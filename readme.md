@@ -1,4 +1,4 @@
 Scacchi Painter
 ===============
 
-[Roadmap]Roadmap
+Go to [Roadmap](./dist/Roadmap) to look at the future
