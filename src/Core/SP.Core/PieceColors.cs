@@ -4,9 +4,10 @@ using System.Text;
 
 namespace SP.Core
 {
-	public abstract class PieceBase
+	public enum PieceColors
 	{
-		public PieceColors Color { get; set; } = PieceColors.Neutral;
-
+		White = 0,
+		Black = 1,
+		Neutral = 2
 	}
 }

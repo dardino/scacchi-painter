@@ -13,6 +13,8 @@ namespace SP.Core
 
 		public bool Occupied => piece != null;
 
+		public PieceBase Piece => piece;
+
 		public Cell(int index)
 		{
 			cellindex = index;
