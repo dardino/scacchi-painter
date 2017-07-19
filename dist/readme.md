@@ -14,5 +14,6 @@ Scacchi Painter 3.0 Roadmap
 * [ ] Bishop move generator
 * [ ] Horse move generator
 * [ ] Queen move generator
-* [ ] Board structure
+* [X] API - Board structure
+* [X] API - Import board from FEN
 
