@@ -5,6 +5,7 @@ Scacchi Painter 3.0 Roadmap
 
 * [ ] Solving problems with `direct-mate` stipulation
 * [ ] Solving problems with `help-mate` stipulation
+* [ ] Load and display positions from `*.sp2` file
 
 ### Version 0.1 (december 2017)
 
