@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -86,5 +87,7 @@ namespace SP.Core
 
 			return filtered.FirstOrDefault();
 		}
+		
+		public abstract Int32 GetMovesFromPosition(Columns col, Rows row);
 	}
 }

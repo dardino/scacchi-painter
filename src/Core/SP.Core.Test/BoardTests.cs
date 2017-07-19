@@ -110,5 +110,6 @@ namespace SP.Core.Test
 			Assert.AreEqual(typeof(Pieces.Pawn), p01.GetType());
 			Assert.AreEqual(PieceColors.Neutral, p01.Color);
 		}
+
 	}
 }
