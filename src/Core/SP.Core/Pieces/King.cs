@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SP.Core.Pieces
 {
+	[Figurine(PieceFigurine.King)]
 	public class King : PieceBase
 	{
 	}
