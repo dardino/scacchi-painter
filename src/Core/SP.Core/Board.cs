@@ -89,6 +89,16 @@ namespace SP.Core
 				traversa = traversa.Replace("*|A", "|*A");
 				traversa = traversa.Replace("*|E", "|*E");
 				traversa = traversa.Replace("*|T", "|*T");
+				traversa = traversa.Replace("*|k", "|*K");
+				traversa = traversa.Replace("*|q", "|*Q");
+				traversa = traversa.Replace("*|n", "|*N");
+				traversa = traversa.Replace("*|s", "|*N");
+				traversa = traversa.Replace("*|b", "|*B");
+				traversa = traversa.Replace("*|r", "|*R");
+				traversa = traversa.Replace("*|p", "|*P");
+				traversa = traversa.Replace("*|a", "|*A");
+				traversa = traversa.Replace("*|e", "|*E");
+				traversa = traversa.Replace("*|t", "|*T");
 				// ora controllo se ci sono rotazioni (":")
 				traversa = traversa.Replace(":0", "+ ");
 				traversa = traversa.Replace(":1", "+/");
