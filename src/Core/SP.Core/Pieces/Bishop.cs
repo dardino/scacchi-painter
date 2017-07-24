@@ -8,5 +8,9 @@ namespace SP.Core.Pieces
 	[Figurine(PieceFigurine.Bishop)]
 	public class Bishop : PieceBase
 	{
+		public override int GetMovesFromPosition(Columns col, Rows row)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

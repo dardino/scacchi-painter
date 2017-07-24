@@ -8,7 +8,7 @@ namespace SP.Core.Pieces
 	[Figurine(PieceFigurine.Pawn)]
 	public class Pawn : PieceBase
 	{
-		public override List<BitArray> GetMovesFromPosition(Columns col, Rows row)
+		public override int GetMovesFromPosition(Columns col, Rows row)
 		{
 			throw new NotImplementedException();
 		}

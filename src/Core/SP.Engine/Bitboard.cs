@@ -1,6 +1,7 @@
 ﻿using SP.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace SP.Engine
@@ -34,25 +35,23 @@ namespace SP.Engine
 		{
 			for (int r = 7; r >= 0; r--)
 			{
-				Console.WriteLine("------------------------");
+				Debug.WriteLine("------------------------");
 				for (int c = 0; c <= 7; c++)
 				{
-					Console.Write('[');
-					if (IsBitSet(bitBoard, Board.GetSquareIndex((Columns)c, (Rows)r)))
+					Debug.Write('[');
+					if (IsBitSet(bitBoard, (int)Board.GetSquareIndex((Columns)c, (Rows)r)))
 					{
-						Console.ForegroundColor = ConsoleColor.Green;
-						Console.Write('1');
+						Debug.Write('1');
 					}
 					else
 					{
-						Console.ForegroundColor = ConsoleColor.DarkRed;
-						Console.Write('0');
+						Debug.Write('0');
 					}
 
-					Console.ResetColor();
-					Console.Write(']');
+					Debug.Write(']');
 				}
-				Console.WriteLine();
+
+				Debug.WriteLine("");
 			}
 		}
 		public static int PopCount(BitBoard bitBoard)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SP.Engine;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,8 +12,12 @@ namespace SP.Core.Engine.Pieces
 		[TestMethod]
 		public void MoveInABlankBoard()
 		{
+
 			var king = new Core.Pieces.King();
-			var expectedBitboard = 3 << 8;
+			UInt64 expectedBitboard = 7 << 8;
+
+			BitBoard.Display(new BitBoard(expectedBitboard));
+			
 			var bitboardOfMoves = king.GetMovesFromPosition(Columns.ColA, Rows.Row1);
 		}
 
