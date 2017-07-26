@@ -1,13 +1,13 @@
 Scacchi Painter 3.0 Roadmap
 ===========================
 
-### Version 0.2
+### Version 3.0.2
 
 * [ ] Solving problems with `direct-mate` stipulation
 * [ ] Solving problems with `help-mate` stipulation
 * [ ] Load and display positions from `*.sp2` file
 
-### Version 0.1 (december 2017)
+### Version 3.0.1 (december 2017)
 
 * [ ] Pawn move generator
 * [X] King move generator
