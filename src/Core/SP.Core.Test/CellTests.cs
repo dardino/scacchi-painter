@@ -6,6 +6,7 @@ using System.Text;
 namespace SP.Core.Test
 {
 	[TestClass]
+	[TestCategory("Core.Cell")]
 	public class CellTest
 	{
 		[TestMethod]

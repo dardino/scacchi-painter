@@ -70,13 +70,13 @@ namespace SP.Core
 
 		private static PieceBase MakePieceClass(PieceFigurine tipo, string name)
 		{
-			var type = findClass(tipo, name);
+			var type = FindClass(tipo, name);
 			if (type == null) return null;
 			var instance = Activator.CreateInstance(type) as PieceBase;
 			return instance;
 		}
 
-		private static Type findClass(PieceFigurine tipo, string name)
+		private static Type FindClass(PieceFigurine tipo, string name)
 		{
 			var filtered = piecetypes
 				.Where(p =>
@@ -87,7 +87,12 @@ namespace SP.Core
 
 			return filtered.FirstOrDefault();
 		}
-		
-		public abstract Int32 GetMovesFromPosition(Columns col, Rows row);
+
+		public abstract ulong GetMovesFromPosition(Columns col, Rows row, ulong allied, ulong enemies);
+		public abstract ulong GetMovesFromPosition(Square s, ulong allied, ulong enemies);
+		public abstract ulong GetMovesFromPosition(Columns col, Rows row);
+		public abstract ulong GetCapturesFromPosition(Columns col, Rows row, ulong allied, ulong enemies);
+		public abstract ulong GetCapturesFromPosition(Square s, ulong allied, ulong enemies);
+		public abstract bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies);
 	}
 }

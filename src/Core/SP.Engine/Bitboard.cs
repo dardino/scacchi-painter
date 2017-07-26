@@ -31,28 +31,23 @@ namespace SP.Engine
 		{
 			return (UInt64)1 << toConvert;
 		}
-		public static void Display(BitBoard bitBoard)
+		public static string[] GetRepresentation(BitBoard bitBoard)
 		{
-			for (int r = 7; r >= 0; r--)
+			List<string> outtext = new List<string>();
+			outtext.Add(Convert.ToString((long)(ulong)bitBoard, 2).PadLeft(64, '0'));
+			outtext.Add("---------------------------");
+			for (int r = 0; r < 8; r++)
 			{
-				Debug.WriteLine("------------------------");
-				for (int c = 0; c <= 7; c++)
+				var row = "";
+				for (int c = 0; c < 8; c++)
 				{
-					Debug.Write('[');
-					if (IsBitSet(bitBoard, (int)Board.GetSquareIndex((Columns)c, (Rows)r)))
-					{
-						Debug.Write('1');
-					}
-					else
-					{
-						Debug.Write('0');
-					}
-
-					Debug.Write(']');
+					row += $@"{(IsBitSet(bitBoard, (int)BoardSquare.GetSquareIndex((Columns)c, (Rows)r)) ? "1" : "0")}   ";
 				}
-
-				Debug.WriteLine("");
+				outtext.Add("|   " + row + "|");
 			}
+			outtext.Add("---------------------------");
+			return outtext.ToArray();
+
 		}
 		public static int PopCount(BitBoard bitBoard)
 		{

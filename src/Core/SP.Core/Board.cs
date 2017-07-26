@@ -25,12 +25,7 @@ namespace SP.Core
 			return this[(int)sq].Piece;
 		}
 		public PieceBase GetPiece(Columns col, Rows row) {
-			return GetPiece(GetSquareIndex(col, row));
-		}
-
-		public static Square GetSquareIndex(Columns col, Rows row)
-		{
-			return (Square)((int)col + (int)row * 8);
+			return GetPiece(BoardSquare.GetSquareIndex(col, row));
 		}
 
 		public Board()
@@ -47,7 +42,7 @@ namespace SP.Core
 		}
 		public void PlacePieceOnBoard(Columns col, Rows row, PieceBase piece)
 		{
-			PlacePieceOnBoard(GetSquareIndex(col, row), piece);
+			PlacePieceOnBoard(BoardSquare.GetSquareIndex(col, row), piece);
 		}
 
 		public static Board FromNotation(string notation)
