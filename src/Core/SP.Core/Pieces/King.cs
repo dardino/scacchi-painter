@@ -33,8 +33,8 @@ namespace SP.Core.Pieces
 			var c = fromSq - b2Index;
 			if (c == 0) return movesFromB2;
 			var m2clone = movesFromB2;
-			if (c < 0) for (var i = 0; i > c; i--) m2clone = m2clone >> 1;
-			if (c > 0) for (var i = 0; i < c; i++) m2clone = m2clone << 1;
+			if (c < 0) m2clone = m2clone >> (c * -1);
+			if (c > 0) m2clone = m2clone << c;
 
 			if (col == Columns.ColA) m2clone &= 0xFEFEFEFEFEFEFEFE;
 			if (col == Columns.ColH) m2clone &= 0x7F7F7F7F7F7F7F7F;

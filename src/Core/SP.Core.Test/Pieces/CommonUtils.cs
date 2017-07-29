@@ -13,16 +13,14 @@ namespace SP.Core.Test.Pieces
 		public void DiagonalA1H8CalcTest()
 		{
 			ulong Exp_a2 = 0x204081020408000;
-			ulong Act_a2 = Core.Pieces.CommonUtils.GetBotLeft2TopRightDiagonal(Square.A2);
-
 			ulong Exp_c7 = 0x1020408000000000;
-			ulong Act_c7 = Core.Pieces.CommonUtils.GetBotLeft2TopRightDiagonal(Square.C7);
-
 			ulong Exp_g1 = 0x102;
+			ulong Exp_g3 = 0x1020408;
+
+			ulong Act_a2 = Core.Pieces.CommonUtils.GetBotLeft2TopRightDiagonal(Square.A2);
+			ulong Act_c7 = Core.Pieces.CommonUtils.GetBotLeft2TopRightDiagonal(Square.C7);
 			ulong Act_g1 = Core.Pieces.CommonUtils.GetBotLeft2TopRightDiagonal(Square.G1);
 			ulong Act_h2 = Core.Pieces.CommonUtils.GetBotLeft2TopRightDiagonal(Square.H2);
-
-			ulong Exp_g3 = 0x1020408;
 			ulong Act_g3 = Core.Pieces.CommonUtils.GetBotLeft2TopRightDiagonal(Square.G3);
 
 			Assert.AreEqual(Exp_a2, Act_a2, "a2");
@@ -64,7 +62,8 @@ namespace SP.Core.Test.Pieces
 		}
 
 		[TestMethod]
-		public void GetDiagonals() {
+		public void GetDiagonals()
+		{
 
 			ulong g3 = 0x4020100805020508;
 			ulong e5 = 0x4122140814224180;
@@ -98,6 +97,56 @@ namespace SP.Core.Test.Pieces
 			Assert.AreEqual(e2, Act_e2, "e2");
 			Assert.AreEqual(f3, Act_f3, "f3");
 			Assert.AreEqual(c8, Act_c8, "c8");
+		}
+
+		[TestMethod]
+		public void GetColumns()
+		{
+			ulong[] exps = new ulong[8];
+			exps[(int)Columns.ColA] = 0x8080808080808080;
+			exps[(int)Columns.ColB] = 0x4040404040404040;
+			exps[(int)Columns.ColC] = 0x2020202020202020;
+			exps[(int)Columns.ColD] = 0x1010101010101010;
+			exps[(int)Columns.ColE] = 0x0808080808080808;
+			exps[(int)Columns.ColF] = 0x0404040404040404;
+			exps[(int)Columns.ColG] = 0x0202020202020202;
+			exps[(int)Columns.ColH] = 0x0101010101010101;
+
+			for (var col = 0; col < 8; col++)
+			{
+				var exp = exps[col];
+
+				for (var r = 0; r < 8; r++)
+				{
+					ulong act = Core.Pieces.CommonUtils.GetColumns(BoardSquare.GetSquareIndex((Columns)col, (Rows)r));
+					Assert.AreEqual(exp, act, Enum.GetName(typeof(Columns), col));
+				}
+			}
+		}
+
+		[TestMethod]
+		public void GetRows()
+		{
+			ulong[] exps = new ulong[8];
+			exps[(int)Rows.Row1] = 0x00000000000000FF;
+			exps[(int)Rows.Row2] = 0x000000000000FF00;
+			exps[(int)Rows.Row3] = 0x0000000000FF0000;
+			exps[(int)Rows.Row4] = 0x00000000FF000000;
+			exps[(int)Rows.Row5] = 0x000000FF00000000;
+			exps[(int)Rows.Row6] = 0x0000FF0000000000;
+			exps[(int)Rows.Row7] = 0x00FF000000000000;
+			exps[(int)Rows.Row8] = 0xFF00000000000000;
+
+			for (var r = 0; r < 8; r++)
+			{
+				var exp = exps[r];
+
+				for (var col = 0; col < 8; col++)
+				{
+					ulong act = Core.Pieces.CommonUtils.GetRows(BoardSquare.GetSquareIndex((Columns)col, (Rows)r));
+					Assert.AreEqual(exp, act, $"{Enum.GetName(typeof(Columns), col)}.{Enum.GetName(typeof(Rows), r)}");
+				}
+			}
 		}
 	}
 }
