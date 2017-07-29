@@ -2,13 +2,13 @@
 {
 	public enum Rows
 	{
-		Row1 = 7,
-		Row2 = 6,
-		Row3 = 5,
-		Row4 = 4,
-		Row5 = 3,
-		Row6 = 2,
-		Row7 = 1,
-		Row8 = 0
+		Row1 = 0,
+		Row2 = 1,
+		Row3 = 2,
+		Row4 = 3,
+		Row5 = 4,
+		Row6 = 5,
+		Row7 = 6,
+		Row8 = 7
 	}
 }

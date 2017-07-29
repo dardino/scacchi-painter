@@ -63,7 +63,7 @@ namespace SP.Core
 			foreach (string mytr in traverse)
 			{
 				nt++;
-				ParseTraversa(mytr, nt);
+				ParseTraversa(mytr, 7 - nt);
 			}
 
 			// caricamento delle altre info
@@ -85,8 +85,8 @@ namespace SP.Core
 				if (c.Trim() == "#") continue;
 				if (String.IsNullOrEmpty(c)) continue;
 
-				// ora calcolo la traversa e la colonna:
-				Columns numcol = (Columns)(nc);
+				// ora calcolo la traversa e la colonna (la colonna A ha indice 7):
+				Columns numcol = (Columns)(7 - nc);
 				Rows numtra = (Rows)(nt);
 
 				PlacePieceOnBoard(numcol, numtra, PieceBase.FromFEN(c));

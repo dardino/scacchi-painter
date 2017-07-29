@@ -2,13 +2,13 @@
 {
 	public enum Columns
 	{
-		ColA = 0,
-		ColB = 1,
-		ColC = 2,
-		ColD = 3,
-		ColE = 4,
-		ColF = 5,
-		ColG = 6,
-		ColH = 7
+		ColA = 7,
+		ColB = 6,
+		ColC = 5,
+		ColD = 4,
+		ColE = 3,
+		ColF = 2,
+		ColG = 1,
+		ColH = 0
 	}
 }

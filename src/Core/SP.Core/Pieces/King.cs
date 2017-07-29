@@ -22,9 +22,9 @@ namespace SP.Core.Pieces
 			return GetCapturesFromPosition(coords.Column, coords.Row, allied, enemies);
 		}
 
-		public override ulong GetMovesFromPosition(Columns col, Rows row, ulong sameSide, ulong enemies) {
+		public override ulong GetMovesFromPosition(Columns col, Rows row, ulong allied, ulong enemies) {
 			ulong moves = GetMovesFromPosition(col, row);
-			return (sameSide & moves) ^ moves;
+			return (allied & moves) ^ moves;
 		}
 
 		public override ulong GetMovesFromPosition(Columns col, Rows row)

@@ -22,26 +22,26 @@ namespace SP.Core.Test
 		public void TestRows()
 		{
 			var cell0 = new Cell(0);
-			Assert.AreEqual(cell0.Row, Rows.Row8);
+			Assert.AreEqual(cell0.Row, Rows.Row1);
 			var cell22 = new Cell(22);
-			Assert.AreEqual(cell22.Row, Rows.Row6);
+			Assert.AreEqual(cell22.Row, Rows.Row3);
 			var cell63 = new Cell(63);
-			Assert.AreEqual(cell63.Row, Rows.Row1);
+			Assert.AreEqual(cell63.Row, Rows.Row8);
 		}
 
 		[TestMethod]
 		public void TestColumns()
 		{
 			var cell0 = new Cell(0);
-			Assert.AreEqual(cell0.Column, Columns.ColA);
+			Assert.AreEqual(cell0.Column, Columns.ColH);
 			var cell16 = new Cell(16);
-			Assert.AreEqual(cell16.Column, Columns.ColA);
+			Assert.AreEqual(cell16.Column, Columns.ColH);
 			var cell22 = new Cell(22);
-			Assert.AreEqual(cell22.Column, Columns.ColG);
+			Assert.AreEqual(cell22.Column, Columns.ColB);
 			var cell55 = new Cell(55);
-			Assert.AreEqual(cell55.Column, Columns.ColH);
+			Assert.AreEqual(cell55.Column, Columns.ColA);
 			var cell63 = new Cell(63);
-			Assert.AreEqual(cell63.Column, Columns.ColH);
+			Assert.AreEqual(cell63.Column, Columns.ColA);
 		}
 	}
 

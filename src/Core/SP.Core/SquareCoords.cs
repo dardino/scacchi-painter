@@ -16,7 +16,7 @@ namespace SP.Core
 		}
 		public static Square GetSquareIndex(Columns col, Rows row)
 		{
-			return (Square)(63 - ((int)col + (int)row * 8));
+			return (Square)((int)col + (int)row * 8);
 		}
 
 		public Columns Column => (Columns)((int)square % 8);
