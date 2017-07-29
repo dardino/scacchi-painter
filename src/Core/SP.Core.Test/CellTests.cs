@@ -14,7 +14,7 @@ namespace SP.Core.Test
 		{
 			var cell0 = new Cell(0);
 			Assert.IsFalse(cell0.Occupied);
-			cell0.SetPiece(new Pieces.Pawn());
+			cell0.SetPiece(new Core.Pieces.Pawn());
 			Assert.IsTrue(cell0.Occupied);
 		}
 

@@ -8,6 +8,7 @@ namespace SP.Core.Pieces
 	[Figurine(PieceFigurine.Bishop)]
 	public class Bishop : PieceBase
 	{
+
 		public override ulong GetCapturesFromPosition(Columns col, Rows row, ulong allied, ulong enemies)
 		{
 			return GetMovesFromPosition(col, row);

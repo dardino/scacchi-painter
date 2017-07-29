@@ -15,9 +15,9 @@ namespace SP.Core.Test
 			var board = new Board();
 			var p1 = board.GetPiece(Columns.ColA, Rows.Row1);
 			Assert.IsNull(p1);
-			board.PlacePieceOnBoard(Columns.ColF, Rows.Row4, new Pieces.Queen { Color = PieceColors.White });
+			board.PlacePieceOnBoard(Columns.ColF, Rows.Row4, new Core.Pieces.Queen { Color = PieceColors.White });
 			var p2 = board.GetPiece(Columns.ColF, Rows.Row4);
-			Assert.AreEqual(p2.GetType(), typeof(Pieces.Queen));
+			Assert.AreEqual(p2.GetType(), typeof(Core.Pieces.Queen));
 		}
 
 		[TestMethod]
@@ -47,26 +47,26 @@ namespace SP.Core.Test
 			var p30 = board.GetPiece(Columns.ColC, Rows.Row1);
 
 			// test Piece Type
-			Assert.AreEqual(typeof(Pieces.Queen ), p01.GetType());
-			Assert.AreEqual(typeof(Pieces.Horse ), p02.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p03.GetType());
-			Assert.AreEqual(typeof(Pieces.Rock  ), p04.GetType());
-			Assert.AreEqual(typeof(Pieces.Rock  ), p05.GetType());
-			Assert.AreEqual(typeof(Pieces.Bishop), p06.GetType());
-			Assert.AreEqual(typeof(Pieces.Horse ), p07.GetType());
-			Assert.AreEqual(typeof(Pieces.King  ), p08.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p09.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p20.GetType());
-			Assert.AreEqual(typeof(Pieces.Horse ), p21.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p22.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p23.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p24.GetType());
-			Assert.AreEqual(typeof(Pieces.Bishop), p25.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p26.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p27.GetType());
-			Assert.AreEqual(typeof(Pieces.Pawn  ), p28.GetType());
-			Assert.AreEqual(typeof(Pieces.Queen ), p29.GetType());
-			Assert.AreEqual(typeof(Pieces.King  ), p30.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Queen ), p01.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Horse ), p02.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p03.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Rock  ), p04.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Rock  ), p05.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Bishop), p06.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Horse ), p07.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.King  ), p08.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p09.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p20.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Horse ), p21.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p22.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p23.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p24.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Bishop), p25.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p26.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p27.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn  ), p28.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Queen ), p29.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.King  ), p30.GetType());
 
 			// test Piece Color
 
@@ -108,7 +108,7 @@ namespace SP.Core.Test
 
 			var p01 = board.GetPiece(Columns.ColA, Rows.Row5);
 
-			Assert.AreEqual(typeof(Pieces.Pawn), p01.GetType());
+			Assert.AreEqual(typeof(Core.Pieces.Pawn), p01.GetType());
 			Assert.AreEqual(PieceColors.Neutral, p01.Color);
 		}
 
