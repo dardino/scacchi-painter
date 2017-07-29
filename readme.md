@@ -1,4 +1,4 @@
 Scacchi Painter
 ===============
 
-Go to [Roadmap](./dist/readme.md) to look at the future
+Go to [Roadmap](./wiki/roadmap.md) to look at the future
