@@ -57,14 +57,14 @@ namespace SP.Core.Engine.Pieces
 
 			var piece = new Bishop();
 
-			UInt64 movesB1 = 0x102040810a040;
-			UInt64 movesA1 = 0x102040810204080;
-			UInt64 movesC2 = 0x1020488502050;
-			UInt64 movesD4 = 0x182442810284482;
-			UInt64 movesA8 = 0x8040201008040201;
-			UInt64 movesH6 = 0x402010204081020;
-			UInt64 movesH8 = 0x102040810204080;
-			UInt64 movesH1 = 0x8040201008040201;
+			UInt64 movesB1 = 0x102040810a000;
+			UInt64 movesA1 = 0x102040810204000;
+			UInt64 movesC2 = 0x1020488500050;
+			UInt64 movesD4 = 0x182442800284482;
+			UInt64 movesA8 = 0x0040201008040201;
+			UInt64 movesH6 = 0x402000204081020;
+			UInt64 movesH8 = 0x2040810204080;
+			UInt64 movesH1 = 0x8040201008040200;
 
 			var bbMovesA1 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row1);
 			var bbMovesB1 = piece.GetMovesFromPosition(Columns.ColB, Rows.Row1);
@@ -75,14 +75,14 @@ namespace SP.Core.Engine.Pieces
 			var bbMovesH8 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row8);
 			var bbMovesH1 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row1);
 
-			Assert.AreEqual(bbMovesA1, movesA1);
-			Assert.AreEqual(bbMovesB1, movesB1);
-			Assert.AreEqual(bbMovesC2, movesC2);
-			Assert.AreEqual(bbMovesD4, movesD4);
-			Assert.AreEqual(bbMovesA8, movesA8);
-			Assert.AreEqual(bbMovesH6, movesH6);
-			Assert.AreEqual(bbMovesH8, movesH8);
-			Assert.AreEqual(bbMovesH1, movesH1);
+			Assert.AreEqual(bbMovesA1, movesA1, "A1");
+			Assert.AreEqual(bbMovesB1, movesB1, "B1");
+			Assert.AreEqual(bbMovesC2, movesC2, "C2");
+			Assert.AreEqual(bbMovesD4, movesD4, "D4");
+			Assert.AreEqual(bbMovesA8, movesA8, "A8");
+			Assert.AreEqual(bbMovesH6, movesH6, "H6");
+			Assert.AreEqual(bbMovesH8, movesH8, "H8");
+			Assert.AreEqual(bbMovesH1, movesH1, "H1");
 
 		}
 
@@ -91,9 +91,9 @@ namespace SP.Core.Engine.Pieces
 
 			var piece = new Bishop();
 
-			ulong expec1 = 0x60105000;
-			ulong moves1 = piece.GetMovesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
-			ulong expec2 = 0x60105000;
+			ulong expec1 = 0x8500040800000;
+			ulong moves1 = piece.GetMovesFromPosition(Columns.ColC, Rows.Row5, allied, enemies);
+			ulong expec2 = 0x8040005000;
 			ulong moves2 = piece.GetMovesFromPosition(Square.C3, allied, enemies);
 
 			Assert.AreEqual(expec1, moves1);
@@ -106,7 +106,7 @@ namespace SP.Core.Engine.Pieces
 
 			var piece = new Bishop();
 
-			ulong expec1 = 0x105000;
+			ulong expec1 = 0x5000;
 			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
 
 			Assert.AreEqual(expec1, moves1);
