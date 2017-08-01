@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SP.Engine;
+using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -54,7 +55,7 @@ namespace SP.Core.Engine.Pieces
 		public void K_MoveInABlankBoard()
 		{
 
-			var king = new Core.Pieces.King();
+			var king = new King();
 			UInt64 movesB1 = 0x000000000000E0A0;
 			UInt64 movesA1 = 0x000000000000C040;
 			UInt64 movesC2 = 0x0000000000705070;
@@ -87,7 +88,7 @@ namespace SP.Core.Engine.Pieces
 		[TestMethod]
 		public void K_MoveInOccupiedBoard() {
 
-			var king = new Core.Pieces.King();
+			var king = new King();
 
 			ulong expec1 = 0x60105000;
 			ulong moves1 = king.GetMovesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
@@ -102,7 +103,7 @@ namespace SP.Core.Engine.Pieces
 		public void K_CapturesTest()
 		{
 
-			var king = new Core.Pieces.King();
+			var king = new King();
 
 			ulong expec1 = 0x105000;
 			ulong moves1 = king.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
@@ -113,7 +114,7 @@ namespace SP.Core.Engine.Pieces
 
 		public void K_IsAttackingSquare() {
 
-			var king = new Core.Pieces.King();
+			var king = new King();
 			Assert.IsTrue(king.IsAttackingSquare(Square.B2, Square.C3, allied, enemies));
 			Assert.IsFalse(king.IsAttackingSquare(Square.A1, Square.C2, allied, enemies));
 			Assert.IsFalse(king.IsAttackingSquare(Square.A4, Square.H4, allied, enemies));

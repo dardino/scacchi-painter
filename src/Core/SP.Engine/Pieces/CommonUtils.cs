@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SP.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SP.Core.Pieces
+namespace SP.Engine.Pieces
 {
 	public static class CommonUtils
 	{
@@ -17,7 +18,7 @@ namespace SP.Core.Pieces
 			return (mybit & da) > 0 ? da : db;
 		}
 
-		internal static ulong GetTopLeft2BottomRight(Square s)
+		public static ulong GetTopLeft2BottomRight(Square s)
 		{
 			var offset = (int)s % 9;
 			var da = offset < 8 ? DiagonalA8H1 >> (8 * offset) : 0;
@@ -26,7 +27,7 @@ namespace SP.Core.Pieces
 			return (mybit & da) > 0 ? da : db;
 		}
 
-		internal static ulong GetDiagonals(Square s) {
+		public static ulong GetDiagonals(Square s) {
 			return GetTopLeft2BottomRight(s) | GetBotLeft2TopRightDiagonal(s);
 		}
 
@@ -42,7 +43,7 @@ namespace SP.Core.Pieces
 			0x8080808080808080
 		};
 
-		internal static ulong GetColumns(Square square)
+		public static ulong GetColumns(Square square)
 		{
 			return cols[(int)square % 8];
 		}
@@ -59,7 +60,7 @@ namespace SP.Core.Pieces
 			0xFF00000000000000
 		};
 
-		internal static ulong GetRows(Square square)
+		public static ulong GetRows(Square square)
 		{
 			return rows[(int)Math.Floor((float)square / 8f)];
 		}

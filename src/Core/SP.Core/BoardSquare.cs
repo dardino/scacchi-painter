@@ -30,6 +30,7 @@ namespace SP.Core
 		{
 			return new BoardSquare((Square) index);
 		}
+
 		public static implicit operator int(BoardSquare square)
 		{
 			return (int)square.square;
