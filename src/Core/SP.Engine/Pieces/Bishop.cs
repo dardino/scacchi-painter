@@ -20,20 +20,24 @@ namespace SP.Engine.Pieces
 			throw new NotImplementedException();
 		}
 
+		#region GetMoves
 		public override ulong GetMovesFromPosition(Columns col, Rows row)
 		{
-			throw new NotImplementedException();
+			return GetMovesFromPosition(col, row, 0, 0);
 		}
-
 		public override ulong GetMovesFromPosition(Columns col, Rows row, ulong allied, ulong enemies)
 		{
-			throw new NotImplementedException();
+			return GetMovesFromPosition(BoardSquare.GetSquareIndex(col, row), 0, 0);
 		}
-
 		public override ulong GetMovesFromPosition(Square s, ulong allied, ulong enemies)
 		{
-			throw new NotImplementedException();
+			var mydiagA = CommonUtils.GetBotLeft2TopRightDiagonal(s);
+			var mydiagB = CommonUtils.GetTopLeft2BottomRight(s);
+			// var oppsA = enemies & mydiagA; 
+			// var oppsB = enemies & mydiagB; 
+			return (mydiagA | mydiagB);
 		}
+		#endregion
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
 		{
