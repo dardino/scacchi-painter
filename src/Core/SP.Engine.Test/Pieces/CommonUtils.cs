@@ -149,5 +149,10 @@ namespace SP.Engine.Test.Pieces
 				}
 			}
 		}
+
+		[TestMethod]
+		public void TestHashKey() {
+			
+		}
 	}
 }

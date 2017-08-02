@@ -5,6 +5,7 @@ using System.Text;
 
 namespace SP.Engine.Pieces
 {
+
 	public static class CommonUtils
 	{
 		public static ulong DiagonalA1H8 = 0x0102040810204080;
@@ -64,5 +65,11 @@ namespace SP.Engine.Pieces
 		{
 			return rows[(int)Math.Floor((float)square / 8f)];
 		}
+	}
+
+	public struct MovesHashKey {
+		public Square Square;
+		public ulong Allied;
+		public ulong Enemies;
 	}
 }

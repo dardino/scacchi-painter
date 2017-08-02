@@ -1,7 +1,4 @@
 ﻿using SP.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SP.Engine.Pieces
 {
@@ -82,7 +79,7 @@ namespace SP.Engine.Pieces
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
 		{
-			throw new NotImplementedException();
+			return (GetCapturesFromPosition(fromSquare, allied, enemies) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 	}
 }
