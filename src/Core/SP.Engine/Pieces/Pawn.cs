@@ -10,12 +10,6 @@ namespace SP.Engine.Pieces
 	public class Pawn : EnginePiece
 	{
 		
-		public override ulong GetCapturesFromPosition(Columns col, Rows row, ulong allied, ulong enemies)
-		{
-			var index = BoardSquare.GetSquareIndex(col, row);
-			return GetCapturesFromPosition(index, allied, enemies);
-		}
-
 		public override ulong GetCapturesFromPosition(Square s, ulong allied, ulong enemies)
 		{
 			int index = (int)s;
@@ -24,17 +18,6 @@ namespace SP.Engine.Pieces
 			ulong m1 = (i1 <= 0 || i1 > 63 || index == (int)Columns.ColH) ? 0 : (ulong)Math.Pow(2, i1);
 			ulong m2 = (i2 <= 0 || i2 > 63 || index == (int)Columns.ColA) ? 0 : (ulong)Math.Pow(2, i2);
 			return (m1 | m2) & enemies;
-		}
-
-		public override ulong GetMovesFromPosition(Columns col, Rows row)
-		{
-			return GetMovesFromPosition(col, row, 0, 0);
-		}
-
-		public override ulong GetMovesFromPosition(Columns col, Rows row, ulong allied, ulong enemies)
-		{
-			var index = BoardSquare.GetSquareIndex(col, row);
-			return GetMovesFromPosition(index, allied, enemies);
 		}
 
 		public override ulong GetMovesFromPosition(Square s, ulong allied, ulong enemies)
@@ -54,7 +37,9 @@ namespace SP.Engine.Pieces
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
 		{
-			throw new NotImplementedException();
+			ulong sq = (ulong)squareToCheck.ToSquareBits();
+			var moves = GetMovesFromPosition(fromSquare, allied, enemies | sq);
+			return (moves & sq) > 0;
 		}
 	}
 }

@@ -113,12 +113,14 @@ namespace SP.Core.Engine.Pieces
 
 		}
 
+		[TestMethod]
 		public void B_IsAttackingSquare() {
 
 			var piece = new Bishop();
-			Assert.IsTrue(piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies));
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies));
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, allied, enemies));
+			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.B2, allied, enemies), "a1-b2");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies), "b2-c3");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies), "a1-c2");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, allied, enemies), "a4-h4");
 		}
 	}
 }

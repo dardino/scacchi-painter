@@ -8,22 +8,7 @@ namespace SP.Engine.Pieces
 	[Figurine(PieceFigurine.Horse)]
 	public class Horse : EnginePiece
 	{
-		public override ulong GetCapturesFromPosition(Columns col, Rows row, ulong allied, ulong enemies)
-		{
-			return GetMovesFromPosition(col, row);
-		}
-
 		public override ulong GetCapturesFromPosition(Square s, ulong allied, ulong enemies)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override ulong GetMovesFromPosition(Columns col, Rows row)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override ulong GetMovesFromPosition(Columns col, Rows row, ulong allied, ulong enemies)
 		{
 			throw new NotImplementedException();
 		}

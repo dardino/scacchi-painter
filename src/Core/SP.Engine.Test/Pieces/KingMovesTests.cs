@@ -57,6 +57,7 @@ namespace SP.Core.Engine.Pieces
 
 			var king = new King();
 			UInt64 movesB1 = 0x000000000000E0A0;
+			UInt64 movesB2 = 0x0000000000e0a0e0;
 			UInt64 movesA1 = 0x000000000000C040;
 			UInt64 movesC2 = 0x0000000000705070;
 			UInt64 movesD4 = 0x0000003828380000;
@@ -67,6 +68,7 @@ namespace SP.Core.Engine.Pieces
 
 			var bbMovesA1 = king.GetMovesFromPosition(Columns.ColA, Rows.Row1);
 			var bbMovesB1 = king.GetMovesFromPosition(Columns.ColB, Rows.Row1);
+			var bbMovesB2 = king.GetMovesFromPosition(Columns.ColB, Rows.Row2);
 			var bbMovesC2 = king.GetMovesFromPosition(Columns.ColC, Rows.Row2);
 			var bbMovesD4 = king.GetMovesFromPosition(Columns.ColD, Rows.Row4);
 			var bbMovesA8 = king.GetMovesFromPosition(Columns.ColA, Rows.Row8);
@@ -76,6 +78,7 @@ namespace SP.Core.Engine.Pieces
 
 			Assert.AreEqual(bbMovesA1, movesA1);
 			Assert.AreEqual(bbMovesB1, movesB1);
+			Assert.AreEqual(bbMovesB2, movesB2);
 			Assert.AreEqual(bbMovesC2, movesC2);
 			Assert.AreEqual(bbMovesD4, movesD4);
 			Assert.AreEqual(bbMovesA8, movesA8);
@@ -94,9 +97,17 @@ namespace SP.Core.Engine.Pieces
 			ulong moves1 = king.GetMovesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
 			ulong expec2 = 0x60105000;
 			ulong moves2 = king.GetMovesFromPosition(Square.C3, allied, enemies);
+			ulong expec3 = 0xa080e0;
+			ulong moves3 = king.GetMovesFromPosition(Square.B2, allied, enemies);
+			ulong expec4 = 0x305070;
+			ulong moves4 = king.GetMovesFromPosition(Square.C2, allied, enemies);
 
-			Assert.AreEqual(expec1, moves1);
-			Assert.AreEqual(expec2, moves2);
+
+			Assert.AreEqual(expec1, moves1, "c3");
+			Assert.AreEqual(expec2, moves2, "c3");
+			Assert.AreEqual(expec3, moves3, "b2");
+			Assert.AreEqual(expec4, moves4, "c2");
+
 		}
 
 		[TestMethod]
@@ -112,6 +123,7 @@ namespace SP.Core.Engine.Pieces
 
 		}
 
+		[TestMethod]
 		public void K_IsAttackingSquare() {
 
 			var king = new King();

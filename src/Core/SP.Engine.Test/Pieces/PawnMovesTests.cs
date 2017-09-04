@@ -190,12 +190,15 @@ namespace SP.Core.Engine.Pieces
 			Assert.AreEqual(movesC1, bbMovesC1, "c1*b2 | c1*d2");
 		}
 
+		[TestMethod]
 		public void P_IsAttackingSquare() {
 
 			var pawn = new Pawn();
+			pawn.Color = PieceColors.White;
 			Assert.IsTrue(pawn.IsAttackingSquare(Square.B2, Square.C3, allied, enemies));
 			Assert.IsFalse(pawn.IsAttackingSquare(Square.A1, Square.C2, allied, enemies));
 			Assert.IsFalse(pawn.IsAttackingSquare(Square.A4, Square.H4, allied, enemies));
+			Assert.IsTrue(pawn.IsAttackingSquare(Square.C5, Square.B6, allied, enemies));
 		}
 	}
 }
