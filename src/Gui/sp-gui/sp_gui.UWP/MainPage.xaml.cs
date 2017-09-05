@@ -21,7 +21,7 @@ namespace sp_gui.UWP
 		{
 			this.InitializeComponent();
 
-			LoadApplication(new sp_gui.App());
+			LoadApplication(application: new sp_gui.App());
 		}
 	}
 }
