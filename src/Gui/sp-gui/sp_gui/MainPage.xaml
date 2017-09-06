@@ -3,4 +3,5 @@
 				 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 				 xmlns:local="clr-namespace:sp_gui"
 				 x:Class="sp_gui.MainPage">
+	
 </MasterDetailPage>

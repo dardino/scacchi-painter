@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace sp_gui.UWP
+namespace sp_gui.UWP2
 {
 	public sealed partial class MainPage
 	{

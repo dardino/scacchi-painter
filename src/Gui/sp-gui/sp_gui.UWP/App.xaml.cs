@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace sp_gui.UWP
+namespace sp_gui.UWP2
 {
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
@@ -41,10 +41,10 @@ namespace sp_gui.UWP
 		{
 
 #if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = true;
-            }
+				if (System.Diagnostics.Debugger.IsAttached)
+				{
+					 this.DebugSettings.EnableFrameRateCounter = true;
+				}
 #endif
 
 			Frame rootFrame = Window.Current.Content as Frame;

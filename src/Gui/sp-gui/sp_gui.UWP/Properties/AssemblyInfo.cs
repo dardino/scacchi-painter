@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Scacchi Painter")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Accademia del problema")]
-[assembly: AssemblyProduct("sp_gui.UWP")]
+[assembly: AssemblyProduct("sp_gui.UWP2")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
