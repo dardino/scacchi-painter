@@ -14,9 +14,10 @@ namespace sp_gui
 		public NamedColorPage(bool v)
 		{
 			this.v = v;
+
 			Label header = new Label
 			{
-				Text = "MasterDetailPage",
+				Text = "Named Color Page",
 				FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
 				HorizontalOptions = LayoutOptions.Center
 			};

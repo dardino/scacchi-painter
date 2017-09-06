@@ -13,9 +13,11 @@ namespace sp_gui
 		{
 			InitializeComponent();
 
+			MasterBehavior = MasterBehavior.Popover;
+
 			Label header = new Label
 			{
-				Text = "MasterDetailPage",
+				Text = "Main Page",
 				FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
 				HorizontalOptions = LayoutOptions.Center
 			};
@@ -50,7 +52,7 @@ namespace sp_gui
 			// Create the master page with the ListView.
 			Master = new ContentPage
 			{
-				Title = header.Text,
+				Title = "Master Page",
 				Content = new StackLayout
 				{
 					Children =
@@ -58,18 +60,26 @@ namespace sp_gui
 								header,
 								listView
 						  }
-				}
+				},
+				Icon = "hamburger.png"
 			};
 
 			// Create the detail page using NamedColorPage and wrap it in a
 			// navigation page to provide a NavigationBar and Toggle button
-			Detail = new NavigationPage(new NamedColorPage(true));
-			
+			Detail = new NavigationPage(new NamedColorPage(true)) {
+				BackgroundColor = Color.Teal,
+				Icon = "hamburger.png",
+				Title = "Navigation Page",
+				BarBackgroundColor = Color.Teal,
+				BarTextColor = Color.White,
+			};
+
+		
 			// For Windows Phone, provide a way to get back to the master page.
-			if (Device.RuntimePlatform == Device.WinPhone || Device.RuntimePlatform == Device.Windows)
-			{
-				((Detail as NavigationPage).CurrentPage as NamedColorPage).Content.GestureRecognizers.Add(item: GestureRecogizer());
-			}
+			//if (Device.RuntimePlatform == Device.WinPhone || Device.RuntimePlatform == Device.Windows)
+			//{
+			//	((Detail as NavigationPage).CurrentPage as NamedColorPage).Content.GestureRecognizers.Add(item: GestureRecogizer());
+			//}
 
 			// Define a selected handler for the ListView.
 			listView.ItemSelected += (sender, args) =>
