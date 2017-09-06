@@ -66,9 +66,9 @@ namespace sp_gui
 			Detail = new NavigationPage(new NamedColorPage(true));
 			
 			// For Windows Phone, provide a way to get back to the master page.
-			if (Device.RuntimePlatform == Device.WinPhone)
+			if (Device.RuntimePlatform == Device.WinPhone || Device.RuntimePlatform == Device.Windows)
 			{
-				(Detail as ContentPage).Content.GestureRecognizers.Add(item: GestureRecogizer());
+				((Detail as NavigationPage).CurrentPage as NamedColorPage).Content.GestureRecognizers.Add(item: GestureRecogizer());
 			}
 
 			// Define a selected handler for the ListView.
