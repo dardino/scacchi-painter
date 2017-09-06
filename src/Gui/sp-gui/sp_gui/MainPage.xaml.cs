@@ -77,6 +77,8 @@ namespace sp_gui
 				// Set the BindingContext of the detail page.
 				Detail.BindingContext = args.SelectedItem;
 
+				((Detail as NavigationPage).CurrentPage as NamedColorPage).SetColor((args.SelectedItem as NamedColor).Color);
+
 				// Show the detail page.
 				IsPresented = false;
 			};

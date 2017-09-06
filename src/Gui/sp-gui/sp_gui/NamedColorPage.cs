@@ -6,10 +6,14 @@ namespace sp_gui
 	{
 		private bool v;
 
+		public void SetColor(Color color)
+		{
+			BackgroundColor = color;
+		}
+
 		public NamedColorPage(bool v)
 		{
 			this.v = v;
-
 			Label header = new Label
 			{
 				Text = "MasterDetailPage",
