@@ -1,0 +1,464 @@
+>HTREE\ROOT\0
+(StatusCode:1098907658)
+    >ACPI ARM-based PC
+    (ID:ROOT\ARM_HAL\0000, Class:Computer, Manufacturer:(Standard computers), StatusCode:25165835)
+        >Microsoft ACPI-Compliant System
+        (ID:ACPI_HAL\PNP0C08\0, Class:System, Manufacturer:Microsoft, StatusCode:25165834)
+            >QPDS-T900/QPDS-T930 Proximity and Ambient Light Sensor Driver
+            (ID:ACPI\QPDS_APS\1, Class:Sensor, Manufacturer:Nokia, StatusCode:25165834)
+            >ACPI\QCOM248A\2&DABA3FF&0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm Camera Front Sensor Driver
+            (ID:ACPI\QCOM2437\1A, Class:System, Manufacturer:Qualcomm, StatusCode:25174026)
+            >hwnled Driver
+            (ID:ACPI\QCOM0D50\0, Class:System, Manufacturer:Qualcomm, StatusCode:25165834)
+            >Origa2Auth Device
+            (ID:ACPI\MSHW1002\2&DABA3FF&0, Class:Battery, Manufacturer:MMO, StatusCode:25165834)
+            >ACPI\QCOM2487\2&DABA3FF&0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm System MMU v2 Device
+            (ID:ACPI\QCOM2400\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm System MMU v2 Device
+            (ID:ACPI\QCOM2400\1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm System MMU v2 Device
+            (ID:ACPI\QCOM2400\2, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm System MMU v2 Device
+            (ID:ACPI\QCOM2400\3, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm System MMU v2 Device
+            (ID:ACPI\QCOM2400\4, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Bus Access Module Device
+            (ID:ACPI\QCOM2401\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Bus Access Module Device
+            (ID:ACPI\QCOM2401\1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Bus Access Module Device
+            (ID:ACPI\QCOM2401\3, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Bus Access Module Device
+            (ID:ACPI\QCOM2401\6, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Bus Access Module Device
+            (ID:ACPI\QCOM2401\C, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Bus Access Module Device
+            (ID:ACPI\QCOM2401\E, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Secure Channel Manager Device
+            (ID:ACPI\QCOM2402\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >ACPI\ODDT_REG\2&DABA3FF&0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm OCMEM Device
+            (ID:ACPI\QCOM2403\0, Class:System, Manufacturer:Qualcomm Technologies Inc. 2013, StatusCode:25165834)
+            >Qualcomm SPMI Device
+            (ID:ACPI\QCOM2404\1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >GPIO Client Device
+            (ID:ACPI\QCOM2405\0, Class:System, Manufacturer:CompanyName, StatusCode:25165834)
+            >Qualcomm BAM DMUX Device
+            (ID:ACPI\QCOM2406\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Shared Memory Port Device
+            (ID:ACPI\QCOM2407\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >ACPI\QCOM24A7\2&DABA3FF&0
+            (StatusCode:25175040, ProblemCode:28)
+            >ACPI Processor Aggregator
+            (ID:ACPI\ACPI000C\2&DABA3FF&0, Class:System, Manufacturer:(Standard system devices), StatusCode:25165834)
+            >Qualcomm I2C Device
+            (ID:ACPI\QCOM240E\3, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm I2C Device
+            (ID:ACPI\QCOM240E\4, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm I2C Device
+            (ID:ACPI\QCOM240E\5, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >GPIO Buttons Driver
+            (ID:ACPI\QCOM2066\0, Class:HIDClass, Manufacturer:Microsoft, StatusCode:25165834)
+                >HID-compliant device
+                (ID:HID\QCOM2066\3&25EE6C38&0&0000, Class:HIDClass, Manufacturer:(Standard system devices), StatusCode:25174026)
+                >{30EBFBF8-DF5F-4D4D-9FC5-A26C7FD1DF4A}\GPIO_BUTTONS\3&25EE6C38&0&0
+                (StatusCode:25174026)
+            >Qualcomm PMIC Device
+            (ID:ACPI\QCOM2455\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Win8 rmnetbridge Device
+            (ID:ACPI\QCOM2148\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Qualcomm Camera Platform Device
+            (ID:ACPI\QCOM245E\1B, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Trusted Platform Module 2.0
+            (ID:ACPI\MSFT0101\2&DABA3FF&0, Class:SecurityDevices, Manufacturer:(Standard), StatusCode:25165834)
+            >Qualcomm Camera ISP Device
+            (ID:ACPI\QCOM2432\16, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+            >Nokia Regulatory Screen Driver
+            (ID:ACPI\NRSD0001\1, Class:System, Manufacturer:Nokia, StatusCode:25174026)
+            >Qualcomm Audio DSP Subsystem Device
+            (ID:ACPI\QCOM242B\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+                >Qualcomm Slimbus Device
+                (ID:ADSP\QCOM240D\3&2D5E4E35&0&1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+                    >Qualcomm Audio DSP and Calibration Manager Device
+                    (ID:SLM1\QCOM242D\4&1A39E30&0&1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+                        >Qualcomm Audio Device
+                        (ID:ADCM\QCOM242E\5&1DB3EAE&0&0, Class:System, Manufacturer:(Standard system devices), StatusCode:25174026)
+                            >QCAUD Real Time (WaveRT) Driver for Qualcomm SoC
+                            (ID:AUDD\QCOM2451\6&31B01DD6&0&1, Class:System, Manufacturer:QUALCOMM, StatusCode:25174026)
+                            >Qualcomm Multi Button Headset Controller
+                            (ID:AUDD\QCOM2468\6&31B01DD6&0&0, Class:System, Manufacturer:(Standard system devices), StatusCode:25174026)
+            >QUALCOMM btftmdriver 
+            (ID:ACPI\QCOM2462\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Qualcomm SoC Secure Digital host controller
+            (ID:ACPI\QCOM2466\0, Class:SDHost, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+                >SD Storage Class Controller
+                (ID:SD\VID_11&OID_0000&PID_008GE0&REV_0.0\3&307E4393&0&0, Class:SCSIAdapter, Manufacturer:Generic, StatusCode:25165834)
+                    >Disk drive
+                    (ID:SD\DISK&TOSHIBA&008GE0&0.0\4&4593483&0&9E58C909&0, FriendlyName:Toshiba 008GE0, Class:DiskDrive, Manufacturer:(Standard disk drives), StatusCode:25165834)
+            >Qualcomm SoC Secure Digital host controller
+            (ID:ACPI\QCOM2466\1, Class:SDHost, Manufacturer:Qualcomm Incorporated, StatusCode:25174026)
+                >SD Storage Class Controller
+                (ID:SD\VID_1B&OID_534D&PID_00000&REV_1.0\3&79D2A31&0&0, Class:SCSIAdapter, Manufacturer:Generic, StatusCode:25190410)
+                    >Disk drive
+                    (ID:SD\DISK&GENERIC&00000&1.0\4&34F2580D&0&BBA328A3&0, FriendlyName:Generic 00000 SD Card, Class:DiskDrive, Manufacturer:(Standard disk drives), StatusCode:25174026)
+            >Qualcomm Win8 Remote AT Command Processor Device
+            (ID:ACPI\QCOM2155\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >ACPI\ENOGPIO\1
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm Remote FileSystem Device
+            (ID:ACPI\QCOM2423\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Adreno 305
+            (ID:ACPI\QCOM246F\0, Class:Display, Manufacturer:Qualcomm Incorporated, StatusCode:25174026)
+                >Qualcomm Camera AVStream Mini Driver
+                (ID:DISPLAY\QCOM_AVSTREAM_8974\3&24FD9F5C&0&UID32768, Class:System, Manufacturer:Qualcomm, StatusCode:25174026)
+                >Generic PnP Monitor
+                (ID:DISPLAY\KN[6100\3&24FD9F5C&0&UID0, Class:Monitor, Manufacturer:(Standard monitor types), StatusCode:25174026)
+            >Qualcomm QMUX Device
+            (ID:ACPI\QCOM244F\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated., StatusCode:25165834)
+            >Qualcomm Powerkey GPIO Device
+            (ID:ACPI\QCOM241A\1, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25174026)
+            >Qualcomm BcryptCipher Device
+            (ID:ACPI\QCOM241D\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Reset Power Error Notifier Device
+            (ID:ACPI\QCOM245C\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >ACPI\QCOM2498\2&DABA3FF&0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm MipiBif WDF Driver
+            (ID:ACPI\QCOM2459\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm, StatusCode:25165834)
+            >Qualcomm Battery Monitoring System Driver
+            (ID:ACPI\QCOM2454\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2470\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2471\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\2, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\3, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\4, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\5, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\6, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2472\7, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2473\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2474\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2475\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Wireless Connectivity Subsystem Device
+            (ID:ACPI\QCOM242A\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+                >Qualcomm Atheros Wireless LAN Adapter
+                (ID:QWCN\QCOM2450\3&121575EA&0&1, FriendlyName:Qualcomm Atheros Wireless LAN Adapter, Class:Net, Manufacturer:Qualcomm Atheros Inc, StatusCode:25174026)
+                    >Microsoft Wi-Fi Direct Virtual Adapter
+                    (ID:{5D624F94-8850-40C3-A3FA-A4FD2080BAF3}\VWIFIMP_WFD\4&14F5F73&0&11, FriendlyName:Microsoft Wi-Fi Direct Virtual Adapter, Class:Net, Manufacturer:Microsoft, StatusCode:1098915850)
+                >QUALCOMM FM Transport Driver 
+                (ID:QWCN\QCOM2150\3&121575EA&0&1, Class:System, Manufacturer:(Standard system devices), StatusCode:25174026)
+                >Qualcomm Bluetooth Device
+                (ID:QWCN\QCOM245D\3&121575EA&0&1, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25174026)
+                    >Bluetooth Radio
+                    (ID:SYSTEMBUSQC\SMD_BT\4&37E81A5F&0&4097, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:25190410)
+                        >Bluetooth Device (Personal Area Network)
+                        (ID:BTH\MS_BTHPAN\5&36DDE44&0&2, FriendlyName:Bluetooth Device (Personal Area Network), Class:Net, Manufacturer:Microsoft, StatusCode:25174026)
+                        >BthL2cap Driver
+                        (ID:BTH\MS_BTHL2CAP\5&36DDE44&0&1, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:25174026)
+                        >Microsoft Bluetooth Enumerator
+                        (ID:BTH\MS_BTHBRB\5&36DDE44&0&0, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:25174026)
+                            >AVRCP demo (CT)
+                            (ID:BTHENUM\{0000110E-0000-1000-8000-00805F9B34FB}_LOCALMFG&001D\6&74AA39C&0&181714AFC85E_C00000000, StatusCode:25190410)
+                            >Personal Area Network Service
+                            (ID:BTHENUM\{00001115-0000-1000-8000-00805F9B34FB}_VID&00010006_PID&0001\6&74AA39C&0&1002B598C712_C00000000, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:1098932234)
+                            >Bluetooth Device
+                            (ID:BTHENUM\DEV_1002B598C712\6&74AA39C&0&BLUETOOTHDEVICE_1002B598C712, FriendlyName:NB-BRUNORI, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:58744842)
+                            >Service Discovery Service
+                            (ID:BTHENUM\{00001000-0000-1000-8000-00805F9B34FB}_VID&00010006_PID&0001\6&74AA39C&0&1002B598C712_C00000000, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:1098932234)
+                            >Hands-Free unit
+                            (ID:BTHENUM\{0000111E-0000-1000-8000-00805F9B34FB}_HCIBYPASS_LOCALMFG&001D\6&74AA39C&0&181714AFC85E_C00000000, StatusCode:25190410)
+                            >Bluetooth Stereo
+                            (ID:BTHENUM\{0000110B-0000-1000-8000-00805F9B34FB}_LOCALMFG&001D\6&74AA39C&0&181714AFC85E_C00000000, FriendlyName:My Radio Stereo, Class:MEDIA, Manufacturer:Microsoft, StatusCode:25190410)
+                            >Bluetooth Device
+                            (ID:BTHENUM\DEV_181714AFC85E\6&74AA39C&0&BLUETOOTHDEVICE_181714AFC85E, FriendlyName:My Radio, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:58744842)
+                            >Object Push Service
+                            (ID:BTHENUM\{00001105-0000-1000-8000-00805F9B34FB}_LOCALMFG&001D\6&74AA39C&0&181714AFC85E_C00000000, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:1098932234)
+                            >Device Identification Service
+                            (ID:BTHENUM\{00001200-0000-1000-8000-00805F9B34FB}_VID&00010006_PID&0001\6&74AA39C&0&1002B598C712_C00000000, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:1098932234)
+                        >Microsoft Bluetooth LE Enumerator
+                        (ID:BTH\MS_BTHLE\5&36DDE44&0&0, Class:Bluetooth, Manufacturer:Microsoft, StatusCode:25174026)
+                        >Bluetooth Device (RFCOMM Protocol TDI)
+                        (ID:BTH\MS_RFCOMM\5&36DDE44&0&3, Class:Net, Manufacturer:Microsoft, StatusCode:25174026)
+            >Processor
+            (ID:ACPI\QUALCOMM_INC_-_ARM_FAMILY_7_MODEL_C07_REVISION___3\0, FriendlyName:Qualcomm Snapdragon 400 Processor (8226), Class:Processor, Manufacturer:(Standard processor types), StatusCode:25165834)
+            >Processor
+            (ID:ACPI\QUALCOMM_INC_-_ARM_FAMILY_7_MODEL_C07_REVISION___3\1, FriendlyName:Qualcomm Snapdragon 400 Processor (8226), Class:Processor, Manufacturer:(Standard processor types), StatusCode:25165834)
+            >Processor
+            (ID:ACPI\QUALCOMM_INC_-_ARM_FAMILY_7_MODEL_C07_REVISION___3\2, FriendlyName:Qualcomm Snapdragon 400 Processor (8226), Class:Processor, Manufacturer:(Standard processor types), StatusCode:25165834)
+            >Processor
+            (ID:ACPI\QUALCOMM_INC_-_ARM_FAMILY_7_MODEL_C07_REVISION___3\3, FriendlyName:Qualcomm Snapdragon 400 Processor (8226), Class:Processor, Manufacturer:(Standard processor types), StatusCode:25165834)
+            >Qualcomm PEP Proxy Device
+            (ID:ACPI\QCOM2427\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm QDSS Device
+            (ID:ACPI\QCOM247D\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >ACPI\QCOM2424\3
+            (StatusCode:25175040, ProblemCode:28)
+            >ACPI\ODDT_CPU\2&DABA3FF&0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm ADC Device
+            (ID:ACPI\QCOM240F\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm IPC Router Device
+            (ID:ACPI\QCOM240A\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Pmic vibra driver
+            (ID:ACPI\NOKIA_VIBRA_PMIC\2&DABA3FF&0, Class:System, Manufacturer:(Standard system devices), StatusCode:25165834)
+            >Nokia Battery Interface Driver
+            (ID:ACPI\NOKI0BF0\2&DABA3FF&0, Class:System, Manufacturer:Nokia, StatusCode:25165834)
+            >Qualcomm Crash Dump Injector Device
+            (ID:ACPI\QCOM245B\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25174026)
+            >Ssm Driver
+            (ID:ACPI\QCOM2414\2&DABA3FF&0, Class:System, Manufacturer:(Standard system devices), StatusCode:25165834)
+            >USB Chipidea Controller
+            (ID:ACPI\QCOM2488\1, Class:USBFunctionController, Manufacturer:USB Chipidea Controller, StatusCode:25165834)
+                >NCSd
+                (ID:USBFN\NCSD\3&1CB10E25&0&03, Class:System, Manufacturer:(Standard system devices), StatusCode:25174026)
+                >Generic USB Function Class
+                (ID:USBFN\IPOVERUSB\3&1CB10E25&0&01, Class:USB, Manufacturer:Generic USB Function Class, StatusCode:25174026)
+                >Generic USB Function Class
+                (ID:USBFN\MTP\3&1CB10E25&0&00, Class:USB, Manufacturer:Generic USB Function Class, StatusCode:25174026)
+                >Microsoft Windows Phone VidStream Device Driver
+                (ID:USBFN\VIDSTREAM\3&1CB10E25&0&02, Class:System, Manufacturer:(Standard system devices), StatusCode:25174026)
+            >Qualcomm ADC Temperature Monitor Device
+            (ID:ACPI\QCOM248C\1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm ADC Temperature Monitor Device
+            (ID:ACPI\QCOM248E\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm ADC Temperature Monitor Device
+            (ID:ACPI\QCOM248F\0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm ADC Temperature Monitor Device
+            (ID:ACPI\QCOM248F\1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm ADC Temperature Monitor Device
+            (ID:ACPI\QCOM248F\2, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm ADC Temperature Monitor Device
+            (ID:ACPI\QCOM248F\3, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm ADC Temperature Monitor Device
+            (ID:ACPI\QCOM248F\4, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >WDFHELPER Driver
+            (ID:ACPI\QCOM247F\2&DABA3FF&0, Class:System, Manufacturer:(Standard system devices), StatusCode:25165834)
+            >Qualcomm ACPI Bridge Device
+            (ID:ACPI\QCOM2431\0, Class:System, Manufacturer:Qualcomm Technologies Inc., StatusCode:25165834)
+            >Nokia Energy Driver
+            (ID:ACPI\NOKI0B00\2&DABA3FF&0, Class:Battery, Manufacturer:Nokia, StatusCode:25165834)
+            >ACPI Wake Alarm
+            (ID:ACPI\ACPI000E\2&DABA3FF&0, Class:System, Manufacturer:(Standard system devices), StatusCode:25165834)
+            >Nokia security driver
+            (ID:ACPI\NOKIA_SEC\2&DABA3FF&0, Class:System, Manufacturer:Nokia, StatusCode:25165834)
+            >ACPI\QCOM2496\0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm PMIC Apps Device
+            (ID:ACPI\QCOM2457\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >ACPI\NOKIA_ATTS\2&DABA3FF&0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm Win8 Modembridge Device
+            (ID:ACPI\QCOM2145\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Qualcomm Diagnostic Router Device
+            (ID:ACPI\QCOM2413\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Qualcomm Temperature Sensor Device
+            (ID:ACPI\QCOM2475\64, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >Qualcomm Power Engine Plug-in Device
+            (ID:ACPI\QCOM2425\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+            >NXP PN547 NFC I2C Transport Driver
+            (ID:ACPI\PN547\2&DABA3FF&0, Class:Proximity, Manufacturer:NXP Semiconductors, StatusCode:25174026)
+            >Nokia Extra Sensory Perception Driver
+            (ID:ACPI\CESP0001\1, Class:System, Manufacturer:Nokia Corporation, StatusCode:25165834)
+            >Qualcomm Camera JPEG Encoder Driver
+            (ID:ACPI\QCOM2467\17, Class:System, Manufacturer:Qualcomm, StatusCode:25165834)
+            >Qualcomm Diagnostic Bridge Device
+            (ID:ACPI\QCOM248B\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25174026)
+            >ACPI\ODDT_VIB\0
+            (StatusCode:25175040, ProblemCode:28)
+            >Qualcomm Camera Rear Sensor Driver
+            (ID:ACPI\QCOM2436\15, Class:System, Manufacturer:Qualcomm, StatusCode:25174026)
+                >Qualcomm Camera Flash Driver
+                (ID:ACPI\QCOM0705\19, Class:System, Manufacturer:Qualcomm, StatusCode:25174026)
+            >Nokia Panel Driver
+            (ID:ACPI\NOKIA_PANEL\0, Class:System, Manufacturer:Nokia, StatusCode:25174026)
+            >ngp_drv Device
+            (ID:ACPI\QCOM_GPS\0, Class:System, Manufacturer:Microsoft Corporation, StatusCode:25165834)
+            >Qualcomm Sensor Collection
+            (ID:ACPI\QCOM2495\2&DABA3FF&0, Class:Sensor, Manufacturer:Qualcomm, StatusCode:25165834)
+                >Nokia Step Counter driver
+                (ID:ACPI\SSC_NOKIA_STEP_COUNTER\3&236C45AB&0, Class:Sensor, Manufacturer:Nokia, StatusCode:25165834)
+                >Sensor Algorithm Control driver
+                (ID:ACPI\SSC_SENSOR_ALGORITHM_CONTROL\3&236C45AB&0, Class:Sensor, Manufacturer:Nokia, StatusCode:25165834)
+                >Nokia Gesture Recognition driver
+                (ID:ACPI\SSC_NOKIA_GESTURE_RECOGNITION\3&236C45AB&0, Class:Sensor, Manufacturer:Nokia, StatusCode:25165834)
+                >Nokia Activity Detection driver
+                (ID:ACPI\SSC_NOKIA_ACT_DETECT\3&236C45AB&0, Class:Sensor, Manufacturer:Nokia, StatusCode:25165834)
+            >Qualcomm PMIC 3rd Party Driver
+            (ID:ACPI\QCOM2456\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Qualcomm Diagnostic Consumer Interface Device
+            (ID:ACPI\QCOM2412\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Touch Driver
+            (ID:ACPI\NOKIA_TOUCH\1, Class:HIDClass, Manufacturer:Synaptics, StatusCode:25174026)
+                >{1ED875DA-D851-42BE-9DFD-527D97178147}\TOUCH_TEST\3&18F8F13E&0&0
+                (StatusCode:25174026)
+                >HID-compliant touch screen
+                (ID:HID\NOKIA_TOUCH&COL01\3&18F8F13E&0&0000, Class:HIDClass, Manufacturer:(Standard system devices), StatusCode:25174026)
+                >HID-compliant device
+                (ID:HID\NOKIA_TOUCH&COL02\3&18F8F13E&0&0001, Class:HIDClass, Manufacturer:(Standard system devices), StatusCode:25174026)
+                >{3A0AC59A-4D8A-4875-B7EA-304771FF9B9A}\NOKIATOUCH\3&18F8F13E&0&0
+                (StatusCode:25174026)
+                >HID-compliant device
+                (ID:HID\NOKIA_TOUCH&COL03\3&18F8F13E&0&0002, Class:HIDClass, Manufacturer:(Standard system devices), StatusCode:25174026)
+            >Qualcomm Advanced Modem Subsystem Device
+            (ID:ACPI\QCOM242C\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+                >Qualcomm Mobile Broadband Device
+                (ID:QCMS\QCOM0EA0\3&4887B6B&0&0, FriendlyName:Qualcomm Mobile Broadband Device, Class:Net, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+                >Qualcomm Mobile Broadband Device
+                (ID:QCMS\QCOM0EA0\3&4887B6B&0&1, FriendlyName:Qualcomm Mobile Broadband Device #2, Class:Net, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+                >Qualcomm Mobile Broadband Device
+                (ID:QCMS\QCOM0EA0\3&4887B6B&0&2, FriendlyName:Qualcomm Mobile Broadband Device #3, Class:Net, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+                >Qualcomm Mobile Broadband Device
+                (ID:QCMS\QCOM0EA0\3&4887B6B&0&3, FriendlyName:Qualcomm Mobile Broadband Device #4, Class:Net, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+                >Qualcomm Mobile Broadband Device
+                (ID:QCMS\QCOM0EA0\3&4887B6B&0&4, FriendlyName:Qualcomm Mobile Broadband Device #5, Class:Net, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+                    >Generic software device
+                    (ID:SWD\MBAE\{2986CF19-E310-4772-80CD-9DDECF9949AA}, FriendlyName:Windows.Networking.NetworkOperators.MobileBroadbandAccount, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098932234)
+                    >Generic software device
+                    (ID:SWD\SMSDEVICE\SMS_DEVICE2_{6F4B480E-AC33-4361-BE5A-D9D40F60C2E2}, FriendlyName:SMS_DEVICE2_{6F4B480E-AC33-4361-BE5A-D9D40F60C2E2}, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098932234)
+                >Qualcomm Mobile Broadband Device
+                (ID:QCMS\QCOM0EA0\3&4887B6B&0&5, FriendlyName:Qualcomm Mobile Broadband Device #6, Class:Net, Manufacturer:Qualcomm Inc., StatusCode:25174026)
+            >Qualcomm Peripheral Image Loader Device
+            (ID:ACPI\QCOM2429\2&DABA3FF&0, Class:System, Manufacturer:Qualcomm Incorporated, StatusCode:25165834)
+            >Qualcomm PMIC GPIO Client Device
+            (ID:ACPI\QCOM2458\1, Class:System, Manufacturer:Qualcomm Inc., StatusCode:25165834)
+    >Volume Manager
+    (ID:ROOT\VOLMGR\0000, Class:System, Manufacturer:Microsoft, StatusCode:1098907659)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#00000000A1000000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098907658)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000002000000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000008000000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098907658)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000000E00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001000000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000002200000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000003A00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001200000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000002400000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000003600000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000003C00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000000200000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001400000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000002600000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000003800000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001A00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000003E00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000004000000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000005200000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001600000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000000A00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001C00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000004200000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001800000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\_??_SD#DISK&GENERIC&00000&1.0#4&34F2580D&0&BBA328A3&0#{53F56307-B6BF-11D0-94F2-00A0C91EFB8B}, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000000C00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000005A00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098907658)
+        >Volume
+        (ID:STORAGE\VOLUME\{D2D97CD2-77F2-11E6-9952-806E6F6E6963}#0000000001E00000, Class:Volume, Manufacturer:Microsoft, StatusCode:1098915850)
+    >Microsoft Basic Display Driver
+    (ID:ROOT\BASICDISPLAY\0000, Class:System, Manufacturer:(Standard display types), StatusCode:25175041, ProblemCode:31)
+    >Generic software device
+    (ID:SWD\SCDEVICEENUMBUS\0_SMART_CARD_DEVICE_ENUMERATION_BUS, FriendlyName:Smart Card Device Enumeration Bus, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Generic software device
+        (ID:SWD\SCDEVICEENUM\0_UICC, FriendlyName:UICC, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098915850)
+    >Sensor Fusion Client Driver
+    (ID:ROOT\UMDF2\FUSIONV2, Class:Sensor, Manufacturer:Microsoft, StatusCode:25174027)
+    >Microsoft Kernel Debug Network Adapter
+    (ID:ROOT\KDNIC\0000, FriendlyName:Microsoft Kernel Debug Network Adapter, Class:Net, Manufacturer:Microsoft, StatusCode:1098915851)
+    >Sensor Fusion Client Driver
+    (ID:ROOT\FUSION\0000, Class:Sensor, Manufacturer:@Fusion.inf,%StdMfg%, StatusCode:25175041, ProblemCode:24)
+    >Charge Arbitration Driver
+    (ID:ROOT\CAD\0000, Class:System, Manufacturer:(Standard system devices), StatusCode:25165835)
+    >Generic software device
+    (ID:SWD\RADIO\{3DB5895D-CC28-44B3-AD3D-6F01A782B8D2}, FriendlyName:Microsoft Radio Device Enumeration Bus, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Generic software device
+        (ID:SWD\RADIO\BLUETOOTH_48507379F8C8, FriendlyName:Bluetooth, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Generic software device
+        (ID:SWD\RADIO\{6F4B480E-AC33-4361-BE5A-D9D40F60C2E2}, FriendlyName:Cellular 5, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098915850)
+        >Generic software device
+        (ID:SWD\RADIO\{21C40F65-E726-4256-BF07-F7197D174262}, FriendlyName:Wi-Fi, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098915850)
+    >Generic software device
+    (ID:SWD\MSDAS\{CE958E9A-424F-4C88-86F4-11314821E75A}, FriendlyName:Microsoft Device Association Root Enumerator, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:25174026)
+    >Additional crash dump support for Windows Phone devices
+    (ID:ROOT\WPCRDMP\0000, Class:System, Manufacturer:@wpcrdmp.inf,%StdMfg%, StatusCode:25174027)
+    >HID Message Broker G1 Driver
+    (ID:ROOT\HIDMESSAGEBROKER_G1\0000, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174027)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G1&COL03\1&2CE762BB&0&0002, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G1&COL04\1&2CE762BB&0&0003, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G1&COL01\1&2CE762BB&0&0000, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G1&COL02\1&2CE762BB&0&0001, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+    >Microsoft Basic Render Driver
+    (ID:ROOT\BASICRENDER\0000, Class:System, Manufacturer:Microsoft, StatusCode:1098907659)
+    >HID Message Broker G2 Driver
+    (ID:ROOT\HIDMESSAGEBROKER_G2\0000, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174027)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G2&COL01\1&1D2317F5&0&0000, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G2&COL02\1&1D2317F5&0&0001, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G2&COL03\1&1D2317F5&0&0002, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+        >Nokia HID Message Broker Driverless
+        (ID:HID\HIDMESSAGEBROKER_G2&COL04\1&1D2317F5&0&0003, Class:HIDClass, Manufacturer:Nokia, StatusCode:25174026)
+    >Generic software device
+    (ID:SWD\MMDEVAPI\MICROSOFTGSWAVETABLESYNTH, FriendlyName:Microsoft GS Wavetable Synth, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:25174026)
+    >Charging filter Driver
+    (ID:ROOT\BATTFLTR\0000, StatusCode:25175041, ProblemCode:28)
+    >MSFT Usermode Cellular interconnect - links RILAdaptationService to the EMB stack
+    (ID:ROOT\CELLUSERMODEINTERCONNECT\0000, Class:System, Manufacturer:Microsoft, StatusCode:25174027)
+        >MSFT Radio Interface Layer - provides many to one relationship between apps and a driver instance
+        (ID:MODEM\MUX\1&37A118AD&0&0000, Class:System, Manufacturer:Microsoft, StatusCode:25174026)
+            >Cell Modem Queue that responds to Read/Write IRPs
+            (ID:MODEM\MSRIL\2&23BF95B2&0&0001, Class:System, Manufacturer:Microsoft, StatusCode:25174026)
+    >Generic software device
+    (ID:SWD\SENSORSWDEVICEENUMERATOR\SDOV2, FriendlyName:Microsoft Simple Device Orientation Sensor, Class:Sensor, Manufacturer:Microsoft, StatusCode:1098915850)
+    >Plug and Play Software Device Enumerator
+    (ID:ROOT\SYSTEM\0000, Class:System, Manufacturer:(Standard system devices), StatusCode:25165835)
+    >Generic software device
+    (ID:SWD\VSCDEVICEENUMBUS\0_VSC_DEVICE_ENUMERATION_BUS, FriendlyName:VSC Device Enumeration Bus, Class:SoftwareDevice, Manufacturer:Microsoft, StatusCode:1098915850)
