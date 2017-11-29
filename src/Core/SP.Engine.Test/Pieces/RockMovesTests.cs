@@ -91,14 +91,14 @@ namespace SP.Core.Engine.Pieces
 
 			var piece = new Rock();
 
-			UInt64 expB1 = 0x40fe;
-			UInt64 expA1 = 0x808080fe;
-			UInt64 expC2 = 0x8040;
+			UInt64 expA1 = 0x8080807e;
+			UInt64 expB1 = 0x40be;
+			UInt64 expC2 = 0x20205020;
 			UInt64 expD4 = 0x101010ef100000;
 			UInt64 expA8 = 0x80808080000000;
 			UInt64 expH6 = 0x101020101010100;
 			UInt64 expH8 = 0x1e01010000000000;
-			UInt64 expH1 = 0x101010101010102;
+			UInt64 expH1 = 0x10101010102;
 
 			var movA1 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row1, allied, enemies);
 			var movB1 = piece.GetMovesFromPosition(Columns.ColB, Rows.Row1, allied, enemies);
