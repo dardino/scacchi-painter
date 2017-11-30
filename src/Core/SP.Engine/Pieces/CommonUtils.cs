@@ -71,24 +71,38 @@ namespace SP.Engine.Pieces
 		{
 			return ((bb - 1) ^ bb);
 		}
-		public static ulong GetHigherMoves(ulong dd, ulong allpieces)
+		public static ulong GetHigherMovesDiagonal(ulong dd, ulong allpieces)
 		{
 			var ss = PiecesInLine(dd, allpieces);
 			if (ss == 0) return dd;
 			return ((~FillFromSmaller1(ss) << 1) & dd) ^ dd;
 		}
-		public static ulong GetLowerMoves(ulong dd, ulong allpieces)
+		public static ulong GetLowerMovesDiagonal(ulong dd, ulong allpieces)
 		{
 			var ss = PiecesInLine(dd, allpieces);
 			if (ss == 0) return dd;
 			return ((FillFromBigger1(ss) >> 1) & dd) ^ dd;
 		}
 
+		public static ulong GetSudEstOrtogonal(ulong dd, ulong allpieces)
+		{
+			var ss = (dd & allpieces);
+			if (ss == 0) return dd;
+			return ((FillFromBigger1(ss) >> 1) & dd) ^ dd;
+		}
+
+		public static ulong GetNordOvestOrtogonal(ulong dd, ulong allpieces)
+		{
+			var ss = PiecesInLine(dd, allpieces);
+			if (ss == 0) return dd;
+			return FillFromSmaller1(ss) & dd;
+		}
+
+
 		public static ulong PiecesInLine(ulong line, ulong allpieces) {
 			var ss = (line & allpieces);
 			return ss;
 		}
-
 
 
 		public static ulong FillFromBigger1(ulong bb)

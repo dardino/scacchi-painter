@@ -28,10 +28,10 @@ namespace SP.Engine.Pieces
 			var south = (sqb - 1) >> 1;
 			var north = ~south << 1;
 
-			var se = CommonUtils.GetLowerMoves(south & mydiagA, allpieces); //mosse possibili in S-E
-			var nw = CommonUtils.GetHigherMoves(north & mydiagA, allpieces); //mosse possibili in N-W
-			var sw = CommonUtils.GetLowerMoves(south & mydiagB, allpieces); //mosse possibili in S-W
-			var ne = CommonUtils.GetHigherMoves(north & mydiagB, allpieces); //mosse possibili in N-E
+			var se = CommonUtils.GetLowerMovesDiagonal(south & mydiagA, allpieces); //mosse possibili in S-E
+			var nw = CommonUtils.GetHigherMovesDiagonal(north & mydiagA, allpieces); //mosse possibili in N-W
+			var sw = CommonUtils.GetLowerMovesDiagonal(south & mydiagB, allpieces); //mosse possibili in S-W
+			var ne = CommonUtils.GetHigherMovesDiagonal(north & mydiagB, allpieces); //mosse possibili in N-E
 
 			return (nw | ne | sw | se) ^ allied; // tolgo gli alleati e lascio le catture
 		}
