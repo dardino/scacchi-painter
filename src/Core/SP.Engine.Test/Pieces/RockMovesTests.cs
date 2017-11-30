@@ -126,7 +126,7 @@ namespace SP.Core.Engine.Pieces
 
 			var piece = new Rock();
 
-			ulong expec1 = 0x5000;
+			ulong expec1 = 0x100000;
 			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
 
 			Assert.AreEqual(expec1, moves1);
@@ -137,9 +137,15 @@ namespace SP.Core.Engine.Pieces
 		public void R_IsAttackingSquare() {
 
 			var piece = new Rock();
-			Assert.IsTrue(piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies));
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies));
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, allied, enemies));
+			Assert.IsFalse(piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies), $"B2 -> C3");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies), $"A1 -> C2");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, allied, enemies), $"A4 -> H4");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.D4, Square.H4, allied, enemies), $"D4 -> H4");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.F6, Square.B6, allied, enemies), $"F6 -> B6");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.A8, Square.A4, allied, enemies), $"A8 -> A4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A8, Square.A3, allied, enemies), $"A8 -> A3");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.A4, allied, enemies), $"A1 -> A4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A8, allied, enemies), $"A1 -> A8");
 		}
 	}
 }

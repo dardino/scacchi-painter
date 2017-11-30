@@ -9,7 +9,6 @@ namespace SP.Engine.Pieces
 	public class Rock : EnginePiece
 	{
 
-
 		public override ulong GetCapturesFromPosition(Square s, ulong allied, ulong enemies)
 		{
 			return GetMovesFromPosition(s, allied, enemies) & enemies; // solo le mosse che coinvolgono i nemici
@@ -52,7 +51,7 @@ namespace SP.Engine.Pieces
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
 		{
-			return (GetCapturesFromPosition(fromSquare, allied, enemies) & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (GetMovesFromPosition(fromSquare, allied, enemies) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 	}
 }
