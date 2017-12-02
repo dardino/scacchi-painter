@@ -11,14 +11,15 @@ namespace SP.Engine.Pieces
 		public static ulong DiagonalA1H8 = 0x0102040810204080;
 		public static ulong DiagonalA8H1 = 0x8040201008040201;
 
-		public static ulong GetBotLeft2TopRightDiagonal(Square s) {
+		public static ulong GetBotLeft2TopRightDiagonal(Square s)
+		{
 			var offset = (int)s % 7;
 			var da = DiagonalA1H8 << (8 * offset);
 			var db = DiagonalA1H8 >> (8 * (7 - offset));
 			var mybit = (ulong)s.ToSquareBits();
 			return (mybit & da) > 0 ? da : db;
 		}
-
+	
 		public static ulong GetTopLeft2BottomRight(Square s)
 		{
 			var offset = (int)s % 9;
@@ -28,7 +29,8 @@ namespace SP.Engine.Pieces
 			return (mybit & da) > 0 ? da : db;
 		}
 
-		public static ulong GetDiagonals(Square s) {
+		public static ulong GetDiagonals(Square s)
+		{
 			return GetTopLeft2BottomRight(s) | GetBotLeft2TopRightDiagonal(s);
 		}
 
@@ -63,7 +65,7 @@ namespace SP.Engine.Pieces
 
 		public static ulong GetRows(Square square)
 		{
-			
+
 			return Rows[(int)((BoardSquare)square).Row];
 		}
 
@@ -99,7 +101,8 @@ namespace SP.Engine.Pieces
 		}
 
 
-		public static ulong PiecesInLine(ulong line, ulong allpieces) {
+		public static ulong PiecesInLine(ulong line, ulong allpieces)
+		{
 			var ss = (line & allpieces);
 			return ss;
 		}
@@ -116,9 +119,55 @@ namespace SP.Engine.Pieces
 			return bb;
 		}
 
+		public static ulong GetDiagonalMoves(Square s, ulong allied, ulong enemies)
+		{
+			var sqb = (ulong)s.ToSquareBits();
+			var alldiag = GetDiagonals(s) ^ sqb;
+			enemies = enemies & alldiag;
+			allied = allied & alldiag;
+			var allpieces = (allied | enemies);
+			if (allpieces == 0) return alldiag;
+
+			var mydiagA = GetBotLeft2TopRightDiagonal(s) ^ sqb;
+			var mydiagB = GetTopLeft2BottomRight(s) ^ sqb;
+
+			var south = (sqb - 1);
+			var north = ~south << 1;
+
+			var se = GetLowerMovesDiagonal(south & mydiagA, allpieces); //mosse possibili in S-E
+			var nw = GetHigherMovesDiagonal(north & mydiagA, allpieces); //mosse possibili in N-W
+			var sw = GetLowerMovesDiagonal(south & mydiagB, allpieces); //mosse possibili in S-W
+			var ne = GetHigherMovesDiagonal(north & mydiagB, allpieces); //mosse possibili in N-E
+
+			return (nw | ne | sw | se | allied) ^ allied; // tolgo gli alleati e lascio le catture
+		}
+
+		public static ulong GetOrthogonalMoves(Square s, ulong allied, ulong enemies)
+		{
+			var r = (int)((BoardSquare)s).Row;
+			var c = (int)((BoardSquare)s).Column;
+			var sb = (ulong)s.ToSquareBits();
+
+			var trav = (0xFFul << (r * 8)) ^ sb;
+			var col = (0x101010101010101ul << c) ^ sb;
+			var all = (allied | enemies) & (trav | col);
+
+			var south = (sb - 1);
+			var north = ~(south) ^ sb;
+
+			ulong m1 = GetSudEstOrtogonal(south & col, all); //mosse possibili a sud
+			ulong m2 = GetNordOvestOrtogonal(north & col, all); //mosse possibili a nord
+			ulong m3 = GetSudEstOrtogonal(south & trav, all); //mosse possibili a est
+			ulong m4 = GetNordOvestOrtogonal(north & trav, all); //mosse possibili a ovest
+			ulong sum = (m1 | m2 | m3 | m4);
+			return (sum & allied) ^ sum; // tolgo gli alleati e lascio le catture
+		}
+
+
 	}
 
-	public struct MovesHashKey {
+	public struct MovesHashKey
+	{
 		public Square Square;
 		public ulong Allied;
 		public ulong Enemies;

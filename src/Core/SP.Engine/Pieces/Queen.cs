@@ -10,17 +10,20 @@ namespace SP.Engine.Pieces
 	{
 		public override ulong GetCapturesFromPosition(Square s, ulong allied, ulong enemies)
 		{
-			throw new NotImplementedException();
+			return GetMovesFromPosition(s, allied, enemies) & enemies; // solo le mosse che coinvolgono i nemici
 		}
 
 		public override ulong GetMovesFromPosition(Square s, ulong allied, ulong enemies)
 		{
-			throw new NotImplementedException();
+			return CommonUtils.GetOrthogonalMoves(s, allied, enemies) | 
+				CommonUtils.GetDiagonalMoves(s, allied, enemies);
 		}
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
 		{
-			throw new NotImplementedException();
+			return (GetMovesFromPosition(fromSquare, allied, enemies) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
+
+
 	}
 }
