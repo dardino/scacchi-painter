@@ -126,7 +126,7 @@ namespace SP.Core.Engine.Pieces
 			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.A4, allied, enemies), $"A1 -> A4");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A8, allied, enemies), $"A1 -> A8");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.C3, Square.B5, allied, enemies), $"C3 -> B5");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.C1, Square.C2, allied, enemies), $"C3 -> B5");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.C1, Square.C2, allied, enemies), $"C1 -> C2");
 		}
 	}
 }

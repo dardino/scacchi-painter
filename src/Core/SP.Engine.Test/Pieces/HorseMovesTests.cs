@@ -73,7 +73,7 @@ namespace SP.Core.Engine.Pieces
 			UInt64 expA1 = 0ul;
 			UInt64 expB1 = (ulong)(SquareBits.A3 | SquareBits.C3 | SquareBits.D2);
 			UInt64 expC2 = (ulong)(SquareBits.A1 | SquareBits.A3 | SquareBits.B4 | SquareBits.E3 | SquareBits.E1);
-			UInt64 expD4 = (ulong)(SquareBits.B3 | SquareBits.B5 | SquareBits.C2 | SquareBits.C6 | SquareBits.E2 | SquareBits.E6 | SquareBits.F3 | SquareBits.F5);
+			UInt64 expD4 = (ulong)(SquareBits.B5 | SquareBits.C6 | SquareBits.E2 | SquareBits.E6);
 			UInt64 expA8 = (ulong)(SquareBits.B6 | SquareBits.C7);
 			UInt64 expH6 = (ulong)(SquareBits.G4 | SquareBits.G8);
 			UInt64 expH8 = (ulong)(SquareBits.G6);
@@ -105,7 +105,7 @@ namespace SP.Core.Engine.Pieces
 
 			var piece = new Horse();
 
-			ulong expec1 = (ulong)(SquareBits.B2 | SquareBits.D3 | SquareBits.D2);
+			ulong expec1 = (ulong)(SquareBits.A4 | SquareBits.B5);
 			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
 
 			Assert.AreEqual(expec1, moves1);

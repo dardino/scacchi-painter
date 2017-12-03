@@ -13,5 +13,13 @@ namespace SP.Core
 		H7, G7, F7, E7, D7, C7, B7, A7,
 		H8, G8, F8, E8, D8, C8, B8, A8,
 	}
-	
+
+	public static partial class Extensions
+	{
+		public static Columns GetColumn(this Square sq)
+		{
+			return (Columns)((int)sq % 8);
+		}
+
+	}
 }

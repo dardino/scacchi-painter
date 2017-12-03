@@ -22,7 +22,7 @@ namespace SP.Engine.Pieces
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
 		{
-			return (GetCapturesFromPosition(fromSquare, allied, enemies | (ulong)squareToCheck.ToSquareBits()) & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (GetCapturesFromPosition(fromSquare, 0, allied | enemies | (ulong)squareToCheck.ToSquareBits()) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 	}
 }
