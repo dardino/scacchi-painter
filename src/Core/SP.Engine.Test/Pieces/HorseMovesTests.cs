@@ -6,8 +6,8 @@ using System;
 namespace SP.Core.Engine.Pieces
 {
 	[TestClass]
-	[TestCategory("Engine.Pieces.Queen")]
-	public class QueenMovesTests
+	[TestCategory("Engine.Pieces.Horse")]
+	public class HorseMovesTests
 	{
 		// WHITE:                               BLACK:
 		// ---------------------------------	 ---------------------------------
@@ -31,19 +31,19 @@ namespace SP.Core.Engine.Pieces
 
 
 		[TestMethod]
-		public void Q_MoveInABlankBoard()
+		public void H_MoveInABlankBoard()
 		{
 
-			var piece = new Queen();
+			var piece = new Horse();
 
-			UInt64 movesA1 = 0x8182848890a0c07f;
-			UInt64 movesB1 = 0x404142444850e0bf;
-			UInt64 movesC2 = 0x20212224a870df70;
-			UInt64 movesD4 = 0x11925438ef385492;
-			UInt64 movesA8 = 0x7fc0a09088848281;
-			UInt64 movesH6 = 0x0503fe0305091121;
-			UInt64 movesH8 = 0xfe03050911214181;
-			UInt64 movesH1 = 0x81412111090503fe;
+			UInt64 movesA1 = (ulong)(SquareBits.B3 | SquareBits.C2);
+			UInt64 movesB1 = (ulong)(SquareBits.A3 | SquareBits.C3 | SquareBits.D2);
+			UInt64 movesC2 = (ulong)(SquareBits.A1 | SquareBits.A3 | SquareBits.B4 | SquareBits.D4 | SquareBits.E3 | SquareBits.E1);
+			UInt64 movesD4 = (ulong)(SquareBits.B3 | SquareBits.B5 | SquareBits.C2 | SquareBits.C6 | SquareBits.E2 | SquareBits.E6 | SquareBits.F3 | SquareBits.F5);
+			UInt64 movesA8 = (ulong)(SquareBits.B6 | SquareBits.C7);
+			UInt64 movesH6 = (ulong)(SquareBits.F5 | SquareBits.F7 | SquareBits.G4 | SquareBits.G8);
+			UInt64 movesH8 = (ulong)(SquareBits.F7 | SquareBits.G6);
+			UInt64 movesH1 = (ulong)(SquareBits.F2 | SquareBits.G3);
 
 			var bbMovesA1 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row1);
 			var bbMovesB1 = piece.GetMovesFromPosition(Columns.ColB, Rows.Row1);
@@ -66,18 +66,18 @@ namespace SP.Core.Engine.Pieces
 		}
 
 		[TestMethod]
-		public void Q_MoveInOccupiedBoard() {
+		public void H_MoveInOccupiedBoard() {
 
-			var piece = new Queen();
+			var piece = new Horse();
 
-			UInt64 expA1 = 0x8080c07e;
-			UInt64 expB1 = 0xc0be;
-			UInt64 expC2 = 0x20305070;
-			UInt64 expD4 = 0x01121418ef384400;
-			UInt64 expA8 = 0xc0a09088000000;
-			UInt64 expH6 = 0x0503020301010100;
-			UInt64 expH8 = 0x1e03050800000000;
-			UInt64 expH1 = 0x10101010302;
+			UInt64 expA1 = 0ul;
+			UInt64 expB1 = (ulong)(SquareBits.A3 | SquareBits.C3 | SquareBits.D2);
+			UInt64 expC2 = (ulong)(SquareBits.A1 | SquareBits.A3 | SquareBits.B4 | SquareBits.E3 | SquareBits.E1);
+			UInt64 expD4 = (ulong)(SquareBits.B3 | SquareBits.B5 | SquareBits.C2 | SquareBits.C6 | SquareBits.E2 | SquareBits.E6 | SquareBits.F3 | SquareBits.F5);
+			UInt64 expA8 = (ulong)(SquareBits.B6 | SquareBits.C7);
+			UInt64 expH6 = (ulong)(SquareBits.G4 | SquareBits.G8);
+			UInt64 expH8 = (ulong)(SquareBits.G6);
+			UInt64 expH1 = (ulong)(SquareBits.F2 | SquareBits.G3);
 
 			var movA1 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row1, allied, enemies);
 			var movB1 = piece.GetMovesFromPosition(Columns.ColB, Rows.Row1, allied, enemies);
@@ -100,10 +100,10 @@ namespace SP.Core.Engine.Pieces
 		}
 
 		[TestMethod]
-		public void Q_CapturesTest()
+		public void H_CapturesTest()
 		{
 
-			var piece = new Queen();
+			var piece = new Horse();
 
 			ulong expec1 = (ulong)(SquareBits.B2 | SquareBits.D3 | SquareBits.D2);
 			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
@@ -113,20 +113,19 @@ namespace SP.Core.Engine.Pieces
 		}
 
 		[TestMethod]
-		public void Q_IsAttackingSquare() {
+		public void H_IsAttackingSquare() {
 
-			var piece = new Queen();
-			Assert.IsTrue (piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies), $"B2 -> C3");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies), $"A1 -> C2");
+			var piece = new Horse();
+			Assert.IsFalse(piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies), $"B2 -> C3");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies), $"A1 -> C2");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, allied, enemies), $"A4 -> H4");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.D4, Square.H4, allied, enemies), $"D4 -> H4");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.F6, Square.B6, allied, enemies), $"F6 -> B6");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.A8, Square.A4, allied, enemies), $"A8 -> A4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.D4, Square.H4, allied, enemies), $"D4 -> H4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.F6, Square.B6, allied, enemies), $"F6 -> B6");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A8, Square.A4, allied, enemies), $"A8 -> A4");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A8, Square.A3, allied, enemies), $"A8 -> A3");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.A4, allied, enemies), $"A1 -> A4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A4, allied, enemies), $"A1 -> A4");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A8, allied, enemies), $"A1 -> A8");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.C3, Square.B5, allied, enemies), $"C3 -> B5");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.C1, Square.C2, allied, enemies), $"C3 -> B5");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.C3, Square.B5, allied, enemies), $"C3 -> B5");
 		}
 	}
 }
