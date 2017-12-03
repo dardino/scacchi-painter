@@ -10,9 +10,9 @@ namespace SP.Engine.Pieces
 	{
 		static ulong c3Moves = (ulong)(SquareBits.A2 | SquareBits.A4 | SquareBits.B1 | SquareBits.B5 | SquareBits.D5 | SquareBits.D1 | SquareBits.E2 | SquareBits.E4);
 
-		public override ulong GetCapturesFromPosition(Square s, ulong allied, ulong enemies)
+		public override ulong GetCapturesFromPosition(Square s, GameState gameState)
 		{
-			return GetMovesFromPosition(s, allied, enemies) & enemies;
+			return GetMovesFromPosition(s, gameState) & gameState.enemies;
 		}
 
 		public static ulong[] Cols = new ulong[] {
@@ -26,17 +26,17 @@ namespace SP.Engine.Pieces
 			0x2020202020202020 | 0x4040404040404040 | 0x8080808080808080
 		};
 
-		public override ulong GetMovesFromPosition(Square s, ulong allied, ulong enemies)
+		public override ulong GetMovesFromPosition(Square s, GameState g)
 		{
 			var fullC = Cols[(int)s.GetColumn()];
 			var dc3 = s - Square.C3;
 			var allMoves = (dc3 < 0 ? c3Moves >> (0 - dc3) : c3Moves << dc3) & fullC;
-			return (allMoves | allied) ^ allied; // dove sono gli enemies non mi serve saperlo.
+			return (allMoves | g.allied) ^ g.allied; // dove sono gli enemies non mi serve saperlo.
 		}
 
-		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
+		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState g)
 		{
-			return (GetMovesFromPosition(fromSquare, 0, allied | enemies | (ulong)squareToCheck.ToSquareBits()) & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (GetMovesFromPosition(fromSquare, new GameState { enemies = g.allied | g.enemies | (ulong)squareToCheck.ToSquareBits() }) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 	}
 }

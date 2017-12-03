@@ -11,44 +11,30 @@ namespace SP.Core.Engine.Pieces
 	[TestCategory("Engine.Pieces.King")]
 	public class KingMovesTests
 	{
-		// WHITE:
-		// ---------------------------------
-		// | X | X |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   | X |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   | X |   |   |   |   |
-		// ---------------------------------
-		// |   | X |   |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   | X |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   |   | X |
-		// ---------------------------------
-		ulong allied = 0xC004002410442001;
-		// BLACK:
-		// ---------------------------------
-		// |   |   | X | X |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   | X | X |   |   |   |
-		// ---------------------------------
-		// |   | X |   |   |   |   | X | X |
-		// ---------------------------------
-		// |   | X |   |   |   |   | X |   |
-		// ---------------------------------
-		// | X |   |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   | X |   |   |   |   |
-		// ---------------------------------
-		// |   | X |   | X |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   | X |   |
-		// ---------------------------------
-		ulong enemies = 0x3018434280105402;
+		GameState g = new GameState
+		{
+			// WHITE:                                BLACK:
+			// ---------------------------------     ---------------------------------
+			// | X | X |   |   |   |   |   |   |     |   |   | X | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   | X |   |   |     |   |   |   | X | X |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   |   |     |   | X |   |   |   |   | X | X |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   | X |   |   |     |   | X |   |   |   |   | X |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   | X |   |   |   |   |     | X |   |   |   |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   | X |   |   |   | X |   |   |     |   |   |   | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   |   |   |   |     |   | X |   | X |   | X |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   | X |     |   |   |   |   |   |   | X |   |
+			// ---------------------------------     --------------------------------- 
+			allied = 0xC004002410442001,              enemies = 0x3018434280105402
+		};
+
+
 
 
 		[TestMethod]
@@ -94,13 +80,13 @@ namespace SP.Core.Engine.Pieces
 			var king = new King();
 
 			ulong expec1 = 0x60105000;
-			ulong moves1 = king.GetMovesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
+			ulong moves1 = king.GetMovesFromPosition(Columns.ColC, Rows.Row3, g);
 			ulong expec2 = 0x60105000;
-			ulong moves2 = king.GetMovesFromPosition(Square.C3, allied, enemies);
+			ulong moves2 = king.GetMovesFromPosition(Square.C3, g);
 			ulong expec3 = 0xa080e0;
-			ulong moves3 = king.GetMovesFromPosition(Square.B2, allied, enemies);
+			ulong moves3 = king.GetMovesFromPosition(Square.B2, g);
 			ulong expec4 = 0x305070;
-			ulong moves4 = king.GetMovesFromPosition(Square.C2, allied, enemies);
+			ulong moves4 = king.GetMovesFromPosition(Square.C2, g);
 
 
 			Assert.AreEqual(expec1, moves1, "c3");
@@ -117,7 +103,7 @@ namespace SP.Core.Engine.Pieces
 			var king = new King();
 
 			ulong expec1 = 0x105000;
-			ulong moves1 = king.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
+			ulong moves1 = king.GetCapturesFromPosition(Columns.ColC, Rows.Row3, g);
 
 			Assert.AreEqual(expec1, moves1);
 
@@ -127,9 +113,9 @@ namespace SP.Core.Engine.Pieces
 		public void K_IsAttackingSquare() {
 
 			var king = new King();
-			Assert.IsTrue(king.IsAttackingSquare(Square.B2, Square.C3, allied, enemies));
-			Assert.IsFalse(king.IsAttackingSquare(Square.A1, Square.C2, allied, enemies));
-			Assert.IsFalse(king.IsAttackingSquare(Square.A4, Square.H4, allied, enemies));
+			Assert.IsTrue(king.IsAttackingSquare(Square.B2, Square.C3,  g));
+			Assert.IsFalse(king.IsAttackingSquare(Square.A1, Square.C2, g));
+			Assert.IsFalse(king.IsAttackingSquare(Square.A4, Square.H4, g));
 		}
 	}
 }

@@ -7,22 +7,22 @@ namespace SP.Engine.Pieces
 	public class Bishop : EnginePiece
 	{
 
-		public override ulong GetCapturesFromPosition(Square s, ulong allied, ulong enemies)
+		public override ulong GetCapturesFromPosition(Square s, GameState gameState)
 		{
-			return GetMovesFromPosition(s, allied, enemies) & enemies; // solo le mosse che coinvolgono i nemici
+			return GetMovesFromPosition(s, gameState) & gameState.enemies; // solo le mosse che coinvolgono i nemici
 		}
 
 		#region GetMoves
-		public override ulong GetMovesFromPosition(Square s, ulong allied, ulong enemies)
+		public override ulong GetMovesFromPosition(Square s, GameState gameState)
 		{
-			return CommonUtils.GetDiagonalMoves(s, allied, enemies);
+			return CommonUtils.GetDiagonalMoves(s, gameState.allied, gameState.enemies);
 		}
 
 		#endregion
 
-		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, ulong allied, ulong enemies)
+		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gameState)
 		{
-			return (GetCapturesFromPosition(fromSquare, 0, allied | enemies | (ulong)squareToCheck.ToSquareBits()) & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (GetCapturesFromPosition(fromSquare, new GameState { enemies = gameState.allied | gameState.enemies | (ulong)squareToCheck.ToSquareBits() }) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 	}
 }

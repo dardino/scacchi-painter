@@ -9,26 +9,28 @@ namespace SP.Core.Engine.Pieces
 	[TestCategory("Engine.Pieces.Horse")]
 	public class HorseMovesTests
 	{
-		// WHITE:                               BLACK:
-		// ---------------------------------	 ---------------------------------
-		// | X | X |   |   |   |   |   |   |	 |   |   | X | X |   |   |   |   |
-		// ---------------------------------	 ---------------------------------
-		// |   |   |   |   |   | X |   |   |	 |   |   |   | X | X |   |   |   |
-		// ---------------------------------	 ---------------------------------
-		// |   |   |   |   |   |   |   |   |	 |   | X |   |   |   |   | X | X |
-		// ---------------------------------	 ---------------------------------
-		// |   |   | X |   |   | X |   |   |	 |   | X |   |   |   |   | X |   |
-		// ---------------------------------	 ---------------------------------
-		// |   |   |   | X |   |   |   |   |	 | X |   |   |   |   |   |   |   |
-		// ---------------------------------	 ---------------------------------
-		// |   | X |   |   |   | X |   |   |	 |   |   |   | X |   |   |   |   |
-		// ---------------------------------	 ---------------------------------
-		// |   |   | X |   |   |   |   |   |	 |   | X |   | X |   | X |   |   |
-		// ---------------------------------	 ---------------------------------
-		// |   |   |   |   |   |   |   | X |	 |   |   |   |   |   |   | X |   |
-		// ---------------------------------	 ---------------------------------
-		ulong allied = 0xC004002410442001;      ulong enemies = 0x3018434280105402;
-
+		GameState g = new GameState
+		{
+			// WHITE:                                BLACK:
+			// ---------------------------------     ---------------------------------
+			// | X | X |   |   |   |   |   |   |     |   |   | X | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   | X |   |   |     |   |   |   | X | X |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   |   |     |   | X |   |   |   |   | X | X |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   | X |   |   |     |   | X |   |   |   |   | X |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   | X |   |   |   |   |     | X |   |   |   |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   | X |   |   |   | X |   |   |     |   |   |   | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   |   |   |   |     |   | X |   | X |   | X |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   | X |     |   |   |   |   |   |   | X |   |
+			// ---------------------------------     --------------------------------- 
+			allied = 0xC004002410442001,             enemies = 0x3018434280105402
+		};
 
 		[TestMethod]
 		public void H_MoveInABlankBoard()
@@ -79,14 +81,14 @@ namespace SP.Core.Engine.Pieces
 			UInt64 expH8 = (ulong)(SquareBits.G6);
 			UInt64 expH1 = (ulong)(SquareBits.F2 | SquareBits.G3);
 
-			var movA1 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row1, allied, enemies);
-			var movB1 = piece.GetMovesFromPosition(Columns.ColB, Rows.Row1, allied, enemies);
-			var movC2 = piece.GetMovesFromPosition(Columns.ColC, Rows.Row2, allied, enemies);
-			var movD4 = piece.GetMovesFromPosition(Columns.ColD, Rows.Row4, allied, enemies);
-			var movA8 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row8, allied, enemies);
-			var movH6 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row6, allied, enemies);
-			var movH8 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row8, allied, enemies);
-			var movH1 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row1, allied, enemies);
+			var movA1 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row1, g);
+			var movB1 = piece.GetMovesFromPosition(Columns.ColB, Rows.Row1, g);
+			var movC2 = piece.GetMovesFromPosition(Columns.ColC, Rows.Row2, g);
+			var movD4 = piece.GetMovesFromPosition(Columns.ColD, Rows.Row4, g);
+			var movA8 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row8, g);
+			var movH6 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row6, g);
+			var movH8 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row8, g);
+			var movH1 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row1, g);
 
 			Assert.AreEqual(expA1, movA1, "A1");
 			Assert.AreEqual(expB1, movB1, "B1");
@@ -106,7 +108,7 @@ namespace SP.Core.Engine.Pieces
 			var piece = new Horse();
 
 			ulong expec1 = (ulong)(SquareBits.A4 | SquareBits.B5);
-			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
+			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, g);
 
 			Assert.AreEqual(expec1, moves1);
 
@@ -116,16 +118,16 @@ namespace SP.Core.Engine.Pieces
 		public void H_IsAttackingSquare() {
 
 			var piece = new Horse();
-			Assert.IsFalse(piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies), $"B2 -> C3");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies), $"A1 -> C2");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, allied, enemies), $"A4 -> H4");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.D4, Square.H4, allied, enemies), $"D4 -> H4");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.F6, Square.B6, allied, enemies), $"F6 -> B6");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A8, Square.A4, allied, enemies), $"A8 -> A4");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A8, Square.A3, allied, enemies), $"A8 -> A3");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A4, allied, enemies), $"A1 -> A4");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A8, allied, enemies), $"A1 -> A8");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.C3, Square.B5, allied, enemies), $"C3 -> B5");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.B2, Square.C3, g), $"B2 -> C3");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.C2, g), $"A1 -> C2");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, g), $"A4 -> H4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.D4, Square.H4, g), $"D4 -> H4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.F6, Square.B6, g), $"F6 -> B6");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A8, Square.A4, g), $"A8 -> A4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A8, Square.A3, g), $"A8 -> A3");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A4, g), $"A1 -> A4");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.A8, g), $"A1 -> A8");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.C3, Square.B5, g), $"C3 -> B5");
 		}
 	}
 }

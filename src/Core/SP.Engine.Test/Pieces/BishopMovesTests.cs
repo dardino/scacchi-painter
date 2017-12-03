@@ -11,45 +11,28 @@ namespace SP.Core.Engine.Pieces
 	[TestCategory("Engine.Pieces.Bishop")]
 	public class BishopMovesTests
 	{
-		// WHITE:
-		// ---------------------------------
-		// | X | X |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   | X |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   | X |   |   |   |   |
-		// ---------------------------------
-		// |   | X |   |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   | X |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   |   | X |
-		// ---------------------------------
-		ulong allied = 0xC004002410442001;
-		// BLACK:
-		// ---------------------------------   // ---------------------------------
-		// |   |   | X | X |   |   |   |   |   // | 00| 02| 05| 09| 14| 20| 27| 35|
-		// ---------------------------------   // ---------------------------------
-		// |   |   |   | X | X |   |   |   |   // | 01| 04| 08| 13| 19| 26| 34| 42|
-		// ---------------------------------   // ---------------------------------
-		// |   | X |   |   |   |   | X | X |   // | 03| 07| 12| 18| 25| 33| 41| 48|
-		// ---------------------------------   // ---------------------------------
-		// |   | X |   |   |   |   | X |   |   // | 06| 11| 17| 24| 32| 40| 47| 53|
-		// ---------------------------------   // ---------------------------------
-		// | X |   |   |   |   |   |   |   |   // | 10| 16| 23| 31| 39| 46| 52| 57|
-		// ---------------------------------   // ---------------------------------
-		// |   |   |   | X |   |   |   |   |   // | 15| 22| 30| 38| 45| 51| 56| 60|
-		// ---------------------------------   // ---------------------------------
-		// |   | X |   | X |   | X |   |   |   // | 21| 29| 37| 44| 50| 55| 59| 62|
-		// ---------------------------------   // ---------------------------------
-		// |   |   |   |   |   |   | X |   |   // | 28| 36| 43| 49| 54| 58| 61| 63|
-		// ---------------------------------   // ---------------------------------
-		ulong enemies = 0x3018434280105402;
-
+		GameState g = new GameState
+		{
+			// WHITE:                                BLACK:
+			// ---------------------------------     ---------------------------------
+			// | X | X |   |   |   |   |   |   |     |   |   | X | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   | X |   |   |     |   |   |   | X | X |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   |   |     |   | X |   |   |   |   | X | X |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   | X |   |   |     |   | X |   |   |   |   | X |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   | X |   |   |   |   |     | X |   |   |   |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   | X |   |   |   | X |   |   |     |   |   |   | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   |   |   |   |     |   | X |   | X |   | X |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   | X |     |   |   |   |   |   |   | X |   |
+			// ---------------------------------     --------------------------------- 
+			allied = 0xC004002410442001,             enemies = 0x3018434280105402
+		};
 
 		[TestMethod]
 		public void B_MoveInABlankBoard()
@@ -92,9 +75,9 @@ namespace SP.Core.Engine.Pieces
 			var piece = new Bishop();
 
 			ulong expec1 = 0x8500040800000;
-			ulong moves1 = piece.GetMovesFromPosition(Columns.ColC, Rows.Row5, allied, enemies);
+			ulong moves1 = piece.GetMovesFromPosition(Columns.ColC, Rows.Row5, g);
 			ulong expec2 = 0x8040005000;
-			ulong moves2 = piece.GetMovesFromPosition(Square.C3, allied, enemies);
+			ulong moves2 = piece.GetMovesFromPosition(Square.C3, g);
 
 			Assert.AreEqual(expec1, moves1);
 			Assert.AreEqual(expec2, moves2);
@@ -107,7 +90,7 @@ namespace SP.Core.Engine.Pieces
 			var piece = new Bishop();
 
 			ulong expec1 = 0x5000;
-			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, allied, enemies);
+			ulong moves1 = piece.GetCapturesFromPosition(Columns.ColC, Rows.Row3, g);
 
 			Assert.AreEqual(expec1, moves1);
 
@@ -117,10 +100,10 @@ namespace SP.Core.Engine.Pieces
 		public void B_IsAttackingSquare() {
 
 			var piece = new Bishop();
-			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.B2, allied, enemies), "a1-b2");
-			Assert.IsTrue (piece.IsAttackingSquare(Square.B2, Square.C3, allied, enemies), "b2-c3");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, allied, enemies), "a1-c2");
-			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, allied, enemies), "a4-h4");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.A1, Square.B2, g), "a1-b2");
+			Assert.IsTrue (piece.IsAttackingSquare(Square.B2, Square.C3, g), "b2-c3");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, g), "a1-c2");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, g), "a4-h4");
 		}
 	}
 }

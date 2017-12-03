@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SP.Engine;
 using SP.Engine.Pieces;
 using System;
 
@@ -8,44 +9,32 @@ namespace SP.Core.Engine.Pieces
 	[TestCategory("Engine.Pieces.Pawn")]
 	public class PawnMovesTests
 	{
-		// WHITE:
-		// ---------------------------------
-		// | X | X |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   | X |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   | X |   |   |   |   |
-		// ---------------------------------
-		// |   | X |   |   |   | X |   |   |
-		// ---------------------------------
-		// |   |   | X |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   |   | X |
-		// ---------------------------------
-		ulong allied = 0xC004002410442001;
-		// BLACK:
-		// ---------------------------------
-		// |   |   | X | X |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   | X | X |   |   |   |
-		// ---------------------------------
-		// |   | X |   |   |   |   | X | X |
-		// ---------------------------------
-		// |   | X |   |   |   |   | X |   |
-		// ---------------------------------
-		// | X |   |   |   |   |   |   |   |
-		// ---------------------------------
-		// |   |   |   | X |   |   |   |   |
-		// ---------------------------------
-		// |   | X |   | X |   | X |   |   |
-		// ---------------------------------
-		// |   |   |   |   |   |   | X |   |
-		// ---------------------------------
-		ulong enemies = 0x3018434280105402;
+
+		GameState g = new GameState
+		{
+			// WHITE:                                BLACK:
+			// ---------------------------------     ---------------------------------
+			// | X | X |   |   |   |   |   |   |     |   |   | X | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   | X |   |   |     |   |   |   | X | X |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   |   |     |   | X |   |   |   |   | X | X |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   | X |   |   |     |   | X |   |   |   |   | X |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   | X |   |   |   |   |     | X |   |   |   |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   | X |   |   |   | X |   |   |     |   |   |   | X |   |   |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   | X |   |   |   |   |   |     |   | X |   | X |   | X |   |   |
+			// ---------------------------------     ---------------------------------
+			// |   |   |   |   |   |   |   | X |     |   |   |   |   |   |   | X |   |
+			// ---------------------------------     --------------------------------- 
+			allied = 0xC004002410442001,             enemies = 0x3018434280105402
+		};
+
+
+
 
 
 		[TestMethod]
@@ -109,19 +98,19 @@ namespace SP.Core.Engine.Pieces
 			UInt64 movesA2 = 0x800000;
 			UInt64 movesD2 = 0x0;
 
-			var bbMovesA1 = pawn.GetMovesFromPosition(Columns.ColA, Rows.Row1, allied, enemies);
-			var bbMovesB1 = pawn.GetMovesFromPosition(Columns.ColB, Rows.Row1, allied, enemies);
-			var bbMovesC2 = pawn.GetMovesFromPosition(Columns.ColC, Rows.Row2, allied, enemies);
-			var bbMovesD4 = pawn.GetMovesFromPosition(Columns.ColD, Rows.Row4, allied, enemies);
-			var bbMovesA8 = pawn.GetMovesFromPosition(Columns.ColA, Rows.Row8, allied, enemies);
-			var bbMovesH5 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row5, allied, enemies);
-			var bbMovesH6 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row6, allied, enemies);
-			var bbMovesH8 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row8, allied, enemies);
-			var bbMovesH1 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row1, allied, enemies);
-			var bbMovesF7 = pawn.GetMovesFromPosition(Columns.ColF, Rows.Row7, allied, enemies);
-			var bbMovesC7 = pawn.GetMovesFromPosition(Columns.ColC, Rows.Row7, allied, enemies);
-			var bbMovesA2 = pawn.GetMovesFromPosition(Columns.ColA, Rows.Row2, allied, enemies);
-			var bbMovesD2 = pawn.GetMovesFromPosition(Columns.ColD, Rows.Row2, allied, enemies);
+			var bbMovesA1 = pawn.GetMovesFromPosition(Columns.ColA, Rows.Row1, g);
+			var bbMovesB1 = pawn.GetMovesFromPosition(Columns.ColB, Rows.Row1, g);
+			var bbMovesC2 = pawn.GetMovesFromPosition(Columns.ColC, Rows.Row2, g);
+			var bbMovesD4 = pawn.GetMovesFromPosition(Columns.ColD, Rows.Row4, g);
+			var bbMovesA8 = pawn.GetMovesFromPosition(Columns.ColA, Rows.Row8, g);
+			var bbMovesH5 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row5, g);
+			var bbMovesH6 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row6, g);
+			var bbMovesH8 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row8, g);
+			var bbMovesH1 = pawn.GetMovesFromPosition(Columns.ColH, Rows.Row1, g);
+			var bbMovesF7 = pawn.GetMovesFromPosition(Columns.ColF, Rows.Row7, g);
+			var bbMovesC7 = pawn.GetMovesFromPosition(Columns.ColC, Rows.Row7, g);
+			var bbMovesA2 = pawn.GetMovesFromPosition(Columns.ColA, Rows.Row2, g);
+			var bbMovesD2 = pawn.GetMovesFromPosition(Columns.ColD, Rows.Row2, g);
 
 			Assert.AreEqual(movesA1, bbMovesA1, "a1-a2");
 			Assert.AreEqual(movesB1, bbMovesB1, "b1-b2");
@@ -159,20 +148,20 @@ namespace SP.Core.Engine.Pieces
 			UInt64 movesD2 = 0x0;
 			UInt64 movesC1 = (ulong)Math.Pow(2, (int)Square.B2) | (ulong)Math.Pow(2, (int)Square.D2);
 
-			var bbMovesA1 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row1, allied, enemies);
-			var bbMovesB1 = pawn.GetCapturesFromPosition(Columns.ColB, Rows.Row1, allied, enemies);
-			var bbMovesC2 = pawn.GetCapturesFromPosition(Columns.ColC, Rows.Row2, allied, enemies);
-			var bbMovesD4 = pawn.GetCapturesFromPosition(Columns.ColD, Rows.Row4, allied, enemies);
-			var bbMovesA8 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row8, allied, enemies);
-			var bbMovesH5 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row5, allied, enemies);
-			var bbMovesH6 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row6, allied, enemies);
-			var bbMovesH8 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row8, allied, enemies);
-			var bbMovesH1 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row1, allied, enemies);
-			var bbMovesF7 = pawn.GetCapturesFromPosition(Columns.ColF, Rows.Row7, allied, enemies);
-			var bbMovesC7 = pawn.GetCapturesFromPosition(Columns.ColC, Rows.Row7, allied, enemies);
-			var bbMovesA2 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row2, allied, enemies);
-			var bbMovesD2 = pawn.GetCapturesFromPosition(Columns.ColD, Rows.Row2, allied, enemies);
-			var bbMovesC1 = pawn.GetCapturesFromPosition(Columns.ColC, Rows.Row1, allied, enemies);
+			var bbMovesA1 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row1, g);
+			var bbMovesB1 = pawn.GetCapturesFromPosition(Columns.ColB, Rows.Row1, g);
+			var bbMovesC2 = pawn.GetCapturesFromPosition(Columns.ColC, Rows.Row2, g);
+			var bbMovesD4 = pawn.GetCapturesFromPosition(Columns.ColD, Rows.Row4, g);
+			var bbMovesA8 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row8, g);
+			var bbMovesH5 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row5, g);
+			var bbMovesH6 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row6, g);
+			var bbMovesH8 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row8, g);
+			var bbMovesH1 = pawn.GetCapturesFromPosition(Columns.ColH, Rows.Row1, g);
+			var bbMovesF7 = pawn.GetCapturesFromPosition(Columns.ColF, Rows.Row7, g);
+			var bbMovesC7 = pawn.GetCapturesFromPosition(Columns.ColC, Rows.Row7, g);
+			var bbMovesA2 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row2, g);
+			var bbMovesD2 = pawn.GetCapturesFromPosition(Columns.ColD, Rows.Row2, g);
+			var bbMovesC1 = pawn.GetCapturesFromPosition(Columns.ColC, Rows.Row1, g);
 
 			Assert.AreEqual(movesA1, bbMovesA1, "a1*b2");
 			Assert.AreEqual(movesB1, bbMovesB1, "b1***");
@@ -195,10 +184,10 @@ namespace SP.Core.Engine.Pieces
 
 			var pawn = new Pawn();
 			pawn.Color = PieceColors.White;
-			Assert.IsTrue(pawn.IsAttackingSquare(Square.B2, Square.C3, allied, enemies));
-			Assert.IsFalse(pawn.IsAttackingSquare(Square.A1, Square.C2, allied, enemies));
-			Assert.IsFalse(pawn.IsAttackingSquare(Square.A4, Square.H4, allied, enemies));
-			Assert.IsTrue(pawn.IsAttackingSquare(Square.C5, Square.B6, allied, enemies));
+			Assert.IsTrue(pawn.IsAttackingSquare(Square.B2, Square.C3, g));
+			Assert.IsFalse(pawn.IsAttackingSquare(Square.A1, Square.C2,g));
+			Assert.IsFalse(pawn.IsAttackingSquare(Square.A4, Square.H4,g));
+			Assert.IsTrue(pawn.IsAttackingSquare(Square.C5, Square.B6, g));
 		}
 	}
 }
