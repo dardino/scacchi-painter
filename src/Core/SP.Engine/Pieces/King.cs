@@ -14,7 +14,7 @@ namespace SP.Engine.Pieces
 		public override ulong GetCapturesFromPosition(Square s, GameState gameState)
 		{
 			ulong moves = GetMovesFromPosition(s, gameState);
-			return (moves & gameState.enemies);
+			return (moves & gameState.Enemies);
 		}
 
 		public override ulong GetMovesFromPosition(Square fromSq, GameState gameState)
@@ -29,7 +29,7 @@ namespace SP.Engine.Pieces
 				if (col == Columns.ColA) m2clone &= 0xFEFEFEFEFEFEFEFE;
 				if (col == Columns.ColH) m2clone &= 0x7F7F7F7F7F7F7F7F;
 			}
-			return (gameState.allied & m2clone) ^ m2clone;
+			return (gameState.Allied & m2clone) ^ m2clone;
 		}
 
 		public override bool IsAttackingSquare(Square fromSquare, Square attackingSquare, GameState gameState)

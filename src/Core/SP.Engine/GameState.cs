@@ -11,10 +11,11 @@ namespace SP.Engine
 
 	public class GameState
 	{
-		public BitBoard allied = 0;
-		public BitBoard enemies = 0;
+		public BitBoard Allied = 0;
+		public BitBoard Enemies = 0;
 		public bool IsSquareUnderAttack(Square s) { return false; }
 		public Move? LastMove = null;
 		public bool[] CastlingAllowed = new bool[4] { true, true, true, true };
+		public ulong AlliedRocks = 0; // bitboard for castling check
 	}
 }

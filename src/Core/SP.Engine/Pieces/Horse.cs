@@ -12,7 +12,7 @@ namespace SP.Engine.Pieces
 
 		public override ulong GetCapturesFromPosition(Square s, GameState gameState)
 		{
-			return GetMovesFromPosition(s, gameState) & gameState.enemies;
+			return GetMovesFromPosition(s, gameState) & gameState.Enemies;
 		}
 
 		public static ulong[] Cols = new ulong[] {
@@ -31,12 +31,12 @@ namespace SP.Engine.Pieces
 			var fullC = Cols[(int)s.GetColumn()];
 			var dc3 = s - Square.C3;
 			var allMoves = (dc3 < 0 ? c3Moves >> (0 - dc3) : c3Moves << dc3) & fullC;
-			return (allMoves | g.allied) ^ g.allied; // dove sono gli enemies non mi serve saperlo.
+			return (allMoves | g.Allied) ^ g.Allied; // dove sono gli enemies non mi serve saperlo.
 		}
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState g)
 		{
-			return (GetMovesFromPosition(fromSquare, new GameState { enemies = g.allied | g.enemies | (ulong)squareToCheck.ToSquareBits() }) & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (GetMovesFromPosition(fromSquare, new GameState { Enemies = g.Allied | g.Enemies | (ulong)squareToCheck.ToSquareBits() }) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 	}
 }

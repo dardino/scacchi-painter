@@ -31,7 +31,7 @@ namespace SP.Core.Engine.Pieces
 			// ---------------------------------     ---------------------------------
 			// |   |   |   |   |   |   |   | X |     |   |   |   |   |   |   | X |   |
 			// ---------------------------------     --------------------------------- 
-			allied = 0xC004002410442001,              enemies = 0x3018434280105402
+			Allied = 0xC004002410442001,              Enemies = 0x3018434280105402
 		};
 
 
@@ -116,6 +116,13 @@ namespace SP.Core.Engine.Pieces
 			Assert.IsTrue(king.IsAttackingSquare(Square.B2, Square.C3,  g));
 			Assert.IsFalse(king.IsAttackingSquare(Square.A1, Square.C2, g));
 			Assert.IsFalse(king.IsAttackingSquare(Square.A4, Square.H4, g));
+		}
+
+		[TestMethod]
+		public void K_Castling() {
+			var wk = new King() { Color = PieceColors.White };
+			var bk = new King() { Color = PieceColors.Black };
+			var gs = new GameState { Allied = (ulong)(SquareBits.A1 | SquareBits.E1), Enemies = 0, CastlingAllowed =new bool[] { true, true, true, true }, AlliedRocks = (ulong)(SquareBits.A1) };
 		}
 	}
 }

@@ -11,17 +11,17 @@ namespace SP.Engine.Pieces
 
 		public override ulong GetCapturesFromPosition(Square s, GameState g)
 		{
-			return GetMovesFromPosition(s, g) & g.enemies; // solo le mosse che coinvolgono i nemici
+			return GetMovesFromPosition(s, g) & g.Enemies; // solo le mosse che coinvolgono i nemici
 		}
 
 		public override ulong GetMovesFromPosition(Square s, GameState g)
 		{
-			return CommonUtils.GetOrthogonalMoves(s, g.allied, g.enemies);
+			return CommonUtils.GetOrthogonalMoves(s, g.Allied, g.Enemies);
 		}
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState g)
 		{
-			return (GetMovesFromPosition(fromSquare, new GameState { enemies = g.allied | g.enemies | (ulong)squareToCheck.ToSquareBits() }) & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (GetMovesFromPosition(fromSquare, new GameState { Enemies = g.Allied | g.Enemies | (ulong)squareToCheck.ToSquareBits() }) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 	}
 }
