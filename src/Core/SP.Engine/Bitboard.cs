@@ -80,5 +80,15 @@ namespace SP.Engine
 
 		}
 
+
+		public static BitBoard fromRowBytes(params uint[] row) {
+			ulong ret = 0;
+			if (row.Length > 8) throw new IndexOutOfRangeException("Too many rows!");
+			for (var r = 0; r < row.Length; r++) {
+				var ri = 7 - r;
+				ret = ret | ((ulong)row[r] << (8 * ri));
+			}
+			return ret;
+		}
 	}
 }

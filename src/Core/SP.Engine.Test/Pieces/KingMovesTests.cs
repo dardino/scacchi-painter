@@ -119,10 +119,78 @@ namespace SP.Core.Engine.Pieces
 		}
 
 		[TestMethod]
-		public void K_Castling() {
+		public void K_FreeCastling() {
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs = new GameState { Allied = (ulong)(SquareBits.A1 | SquareBits.E1), Enemies = 0, CastlingAllowed =new bool[] { true, true, true, true }, AlliedRocks = (ulong)(SquareBits.A1) };
+			var gs1 = new GameState {
+				Allied = (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.A2 /*pedone*/),
+				Enemies = (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8 | SquareBits.H7),
+				CastlingAllowed = new bool[] { true, true, true, true },
+				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
+			};
+			var expec1 = (ulong)(SquareBits.C1 | SquareBits.D1 | SquareBits.F1 | SquareBits.G1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
+			var expec2 = (ulong)(SquareBits.C8 | SquareBits.D8 | SquareBits.F8 | SquareBits.G8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
+
+			var moves1 = wk.GetMovesFromPosition(Square.E1, gs1);
+			var moves2 = bk.GetMovesFromPosition(Square.E8, gs1);
+
+			Assert.AreEqual(expec1, moves1, "WK E1 --> All Moves + All Castling");
+			Assert.AreEqual(expec2, moves2, "BK E8 --> All Moves + All Castling");
+		}
+
+		[TestMethod]
+		public void K_NoCastling1()
+		{
+			var wk = new King() { Color = PieceColors.White };
+			var bk = new King() { Color = PieceColors.Black };
+			var gs2 = new GameState // rocks under check
+			{
+				Allied = (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1),
+				Enemies = (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8),
+				CastlingAllowed = new bool[] { true, true, true, true },
+				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
+			};
+			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
+			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
+
+			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
+			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
+
+			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (R under check)");
+			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (R under check)");
+		}
+
+
+		[TestMethod]
+		public void K_NoCastling2()
+		{
+			var wk = new King() { Color = PieceColors.White };
+			var bk = new King() { Color = PieceColors.Black };
+			var gs2 = new GameState // rocks under check
+			{
+				Allied = (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.H6), // metto un alfiere bianco in H6
+				Enemies = (ulong)(SquareBits.A3 | SquareBits.A8 | SquareBits.E8 | SquareBits.H8), // e uno nero in A3
+				CastlingAllowed = new bool[] { true, true, true, true },
+				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8),
+				UnderAttackCells = BitBoard.fromRowBytes(
+					0b00100010,
+					0b00000000,
+					0b00000000,
+					0b00000000,
+					0b00000000,
+					0b00000000,
+					0b00000000,
+					0b00100010
+					)
+			};
+			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
+			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
+
+			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
+			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
+
+			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (arrival square under check)");
+			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (arrival square under check)");
 		}
 	}
 }
