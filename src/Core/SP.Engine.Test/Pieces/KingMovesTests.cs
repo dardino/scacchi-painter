@@ -13,25 +13,27 @@ namespace SP.Core.Engine.Pieces
 	{
 		GameState g = new GameState
 		{
-			// WHITE:                                BLACK:
-			// ---------------------------------     ---------------------------------
-			// | X | X |   |   |   |   |   |   |     |   |   | X | X |   |   |   |   |
-			// ---------------------------------     ---------------------------------
-			// |   |   |   |   |   | X |   |   |     |   |   |   | X | X |   |   |   |
-			// ---------------------------------     ---------------------------------
-			// |   |   |   |   |   |   |   |   |     |   | X |   |   |   |   | X | X |
-			// ---------------------------------     ---------------------------------
-			// |   |   | X |   |   | X |   |   |     |   | X |   |   |   |   | X |   |
-			// ---------------------------------     ---------------------------------
-			// |   |   |   | X |   |   |   |   |     | X |   |   |   |   |   |   |   |
-			// ---------------------------------     ---------------------------------
-			// |   | X |   |   |   | X |   |   |     |   |   |   | X |   |   |   |   |
-			// ---------------------------------     ---------------------------------
-			// |   |   | X |   |   |   |   |   |     |   | X |   | X |   | X |   |   |
-			// ---------------------------------     ---------------------------------
-			// |   |   |   |   |   |   |   | X |     |   |   |   |   |   |   | X |   |
-			// ---------------------------------     --------------------------------- 
-			Allied = 0xC004002410442001,              Enemies = 0x3018434280105402
+			BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
+				// WHITE:                                    BLACK:
+				// ---------------------------------         ---------------------------------
+				// | X | X |   |   |   |   |   |   |         |   |   | X | X |   |   |   |   |
+				// ---------------------------------         ---------------------------------
+				// |   |   |   |   |   | X |   |   |         |   |   |   | X | X |   |   |   |
+				// ---------------------------------         ---------------------------------
+				// |   |   |   |   |   |   |   |   |         |   | X |   |   |   |   | X | X |
+				// ---------------------------------         ---------------------------------
+				// |   |   | X |   |   | X |   |   |         |   | X |   |   |   |   | X |   |
+				// ---------------------------------         ---------------------------------
+				// |   |   |   | X |   |   |   |   |         | X |   |   |   |   |   |   |   |
+				// ---------------------------------         ---------------------------------
+				// |   | X |   |   |   | X |   |   |         |   |   |   | X |   |   |   |   |
+				// ---------------------------------         ---------------------------------
+				// |   |   | X |   |   |   |   |   |         |   | X |   | X |   | X |   |   |
+				// ---------------------------------         ---------------------------------
+				// |   |   |   |   |   |   |   | X |         |   |   |   |   |   |   | X |   |
+				// ---------------------------------         --------------------------------- 
+				{ PieceColors.White, 0xC004002410442001 }, {PieceColors.Black, 0x3018434280105402 }, { PieceColors.Neutral, 0 }
+			}
 		};
 
 
@@ -123,13 +125,23 @@ namespace SP.Core.Engine.Pieces
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
 			var gs1 = new GameState {
-				Allied = (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.A2 /*pedone*/),
-				Enemies = (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8 | SquareBits.H7),
+				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
+				{
+					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.A2 /*pedone*/)},
+					{ PieceColors.Black, (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8 | SquareBits.H7)           },
+					{ PieceColors.Neutral, 0ul }
+				},
 				CastlingAllowed = new bool[] { true, true, true, true },
 				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
 			};
-			var expec1 = (ulong)(SquareBits.C1 | SquareBits.D1 | SquareBits.F1 | SquareBits.G1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
-			var expec2 = (ulong)(SquareBits.C8 | SquareBits.D8 | SquareBits.F8 | SquareBits.G8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
+			var expec1 = (ulong)BitBoard.FromRowBytes(
+				Row2: 0b00011100,
+				Row1: 0b00110110
+				);
+			var expec2 = (ulong)BitBoard.FromRowBytes(
+				Row8: 0b00110110,
+				Row7: 0b00011100
+				);
 
 			var moves1 = wk.GetMovesFromPosition(Square.E1, gs1);
 			var moves2 = bk.GetMovesFromPosition(Square.E8, gs1);
@@ -145,8 +157,12 @@ namespace SP.Core.Engine.Pieces
 			var bk = new King() { Color = PieceColors.Black };
 			var gs2 = new GameState // rocks under check
 			{
-				Allied = (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1),
-				Enemies = (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8),
+				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
+				{
+					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1)},
+					{ PieceColors.Black, (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8)},
+					{ PieceColors.Neutral, 0ul }
+				},
 				CastlingAllowed = new bool[] { true, true, true, true },
 				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
 			};
@@ -168,11 +184,15 @@ namespace SP.Core.Engine.Pieces
 			var bk = new King() { Color = PieceColors.Black };
 			var gs2 = new GameState // rocks under check
 			{
-				Allied = (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.H6), // metto un alfiere bianco in H6
-				Enemies = (ulong)(SquareBits.A3 | SquareBits.A8 | SquareBits.E8 | SquareBits.H8), // e uno nero in A3
+				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
+				{
+					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.H6)},
+					{ PieceColors.Black, (ulong)(SquareBits.A3 | SquareBits.A8 | SquareBits.E8 | SquareBits.H8)},
+					{ PieceColors.Neutral, 0ul }
+				},
 				CastlingAllowed = new bool[] { true, true, true, true },
 				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8),
-				UnderAttackCells = BitBoard.fromRowBytes(
+				UnderAttackCells = BitBoard.FromRowBytes(
 					0b00100010,
 					0b00000000,
 					0b00000000,

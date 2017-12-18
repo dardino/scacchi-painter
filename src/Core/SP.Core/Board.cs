@@ -7,16 +7,17 @@ namespace SP.Core
 {
 	public class Board
 	{
-		public Cell this[int index]
+		public BoardSquare this[int index]
 		{
 			get {
 				return cells[index];
 			}
 		}
 
-		private Cell[] cells = new Cell[64];
+		private BoardSquare[] cells = new BoardSquare[64];
 		public int WhiteCount   => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.White ? 1 : 0);
 		public int BlackCount   => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Black ? 1 : 0);
+
 		public int NeutralCount => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Neutral ? 1 : 0);
 		public int TotalCount => cells.Sum(c => c.Occupied ? 1 : 0);
 
@@ -32,7 +33,7 @@ namespace SP.Core
 		{
 			for (int i = 0; i < 64; i++)
 			{
-				cells[i] = new Cell(i);
+				cells[i] = new BoardSquare((Square)i);
 			}
 		}
 

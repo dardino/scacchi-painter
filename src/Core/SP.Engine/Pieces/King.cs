@@ -1,6 +1,7 @@
 ﻿using SP.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SP.Engine.Pieces
@@ -10,6 +11,23 @@ namespace SP.Engine.Pieces
 	{
 		static ulong movesFromB2 = 0xE0A0E0;
 		static int b2Index = (int)BoardSquare.GetSquareIndex(Columns.ColB, Rows.Row2);
+		static Dictionary<PieceColors, CastlingIndexes[]> castlingByColor = new Dictionary<PieceColors, CastlingIndexes[]> {
+			{ PieceColors.Black, new CastlingIndexes[] { CastlingIndexes.ooo, CastlingIndexes.oo } },
+			{ PieceColors.White, new CastlingIndexes[] { CastlingIndexes.OOO, CastlingIndexes.OO } }
+		};
+
+		static Dictionary<CastlingIndexes, BitBoard> CastlingBB = new Dictionary<CastlingIndexes, BitBoard>
+		{
+			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00100000) },
+			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000010) },
+			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00100000) },
+			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000010) }
+		};
+
+		protected bool IsMyStartingSquare(Square s) {
+			return (Color == PieceColors.White && s == Square.E1) ||
+					(Color == PieceColors.Black && s== Square.E8);
+		}
 
 		public override ulong GetCapturesFromPosition(Square s, GameState gameState)
 		{
@@ -29,7 +47,19 @@ namespace SP.Engine.Pieces
 				if (col == Columns.ColA) m2clone &= 0xFEFEFEFEFEFEFEFE;
 				if (col == Columns.ColH) m2clone &= 0x7F7F7F7F7F7F7F7F;
 			}
-			return (gameState.Allied & m2clone) ^ m2clone;
+			var moves = (gameState.Allied & m2clone) ^ m2clone;
+			if (gameState.CastlingAllowed.Any(a => a) 
+				&& IsMyStartingSquare(fromSq)
+				&& !gameState.IsSquareUnderAttack(fromSq)
+			) {
+				var idxs = castlingByColor[Color];
+				foreach (var castling in idxs)
+				{
+					if (!gameState.CastlingAllowed[(int)castling]) continue;
+					moves |= CastlingBB[castling];
+				}
+			}
+			return moves;
 		}
 
 		public override bool IsAttackingSquare(Square fromSquare, Square attackingSquare, GameState gameState)

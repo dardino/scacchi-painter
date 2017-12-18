@@ -21,7 +21,8 @@ namespace SP.Engine.Pieces
 
 		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState g)
 		{
-			return (GetMovesFromPosition(fromSquare, new GameState { Enemies = g.Allied | g.Enemies | (ulong)squareToCheck.ToSquareBits() }) & (ulong)squareToCheck.ToSquareBits()) > 0;
+			var gs = GameState.FromOnlyEnemies(g.AllBB | (ulong)squareToCheck.ToSquareBits(), g.MoveTo);
+			return (GetMovesFromPosition(fromSquare, gs) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 
 

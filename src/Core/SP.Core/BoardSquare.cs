@@ -5,14 +5,25 @@ namespace SP.Core
 	public struct BoardSquare
 	{
 		private Square square;
+		public bool Occupied { get { return Piece != null; } }
+
+		public PieceBase Piece { get; private set; }
+
+		internal void SetPiece(PieceBase piece)
+		{
+			Piece = piece;
+		}
 
 		public BoardSquare(Square s)
 		{
 			square = s;
+			Piece = null;
 		}
 
-		public BoardSquare(Columns c, Rows r) {
+		public BoardSquare(Columns c, Rows r)
+		{
 			square = GetSquareIndex(c, r);
+			Piece = null;
 		}
 		public static Square GetSquareIndex(Columns col, Rows row)
 		{
@@ -28,7 +39,7 @@ namespace SP.Core
 		}
 		public static implicit operator BoardSquare(int index)
 		{
-			return new BoardSquare((Square) index);
+			return new BoardSquare((Square)index);
 		}
 
 		public static implicit operator int(BoardSquare square)

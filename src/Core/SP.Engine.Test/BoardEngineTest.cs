@@ -33,11 +33,11 @@ namespace SP.Engine.Test
 			ulong bitWhites = 0x1800000010004020;
 
 			var board     = Board.FromNotation(notation);
-			var bitBoards = EngineBitBoards.FromBoard(board);
+			var bitBoards = GameState.FromBoard(board);
 
-			Assert.AreEqual(bitAllPieces, bitBoards.AllPieces);
-			Assert.AreEqual(bitBlacks, bitBoards.BlackPieces);
-			Assert.AreEqual(bitWhites, bitBoards.WhitePieces);
+			Assert.AreEqual(bitAllPieces, (ulong)bitBoards.AllBB);
+			Assert.AreEqual(bitBlacks, (ulong)bitBoards.BitBoardByColor[PieceColors.Black]);
+			Assert.AreEqual(bitWhites, (ulong)bitBoards.BitBoardByColor[PieceColors.White]);
 
 		}
 
