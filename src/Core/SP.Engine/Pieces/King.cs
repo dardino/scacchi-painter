@@ -23,6 +23,13 @@ namespace SP.Engine.Pieces
 			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00100000) },
 			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000010) }
 		};
+		static Dictionary<CastlingIndexes, BitBoard> CastlingNotUnderCheck = new Dictionary<CastlingIndexes, BitBoard>
+		{
+			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b10111000) },
+			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00001111) },
+			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b10111000) },
+			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00001111) }
+		};
 
 		protected bool IsMyStartingSquare(Square s) {
 			return (Color == PieceColors.White && s == Square.E1) ||
@@ -50,12 +57,12 @@ namespace SP.Engine.Pieces
 			var moves = (gameState.Allied & m2clone) ^ m2clone;
 			if (gameState.CastlingAllowed.Any(a => a) 
 				&& IsMyStartingSquare(fromSq)
-				&& !gameState.IsSquareUnderAttack(fromSq)
 			) {
 				var idxs = castlingByColor[Color];
 				foreach (var castling in idxs)
 				{
-					if (!gameState.CastlingAllowed[(int)castling]) continue;
+					if (!gameState.CastlingAllowed[(int)castling] 
+						|| (gameState.UnderAttackCells & CastlingNotUnderCheck[castling]) != 0) continue;
 					moves |= CastlingBB[castling];
 				}
 			}

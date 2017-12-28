@@ -164,10 +164,11 @@ namespace SP.Core.Engine.Pieces
 					{ PieceColors.Neutral, 0ul }
 				},
 				CastlingAllowed = new bool[] { true, true, true, true },
-				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
+				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8),
+				UnderAttackCells = (ulong)(SquareBits.A1 | SquareBits.H8)
 			};
-			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
-			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
+			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2 | SquareBits.G1);
+			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7 | SquareBits.C8);
 
 			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
 			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
@@ -182,7 +183,7 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = new GameState // rocks under check
+			var gs2 = new GameState
 			{
 				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
 				{
