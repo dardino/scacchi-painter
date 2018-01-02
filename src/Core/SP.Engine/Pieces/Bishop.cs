@@ -1,9 +1,11 @@
 ﻿using SP.Core;
+using System.Collections.Generic;
 
 namespace SP.Engine.Pieces
 {
 
 	[Figurine(PieceFigurine.Bishop)]
+	[PieceName("B")]
 	public class Bishop : EnginePiece
 	{
 
@@ -25,6 +27,11 @@ namespace SP.Engine.Pieces
 			var gs = GameState.FromOnlyEnemies(gameState.All | (ulong)squareToCheck.ToSquareBits(), gameState.MoveTo);
 			return (GetCapturesFromPosition(fromSquare, gs)
 				& (ulong)squareToCheck.ToSquareBits()) > 0;
+		}
+
+		public override IEnumerable<Move> GetMoves(ulong bitb)
+		{
+			return new List<Move>();
 		}
 	}
 }

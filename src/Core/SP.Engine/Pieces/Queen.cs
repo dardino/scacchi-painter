@@ -6,6 +6,7 @@ using SP.Core;
 namespace SP.Engine.Pieces
 {
 	[Figurine(PieceFigurine.Queen)]
+	[PieceName("Q")]
 	public class Queen : EnginePiece
 	{
 		public override ulong GetCapturesFromPosition(Square s, GameState g)
@@ -25,6 +26,10 @@ namespace SP.Engine.Pieces
 			return (GetMovesFromPosition(fromSquare, gs) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 
+		public override IEnumerable<Move> GetMoves(ulong bitb)
+		{
+			return new List<Move>();
+		}
 
 	}
 }

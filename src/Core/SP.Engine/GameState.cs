@@ -15,7 +15,7 @@ namespace SP.Engine
 
 	public class GameState
 	{
-		public BitBoard Allied { get { return BitBoardByColor[AlliedColor]; } }
+		public BitBoard Allied { get { return BitBoardByColor[AlliedColor] | BitBoardByColor[PieceColors.Neutral]; } }
 		public BitBoard Enemies { get { return BitBoardByColor[EnemiesColor]; } }
 		public BitBoard All { get { return BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral]; } }
 
@@ -26,6 +26,7 @@ namespace SP.Engine
 		};
 
 		public BitBoard UnderAttackCells = 0;
+		public BitBoard AttackingCells = 0;
 
 		public bool IsSquareUnderAttack(Square s)
 		{
@@ -36,24 +37,71 @@ namespace SP.Engine
 		public bool[] CastlingAllowed = new bool[4] { true, true, true, true };
 		public ulong AlliedRocks = 0; // bitboard for castling check
 		public PieceColors MoveTo = PieceColors.White;
-
+		public List<Type> AvailablePromotionsTypes = new List<Type> {
+			typeof(Pieces.Pawn),
+			typeof(Pieces.Bishop),
+			typeof(Pieces.Horse),
+			typeof(Pieces.Rock),
+			typeof(Pieces.Queen)
+		};
 		private Board board;
-		internal static GameState FromBoard(Board board)
+
+		List<Move> moves = new List<Move>();
+		internal List<Move> GetMoves()
 		{
-			var gs = new GameState();
-			gs.board = board;
-			for (int c = 0; c < 64; c++) {
-				var s = (Square)c;
-				var p = gs.board.GetPiece(s);
-				if (p == null) continue;
-				gs.BitBoardByColor[p.Color] |= (ulong)s.ToSquareBits();
+			return moves;
+		}
+
+		public decimal MaxDepth { get { return board.Stipulation.Depth; } }
+
+		private decimal ActualDepth { get; set; }
+
+		public void UpdateGameState()
+		{
+			BitBoardByColor[PieceColors.White]   = 0;
+			BitBoardByColor[PieceColors.Black]   = 0;
+			BitBoardByColor[PieceColors.Neutral] = 0;
+			UnderAttackCells = 0;
+			AttackingCells = 0;
+
+			for (var i = 0; i < 64; i++)
+			{
+				var s = (Square)i;
+				var x = (ulong)s.ToSquareBits();
+				var p = board.GetPiece(s) as EnginePiece;
+				if (p == null)
+				{
+					
+				}
+				else
+				{
+					BitBoardByColor[p.Color] |= x;
+				}
+
 			}
-			return gs;
 		}
 
 		public PieceColors AlliedColor { get { return MoveTo; } }
 		public PieceColors EnemiesColor { get { return MoveTo == PieceColors.White ? PieceColors.Black : PieceColors.White; } }
 
+		internal static GameState FromBoard(Board board)
+		{
+			var gs = new GameState
+			{
+				board = board
+			};
+			for (int c = 0; c < 64; c++)
+			{
+				var s = (Square)c;
+				var ex = gs.board.GetPiece(s);
+				var p = EnginePiece.FromPieceBase(ex);
+				gs.board.PlacePieceOnBoard(s, p);
+			}
+			gs.MoveTo = gs.board.Stipulation.StartingMoveColor;
+			gs.ActualDepth = gs.MaxDepth;
+			gs.UpdateGameState();
+			return gs;
+		}
 		internal static GameState FromOnlyEnemies(ulong enemies, PieceColors moveTo)
 		{
 			var bbe = new Dictionary<PieceColors, BitBoard>

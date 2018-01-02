@@ -6,6 +6,7 @@ using System.Text;
 namespace SP.Engine.Pieces
 {
 	[Figurine(PieceFigurine.Horse)]
+	[PieceName("N")]
 	public class Horse : EnginePiece
 	{
 		static ulong c3Moves = (ulong)(SquareBits.A2 | SquareBits.A4 | SquareBits.B1 | SquareBits.B5 | SquareBits.D5 | SquareBits.D1 | SquareBits.E2 | SquareBits.E4);
@@ -38,6 +39,10 @@ namespace SP.Engine.Pieces
 		{
 			var enemies = g.Allied | g.Enemies | (ulong)squareToCheck.ToSquareBits();
 			return (GetMovesFromPosition(fromSquare, GameState.FromOnlyEnemies(enemies, g.MoveTo)) & (ulong)squareToCheck.ToSquareBits()) > 0;
+		}
+		public override IEnumerable<Move> GetMoves(ulong bitb)
+		{
+			return new List<Move>();
 		}
 	}
 }

@@ -6,6 +6,7 @@ using SP.Core;
 namespace SP.Engine.Pieces
 {
 	[Figurine(PieceFigurine.Rock)]
+	[PieceName("R")]
 	public class Rock : EnginePiece
 	{
 
@@ -23,5 +24,10 @@ namespace SP.Engine.Pieces
 		{
 			return (GetMovesFromPosition(fromSquare, GameState.FromOnlyEnemies(g.Allied | g.Enemies | (ulong)squareToCheck.ToSquareBits() , g.MoveTo)) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
+		public override IEnumerable<Move> GetMoves(ulong bitb)
+		{
+			return new List<Move>();
+		}
+
 	}
 }

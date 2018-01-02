@@ -33,6 +33,7 @@ namespace SP.Core
 			{ 'T', PieceFigurine.Rock }
 		};
 		internal static List<Type> piecetypes = typeof(PieceBase).Assembly.GetTypes().Where(f => f.BaseType == typeof(PieceBase)).ToList();
+		public string Name { get; protected set; }
 
 		internal static PieceBase FromFEN(string c)
 		{
@@ -53,6 +54,7 @@ namespace SP.Core
 			PieceFigurine tipo = pieceSymbolMap[stcol];
 			// ora genero il pezzo:
 			PieceBase pezzo = MakePieceClass(tipo, stcol.ToString());
+
 			// gli applico il colore:
 			pezzo.Color = colore;
 			// quindi cerco la rotazione:
@@ -73,6 +75,7 @@ namespace SP.Core
 			var type = FindClass(tipo, name);
 			if (type == null) return null;
 			var instance = Activator.CreateInstance(type) as PieceBase;
+			instance.Name = name;
 			return instance;
 		}
 

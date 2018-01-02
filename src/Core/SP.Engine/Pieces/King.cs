@@ -7,6 +7,7 @@ using System.Text;
 namespace SP.Engine.Pieces
 {
 	[Figurine(PieceFigurine.King)]
+	[PieceName("K")]
 	public class King : EnginePiece
 	{
 		static ulong movesFromB2 = 0xE0A0E0;
@@ -37,6 +38,7 @@ namespace SP.Engine.Pieces
 			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b01110000) },
 			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000110) }
 		};
+
 
 		protected bool IsMyStartingSquare(Square s) {
 			return (Color == PieceColors.White && s == Square.E1) ||
@@ -82,6 +84,10 @@ namespace SP.Engine.Pieces
 		{
 			var moves = GetMovesFromPosition(fromSquare, gameState);
 			return ((ulong)Math.Pow(2, (int)attackingSquare) & moves) > 0;
+		}
+		public override IEnumerable<Move> GetMoves(ulong bitb)
+		{
+			return new List<Move>();
 		}
 	}
 }

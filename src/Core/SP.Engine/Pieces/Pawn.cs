@@ -7,6 +7,7 @@ using SP.Core;
 namespace SP.Engine.Pieces
 {
 	[Figurine(PieceFigurine.Pawn)]
+	[PieceName("P")]
 	public class Pawn : EnginePiece
 	{
 		
@@ -40,6 +41,10 @@ namespace SP.Engine.Pieces
 			ulong sq = (ulong)squareToCheck.ToSquareBits();
 			var moves = GetMovesFromPosition(fromSquare, GameState.FromOnlyEnemies(g.Allied | g.Enemies | sq, g.MoveTo));
 			return (moves & sq) > 0;
+		}
+		public override IEnumerable<Move> GetMoves(ulong bitb)
+		{
+			return new List<Move>();
 		}
 	}
 }

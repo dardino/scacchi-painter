@@ -21,6 +21,8 @@ namespace SP.Core
 		public int NeutralCount => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Neutral ? 1 : 0);
 		public int TotalCount => cells.Sum(c => c.Occupied ? 1 : 0);
 
+		public Stipulation Stipulation { get; set; } = new Stipulation(2);
+
 		public PieceBase GetPiece(Square sq)
 		{
 			return this[(int)sq].Piece;
