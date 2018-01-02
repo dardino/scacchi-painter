@@ -35,7 +35,7 @@ namespace SP.Engine.Test
 			var board     = Board.FromNotation(notation);
 			var bitBoards = GameState.FromBoard(board);
 
-			Assert.AreEqual(bitAllPieces, (ulong)bitBoards.AllBB);
+			Assert.AreEqual(bitAllPieces, (ulong)bitBoards.All);
 			Assert.AreEqual(bitBlacks, (ulong)bitBoards.BitBoardByColor[PieceColors.Black]);
 			Assert.AreEqual(bitWhites, (ulong)bitBoards.BitBoardByColor[PieceColors.White]);
 

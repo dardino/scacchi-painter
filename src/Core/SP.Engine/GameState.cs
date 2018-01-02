@@ -17,7 +17,7 @@ namespace SP.Engine
 	{
 		public BitBoard Allied { get { return BitBoardByColor[AlliedColor]; } }
 		public BitBoard Enemies { get { return BitBoardByColor[EnemiesColor]; } }
-		public BitBoard AllBB { get { return BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral]; } }
+		public BitBoard All { get { return BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral]; } }
 
 		public Dictionary<PieceColors, BitBoard> BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
 			{ PieceColors.Black   , BitBoard.FromRowBytes() },

@@ -30,6 +30,13 @@ namespace SP.Engine.Pieces
 			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b10111000) },
 			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00001111) }
 		};
+		static Dictionary<CastlingIndexes, BitBoard> CastlingFreeCells = new Dictionary<CastlingIndexes, BitBoard>
+		{
+			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b01110000) },
+			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000110) },
+			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b01110000) },
+			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000110) }
+		};
 
 		protected bool IsMyStartingSquare(Square s) {
 			return (Color == PieceColors.White && s == Square.E1) ||
@@ -61,8 +68,10 @@ namespace SP.Engine.Pieces
 				var idxs = castlingByColor[Color];
 				foreach (var castling in idxs)
 				{
-					if (!gameState.CastlingAllowed[(int)castling] 
-						|| (gameState.UnderAttackCells & CastlingNotUnderCheck[castling]) != 0) continue;
+					if (!gameState.CastlingAllowed[(int)castling] // non è più possibile arroccare
+						|| (gameState.All & CastlingFreeCells[castling]) != 0 // la linea di arrocco è occupata
+						|| (gameState.UnderAttackCells & CastlingNotUnderCheck[castling]) != 0 // le case interessate dall'arrocco sono sotto attacco
+						) continue;
 					moves |= CastlingBB[castling];
 				}
 			}

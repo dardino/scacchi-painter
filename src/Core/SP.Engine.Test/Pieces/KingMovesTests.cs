@@ -213,5 +213,37 @@ namespace SP.Core.Engine.Pieces
 			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (arrival square under check)");
 			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (arrival square under check)");
 		}
+
+		[TestMethod]
+		public void K_NoCastling3()
+		{
+			var wk = new King() { Color = PieceColors.White };
+			var bk = new King() { Color = PieceColors.Black };
+			var gs2 = new GameState
+			{
+				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
+				{
+					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.H6 | SquareBits.G8)},
+					{ PieceColors.Black, (ulong)(SquareBits.A3 | SquareBits.A8 | SquareBits.E8 | SquareBits.H8 | SquareBits.B1)},
+					{ PieceColors.Neutral, 0ul }
+				},
+				CastlingAllowed = new bool[] { true, true, true, true },
+				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
+			};
+			ulong expec3 = BitBoard.FromRowBytes(
+				Row2: 0b00011100,
+				Row1: 0b00010110
+					);
+			ulong expec4 = BitBoard.FromRowBytes(
+				Row8: 0b00110100,
+				Row7: 0b00011100
+					);
+
+			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
+			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
+
+			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (occupied cell in rock line move)");
+			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (occupied cell in rock line move)");
+		}
 	}
 }
