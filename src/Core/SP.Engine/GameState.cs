@@ -46,11 +46,6 @@ namespace SP.Engine
 		};
 		private Board board;
 
-		List<Move> moves = new List<Move>();
-		internal List<Move> GetMoves()
-		{
-			return moves;
-		}
 
 		public decimal MaxDepth { get { return board.Stipulation.Depth; } }
 
@@ -58,8 +53,8 @@ namespace SP.Engine
 
 		public void UpdateGameState()
 		{
-			BitBoardByColor[PieceColors.White]   = 0;
-			BitBoardByColor[PieceColors.Black]   = 0;
+			BitBoardByColor[PieceColors.White] = 0;
+			BitBoardByColor[PieceColors.Black] = 0;
 			BitBoardByColor[PieceColors.Neutral] = 0;
 			UnderAttackCells = 0;
 			AttackingCells = 0;
@@ -69,17 +64,21 @@ namespace SP.Engine
 				var s = (Square)i;
 				var x = (ulong)s.ToSquareBits();
 				var p = board.GetPiece(s) as EnginePiece;
-				if (p == null)
+				if (p == null) continue;
+				BitBoardByColor[p.Color] |= x;
+				if (p.Color == PieceColors.Neutral || p.Color == MoveTo)
 				{
-					
+					var m = p.GetMovesFromPosition(s, this);
+					AttackingCells |= m;
 				}
-				else
+				if (p.Color != MoveTo)
 				{
-					BitBoardByColor[p.Color] |= x;
+					var m = p.GetAttackingSquares(s, this);
+					UnderAttackCells |= m;
 				}
-
 			}
 		}
+
 
 		public PieceColors AlliedColor { get { return MoveTo; } }
 		public PieceColors EnemiesColor { get { return MoveTo == PieceColors.White ? PieceColors.Black : PieceColors.White; } }
@@ -116,6 +115,23 @@ namespace SP.Engine
 				BitBoardByColor = bbe
 			};
 			return gs;
+		}
+
+
+		public IEnumerable<Move> GetMoves()
+		{
+			for (int c = 0; c < 64; c++)
+			{
+				var s = (Square)c;
+				EnginePiece p = board.GetPiece(s) as EnginePiece;
+				if (p != null && (p.Color == MoveTo || p.Color == PieceColors.Neutral))
+				{
+					foreach (var item in p.GetMoves(s, this))
+					{
+						yield return item;
+					}
+				}
+			}
 		}
 	}
 }

@@ -29,9 +29,6 @@ namespace SP.Engine.Pieces
 				& (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
 
-		public override IEnumerable<Move> GetMoves(ulong bitb)
-		{
-			return new List<Move>();
-		}
+
 	}
 }

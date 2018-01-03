@@ -1,14 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SP.Core;
+using System.Linq;
 
 namespace SP.Engine.Test
 {
 	[TestClass]
-	[TestCategory("Engine.Board")]
-	public class BoardEngineTest
+	[TestCategory("Engine.GameState")]
+	public class GameStateTests
 	{
 		[TestMethod]
-		public void BitBoardGenerator()
+		public void GameStateGenerator()
 		{
 			// ---------------------------------
 			// |   |   |   | Q | N |   |   |   |
@@ -41,5 +42,17 @@ namespace SP.Engine.Test
 
 		}
 
+		[TestMethod]
+		public void GameStateGetListOfMoves()
+		{
+			var gameState = GameState.FromBoard(Board.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
+			var moves = gameState.GetMoves();
+			var expstr = "Pd4-d5;  Ne8*f6;  Ne8*d6;  Ne8-g7;  Ne8*c7;  Qd8*d6;  Qd8*e7;  Qd8-d7;  Qd8*c7;  Qd8-c8;  Qd8-b8;  Qd8-a8";
+			var actString = System.String.Join(";  ", moves);
+
+			Assert.AreEqual(12, moves.Count(), "List of Moves must be 12");
+			Assert.AreEqual(expstr, actString, "List of Moves must be " + expstr);
+		}
+		
 	}
 }

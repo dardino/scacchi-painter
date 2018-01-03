@@ -40,9 +40,5 @@ namespace SP.Engine.Pieces
 			var enemies = g.Allied | g.Enemies | (ulong)squareToCheck.ToSquareBits();
 			return (GetMovesFromPosition(fromSquare, GameState.FromOnlyEnemies(enemies, g.MoveTo)) & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
-		public override IEnumerable<Move> GetMoves(ulong bitb)
-		{
-			return new List<Move>();
-		}
 	}
 }

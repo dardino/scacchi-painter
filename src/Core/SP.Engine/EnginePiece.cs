@@ -21,11 +21,35 @@ namespace SP.Engine
 		{
 			return GetMovesFromPosition(BoardSquare.GetSquareIndex(col, row), gInfo);
 		}
+		public IEnumerable<Move> GetMoves(Square fromSquare, GameState state)
+		{
+			var bbMoves = GetMovesFromPosition(fromSquare, state);
+			var squares = BitBoard.GetListOfSquares(bbMoves);
+			foreach (var toSquare in squares)
+			{
+				yield return new Move
+				{
+					Piece = this,
+					SourceSquare = fromSquare,
+					IsCapture = IsCapture(fromSquare, toSquare, state),
+					DestinationSquare = toSquare,
+					SubSequentialMoves = GetSubSequentialMoves(fromSquare, toSquare, state)
+				};
+			}
+		}
 
 		public abstract ulong GetMovesFromPosition(Square s, GameState gInfo);
 		public abstract ulong GetCapturesFromPosition(Square s, GameState gInfo);
+		public virtual ulong GetAttackingSquares(Square s, GameState gInfo) {
+			return GetMovesFromPosition(s, gInfo);
+		}
 		public abstract bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gInfo);
-		public abstract IEnumerable<Move> GetMoves(ulong bitb);
+		public virtual IEnumerable<Move> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
+			return null;
+		}
+		public bool IsCapture(Square from, Square to, GameState gInfo) {
+			return (GetCapturesFromPosition(from, gInfo) & (ulong)to.ToSquareBits()) > 0;
+		}
 
 		internal static List<Type> piecetypes = typeof(EnginePiece).Assembly.GetTypes().Where(f => f.BaseType == typeof(EnginePiece)).ToList();
 
@@ -63,7 +87,15 @@ namespace SP.Engine
 			return filtered.FirstOrDefault();
 		}
 
-
+		public override string ToString()
+		{
+			var t = GetType().GetCustomAttributes(false)
+						.Where(f => f.GetType() == typeof(PieceNameAttribute))
+						.FirstOrDefault() as PieceNameAttribute;
+			var n = t == null ? GetType().Name : t.PieceName;
+			if (Color == PieceColors.Neutral) n = "n" + n.ToUpper();
+			return n;
+		}
 	}
 
 }

@@ -97,5 +97,14 @@ namespace SP.Engine
 			return ret;
 		}
 
+		public static IEnumerable<Square> GetListOfSquares(BitBoard bitBoard) {
+			var x = new List<Square>();
+			for (int i = 0; i < 64; i++)
+			{
+				if ((bitBoard & (ulong)((Square)i).ToSquareBits()) > 0)
+					x.Add((Square)i);
+			}
+			return x;
+		}
 	}
 }

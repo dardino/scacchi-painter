@@ -1,4 +1,7 @@
 ﻿using SP.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SP.Engine
 {
@@ -8,11 +11,18 @@ namespace SP.Engine
 		public Square SourceSquare;
 		public Square DestinationSquare;
 		public bool IsCapture;
+		public IEnumerable<Move> SubSequentialMoves;
 
 		public override string ToString()
 		{
 			var sep = IsCapture ? "*" : "-";
-			return $"{Piece}{SourceSquare}{sep}{DestinationSquare}";
+			var extra = SubSequentialMoves != null && SubSequentialMoves.Count() > 0 
+				? $"[{String.Join(";", SubSequentialMoves)}]" 
+				: "";
+			return Piece 
+				+ $"{SourceSquare}{sep}{DestinationSquare}".ToLower() 
+				+ extra
+				 ;
 		}
 	}
 }

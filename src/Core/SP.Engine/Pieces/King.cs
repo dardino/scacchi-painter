@@ -63,7 +63,9 @@ namespace SP.Engine.Pieces
 				if (col == Columns.ColA) m2clone &= 0xFEFEFEFEFEFEFEFE;
 				if (col == Columns.ColH) m2clone &= 0x7F7F7F7F7F7F7F7F;
 			}
-			var moves = (gameState.Allied & m2clone) ^ m2clone;
+
+			var moves = ((gameState.Allied & m2clone) ^ m2clone) & ~gameState.UnderAttackCells;
+
 			if (gameState.CastlingAllowed.Any(a => a) 
 				&& IsMyStartingSquare(fromSq)
 			) {
@@ -85,9 +87,6 @@ namespace SP.Engine.Pieces
 			var moves = GetMovesFromPosition(fromSquare, gameState);
 			return ((ulong)Math.Pow(2, (int)attackingSquare) & moves) > 0;
 		}
-		public override IEnumerable<Move> GetMoves(ulong bitb)
-		{
-			return new List<Move>();
-		}
+
 	}
 }
