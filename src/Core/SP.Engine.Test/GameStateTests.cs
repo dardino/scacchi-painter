@@ -53,6 +53,15 @@ namespace SP.Engine.Test
 			Assert.AreEqual(12, moves.Count(), "List of Moves must be 12");
 			Assert.AreEqual(expstr, actString, "List of Moves must be " + expstr);
 		}
-		
+
+		[TestMethod]
+		public void GameStatePinnedPieces()
+		{
+			var gameState = GameState.FromBoard(Board.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
+			var moves = gameState.GetMoves();
+
+			Assert.AreEqual(0, moves.Count(), "no Moves allowed");
+		}
+
 	}
 }

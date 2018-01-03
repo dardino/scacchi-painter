@@ -23,7 +23,8 @@ namespace SP.Engine
 		}
 		public IEnumerable<Move> GetMoves(Square fromSquare, GameState state)
 		{
-			var bbMoves = GetMovesFromPosition(fromSquare, state);
+			var bbMoves = GetMovesFromPosition(fromSquare, state);			
+
 			var squares = BitBoard.GetListOfSquares(bbMoves);
 			foreach (var toSquare in squares)
 			{

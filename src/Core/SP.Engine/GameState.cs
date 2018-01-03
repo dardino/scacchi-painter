@@ -25,6 +25,11 @@ namespace SP.Engine
 			{ PieceColors.Neutral , BitBoard.FromRowBytes() }
 		};
 
+		internal bool IsPiecePinned(Square pos)
+		{
+			throw new NotImplementedException("Is Piece Pinned is not implemented");
+		}
+
 		public BitBoard UnderAttackCells = 0;
 		public BitBoard AttackingCells = 0;
 
@@ -123,8 +128,9 @@ namespace SP.Engine
 			for (int c = 0; c < 64; c++)
 			{
 				var s = (Square)c;
-				EnginePiece p = board.GetPiece(s) as EnginePiece;
-				if (p != null && (p.Color == MoveTo || p.Color == PieceColors.Neutral))
+				if (IsPiecePinned(s)) yield break;
+
+				if (board.GetPiece(s) is EnginePiece p && (p.Color == MoveTo || p.Color == PieceColors.Neutral))
 				{
 					foreach (var item in p.GetMoves(s, this))
 					{
