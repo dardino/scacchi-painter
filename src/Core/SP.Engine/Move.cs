@@ -24,5 +24,17 @@ namespace SP.Engine
 				+ extra
 				 ;
 		}
+
+		public Move Clone() {
+			return new Move()
+			{
+				Piece = Piece,
+				DestinationSquare = DestinationSquare,
+				IsCapture = IsCapture,
+				SourceSquare = SourceSquare,
+				SubSequentialMoves = null
+			};
+
+		}
 	}
 }

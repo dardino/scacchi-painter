@@ -21,6 +21,14 @@ namespace SP.Engine
 		{
 			return GetMovesFromPosition(BoardSquare.GetSquareIndex(col, row), gInfo);
 		}
+
+		internal bool IsKing
+		{
+			get {
+				return Name == "K";
+			}
+		}
+
 		public IEnumerable<Move> GetMoves(Square fromSquare, GameState state)
 		{
 			var bbMoves = GetMovesFromPosition(fromSquare, state);			
@@ -44,7 +52,10 @@ namespace SP.Engine
 		public virtual ulong GetAttackingSquares(Square s, GameState gInfo) {
 			return GetMovesFromPosition(s, gInfo);
 		}
-		public abstract bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gInfo);
+		public bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gInfo) {
+			var a = GetAttackingSquares(fromSquare, gInfo);
+			return (a & (ulong)squareToCheck.ToSquareBits()) > 0;
+		}
 		public virtual IEnumerable<Move> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
 			return null;
 		}

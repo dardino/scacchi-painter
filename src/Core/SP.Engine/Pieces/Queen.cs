@@ -20,13 +20,5 @@ namespace SP.Engine.Pieces
 				CommonUtils.GetDiagonalMoves(s, g.Allied, g.Enemies);
 		}
 
-		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState g)
-		{
-			var gs = GameState.FromOnlyEnemies(g.All | (ulong)squareToCheck.ToSquareBits(), g.MoveTo);
-			return (GetMovesFromPosition(fromSquare, gs) & (ulong)squareToCheck.ToSquareBits()) > 0;
-		}
-
-
-
 	}
 }

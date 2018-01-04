@@ -106,6 +106,13 @@ namespace SP.Core.Engine.Pieces
 			Assert.IsTrue (piece.IsAttackingSquare(Square.B2, Square.C3, g), "b2-c3");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, g), "a1-c2");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, g), "a4-h4");
+
+			var gg = GameState.FromBoard(Board.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"));
+			Assert.IsTrue(piece.IsAttackingSquare(Square.A5, Square.E1, gg), "a5-e1");
+
+			gg = GameState.FromBoard(Board.FromNotation("r3k2r/8/8/b7/B7/8/3P4/R3K2R"));
+			Assert.IsFalse(piece.IsAttackingSquare(Square.A5, Square.E1, gg), "a5-e1");
+
 		}
 	}
 }

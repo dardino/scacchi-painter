@@ -77,7 +77,8 @@ namespace SP.Core.Engine.Pieces
 		}
 
 		[TestMethod]
-		public void K_MoveInOccupiedBoard() {
+		public void K_MoveInOccupiedBoard()
+		{
 
 			var king = new King();
 
@@ -112,28 +113,21 @@ namespace SP.Core.Engine.Pieces
 		}
 
 		[TestMethod]
-		public void K_IsAttackingSquare() {
+		public void K_IsAttackingSquare()
+		{
 
 			var king = new King();
-			Assert.IsTrue(king.IsAttackingSquare(Square.B2, Square.C3,  g));
+			Assert.IsTrue(king.IsAttackingSquare(Square.B2, Square.C3, g));
 			Assert.IsFalse(king.IsAttackingSquare(Square.A1, Square.C2, g));
 			Assert.IsFalse(king.IsAttackingSquare(Square.A4, Square.H4, g));
 		}
 
 		[TestMethod]
-		public void K_FreeCastling() {
+		public void K_FreeCastling()
+		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs1 = new GameState {
-				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
-				{
-					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.A2 /*pedone*/)},
-					{ PieceColors.Black, (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8 | SquareBits.H7)           },
-					{ PieceColors.Neutral, 0ul }
-				},
-				CastlingAllowed = new bool[] { true, true, true, true },
-				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
-			};
+			var gs1 = GameState.FromBoard(Board.FromNotation("R6R/8/8/8/8/8/8/R6R"));
 			var expec1 = (ulong)BitBoard.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00110110
@@ -155,26 +149,18 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = new GameState // rocks under check
-			{
-				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
-				{
-					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1)},
-					{ PieceColors.Black, (ulong)(SquareBits.A8 | SquareBits.E8 | SquareBits.H8)},
-					{ PieceColors.Neutral, 0ul }
-				},
-				CastlingAllowed = new bool[] { true, true, true, true },
-				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8),
-				UnderAttackCells = (ulong)(SquareBits.A1 | SquareBits.H8)
-			};
-			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2 | SquareBits.G1);
-			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7 | SquareBits.C8);
+			var gs2 = GameState.FromBoard(Board.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"));
+
+			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
+			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
 
 			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
+			gs2.MoveTo = PieceColors.Black;
+			gs2.UpdateGameState();
 			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
 
-			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (R under check)");
-			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (R under check)");
+			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (King under check)");
+			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (King under check)");
 		}
 
 
@@ -183,17 +169,8 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = new GameState
-			{
-				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
-				{
-					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.H6)},
-					{ PieceColors.Black, (ulong)(SquareBits.A3 | SquareBits.A8 | SquareBits.E8 | SquareBits.H8)},
-					{ PieceColors.Neutral, 0ul }
-				},
-				CastlingAllowed = new bool[] { true, true, true, true },
-				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8),
-				UnderAttackCells = BitBoard.FromRowBytes(
+			var gs2 = GameState.FromBoard(Board.FromNotation("R6R/8/8/8/8/8/8/R6R"));
+			gs2.UnderEnemiesAttackByPiece[(int)Square.C2] = BitBoard.FromRowBytes(
 					0b00100010,
 					0b00000000,
 					0b00000000,
@@ -202,8 +179,7 @@ namespace SP.Core.Engine.Pieces
 					0b00000000,
 					0b00000000,
 					0b00100010
-					)
-			};
+					);
 			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
 			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
 
@@ -219,17 +195,7 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = new GameState
-			{
-				BitBoardByColor = new Dictionary<PieceColors, BitBoard>
-				{
-					{ PieceColors.White, (ulong)(SquareBits.A1 | SquareBits.E1 | SquareBits.H1 | SquareBits.H6 | SquareBits.G8)},
-					{ PieceColors.Black, (ulong)(SquareBits.A3 | SquareBits.A8 | SquareBits.E8 | SquareBits.H8 | SquareBits.B1)},
-					{ PieceColors.Neutral, 0ul }
-				},
-				CastlingAllowed = new bool[] { true, true, true, true },
-				AlliedRocks = (ulong)(SquareBits.A1 | SquareBits.H8)
-			};
+			var gs2 = GameState.FromBoard(Board.FromNotation("R6R/8/8/8/8/8/8/R6R"));
 			ulong expec3 = BitBoard.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00010110

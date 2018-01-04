@@ -26,10 +26,10 @@ namespace SP.Engine.Pieces
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingNotUnderCheck = new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b10111000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00001111) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b10111000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00001111) }
+			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00111000) },
+			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00001110) },
+			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00111000) },
+			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00001110) }
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingFreeCells = new Dictionary<CastlingIndexes, BitBoard>
 		{
@@ -64,7 +64,7 @@ namespace SP.Engine.Pieces
 				if (col == Columns.ColH) m2clone &= 0x7F7F7F7F7F7F7F7F;
 			}
 
-			var moves = ((gameState.Allied & m2clone) ^ m2clone) & ~gameState.UnderAttackCells;
+			var moves = ((gameState.Allied & m2clone) ^ m2clone);
 
 			if (gameState.CastlingAllowed.Any(a => a) 
 				&& IsMyStartingSquare(fromSq)
@@ -81,12 +81,7 @@ namespace SP.Engine.Pieces
 			}
 			return moves;
 		}
-
-		public override bool IsAttackingSquare(Square fromSquare, Square attackingSquare, GameState gameState)
-		{
-			var moves = GetMovesFromPosition(fromSquare, gameState);
-			return ((ulong)Math.Pow(2, (int)attackingSquare) & moves) > 0;
-		}
+		
 
 	}
 }

@@ -34,11 +34,6 @@ namespace SP.Engine.Pieces
 			var allMoves = (dc3 < 0 ? c3Moves >> (0 - dc3) : c3Moves << dc3) & fullC;
 			return (allMoves | g.Allied) ^ g.Allied; // dove sono gli enemies non mi serve saperlo.
 		}
-
-		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState g)
-		{
-			var enemies = g.Allied | g.Enemies | (ulong)squareToCheck.ToSquareBits();
-			return (GetMovesFromPosition(fromSquare, GameState.FromOnlyEnemies(enemies, g.MoveTo)) & (ulong)squareToCheck.ToSquareBits()) > 0;
-		}
+		
 	}
 }

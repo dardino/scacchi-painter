@@ -2,7 +2,7 @@
 
 namespace SP.Core
 {
-	public struct BoardSquare
+	public struct BoardSquare: ICloneable
 	{
 		private Square square;
 		public bool Occupied { get { return Piece != null; } }
@@ -30,8 +30,18 @@ namespace SP.Core
 			return (Square)((int)col + (int)row * 8);
 		}
 
+		public object Clone()
+		{
+			return new BoardSquare(square)
+			{
+				Piece = Piece
+			};
+		}
+
 		public Columns Column => (Columns)((int)square % 8);
 		public Rows Row => (Rows)Math.Floor((float)square / 8f);
+
+		public Square Square => square;
 
 		public static implicit operator BoardSquare(Square index)
 		{
@@ -51,5 +61,9 @@ namespace SP.Core
 			return square.square;
 		}
 
+		public override string ToString()
+		{
+			return $"{square}({Piece})";
+		}
 	}
 }

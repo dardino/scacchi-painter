@@ -42,11 +42,5 @@ namespace SP.Engine.Pieces
 			return (m1 | m2);
 		}
 
-		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState g)
-		{
-			ulong sq = (ulong)squareToCheck.ToSquareBits();
-			var moves = GetAttackingSquares(fromSquare, g);
-			return (moves & sq) > 0;
-		}
 	}
 }

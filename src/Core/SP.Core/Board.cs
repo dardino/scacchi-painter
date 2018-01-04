@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SP.Core
 {
-	public class Board
+	public class Board: IDisposable
 	{
 		public BoardSquare this[int index]
 		{
@@ -15,13 +15,14 @@ namespace SP.Core
 		}
 
 		private BoardSquare[] cells = new BoardSquare[64];
+		public BoardSquare[] Cells => cells;
 		public int WhiteCount   => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.White ? 1 : 0);
 		public int BlackCount   => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Black ? 1 : 0);
 
 		public int NeutralCount => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Neutral ? 1 : 0);
 		public int TotalCount => cells.Sum(c => c.Occupied ? 1 : 0);
 
-		public Stipulation Stipulation { get; set; } = new Stipulation(2);
+		public Stipulation Stipulation { get; private set; } = new Stipulation(2);
 
 		public PieceBase GetPiece(Square sq)
 		{
@@ -160,6 +161,21 @@ namespace SP.Core
 			// tolgo il primo Pipe
 			traversa = traversa.Trim('|');
 			return traversa;
+		}
+
+		public Board Clone()
+		{
+			var b = new Board {
+				Stipulation = Stipulation
+			};
+			cells.CopyTo(b.cells, 0);
+			return b;
+		}
+
+		public void Dispose()
+		{
+			cells = null;
+			Stipulation = null;
 		}
 	}
 }

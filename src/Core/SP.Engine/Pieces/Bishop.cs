@@ -21,13 +21,7 @@ namespace SP.Engine.Pieces
 		}
 
 		#endregion
-
-		public override bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gameState)
-		{
-			var gs = GameState.FromOnlyEnemies(gameState.All | (ulong)squareToCheck.ToSquareBits(), gameState.MoveTo);
-			return (GetCapturesFromPosition(fromSquare, gs)
-				& (ulong)squareToCheck.ToSquareBits()) > 0;
-		}
+		
 
 
 	}
