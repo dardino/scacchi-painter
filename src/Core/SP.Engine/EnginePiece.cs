@@ -47,10 +47,10 @@ namespace SP.Engine
 			}
 		}
 
-		public abstract ulong GetMovesFromPosition(Square s, GameState gInfo);
+		public abstract ulong GetAttackingSquares(Square s, GameState gInfo);
 		public abstract ulong GetCapturesFromPosition(Square s, GameState gInfo);
-		public virtual ulong GetAttackingSquares(Square s, GameState gInfo) {
-			return GetMovesFromPosition(s, gInfo);
+		public virtual ulong GetMovesFromPosition(Square s, GameState gInfo) {
+			return (GetAttackingSquares(s, gInfo) | gInfo.Allied) ^ gInfo.Allied;
 		}
 		public bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gInfo) {
 			var a = GetAttackingSquares(fromSquare, gInfo);

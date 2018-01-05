@@ -195,7 +195,7 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = GameState.FromBoard(Board.FromNotation("R6R/8/8/8/8/8/8/R6R"));
+			var gs2 = GameState.FromBoard(Board.FromNotation("r3k1br/8/8/8/8/8/8/R1B1K2R"));
 			ulong expec3 = BitBoard.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00010110
@@ -206,6 +206,8 @@ namespace SP.Core.Engine.Pieces
 					);
 
 			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
+			gs2.MoveTo = PieceColors.Black;
+			gs2.UpdateGameState();
 			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
 
 			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (occupied cell in rock line move)");

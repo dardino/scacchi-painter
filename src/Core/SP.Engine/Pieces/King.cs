@@ -51,20 +51,26 @@ namespace SP.Engine.Pieces
 			return (moves & gameState.Enemies);
 		}
 
-		public override ulong GetMovesFromPosition(Square fromSq, GameState gameState)
+		public override ulong GetAttackingSquares(Square s, GameState g)
 		{
-			int c = (int)fromSq - b2Index;
+			int c = (int)s - b2Index;
 			var m2clone = movesFromB2;
 			if (c != 0)
 			{
-				var col = ((BoardSquare)fromSq).Column;
+				var col = ((BoardSquare)s).Column;
 				if (c < 0) m2clone = m2clone >> (c * -1);
 				if (c > 0) m2clone = m2clone << c;
 				if (col == Columns.ColA) m2clone &= 0xFEFEFEFEFEFEFEFE;
 				if (col == Columns.ColH) m2clone &= 0x7F7F7F7F7F7F7F7F;
 			}
 
-			var moves = ((gameState.Allied & m2clone) ^ m2clone);
+			var moves = ((g.Allied & m2clone) ^ m2clone);
+			return moves;
+		}
+
+		public override ulong GetMovesFromPosition(Square fromSq, GameState gameState)
+		{
+			var moves = GetAttackingSquares(fromSq, gameState);
 
 			if (gameState.CastlingAllowed.Any(a => a) 
 				&& IsMyStartingSquare(fromSq)

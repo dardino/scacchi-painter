@@ -97,7 +97,12 @@ namespace SP.Engine
 			BitBoardByColor[PieceColors.White] = 0;
 			BitBoardByColor[PieceColors.Black] = 0;
 			BitBoardByColor[PieceColors.Neutral] = 0;
-			UnderEnemiesAttackByPiece.Initialize();
+
+			for (var u = 0; u < 64; u++)
+			{
+				UnderEnemiesAttackByPiece[u] = 0;
+				UnderAlliedAttackByPiece[u] = 0;
+			}
 
 			for (var i = 0; i < 64; i++)
 			{
@@ -192,8 +197,8 @@ namespace SP.Engine
 			ActualDepth = gs.ActualDepth;
 			AvailablePromotionsTypes = gs.AvailablePromotionsTypes;
 			BitBoardByColor = new Dictionary<PieceColors, BitBoard>();
-			BitBoardByColor[PieceColors.White  ] = gs.BitBoardByColor[PieceColors.White  ];
-			BitBoardByColor[PieceColors.Black  ] = gs.BitBoardByColor[PieceColors.Black  ];
+			BitBoardByColor[PieceColors.White] = gs.BitBoardByColor[PieceColors.White];
+			BitBoardByColor[PieceColors.Black] = gs.BitBoardByColor[PieceColors.Black];
 			BitBoardByColor[PieceColors.Neutral] = gs.BitBoardByColor[PieceColors.Neutral];
 			board = gs.board.Clone();
 			gs.CastlingAllowed.CopyTo(CastlingAllowed, 0);

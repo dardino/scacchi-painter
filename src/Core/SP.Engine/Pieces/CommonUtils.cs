@@ -139,7 +139,7 @@ namespace SP.Engine.Pieces
 			var sw = GetLowerMovesDiagonal(south & mydiagB, allpieces); //mosse possibili in S-W
 			var ne = GetHigherMovesDiagonal(north & mydiagB, allpieces); //mosse possibili in N-E
 
-			return (nw | ne | sw | se | allied) ^ allied; // tolgo gli alleati e lascio le catture
+			return (nw | ne | sw | se); // tolgo gli alleati e lascio le catture
 		}
 
 		public static ulong GetOrthogonalMoves(Square s, ulong allied, ulong enemies)
@@ -160,7 +160,7 @@ namespace SP.Engine.Pieces
 			ulong m3 = GetSudEstOrtogonal(south & trav, all); //mosse possibili a est
 			ulong m4 = GetNordOvestOrtogonal(north & trav, all); //mosse possibili a ovest
 			ulong sum = (m1 | m2 | m3 | m4);
-			return (sum & allied) ^ sum; // tolgo gli alleati e lascio le catture
+			return sum;
 		}
 
 

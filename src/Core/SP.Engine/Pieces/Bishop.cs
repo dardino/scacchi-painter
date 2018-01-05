@@ -14,15 +14,10 @@ namespace SP.Engine.Pieces
 			return GetMovesFromPosition(s, gameState) & gameState.Enemies; // solo le mosse che coinvolgono i nemici
 		}
 
-		#region GetMoves
-		public override ulong GetMovesFromPosition(Square s, GameState gameState)
+		public override ulong GetAttackingSquares(Square s, GameState gInfo)
 		{
-			return CommonUtils.GetDiagonalMoves(s, gameState.Allied, gameState.Enemies);
+			return CommonUtils.GetDiagonalMoves(s, gInfo.Allied, gInfo.Enemies);
 		}
-
-		#endregion
-		
-
 
 	}
 }
