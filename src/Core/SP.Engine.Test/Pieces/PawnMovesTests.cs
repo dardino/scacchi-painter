@@ -204,5 +204,32 @@ namespace SP.Core.Engine.Pieces
 			Assert.IsFalse(pawn.IsAttackingSquare(Square.A2, Square.H1, g));
 			Assert.IsFalse(pawn.IsAttackingSquare(Square.A2, Square.H2, g));
 		}
+
+
+		[TestMethod]
+		public void P_EnPassantCaptures()
+		{
+			var board = Board.FromNotation("8/2p5/8/3Pp3/8/8/8/8");
+			var gEP = GameState.FromBoard(board);
+
+			gEP.MoveTo = PieceColors.Black;
+			gEP.ApplyMove(new Move() {
+				DestinationSquare = Square.C5,
+				IsCapture = false,
+				SourceSquare = Square.C7,
+				SubSequentialMoves = null,
+				Piece = board.GetPiece(Square.C7) as EnginePiece
+			});
+
+			var p = board.GetPiece(Square.D5) as Pawn;
+			var actuals = p.GetMovesFromPosition(Square.D5, gEP);
+
+			var expected = (ulong)BitBoard.FromRowBytes(
+				Row7: 0b00000000, 
+				Row6: 0b00110000
+				);
+
+			Assert.AreEqual(expected, actuals, "d5*c6 ep; d5-d6");
+		}
 	}
 }

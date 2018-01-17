@@ -38,8 +38,8 @@ namespace SP.Core
 			};
 		}
 
-		public Columns Column => (Columns)((int)square % 8);
-		public Rows Row => (Rows)Math.Floor((float)square / 8f);
+		public Columns Column => square.GetColumn();
+		public Rows Row => square.GetRow();
 
 		public Square Square => square;
 

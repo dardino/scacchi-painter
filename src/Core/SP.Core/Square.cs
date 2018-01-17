@@ -20,6 +20,10 @@ namespace SP.Core
 		{
 			return (Columns)((int)sq % 8);
 		}
+		public static Rows GetRow(this Square sq)
+		{
+			return (Rows)Math.Floor((float)sq / 8f);
+		}
 
 	}
 }

@@ -17,15 +17,16 @@ namespace SP.Engine
 	{
 		public BitBoard Allied { get { return BitBoardByColor[AlliedColor] | BitBoardByColor[PieceColors.Neutral]; } }
 
-		internal void ApplyMove(Move moveToTest)
+		internal void ApplyMove(Move move)
 		{
 			// sposto il pezzo:
-			board.PlacePieceOnBoard(moveToTest.SourceSquare, null);
-			board.PlacePieceOnBoard(moveToTest.DestinationSquare, moveToTest.Piece);
+			board.PlacePieceOnBoard(move.SourceSquare, null);
+			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
 			// ogni mossa è una mezza mossa:
 			ActualDepth += .5m;
 			// cambio colore del giocatore di turno
 			MoveTo = MoveTo == PieceColors.Black ? PieceColors.White : PieceColors.Black;
+			LastMove = move;
 			// aggiorno il gamestate:
 			UpdateGameState();
 		}
@@ -36,6 +37,9 @@ namespace SP.Engine
 		}
 
 		public BitBoard Enemies { get { return BitBoardByColor[EnemiesColor]; } }
+
+		internal BitBoard BitBoardPawnEP;
+
 		public BitBoard All { get { return BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral]; } }
 		public Dictionary<PieceColors, BitBoard> BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
 			{ PieceColors.Black   , BitBoard.FromRowBytes() },
@@ -122,6 +126,13 @@ namespace SP.Engine
 					var m = p.GetAttackingSquares(s, this);
 					UnderEnemiesAttackByPiece[i] = m;
 				}
+			}
+
+			BitBoardPawnEP = 0;
+			if (LastMove.HasValue && LastMove.Value.Piece.IsPawn && Engine.Pieces.Pawn.IsStartingSquare(LastMove.Value.SourceSquare, LastMove.Value.Piece.Color)) {
+				BitBoardPawnEP = LastMove.Value.Piece.Color == PieceColors.Black ? 
+					((ulong)LastMove.Value.SourceSquare.ToSquareBits() >> 8) :
+					((ulong)LastMove.Value.SourceSquare.ToSquareBits() << 8);
 			}
 		}
 

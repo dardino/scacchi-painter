@@ -22,12 +22,8 @@ namespace SP.Engine
 			return GetMovesFromPosition(BoardSquare.GetSquareIndex(col, row), gInfo);
 		}
 
-		internal bool IsKing
-		{
-			get {
-				return Name == "K";
-			}
-		}
+		internal bool IsKing => Name == "K";
+		internal bool IsPawn => Name == "P";
 
 		public IEnumerable<Move> GetMoves(Square fromSquare, GameState state)
 		{
