@@ -19,16 +19,27 @@ namespace SP.Engine
 
 		internal void ApplyMove(Move move)
 		{
+			LastMove = move;
 			// sposto il pezzo:
-			board.PlacePieceOnBoard(move.SourceSquare, null);
-			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
+			MovePiece(move);
 			// ogni mossa è una mezza mossa:
 			ActualDepth += .5m;
 			// cambio colore del giocatore di turno
 			MoveTo = MoveTo == PieceColors.Black ? PieceColors.White : PieceColors.Black;
-			LastMove = move;
 			// aggiorno il gamestate:
 			UpdateGameState();
+			// se la mossa ha "sottomosse" le eseguo
+			if (move.SubSequentialMoves != null) {
+				foreach (var subMove in move.SubSequentialMoves)
+				{
+					ApplyMove(subMove);
+				}
+			}
+		}
+
+		private void MovePiece(Move move) {
+			board.PlacePieceOnBoard(move.SourceSquare, null);
+			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
 		}
 
 		public Square KingPosition(PieceColors kingColor)
@@ -83,14 +94,13 @@ namespace SP.Engine
 			.Aggregate((a, b) => a | b);
 		public PieceColors MoveTo = PieceColors.White;
 		public List<Type> AvailablePromotionsTypes = new List<Type> {
-			typeof(Pieces.Pawn),
 			typeof(Pieces.Bishop),
 			typeof(Pieces.Horse),
 			typeof(Pieces.Rock),
 			typeof(Pieces.Queen)
 		};
 		private Board board;
-
+		public Board Board => board;
 
 		public decimal MaxDepth { get { return board.Stipulation.Depth; } }
 

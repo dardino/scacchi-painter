@@ -5,8 +5,9 @@ using System.Text;
 
 namespace SP.Core
 {
-	public class Board: IDisposable
+	public class Board : IDisposable
 	{
+
 		public BoardSquare this[int index]
 		{
 			get {
@@ -16,9 +17,8 @@ namespace SP.Core
 
 		private BoardSquare[] cells = new BoardSquare[64];
 		public BoardSquare[] Cells => cells;
-		public int WhiteCount   => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.White ? 1 : 0);
-		public int BlackCount   => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Black ? 1 : 0);
-
+		public int WhiteCount => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.White ? 1 : 0);
+		public int BlackCount => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Black ? 1 : 0);
 		public int NeutralCount => cells.Sum(c => c.Occupied && c.Piece.Color == PieceColors.Neutral ? 1 : 0);
 		public int TotalCount => cells.Sum(c => c.Occupied ? 1 : 0);
 
@@ -59,7 +59,7 @@ namespace SP.Core
 		private void FromFEN(string FEN_adp)
 		{
 			string[] fenParts = FEN_adp.Split('|');
-			
+
 			//caricamento dei pezzi
 
 			string[] traverse = fenParts[0].Split('/');
@@ -72,7 +72,7 @@ namespace SP.Core
 
 			// caricamento delle altre info
 			if (fenParts.Length > 1) {
-				
+
 			}
 
 		}
@@ -176,6 +176,11 @@ namespace SP.Core
 		{
 			cells = null;
 			Stipulation = null;
+		}
+
+		public override string ToString()
+		{
+			return String.Join("|", cells.Select(f => (f.Piece?.ToString() ?? "").PadLeft(5)));
 		}
 	}
 }

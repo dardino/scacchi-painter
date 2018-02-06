@@ -80,6 +80,10 @@ namespace SP.Engine.Test
 				var v2 = f.GetValue(gs2);
 				x = Equals(v1, v2);
 				if (!x) {
+					if (v1 is Board)
+					{
+						x = Equals(v1?.ToString(), v2?.ToString());
+					}
 					if (f.PropertyType.IsArray)
 					{
 						Array a1 = v1 as Array;
@@ -102,6 +106,65 @@ namespace SP.Engine.Test
 				Assert.IsTrue(x, $"{f.Name} not match");
 				return x;
 			});
+
+		}
+
+		[TestMethod]
+		public void GameStateApplyMoveKing() {
+			var board1 = Board.FromNotation("8/8/8/8/8/8/8/R3K3");
+			var board2 = Board.FromNotation("8/8/8/8/8/8/8/R3K3");
+
+			var gs1 = GameState.FromBoard(board1);
+			var gs2 = GameState.FromBoard(board2);
+
+			gs1.ApplyMove(new Move()
+			{
+				DestinationSquare = Square.D1,
+				SourceSquare = Square.E1,
+				IsCapture = false,
+				Piece = board1.GetPiece(Square.E1) as EnginePiece
+			});
+
+			gs2.ApplyMove(new Move()
+			{
+				DestinationSquare = Square.C1,
+				SourceSquare = Square.E1,
+				IsCapture = false,
+				Piece = board2.GetPiece(Square.E1) as EnginePiece,
+				SubSequentialMoves = new List<Move> {
+					new Move() {
+						DestinationSquare = Square.D1,
+						SourceSquare = Square.A1,
+						IsCapture = false,
+						Piece = board2.GetPiece(Square.A1) as EnginePiece
+					}
+				}
+			});
+
+			var expected1 = BitBoard.FromRowBytes(Row1: 0b10010000);
+			var expected2 = BitBoard.FromRowBytes(Row1: 0b00110000);
+
+			Assert.AreEqual((ulong)gs1.All, (ulong)expected1, "mossa singola");
+			Assert.AreEqual((ulong)gs2.All, (ulong)expected2, "mossa con subsequence");
+
+		}
+
+
+		[TestMethod]
+		public void GameStateApplyMovePawn()
+		{
+			var board1 = Board.FromNotation("8/2P5/8/8/8/8/8/8");
+
+			var gs1 = GameState.FromBoard(board1);
+			var moves1 = gs1.GetMoves();
+			foreach (var move in moves1)
+			{
+				var gc = new GameState();
+				gc.CloneFrom(gs1);
+				gc.ApplyMove(move);
+				Assert.IsTrue(gc.Pieces.Count() == 1);
+				Assert.IsTrue(gc.Pieces.First().ToString() == move.SubSequentialMoves.First().Piece.ToString());
+			}
 
 		}
 	}

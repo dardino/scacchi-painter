@@ -87,7 +87,17 @@ namespace SP.Engine.Pieces
 			}
 			return moves;
 		}
-		
+
+		public override IEnumerable<Move> GetSubSequentialMoves(Square from, Square to, GameState gInfo)
+		{
+			if (from == Square.E1 && to == Square.C1) return new List<Move> { new Move { DestinationSquare = Square.D1, SourceSquare = Square.A1, Piece = gInfo.Board.GetPiece(Square.A1) as Rock } };
+			if (from == Square.E1 && to == Square.G1) return new List<Move> { new Move { DestinationSquare = Square.F1, SourceSquare = Square.H1, Piece = gInfo.Board.GetPiece(Square.H1) as Rock } };
+			if (from == Square.E8 && to == Square.C8) return new List<Move> { new Move { DestinationSquare = Square.D8, SourceSquare = Square.A8, Piece = gInfo.Board.GetPiece(Square.A8) as Rock } };
+			if (from == Square.E8 && to == Square.G8) return new List<Move> { new Move { DestinationSquare = Square.F8, SourceSquare = Square.H8, Piece = gInfo.Board.GetPiece(Square.H8) as Rock } };
+			else return null;
+		}
+
+
 
 	}
 }

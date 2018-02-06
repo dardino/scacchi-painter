@@ -27,19 +27,47 @@ namespace SP.Engine
 
 		public IEnumerable<Move> GetMoves(Square fromSquare, GameState state)
 		{
+
 			var bbMoves = GetMovesFromPosition(fromSquare, state);			
 
 			var squares = BitBoard.GetListOfSquares(bbMoves);
 			foreach (var toSquare in squares)
 			{
-				yield return new Move
+				if (toSquare.GetRow() == Rows.Row8 || toSquare.GetRow() == Rows.Row1)
 				{
-					Piece = this,
-					SourceSquare = fromSquare,
-					IsCapture = IsCapture(fromSquare, toSquare, state),
-					DestinationSquare = toSquare,
-					SubSequentialMoves = GetSubSequentialMoves(fromSquare, toSquare, state)
-				};
+					foreach (var p in state.AvailablePromotionsTypes)
+					{
+						yield return new Move
+						{
+							Piece = this,
+							SourceSquare = fromSquare,
+							IsCapture = IsCapture(fromSquare, toSquare, state),
+							DestinationSquare = toSquare,
+							SubSequentialMoves = new List<Move> {
+								new Move()
+								{
+									Piece = MakePieceClass(p, Color),
+									DestinationSquare = toSquare,
+									SourceSquare = toSquare,
+									SubSequentialMoves = null,
+									IsCapture = false
+								}
+							}
+						};
+					}
+				}
+				else
+				{
+					yield return new Move
+					{
+						Piece = this,
+						SourceSquare = fromSquare,
+						IsCapture = IsCapture(fromSquare, toSquare, state),
+						DestinationSquare = toSquare,
+						SubSequentialMoves = GetSubSequentialMoves(fromSquare, toSquare, state)
+					};
+				}
+
 			}
 		}
 
@@ -64,20 +92,25 @@ namespace SP.Engine
 		public static EnginePiece FromPieceBase(PieceBase piece)
 		{
 			if (piece is null) return null;
-			var instance = MakePieceClass(piece.Name);
+			var instance = MakePieceClass(piece.Name, piece.Color);
 			if (instance is null) return null;
-			instance.Color = piece.Color;
 			instance.Name = piece.Name;
 			instance.Rotation = piece.Rotation;
 			return instance;
 		}
+		
+		private static EnginePiece MakePieceClass(Type type, PieceColors color)
+		{
+			var instance = Activator.CreateInstance(type) as EnginePiece;
+			instance.Color = color;
+			return instance;
+		}
 
-		private static EnginePiece MakePieceClass(string name)
+		private static EnginePiece MakePieceClass(string name, PieceColors color)
 		{
 			var type = FindClass(name);
 			if (type == null) return null;
-			var instance = Activator.CreateInstance(type) as EnginePiece;
-			return instance;
+			return MakePieceClass(type, color);
 		}
 		private static Type FindClass(string name)
 		{

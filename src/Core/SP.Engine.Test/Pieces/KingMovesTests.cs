@@ -3,6 +3,7 @@ using SP.Engine;
 using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SP.Core.Engine.Pieces
@@ -212,6 +213,55 @@ namespace SP.Core.Engine.Pieces
 
 			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (occupied cell in rock line move)");
 			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (occupied cell in rock line move)");
+		}
+
+		[TestMethod]
+		public void K_CastlingSubMovesWhite()
+		{
+			var gs1 = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/8/8/R3K2R"));
+
+			var moves1 = (gs1.Board.GetPiece(Square.E1) as King).GetMoves(Square.E1, gs1);
+
+			var arroccoLungo = moves1.Where(m => m.DestinationSquare == Square.C1);
+			var arroccoCorto = moves1.Where(m => m.DestinationSquare == Square.G1);
+
+			Assert.IsTrue(arroccoLungo.Count() == 1, "Arrocco Lungo non trovato");
+			Assert.IsTrue(arroccoCorto.Count() == 1, "Arrocco Corto non trovato");
+
+			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves != null, "Arrocco Lungo senza subsequential");
+			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves != null, "Arrocco Corto senza subsequential");
+
+			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.Count() == 1, "Arrocco Lungo con subsequential != 1");
+			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.Count() == 1, "Arrocco Corto con subsequential != 1");
+
+			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.First().DestinationSquare == Square.D1, "Arrocco Lungo - torre non in d1");
+			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.First().DestinationSquare == Square.F1, "Arrocco Corto - torre non in g1");
+		}
+
+		[TestMethod]
+		public void K_CastlingSubMovesBlack()
+		{
+			var gs1 = GameState.FromBoard(Board.FromNotation("r3k2r/8/8/8/8/8/8/8"));
+			gs1.MoveTo = PieceColors.Black;
+			gs1.UpdateGameState();
+
+			var piece = (King)gs1.Board.GetPiece(Square.E8);
+			var moves1 = piece.GetMoves(Square.E8, gs1);
+
+			var arroccoLungo = moves1.Where(m => m.DestinationSquare == Square.C8);
+			var arroccoCorto = moves1.Where(m => m.DestinationSquare == Square.G8);
+
+			Assert.IsTrue(arroccoLungo.Count() == 1, "Arrocco Lungo non trovato");
+			Assert.IsTrue(arroccoCorto.Count() == 1, "Arrocco Corto non trovato");
+
+			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves != null, "Arrocco Lungo senza subsequential");
+			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves != null, "Arrocco Corto senza subsequential");
+
+			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.Count() == 1, "Arrocco Lungo con subsequential != 1");
+			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.Count() == 1, "Arrocco Corto con subsequential != 1");
+
+			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.First().DestinationSquare == Square.D8, "Arrocco Lungo - torre non in d8");
+			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.First().DestinationSquare == Square.F8, "Arrocco Corto - torre non in g8");
 		}
 	}
 }

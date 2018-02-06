@@ -3,6 +3,7 @@ using SP.Engine;
 using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SP.Core.Engine.Pieces
 {
@@ -188,8 +189,8 @@ namespace SP.Core.Engine.Pieces
 			var pawn = new Pawn();
 			pawn.Color = PieceColors.White;
 			Assert.IsTrue(pawn.IsAttackingSquare(Square.B2, Square.C3, g));
-			Assert.IsFalse(pawn.IsAttackingSquare(Square.A1, Square.C2,g));
-			Assert.IsFalse(pawn.IsAttackingSquare(Square.A4, Square.H4,g));
+			Assert.IsFalse(pawn.IsAttackingSquare(Square.A1, Square.C2, g));
+			Assert.IsFalse(pawn.IsAttackingSquare(Square.A4, Square.H4, g));
 			Assert.IsTrue(pawn.IsAttackingSquare(Square.C5, Square.B6, g));
 			Assert.IsTrue(pawn.IsAttackingSquare(Square.A7, Square.B8, g));
 			Assert.IsFalse(pawn.IsAttackingSquare(Square.A7, Square.H8, g));
@@ -225,11 +226,32 @@ namespace SP.Core.Engine.Pieces
 			var actuals = p.GetMovesFromPosition(Square.D5, gEP);
 
 			var expected = (ulong)BitBoard.FromRowBytes(
-				Row7: 0b00000000, 
+				Row7: 0b00000000,
 				Row6: 0b00110000
 				);
 
 			Assert.AreEqual(expected, actuals, "d5*c6 ep; d5-d6");
+		}
+
+
+		[TestMethod]
+		public void P_WhitePromotions() {
+			var gs1 = GameState.FromBoard(Board.FromNotation("8/2P5/8/8/8/8/8/8"));
+			var pawn = (Pawn)gs1.Board.GetPiece(Square.C7);
+			var moves = pawn.GetMoves(Square.C7, gs1);
+			Assert.IsTrue(moves.Count() == 4, "4 promozioni: Q R B H");
+		}
+
+		[TestMethod]
+		public void P_BlackPromotions()
+		{
+			var gs1 = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/8/2p5/8"));
+			gs1.MoveTo = PieceColors.Black;
+			gs1.UpdateGameState();
+
+			var pawn = (Pawn)gs1.Board.GetPiece(Square.C2);
+			var moves = pawn.GetMoves(Square.C2, gs1);
+			Assert.IsTrue(moves.Count() == 4, "4 promozioni: Q R B H");
 		}
 	}
 }
