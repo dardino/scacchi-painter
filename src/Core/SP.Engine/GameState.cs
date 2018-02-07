@@ -42,7 +42,15 @@ namespace SP.Engine
 			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
 		}
 
-		internal bool IsCheck(Move move)
+		public bool IsCheckMate() {
+			return !Moves.Any() && MyKingUnderAttack();
+		}
+
+		bool MyKingUnderAttack() {
+			return IsSquareUnderAttack(KingPosition(MoveTo));
+		}
+
+		public bool IsCheck(Move move)
 		{
 			var clone = new GameState();
 			clone.CloneFrom(this);
@@ -117,6 +125,7 @@ namespace SP.Engine
 
 		public void UpdateGameState()
 		{
+			moves = null;
 			BitBoardByColor[PieceColors.White] = 0;
 			BitBoardByColor[PieceColors.Black] = 0;
 			BitBoardByColor[PieceColors.Neutral] = 0;
@@ -177,6 +186,8 @@ namespace SP.Engine
 			gs.UpdateGameState();
 			return gs;
 		}
+
+
 		internal static GameState FromOnlyEnemies(ulong enemies, PieceColors moveTo)
 		{
 			var bbe = new Dictionary<PieceColors, BitBoard>
@@ -195,7 +206,9 @@ namespace SP.Engine
 			return gs;
 		}
 
-		public IEnumerable<Move> GetMoves()
+
+
+		private IEnumerable<Move> GetMoves()
 		{
 			for (int c = 0; c < 64; c++)
 			{
@@ -240,6 +253,16 @@ namespace SP.Engine
 		}
 
 		public ChessRule[] Rules => rules;
+
+		private IEnumerable<Move> moves;
+		public IEnumerable<Move> Moves {
+			get {
+				if (moves == null)
+					moves = GetMoves();
+				return moves;
+			}
+		}
+
 		private ChessRule[] rules;
 		public GameState(params ChessRule[] rules)
 		{

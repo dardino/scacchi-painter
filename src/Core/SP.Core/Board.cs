@@ -49,6 +49,12 @@ namespace SP.Core
 			PlacePieceOnBoard(BoardSquare.GetSquareIndex(col, row), piece);
 		}
 
+		public static Board FromNotation(string notation, Stipulation stipulation)
+		{
+			var board = FromNotation(notation);
+			board.Stipulation = stipulation;
+			return board;
+		}
 		public static Board FromNotation(string notation)
 		{
 			Board b = new Board();

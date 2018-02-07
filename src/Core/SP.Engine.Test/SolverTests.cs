@@ -47,7 +47,24 @@ namespace SP.Engine.Test
 			var counter = t.Result.Count;
 			var check = t.Result.Any((move) => gs.IsCheck(move));
 			Assert.AreEqual(2, counter, $"Il numero di mosse calcolate deve essere 2 invece è {counter}");
-			Assert.IsFalse(check, "Nessina mossa calcolata non deve essere check");
+			Assert.IsFalse(check, "Nessuna mossa calcolata deve essere check");
+		}
+
+		[TestMethod]
+		public void TestCheckMateWhite() {
+			// test di alcune posizioni di scacco matto del bianco al re nero:
+			var w_gs1_y = GameState.FromBoard(Board.FromNotation("k7/8/8/7K/8/8/1R6/R7", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			// test di alcune posizioni di NON scacco matto del bianco al re nero:
+			var w_gs1_n = GameState.FromBoard(Board.FromNotation("K1k5/8/8/8/8/8/P7/8", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			// test di alcune posizioni di stallo del re nero:
+			var w_gs2_n = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/1K6/2Q5/k7", new Stipulation(StipulationType.DirectMate, 0.5m)));
+
+			Assert.IsTrue(w_gs1_y.IsCheckMate(), "k7/8/8/7K/8/8/1R6/R7 ha dato false ??");
+
+			Assert.IsFalse(w_gs1_n.IsCheckMate(), "K1k5/8/8/8/8/8/P7/8 ha dato true ??");
+
+			Assert.IsFalse(w_gs1_n.IsCheckMate(), "8/8/8/8/8/1K6/2Q5/k7 ha dato true ??");
+
 		}
 	}
 }

@@ -48,7 +48,7 @@ namespace SP.Engine.Test
 		public void GameStateGetListOfMoves()
 		{
 			var gameState = GameState.FromBoard(Board.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
-			var moves = gameState.GetMoves();
+			var moves = gameState.Moves;
 			var expstr = "Pd4-d5;  Ne8*f6;  Ne8*d6;  Ne8-g7;  Ne8*c7;  Qd8*d6;  Qd8*e7;  Qd8-d7;  Qd8*c7;  Qd8-c8;  Qd8-b8;  Qd8-a8";
 			var actString = System.String.Join(";  ", moves);
 
@@ -60,7 +60,7 @@ namespace SP.Engine.Test
 		public void GameStateNoMovesBecausePinned()
 		{
 			var gameState = GameState.FromBoard(Board.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
-			var moves = gameState.GetMoves();
+			var moves = gameState.Moves;
 
 			Assert.AreEqual(0, moves.Count(), "no Moves allowed");
 		}
@@ -71,8 +71,10 @@ namespace SP.Engine.Test
 			var gs1 = GameState.FromBoard(Board.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
 			var gs2 = new GameState();
 			gs2.CloneFrom(gs1);
-
-			var ok = gs2.GetType().GetProperties().All(f =>
+			var ignore = new List<string> { $"{nameof(GameState.Moves)}" };
+			var ok = gs2.GetType().GetProperties()
+				.Where(f => !ignore.Contains(f.Name))
+				.All(f =>
 			{
 				var x = true;
 				var name = f.Name;
@@ -156,7 +158,7 @@ namespace SP.Engine.Test
 			var board1 = Board.FromNotation("8/2P5/8/8/8/8/8/8");
 
 			var gs1 = GameState.FromBoard(board1);
-			var moves1 = gs1.GetMoves();
+			var moves1 = gs1.Moves;
 			foreach (var move in moves1)
 			{
 				var gc = new GameState();

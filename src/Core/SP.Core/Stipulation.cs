@@ -6,6 +6,12 @@ namespace SP.Core
 	{
 		public Stipulation(decimal depth)
 		{
+			StipulationType = StipulationType.DirectMate;
+			Depth = depth;
+		}
+		public Stipulation(StipulationType sttype, decimal depth)
+		{
+			StipulationType = sttype;
 			Depth = depth;
 		}
 
@@ -22,8 +28,11 @@ namespace SP.Core
 				);
 			}
 		}
-		public StipulationType StipulationType { get; set; } = StipulationType.DirectMate;
+
+		private StipulationType stipulationType;
+
 		public decimal Depth { get; set; } = 2;
+		public StipulationType StipulationType { get => stipulationType; private set => stipulationType = value; }
 
 		public override string ToString()
 		{

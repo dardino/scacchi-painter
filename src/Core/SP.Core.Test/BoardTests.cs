@@ -19,7 +19,19 @@ namespace SP.Core.Test
 			var p2 = board.GetPiece(Columns.ColF, Rows.Row4);
 			Assert.AreEqual(p2.GetType(), typeof(Core.Pieces.Queen));
 		}
-
+		[TestMethod]
+		public void LoadFromNotationAndStipulation()
+		{
+			var notation = "3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5";
+			var board = Board.FromNotation(notation, new Stipulation(StipulationType.HelpMate, 2));
+			Assert.AreEqual(PieceColors.Black, board.Stipulation.StartingMoveColor, "check starting color");
+			board = Board.FromNotation(notation, new Stipulation(StipulationType.DirectMate, 2));
+			Assert.AreEqual(PieceColors.White, board.Stipulation.StartingMoveColor, "check starting color");
+			board = Board.FromNotation(notation, new Stipulation(StipulationType.HelpMate, 0.5m));
+			Assert.AreEqual(PieceColors.White, board.Stipulation.StartingMoveColor, "check starting color");
+			board = Board.FromNotation(notation, new Stipulation(StipulationType.DirectMate, 0.5m));
+			Assert.AreEqual(PieceColors.Black, board.Stipulation.StartingMoveColor, "check starting color");
+		}
 		[TestMethod]
 		public void LoadFromNotation() {
 			var notation = "3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5";
