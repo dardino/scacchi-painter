@@ -92,4 +92,13 @@ namespace SP.Core
 		}
 		
 	}
+	public static class PieceExt
+	{
+		public static PieceColors Opposite(this PieceColors color)
+		{
+			return color == PieceColors.Black ? PieceColors.White
+				: color == PieceColors.White ? PieceColors.Black
+				: PieceColors.Neutral;
+		}
+	}
 }

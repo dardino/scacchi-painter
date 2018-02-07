@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,49 +13,76 @@ namespace SP.Engine
 	/// </summary>
 	public class Solver
 	{
-		private GameState game;
-
+		private GameState initialGameState = null;
 		private CancellationTokenSource tokenSource;
-		private Task<MoveTree> taskSolver;
+		private Task<MoveList> taskSolver;
+		private Lazy<MoveList> moves { get; set; } = new Lazy<MoveList>(true);
 
 		public TaskStatus State => taskSolver?.Status ?? TaskStatus.WaitingToRun;
 
 		public static Solver GetSolver(GameState startGame)
 		{
-			return new Solver() { game = startGame };
+			return new Solver() { initialGameState = startGame };
 		}
 
 		private Solver() { }
 
-		public Task<MoveTree> Start() {
+		public Task<MoveList> Solve() {
 			if (State != TaskStatus.Running)
 			{
-				if (tokenSource != null) tokenSource.Dispose();
-				if (taskSolver != null) taskSolver.Dispose();
-
-				tokenSource = new CancellationTokenSource();
-				System.Diagnostics.Debug.WriteLine($"solver creation");
-				taskSolver = Task.Factory.StartNew(() =>
+				if (tokenSource != null)
 				{
-					var tree = new MoveTree();
-					for (var i = 0; i < 10; i++)
-					{
-						if (tokenSource.IsCancellationRequested)
-						{
-							break;
-						}
-						System.Diagnostics.Debug.WriteLine($"iteration count: {i}");
-						Task.Delay(1_000).Wait();
-					}
-					return tree;
-				}, tokenSource.Token);
-				
-				return taskSolver;
+					tokenSource.Cancel();
+					tokenSource.Dispose();
+				}
+				if (taskSolver != null)
+				{
+					taskSolver.Dispose();
+				}
+				tokenSource = new CancellationTokenSource();
+				return InternalSolve();
 			}
 			else {
 				Log("You cannot call Start method more than once! Call Stop() then call Start() again");
 				return null;
 			}
+		}
+
+		private Task<MoveList> InternalSolve()
+		{
+			var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+#if DEBUG
+			System.Diagnostics.Debug.WriteLine($"solver creation");
+#endif
+			taskSolver = Task.Factory.StartNew(() =>
+			{
+				if (tokenSource.IsCancellationRequested) { return moves.Value; }
+				var movefound = FindMoves(initialGameState, 0);
+				if (movefound == null) return moves.Value;
+
+				Parallel.ForEach(movefound, (move) => {
+					if (tokenSource.IsCancellationRequested) { return; }
+					moves.Value.Add(move);
+				});
+
+				return moves.Value;
+			}, tokenSource.Token);
+#if DEBUG
+			System.Diagnostics.Debug.WriteLine($"elapsed time: {stopwatch.Elapsed}");
+#endif
+			return taskSolver;
+		}
+
+		private MoveList FindMoves(GameState gs, int deep)
+		{
+			if (gs.MaxDepth < deep) return null;
+			var gsml = gs.GetMoves();
+			if (!gsml.Any()) return null;
+			MoveList ml = new MoveList();
+			foreach (var m in gsml) {
+				ml.Add(m);
+			}
+			return ml;
 		}
 
 		private void Log(string v)
@@ -64,14 +93,14 @@ namespace SP.Engine
 #endif
 		}
 
-		public void Stop()
+		public void Cancel()
 		{
 			tokenSource.Cancel();
 		}
 	}
 
-	public class MoveTree
+	public class MoveList : ConcurrentBag<Move>
 	{
-		public IEnumerable<Move> Moves { get; set; }
+		public Lazy<MoveList> ChildMoves { get; set; } = new Lazy<MoveList>(true);
 	}
 }

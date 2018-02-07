@@ -33,7 +33,7 @@ namespace SP.Engine
 			var squares = BitBoard.GetListOfSquares(bbMoves);
 			foreach (var toSquare in squares)
 			{
-				if (toSquare.GetRow() == Rows.Row8 || toSquare.GetRow() == Rows.Row1)
+				if (IsPawn && (toSquare.GetRow() == Rows.Row8 || toSquare.GetRow() == Rows.Row1))
 				{
 					foreach (var p in state.AvailablePromotionsTypes)
 					{

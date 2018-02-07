@@ -42,6 +42,15 @@ namespace SP.Engine
 			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
 		}
 
+		internal bool IsCheck(Move move)
+		{
+			var clone = new GameState();
+			clone.CloneFrom(this);
+			clone.ApplyMove(move);
+			// è scacco se una volta applicata la mossa il re nemico è sotto scacco
+			return (clone.IsSquareUnderAttack(clone.KingPosition(move.Piece.Color.Opposite())));
+		}
+
 		public Square KingPosition(PieceColors kingColor)
 		{
 			return (Square)Array.IndexOf(SquaresOccupation, SquaresOccupation.FirstOrDefault(f => f != null && f.Color == kingColor && f.IsKing));
