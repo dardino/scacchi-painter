@@ -114,5 +114,21 @@ namespace SP.Core.Engine.Pieces
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A5, Square.E1, gg), "a5-e1");
 
 		}
+		[TestMethod]
+		public void B_IsAttackingSquareOnBoard()
+		{
+
+			var piece = new Bishop
+			{
+				Color = PieceColors.White
+			};
+
+			var gg = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/2p4p/1B6/1n6/4K3"));
+			Assert.IsFalse(piece.IsAttackingSquare(Square.B3, Square.D5, gg), "b3-d5");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.B3, Square.E6, gg), "b3-e6");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.B3, Square.F7, gg), "b3-f7");
+			Assert.IsFalse(piece.IsAttackingSquare(Square.B3, Square.G8, gg), "b3-g8");
+
+		}
 	}
 }

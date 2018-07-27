@@ -164,7 +164,6 @@ namespace SP.Core.Engine.Pieces
 			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (King under check)");
 		}
 
-
 		[TestMethod]
 		public void K_NoCastling2()
 		{
@@ -214,6 +213,16 @@ namespace SP.Core.Engine.Pieces
 			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (occupied cell in rock line move)");
 			Assert.AreEqual(expec4, moves4, "BK E8 --> All Moves + NO Castling (occupied cell in rock line move)");
 		}
+
+		[TestMethod]
+		public void K_NoCastling4()
+		{
+			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var wk = new King() { Color = PieceColors.White };
+			var moves = wk.GetMovesFromPosition(Square.E1, gs);
+
+		}
+
 
 		[TestMethod]
 		public void K_CastlingSubMovesWhite()

@@ -12,7 +12,6 @@ namespace SP.Engine
 		public Square DestinationSquare;
 		public bool IsCapture;
 		public IEnumerable<Move> SubSequentialMoves;
-
 		public override string ToString()
 		{
 			var sep = IsCapture ? "*" : "-";
@@ -21,8 +20,7 @@ namespace SP.Engine
 				: "";
 			return Piece 
 				+ $"{SourceSquare}{sep}{DestinationSquare}".ToLower() 
-				+ extra
-				 ;
+				+ extra;
 		}
 
 		public Move Clone() {
@@ -36,5 +34,6 @@ namespace SP.Engine
 			};
 
 		}
+		
 	}
 }

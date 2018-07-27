@@ -42,8 +42,15 @@ namespace SP.Engine
 			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
 		}
 
+		public bool IsCheckMate(Move move)
+		{
+			var clone = new GameState();
+			clone.CloneFrom(this);
+			clone.ApplyMove(move);
+			return clone.IsCheckMate();
+		}
 		public bool IsCheckMate() {
-			return !Moves.Any() && MyKingUnderAttack();
+			return MyKingUnderAttack() && !Moves.Any();
 		}
 
 		bool MyKingUnderAttack() {
@@ -162,6 +169,7 @@ namespace SP.Engine
 					((ulong)LastMove.Value.SourceSquare.ToSquareBits() >> 8) :
 					((ulong)LastMove.Value.SourceSquare.ToSquareBits() << 8);
 			}
+
 		}
 
 

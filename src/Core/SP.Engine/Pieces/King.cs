@@ -38,7 +38,13 @@ namespace SP.Engine.Pieces
 			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b01110000) },
 			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000110) }
 		};
-
+		static Dictionary<CastlingIndexes, BitBoard> CastlingAlliedRockPos = new Dictionary<CastlingIndexes, BitBoard>
+		{
+			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b10000000) },
+			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000001) },
+			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b10000000) },
+			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000001) }
+		};
 
 		protected bool IsMyStartingSquare(Square s) {
 			return (Color == PieceColors.White && s == Square.E1) ||
@@ -81,6 +87,7 @@ namespace SP.Engine.Pieces
 					if (!gameState.CastlingAllowed[(int)castling] // non è più possibile arroccare
 						|| (gameState.All & CastlingFreeCells[castling]) != 0 // la linea di arrocco è occupata
 						|| (gameState.UnderAttackCells & CastlingNotUnderCheck[castling]) != 0 // le case interessate dall'arrocco sono sotto attacco
+						|| (gameState.AlliedRocks & CastlingAlliedRockPos[castling]) != CastlingAlliedRockPos[castling] // le mie torri non sono al posto giusto
 						) continue;
 					moves |= CastlingBB[castling];
 				}
