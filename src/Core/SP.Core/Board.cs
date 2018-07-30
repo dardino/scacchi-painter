@@ -188,5 +188,57 @@ namespace SP.Core
 		{
 			return String.Join("|", cells.Select(f => (f.Piece?.ToString() ?? "").PadLeft(5)));
 		}
+
+		public static string[] GetRepresentation(params Board[] boards)
+		{
+			var bb2p = boards.Length;
+
+			List<string> outtext = new List<string>();
+			var top = "";
+			for (var bb = 0; bb < bb2p; bb++)
+			{
+				top += "╔═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╗";
+			}
+			outtext.Add(top);
+			for (int r = 7; r > -1; r--)
+			{
+				var globalRow = "";
+				for (var bb = 0; bb < bb2p; bb++)
+				{
+					var row = "";
+					for (int c = 7; c > -1; c--)
+					{
+						var sqi = (int)BoardSquare.GetSquareIndex((Columns)c, (Rows)r);
+						row += $@"{(boards[bb][sqi].Occupied ? boards[bb][sqi].Piece.Name.PadRight(2, ' ').PadLeft(3, ' ') : "   ")}";
+						if (c > 0) row += "│";
+					}
+					globalRow += "║" + row + "║";
+				}
+				outtext.Add(globalRow);
+			}
+			var bot = "";
+			for (var bb = 0; bb < bb2p; bb++)
+			{
+				bot += "╚═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝";
+			}
+			outtext.Add(bot);
+			for (var bb = 0; bb < bb2p; bb++)
+			{
+				outtext.Add(bb + ":");
+				outtext.Add(boards[bb].ToFEN());
+			}
+
+#if DEBUG
+			System.Diagnostics.Debug.WriteLine(String.Join("\r\n", outtext));
+			return new string[0];
+#else
+			return outtext.ToArray();
+#endif
+		}
+
+		private string ToFEN()
+		{
+			return "";
+		}
 	}
 }

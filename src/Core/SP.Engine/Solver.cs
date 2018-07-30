@@ -16,6 +16,7 @@ namespace SP.Engine
 		private GameState initialGameState = null;
 		private CancellationTokenSource tokenSource;
 		private Task<MoveList> taskSolver;
+		private int currentDepth = 0;
 		private Lazy<MoveList> moves { get; set; } = new Lazy<MoveList>(true);
 
 		public TaskStatus State => taskSolver?.Status ?? TaskStatus.WaitingToRun;
@@ -58,7 +59,8 @@ namespace SP.Engine
 			{
 				if (tokenSource.IsCancellationRequested) { return moves.Value; }
 				var movefound = FindMoves(initialGameState, 0);
-				if (movefound == null) return moves.Value;
+				if (movefound == null)
+					return moves.Value;
 
 				Parallel.ForEach(movefound, (move) => {
 					if (tokenSource.IsCancellationRequested) { return; }

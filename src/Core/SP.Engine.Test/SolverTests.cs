@@ -18,7 +18,6 @@ namespace SP.Engine.Test
 			Assert.AreEqual(TaskStatus.WaitingToRun, s.State);
 		   var result = s.Solve();
 
-			// stop after 1.5 seconds
 			var t = Task.Run(() => {
 				s.Cancel();
 			});
@@ -65,6 +64,27 @@ namespace SP.Engine.Test
 
 			Assert.IsFalse(w_gs1_n.IsCheckMate(), "8/8/8/8/8/1K6/2Q5/k7 ha dato true ??");
 
+		}
+
+
+		[TestMethod]
+		public void GetAllMoves() {
+			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			gs.Board.Stipulation.Depth = 1;
+			var s = Solver.GetSolver(gs);
+			var t = s.Solve();
+			var counter = t.Result.Count;
+			Assert.AreEqual(counter, 16, $"Il numero di mosse calcolate deve essere 16 invece è {counter}");
+		}
+
+		[TestMethod]
+		public void GetChecks()
+		{
+			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			gs.Board.Stipulation.Depth = 1;
+			var t = gs.Moves;
+			var check = t.Count((move) => gs.IsCheck(move));
+			Assert.AreEqual(check, 3, $"3 mosse devono essere di check, invece sono {check}");
 		}
 	}
 }
