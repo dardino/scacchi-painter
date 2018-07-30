@@ -26,6 +26,7 @@ namespace sp_gui.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::NGraphics.Android.Custom.Resource.String.library_name = global::sp_gui.Droid.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::sp_gui.Droid.Resource.Attribute.actionBarSize;
 		}
 		
@@ -3737,8 +3738,8 @@ namespace sp_gui.Droid
 			// aapt resource value: 0x7f0a0027
 			public const int abc_toolbar_collapse_description = 2131361831;
 			
-			// aapt resource value: 0x7f0a003e
-			public const int app_label = 2131361854;
+			// aapt resource value: 0x7f0a003f
+			public const int app_label = 2131361855;
 			
 			// aapt resource value: 0x7f0a0036
 			public const int appbar_scrolling_view_behavior = 2131361846;
@@ -3748,6 +3749,9 @@ namespace sp_gui.Droid
 			
 			// aapt resource value: 0x7f0a0038
 			public const int character_counter_pattern = 2131361848;
+			
+			// aapt resource value: 0x7f0a003e
+			public const int library_name = 2131361854;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int mr_button_content_description = 2131361792;

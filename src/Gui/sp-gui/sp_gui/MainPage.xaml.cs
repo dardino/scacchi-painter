@@ -106,9 +106,17 @@ namespace sp_gui
 			//	((Detail as NavigationPage).CurrentPage as NamedColorPage).Content.GestureRecognizers.Add(item: GestureRecogizer());
 			//}
 
+			var firstTime = true;
 			// Define a selected handler for the ListView.
 			listView.ItemSelected += (sender, args) =>
 			{
+				if (!firstTime)
+				{
+					var c = Plugin.FilePicker.CrossFilePicker.Current.PickFile();
+					c.Wait();
+					var x = c.Result;
+				}
+				firstTime = false;
 				// Set the BindingContext of the detail page.
 				Detail.BindingContext = args.SelectedItem;
 
