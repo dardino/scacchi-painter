@@ -14,7 +14,8 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void TestCancellation()
 		{
-			var s = Solver.GetSolver(new GameState());
+			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var s = Solver.GetSolver(gs);
 			Assert.AreEqual(TaskStatus.WaitingToRun, s.State);
 		   var result = s.Solve();
 

@@ -29,6 +29,7 @@ namespace SP.Engine
 		private Solver() { }
 
 		public Task<MoveList> Solve() {
+			if (initialGameState.Board == null) return null;
 			if (State != TaskStatus.Running)
 			{
 				if (tokenSource != null)
@@ -41,6 +42,7 @@ namespace SP.Engine
 					taskSolver.Dispose();
 				}
 				tokenSource = new CancellationTokenSource();
+				initialGameState.SetCancellationToken(tokenSource.Token);
 				return InternalSolve();
 			}
 			else {
@@ -62,8 +64,8 @@ namespace SP.Engine
 				if (movefound == null)
 					return moves.Value;
 
-				Parallel.ForEach(movefound, (move) => {
-					if (tokenSource.IsCancellationRequested) { return; }
+				Parallel.ForEach(movefound, (move, cloop) => {
+					if (tokenSource.IsCancellationRequested) { cloop.Break(); return; }
 					moves.Value.Add(move);
 				});
 

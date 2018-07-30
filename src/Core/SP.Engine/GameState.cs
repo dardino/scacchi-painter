@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SP.Engine
 {
@@ -15,6 +17,7 @@ namespace SP.Engine
 
 	public class GameState
 	{
+
 		public BitBoard Allied { get { return BitBoardByColor[AlliedColor] | BitBoardByColor[PieceColors.Neutral]; } }
 
 		internal void ApplyMove(Move move)
@@ -29,7 +32,8 @@ namespace SP.Engine
 			// aggiorno il gamestate:
 			UpdateGameState();
 			// se la mossa ha "sottomosse" le eseguo
-			if (move.SubSequentialMoves != null) {
+			if (move.SubSequentialMoves != null)
+			{
 				foreach (var subMove in move.SubSequentialMoves)
 				{
 					ApplyMove(subMove);
@@ -37,9 +41,15 @@ namespace SP.Engine
 			}
 		}
 
-		private void MovePiece(Move move) {
+		private void MovePiece(Move move)
+		{
 			board.PlacePieceOnBoard(move.SourceSquare, null);
 			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
+		}
+
+		internal void SetCancellationToken(CancellationToken token)
+		{
+			this.ct = token;
 		}
 
 		public bool IsCheckMate(Move move)
@@ -49,11 +59,13 @@ namespace SP.Engine
 			clone.ApplyMove(move);
 			return clone.IsCheckMate();
 		}
-		public bool IsCheckMate() {
+		public bool IsCheckMate()
+		{
 			return MyKingUnderAttack() && !Moves.Any();
 		}
 
-		bool MyKingUnderAttack() {
+		bool MyKingUnderAttack()
+		{
 			return IsSquareUnderAttack(KingPosition(MoveTo));
 		}
 
@@ -129,7 +141,7 @@ namespace SP.Engine
 		public decimal MaxDepth { get { return board.Stipulation.Depth; } }
 
 		private decimal ActualDepth { get; set; } = 0;
-
+		private CancellationToken ct;
 		public void UpdateGameState()
 		{
 			moves = null;
@@ -143,29 +155,38 @@ namespace SP.Engine
 				UnderAlliedAttackByPiece[u] = 0;
 			}
 
-			for (var i = 0; i < 64; i++)
+			Parallel.ForEach(board.Cells, (cell, ploop, i) =>
 			{
-				var s = (Square)i;
-				var x = (ulong)s.ToSquareBits();
+				if (ct != null && ct.IsCancellationRequested) ploop.Break();
+				var s = cell.Square;
 				var p = board.GetPiece(s) as EnginePiece;
-				SquaresOccupation[i] = p;
-				if (p == null) continue;
+				SquaresOccupation[(Int32)s] = p;
+				if (p == null) return;
+				var x = (ulong)s.ToSquareBits();
 				BitBoardByColor[p.Color] |= x;
+			});
+
+			Parallel.ForEach(board.Cells, (cell, ploop, i) =>
+			{
+				if (ct != null && ct.IsCancellationRequested) ploop.Break();
+				var s = cell.Square;
+				if (!(board.GetPiece(s) is EnginePiece p)) return;
 				if (p.Color == PieceColors.Neutral || p.Color == MoveTo)
 				{
 					var m = p.GetMovesFromPosition(s, this);
-					UnderAlliedAttackByPiece[i] = m;
+					UnderAlliedAttackByPiece[(Int32)s] = m;
 				}
 				if (p.Color != MoveTo)
 				{
 					var m = p.GetAttackingSquares(s, this);
-					UnderEnemiesAttackByPiece[i] = m;
+					UnderEnemiesAttackByPiece[(Int32)s] = m;
 				}
-			}
+			});
 
 			BitBoardPawnEP = 0;
-			if (LastMove.HasValue && LastMove.Value.Piece.IsPawn && Engine.Pieces.Pawn.IsStartingSquare(LastMove.Value.SourceSquare, LastMove.Value.Piece.Color)) {
-				BitBoardPawnEP = LastMove.Value.Piece.Color == PieceColors.Black ? 
+			if (LastMove.HasValue && LastMove.Value.Piece.IsPawn && Engine.Pieces.Pawn.IsStartingSquare(LastMove.Value.SourceSquare, LastMove.Value.Piece.Color))
+			{
+				BitBoardPawnEP = LastMove.Value.Piece.Color == PieceColors.Black ?
 					((ulong)LastMove.Value.SourceSquare.ToSquareBits() >> 8) :
 					((ulong)LastMove.Value.SourceSquare.ToSquareBits() << 8);
 			}
@@ -263,8 +284,10 @@ namespace SP.Engine
 		public ChessRule[] Rules => rules;
 
 		private IEnumerable<Move> moves;
-		public IEnumerable<Move> Moves {
-			get {
+		public IEnumerable<Move> Moves
+		{
+			get
+			{
 				if (moves == null)
 					moves = GetMoves();
 				return moves;
