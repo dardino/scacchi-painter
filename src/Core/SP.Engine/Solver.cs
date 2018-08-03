@@ -16,8 +16,7 @@ namespace SP.Engine
 		private GameState initialGameState = null;
 		private CancellationTokenSource tokenSource;
 		private Task<MoveList> taskSolver;
-		private int currentDepth = 0;
-		private Lazy<MoveList> moves { get; set; } = new Lazy<MoveList>(true);
+		private Lazy<MoveList> Moves { get; set; } = new Lazy<MoveList>(true);
 
 		public TaskStatus State => taskSolver?.Status ?? TaskStatus.WaitingToRun;
 
@@ -59,17 +58,17 @@ namespace SP.Engine
 #endif
 			taskSolver = Task.Factory.StartNew(() =>
 			{
-				if (tokenSource.IsCancellationRequested) { return moves.Value; }
+				if (tokenSource.IsCancellationRequested) { return Moves.Value; }
 				var movefound = FindMoves(initialGameState, 0);
 				if (movefound == null)
-					return moves.Value;
+					return Moves.Value;
 
 				Parallel.ForEach(movefound, (move, cloop) => {
 					if (tokenSource.IsCancellationRequested) { cloop.Break(); return; }
-					moves.Value.Add(move);
+					Moves.Value.Add(move);
 				});
 
-				return moves.Value;
+				return Moves.Value;
 			}, tokenSource.Token);
 #if DEBUG
 			System.Diagnostics.Debug.WriteLine($"elapsed time: {stopwatch.Elapsed}");
@@ -80,7 +79,7 @@ namespace SP.Engine
 		private MoveList FindMoves(GameState gs, int deep)
 		{
 			if (gs.MaxDepth < deep) return null;
-			var gsml = gs.Moves;
+			var gsml = gs.Moves();
 			if (!gsml.Any()) return null;
 			MoveList ml = new MoveList();
 			foreach (var m in gsml) {
@@ -103,7 +102,7 @@ namespace SP.Engine
 		}
 	}
 
-	public class MoveList : ConcurrentBag<Move>
+	public class MoveList : ConcurrentBag<HalfMove>
 	{
 		public Lazy<MoveList> ChildMoves { get; set; } = new Lazy<MoveList>(true);
 	}

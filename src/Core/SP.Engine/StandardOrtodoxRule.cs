@@ -2,7 +2,7 @@
 {
 	public class StandardOrtodoxRule: ChessRule
 	{
-		public override bool IsMoveValid(GameState gs, Move moveToTest)
+		public override bool IsMoveValid(GameState gs, HalfMove moveToTest)
 		{
 			var newGs = new GameState(gs.Rules);
 			// clono la scacchiera

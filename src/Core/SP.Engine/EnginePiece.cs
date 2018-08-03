@@ -25,7 +25,7 @@ namespace SP.Engine
 		internal bool IsKing => Name == "K";
 		internal bool IsPawn => Name == "P";
 
-		public IEnumerable<Move> GetMoves(Square fromSquare, GameState state)
+		public IEnumerable<HalfMove> GetMoves(Square fromSquare, GameState state)
 		{
 
 			var bbMoves = GetMovesFromPosition(fromSquare, state);			
@@ -37,14 +37,14 @@ namespace SP.Engine
 				{
 					foreach (var p in state.AvailablePromotionsTypes)
 					{
-						yield return new Move
+						yield return new HalfMove
 						{
 							Piece = this,
 							SourceSquare = fromSquare,
 							IsCapture = IsCapture(fromSquare, toSquare, state),
 							DestinationSquare = toSquare,
-							SubSequentialMoves = new List<Move> {
-								new Move()
+							SubSequentialMoves = new List<HalfMove> {
+								new HalfMove()
 								{
 									Piece = MakePieceClass(p, Color),
 									DestinationSquare = toSquare,
@@ -58,7 +58,7 @@ namespace SP.Engine
 				}
 				else
 				{
-					yield return new Move
+					yield return new HalfMove
 					{
 						Piece = this,
 						SourceSquare = fromSquare,
@@ -80,7 +80,7 @@ namespace SP.Engine
 			var a = GetAttackingSquares(fromSquare, gInfo);
 			return (a & (ulong)squareToCheck.ToSquareBits()) > 0;
 		}
-		public virtual IEnumerable<Move> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
+		public virtual IEnumerable<HalfMove> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
 			return null;
 		}
 		public bool IsCapture(Square from, Square to, GameState gInfo) {

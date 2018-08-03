@@ -13,7 +13,12 @@ namespace SP.Engine.Pieces
 		private static BitBoard getEnemies(GameState g) {
 			return (g.Enemies | g.BitBoardPawnEP);
 		}
-		
+		private static BitBoard getAllButMe(GameState g, Square s)
+		{
+			var b = (ulong)s.ToSquareBits();
+			return (g.All | b) ^ b;
+		}
+
 		public override ulong GetCapturesFromPosition(Square s, GameState g)
 		{
 			return GetAttackingSquares(s, g) & getEnemies(g);
@@ -31,7 +36,7 @@ namespace SP.Engine.Pieces
 			ulong m2 = 0;
 			ulong fromOrigin = (Color == PieceColors.White) ? (ulong)0x0000000000ff0000 : 0x0000ff0000000000;
 			if ((m1 & fromOrigin) > 0) m2 = (ulong)Math.Pow(2, i2);
-			var freeMove = (getEnemies(g) & (m1 | m2)) ^ (m1 | m2);
+			var freeMove = (getAllButMe(g, s) & (m1 | m2)) ^ (m1 | m2);
 			return freeMove | capt;
 		}
 

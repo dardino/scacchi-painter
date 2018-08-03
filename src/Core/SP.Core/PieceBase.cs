@@ -34,6 +34,12 @@ namespace SP.Core
 		};
 		internal static List<Type> piecetypes = typeof(PieceBase).Assembly.GetTypes().Where(f => f.BaseType == typeof(PieceBase)).ToList();
 		public string Name { get; protected set; }
+		public string NameByColor
+		{
+			get {
+				return Color == PieceColors.Black ? Name.ToLower() : Name.ToUpper();
+			}
+		}
 
 		internal static PieceBase FromFEN(string c)
 		{

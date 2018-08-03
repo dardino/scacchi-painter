@@ -1,6 +1,7 @@
 ﻿using SP.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,9 +19,13 @@ namespace SP.Engine
 	public class GameState
 	{
 
-		public BitBoard Allied { get { return BitBoardByColor[AlliedColor] | BitBoardByColor[PieceColors.Neutral]; } }
+		public BitBoard Allied {
+			get {
+				return BitBoardByColor[AlliedColor] | BitBoardByColor[PieceColors.Neutral];
+			}
+		}
 
-		internal void ApplyMove(Move move)
+		internal void ApplyMove(HalfMove move)
 		{
 			LastMove = move;
 			// sposto il pezzo:
@@ -41,10 +46,10 @@ namespace SP.Engine
 			}
 		}
 
-		private void MovePiece(Move move)
+		private void MovePiece(HalfMove move)
 		{
-			board.PlacePieceOnBoard(move.SourceSquare, null);
-			board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
+			Board.PlacePieceOnBoard(move.SourceSquare, null);
+			Board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
 		}
 
 		internal void SetCancellationToken(CancellationToken token)
@@ -52,7 +57,7 @@ namespace SP.Engine
 			this.ct = token;
 		}
 
-		public bool IsCheckMate(Move move)
+		public bool IsCheckMate(HalfMove move)
 		{
 			var clone = new GameState();
 			clone.CloneFrom(this);
@@ -61,7 +66,7 @@ namespace SP.Engine
 		}
 		public bool IsCheckMate()
 		{
-			return MyKingUnderAttack() && !Moves.Any();
+			return moves != null && !moves.Any() && MyKingUnderAttack();
 		}
 
 		bool MyKingUnderAttack()
@@ -69,7 +74,7 @@ namespace SP.Engine
 			return IsSquareUnderAttack(KingPosition(MoveTo));
 		}
 
-		public bool IsCheck(Move move)
+		public bool IsCheck(HalfMove move)
 		{
 			var clone = new GameState();
 			clone.CloneFrom(this);
@@ -122,9 +127,9 @@ namespace SP.Engine
 			return (AttackingCells & (ulong)s.ToSquareBits()) > 0;
 		}
 
-		public Move? LastMove = null;
+		public HalfMove? LastMove = null;
 		public bool[] CastlingAllowed = new bool[4] { true, true, true, true };
-		public ulong AlliedRocks => board.Cells
+		public ulong AlliedRocks => Board.Cells
 			.Where(c => c.Piece != null && c.Piece.Name == "R" && c.Piece.Color == MoveTo)
 			.Select(c => (ulong)c.Square.ToSquareBits())
 			.Aggregate((a, b) => a | b);
@@ -135,10 +140,9 @@ namespace SP.Engine
 			typeof(Pieces.Rock),
 			typeof(Pieces.Queen)
 		};
-		private Board board;
-		public Board Board => board;
+		public Board Board { get; private set; }
 
-		public decimal MaxDepth { get { return board.Stipulation.Depth; } }
+		public decimal MaxDepth { get { return Board.Stipulation.Depth; } }
 
 		private decimal ActualDepth { get; set; } = 0;
 		private CancellationToken ct;
@@ -155,22 +159,26 @@ namespace SP.Engine
 				UnderAlliedAttackByPiece[u] = 0;
 			}
 
-			Parallel.ForEach(board.Cells, (cell, ploop, i) =>
+			if (ct.IsCancellationRequested) return;
+
+			for (var u = 0; u < 64; u++)
 			{
-				if (ct != null && ct.IsCancellationRequested) ploop.Break();
+				var cell = Board.Cells[u];
 				var s = cell.Square;
-				var p = board.GetPiece(s) as EnginePiece;
+				var p = Board.GetPiece(s) as EnginePiece;
 				SquaresOccupation[(Int32)s] = p;
-				if (p == null) return;
+				if (p == null) continue;
 				var x = (ulong)s.ToSquareBits();
 				BitBoardByColor[p.Color] |= x;
-			});
+			}
 
-			Parallel.ForEach(board.Cells, (cell, ploop, i) =>
+			if (ct.IsCancellationRequested) return;
+
+			for (var u = 0; u < 64; u++)
 			{
-				if (ct != null && ct.IsCancellationRequested) ploop.Break();
+				var cell = Board.Cells[u];
 				var s = cell.Square;
-				if (!(board.GetPiece(s) is EnginePiece p)) return;
+				if (!(Board.GetPiece(s) is EnginePiece p)) continue;
 				if (p.Color == PieceColors.Neutral || p.Color == MoveTo)
 				{
 					var m = p.GetMovesFromPosition(s, this);
@@ -181,7 +189,7 @@ namespace SP.Engine
 					var m = p.GetAttackingSquares(s, this);
 					UnderEnemiesAttackByPiece[(Int32)s] = m;
 				}
-			});
+			};
 
 			BitBoardPawnEP = 0;
 			if (LastMove.HasValue && LastMove.Value.Piece.IsPawn && Engine.Pieces.Pawn.IsStartingSquare(LastMove.Value.SourceSquare, LastMove.Value.Piece.Color))
@@ -201,16 +209,16 @@ namespace SP.Engine
 		{
 			var gs = new GameState(new StandardOrtodoxRule())
 			{
-				board = board
+				Board = board
 			};
 			for (int c = 0; c < 64; c++)
 			{
 				var s = (Square)c;
-				var ex = gs.board.GetPiece(s);
+				var ex = gs.Board.GetPiece(s);
 				var p = EnginePiece.FromPieceBase(ex);
-				gs.board.PlacePieceOnBoard(s, p);
+				gs.Board.PlacePieceOnBoard(s, p);
 			}
-			gs.MoveTo = gs.board.Stipulation.StartingMoveColor;
+			gs.MoveTo = gs.Board.Stipulation.StartingMoveColor;
 			gs.ActualDepth = gs.MaxDepth;
 			gs.UpdateGameState();
 			return gs;
@@ -237,13 +245,13 @@ namespace SP.Engine
 
 
 
-		private IEnumerable<Move> GetMoves()
+		private IEnumerable<HalfMove> GetMoves()
 		{
 			for (int c = 0; c < 64; c++)
 			{
 				var s = (Square)c;
 
-				if (board.GetPiece(s) is EnginePiece p && (p.Color == MoveTo || p.Color == PieceColors.Neutral))
+				if (Board.GetPiece(s) is EnginePiece p && (p.Color == MoveTo || p.Color == PieceColors.Neutral))
 				{
 					foreach (var item in p.GetMoves(s, this))
 					{
@@ -259,7 +267,7 @@ namespace SP.Engine
 		/// </summary>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		private bool MoveIsValid(Move item)
+		private bool MoveIsValid(HalfMove item)
 		{
 			return rules.All(r => r.IsMoveValid(this, item));
 		}
@@ -267,31 +275,26 @@ namespace SP.Engine
 		internal void CloneFrom(GameState gs)
 		{
 			ActualDepth = gs.ActualDepth;
+			Board = gs.Board.Clone();
+
+			rules = new ChessRule[gs.rules.Length];
+			gs.rules.CopyTo(rules, 0);
 			AvailablePromotionsTypes = gs.AvailablePromotionsTypes;
-			BitBoardByColor = new Dictionary<PieceColors, BitBoard>();
-			BitBoardByColor[PieceColors.White] = gs.BitBoardByColor[PieceColors.White];
-			BitBoardByColor[PieceColors.Black] = gs.BitBoardByColor[PieceColors.Black];
-			BitBoardByColor[PieceColors.Neutral] = gs.BitBoardByColor[PieceColors.Neutral];
-			board = gs.board.Clone();
 			gs.CastlingAllowed.CopyTo(CastlingAllowed, 0);
 			LastMove = gs.LastMove?.Clone();
 			MoveTo = gs.MoveTo;
-			rules = new ChessRule[gs.rules.Length];
-			gs.rules.CopyTo(rules, 0);
+
 			UpdateGameState();
 		}
 
 		public ChessRule[] Rules => rules;
 
-		private IEnumerable<Move> moves;
-		public IEnumerable<Move> Moves
+		private IEnumerable<HalfMove> moves;
+		public IEnumerable<HalfMove> Moves()
 		{
-			get
-			{
-				if (moves == null)
-					moves = GetMoves();
-				return moves;
-			}
+			if (moves == null)
+				moves = GetMoves();
+			return moves;
 		}
 
 		private ChessRule[] rules;

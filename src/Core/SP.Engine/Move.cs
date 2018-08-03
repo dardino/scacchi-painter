@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace SP.Engine
 {
-	public struct Move
+	public struct HalfMove
 	{
 		public EnginePiece Piece;
 		public Square SourceSquare;
 		public Square DestinationSquare;
 		public bool IsCapture;
-		public IEnumerable<Move> SubSequentialMoves;
+		public IEnumerable<HalfMove> SubSequentialMoves;
 		public override string ToString()
 		{
 			var sep = IsCapture ? "*" : "-";
@@ -23,8 +23,8 @@ namespace SP.Engine
 				+ extra;
 		}
 
-		public Move Clone() {
-			return new Move()
+		public HalfMove Clone() {
+			return new HalfMove()
 			{
 				Piece = Piece,
 				DestinationSquare = DestinationSquare,

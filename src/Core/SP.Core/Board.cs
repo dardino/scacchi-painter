@@ -209,7 +209,7 @@ namespace SP.Core
 					for (int c = 7; c > -1; c--)
 					{
 						var sqi = (int)BoardSquare.GetSquareIndex((Columns)c, (Rows)r);
-						row += $@"{(boards[bb][sqi].Occupied ? boards[bb][sqi].Piece.Name.PadRight(2, ' ').PadLeft(3, ' ') : "   ")}";
+						row += $@"{(boards[bb][sqi].Occupied ? boards[bb][sqi].Piece.NameByColor.PadRight(2, ' ').PadLeft(3, ' ') : "   ")}";
 						if (c > 0) row += "│";
 					}
 					globalRow += "║" + row + "║";

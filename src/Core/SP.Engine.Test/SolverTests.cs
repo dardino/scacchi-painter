@@ -58,12 +58,12 @@ namespace SP.Engine.Test
 			var w_gs1_n = GameState.FromBoard(Board.FromNotation("K1k5/8/8/8/8/8/P7/8", new Stipulation(StipulationType.DirectMate, 0.5m)));
 			// test di alcune posizioni di stallo del re nero:
 			var w_gs2_n = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/1K6/2Q5/k7", new Stipulation(StipulationType.DirectMate, 0.5m)));
-
+			w_gs1_y.Moves();
 			Assert.IsTrue(w_gs1_y.IsCheckMate(), "k7/8/8/7K/8/8/1R6/R7 ha dato false ??");
-
+			w_gs1_n.Moves();
 			Assert.IsFalse(w_gs1_n.IsCheckMate(), "K1k5/8/8/8/8/8/P7/8 ha dato true ??");
-
-			Assert.IsFalse(w_gs1_n.IsCheckMate(), "8/8/8/8/8/1K6/2Q5/k7 ha dato true ??");
+			w_gs2_n.Moves();
+			Assert.IsFalse(w_gs2_n.IsCheckMate(), "8/8/8/8/8/1K6/2Q5/k7 ha dato true ??");
 
 		}
 
@@ -83,7 +83,7 @@ namespace SP.Engine.Test
 		{
 			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
 			gs.Board.Stipulation.Depth = 1;
-			var t = gs.Moves;
+			var t = gs.Moves();
 			var check = t.Count((move) => gs.IsCheck(move));
 			Assert.AreEqual(check, 3, $"3 mosse devono essere di check, invece sono {check}");
 		}
