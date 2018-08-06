@@ -45,7 +45,7 @@ namespace SP.Engine.Test
 			var s = Solver.GetSolver(gs);
 			var t = s.Solve();
 			var counter = t.Result.Count;
-			var check = t.Result.Any((move) => gs.IsCheck(move));
+			var check   = t.Result.Any((move) => gs.IsCheck(move.Move));
 			Assert.AreEqual(2, counter, $"Il numero di mosse calcolate deve essere 2 invece è {counter}");
 			Assert.IsFalse(check, "Nessuna mossa calcolata deve essere check");
 		}
@@ -74,7 +74,8 @@ namespace SP.Engine.Test
 			gs.Board.Stipulation.Depth = 1;
 			var s = Solver.GetSolver(gs);
 			var t = s.Solve();
-			var counter = t.Result.Count;
+			var tuttelemosse = t.Result.ToList();
+			var counter = tuttelemosse.Count;
 			Assert.AreEqual(counter, 16, $"Il numero di mosse calcolate deve essere 16 invece è {counter}");
 		}
 
@@ -86,6 +87,18 @@ namespace SP.Engine.Test
 			var t = gs.Moves();
 			var check = t.Count((move) => gs.IsCheck(move));
 			Assert.AreEqual(check, 3, $"3 mosse devono essere di check, invece sono {check}");
+		}
+
+		[TestMethod]
+		public void FindCheckMate()
+		{
+			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			gs.Board.Stipulation.Depth = 2m;
+			var s = Solver.GetSolver(gs);
+			var t = s.Solve();
+			var tuttelemosse = t.Result.ToList();
+			var counter = tuttelemosse.Count;
+			Assert.AreEqual(counter, 16, $"Il numero di mosse calcolate deve essere 16 invece è {counter}");
 		}
 	}
 }

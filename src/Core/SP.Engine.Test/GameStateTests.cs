@@ -177,5 +177,24 @@ namespace SP.Engine.Test
 			}
 
 		}
+
+
+
+		[TestMethod]
+		public void GameStateActualDepth()
+		{
+			var board1 = Board.FromNotation("8/2P5/8/8/8/8/8/8");
+			var gs1 = GameState.FromBoard(board1);
+			var moves1 = gs1.Moves();
+			Assert.AreEqual(gs1.ActualDepth, 0, "Profondità 0");
+			foreach (var move in moves1)
+			{
+				var gc = new GameState();
+				gc.CloneFrom(gs1);
+				gc.ApplyMove(move);
+				Assert.AreEqual(gc.ActualDepth, 0.5m, "Profondità 0.5");
+			}
+
+		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -27,7 +28,8 @@ namespace SP.Engine
 
 		private Solver() { }
 
-		public Task<MoveList> Solve() {
+		public Task<MoveList> Solve()
+		{
 			if (initialGameState.Board == null) return null;
 			if (State != TaskStatus.Running)
 			{
@@ -44,8 +46,9 @@ namespace SP.Engine
 				initialGameState.SetCancellationToken(tokenSource.Token);
 				return InternalSolve();
 			}
-			else {
-				Log("You cannot call Start method more than once! Call Stop() then call Start() again");
+			else
+			{
+				Log("You cannot call Start method more than once! Call Stop() then call Start() again", true);
 				return null;
 			}
 		}
@@ -58,15 +61,21 @@ namespace SP.Engine
 #endif
 			taskSolver = Task.Factory.StartNew(() =>
 			{
-				if (tokenSource.IsCancellationRequested) { return Moves.Value; }
-				var movefound = FindMoves(initialGameState, 0);
+				if (tokenSource.IsCancellationRequested) {
+					return Moves.Value;
+				}
+				var movefound = FindMoves(initialGameState);
 				if (movefound == null)
 					return Moves.Value;
 
-				Parallel.ForEach(movefound, (move, cloop) => {
-					if (tokenSource.IsCancellationRequested) { cloop.Break(); return; }
+				foreach (var move in movefound)
+				{
+
+					// if (tokenSource.IsCancellationRequested) { cloop.Break(); return; }
 					Moves.Value.Add(move);
-				});
+					Log(move.ToString(), true);
+
+				};
 
 				return Moves.Value;
 			}, tokenSource.Token);
@@ -76,23 +85,40 @@ namespace SP.Engine
 			return taskSolver;
 		}
 
-		private MoveList FindMoves(GameState gs, int deep)
+		private MoveList FindMoves(GameState gs)
 		{
-			if (gs.MaxDepth < deep) return null;
+			if (gs.MaxDepth < gs.ActualDepth) return null;
 			var gsml = gs.Moves();
 			if (!gsml.Any()) return null;
 			MoveList ml = new MoveList();
-			foreach (var m in gsml) {
-				ml.Add(m);
-			}
+			Parallel.ForEach(gsml, (m) =>
+			{
+				var subg = gs.GetAfterMove(m);
+				var mTree = new MoveTree(m, subg.ActualDepth);
+				ml.Add(mTree);
+				var mosse = FindMoves(subg);
+				if (mosse != null && mosse.Count > 0)
+				{
+					mosse.ToList().ForEach(mTree.ChildMoves.Add);
+				}
+				else
+				{
+					mTree.Check = subg.IsCheck();
+					mTree.CheckMate = subg.IsCheckMate();
+				}
+			});
 			return ml;
 		}
 
-		private void Log(string v)
+		private void Log(string v, bool newLine)
 		{
-			Console.WriteLine(v);
+			Console.Write(v);
+			if (newLine)
+				Console.WriteLine();
 #if DEBUG
-			System.Diagnostics.Debug.WriteLine(v);
+			Debug.Write(v);
+			if (newLine)
+				Debug.WriteLine("");
 #endif
 		}
 
@@ -102,8 +128,32 @@ namespace SP.Engine
 		}
 	}
 
-	public class MoveList : ConcurrentBag<HalfMove>
+	public class MoveList : ConcurrentBag<MoveTree>
 	{
-		public Lazy<MoveList> ChildMoves { get; set; } = new Lazy<MoveList>(true);
+
+	}
+
+	public class MoveTree
+	{
+		public HalfMove Move { get; private set; }
+		public MoveList ChildMoves { get; } = new MoveList();
+		public decimal Dept { get; private set; }
+
+		public MoveTree(HalfMove halfMove, decimal dept)
+		{
+			Move = halfMove;
+			Dept = dept;
+		}
+		public bool Check { get; internal set; }
+		public bool CheckMate { get; internal set; }
+
+		public override string ToString()
+		{
+			var tab = String.Join("_", (new Array[(int)(Dept * 2)]).ToList());
+			var children = ChildMoves != null ? String.Join(".", ChildMoves.Select(f => f.ToString()).ToList()) : "";
+			return "\r\n" + tab + Move.ToString() + 
+				(CheckMate ? "#": Check ? "+": "")
+				+ children;
+		}
 	}
 }

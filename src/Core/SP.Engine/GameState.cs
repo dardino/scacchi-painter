@@ -39,10 +39,13 @@ namespace SP.Engine
 			// se la mossa ha "sottomosse" le eseguo
 			if (move.SubSequentialMoves != null)
 			{
+				// ma non devo variare la profondità
+				var depth = ActualDepth;
 				foreach (var subMove in move.SubSequentialMoves)
 				{
 					ApplyMove(subMove);
 				}
+				ActualDepth = depth;
 			}
 		}
 
@@ -74,6 +77,11 @@ namespace SP.Engine
 			return IsSquareUnderAttack(KingPosition(MoveTo));
 		}
 
+		internal bool IsCheck()
+		{
+			return MyKingUnderAttack();
+		}
+
 		public bool IsCheck(HalfMove move)
 		{
 			var clone = new GameState();
@@ -93,11 +101,20 @@ namespace SP.Engine
 		internal BitBoard BitBoardPawnEP;
 
 		public BitBoard All { get { return BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral]; } }
+
+		internal GameState GetAfterMove(HalfMove mTree)
+		{
+			var m = GetCloneOf(this);
+			m.ApplyMove(mTree);
+			return m;
+		}
+
 		public Dictionary<PieceColors, BitBoard> BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
 			{ PieceColors.Black   , BitBoard.FromRowBytes() },
 			{ PieceColors.White   , BitBoard.FromRowBytes() },
 			{ PieceColors.Neutral , BitBoard.FromRowBytes() }
 		};
+
 		public EnginePiece[] SquaresOccupation { get; } = new EnginePiece[64];
 		public BitBoard[] UnderEnemiesAttackByPiece { get; } = new BitBoard[64];
 		public BitBoard[] UnderAlliedAttackByPiece { get; } = new BitBoard[64];
@@ -129,10 +146,18 @@ namespace SP.Engine
 
 		public HalfMove? LastMove = null;
 		public bool[] CastlingAllowed = new bool[4] { true, true, true, true };
-		public ulong AlliedRocks => Board.Cells
-			.Where(c => c.Piece != null && c.Piece.Name == "R" && c.Piece.Color == MoveTo)
-			.Select(c => (ulong)c.Square.ToSquareBits())
-			.Aggregate((a, b) => a | b);
+		public ulong AlliedRocks
+		{
+			get
+			{
+				var lista = Board.Cells
+					.Where(c => c.Piece != null && c.Piece.Name == "R" && c.Piece.Color == MoveTo)
+					.Select(c => (ulong)c.Square.ToSquareBits()).ToList();
+				if (lista.Count>0)
+					return lista.Aggregate((a, b) => a | b);
+				return 0;
+			}
+		}
 		public PieceColors MoveTo = PieceColors.White;
 		public List<Type> AvailablePromotionsTypes = new List<Type> {
 			typeof(Pieces.Bishop),
@@ -143,8 +168,8 @@ namespace SP.Engine
 		public Board Board { get; private set; }
 
 		public decimal MaxDepth { get { return Board.Stipulation.Depth; } }
+		public decimal ActualDepth { get; private set; } = 0;
 
-		private decimal ActualDepth { get; set; } = 0;
 		private CancellationToken ct;
 		public void UpdateGameState()
 		{
@@ -219,7 +244,7 @@ namespace SP.Engine
 				gs.Board.PlacePieceOnBoard(s, p);
 			}
 			gs.MoveTo = gs.Board.Stipulation.StartingMoveColor;
-			gs.ActualDepth = gs.MaxDepth;
+			gs.ActualDepth = 0;
 			gs.UpdateGameState();
 			return gs;
 		}
@@ -301,6 +326,13 @@ namespace SP.Engine
 		public GameState(params ChessRule[] rules)
 		{
 			this.rules = rules;
+		}
+
+		public static GameState GetCloneOf(GameState gs)
+		{
+			var n = new GameState();
+			n.CloneFrom(gs);
+			return n;
 		}
 	}
 }
