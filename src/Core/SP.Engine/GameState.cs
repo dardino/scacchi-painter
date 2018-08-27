@@ -201,18 +201,18 @@ namespace SP.Engine
 
 			for (var u = 0; u < 64; u++)
 			{
-				var cell = Board.Cells[u];
+				var cell = Board[u];
 				var s = cell.Square;
-				if (!(Board.GetPiece(s) is EnginePiece p)) continue;
+				if (!cell.Occupied || !(Board.GetPiece(s) is EnginePiece p)) continue;
 				if (p.Color == PieceColors.Neutral || p.Color == MoveTo)
 				{
 					var m = p.GetMovesFromPosition(s, this);
-					UnderAlliedAttackByPiece[(Int32)s] = m;
+					UnderAlliedAttackByPiece[(int)s] = m;
 				}
 				if (p.Color != MoveTo)
 				{
 					var m = p.GetAttackingSquares(s, this);
-					UnderEnemiesAttackByPiece[(Int32)s] = m;
+					UnderEnemiesAttackByPiece[(int)s] = m;
 				}
 			};
 
@@ -302,8 +302,7 @@ namespace SP.Engine
 			ActualDepth = gs.ActualDepth;
 			Board = gs.Board.Clone();
 
-			rules = new ChessRule[gs.rules.Length];
-			gs.rules.CopyTo(rules, 0);
+			rules = gs.rules;
 			AvailablePromotionsTypes = gs.AvailablePromotionsTypes;
 			gs.CastlingAllowed.CopyTo(CastlingAllowed, 0);
 			LastMove = gs.LastMove?.Clone();
@@ -320,6 +319,13 @@ namespace SP.Engine
 			if (moves == null)
 				moves = GetMoves();
 			return moves;
+		}
+
+		public bool CanMove()
+		{
+			if (moves == null)
+				moves = GetMoves();
+			return moves.Any();
 		}
 
 		private ChessRule[] rules;

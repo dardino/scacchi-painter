@@ -17,7 +17,7 @@ namespace SP.Engine
 		private GameState initialGameState = null;
 		private CancellationTokenSource tokenSource;
 		private Task<MoveList> taskSolver;
-		private Lazy<MoveList> Moves { get; set; } = new Lazy<MoveList>(true);
+		private MoveList Moves { get; set; } = new MoveList();
 
 		public TaskStatus State => taskSolver?.Status ?? TaskStatus.WaitingToRun;
 
@@ -55,43 +55,43 @@ namespace SP.Engine
 
 		private Task<MoveList> InternalSolve()
 		{
-			var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+			var stopwatch = Stopwatch.StartNew();
 #if DEBUG
-			System.Diagnostics.Debug.WriteLine($"solver creation");
+			Debug.WriteLine($"solver creation");
 #endif
 			taskSolver = Task.Factory.StartNew(() =>
 			{
 				if (tokenSource.IsCancellationRequested) {
-					return Moves.Value;
+					return Moves;
 				}
 				var movefound = FindMoves(initialGameState);
 				if (movefound == null)
-					return Moves.Value;
+					return Moves;
 
 				foreach (var move in movefound)
 				{
-
 					// if (tokenSource.IsCancellationRequested) { cloop.Break(); return; }
-					Moves.Value.Add(move);
+					Moves.Add(move);
 					Log(move.ToString(), true);
 
 				};
 
-				return Moves.Value;
+				return Moves;
 			}, tokenSource.Token);
 #if DEBUG
-			System.Diagnostics.Debug.WriteLine($"elapsed time: {stopwatch.Elapsed}");
+			Debug.WriteLine($"elapsed time: {stopwatch.Elapsed}");
 #endif
 			return taskSolver;
 		}
 
 		private MoveList FindMoves(GameState gs)
 		{
-			if (gs.MaxDepth < gs.ActualDepth) return null;
+			if (gs.MaxDepth <= gs.ActualDepth) return null;
 			var gsml = gs.Moves();
-			if (!gsml.Any()) return null;
 			MoveList ml = new MoveList();
-			Parallel.ForEach(gsml, (m) =>
+			if (!gsml.Any()) return ml;
+
+			var loop = Parallel.ForEach(gsml, (m) =>
 			{
 				var subg = gs.GetAfterMove(m);
 				var mTree = new MoveTree(m, subg.ActualDepth);
@@ -99,14 +99,17 @@ namespace SP.Engine
 				var mosse = FindMoves(subg);
 				if (mosse != null && mosse.Count > 0)
 				{
+					mTree.ChildMoves = new MoveList();
 					mosse.ToList().ForEach(mTree.ChildMoves.Add);
 				}
 				else
 				{
 					mTree.Check = subg.IsCheck();
-					mTree.CheckMate = subg.IsCheckMate();
+					mTree.CheckMate = mTree.Check;
+					mTree.StaleMate = !mTree.CheckMate;
 				}
 			});
+
 			return ml;
 		}
 
@@ -136,7 +139,7 @@ namespace SP.Engine
 	public class MoveTree
 	{
 		public HalfMove Move { get; private set; }
-		public MoveList ChildMoves { get; } = new MoveList();
+		public MoveList ChildMoves { get; set; } = null;
 		public decimal Dept { get; private set; }
 
 		public MoveTree(HalfMove halfMove, decimal dept)
@@ -146,13 +149,14 @@ namespace SP.Engine
 		}
 		public bool Check { get; internal set; }
 		public bool CheckMate { get; internal set; }
+		public bool StaleMate { get; internal set; }
 
 		public override string ToString()
 		{
 			var tab = String.Join("_", (new Array[(int)(Dept * 2)]).ToList());
 			var children = ChildMoves != null ? String.Join(".", ChildMoves.Select(f => f.ToString()).ToList()) : "";
 			return "\r\n" + tab + Move.ToString() + 
-				(CheckMate ? "#": Check ? "+": "")
+				(CheckMate ? "#": Check ? "+": StaleMate ? "=" : "")
 				+ children;
 		}
 	}

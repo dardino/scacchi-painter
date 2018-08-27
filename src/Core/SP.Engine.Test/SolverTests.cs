@@ -2,6 +2,7 @@
 using SP.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,11 +94,15 @@ namespace SP.Engine.Test
 		public void FindCheckMate()
 		{
 			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var sw = new Stopwatch();
+			sw.Start();
 			gs.Board.Stipulation.Depth = 2m;
 			var s = Solver.GetSolver(gs);
 			var t = s.Solve();
 			var tuttelemosse = t.Result.ToList();
 			var counter = tuttelemosse.Count;
+			sw.Stop();
+			Debug.WriteLine(sw.Elapsed);
 			Assert.AreEqual(counter, 16, $"Il numero di mosse calcolate deve essere 16 invece è {counter}");
 		}
 	}
