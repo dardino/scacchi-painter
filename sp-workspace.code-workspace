@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "src/Gui/sp-web-gui"
+		},
+		{
+			"path": "src/Core/SP.Core"
+		}
+	],
+	"settings": {}
+}
