@@ -1,14 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using sp_web_gui.Models;
 
 namespace sp_web_gui.Controllers
 {
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
+        [HttpGet]
+        [Route("file")]
+        async public Task<ActionResult> FileJSON()
+        {
+            var content = await System.IO.File.ReadAllTextAsync("Contents/example.xml");
+            byte[] byteArray = Encoding.ASCII.GetBytes(content);
+            var xs = new XmlSerializer(typeof(ScacchiPainterDatabase));
+            var des = xs.Deserialize(new MemoryStream(byteArray));
+            return Ok(des);
+        }
+
         private static string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
