@@ -30,19 +30,21 @@ namespace sp_web_gui.Models
         [XmlAttribute("ProblemType")]
         [JsonProperty("stipulationType")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public StipulationTypeEnum StipulationType { get; set; }//="Direct" 
+        public StipulationTypeEnum StipulationType { get; set; }
         [XmlAttribute("Moves")]
-        public Decimal Moves { get; set; }//="2"
+        public Decimal Moves { get; set; }
+
         [XmlAttribute("Date")]
-        public DateTime Date { get; set; } //="2010-12-16T23:00:00Z"
+
+        public DateTime Date { get; set; }
         [XmlAttribute("Maximum")]
-        public bool Maximum { get; set; } //="false"                                  
+        public bool Maximum { get; set; }
         [XmlAttribute("Serie")]
-        public bool Serie { get; set; } //="false"                                  
+        public bool Serie { get; set; }
         [XmlAttribute("PrizeRank")]
-        public string PrizeRank { get; set; } //="0"                                      
+        public string PrizeRank { get; set; }
         [XmlAttribute("CompleteStipulationDesc")]
-        public string CompleteStipulationDesc { get; set; } //="#"                                      
+        public string CompleteStipulationDesc { get; set; }
         [XmlAttribute("PersonalID")]
         public string PersonalID { get; set; } //="1"                                      
         [XmlAttribute("PrizeDescription")]
@@ -61,6 +63,44 @@ namespace sp_web_gui.Models
 
         public List<Piece> Pieces { get; set; }
 
+        [XmlElement("Solution")]
+        public String OldSolution { get; set; }
+
+        [XmlElement("SolutionRtf")]
+        public String OldRtfSolution { get; set; }
+
+        public String MdSolution { get; set; }
+
+        [XmlArray("Twins")]
+        [XmlArrayItem(typeof(Twin))]
+        public List<Twin> Twins { get; set; }
+
+        [XmlArray("Tags")]
+        [XmlArrayItem(typeof(Tag))]
+        public List<Tag> Tags { get; set; }
+
+        [XmlArray("Conditions")]
+        [XmlArrayItem(typeof(Condition))]
+        public List<Condition> Conditions { get; set; }
+
+        /*
+        <Conditions>
+        <Condition Value="Sentinelles" />
+        </Conditions>
+        */
+
+    }
+
+    [XmlRoot("Twin")]
+    public class Twin
+    {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TwinTypes TwinType { get; set; }
+        public string ValueA { get; set; }
+        public string ValueB { get; set; }
+        public string ValueC { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TwinModes TwinMode { get; set; }
     }
 
     [XmlRoot("Author")]
@@ -119,5 +159,50 @@ namespace sp_web_gui.Models
 
         [XmlAttribute("code")] public String Code { get; set; }
     }
+    public enum TwinTypes
+    {
+        Diagram = 0,                // no values
+        MovePiece = 1,              // 2 values
+        RemovePiece = 2,            // 1 value
+        AddPiece = 3,               // 2 values
+        Substitute = 4,             // 3 values
+        SwapPieces = 5,             // 2 values
+        Rotation90 = 6,             // no value
+        Rotation180 = 7,            // no value
+        Rotation270 = 8,            // no value
+        TraslateNormal = 9,         // 2 value
+        TraslateToroidal = 10,      // 2 value
+        MirrorHorizontal = 11,      // no value
+        MirrorVertical = 12,        // no value
+        ChangeProblemType = 13,     // 2 value
+        Duplex = 14,                // no value
+        AfterKey = 15,              // no value
+        SwapColors = 16,            // no value
+        Stipulation = 17            // 1 value
+    }
+    public enum TwinModes
+    {
+        Normal = 0,
+        Combined = 1
+    }
+
+    [XmlRoot("Tag")]
+    public class Tag
+    {
+
+        [XmlAttribute("Value")]
+        public string Value { get; set; }
+
+    }
+
+
+    [XmlRoot("Condition")]
+    public class Condition
+    {
+        [XmlAttribute("Value")]
+        public string Value { get; set; }
+    }
 
 }
+
+

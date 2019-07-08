@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
-import { SpDbmComponent } from './sp-dbm.component';
-
-
+import { SpDbmService } from './sp-dbm.service';
 
 @NgModule({
-  declarations: [SpDbmComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [SpDbmComponent]
+  exports: [SpDbmService]
 })
 export class SpDbmModule { }

@@ -21,7 +21,9 @@ namespace sp_web_gui.Controllers
             byte[] byteArray = Encoding.ASCII.GetBytes(content);
             var xs = new XmlSerializer(typeof(ScacchiPainterDatabase));
             var des = xs.Deserialize(new MemoryStream(byteArray));
-            return Ok(des);
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(des);
+            await System.IO.File.WriteAllTextAsync("Contents/example.json", json);
+            return Json(des);
         }
 
         private static string[] Summaries = new[]
