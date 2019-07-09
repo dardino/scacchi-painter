@@ -1,18 +1,17 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css']
+  selector: "app-sp-nav-menu",
+  templateUrl: "./nav-menu.component.html",
+  styleUrls: ["./nav-menu.component.styl"]
 })
 export class NavMenuComponent {
-  isExpanded = false;
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(map(result => result.matches));
 
-  collapse() {
-    this.isExpanded = false;
-  }
-
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
+  constructor(private breakpointObserver: BreakpointObserver) {}
 }
