@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
-import { SpUicComponent } from './sp-uic.component';
-
-
+import { NgModule } from "@angular/core";
+import { CbsComponent } from "./cbs/cbs.component";
+import { ChessboardComponent } from "./chessboard/chessboard.component";
+import { CommonModule } from "@angular/common";
 
 @NgModule({
-  declarations: [SpUicComponent],
-  imports: [
-  ],
-  exports: [SpUicComponent]
+  declarations: [CbsComponent, ChessboardComponent],
+  imports: [CommonModule],
+  exports: [CbsComponent, ChessboardComponent]
 })
-export class SpUicModule { }
+export class SpUicModule {}

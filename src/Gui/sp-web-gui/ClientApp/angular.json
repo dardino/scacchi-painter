@@ -10,7 +10,7 @@
       "prefix": "sp",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "style"
+          "styleext": "styl"
         }
       },
       "architect": {
@@ -75,7 +75,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
-            "styles": ["styles.css"],
+            "styles": ["styles.styl"],
             "scripts": [],
             "assets": ["src/assets"]
           }
