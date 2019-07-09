@@ -19,6 +19,7 @@ import { SpFenService } from "projects/sp-dbm/src/lib/sp-fen.service";
 })
 export class ChessboardComponent implements OnInit, OnChanges {
   cells: UiCell[] = [];
+  currentCell: UiCell | null = null;
 
   @Input()
   notation?: string;
@@ -57,6 +58,10 @@ export class ChessboardComponent implements OnInit, OnChanges {
     data.forEach((f, i, a) => {
       this.cells[i].piece = f.data;
     });
+  }
+
+  onCellClick(cell: UiCell) {
+    this.currentCell = cell;
   }
 }
 

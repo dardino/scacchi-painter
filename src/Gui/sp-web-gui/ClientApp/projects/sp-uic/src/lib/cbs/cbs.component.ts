@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import {
   Piece,
   GetSquareColor,
@@ -28,7 +28,9 @@ export class CbsComponent implements OnInit {
       classlist.push(this.piece.rotation.toLowerCase());
     }
     if (this.piece && this.piece.color) {
-      classlist.push(`pc-${PieceColors[this.piece.color].substring(0, 1).toLowerCase()}`);
+      classlist.push(
+        `pc-${PieceColors[this.piece.color].substring(0, 1).toLowerCase()}`
+      );
     }
     return classlist.join(" ");
   }
@@ -40,9 +42,7 @@ export class CbsComponent implements OnInit {
   public location: SquareLocation;
 
   get piecechar(): string {
-    if (!this.piece) {
-      return "";
-    }
+    if (!this.piece) return "";
     return CodeToFont[this.piece.appearance.toLowerCase()];
   }
 

@@ -4,6 +4,6 @@
     "directive-selector": [true, "attribute", "lib", "camelCase"],
     "component-selector": [true, "element", "lib", "kebab-case"],
     "quotemark": [true, "double", "jsx-double"],
-    "curly": [true, "ignore-same-line", "as-needed"]
+    "curly": [true, "ignore-same-line"]
   }
 }
