@@ -12,7 +12,7 @@ import { FetchDataComponent } from "./fetch-data/fetch-data.component";
 import { SpUicModule } from "projects/sp-uic/src/public-api";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule } from "@angular/material";
+import { MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule, MatButtonModule } from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -37,7 +37,8 @@ import { MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule } from
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
