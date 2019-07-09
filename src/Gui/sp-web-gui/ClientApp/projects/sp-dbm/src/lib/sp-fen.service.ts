@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Piece, PieceRotation } from "./sp-dbm.service";
+import { Piece, PieceRotation, PieceColors } from "./sp-dbm.service";
 
 const rotationsCodes: ["+ ", "+/", "+-", "+\\", "- ", "-/", "--", "-\\"] = ["+ ", "+/", "+-", "+\\", "- ", "-/", "--", "-\\"];
 
@@ -69,7 +69,8 @@ export class SpFenService {
       pieces.push({
         appearance: pieceName,
         rotation: PieceRotation[rotation],
-        fairyCode: fairy.replace(/[\{\}]/g, "")
+        fairyCode: fairy.replace(/[\{\}]/g, ""),
+        color: pieceName.toLowerCase() === pieceName ? PieceColors.White : PieceColors.Black
       });
     }
     return pieces;

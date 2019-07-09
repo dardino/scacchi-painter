@@ -6,7 +6,7 @@
     "class-name": true,
     "comment-format": [true, "check-space"],
     "component-selector": [true, "element", "sp", "kebab-case"],
-    "curly": true,
+    "curly": [true, "ignore-same-line"],
     "deprecation": {
       "severity": "warn"
     },

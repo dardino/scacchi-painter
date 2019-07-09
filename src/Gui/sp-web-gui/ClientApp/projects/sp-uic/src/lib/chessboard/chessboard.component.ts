@@ -1,5 +1,15 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { Piece, GetLocationFromIndex, SquareLocation } from "projects/sp-dbm/src/public-api";
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from "@angular/core";
+import {
+  Piece,
+  GetLocationFromIndex,
+  SquareLocation
+} from "projects/sp-dbm/src/public-api";
 import { SpFenService } from "projects/sp-dbm/src/lib/sp-fen.service";
 
 @Component({
@@ -11,14 +21,28 @@ export class ChessboardComponent implements OnInit, OnChanges {
   cells: UiCell[] = [];
 
   @Input()
-  notation: string;
+  notation?: string;
 
   @Input()
-  pieces: Piece[];
+  pieces?: Piece[];
 
   constructor(private fensvc: SpFenService) {}
 
   ngOnInit() {
+    console.log("INIT");
+    this.updateBoard();
+  }
+
+  ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
+    console.log("CHANGE");
+    if (changes.notation && !changes.notation.isFirstChange()) {
+      this.updateBoard();
+    }
+    if (changes.pieces) {
+    }
+  }
+
+  clearCells() {
     for (let i = 1; i <= 64; i++) {
       this.cells.push({
         location: GetLocationFromIndex(i),
@@ -27,23 +51,16 @@ export class ChessboardComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-    if (changes.notation) {
-      this.updateBoard();
-    }
-  }
-
   updateBoard() {
+    this.clearCells();
     const data = this.fensvc.FenToChessBoard(this.notation);
-    data.forEach(f => {
-      this.cells[f.index].piece = f.data;
+    data.forEach((f, i, a) => {
+      this.cells[i].piece = f.data;
     });
   }
 }
 
-export declare type SimpleChanges2<T> = {
-  [P in keyof T]?: SimpleChange<T[P]>
-};
+export declare type SimpleChanges2<T> = { [P in keyof T]?: SimpleChange<T[P]> };
 export declare class SimpleChange<T> {
   previousValue: T;
   currentValue: T;
@@ -51,7 +68,6 @@ export declare class SimpleChange<T> {
   constructor(previousValue: T, currentValue: T, firstChange: boolean);
   isFirstChange(): boolean;
 }
-
 
 interface UiCell {
   piece?: Partial<Piece>;
