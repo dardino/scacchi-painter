@@ -1,1 +1,1 @@
-Folder che contiene i progetti CORE
+# Folder che contiene i progetti CORE

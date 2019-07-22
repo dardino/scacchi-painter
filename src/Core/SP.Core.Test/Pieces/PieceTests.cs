@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SP.Core.Utils;
 
 namespace SP.Core.Test.Pieces
 {
@@ -13,7 +14,7 @@ namespace SP.Core.Test.Pieces
 		public void TestPieceTypesCount()
 		{
 			var p = new Core.Pieces.Bishop();
-			var types = PieceBase.piecetypes.ToArray();
+			var types = PieceBaseUtils.piecetypes.ToArray();
 			var count = types.Length;
 			Assert.AreEqual(6, count);
 		}
@@ -21,17 +22,17 @@ namespace SP.Core.Test.Pieces
 		[TestMethod]
 		public void TestPieceTypes()
 		{
-			var p = PieceBase.FromFEN("K+ ");
+			var p = PieceBaseUtils.FromFEN("K+ ");
 			Assert.AreEqual(p.GetType(), typeof(Core.Pieces.King));
-			p = PieceBase.FromFEN("Q+ ");
+			p = PieceBaseUtils.FromFEN("Q+ ");
 			Assert.AreEqual(p.GetType(), typeof(Core.Pieces.Queen));
-			p = PieceBase.FromFEN("R+ ");
+			p = PieceBaseUtils.FromFEN("R+ ");
 			Assert.AreEqual(p.GetType(), typeof(Core.Pieces.Rock));
-			p = PieceBase.FromFEN("B+ ");
+			p = PieceBaseUtils.FromFEN("B+ ");
 			Assert.AreEqual(p.GetType(), typeof(Core.Pieces.Bishop));
-			p = PieceBase.FromFEN("N+ ");
+			p = PieceBaseUtils.FromFEN("N+ ");
 			Assert.AreEqual(p.GetType(), typeof(Core.Pieces.Horse));
-			p = PieceBase.FromFEN("P+ ");
+			p = PieceBaseUtils.FromFEN("P+ ");
 			Assert.AreEqual(p.GetType(), typeof(Core.Pieces.Pawn));
 		}
 	}

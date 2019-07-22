@@ -74,6 +74,7 @@ export declare class SimpleChange<T> {
   isFirstChange(): boolean;
 }
 
+
 interface UiCell {
   piece?: Partial<Piece>;
   location: SquareLocation;

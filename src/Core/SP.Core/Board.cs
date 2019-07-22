@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SP.Core.Utils;
 
 namespace SP.Core
 {
@@ -99,7 +100,7 @@ namespace SP.Core
 				Columns numcol = (Columns)(7 - nc);
 				Rows numtra = (Rows)(nt);
 
-				PlacePieceOnBoard(numcol, numtra, PieceBase.FromFEN(c));
+				PlacePieceOnBoard(numcol, numtra, PieceBaseUtils.FromFEN(c));
 			}
 		}
 

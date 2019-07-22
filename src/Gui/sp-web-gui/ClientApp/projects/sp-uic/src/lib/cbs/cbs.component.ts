@@ -46,7 +46,9 @@ export class CbsComponent implements OnInit {
     return CodeToFont[this.piece.appearance.toLowerCase()];
   }
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
 }
+
