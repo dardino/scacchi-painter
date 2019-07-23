@@ -1,10 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SP.Core;
 using SP.Engine;
 using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
 
-namespace SP.Core.Engine.Pieces
+namespace SP.Engine.Pieces
 {
 	[TestClass]
 	[TestCategory("Engine.Pieces.Queen")]

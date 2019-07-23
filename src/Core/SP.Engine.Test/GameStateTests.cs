@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SP.Core;
+using SP.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace SP.Engine.Test
 			ulong bitBlacks = 0x2c9c44004a8a00;
 			ulong bitWhites = 0x1800000010004020;
 
-			var board = Board.FromNotation(notation);
+			var board = BoardUtils.FromNotation(notation);
 			var bitBoards = GameState.FromBoard(board);
 
 			Assert.AreEqual(bitAllPieces, (ulong)bitBoards.All);
@@ -47,7 +48,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateGetListOfMoves()
 		{
-			var gameState = GameState.FromBoard(Board.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
+			var gameState = GameState.FromBoard(BoardUtils.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
 			var moves = gameState.Moves();
 			var expstr = "Pd4-d5;  Ne8*f6;  Ne8*d6;  Ne8-g7;  Ne8*c7;  Qd8*d6;  Qd8*e7;  Qd8-d7;  Qd8*c7;  Qd8-c8;  Qd8-b8;  Qd8-a8";
 			var actString = System.String.Join(";  ", moves);
@@ -59,7 +60,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateNoMovesBecausePinned()
 		{
-			var gameState = GameState.FromBoard(Board.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
+			var gameState = GameState.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
 			var moves = gameState.Moves();
 
 			Assert.AreEqual(2, moves.Count(), "only 2 moves allowed but: " + String.Join("; ", moves));
@@ -69,11 +70,11 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateClone()
 		{
-			var gs1 = GameState.FromBoard(Board.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
+			var gs1 = GameState.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
 			var gs2 = new GameState();
 			gs2.CloneFrom(gs1);
 
-			Assert.AreEqual(String.Join("   ", Board.GetRepresentation(gs2.Board)), String.Join("   ", Board.GetRepresentation(gs1.Board)));
+			Assert.AreEqual(String.Join("   ", BoardUtils.GetRepresentation(gs2.Board)), String.Join("   ", BoardUtils.GetRepresentation(gs1.Board)));
 
 			Assert.AreEqual(gs1.BitBoardByColor[PieceColors.Black  ], gs2.BitBoardByColor[PieceColors.Black  ]);
 			Assert.AreEqual(gs1.BitBoardByColor[PieceColors.White  ], gs2.BitBoardByColor[PieceColors.White  ]);
@@ -121,8 +122,8 @@ namespace SP.Engine.Test
 
 		[TestMethod]
 		public void GameStateApplyMoveKing() {
-			var board1 = Board.FromNotation("8/8/8/8/8/8/8/R3K3");
-			var board2 = Board.FromNotation("8/8/8/8/8/8/8/R3K3");
+			var board1 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
+			var board2 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
 
 			var gs1 = GameState.FromBoard(board1);
 			var gs2 = GameState.FromBoard(board2);
@@ -163,7 +164,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateApplyMovePawn()
 		{
-			var board1 = Board.FromNotation("8/2P5/8/8/8/8/8/8");
+			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
 
 			var gs1 = GameState.FromBoard(board1);
 			var moves1 = gs1.Moves();
@@ -183,7 +184,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateActualDepth()
 		{
-			var board1 = Board.FromNotation("8/2P5/8/8/8/8/8/8");
+			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
 			var gs1 = GameState.FromBoard(board1);
 			var moves1 = gs1.Moves();
 			Assert.AreEqual(gs1.ActualDepth, 0, "Profondità 0");

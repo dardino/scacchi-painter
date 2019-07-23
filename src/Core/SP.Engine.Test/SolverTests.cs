@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SP.Core;
+using SP.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void TestCancellation()
 		{
-			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var gs = GameState.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
 			var s = Solver.GetSolver(gs);
 			Assert.AreEqual(TaskStatus.WaitingToRun, s.State);
 		   var result = s.Solve();
@@ -41,7 +42,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void TestSolverOneDepth()
 		{
-			var gs = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/8/P7/8"));
+			var gs = GameState.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/P7/8"));
 			gs.Board.Stipulation.Depth = 1;
 			var s = Solver.GetSolver(gs);
 			var t = s.Solve();
@@ -54,11 +55,11 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void TestCheckMateWhite() {
 			// test di alcune posizioni di scacco matto del bianco al re nero:
-			var w_gs1_y = GameState.FromBoard(Board.FromNotation("k7/8/8/7K/8/8/1R6/R7", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			var w_gs1_y = GameState.FromBoard(BoardUtils.FromNotation("k7/8/8/7K/8/8/1R6/R7", new Stipulation(StipulationType.DirectMate, 0.5m)));
 			// test di alcune posizioni di NON scacco matto del bianco al re nero:
-			var w_gs1_n = GameState.FromBoard(Board.FromNotation("K1k5/8/8/8/8/8/P7/8", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			var w_gs1_n = GameState.FromBoard(BoardUtils.FromNotation("K1k5/8/8/8/8/8/P7/8", new Stipulation(StipulationType.DirectMate, 0.5m)));
 			// test di alcune posizioni di stallo del re nero:
-			var w_gs2_n = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/1K6/2Q5/k7", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			var w_gs2_n = GameState.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/1K6/2Q5/k7", new Stipulation(StipulationType.DirectMate, 0.5m)));
 			w_gs1_y.Moves();
 			Assert.IsTrue(w_gs1_y.IsCheckMate(), "k7/8/8/7K/8/8/1R6/R7 ha dato false ??");
 			w_gs1_n.Moves();
@@ -71,7 +72,7 @@ namespace SP.Engine.Test
 
 		[TestMethod]
 		public void GetAllMoves() {
-			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var gs = GameState.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
 			gs.Board.Stipulation.Depth = 1;
 			var s = Solver.GetSolver(gs);
 			var t = s.Solve();
@@ -83,7 +84,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GetChecks()
 		{
-			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var gs = GameState.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
 			gs.Board.Stipulation.Depth = 1;
 			var t = gs.Moves();
 			var check = t.Count((move) => gs.IsCheck(move));
@@ -93,7 +94,7 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void FindCheckMate()
 		{
-			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var gs = GameState.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
 			var sw = new Stopwatch();
 			sw.Start();
 			gs.Board.Stipulation.Depth = 2m;

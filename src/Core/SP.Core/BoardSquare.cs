@@ -7,12 +7,7 @@ namespace SP.Core
 		private Square square;
 		public bool Occupied { get { return Piece != null; } }
 
-		public PieceBase Piece { get; private set; }
-
-		internal void SetPiece(PieceBase piece)
-		{
-			Piece = piece;
-		}
+		public PieceBase Piece { get; internal set; }
 
 		public BoardSquare(Square s)
 		{

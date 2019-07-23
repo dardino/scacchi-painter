@@ -53,8 +53,8 @@ namespace SP.Engine
 
 		private void MovePiece(HalfMove move)
 		{
-			Board.PlacePieceOnBoard(move.SourceSquare, null);
-			Board.PlacePieceOnBoard(move.DestinationSquare, move.Piece);
+			BoardUtils.PlacePieceOnBoard(Board, move.SourceSquare, null);
+			BoardUtils.PlacePieceOnBoard(Board, move.DestinationSquare, move.Piece);
 		}
 
 		internal void SetCancellationToken(CancellationToken token)
@@ -203,7 +203,7 @@ namespace SP.Engine
 
 			for (var u = 0; u < 64; u++)
 			{
-				var cell = Board[u];
+				var cell = Board.Cells[u];
 				var s = cell.Square;
 				if (!cell.Occupied || !(Board.GetPiece(s) is EnginePiece p)) continue;
 				if (p.Color == PieceColors.Neutral || p.Color == MoveTo)
@@ -243,7 +243,7 @@ namespace SP.Engine
 				var s = (Square)c;
 				var ex = gs.Board.GetPiece(s);
 				var p = EnginePiece.FromPieceBase(ex);
-				gs.Board.PlacePieceOnBoard(s, p);
+				BoardUtils.PlacePieceOnBoard(gs.Board, s, p);
 			}
 			gs.MoveTo = gs.Board.Stipulation.StartingMoveColor;
 			gs.ActualDepth = 0;

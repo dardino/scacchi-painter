@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SP.Core;
+using SP.Core.Utils;
 using SP.Engine;
 using SP.Engine.Pieces;
 using System;
@@ -6,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SP.Core.Engine.Pieces
+namespace SP.Engine.Pieces
 {
 	[TestClass]
 	[TestCategory("Engine.Pieces.King")]
@@ -128,7 +130,7 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs1 = GameState.FromBoard(Board.FromNotation("R6R/8/8/8/8/8/8/R6R"));
+			var gs1 = GameState.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"));
 			var expec1 = (ulong)BitBoard.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00110110
@@ -150,7 +152,7 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = GameState.FromBoard(Board.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"));
+			var gs2 = GameState.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"));
 
 			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
 			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
@@ -169,7 +171,7 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = GameState.FromBoard(Board.FromNotation("R6R/8/8/8/8/8/8/R6R"));
+			var gs2 = GameState.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"));
 			gs2.UnderEnemiesAttackByPiece[(int)Square.C2] = BitBoard.FromRowBytes(
 					0b00100010,
 					0b00000000,
@@ -195,7 +197,7 @@ namespace SP.Core.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = GameState.FromBoard(Board.FromNotation("r3k1br/8/8/8/8/8/8/R1B1K2R"));
+			var gs2 = GameState.FromBoard(BoardUtils.FromNotation("r3k1br/8/8/8/8/8/8/R1B1K2R"));
 			ulong expec3 = BitBoard.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00010110
@@ -217,7 +219,7 @@ namespace SP.Core.Engine.Pieces
 		[TestMethod]
 		public void K_NoCastling4()
 		{
-			var gs = GameState.FromBoard(Board.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var gs = GameState.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
 			var wk = new King() { Color = PieceColors.White };
 			var moves = wk.GetMovesFromPosition(Square.E1, gs);
 
@@ -227,7 +229,7 @@ namespace SP.Core.Engine.Pieces
 		[TestMethod]
 		public void K_CastlingSubMovesWhite()
 		{
-			var gs1 = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/8/8/R3K2R"));
+			var gs1 = GameState.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K2R"));
 
 			var moves1 = (gs1.Board.GetPiece(Square.E1) as King).GetMoves(Square.E1, gs1);
 
@@ -250,7 +252,7 @@ namespace SP.Core.Engine.Pieces
 		[TestMethod]
 		public void K_CastlingSubMovesBlack()
 		{
-			var gs1 = GameState.FromBoard(Board.FromNotation("r3k2r/8/8/8/8/8/8/8"));
+			var gs1 = GameState.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/8/8/8/8/8"));
 			gs1.MoveTo = PieceColors.Black;
 			gs1.UpdateGameState();
 

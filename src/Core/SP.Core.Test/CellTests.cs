@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SP.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace SP.Core.Test
 		{
 			var cell0 = new BoardSquare(0);
 			Assert.IsFalse(cell0.Occupied);
-			cell0.SetPiece(new Core.Pieces.Pawn());
+			BoardSquareUtils.SetPiece(ref cell0, new Core.Pieces.Pawn());
 			Assert.IsTrue(cell0.Occupied);
 		}
 
