@@ -87,7 +87,7 @@ namespace SP.Engine
 		private MoveList FindMoves(GameState gs)
 		{
 			if (gs.MaxDepth <= gs.ActualDepth) return null;
-			var gsml = gs.Moves();
+			var gsml = gs.Moves;
 			MoveList ml = new MoveList();
 			if (!gsml.Any()) return ml;
 

@@ -11,7 +11,9 @@ namespace SP.Core
         public PieceRotation Rotation { get; set; } = PieceRotation.NoRotation;
 
         public string Name { get; set; }
-        public string NameByColor => Color == PieceColors.Black ? Name.ToLower() : Name.ToUpper();
+
+        private Lazy<string> nameByColor => new Lazy<string>(() => Color == PieceColors.Black ? Name.ToLower() : Name.ToUpper());
+        public string NameByColor => nameByColor.Value;
     }
 
 }

@@ -12,33 +12,33 @@ namespace SP.Engine.Pieces
 	{
 		static ulong movesFromB2 = 0xE0A0E0;
 		static int b2Index = (int)BoardSquare.GetSquareIndex(Columns.ColB, Rows.Row2);
-		static Dictionary<PieceColors, CastlingIndexes[]> castlingByColor = new Dictionary<PieceColors, CastlingIndexes[]> {
+		static Dictionary<PieceColors, CastlingIndexes[]> castlingByColor => new Dictionary<PieceColors, CastlingIndexes[]> {
 			{ PieceColors.Black, new CastlingIndexes[] { CastlingIndexes.ooo, CastlingIndexes.oo } },
 			{ PieceColors.White, new CastlingIndexes[] { CastlingIndexes.OOO, CastlingIndexes.OO } }
 		};
 
-		static Dictionary<CastlingIndexes, BitBoard> CastlingBB = new Dictionary<CastlingIndexes, BitBoard>
+		static Dictionary<CastlingIndexes, BitBoard> CastlingBB => new Dictionary<CastlingIndexes, BitBoard>
 		{
 			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00100000) },
 			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000010) },
 			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00100000) },
 			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000010) }
 		};
-		static Dictionary<CastlingIndexes, BitBoard> CastlingNotUnderCheck = new Dictionary<CastlingIndexes, BitBoard>
+		static Dictionary<CastlingIndexes, BitBoard> CastlingNotUnderCheck => new Dictionary<CastlingIndexes, BitBoard>
 		{
 			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00111000) },
 			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00001110) },
 			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00111000) },
 			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00001110) }
 		};
-		static Dictionary<CastlingIndexes, BitBoard> CastlingFreeCells = new Dictionary<CastlingIndexes, BitBoard>
+		static Dictionary<CastlingIndexes, BitBoard> CastlingFreeCells => new Dictionary<CastlingIndexes, BitBoard>
 		{
 			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b01110000) },
 			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000110) },
 			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b01110000) },
 			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000110) }
 		};
-		static Dictionary<CastlingIndexes, BitBoard> CastlingAlliedRockPos = new Dictionary<CastlingIndexes, BitBoard>
+		static Dictionary<CastlingIndexes, BitBoard> CastlingAlliedRockPos => new Dictionary<CastlingIndexes, BitBoard>
 		{
 			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b10000000) },
 			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000001) },
