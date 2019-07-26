@@ -6,11 +6,11 @@
 		{
 			var newGs = new GameState(gs.Rules);
 			// clono la scacchiera
-			newGs.CloneFrom(gs);
+			GameStateStatic.CloneTo(ref gs, ref newGs);
 			// negli scacchi ortodossi la mossa è valida se dopo la suddetta mossa l'avversario non ha possiblità di mangiare il mio re.
-			newGs.ApplyMove(moveToTest);
+			GameStateStatic.ApplyMove(ref newGs, moveToTest);
 			var mtStr = moveToTest.ToString();
-			return !newGs.IsAttackingSquare(newGs.KingPosition(moveToTest.Piece.Color));
+			return !GameStateStatic.IsAttackingSquare(ref newGs, GameStateStatic.KingPosition(ref newGs, moveToTest.Piece.Color));
 		}
 	}
 }

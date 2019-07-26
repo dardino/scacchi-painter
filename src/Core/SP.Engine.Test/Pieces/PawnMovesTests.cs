@@ -213,10 +213,10 @@ namespace SP.Engine.Pieces
 		public void P_EnPassantCaptures()
 		{
 			var board = BoardUtils.FromNotation("8/2p5/8/3Pp3/8/8/8/8");
-			var gEP = GameState.FromBoard(board);
+			var gEP = GameStateStatic.FromBoard(board);
 
 			gEP.MoveTo = PieceColors.Black;
-			gEP.ApplyMove(new HalfMove() {
+			GameStateStatic.ApplyMove(ref gEP, new HalfMove() {
 				DestinationSquare = Square.C5,
 				IsCapture = false,
 				SourceSquare = Square.C7,
@@ -238,7 +238,7 @@ namespace SP.Engine.Pieces
 
 		[TestMethod]
 		public void P_WhitePromotions() {
-			var gs1 = GameState.FromBoard(BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8"));
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8"));
 			var pawn = (Pawn)gs1.Board.GetPiece(Square.C7);
 			var moves = pawn.GetMoves(Square.C7, gs1);
 			Assert.IsTrue(moves.Count() == 4, "4 promozioni: Q R B H");
@@ -247,9 +247,9 @@ namespace SP.Engine.Pieces
 		[TestMethod]
 		public void P_BlackPromotions()
 		{
-			var gs1 = GameState.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/2p5/8"));
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/2p5/8"));
 			gs1.MoveTo = PieceColors.Black;
-			gs1.UpdateGameState();
+			GameStateStatic.UpdateGameState(ref gs1);
 
 			var pawn = (Pawn)gs1.Board.GetPiece(Square.C2);
 			var moves = pawn.GetMoves(Square.C2, gs1);

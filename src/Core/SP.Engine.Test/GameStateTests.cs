@@ -37,7 +37,7 @@ namespace SP.Engine.Test
 			ulong bitWhites = 0x1800000010004020;
 
 			var board = BoardUtils.FromNotation(notation);
-			var bitBoards = GameState.FromBoard(board);
+			var bitBoards = GameStateStatic.FromBoard(board);
 
 			Assert.AreEqual(bitAllPieces, (ulong)bitBoards.All);
 			Assert.AreEqual(bitBlacks, (ulong)bitBoards.BitBoardByColor[PieceColors.Black]);
@@ -48,8 +48,9 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateGetListOfMoves()
 		{
-			var gameState = GameState.FromBoard(BoardUtils.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
-			var moves = gameState.Moves();
+			var gameState = GameStateStatic.FromBoard(BoardUtils.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
+			GameStateStatic.Analyze(ref gameState);
+			var moves = gameState.Moves;
 			var expstr = "Pd4-d5;  Ne8*f6;  Ne8*d6;  Ne8-g7;  Ne8*c7;  Qd8*d6;  Qd8*e7;  Qd8-d7;  Qd8*c7;  Qd8-c8;  Qd8-b8;  Qd8-a8";
 			var actString = System.String.Join(";  ", moves);
 
@@ -60,8 +61,9 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateNoMovesBecausePinned()
 		{
-			var gameState = GameState.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
-			var moves = gameState.Moves();
+			var gameState = GameStateStatic.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
+			GameStateStatic.Analyze(ref gameState);
+			var moves = gameState.Moves;
 
 			Assert.AreEqual(2, moves.Count(), "only 2 moves allowed but: " + String.Join("; ", moves));
 			Assert.AreEqual("Qd3*d1; Qd3-d2", String.Join("; ", moves));
@@ -70,9 +72,9 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateClone()
 		{
-			var gs1 = GameState.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
 			var gs2 = new GameState();
-			gs2.CloneFrom(gs1);
+			GameStateStatic.CloneTo(ref gs1, ref gs2);
 
 			Assert.AreEqual(String.Join("   ", BoardUtils.GetRepresentation(gs2.Board)), String.Join("   ", BoardUtils.GetRepresentation(gs1.Board)));
 
@@ -125,10 +127,10 @@ namespace SP.Engine.Test
 			var board1 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
 			var board2 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
 
-			var gs1 = GameState.FromBoard(board1);
-			var gs2 = GameState.FromBoard(board2);
+			var gs1 = GameStateStatic.FromBoard(board1);
+			var gs2 = GameStateStatic.FromBoard(board2);
 
-			gs1.ApplyMove(new HalfMove()
+			GameStateStatic.ApplyMove(ref gs1, new HalfMove()
 			{
 				DestinationSquare = Square.D1,
 				SourceSquare = Square.E1,
@@ -136,7 +138,7 @@ namespace SP.Engine.Test
 				Piece = board1.GetPiece(Square.E1) as EnginePiece
 			});
 
-			gs2.ApplyMove(new HalfMove()
+			GameStateStatic.ApplyMove(ref gs2, new HalfMove()
 			{
 				DestinationSquare = Square.C1,
 				SourceSquare = Square.E1,
@@ -166,13 +168,14 @@ namespace SP.Engine.Test
 		{
 			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
 
-			var gs1 = GameState.FromBoard(board1);
-			var moves1 = gs1.Moves();
+			var gs1 = GameStateStatic.FromBoard(board1);
+			GameStateStatic.Analyze(ref gs1);
+			var moves1 = gs1.Moves;
 			foreach (var move in moves1)
 			{
 				var gc = new GameState();
-				gc.CloneFrom(gs1);
-				gc.ApplyMove(move);
+				GameStateStatic.CloneTo(ref gs1, ref gc);
+				GameStateStatic.ApplyMove(ref gc, move);
 				Assert.IsTrue(gc.Pieces.Count() == 1);
 				Assert.IsTrue(gc.Pieces.First().ToString() == move.SubSequentialMoves.First().Piece.ToString());
 			}
@@ -185,14 +188,15 @@ namespace SP.Engine.Test
 		public void GameStateActualDepth()
 		{
 			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
-			var gs1 = GameState.FromBoard(board1);
-			var moves1 = gs1.Moves();
+			var gs1 = GameStateStatic.FromBoard(board1);
+			GameStateStatic.Analyze(ref gs1);
+			var moves1 = gs1.Moves;
 			Assert.AreEqual(gs1.ActualDepth, 0, "Profondità 0");
 			foreach (var move in moves1)
 			{
 				var gc = new GameState();
-				gc.CloneFrom(gs1);
-				gc.ApplyMove(move);
+				GameStateStatic.CloneTo(ref gs1, ref gc);
+				GameStateStatic.ApplyMove(ref gc, move);
 				Assert.AreEqual(gc.ActualDepth, 0.5m, "Profondità 0.5");
 			}
 

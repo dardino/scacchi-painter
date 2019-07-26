@@ -87,13 +87,14 @@ namespace SP.Engine
 		private MoveList FindMoves(GameState gs)
 		{
 			if (gs.MaxDepth <= gs.ActualDepth) return null;
-			var gsml = gs.Moves();
+			GameStateStatic.Analyze(ref gs);
+			var gsml = gs.Moves;
 			MoveList ml = new MoveList();
 			if (!gsml.Any()) return ml;
 
 			var loop = Parallel.ForEach(gsml, (m) =>
 			{
-				var subg = gs.GetAfterMove(m);
+				var subg = GameStateStatic.GetAfterMove(ref gs, m);
 				var mTree = new MoveTree(m, subg.ActualDepth);
 				ml.Add(mTree);
 				var mosse = FindMoves(subg);
@@ -104,7 +105,7 @@ namespace SP.Engine
 				}
 				else
 				{
-					mTree.Check = subg.IsCheck();
+					mTree.Check = GameStateStatic.IsCheck(ref subg);
 					mTree.CheckMate = mTree.Check;
 					mTree.StaleMate = !mTree.CheckMate;
 				}

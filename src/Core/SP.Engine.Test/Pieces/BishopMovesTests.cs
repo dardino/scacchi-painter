@@ -109,10 +109,10 @@ namespace SP.Engine.Pieces
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A1, Square.C2, g), "a1-c2");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A4, Square.H4, g), "a4-h4");
 
-			var gg = GameState.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"));
+			var gg = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"));
 			Assert.IsTrue(piece.IsAttackingSquare(Square.A5, Square.E1, gg), "a5-e1");
 
-			gg = GameState.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/b7/B7/8/3P4/R3K2R"));
+			gg = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/b7/B7/8/3P4/R3K2R"));
 			Assert.IsFalse(piece.IsAttackingSquare(Square.A5, Square.E1, gg), "a5-e1");
 
 		}
@@ -125,7 +125,7 @@ namespace SP.Engine.Pieces
 				Color = PieceColors.White
 			};
 
-			var gg = GameState.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/2p4p/1B6/1n6/4K3"));
+			var gg = GameStateStatic.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/2p4p/1B6/1n6/4K3"));
 			Assert.IsFalse(piece.IsAttackingSquare(Square.B3, Square.D5, gg), "b3-d5");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.B3, Square.E6, gg), "b3-e6");
 			Assert.IsFalse(piece.IsAttackingSquare(Square.B3, Square.F7, gg), "b3-f7");

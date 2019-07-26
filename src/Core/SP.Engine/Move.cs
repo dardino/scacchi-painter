@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SP.Engine
 {
-	public struct HalfMove
+	public class HalfMove
 	{
 		public EnginePiece Piece;
 		public Square SourceSquare;
@@ -32,7 +32,6 @@ namespace SP.Engine
 				SourceSquare = SourceSquare,
 				SubSequentialMoves = null
 			};
-
 		}
 		
 	}
