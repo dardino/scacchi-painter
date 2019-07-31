@@ -25,7 +25,7 @@ namespace SP.Engine.Test
             sp.Stop();
             var average  =(decimal)sp.ElapsedMilliseconds / (decimal)counter;
             Console.WriteLine("millisecondi per clone: {0}",average);
-            Assert.IsTrue(average < 0.001m);
+            Assert.IsTrue(average < 0.005m);
         }
     }
 }
