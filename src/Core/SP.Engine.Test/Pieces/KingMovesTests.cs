@@ -131,11 +131,11 @@ namespace SP.Engine.Pieces
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
 			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"));
-			var expec1 = (ulong)BitBoard.FromRowBytes(
+			var expec1 = (ulong)BitBoardUtils.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00110110
 				);
-			var expec2 = (ulong)BitBoard.FromRowBytes(
+			var expec2 = (ulong)BitBoardUtils.FromRowBytes(
 				Row8: 0b00110110,
 				Row7: 0b00011100
 				);
@@ -172,7 +172,7 @@ namespace SP.Engine.Pieces
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
 			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"));
-			gs2.UnderEnemiesAttackByPiece[(int)Square.C2] = BitBoard.FromRowBytes(
+			gs2.UnderEnemiesAttackByPiece[(int)Square.C2] = BitBoardUtils.FromRowBytes(
 					0b00100010,
 					0b00000000,
 					0b00000000,
@@ -198,11 +198,11 @@ namespace SP.Engine.Pieces
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
 			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k1br/8/8/8/8/8/8/R1B1K2R"));
-			ulong expec3 = BitBoard.FromRowBytes(
+			ulong expec3 = BitBoardUtils.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00010110
 					);
-			ulong expec4 = BitBoard.FromRowBytes(
+			ulong expec4 = BitBoardUtils.FromRowBytes(
 				Row8: 0b00110100,
 				Row7: 0b00011100
 					);

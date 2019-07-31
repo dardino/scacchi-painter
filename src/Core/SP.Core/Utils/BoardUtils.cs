@@ -58,9 +58,11 @@ namespace SP.Core.Utils
 				PlacePieceOnBoard(board, numcol, numtra, PieceBaseUtils.FromFEN(c));
 			}
 		}
-		public static void PlacePieceOnBoard(Board board, Square sq, PieceBase piece)
+
+		/** restituisce true se il pezzo termina dove ce n'è un altro */
+		public static bool PlacePieceOnBoard(Board board, Square sq, PieceBase piece)
 		{
-			board.Cells[(uint)sq].SetPiece(piece);
+			return board.Cells[(uint)sq].SetPiece(piece);
 		}
 		public static void PlacePieceOnBoard(Board board, Columns col, Rows row, PieceBase piece)
 		{

@@ -19,31 +19,31 @@ namespace SP.Engine.Pieces
 
 		static Dictionary<CastlingIndexes, BitBoard> CastlingBB => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00100000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000010) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00100000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000010) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b00100000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00000010) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b00100000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00000010) }
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingNotUnderCheck => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00111000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00001110) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00111000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00001110) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b00111000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00001110) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b00111000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00001110) }
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingFreeCells => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b01110000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000110) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b01110000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000110) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b01110000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00000110) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b01110000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00000110) }
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingAlliedRockPos => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b10000000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000001) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b10000000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000001) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b10000000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00000001) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b10000000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00000001) }
 		};
 
 		protected bool IsMyStartingSquare(Square s) {

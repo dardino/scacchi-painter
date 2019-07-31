@@ -154,8 +154,8 @@ namespace SP.Engine.Test
 				}
 			});
 
-			var expected1 = BitBoard.FromRowBytes(Row1: 0b10010000);
-			var expected2 = BitBoard.FromRowBytes(Row1: 0b00110000);
+			var expected1 = BitBoardUtils.FromRowBytes(Row1: 0b10010000);
+			var expected2 = BitBoardUtils.FromRowBytes(Row1: 0b00110000);
 
 			Assert.AreEqual((ulong)gs1.All, (ulong)expected1, "mossa singola");
 			Assert.AreEqual((ulong)gs2.All, (ulong)expected2, "mossa con subsequence");

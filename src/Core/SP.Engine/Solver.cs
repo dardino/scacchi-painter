@@ -137,24 +137,26 @@ namespace SP.Engine
 
 	}
 
-	public class MoveTree
+	public struct MoveTree
 	{
 		public HalfMove Move { get; private set; }
-		public MoveList ChildMoves { get; set; } = null;
-		public decimal Dept { get; private set; }
+		public MoveList ChildMoves { get; set; }
+		public bool Check     { get; internal set; }
+		public bool CheckMate { get; internal set; }
+		public bool StaleMate { get; internal set; }
 
 		public MoveTree(HalfMove halfMove, decimal dept)
 		{
 			Move = halfMove;
-			Dept = dept;
+			ChildMoves = null;
+			Check = false;
+			CheckMate = false;
+			StaleMate = false;
 		}
-		public bool Check { get; internal set; }
-		public bool CheckMate { get; internal set; }
-		public bool StaleMate { get; internal set; }
 
 		public override string ToString()
 		{
-			var tab = String.Join("\t", (new Array[(int)(Dept * 2)]).ToList());
+			var tab = String.Join("\t", (new Array[(int)(Move.Dept * 2)]).ToList());
 			var children = ChildMoves != null ? String.Join(".", ChildMoves.Select(f => f.ToString()).ToList()) : "";
 			return "\r\n" + tab + Move.ToString() + 
 				(CheckMate ? "#": Check ? "+": StaleMate ? "=" : "")

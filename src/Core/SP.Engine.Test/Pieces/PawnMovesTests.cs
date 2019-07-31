@@ -227,7 +227,7 @@ namespace SP.Engine.Pieces
 			var p = board.GetPiece(Square.D5) as Pawn;
 			var actuals = p.GetMovesFromPosition(Square.D5, gEP);
 
-			var expected = (ulong)BitBoard.FromRowBytes(
+			var expected = (ulong)BitBoardUtils.FromRowBytes(
 				Row7: 0b00000000,
 				Row6: 0b00110000
 				);

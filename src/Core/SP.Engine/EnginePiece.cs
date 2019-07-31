@@ -30,7 +30,7 @@ namespace SP.Engine
 
 			var bbMoves = GetMovesFromPosition(fromSquare, state);			
 
-			var squares = BitBoard.GetListOfSquares(bbMoves);
+			var squares = BitBoardUtils.GetListOfSquares(bbMoves);
 			foreach (var toSquare in squares)
 			{
 				if (IsPawn && (toSquare.GetRow() == Rows.Row8 || toSquare.GetRow() == Rows.Row1))
@@ -41,7 +41,6 @@ namespace SP.Engine
 						{
 							Piece = this,
 							SourceSquare = fromSquare,
-							IsCapture = IsCapture(fromSquare, toSquare, state),
 							DestinationSquare = toSquare,
 							SubSequentialMoves = new List<HalfMove> {
 								new HalfMove()
@@ -62,7 +61,6 @@ namespace SP.Engine
 					{
 						Piece = this,
 						SourceSquare = fromSquare,
-						IsCapture = IsCapture(fromSquare, toSquare, state),
 						DestinationSquare = toSquare,
 						SubSequentialMoves = GetSubSequentialMoves(fromSquare, toSquare, state)
 					};
@@ -83,10 +81,6 @@ namespace SP.Engine
 		public virtual IEnumerable<HalfMove> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
 			return null;
 		}
-		public bool IsCapture(Square from, Square to, GameState gInfo) {
-			return (GetCapturesFromPosition(from, gInfo) & to.ToSquareBits()) > 0;
-		}
-
 		internal static List<Type> piecetypes = typeof(EnginePiece).Assembly.GetTypes().Where(f => f.BaseType == typeof(EnginePiece)).ToList();
 
 		public static EnginePiece FromPieceBase(PieceBase piece)

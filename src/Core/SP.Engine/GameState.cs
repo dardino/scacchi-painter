@@ -112,7 +112,7 @@ namespace SP.Engine
             destination.Rules = origin.Rules;
             destination.AvailablePromotionsTypes = origin.AvailablePromotionsTypes;
             origin.CastlingAllowed.CopyTo(destination.CastlingAllowed, 0);
-            destination.LastMove = origin.LastMove?.Clone();
+            if (origin.LastMove != null) destination.LastMove = origin.LastMove.Clone();
             destination.MoveTo = origin.MoveTo;
             UpdateGameState(ref destination);
         }
@@ -128,7 +128,8 @@ namespace SP.Engine
         {
             game.LastMove = move;
             // sposto il pezzo:
-            GameStateStatic.MovePiece(ref game, move);
+            var isCaputre = GameStateStatic.MovePiece(ref game, move);
+            game.LastMove.IsCapture = isCaputre;
             // ogni mossa è una mezza mossa:
             game.ActualDepth += .5m;
             // cambio colore del giocatore di turno
@@ -220,10 +221,11 @@ namespace SP.Engine
 
         }
 
-        private static void MovePiece(ref GameState game, HalfMove move)
+        private static bool MovePiece(ref GameState game, HalfMove move)
         {
             BoardUtils.PlacePieceOnBoard(game.Board, move.SourceSquare, null);
-            BoardUtils.PlacePieceOnBoard(game.Board, move.DestinationSquare, move.Piece);
+            var isCapture = BoardUtils.PlacePieceOnBoard(game.Board, move.DestinationSquare, move.Piece);
+            return isCapture;
         }
 
     }
@@ -232,7 +234,7 @@ namespace SP.Engine
     {
         internal void SetCancellationToken(CancellationToken token)
         {
-            this.ct = token;
+            GameStateStatic.GlobalCancellationToken = token;
         }
 
         public BitBoard Allied
@@ -243,18 +245,16 @@ namespace SP.Engine
             }
         }
 
-
-        public BitBoard Enemies { get { return BitBoardByColor[EnemiesColor]; } }
+        public BitBoard Enemies => BitBoardByColor[EnemiesColor];
 
         internal BitBoard BitBoardPawnEP;
 
-        public BitBoard All { get { return BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral]; } }
-
+        public BitBoard All => BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral];
 
         public Dictionary<PieceColors, BitBoard> BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
-            { PieceColors.Black   , BitBoard.FromRowBytes() },
-            { PieceColors.White   , BitBoard.FromRowBytes() },
-            { PieceColors.Neutral , BitBoard.FromRowBytes() }
+            { PieceColors.Black   , BitBoardUtils.FromRowBytes() },
+            { PieceColors.White   , BitBoardUtils.FromRowBytes() },
+            { PieceColors.Neutral , BitBoardUtils.FromRowBytes() }
         };
 
         public EnginePiece[] SquaresOccupation { get; } = new EnginePiece[64];
@@ -304,9 +304,6 @@ namespace SP.Engine
 
         public decimal MaxDepth { get { return Board.Stipulation.Depth; } }
         public decimal ActualDepth { get; set; } = 0;
-
-        private CancellationToken ct;
-
 
         public PieceColors AlliedColor { get { return MoveTo; } }
         public PieceColors EnemiesColor { get { return MoveTo == PieceColors.White ? PieceColors.Black : PieceColors.White; } }

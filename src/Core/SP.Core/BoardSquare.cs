@@ -9,9 +9,11 @@ namespace SP.Core
 		public readonly Rows Row;
 		public readonly Square Square;
 		public bool Occupied => Piece != null;
-		internal void SetPiece(PieceBase piece)
+		internal bool SetPiece(PieceBase piece)
 		{
+			var occupied = Occupied;
 			Piece = piece;
+			return occupied;
 		}
 		public BoardSquare(Square s)
 		{
