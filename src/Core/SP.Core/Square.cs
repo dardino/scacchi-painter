@@ -2,7 +2,7 @@
 
 namespace SP.Core
 {
-	public enum Square
+	public enum Square: short
 	{
 		H1, G1, F1, E1, D1, C1, B1, A1,
 		H2, G2, F2, E2, D2, C2, B2, A2,
@@ -18,11 +18,11 @@ namespace SP.Core
 	{
 		public static Columns GetColumn(this Square sq)
 		{
-			return (Columns)((int)sq % 8);
+			return (Columns)((uint)sq % 8);
 		}
 		public static Rows GetRow(this Square sq)
 		{
-			return (Rows)Math.Floor((float)sq / 8f);
+			return (Rows)Math.Floor((uint)sq / 8f);
 		}
 
 	}

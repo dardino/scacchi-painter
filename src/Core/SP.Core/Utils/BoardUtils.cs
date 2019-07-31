@@ -60,7 +60,7 @@ namespace SP.Core.Utils
 		}
 		public static void PlacePieceOnBoard(Board board, Square sq, PieceBase piece)
 		{
-			BoardSquareUtils.SetPiece(board, sq, piece);
+			board.Cells[(uint)sq].SetPiece(piece);
 		}
 		public static void PlacePieceOnBoard(Board board, Columns col, Rows row, PieceBase piece)
 		{

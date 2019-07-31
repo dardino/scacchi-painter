@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SP.Core
 {
-	public enum PieceColors
+	public enum PieceColors: ushort
 	{
 		White = 0,
 		Black = 1,

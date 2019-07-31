@@ -55,11 +55,11 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void TestCheckMateWhite() {
 			// test di alcune posizioni di scacco matto del bianco al re nero:
-			var w_gs1_y = GameStateStatic.FromBoard(BoardUtils.FromNotation("k7/8/8/7K/8/8/1R6/R7", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			var w_gs1_y = GameStateStatic.FromBoard(BoardUtils.FromNotation("k7/8/8/7K/8/8/1R6/R7", new Stipulation(StipulationTypes.DirectMate, 0.5m)));
 			// test di alcune posizioni di NON scacco matto del bianco al re nero:
-			var w_gs1_n = GameStateStatic.FromBoard(BoardUtils.FromNotation("K1k5/8/8/8/8/8/P7/8", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			var w_gs1_n = GameStateStatic.FromBoard(BoardUtils.FromNotation("K1k5/8/8/8/8/8/P7/8", new Stipulation(StipulationTypes.DirectMate, 0.5m)));
 			// test di alcune posizioni di stallo del re nero:
-			var w_gs2_n = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/1K6/2Q5/k7", new Stipulation(StipulationType.DirectMate, 0.5m)));
+			var w_gs2_n = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/1K6/2Q5/k7", new Stipulation(StipulationTypes.DirectMate, 0.5m)));
 			GameStateStatic.Analyze(ref w_gs1_y);
 			Assert.IsTrue(GameStateStatic.IsCheckMate(ref w_gs1_y), "k7/8/8/7K/8/8/1R6/R7 ha dato false ??");
 			GameStateStatic.Analyze(ref w_gs1_n);

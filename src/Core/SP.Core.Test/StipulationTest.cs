@@ -14,14 +14,14 @@ namespace SP.Core.Test
 		public void TestStartingColor()
 		{
 
-			var st1 = new Stipulation(StipulationType.DirectMate, 2.5m);
-			var st2 = new Stipulation(StipulationType.DirectMate, 5);
-			var st3 = new Stipulation(StipulationType.HelpMate, 2.5m);
-			var st4 = new Stipulation(StipulationType.HelpMate, 5);
-			var st5 = new Stipulation(StipulationType.SelfStaleMate, 2.5m);
-			var st6 = new Stipulation(StipulationType.SelfStaleMate, 5);
-			var st7 = new Stipulation(StipulationType.HelpSelfStaleMate, 2.5m);
-			var st8 = new Stipulation(StipulationType.HelpSelfStaleMate, 5);
+			var st1 = new Stipulation(StipulationTypes.DirectMate, 2.5m);
+			var st2 = new Stipulation(StipulationTypes.DirectMate, 5);
+			var st3 = new Stipulation(StipulationTypes.HelpMate, 2.5m);
+			var st4 = new Stipulation(StipulationTypes.HelpMate, 5);
+			var st5 = new Stipulation(StipulationTypes.SelfStaleMate, 2.5m);
+			var st6 = new Stipulation(StipulationTypes.SelfStaleMate, 5);
+			var st7 = new Stipulation(StipulationTypes.HelpSelfStaleMate, 2.5m);
+			var st8 = new Stipulation(StipulationTypes.HelpSelfStaleMate, 5);
 
 			Assert.AreEqual(PieceColors.Black, st1.StartingMoveColor, "Diretto in 2.5 --> tocca al nero");
 			Assert.AreEqual(PieceColors.White, st2.StartingMoveColor, "Diretto in 5 --> tocca al bianco");

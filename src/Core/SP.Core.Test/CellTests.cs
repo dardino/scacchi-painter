@@ -15,7 +15,7 @@ namespace SP.Core.Test
 		{
 			var cell0 = new BoardSquare(0);
 			Assert.IsFalse(cell0.Occupied);
-			BoardSquareUtils.SetPiece(ref cell0, new Core.Pieces.Pawn());
+			cell0.SetPiece(new Core.Pieces.Pawn());
 			Assert.IsTrue(cell0.Occupied);
 		}
 

@@ -1,6 +1,6 @@
 ﻿namespace SP.Core
 {
-	public enum Columns
+	public enum Columns: short
 	{
 		ColA = 7,
 		ColB = 6,
