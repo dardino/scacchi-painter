@@ -29,8 +29,8 @@ namespace SP.Engine
         public static bool IsCheckMate(ref GameState state, ref HalfMove move)
         {
             var clone = new GameState();
-            CloneTo(ref state, ref clone);
-            ApplyMove(ref clone, move);
+            CloneTo(state, clone);
+            ApplyMove(clone, move);
             return IsCheckMate(ref clone);
         }
         public static bool IsCheck(ref GameState game)
@@ -40,8 +40,8 @@ namespace SP.Engine
         public static bool IsCheckAfter(ref GameState game, HalfMove move)
         {
             var clone = new GameState();
-            CloneTo(ref game, ref clone);
-            ApplyMove(ref clone, move);
+            CloneTo(game, clone);
+            ApplyMove(clone, move);
             // è scacco se una volta applicata la mossa il re nemico è sotto scacco
             return IsCheck(ref clone);
         }
@@ -49,12 +49,6 @@ namespace SP.Engine
         {
             if (!kingColor.HasValue) kingColor = game.MoveTo;
             return (Square)Array.IndexOf(game.SquaresOccupation, game.SquaresOccupation.FirstOrDefault(f => f != null && f.Color == kingColor && f.IsKing));
-        }
-        internal static GameState GetAfterMove(ref GameState game, HalfMove mTree)
-        {
-            var m = GetCloneOf(game);
-            GameStateStatic.ApplyMove(ref m, mTree);
-            return m;
         }
 
         internal static IEnumerable<HalfMove> GetMoves(GameState state)
@@ -105,26 +99,32 @@ namespace SP.Engine
             return (state.AttackingCells & s.ToSquareBits()) > 0;
         }
 
-        internal static void CloneTo(ref GameState origin, ref GameState destination)
+        internal static void CloneTo(GameState origin, GameState destination)
         {
             destination.ActualDepth = origin.ActualDepth;
             destination.Board = origin.Board.Clone();
             destination.Rules = origin.Rules;
             destination.AvailablePromotionsTypes = origin.AvailablePromotionsTypes;
-            origin.CastlingAllowed.CopyTo(destination.CastlingAllowed, 0);
+            for (var a = 0; a < 4; a++) destination.CastlingAllowed[a] = origin.CastlingAllowed[a];
             if (origin.LastMove != null) destination.LastMove = origin.LastMove.Clone();
             destination.MoveTo = origin.MoveTo;
-            UpdateGameState(ref destination);
+            destination.BitBoardByColor[PieceColors.Black] = origin.BitBoardByColor[PieceColors.Black];
+            destination.BitBoardByColor[PieceColors.White] = origin.BitBoardByColor[PieceColors.White];
+            destination.BitBoardByColor[PieceColors.Neutral] = origin.BitBoardByColor[PieceColors.Neutral];
+            destination.BitBoardPawnEP = origin.BitBoardPawnEP;
+            Array.Copy(origin.SquaresOccupation        , destination.SquaresOccupation        , 64);
+            Array.Copy(origin.UnderEnemiesAttackByPiece, destination.UnderEnemiesAttackByPiece, 64);
+            Array.Copy(origin.UnderAlliedAttackByPiece , destination.UnderAlliedAttackByPiece , 64);
         }
 
         public static GameState GetCloneOf(GameState gs)
         {
             var n = new GameState();
-            CloneTo(ref gs, ref n);
+            CloneTo(gs, n);
             return n;
         }
 
-        internal static void ApplyMove(ref GameState game, HalfMove move)
+        internal static void ApplyMove(GameState game, HalfMove move)
         {
             game.LastMove = move;
             // sposto il pezzo:
@@ -143,7 +143,7 @@ namespace SP.Engine
                 var depth = game.ActualDepth;
                 foreach (var subMove in move.SubSequentialMoves)
                 {
-                    ApplyMove(ref game, subMove);
+                    ApplyMove(game, subMove);
                 }
                 game.ActualDepth = depth;
             }
@@ -237,19 +237,11 @@ namespace SP.Engine
             GameStateStatic.GlobalCancellationToken = token;
         }
 
-        public BitBoard Allied
-        {
-            get
-            {
-                return BitBoardByColor[AlliedColor] | BitBoardByColor[PieceColors.Neutral];
-            }
-        }
-
+        public BitBoard Allied => BitBoardByColor[AlliedColor] | BitBoardByColor[PieceColors.Neutral];
         public BitBoard Enemies => BitBoardByColor[EnemiesColor];
+        public BitBoard All => BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral];
 
         internal BitBoard BitBoardPawnEP;
-
-        public BitBoard All => BitBoardByColor[PieceColors.Black] | BitBoardByColor[PieceColors.White] | BitBoardByColor[PieceColors.Neutral];
 
         public Dictionary<PieceColors, BitBoard> BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
             { PieceColors.Black   , BitBoardUtils.FromRowBytes() },

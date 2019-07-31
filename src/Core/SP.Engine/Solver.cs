@@ -16,8 +16,8 @@ namespace SP.Engine
 	{
 		private GameState initialGameState = null;
 		private CancellationTokenSource tokenSource;
-		private Task<MoveList> taskSolver;
-		private MoveList Moves { get; set; } = new MoveList();
+		private Task<ConcurrentBag<MoveTree>> taskSolver;
+		private ConcurrentBag<MoveTree> Moves { get; set; } = new ConcurrentBag<MoveTree>();
 
 		public TaskStatus State => taskSolver?.Status ?? TaskStatus.WaitingToRun;
 
@@ -28,7 +28,7 @@ namespace SP.Engine
 
 		private Solver() { }
 
-		public Task<MoveList> Solve()
+		public Task<ConcurrentBag<MoveTree>> Solve()
 		{
 			if (initialGameState.Board == null) return null;
 			if (State != TaskStatus.Running)
@@ -53,13 +53,13 @@ namespace SP.Engine
 			}
 		}
 
-		private Task<MoveList> InternalSolve()
+		private Task<ConcurrentBag<MoveTree>> InternalSolve()
 		{
 			var stopwatch = Stopwatch.StartNew();
 #if DEBUG
 			Debug.WriteLine($"solver creation");
 #endif
-			taskSolver = Task.Factory.StartNew(() =>
+			taskSolver = Task.Run(() =>
 			{
 				if (tokenSource.IsCancellationRequested) {
 					return Moves;
@@ -84,24 +84,23 @@ namespace SP.Engine
 			return taskSolver;
 		}
 
-		private MoveList FindMoves(GameState gs)
+		private ConcurrentBag<MoveTree> FindMoves(GameState gs)
 		{
 			if (gs.MaxDepth <= gs.ActualDepth) return null;
 			GameStateStatic.Analyze(ref gs);
 			var gsml = gs.Moves;
-			MoveList ml = new MoveList();
-			if (!gsml.Any()) return ml;
-
+			var ml = new ConcurrentBag<MoveTree>();
 			var loop = Parallel.ForEach(gsml, (m) =>
 			{
-				var subg = GameStateStatic.GetAfterMove(ref gs, m);
+				GameState subg = GameStateStatic.GetCloneOf(gs);
+				GameStateStatic.ApplyMove(subg, m);
+
 				var mTree = new MoveTree(m, subg.ActualDepth);
 				ml.Add(mTree);
 				var mosse = FindMoves(subg);
 				if (mosse != null && mosse.Count > 0)
 				{
-					mTree.ChildMoves = new MoveList();
-					mosse.ToList().ForEach(mTree.ChildMoves.Add);
+					mTree.ChildMoves = mosse.ToArray();
 				}
 				else
 				{
@@ -132,15 +131,10 @@ namespace SP.Engine
 		}
 	}
 
-	public class MoveList : ConcurrentBag<MoveTree>
-	{
-
-	}
-
 	public struct MoveTree
 	{
 		public HalfMove Move { get; private set; }
-		public MoveList ChildMoves { get; set; }
+		public MoveTree[] ChildMoves { get; set; }
 		public bool Check     { get; internal set; }
 		public bool CheckMate { get; internal set; }
 		public bool StaleMate { get; internal set; }

@@ -42,7 +42,7 @@ namespace SP.Engine
 							Piece = this,
 							SourceSquare = fromSquare,
 							DestinationSquare = toSquare,
-							SubSequentialMoves = new List<HalfMove> {
+							SubSequentialMoves = new HalfMove[] {
 								new HalfMove()
 								{
 									Piece = MakePieceClass(p, Color),
@@ -78,7 +78,7 @@ namespace SP.Engine
 			var a = GetAttackingSquares(fromSquare, gInfo);
 			return (a & squareToCheck.ToSquareBits()) > 0;
 		}
-		public virtual IEnumerable<HalfMove> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
+		public virtual HalfMove[] GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
 			return null;
 		}
 		internal static List<Type> piecetypes = typeof(EnginePiece).Assembly.GetTypes().Where(f => f.BaseType == typeof(EnginePiece)).ToList();

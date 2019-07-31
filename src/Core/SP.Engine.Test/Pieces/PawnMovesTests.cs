@@ -216,7 +216,7 @@ namespace SP.Engine.Pieces
 			var gEP = GameStateStatic.FromBoard(board);
 
 			gEP.MoveTo = PieceColors.Black;
-			GameStateStatic.ApplyMove(ref gEP, new HalfMove() {
+			GameStateStatic.ApplyMove(gEP, new HalfMove() {
 				DestinationSquare = Square.C5,
 				IsCapture = false,
 				SourceSquare = Square.C7,

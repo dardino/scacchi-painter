@@ -74,7 +74,7 @@ namespace SP.Engine.Test
 		{
 			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
 			var gs2 = new GameState();
-			GameStateStatic.CloneTo(ref gs1, ref gs2);
+			GameStateStatic.CloneTo(gs1, gs2);
 
 			Assert.AreEqual(String.Join("   ", BoardUtils.GetRepresentation(gs2.Board)), String.Join("   ", BoardUtils.GetRepresentation(gs1.Board)));
 
@@ -130,7 +130,7 @@ namespace SP.Engine.Test
 			var gs1 = GameStateStatic.FromBoard(board1);
 			var gs2 = GameStateStatic.FromBoard(board2);
 
-			GameStateStatic.ApplyMove(ref gs1, new HalfMove()
+			GameStateStatic.ApplyMove(gs1, new HalfMove()
 			{
 				DestinationSquare = Square.D1,
 				SourceSquare = Square.E1,
@@ -138,13 +138,13 @@ namespace SP.Engine.Test
 				Piece = board1.GetPiece(Square.E1) as EnginePiece
 			});
 
-			GameStateStatic.ApplyMove(ref gs2, new HalfMove()
+			GameStateStatic.ApplyMove(gs2, new HalfMove()
 			{
 				DestinationSquare = Square.C1,
 				SourceSquare = Square.E1,
 				IsCapture = false,
 				Piece = board2.GetPiece(Square.E1) as EnginePiece,
-				SubSequentialMoves = new List<HalfMove> {
+				SubSequentialMoves = new HalfMove[] {
 					new HalfMove() {
 						DestinationSquare = Square.D1,
 						SourceSquare = Square.A1,
@@ -174,8 +174,8 @@ namespace SP.Engine.Test
 			foreach (var move in moves1)
 			{
 				var gc = new GameState();
-				GameStateStatic.CloneTo(ref gs1, ref gc);
-				GameStateStatic.ApplyMove(ref gc, move);
+				GameStateStatic.CloneTo(gs1, gc);
+				GameStateStatic.ApplyMove(gc, move);
 				Assert.IsTrue(gc.Pieces.Count() == 1);
 				Assert.IsTrue(gc.Pieces.First().ToString() == move.SubSequentialMoves.First().Piece.ToString());
 			}
@@ -195,16 +195,12 @@ namespace SP.Engine.Test
 			foreach (var move in moves1)
 			{
 				var gc = new GameState();
-				GameStateStatic.CloneTo(ref gs1, ref gc);
-				GameStateStatic.ApplyMove(ref gc, move);
+				GameStateStatic.CloneTo(gs1, gc);
+				GameStateStatic.ApplyMove(gc, move);
 				Assert.AreEqual(gc.ActualDepth, 0.5m, "Profondità 0.5");
 			}
 
 		}
 
-		[TestMethod]
-		public void GameStateClonePerformanceTest() {
-			
-		}
 	}
 }
