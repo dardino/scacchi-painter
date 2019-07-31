@@ -78,13 +78,13 @@ namespace SP.Engine
 		}
 		public bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gInfo) {
 			var a = GetAttackingSquares(fromSquare, gInfo);
-			return (a & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (a & squareToCheck.ToSquareBits()) > 0;
 		}
 		public virtual IEnumerable<HalfMove> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
 			return null;
 		}
 		public bool IsCapture(Square from, Square to, GameState gInfo) {
-			return (GetCapturesFromPosition(from, gInfo) & (ulong)to.ToSquareBits()) > 0;
+			return (GetCapturesFromPosition(from, gInfo) & to.ToSquareBits()) > 0;
 		}
 
 		internal static List<Type> piecetypes = typeof(EnginePiece).Assembly.GetTypes().Where(f => f.BaseType == typeof(EnginePiece)).ToList();

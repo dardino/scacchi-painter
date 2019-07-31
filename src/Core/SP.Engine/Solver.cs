@@ -72,7 +72,7 @@ namespace SP.Engine
 				{
 					// if (tokenSource.IsCancellationRequested) { cloop.Break(); return; }
 					Moves.Add(move);
-					Log(move.ToString(), true);
+					// Log(move.ToString(), true);
 
 				};
 
@@ -154,7 +154,7 @@ namespace SP.Engine
 
 		public override string ToString()
 		{
-			var tab = String.Join("_", (new Array[(int)(Dept * 2)]).ToList());
+			var tab = String.Join("\t", (new Array[(int)(Dept * 2)]).ToList());
 			var children = ChildMoves != null ? String.Join(".", ChildMoves.Select(f => f.ToString()).ToList()) : "";
 			return "\r\n" + tab + Move.ToString() + 
 				(CheckMate ? "#": Check ? "+": StaleMate ? "=" : "")

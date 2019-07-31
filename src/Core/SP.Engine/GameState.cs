@@ -98,11 +98,11 @@ namespace SP.Engine
         }
         public static bool IsSquareUnderAttack(ref GameState state, Square s)
         {
-            return (state.UnderAttackCells & (ulong)s.ToSquareBits()) > 0;
+            return (state.UnderAttackCells & s.ToSquareBits()) > 0;
         }
         public static bool IsAttackingSquare(ref GameState state, Square s)
         {
-            return (state.AttackingCells & (ulong)s.ToSquareBits()) > 0;
+            return (state.AttackingCells & s.ToSquareBits()) > 0;
         }
 
         internal static void CloneTo(ref GameState origin, ref GameState destination)
@@ -183,7 +183,7 @@ namespace SP.Engine
                 var p = game.Board.GetPiece(s) as EnginePiece;
                 game.SquaresOccupation[(Int32)s] = p;
                 if (p == null) continue;
-                var x = (ulong)s.ToSquareBits();
+                var x = s.ToSquareBits();
                 game.BitBoardByColor[p.Color] |= x;
             }
 
@@ -214,8 +214,8 @@ namespace SP.Engine
             )
             {
                 game.BitBoardPawnEP = game.LastMove.Piece.Color == PieceColors.Black ?
-                    ((ulong)game.LastMove.SourceSquare.ToSquareBits() >> 8) :
-                    ((ulong)game.LastMove.SourceSquare.ToSquareBits() << 8);
+                    (game.LastMove.SourceSquare.ToSquareBits() >> 8) :
+                    (game.LastMove.SourceSquare.ToSquareBits() << 8);
             }
 
         }
@@ -286,7 +286,7 @@ namespace SP.Engine
             {
                 var lista = Board.Cells
                     .Where(c => c.Piece != null && c.Piece.Name == "R" && c.Piece.Color == MoveTo)
-                    .Select(c => (ulong)c.Square.ToSquareBits()).ToList();
+                    .Select(c => c.Square.ToSquareBits()).ToList();
                 if (lista.Count > 0)
                     return lista.Aggregate((a, b) => a | b);
                 return 0;

@@ -139,20 +139,20 @@ namespace SP.Engine.Pieces
 			var pawn = new Pawn();
 			pawn.Color = PieceColors.White;
 
-			ulong movesA1 = (ulong)Square.B2.ToSquareBits();
+			ulong movesA1 = Square.B2.ToSquareBits();
 			ulong movesB1 = 0x0;
-			ulong movesC2 = (ulong)Square.D3.ToSquareBits();
+			ulong movesC2 = Square.D3.ToSquareBits();
 			ulong movesD4 = 0x0;
 			ulong movesA8 = 0x0;
-			ulong movesH5 = (ulong)Square.G6.ToSquareBits();
+			ulong movesH5 = Square.G6.ToSquareBits();
 			ulong movesH6 = 0x0;
 			ulong movesH8 = 0x0;
 			ulong movesH1 = 0x0;
 			ulong movesF7 = 0x0;
-			ulong movesC7 = (ulong)Square.D8.ToSquareBits();
+			ulong movesC7 = Square.D8.ToSquareBits();
 			ulong movesA2 = 0x0;
 			ulong movesD2 = 0x0;
-			ulong movesC1 = (ulong)Square.B2.ToSquareBits() | (ulong)Square.D2.ToSquareBits();
+			ulong movesC1 = Square.B2.ToSquareBits() | (ulong)Square.D2.ToSquareBits();
 
 			var bbMovesA1 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row1, g);
 			var bbMovesB1 = pawn.GetCapturesFromPosition(Columns.ColB, Rows.Row1, g);

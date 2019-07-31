@@ -98,13 +98,11 @@ namespace SP.Engine
 		}
 
 		public static IEnumerable<Square> GetListOfSquares(BitBoard bitBoard) {
-			var x = new List<Square>();
 			for (int i = 0; i < 64; i++)
 			{
-				if ((bitBoard & (ulong)((Square)i).ToSquareBits()) > 0)
-					x.Add((Square)i);
+				if ((bitBoard & ((Square)i).ToSquareBits()) > 0)
+					yield return (Square)i;
 			}
-			return x;
 		}
 	}
 }

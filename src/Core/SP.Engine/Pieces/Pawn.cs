@@ -13,7 +13,7 @@ namespace SP.Engine.Pieces
 		}
 		internal static BitBoard getAllButMe(GameState g, Square s)
 		{
-			var b = (ulong)s.ToSquareBits();
+			var b = s.ToSquareBits();
 			return (g.All | b) ^ b;
 		}
 		internal static bool IsStartingSquare(Square sourceSquare, PieceColors color)

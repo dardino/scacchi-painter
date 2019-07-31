@@ -201,5 +201,10 @@ namespace SP.Engine.Test
 			}
 
 		}
+
+		[TestMethod]
+		public void GameStateClonePerformanceTest() {
+			
+		}
 	}
 }
