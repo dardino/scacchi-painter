@@ -11,6 +11,7 @@ namespace SP.Core.Test
 	public class SquareTest
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void TestGetColumn()
 		{
 			var sq1 = Square.A1.GetColumn();
@@ -31,6 +32,7 @@ namespace SP.Core.Test
 			Assert.AreEqual(Columns.ColH, sq8);
 		}
 		[TestMethod]
+		[Priority(1)]
 		public void TestGetRow()
 		{
 			var sq1 = Square.A1.GetRow();

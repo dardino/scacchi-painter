@@ -9,6 +9,7 @@ namespace SP.Engine.Test
 	{
 
 		[TestMethod]
+		[Priority(1)]
 		public void ConversionTestsBits()
 		{
 			Assert.AreEqual(Square.H1.ToSquareBits(), (ulong)SquareBits.H1, "SquareBits.H1");

@@ -41,6 +41,7 @@ namespace SP.Engine.Pieces
 		};
 
 		[TestMethod]
+		[Priority(1)]
 		public void B_MoveInABlankBoard()
 		{
 
@@ -76,6 +77,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void B_MoveInOccupiedBoard() {
 
 			var piece = new Bishop();
@@ -90,6 +92,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void B_CapturesTest()
 		{
 
@@ -103,6 +106,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void B_IsAttackingSquare() {
 
 			var tokenSource = new CancellationTokenSource();
@@ -120,6 +124,7 @@ namespace SP.Engine.Pieces
 
 		}
 		[TestMethod]
+		[Priority(1)]
 		public void B_IsAttackingSquareOnBoard()
 		{
 

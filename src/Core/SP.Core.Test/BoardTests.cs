@@ -11,6 +11,7 @@ namespace SP.Core.Test
 	public class BoardTests
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void FillBoardCellsOnConstructor()
 		{
 			var board = new Board();
@@ -21,6 +22,7 @@ namespace SP.Core.Test
 			Assert.AreEqual(p2.GetType(), typeof(Core.Pieces.Queen));
 		}
 		[TestMethod]
+		[Priority(1)]
 		public void LoadFromNotationAndStipulation()
 		{
 			var notation = "3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5";
@@ -34,6 +36,7 @@ namespace SP.Core.Test
 			Assert.AreEqual(PieceColors.Black, board.Stipulation.StartingMoveColor, "check starting color");
 		}
 		[TestMethod]
+		[Priority(1)]
 		public void LoadFromNotation() {
 			var notation = "3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5";
 			var board = BoardUtils.FromNotation(notation);
@@ -114,6 +117,7 @@ namespace SP.Core.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void NeutralPieceFromFEN()
 		{
 			var notation = "8/8/8/*p7/8/8/8/8";

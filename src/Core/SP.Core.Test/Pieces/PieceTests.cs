@@ -11,6 +11,7 @@ namespace SP.Core.Test.Pieces
 	public class PieceTests
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void TestPieceTypesCount()
 		{
 			var p = new Core.Pieces.Bishop();
@@ -20,6 +21,7 @@ namespace SP.Core.Test.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void TestPieceTypes()
 		{
 			var p = PieceBaseUtils.FromFEN("K+ ");

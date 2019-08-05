@@ -46,6 +46,7 @@ namespace SP.Engine.Pieces
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void P_MoveInABlankBoard()
 		{
 
@@ -87,6 +88,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void P_MoveInOccupiedBoard() {
 
 			var pawn = new Pawn();
@@ -135,6 +137,7 @@ namespace SP.Engine.Pieces
 			Assert.AreEqual(movesD2, bbMovesD2, "d2");
 		}
 
+		[Priority(1)]
 		[TestMethod]
 		public void P_CapturesTest()
 		{
@@ -188,6 +191,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void P_IsAttackingSquare() {
 
 			var pawn = new Pawn();
@@ -212,6 +216,7 @@ namespace SP.Engine.Pieces
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void P_EnPassantCaptures()
 		{
 			var tokenSource = new CancellationTokenSource();
@@ -240,6 +245,7 @@ namespace SP.Engine.Pieces
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void P_WhitePromotions() {
 			var tokenSource = new CancellationTokenSource();
 			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8"), tokenSource.Token);
@@ -249,6 +255,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void P_BlackPromotions()
 		{
 			var tokenSource = new CancellationTokenSource();

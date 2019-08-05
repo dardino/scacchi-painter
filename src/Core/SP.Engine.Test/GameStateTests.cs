@@ -13,6 +13,7 @@ namespace SP.Engine.Test
 	public class GameStateTests
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void GameStateGenerator()
 		{
 			// ---------------------------------
@@ -48,6 +49,7 @@ namespace SP.Engine.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void GameStateGetListOfMoves()
 		{
 			var tokenSource = new CancellationTokenSource();
@@ -62,6 +64,7 @@ namespace SP.Engine.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void GameStateNoMovesBecausePinned()
 		{
 			var tokenSource = new CancellationTokenSource();
@@ -74,6 +77,7 @@ namespace SP.Engine.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void GameStateClone()
 		{
 			var tokenSource = new CancellationTokenSource();
@@ -128,6 +132,7 @@ namespace SP.Engine.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void GameStateApplyMoveKing() {
 			var board1 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
 			var board2 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
@@ -170,6 +175,7 @@ namespace SP.Engine.Test
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void GameStateApplyMovePawn()
 		{
 			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
@@ -192,6 +198,7 @@ namespace SP.Engine.Test
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void GameStateActualDepth()
 		{
 			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
