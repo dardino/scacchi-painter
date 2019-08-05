@@ -39,6 +39,7 @@ namespace SP.Engine.Pieces
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void Q_MoveInABlankBoard()
 		{
 
@@ -74,6 +75,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void Q_MoveInOccupiedBoard() {
 
 			var piece = new Queen();
@@ -108,6 +110,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+ 		[Priority(1)]
 		public void Q_CapturesTest()
 		{
 
@@ -121,6 +124,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void Q_IsAttackingSquare() {
 
 			var piece = new Queen();

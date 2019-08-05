@@ -11,6 +11,7 @@ namespace SP.Engine.Test.Pieces
 	public class CommonUtils
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void DiagonalA1H8CalcTest()
 		{
 			ulong Exp_a2 = 0x204081020408000;
@@ -34,6 +35,7 @@ namespace SP.Engine.Test.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void DiagonalA8H1CalcTest()
 		{
 			ulong Exp_a2 = 0x8040;
@@ -63,6 +65,7 @@ namespace SP.Engine.Test.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void GetDiagonals()
 		{
 
@@ -101,6 +104,7 @@ namespace SP.Engine.Test.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void GetColumns()
 		{
 			ulong[] exps = new ulong[8];
@@ -125,6 +129,7 @@ namespace SP.Engine.Test.Pieces
 			}
 		}
 
+		[Priority(1)]
 		[TestMethod]
 		public void GetRows()
 		{
@@ -148,11 +153,6 @@ namespace SP.Engine.Test.Pieces
 					Assert.AreEqual(exp, act, $"{Enum.GetName(typeof(Columns), col)}.{Enum.GetName(typeof(Rows), r)}");
 				}
 			}
-		}
-
-		[TestMethod]
-		public void TestHashKey() {
-			
 		}
 
 	}

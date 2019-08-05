@@ -10,6 +10,7 @@ namespace SP.Core.Test
 	public class BoardSqareTests
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void ConversionTests()
 		{
 			BoardSquare p = new BoardSquare();
@@ -22,6 +23,7 @@ namespace SP.Core.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void GetSquareIndexTests() {
 			var indexA1 = BoardSquare.GetSquareIndex(Columns.ColA, Rows.Row1);
 			var indexA2 = BoardSquare.GetSquareIndex(Columns.ColA, Rows.Row2);

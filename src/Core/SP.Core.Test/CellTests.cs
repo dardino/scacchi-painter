@@ -11,6 +11,7 @@ namespace SP.Core.Test
 	public class CellTest
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void TestOccupation()
 		{
 			var cell0 = new BoardSquare(0);
@@ -20,6 +21,7 @@ namespace SP.Core.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void TestRows()
 		{
 			var cell0 = new BoardSquare(0);
@@ -31,6 +33,7 @@ namespace SP.Core.Test
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void TestColumns()
 		{
 			var cell0 = new BoardSquare(0);

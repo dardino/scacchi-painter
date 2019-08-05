@@ -12,6 +12,7 @@ namespace SP.Engine.Test.Pieces
 	public class BitboardTests
 	{
 		[TestMethod]
+		[Priority(1)]
 		public void TestToSquareList()
 		{
 			var bb = BitBoardUtils.FromRowBytes(
