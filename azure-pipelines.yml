@@ -22,14 +22,16 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Dotnet Build'
   inputs:
     command: 'build'
     projects: '$(solution)'
     configuration: '$(buildConfiguration)'    
 
 - task: DotNetCoreCLI@2
+  displayName: 'Dotnet Test'
   inputs:
     command: 'test'
     projects: '$(solution)'
-    arguments: '--filter Priority=1'
-    configuration: '$(buildConfiguration)'    
+    arguments: '--filter Priority=1 --collect="Code Coverage"'
+    configuration: '$(buildConfiguration)'
