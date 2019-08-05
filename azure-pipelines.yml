@@ -31,4 +31,5 @@ steps:
   inputs:
     command: 'test'
     projects: '$(solution)'
+    arguments: '--filter Priority=1'
     configuration: '$(buildConfiguration)'    
