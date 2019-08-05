@@ -4,44 +4,44 @@ namespace SP.Core
 {
 	public struct BoardSquare: ICloneable
 	{
-		private Square square;
-		public bool Occupied { get { return Piece != null; } }
-
 		public PieceBase Piece { get; private set; }
-
-		internal void SetPiece(PieceBase piece)
+		public readonly Columns Column;
+		public readonly Rows Row;
+		public readonly Square Square;
+		public bool Occupied => Piece != null;
+		internal bool SetPiece(PieceBase piece)
 		{
+			var occupied = Occupied;
 			Piece = piece;
+			return occupied;
 		}
-
 		public BoardSquare(Square s)
 		{
-			square = s;
+			Square = s;
 			Piece = null;
+			Column = Square.GetColumn();
+			Row = Square.GetRow();
 		}
 
 		public BoardSquare(Columns c, Rows r)
 		{
-			square = GetSquareIndex(c, r);
+			Square = GetSquareIndex(c, r);
 			Piece = null;
+			Column = Square.GetColumn();
+			Row = Square.GetRow();
 		}
 		public static Square GetSquareIndex(Columns col, Rows row)
 		{
-			return (Square)((int)col + (int)row * 8);
+			return (Square)((ushort)col + (ushort)row * 8);
 		}
 
 		public object Clone()
 		{
-			return new BoardSquare(square)
+			return new BoardSquare(Square)
 			{
 				Piece = Piece
 			};
 		}
-
-		public Columns Column => square.GetColumn();
-		public Rows Row => square.GetRow();
-
-		public Square Square => square;
 
 		public static implicit operator BoardSquare(Square index)
 		{
@@ -54,16 +54,16 @@ namespace SP.Core
 
 		public static implicit operator int(BoardSquare square)
 		{
-			return (int)square.square;
+			return (int)square.Square;
 		}
 		public static implicit operator Square(BoardSquare square)
 		{
-			return square.square;
+			return square.Square;
 		}
 
 		public override string ToString()
 		{
-			return $"{square}({Piece})";
+			return $"{Square}({Piece})";
 		}
 	}
 }

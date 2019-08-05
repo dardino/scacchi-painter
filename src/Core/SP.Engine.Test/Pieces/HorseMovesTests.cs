@@ -1,10 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SP.Core;
 using SP.Engine;
 using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using BitBoard = System.UInt64;
 
-namespace SP.Core.Engine.Pieces
+namespace SP.Engine.Pieces
 {
 	[TestClass]
 	[TestCategory("Engine.Pieces.Horse")]
@@ -50,6 +53,7 @@ namespace SP.Core.Engine.Pieces
 			UInt64 movesH8 = (ulong)(SquareBits.F7 | SquareBits.G6);
 			UInt64 movesH1 = (ulong)(SquareBits.F2 | SquareBits.G3);
 
+			var sp = Stopwatch.StartNew();
 			var bbMovesA1 = piece.GetMovesFromPosition(Columns.ColA, Rows.Row1);
 			var bbMovesB1 = piece.GetMovesFromPosition(Columns.ColB, Rows.Row1);
 			var bbMovesC2 = piece.GetMovesFromPosition(Columns.ColC, Rows.Row2);
@@ -58,6 +62,9 @@ namespace SP.Core.Engine.Pieces
 			var bbMovesH6 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row6);
 			var bbMovesH8 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row8);
 			var bbMovesH1 = piece.GetMovesFromPosition(Columns.ColH, Rows.Row1);
+			sp.Stop();
+
+			Console.WriteLine($"tempo trascorso per il calcolo delle mosse di cavallo: {sp.Elapsed}");
 
 			Assert.AreEqual(bbMovesA1, movesA1, "A1");
 			Assert.AreEqual(bbMovesB1, movesB1, "B1");

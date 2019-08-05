@@ -27,10 +27,8 @@ namespace SP.Engine
 
 		public IEnumerable<HalfMove> GetMoves(Square fromSquare, GameState state)
 		{
-
-			var bbMoves = GetMovesFromPosition(fromSquare, state);			
-
-			var squares = BitBoard.GetListOfSquares(bbMoves);
+			var bbMoves = state.MovesByPiece[(short)fromSquare];
+			var squares = BitBoardUtils.GetListOfSquares(bbMoves);
 			foreach (var toSquare in squares)
 			{
 				if (IsPawn && (toSquare.GetRow() == Rows.Row8 || toSquare.GetRow() == Rows.Row1))
@@ -41,9 +39,8 @@ namespace SP.Engine
 						{
 							Piece = this,
 							SourceSquare = fromSquare,
-							IsCapture = IsCapture(fromSquare, toSquare, state),
 							DestinationSquare = toSquare,
-							SubSequentialMoves = new List<HalfMove> {
+							SubSequentialMoves = new HalfMove[] {
 								new HalfMove()
 								{
 									Piece = MakePieceClass(p, Color),
@@ -62,7 +59,6 @@ namespace SP.Engine
 					{
 						Piece = this,
 						SourceSquare = fromSquare,
-						IsCapture = IsCapture(fromSquare, toSquare, state),
 						DestinationSquare = toSquare,
 						SubSequentialMoves = GetSubSequentialMoves(fromSquare, toSquare, state)
 					};
@@ -78,15 +74,11 @@ namespace SP.Engine
 		}
 		public bool IsAttackingSquare(Square fromSquare, Square squareToCheck, GameState gInfo) {
 			var a = GetAttackingSquares(fromSquare, gInfo);
-			return (a & (ulong)squareToCheck.ToSquareBits()) > 0;
+			return (a & squareToCheck.ToSquareBits()) > 0;
 		}
-		public virtual IEnumerable<HalfMove> GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
+		public virtual HalfMove[] GetSubSequentialMoves(Square from, Square to, GameState gInfo) {
 			return null;
 		}
-		public bool IsCapture(Square from, Square to, GameState gInfo) {
-			return (GetCapturesFromPosition(from, gInfo) & (ulong)to.ToSquareBits()) > 0;
-		}
-
 		internal static List<Type> piecetypes = typeof(EnginePiece).Assembly.GetTypes().Where(f => f.BaseType == typeof(EnginePiece)).ToList();
 
 		public static EnginePiece FromPieceBase(PieceBase piece)

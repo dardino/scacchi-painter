@@ -7,13 +7,10 @@ namespace SP.Core
 {
     public abstract class PieceBase
     {
-        public PieceColors Color { get; set; } = PieceColors.Neutral;
-        public PieceRotation Rotation { get; set; } = PieceRotation.NoRotation;
-
-        public string Name { get; set; }
-
-        private Lazy<string> nameByColor => new Lazy<string>(() => Color == PieceColors.Black ? Name.ToLower() : Name.ToUpper());
-        public string NameByColor => nameByColor.Value;
+        public PieceColors Color;
+        public PieceRotation Rotation;
+        public string Name;
+        public string NameByColor => Color == PieceColors.Black ? Name.ToLower() : Name.ToUpper();
     }
 
 }

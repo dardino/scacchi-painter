@@ -16,7 +16,7 @@ namespace SP.Engine.Pieces
 			var offset = (int)s % 7;
 			var da = DiagonalA1H8 << (8 * offset);
 			var db = DiagonalA1H8 >> (8 * (7 - offset));
-			var mybit = (ulong)s.ToSquareBits();
+			var mybit = s.ToSquareBits();
 			return (mybit & da) > 0 ? da : db;
 		}
 	
@@ -25,7 +25,7 @@ namespace SP.Engine.Pieces
 			var offset = (int)s % 9;
 			var da = offset < 8 ? DiagonalA8H1 >> (8 * offset) : 0;
 			var db = offset > 1 ? DiagonalA8H1 << (8 * (9 - offset)) : 0;
-			var mybit = (ulong)s.ToSquareBits();
+			var mybit = s.ToSquareBits();
 			return (mybit & da) > 0 ? da : db;
 		}
 
@@ -121,7 +121,7 @@ namespace SP.Engine.Pieces
 
 		public static ulong GetDiagonalMoves(Square s, ulong allied, ulong enemies)
 		{
-			var sqb = (ulong)s.ToSquareBits();
+			var sqb = s.ToSquareBits();
 			var alldiag = GetDiagonals(s) ^ sqb;
 			enemies = enemies & alldiag;
 			allied = allied & alldiag;
@@ -146,7 +146,7 @@ namespace SP.Engine.Pieces
 		{
 			var r = (int)((BoardSquare)s).Row;
 			var c = (int)((BoardSquare)s).Column;
-			var sb = (ulong)s.ToSquareBits();
+			var sb = s.ToSquareBits();
 
 			var trav = (0xFFul << (r * 8)) ^ sb;
 			var col = (0x101010101010101ul << c) ^ sb;

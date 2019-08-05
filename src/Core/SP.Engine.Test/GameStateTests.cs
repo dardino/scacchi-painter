@@ -1,8 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SP.Core;
+using SP.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace SP.Engine.Test
 {
@@ -34,9 +36,10 @@ namespace SP.Engine.Test
 			ulong bitAllPieces = 0x182c9c44104aca20;
 			ulong bitBlacks = 0x2c9c44004a8a00;
 			ulong bitWhites = 0x1800000010004020;
+			var tokenSource = new CancellationTokenSource();
 
-			var board = Board.FromNotation(notation);
-			var bitBoards = GameState.FromBoard(board);
+			var board = BoardUtils.FromNotation(notation);
+			var bitBoards = GameStateStatic.FromBoard(board, tokenSource.Token);
 
 			Assert.AreEqual(bitAllPieces, (ulong)bitBoards.All);
 			Assert.AreEqual(bitBlacks, (ulong)bitBoards.BitBoardByColor[PieceColors.Black]);
@@ -47,7 +50,9 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateGetListOfMoves()
 		{
-			var gameState = GameState.FromBoard(Board.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
+			var tokenSource = new CancellationTokenSource();
+			var gameState = GameStateStatic.FromBoard(BoardUtils.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"), tokenSource.Token);
+			GameStateStatic.Analyze(ref gameState);
 			var moves = gameState.Moves;
 			var expstr = "Pd4-d5;  Ne8*f6;  Ne8*d6;  Ne8-g7;  Ne8*c7;  Qd8*d6;  Qd8*e7;  Qd8-d7;  Qd8*c7;  Qd8-c8;  Qd8-b8;  Qd8-a8";
 			var actString = System.String.Join(";  ", moves);
@@ -59,7 +64,9 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateNoMovesBecausePinned()
 		{
-			var gameState = GameState.FromBoard(Board.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
+			var tokenSource = new CancellationTokenSource();
+			var gameState = GameStateStatic.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"), tokenSource.Token);
+			GameStateStatic.Analyze(ref gameState);
 			var moves = gameState.Moves;
 
 			Assert.AreEqual(2, moves.Count(), "only 2 moves allowed but: " + String.Join("; ", moves));
@@ -69,11 +76,12 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateClone()
 		{
-			var gs1 = GameState.FromBoard(Board.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("7b/b7/4p3/2R1P3/1qNKB2r/3QP3/8/3r4"), tokenSource.Token);
 			var gs2 = new GameState();
-			gs2.CloneFrom(gs1);
+			GameStateStatic.CloneTo(gs1, gs2);
 
-			Assert.AreEqual(String.Join("   ", Board.GetRepresentation(gs2.Board)), String.Join("   ", Board.GetRepresentation(gs1.Board)));
+			Assert.AreEqual(String.Join("   ", BoardUtils.GetRepresentation(gs2.Board)), String.Join("   ", BoardUtils.GetRepresentation(gs1.Board)));
 
 			Assert.AreEqual(gs1.BitBoardByColor[PieceColors.Black  ], gs2.BitBoardByColor[PieceColors.Black  ]);
 			Assert.AreEqual(gs1.BitBoardByColor[PieceColors.White  ], gs2.BitBoardByColor[PieceColors.White  ]);
@@ -121,27 +129,28 @@ namespace SP.Engine.Test
 
 		[TestMethod]
 		public void GameStateApplyMoveKing() {
-			var board1 = Board.FromNotation("8/8/8/8/8/8/8/R3K3");
-			var board2 = Board.FromNotation("8/8/8/8/8/8/8/R3K3");
+			var board1 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
+			var board2 = BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K3");
 
-			var gs1 = GameState.FromBoard(board1);
-			var gs2 = GameState.FromBoard(board2);
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(board1, tokenSource.Token);
+			var gs2 = GameStateStatic.FromBoard(board2, tokenSource.Token);
 
-			gs1.ApplyMove(new HalfMove()
+			GameStateStatic.ApplyMove(gs1, new HalfMove()
 			{
 				DestinationSquare = Square.D1,
 				SourceSquare = Square.E1,
 				IsCapture = false,
 				Piece = board1.GetPiece(Square.E1) as EnginePiece
-			});
+			}, tokenSource.Token);
 
-			gs2.ApplyMove(new HalfMove()
+			GameStateStatic.ApplyMove(gs2, new HalfMove()
 			{
 				DestinationSquare = Square.C1,
 				SourceSquare = Square.E1,
 				IsCapture = false,
 				Piece = board2.GetPiece(Square.E1) as EnginePiece,
-				SubSequentialMoves = new List<HalfMove> {
+				SubSequentialMoves = new HalfMove[] {
 					new HalfMove() {
 						DestinationSquare = Square.D1,
 						SourceSquare = Square.A1,
@@ -149,10 +158,10 @@ namespace SP.Engine.Test
 						Piece = board2.GetPiece(Square.A1) as EnginePiece
 					}
 				}
-			});
+			}, tokenSource.Token);
 
-			var expected1 = BitBoard.FromRowBytes(Row1: 0b10010000);
-			var expected2 = BitBoard.FromRowBytes(Row1: 0b00110000);
+			var expected1 = BitBoardUtils.FromRowBytes(Row1: 0b10010000);
+			var expected2 = BitBoardUtils.FromRowBytes(Row1: 0b00110000);
 
 			Assert.AreEqual((ulong)gs1.All, (ulong)expected1, "mossa singola");
 			Assert.AreEqual((ulong)gs2.All, (ulong)expected2, "mossa con subsequence");
@@ -163,15 +172,17 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateApplyMovePawn()
 		{
-			var board1 = Board.FromNotation("8/2P5/8/8/8/8/8/8");
+			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
 
-			var gs1 = GameState.FromBoard(board1);
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(board1, tokenSource.Token);
+			GameStateStatic.Analyze(ref gs1);
 			var moves1 = gs1.Moves;
 			foreach (var move in moves1)
 			{
 				var gc = new GameState();
-				gc.CloneFrom(gs1);
-				gc.ApplyMove(move);
+				GameStateStatic.CloneTo(gs1, gc);
+				GameStateStatic.ApplyMove(gc, move, tokenSource.Token);
 				Assert.IsTrue(gc.Pieces.Count() == 1);
 				Assert.IsTrue(gc.Pieces.First().ToString() == move.SubSequentialMoves.First().Piece.ToString());
 			}
@@ -183,18 +194,21 @@ namespace SP.Engine.Test
 		[TestMethod]
 		public void GameStateActualDepth()
 		{
-			var board1 = Board.FromNotation("8/2P5/8/8/8/8/8/8");
-			var gs1 = GameState.FromBoard(board1);
+			var board1 = BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8");
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(board1, tokenSource.Token);
+			GameStateStatic.Analyze(ref gs1);
 			var moves1 = gs1.Moves;
 			Assert.AreEqual(gs1.ActualDepth, 0, "Profondità 0");
 			foreach (var move in moves1)
 			{
 				var gc = new GameState();
-				gc.CloneFrom(gs1);
-				gc.ApplyMove(move);
+				GameStateStatic.CloneTo(gs1, gc);
+				GameStateStatic.ApplyMove(gc, move, tokenSource.Token);
 				Assert.AreEqual(gc.ActualDepth, 0.5m, "Profondità 0.5");
 			}
 
 		}
+
 	}
 }

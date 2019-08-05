@@ -1,6 +1,6 @@
 ﻿namespace SP.Core
 {
-	public enum Rows
+	public enum Rows: short
 	{
 		Row1 = 0,
 		Row2 = 1,

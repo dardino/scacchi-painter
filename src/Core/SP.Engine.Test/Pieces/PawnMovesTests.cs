@@ -1,11 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SP.Core;
+using SP.Core.Utils;
 using SP.Engine;
 using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using BitBoard = System.UInt64;
 
-namespace SP.Core.Engine.Pieces
+namespace SP.Engine.Pieces
 {
 	[TestClass]
 	[TestCategory("Engine.Pieces.Pawn")]
@@ -137,20 +141,20 @@ namespace SP.Core.Engine.Pieces
 			var pawn = new Pawn();
 			pawn.Color = PieceColors.White;
 
-			ulong movesA1 = (ulong)Square.B2.ToSquareBits();
+			ulong movesA1 = Square.B2.ToSquareBits();
 			ulong movesB1 = 0x0;
-			ulong movesC2 = (ulong)Square.D3.ToSquareBits();
+			ulong movesC2 = Square.D3.ToSquareBits();
 			ulong movesD4 = 0x0;
 			ulong movesA8 = 0x0;
-			ulong movesH5 = (ulong)Square.G6.ToSquareBits();
+			ulong movesH5 = Square.G6.ToSquareBits();
 			ulong movesH6 = 0x0;
 			ulong movesH8 = 0x0;
 			ulong movesH1 = 0x0;
 			ulong movesF7 = 0x0;
-			ulong movesC7 = (ulong)Square.D8.ToSquareBits();
+			ulong movesC7 = Square.D8.ToSquareBits();
 			ulong movesA2 = 0x0;
 			ulong movesD2 = 0x0;
-			ulong movesC1 = (ulong)Square.B2.ToSquareBits() | (ulong)Square.D2.ToSquareBits();
+			ulong movesC1 = Square.B2.ToSquareBits() | (ulong)Square.D2.ToSquareBits();
 
 			var bbMovesA1 = pawn.GetCapturesFromPosition(Columns.ColA, Rows.Row1, g);
 			var bbMovesB1 = pawn.GetCapturesFromPosition(Columns.ColB, Rows.Row1, g);
@@ -210,22 +214,23 @@ namespace SP.Core.Engine.Pieces
 		[TestMethod]
 		public void P_EnPassantCaptures()
 		{
-			var board = Board.FromNotation("8/2p5/8/3Pp3/8/8/8/8");
-			var gEP = GameState.FromBoard(board);
+			var tokenSource = new CancellationTokenSource();
+			var board = BoardUtils.FromNotation("8/2p5/8/3Pp3/8/8/8/8");
+			var gEP = GameStateStatic.FromBoard(board, tokenSource.Token);
 
 			gEP.MoveTo = PieceColors.Black;
-			gEP.ApplyMove(new HalfMove() {
+			GameStateStatic.ApplyMove(gEP, new HalfMove() {
 				DestinationSquare = Square.C5,
 				IsCapture = false,
 				SourceSquare = Square.C7,
 				SubSequentialMoves = null,
 				Piece = board.GetPiece(Square.C7) as EnginePiece
-			});
+			}, tokenSource.Token);
 
 			var p = board.GetPiece(Square.D5) as Pawn;
 			var actuals = p.GetMovesFromPosition(Square.D5, gEP);
 
-			var expected = (ulong)BitBoard.FromRowBytes(
+			var expected = (ulong)BitBoardUtils.FromRowBytes(
 				Row7: 0b00000000,
 				Row6: 0b00110000
 				);
@@ -236,22 +241,24 @@ namespace SP.Core.Engine.Pieces
 
 		[TestMethod]
 		public void P_WhitePromotions() {
-			var gs1 = GameState.FromBoard(Board.FromNotation("8/2P5/8/8/8/8/8/8"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8"), tokenSource.Token);
 			var pawn = (Pawn)gs1.Board.GetPiece(Square.C7);
 			var moves = pawn.GetMoves(Square.C7, gs1);
-			Assert.IsTrue(moves.Count() == 4, "4 promozioni: Q R B H");
+			Assert.AreEqual(4, moves.Count(), "4 promozioni: Q R B H");
 		}
 
 		[TestMethod]
 		public void P_BlackPromotions()
 		{
-			var gs1 = GameState.FromBoard(Board.FromNotation("8/8/8/8/8/8/2p5/8"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/2p5/8"), tokenSource.Token);
 			gs1.MoveTo = PieceColors.Black;
-			gs1.UpdateGameState();
+			GameStateStatic.UpdateGameState(gs1, tokenSource.Token);
 
 			var pawn = (Pawn)gs1.Board.GetPiece(Square.C2);
 			var moves = pawn.GetMoves(Square.C2, gs1);
-			Assert.IsTrue(moves.Count() == 4, "4 promozioni: Q R B H");
+			Assert.AreEqual(4, moves.Count(), "4 promozioni: Q R B H");
 		}
 	}
 }

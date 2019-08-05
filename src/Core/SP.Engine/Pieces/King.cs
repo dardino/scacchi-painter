@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BitBoard = System.UInt64;
 
 namespace SP.Engine.Pieces
 {
@@ -19,31 +20,31 @@ namespace SP.Engine.Pieces
 
 		static Dictionary<CastlingIndexes, BitBoard> CastlingBB => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00100000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000010) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00100000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000010) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b00100000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00000010) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b00100000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00000010) }
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingNotUnderCheck => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b00111000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00001110) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b00111000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00001110) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b00111000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00001110) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b00111000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00001110) }
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingFreeCells => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b01110000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000110) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b01110000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000110) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b01110000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00000110) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b01110000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00000110) }
 		};
 		static Dictionary<CastlingIndexes, BitBoard> CastlingAlliedRockPos => new Dictionary<CastlingIndexes, BitBoard>
 		{
-			{ CastlingIndexes.OOO, BitBoard.FromRowBytes(Row1: 0b10000000) },
-			{ CastlingIndexes.OO , BitBoard.FromRowBytes(Row1: 0b00000001) },
-			{ CastlingIndexes.ooo, BitBoard.FromRowBytes(Row8: 0b10000000) },
-			{ CastlingIndexes.oo , BitBoard.FromRowBytes(Row8: 0b00000001) }
+			{ CastlingIndexes.OOO, BitBoardUtils.FromRowBytes(Row1: 0b10000000) },
+			{ CastlingIndexes.OO , BitBoardUtils.FromRowBytes(Row1: 0b00000001) },
+			{ CastlingIndexes.ooo, BitBoardUtils.FromRowBytes(Row8: 0b10000000) },
+			{ CastlingIndexes.oo , BitBoardUtils.FromRowBytes(Row8: 0b00000001) }
 		};
 
 		protected bool IsMyStartingSquare(Square s) {
@@ -95,12 +96,12 @@ namespace SP.Engine.Pieces
 			return moves;
 		}
 
-		public override IEnumerable<HalfMove> GetSubSequentialMoves(Square from, Square to, GameState gInfo)
+		public override HalfMove[] GetSubSequentialMoves(Square from, Square to, GameState gInfo)
 		{
-			if (from == Square.E1 && to == Square.C1) return new List<HalfMove> { new HalfMove { DestinationSquare = Square.D1, SourceSquare = Square.A1, Piece = gInfo.Board.GetPiece(Square.A1) as Rock } };
-			if (from == Square.E1 && to == Square.G1) return new List<HalfMove> { new HalfMove { DestinationSquare = Square.F1, SourceSquare = Square.H1, Piece = gInfo.Board.GetPiece(Square.H1) as Rock } };
-			if (from == Square.E8 && to == Square.C8) return new List<HalfMove> { new HalfMove { DestinationSquare = Square.D8, SourceSquare = Square.A8, Piece = gInfo.Board.GetPiece(Square.A8) as Rock } };
-			if (from == Square.E8 && to == Square.G8) return new List<HalfMove> { new HalfMove { DestinationSquare = Square.F8, SourceSquare = Square.H8, Piece = gInfo.Board.GetPiece(Square.H8) as Rock } };
+			if (from == Square.E1 && to == Square.C1) return new HalfMove[] { new HalfMove { DestinationSquare = Square.D1, SourceSquare = Square.A1, Piece = gInfo.Board.GetPiece(Square.A1) as Rock } };
+			if (from == Square.E1 && to == Square.G1) return new HalfMove[] { new HalfMove { DestinationSquare = Square.F1, SourceSquare = Square.H1, Piece = gInfo.Board.GetPiece(Square.H1) as Rock } };
+			if (from == Square.E8 && to == Square.C8) return new HalfMove[] { new HalfMove { DestinationSquare = Square.D8, SourceSquare = Square.A8, Piece = gInfo.Board.GetPiece(Square.A8) as Rock } };
+			if (from == Square.E8 && to == Square.G8) return new HalfMove[] { new HalfMove { DestinationSquare = Square.F8, SourceSquare = Square.H8, Piece = gInfo.Board.GetPiece(Square.H8) as Rock } };
 			else return null;
 		}
 

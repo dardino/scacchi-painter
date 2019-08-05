@@ -14,7 +14,7 @@ namespace SP.Engine.Test.Pieces
 		[TestMethod]
 		public void TestToSquareList()
 		{
-			var bb = BitBoard.FromRowBytes(
+			var bb = BitBoardUtils.FromRowBytes(
 				Row8: 0b10000000,
 				Row7: 0b01000100,
 				Row6: 0b00000000,
@@ -30,7 +30,7 @@ namespace SP.Engine.Test.Pieces
 				Square.A8, Square.B3, Square.B7, Square.C1, Square.D5, Square.F7, Square.H1
 			};
 
-			var actual = BitBoard.GetListOfSquares(bb).ToArray();
+			var actual = BitBoardUtils.GetListOfSquares(bb).ToArray();
 
 			Assert.AreEqual(expected.Count, actual.Count(), "TestToSquareList -> Length");
 			for (int i = 0; i < expected.Count; i++)

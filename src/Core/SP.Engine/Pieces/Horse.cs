@@ -29,9 +29,13 @@ namespace SP.Engine.Pieces
 
 		public override ulong GetAttackingSquares(Square s, GameState gInfo)
 		{
-			var fullC = Cols[(int)s.GetColumn()];
-			var dc3 = s - Square.C3;
-			var allMoves = (dc3 < 0 ? c3Moves >> (0 - dc3) : c3Moves << dc3) & fullC;
+			var fullC = Cols[(ushort)s.GetColumn()];
+			short dc3 = s - Square.C3;
+			var allMoves = (
+				dc3 < 0 
+					? c3Moves >> (0 - dc3) 
+					: c3Moves << dc3
+			) & fullC;
 			return allMoves;
 		}
 

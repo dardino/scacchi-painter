@@ -1,6 +1,6 @@
 ﻿namespace SP.Core
 {
-	public enum PieceRotation
+	public enum PieceRotation: ushort
 	{
 		NoRotation,
 		Clockwise45,

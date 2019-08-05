@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using SP.Core.Utils;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,7 +16,7 @@ namespace SP.Core.Test
 			var board = new Board();
 			var p1 = board.GetPiece(Columns.ColA, Rows.Row1);
 			Assert.IsNull(p1);
-			board.PlacePieceOnBoard(Columns.ColF, Rows.Row4, new Core.Pieces.Queen { Color = PieceColors.White });
+			BoardUtils.PlacePieceOnBoard(board, Columns.ColF, Rows.Row4, new Core.Pieces.Queen { Color = PieceColors.White });
 			var p2 = board.GetPiece(Columns.ColF, Rows.Row4);
 			Assert.AreEqual(p2.GetType(), typeof(Core.Pieces.Queen));
 		}
@@ -23,19 +24,19 @@ namespace SP.Core.Test
 		public void LoadFromNotationAndStipulation()
 		{
 			var notation = "3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5";
-			var board = Board.FromNotation(notation, new Stipulation(StipulationType.HelpMate, 2));
+			var board = BoardUtils.FromNotation(notation, new Stipulation(StipulationTypes.HelpMate, 2));
 			Assert.AreEqual(PieceColors.Black, board.Stipulation.StartingMoveColor, "check starting color");
-			board = Board.FromNotation(notation, new Stipulation(StipulationType.DirectMate, 2));
+			board = BoardUtils.FromNotation(notation, new Stipulation(StipulationTypes.DirectMate, 2));
 			Assert.AreEqual(PieceColors.White, board.Stipulation.StartingMoveColor, "check starting color");
-			board = Board.FromNotation(notation, new Stipulation(StipulationType.HelpMate, 0.5m));
+			board = BoardUtils.FromNotation(notation, new Stipulation(StipulationTypes.HelpMate, 0.5m));
 			Assert.AreEqual(PieceColors.White, board.Stipulation.StartingMoveColor, "check starting color");
-			board = Board.FromNotation(notation, new Stipulation(StipulationType.DirectMate, 0.5m));
+			board = BoardUtils.FromNotation(notation, new Stipulation(StipulationTypes.DirectMate, 0.5m));
 			Assert.AreEqual(PieceColors.Black, board.Stipulation.StartingMoveColor, "check starting color");
 		}
 		[TestMethod]
 		public void LoadFromNotation() {
 			var notation = "3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5";
-			var board = Board.FromNotation(notation);
+			var board = BoardUtils.FromNotation(notation);
 
 			var p01 = board.GetPiece(Columns.ColD, Rows.Row8);
 			var p02 = board.GetPiece(Columns.ColE, Rows.Row8);
@@ -116,7 +117,7 @@ namespace SP.Core.Test
 		public void NeutralPieceFromFEN()
 		{
 			var notation = "8/8/8/*p7/8/8/8/8";
-			var board = Board.FromNotation(notation);
+			var board = BoardUtils.FromNotation(notation);
 
 			var p01 = board.GetPiece(Columns.ColA, Rows.Row5);
 

@@ -1,11 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SP.Engine;
-using SP.Engine.Pieces;
+using SP.Core;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using BitBoard = System.UInt64;
 
-namespace SP.Core.Engine.Pieces
+namespace SP.Engine.Pieces
 {
 	[TestClass]
 	[TestCategory("Engine.Pieces.Rock")]
