@@ -45,6 +45,7 @@ namespace SP.Engine.Pieces
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_MoveInABlankBoard()
 		{
 
@@ -82,6 +83,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_MoveInOccupiedBoard()
 		{
 
@@ -105,6 +107,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_CapturesTest()
 		{
 
@@ -118,6 +121,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_IsAttackingSquare()
 		{
 
@@ -128,6 +132,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_FreeCastling()
 		{
 			var wk = new King() { Color = PieceColors.White };
@@ -151,6 +156,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_NoCastling1()
 		{
 			var tokenSource = new CancellationTokenSource();
@@ -171,6 +177,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_NoCastling2()
 		{
 			var wk = new King() { Color = PieceColors.White };
@@ -198,6 +205,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_NoCastling3()
 		{
 			var wk = new King() { Color = PieceColors.White };
@@ -223,6 +231,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_NoCastling4()
 		{
 			var tokenSource = new CancellationTokenSource();
@@ -234,6 +243,7 @@ namespace SP.Engine.Pieces
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_CastlingSubMovesWhite()
 		{
 			var tokenSource = new CancellationTokenSource();
@@ -261,6 +271,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void K_CastlingSubMovesBlack()
 		{
 			var tokenSource = new CancellationTokenSource();

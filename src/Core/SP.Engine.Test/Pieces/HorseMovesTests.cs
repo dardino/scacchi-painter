@@ -39,6 +39,7 @@ namespace SP.Engine.Pieces
 		};
 
 		[TestMethod]
+		[Priority(1)]
 		public void H_MoveInABlankBoard()
 		{
 
@@ -78,6 +79,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void H_MoveInOccupiedBoard() {
 
 			var piece = new Horse();
@@ -112,6 +114,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void H_CapturesTest()
 		{
 
@@ -125,6 +128,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void H_IsAttackingSquare() {
 
 			var piece = new Horse();

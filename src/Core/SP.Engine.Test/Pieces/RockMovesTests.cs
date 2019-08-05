@@ -37,6 +37,7 @@ namespace SP.Engine.Pieces
 
 
 		[TestMethod]
+		[Priority(1)]
 		public void R_MoveInABlankBoard()
 		{
 
@@ -72,6 +73,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void R_MoveInOccupiedBoard() {
 
 			var piece = new Rock();
@@ -106,6 +108,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void R_CapturesTest()
 		{
 
@@ -119,6 +122,7 @@ namespace SP.Engine.Pieces
 		}
 
 		[TestMethod]
+		[Priority(1)]
 		public void R_IsAttackingSquare() {
 
 			var piece = new Rock();

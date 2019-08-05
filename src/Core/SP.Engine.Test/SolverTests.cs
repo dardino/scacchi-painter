@@ -16,6 +16,7 @@ namespace SP.Engine.Test
     public class SolverTests
     {
         [TestMethod]
+		[Priority(1)]
         public void TestCancellation()
         {
             var tokenSource = new CancellationTokenSource();
@@ -44,6 +45,7 @@ namespace SP.Engine.Test
 
 
         [TestMethod]
+		[Priority(1)]
         public void TestSolverOneDepth()
         {
             var tokenSource = new CancellationTokenSource();
@@ -59,6 +61,7 @@ namespace SP.Engine.Test
         }
 
         [TestMethod]
+		[Priority(1)]
         public void TestCheckMateWhite()
         {
             var tokenSource = new CancellationTokenSource();
@@ -78,6 +81,7 @@ namespace SP.Engine.Test
 
 
         [TestMethod]
+		[Priority(1)]
         public void GetAllMoves()
         {
             var tokenSource = new CancellationTokenSource();
@@ -91,6 +95,7 @@ namespace SP.Engine.Test
         }
 
         [TestMethod]
+		[Priority(1)]
         public void GetChecks()
         {
             var tokenSource = new CancellationTokenSource();
@@ -103,6 +108,7 @@ namespace SP.Engine.Test
         }
 
         [TestMethod]
+		[Priority(1)]
         public void FindCheckMate()
         {
             var tokenSource = new CancellationTokenSource();
@@ -120,8 +126,6 @@ namespace SP.Engine.Test
             var counter = tuttelemosse.Length;
             Console.WriteLine($"Tempo impiegato per calcolare tutte le mosse e materializzarle: {sw.Elapsed}");
             Assert.AreEqual(counter, 16, $"Il numero di mosse calcolate deve essere 16 invece è {counter}");
-			// Assert.IsTrue(counter == 1);
-			// You must close or flush the trace to empty the output buffer.
 		}
 	}
 }

@@ -11,6 +11,7 @@ namespace SP.Core.Test
 	{
 
 		[TestMethod]
+		[Priority(1)]
 		public void TestStartingColor()
 		{
 
