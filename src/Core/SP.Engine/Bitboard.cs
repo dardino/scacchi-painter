@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using BitBoard = System.UInt64;
 
 namespace SP.Engine
 {
@@ -93,21 +94,4 @@ namespace SP.Engine
         }
     }
 
-    public struct BitBoard
-    {
-        private ulong value;
-        public BitBoard(ulong board)
-        {
-            value = board;
-        }
-        public static implicit operator BitBoard(ulong board)
-        {
-            return new BitBoard(board);
-        }
-        public static implicit operator ulong(BitBoard board)
-        {
-            return board.value;
-        }
-
-    }
 }

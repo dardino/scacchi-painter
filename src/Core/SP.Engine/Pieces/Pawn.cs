@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using SP.Core;
+using BitBoard = System.UInt64;
 
 namespace SP.Engine.Pieces
 {

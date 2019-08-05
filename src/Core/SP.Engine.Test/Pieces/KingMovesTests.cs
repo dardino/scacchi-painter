@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using BitBoard = System.UInt64;
 
 namespace SP.Engine.Pieces
 {
@@ -130,7 +132,8 @@ namespace SP.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"), tokenSource.Token);
 			var expec1 = (ulong)BitBoardUtils.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00110110
@@ -150,16 +153,17 @@ namespace SP.Engine.Pieces
 		[TestMethod]
 		public void K_NoCastling1()
 		{
+			var tokenSource = new CancellationTokenSource();
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"));
+			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/b7/B7/8/8/R3K2R"), tokenSource.Token);
 
 			var expec3 = (ulong)(SquareBits.D1 | SquareBits.F1 | SquareBits.D2 | SquareBits.E2 | SquareBits.F2);
 			var expec4 = (ulong)(SquareBits.D8 | SquareBits.F8 | SquareBits.D7 | SquareBits.E7 | SquareBits.F7);
 
 			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
 			gs2.MoveTo = PieceColors.Black;
-			GameStateStatic.UpdateGameState(ref gs2);
+			GameStateStatic.UpdateGameState(gs2, tokenSource.Token);
 			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
 
 			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (King under check)");
@@ -171,8 +175,9 @@ namespace SP.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"));
-			gs2.UnderEnemiesAttackByPiece[(int)Square.C2] = BitBoardUtils.FromRowBytes(
+			var tokenSource = new CancellationTokenSource();
+			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("R6R/8/8/8/8/8/8/R6R"), tokenSource.Token);
+			gs2.UnderAttackCells = BitBoardUtils.FromRowBytes(
 					0b00100010,
 					0b00000000,
 					0b00000000,
@@ -197,7 +202,8 @@ namespace SP.Engine.Pieces
 		{
 			var wk = new King() { Color = PieceColors.White };
 			var bk = new King() { Color = PieceColors.Black };
-			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k1br/8/8/8/8/8/8/R1B1K2R"));
+			var tokenSource = new CancellationTokenSource();
+			var gs2 = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k1br/8/8/8/8/8/8/R1B1K2R"), tokenSource.Token);
 			ulong expec3 = BitBoardUtils.FromRowBytes(
 				Row2: 0b00011100,
 				Row1: 0b00010110
@@ -209,7 +215,7 @@ namespace SP.Engine.Pieces
 
 			var moves3 = wk.GetMovesFromPosition(Square.E1, gs2);
 			gs2.MoveTo = PieceColors.Black;
-			GameStateStatic.UpdateGameState(ref gs2);
+			GameStateStatic.UpdateGameState(gs2, tokenSource.Token);
 			var moves4 = bk.GetMovesFromPosition(Square.E8, gs2);
 
 			Assert.AreEqual(expec3, moves3, "WK E1 --> All Moves + NO Castling (occupied cell in rock line move)");
@@ -219,7 +225,8 @@ namespace SP.Engine.Pieces
 		[TestMethod]
 		public void K_NoCastling4()
 		{
-			var gs = GameStateStatic.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"));
+			var tokenSource = new CancellationTokenSource();
+			var gs = GameStateStatic.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"), tokenSource.Token);
 			var wk = new King() { Color = PieceColors.White };
 			var moves = wk.GetMovesFromPosition(Square.E1, gs);
 
@@ -229,21 +236,25 @@ namespace SP.Engine.Pieces
 		[TestMethod]
 		public void K_CastlingSubMovesWhite()
 		{
-			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K2R"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/8/R3K2R"), tokenSource.Token);
 
 			var moves1 = (gs1.Board.GetPiece(Square.E1) as King).GetMoves(Square.E1, gs1);
 
 			var arroccoLungo = moves1.Where(m => m.DestinationSquare == Square.C1);
 			var arroccoCorto = moves1.Where(m => m.DestinationSquare == Square.G1);
 
-			Assert.IsTrue(arroccoLungo.Count() == 1, "Arrocco Lungo non trovato");
-			Assert.IsTrue(arroccoCorto.Count() == 1, "Arrocco Corto non trovato");
+			var arlCount = arroccoLungo.Count();
+			var arcCount = arroccoCorto.Count();
+
+			Assert.AreEqual(1, arlCount, $"Arrocco Lungo trovato: {arlCount} invece che 1");
+			Assert.AreEqual(1, arcCount, $"Arrocco Corto trovato: {arcCount} invece che 1");
 
 			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves != null, "Arrocco Lungo senza subsequential");
 			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves != null, "Arrocco Corto senza subsequential");
 
-			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.Count() == 1, "Arrocco Lungo con subsequential != 1");
-			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.Count() == 1, "Arrocco Corto con subsequential != 1");
+			Assert.AreEqual(1, arroccoLungo.First().SubSequentialMoves.Count(), "Arrocco Lungo con subsequential != 1");
+			Assert.AreEqual(1, arroccoCorto.First().SubSequentialMoves.Count(), "Arrocco Corto con subsequential != 1");
 
 			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.First().DestinationSquare == Square.D1, "Arrocco Lungo - torre non in d1");
 			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.First().DestinationSquare == Square.F1, "Arrocco Corto - torre non in g1");
@@ -252,9 +263,10 @@ namespace SP.Engine.Pieces
 		[TestMethod]
 		public void K_CastlingSubMovesBlack()
 		{
-			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/8/8/8/8/8"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("r3k2r/8/8/8/8/8/8/8"), tokenSource.Token);
 			gs1.MoveTo = PieceColors.Black;
-			GameStateStatic.UpdateGameState(ref gs1);
+			GameStateStatic.UpdateGameState(gs1, tokenSource.Token);
 
 			var piece = (King)gs1.Board.GetPiece(Square.E8);
 			var moves1 = piece.GetMoves(Square.E8, gs1);
@@ -262,14 +274,14 @@ namespace SP.Engine.Pieces
 			var arroccoLungo = moves1.Where(m => m.DestinationSquare == Square.C8);
 			var arroccoCorto = moves1.Where(m => m.DestinationSquare == Square.G8);
 
-			Assert.IsTrue(arroccoLungo.Count() == 1, "Arrocco Lungo non trovato");
-			Assert.IsTrue(arroccoCorto.Count() == 1, "Arrocco Corto non trovato");
+			Assert.AreEqual(1, arroccoLungo.Count(), "Arrocco Lungo != 1");
+			Assert.AreEqual(1, arroccoCorto.Count(), "Arrocco Corto != 1");
 
 			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves != null, "Arrocco Lungo senza subsequential");
 			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves != null, "Arrocco Corto senza subsequential");
 
-			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.Count() == 1, "Arrocco Lungo con subsequential != 1");
-			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.Count() == 1, "Arrocco Corto con subsequential != 1");
+			Assert.AreEqual(1, arroccoLungo.First().SubSequentialMoves.Count(), "Arrocco Lungo con subsequential != 1");
+			Assert.AreEqual(1, arroccoCorto.First().SubSequentialMoves.Count(), "Arrocco Corto con subsequential != 1");
 
 			Assert.IsTrue(arroccoLungo.First().SubSequentialMoves.First().DestinationSquare == Square.D8, "Arrocco Lungo - torre non in d8");
 			Assert.IsTrue(arroccoCorto.First().SubSequentialMoves.First().DestinationSquare == Square.F8, "Arrocco Corto - torre non in g8");

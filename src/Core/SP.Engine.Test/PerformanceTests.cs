@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace SP.Engine.Test
 {
@@ -14,7 +15,8 @@ namespace SP.Engine.Test
 	{ 
         [TestMethod]
         public void GameStateCloneOf() {
-            var gs = GameStateStatic.FromBoard(BoardUtils.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"));
+			var tokenSource = new CancellationTokenSource();
+            var gs = GameStateStatic.FromBoard(BoardUtils.FromNotation("3QN3/2p1rr2/b2nkp2/1p3n2/3P4/1p2p1b1/pP2p1q1/2K5"), tokenSource.Token);
 
             var sp = Stopwatch.StartNew();
             var counter = 0;

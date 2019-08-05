@@ -4,6 +4,7 @@ using SP.Engine;
 using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
+using BitBoard = System.UInt64;
 
 namespace SP.Engine.Pieces
 {

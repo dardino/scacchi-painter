@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SP.Core;
-using SP.Engine;
-using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using BitBoard = System.UInt64;
 
 namespace SP.Engine.Pieces
 {

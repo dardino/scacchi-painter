@@ -6,6 +6,8 @@ using SP.Engine.Pieces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using BitBoard = System.UInt64;
 
 namespace SP.Engine.Pieces
 {
@@ -212,8 +214,9 @@ namespace SP.Engine.Pieces
 		[TestMethod]
 		public void P_EnPassantCaptures()
 		{
+			var tokenSource = new CancellationTokenSource();
 			var board = BoardUtils.FromNotation("8/2p5/8/3Pp3/8/8/8/8");
-			var gEP = GameStateStatic.FromBoard(board);
+			var gEP = GameStateStatic.FromBoard(board, tokenSource.Token);
 
 			gEP.MoveTo = PieceColors.Black;
 			GameStateStatic.ApplyMove(gEP, new HalfMove() {
@@ -222,7 +225,7 @@ namespace SP.Engine.Pieces
 				SourceSquare = Square.C7,
 				SubSequentialMoves = null,
 				Piece = board.GetPiece(Square.C7) as EnginePiece
-			});
+			}, tokenSource.Token);
 
 			var p = board.GetPiece(Square.D5) as Pawn;
 			var actuals = p.GetMovesFromPosition(Square.D5, gEP);
@@ -238,22 +241,24 @@ namespace SP.Engine.Pieces
 
 		[TestMethod]
 		public void P_WhitePromotions() {
-			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/2P5/8/8/8/8/8/8"), tokenSource.Token);
 			var pawn = (Pawn)gs1.Board.GetPiece(Square.C7);
 			var moves = pawn.GetMoves(Square.C7, gs1);
-			Assert.IsTrue(moves.Count() == 4, "4 promozioni: Q R B H");
+			Assert.AreEqual(4, moves.Count(), "4 promozioni: Q R B H");
 		}
 
 		[TestMethod]
 		public void P_BlackPromotions()
 		{
-			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/2p5/8"));
+			var tokenSource = new CancellationTokenSource();
+			var gs1 = GameStateStatic.FromBoard(BoardUtils.FromNotation("8/8/8/8/8/8/2p5/8"), tokenSource.Token);
 			gs1.MoveTo = PieceColors.Black;
-			GameStateStatic.UpdateGameState(ref gs1);
+			GameStateStatic.UpdateGameState(gs1, tokenSource.Token);
 
 			var pawn = (Pawn)gs1.Board.GetPiece(Square.C2);
 			var moves = pawn.GetMoves(Square.C2, gs1);
-			Assert.IsTrue(moves.Count() == 4, "4 promozioni: Q R B H");
+			Assert.AreEqual(4, moves.Count(), "4 promozioni: Q R B H");
 		}
 	}
 }
