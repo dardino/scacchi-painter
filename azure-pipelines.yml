@@ -35,3 +35,8 @@ steps:
     projects: '$(solution)'
     arguments: '--filter Priority=1 --collect="Code Coverage"'
     configuration: '$(buildConfiguration)'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Coverage'
+  inputs:
+    summaryFileLocation: '**/*.coverage'
