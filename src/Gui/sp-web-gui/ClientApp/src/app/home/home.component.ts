@@ -10,9 +10,19 @@ export class HomeComponent implements OnInit {
   constructor(private db: SpDbmService) {}
 
   currentPositionFen = "8/8/8/8/8/8/8/8";
+  boardType = "canvas";
 
   clickAction(action: ActionInfo<keyof ActionTypes>) {
     switch (action.type) {
+      case "SetBoardType":
+        this.boardType = (action as ActionInfo<"SetBoardType">).args;
+        break;
+      case "FirstProblem":
+        this.db.GotoIndex(0);
+        break;
+      case "LastProblem":
+        this.db.GotoIndex(this.db.Count - 1);
+        break;
       case "GotoProblem":
         this.db.GotoIndex(action.args as number);
         break;

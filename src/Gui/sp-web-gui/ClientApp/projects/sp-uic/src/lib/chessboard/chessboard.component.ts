@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, ElementRef, Optional } from "@angular/core";
 import { Piece, SquareLocation, GetLocationFromIndex } from "projects/sp-dbm/src/public-api";
 import { SpFenService        } from "projects/sp-dbm/src/lib/sp-fen.service";
 import { SpConvertersService } from "projects/sp-dbm/src/lib/sp-converters.service";
+
 import "canvas-chessboard/src/font/chess-figurine.css";
 
 import {
@@ -16,6 +17,11 @@ import {
 export class ChessboardComponent implements OnInit, OnChanges {
   cells: UiCell[] = [];
   currentCell: UiCell | null = null;
+
+  @Input() boardType?: "canvas" | "HTML";
+  get BoardType() {
+    return this.boardType ? this.boardType : "canvas";
+  }
 
   @ViewChild("canvas", { static: true })
   canvas: ElementRef;

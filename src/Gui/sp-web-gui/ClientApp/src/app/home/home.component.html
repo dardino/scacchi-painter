@@ -1,4 +1,4 @@
-<lib-toolbar (action)="clickAction($event)"></lib-toolbar>
+<lib-toolbar [boardType]="boardType" (action)="clickAction($event)"></lib-toolbar>
 <div>
-  <lib-chessboard [notation]="currentPositionFen"></lib-chessboard>
+  <lib-chessboard [boardType]="boardType" [notation]="currentPositionFen"></lib-chessboard>
 </div>

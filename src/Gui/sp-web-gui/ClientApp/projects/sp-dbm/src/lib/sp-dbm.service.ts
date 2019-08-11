@@ -38,6 +38,16 @@ export class SpDbmService {
     return rows.join("/");
   }
 
+  LoadFromLocalStorage() {
+    const db = localStorage.getItem("spdb");
+    if (!db) return;
+    this.reset();
+    this.LoadFromText(db);
+  }
+  SaveToLocalStorage(text: string) {
+    localStorage.setItem("spdb", text);
+  }
+
   LoadDatabase() {
     return this.http.get<ProblemDb>("api/sampledata/file").subscribe({
       complete: () => {}
@@ -71,8 +81,9 @@ export class SpDbmService {
     this.loadProblem();
   }
   GotoIndex(arg0: number) {
-    if (arg0 >= this.count - 1 || arg0 < 0) return;
+    if (arg0 >= this.count || arg0 < 0) return;
     this.currentIndex = arg0;
+    console.log("goto: ", arg0);
     this.loadProblem();
   }
 
