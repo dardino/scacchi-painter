@@ -1,18 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import {
   Piece,
-  GetSquareColor,
   SquareLocation,
-  PieceColors
+  PieceColors,
+  GetSquareColor
 } from "projects/sp-dbm/src/public-api";
 
+import { FontGliphs } from "canvas-chessboard";
+
 const CodeToFont = {
-  k: "&#x265A;",
-  q: "&#x265B;",
-  r: "&#x265C;",
-  b: "&#x265D;",
-  n: "&#x265E;",
-  p: "&#x265F;"
+  k: FontGliphs.code_BK,
+  q: FontGliphs.code_BQ,
+  r: FontGliphs.code_BR,
+  b: FontGliphs.code_BB,
+  n: FontGliphs.code_BN,
+  p: FontGliphs.code_BP
 };
 
 @Component({
@@ -43,7 +45,7 @@ export class CbsComponent implements OnInit {
 
   get piecechar(): string {
     if (!this.piece) return "";
-    return CodeToFont[this.piece.appearance.toLowerCase()];
+    return String.fromCharCode(CodeToFont[this.piece.appearance.toLowerCase()]);
   }
 
   constructor() { }

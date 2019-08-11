@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, ElementRef } from "@angular/core";
-import { Piece, GetLocationFromIndex, SquareLocation, Traverse } from "projects/sp-dbm/src/public-api";
-import { SpFenService } from "projects/sp-dbm/src/lib/sp-fen.service";
+import { Piece, SquareLocation, GetLocationFromIndex } from "projects/sp-dbm/src/public-api";
+import { SpFenService        } from "projects/sp-dbm/src/lib/sp-fen.service";
+import { SpConvertersService } from "projects/sp-dbm/src/lib/sp-converters.service";
 import "canvas-chessboard/src/font/chess-figurine.css";
 
 import {
   CanvasChessBoard
 } from "canvas-chessboard";
-import { SpConvertersService } from "projects/sp-dbm/src/lib/sp-converters.service";
 
 @Component({
   selector: "lib-chessboard",
@@ -42,21 +42,21 @@ export class ChessboardComponent implements OnInit, OnChanges {
       PIECECOLORS: ["#fff", "#294053"]
     });
     this.updateBoard();
-    setTimeout(() => {
-      this.canvasBoard.Redraw();
-    }, 100);
+    this.canvasBoard.Redraw();
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
     console.log("CHANGE");
     if (changes.notation && !changes.notation.isFirstChange()) {
       this.updateBoard();
+      this.canvasBoard.Redraw();
     }
     if (changes.pieces) {
     }
   }
 
   clearCells() {
+    this.cells = [];
     for (let i = 1; i <= 64; i++) {
       this.cells.push({
         location: GetLocationFromIndex(i),
@@ -73,7 +73,7 @@ export class ChessboardComponent implements OnInit, OnChanges {
     });
     if (this.canvasBoard) {
       this.canvasBoard.SetPieces(
-        data.filter(p => p.data).map(p => (p.data ? this.converters.ConvertToBp(p.data) : null))
+        this.cells.filter(p => p.piece && p.piece.appearance).map(p => (p.piece ? this.converters.ConvertToBp(p.piece, p.location) : null))
       );
     }
   }
