@@ -25,6 +25,7 @@
     "@angular/router": "8.1.0",
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
     "aspnet-prerendering": "^3.0.1",
+    "canvas-chessboard": "0.0.11",
     "core-js": "^2.6.9",
     "hammerjs": "^2.0.8",
     "jquery": "^3.4.1",

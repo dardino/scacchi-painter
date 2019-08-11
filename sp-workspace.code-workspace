@@ -4,13 +4,10 @@
 			"path": "src/Gui/sp-web-gui"
 		},
 		{
-			"path": "src/Core/SP.Core"
-		},
-		{
 			"path": "/home/dardino/Dev/popeye"
 		},
 		{
-			"path": "src/PopeyeTranslator"
+			"path": "src/Core"
 		}
 	],
 	"settings": {
