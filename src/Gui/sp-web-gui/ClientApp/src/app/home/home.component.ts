@@ -10,7 +10,7 @@ export class HomeComponent implements OnInit {
   constructor(private db: SpDbmService) {}
 
   currentPositionFen = "8/8/8/8/8/8/8/8";
-  boardType = "canvas";
+  boardType: "canvas" | "HTML" = "HTML";
 
   clickAction(action: ActionInfo<keyof ActionTypes>) {
     switch (action.type) {

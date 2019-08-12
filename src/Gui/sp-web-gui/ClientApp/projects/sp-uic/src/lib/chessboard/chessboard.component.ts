@@ -20,7 +20,7 @@ export class ChessboardComponent implements OnInit, OnChanges {
 
   @Input() boardType?: "canvas" | "HTML";
   get BoardType() {
-    return this.boardType ? this.boardType : "canvas";
+    return this.boardType ? this.boardType : "HTML";
   }
 
   @ViewChild("canvas", { static: true })
