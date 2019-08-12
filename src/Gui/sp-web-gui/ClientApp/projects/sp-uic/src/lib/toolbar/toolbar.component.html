@@ -1,0 +1,9 @@
+<div class="lib-toolbar">
+  <button *ngIf="boardType!='canvas'" mat-button (click)="setCanvas()"><mat-icon class="action">wallpaper</mat-icon></button>
+  <button *ngIf="boardType!='HTML'" mat-button (click)="setHtml()"><mat-icon class="action">format_shapes</mat-icon></button>
+  <button mat-button (click)="goToFirst()"><mat-icon class="action">first_page</mat-icon></button>
+  <button mat-button (click)="goToBefore()"><mat-icon class="action">navigate_before</mat-icon></button>
+  <span>problem {{ currentIndex }} of {{ totalCount }}</span>
+  <button mat-button (click)="goToNext()"><mat-icon class="action">navigate_next</mat-icon></button>
+  <button mat-button (click)="goToLast()"><mat-icon class="action">last_page</mat-icon></button>
+</div>

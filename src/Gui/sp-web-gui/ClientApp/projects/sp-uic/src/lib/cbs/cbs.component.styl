@@ -1,3 +1,4 @@
+@import "../../../../../node_modules/canvas-chessboard/src/font/chess-figurine.css";
 
 $cwc = var(--cell-white-color);
 $cbc = var(--cell-black-color);
@@ -49,7 +50,7 @@ canvas {
 }
 
 .figurine {
-  font-family: 'serif';
+  font-family: 'chess-figurine';
   font-style: normal;
 
   .pc-b & { text-shadow: 1px 1px 0px $pwc, -1px -1px 0px $pwc, -1px 1px 0px $pwc, 1px -1px 0px $pwc; }

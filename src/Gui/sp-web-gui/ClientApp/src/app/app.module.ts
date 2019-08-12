@@ -12,7 +12,17 @@ import { FetchDataComponent } from "./fetch-data/fetch-data.component";
 import { SpUicModule } from "projects/sp-uic/src/public-api";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule, MatButtonModule } from "@angular/material";
+import {
+  MatSidenavModule,
+  MatToolbarModule,
+  MatListModule,
+  MatIconModule,
+  MatButtonModule
+} from "@angular/material";
+import { OpenfileComponent } from "./openfile/openfile.component";
+import { SpDbmModule } from "projects/sp-dbm/src/lib/sp-dbm.module";
+import { SpDbmService, SpConvertersService, SpFenService } from "projects/sp-dbm/src/public-api";
+import { ToolbarComponent } from "projects/sp-uic/src/lib/toolbar/toolbar.component";
 
 @NgModule({
   declarations: [
@@ -20,16 +30,19 @@ import { MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule, MatBu
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    OpenfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
     HttpClientModule,
     FormsModule,
     SpUicModule,
+    SpDbmModule.forRoot(),
     RouterModule.forRoot([
-      { path: "", component: HomeComponent, pathMatch: "full" },
-      { path: "counter", component: CounterComponent },
+      { path: ""          , component: HomeComponent, pathMatch: "full" },
+      { path: "openfile"  , component: OpenfileComponent },
+      { path: "counter"   , component: CounterComponent  },
       { path: "fetch-data", component: FetchDataComponent }
     ]),
     BrowserAnimationsModule,

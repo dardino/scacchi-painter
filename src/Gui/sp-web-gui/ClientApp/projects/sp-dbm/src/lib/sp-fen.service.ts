@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Piece, PieceRotation, PieceColors } from "./sp-dbm.service";
+import { Piece, PieceRotation, PieceColors } from "./helpers";
 
 const rotationsCodes: ["+ ", "+/", "+-", "+\\", "- ", "-/", "--", "-\\"] = ["+ ", "+/", "+-", "+\\", "- ", "-/", "--", "-\\"];
 
@@ -14,9 +14,7 @@ const RotationsCodeMap = {
   [rotationsCodes[7]]: PieceRotation.Counterclockwise45,
 };
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class SpFenService {
   constructor() {}
 
@@ -40,6 +38,7 @@ export class SpFenService {
     row = row.replace(/[4]/g, Array(5).join("|#"));
     row = row.replace(/[3]/g, Array(4).join("|#"));
     row = row.replace(/[2]/g, Array(3).join("|#"));
+    row = row.replace(/[1]/g, "#");
     row = row.substr(1);
     const piecesStrings = row.split("|");
     const pieces: Partial<Piece>[] = [];
@@ -48,11 +47,7 @@ export class SpFenService {
       const c = piecesStrings[x];
       // empty cell
       if (c === "#") {
-        pieces.push({
-          appearance: "",
-          rotation: PieceRotation[PieceRotation.NoRotation],
-          fairyCode: ""
-        });
+        pieces.push(null);
         continue;
       }
       const pieceName = c.substr(0, 1);

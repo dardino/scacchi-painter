@@ -1,4 +1,5 @@
-<div class="chessboard">
+<canvas [style.display]="BoardType==='HTML' ? 'none' : 'block'" #canvas (selectcell)="onSelectCell($event)"></canvas>
+<div class="chessboard" [style.display]="BoardType!=='HTML' ? 'none' : undefined">
   <lib-cbs
     class="clickable"
     [ngClass]="{ current: item === currentCell }"

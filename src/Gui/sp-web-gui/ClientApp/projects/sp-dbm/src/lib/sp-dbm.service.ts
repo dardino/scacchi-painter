@@ -1,167 +1,103 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { ProblemDb, Piece, Traverse, Columns, PieceColors } from "./helpers";
+import { SpConvertersService } from "./sp-converters.service";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class SpDbmService {
-  private http: HttpClient;
+  CurrentDB: Document;
+  private currentIndex = 0;
+  get CurrentIndex() { return this.currentIndex; }
+  private count = 1;
+  get Count() { return this.count; }
+  private currentProblem: Element | null = null;
+  get CurrentProblem() { return this.currentProblem; }
+  private pieces: Array<Piece> = [];
+  get Pieces() { return this.pieces; }
 
-  constructor() {}
+  constructor(private http: HttpClient, private converter: SpConvertersService) {}
+
+  GetCurrentFen(): string {
+    const rows: Array<string> = [];
+    for (let r = 7; r >= 0; r--) {
+      let empty = 0;
+      let column = "";
+      for (let c = 0; c <= 7; c++) {
+        const p = this.pieces.find(f => Columns.indexOf(f.column) === c &&  Traverse.indexOf(f.traverse) === r);
+        if (p) {
+          if (empty > 0) column += empty.toString();
+          column += p.color === PieceColors.White ? p.appearance : p.appearance.toUpperCase();
+          empty = 0;
+        } else {
+          empty++;
+        }
+      }
+      if (empty > 0) column += empty.toString();
+      rows.push(column);
+    }
+    return rows.join("/");
+  }
+
+  LoadFromLocalStorage() {
+    const db = localStorage.getItem("spdb");
+    if (!db) return;
+    this.reset();
+    this.LoadFromText(db);
+  }
+  SaveToLocalStorage(text: string) {
+    localStorage.setItem("spdb", text);
+  }
 
   LoadDatabase() {
     return this.http.get<ProblemDb>("api/sampledata/file").subscribe({
       complete: () => {}
     });
   }
-}
 
-export interface Problem {
-  stipulationType: string;
-  moves: string;
-  date: string;
-  maximum: boolean;
-  serie: boolean;
-  prizeRank: string;
-  completeStipulationDesc: string;
-  personalID: string;
-  prizeDescription: string;
-  source: string;
-  stipulation: string;
-  authors: Author[];
-  pieces: Piece[];
-}
-
-export interface Author {
-  nameAndSurname: string;
-  address: string;
-  city: string;
-  phone: string;
-  zipCode: string;
-  stateOrProvince: string;
-  country: string;
-  language: string;
-}
-
-export interface Piece {
-  appearance: string;
-  fairyCode: string;
-  color: PieceColors;
-  column: Columns;
-  traverse: Traverse;
-  rotation: PieceRotation;
-  fairyAttribute: string;
-}
-
-export interface ProblemDb {
-  version: string;
-  name: string;
-  lastIndex: number;
-  problems: Problem[];
-}
-
-export enum PieceRotation {
-  NoRotation = "NoRotation",
-  Clockwise45 = "Clockwise45",
-  Clockwise90 = "Clockwise90",
-  Clockwise135 = "Clockwise135",
-  UpsideDown = "UpsideDown",
-  Counterclockwise135 = "Counterclockwise135",
-  Counterclockwise90 = "Counterclockwise90",
-  Counterclockwise45 = "Counterclockwise45"
-}
-export enum PieceColors {
-  White = "White",
-  Black = "Black",
-  Neutral = "Neutral"
-}
-
-export type Columns =
-  | "ColA"
-  | "ColB"
-  | "ColC"
-  | "ColD"
-  | "ColE"
-  | "ColF"
-  | "ColG"
-  | "ColH";
-export const Columns: [
-  "ColA",
-  "ColB",
-  "ColC",
-  "ColD",
-  "ColE",
-  "ColF",
-  "ColG",
-  "ColH"
-] = ["ColA", "ColB", "ColC", "ColD", "ColE", "ColF", "ColG", "ColH"];
-
-export type Traverse =
-  | "Row1"
-  | "Row2"
-  | "Row3"
-  | "Row4"
-  | "Row5"
-  | "Row6"
-  | "Row7"
-  | "Row8";
-export const Traverse: [
-  "Row8",
-  "Row7",
-  "Row6",
-  "Row5",
-  "Row4",
-  "Row3",
-  "Row2",
-  "Row1"
-] = ["Row8", "Row7", "Row6", "Row5", "Row4", "Row3", "Row2", "Row1"];
-
-export type SquareColors = "black" | "white";
-
-export function GetSquareColor(loc: SquareLocation): SquareColors;
-export function GetSquareColor(col: Columns, row: Traverse): SquareColors;
-
-export function GetSquareColor(
-  col: Columns | SquareLocation,
-  row?: Traverse
-): SquareColors {
-  if (col == null) {
-    return "white";
-  }
-  if (typeof col !== "string") {
-    row = col.traverse;
-    col = col.column;
+  LoadFromText(xmlText: string): Error | null {
+    try {
+      // tentativo 1: controllo se è un SP2
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+      this.CurrentDB = xmlDoc;
+      const problems = xmlDoc.querySelectorAll("SP_Item");
+      this.currentIndex = parseInt(this.CurrentDB.documentElement.getAttribute("lastIndex"), 10);
+      this.count = problems.length;
+      this.loadProblem();
+    } catch (ex) {
+      console.error(ex);
+      return ex;
+    }
   }
 
-  return ((Columns.indexOf(col) % 2) + Traverse.indexOf(row)) % 2
-    ? "black"
-    : "white";
-}
-
-export interface SquareLocation {
-  column: Columns;
-  traverse: Traverse;
-}
-
-export function GetSquareIndex(loc: SquareLocation): number;
-export function GetSquareIndex(col: Columns, row: Traverse): number;
-export function GetSquareIndex(
-  col: Columns | SquareLocation,
-  row?: Traverse
-): number {
-  if (col == null) {
-    return -1;
+  MovePrevious() {
+    if (this.currentIndex <= 0) return;
+    this.currentIndex--;
+    this.loadProblem();
+  }
+  MoveNext() {
+    if (this.currentIndex >= this.count - 1) return;
+    this.currentIndex++;
+    this.loadProblem();
+  }
+  GotoIndex(arg0: number) {
+    if (arg0 >= this.count || arg0 < 0) return;
+    this.currentIndex = arg0;
+    console.log("goto: ", arg0);
+    this.loadProblem();
   }
 
-  if (typeof col !== "string") {
-    row = col.traverse;
-    col = col.column;
+  private loadProblem() {
+    if (this.CurrentDB == null) return;
+    this.currentProblem = this.CurrentDB ? this.CurrentDB.querySelector("SP_Item:nth-child(" + (this.currentIndex + 1) + ")") : null;
+    if (this.currentProblem == null) return this.reset();
+
+    this.pieces = Array.from(this.currentProblem.querySelectorAll("Piece")).map(f => this.converter.ConvertToPiece(f));
   }
-  return 1 + Columns.indexOf(col) + 8 * Traverse.indexOf(row);
-}
-export function GetLocationFromIndex(index: number): SquareLocation {
-  return {
-    column: Columns[(index - 1) % 8],
-    traverse: Traverse[Math.floor((index - 1) / 8)]
-  };
+
+  private reset() {
+    this.currentIndex = 0;
+    this.currentProblem = null;
+    this.pieces = [];
+  }
 }

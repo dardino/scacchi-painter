@@ -1,0 +1,6 @@
+<h1>Scegli da dove caricare il file:</h1>
+<ul>
+  <li><a (click)="fileloader.click()">Disco locale</a></li>
+  <li><a>Google drive</a></li>
+</ul>
+<input type="file" accept="sp2" (change)="selectLocalFile(fileloader.files)" #fileloader style="display: none;" />
