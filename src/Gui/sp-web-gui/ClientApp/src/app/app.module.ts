@@ -7,8 +7,6 @@ import { RouterModule } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { NavMenuComponent } from "./nav-menu/nav-menu.component";
 import { HomeComponent } from "./home/home.component";
-import { CounterComponent } from "./counter/counter.component";
-import { FetchDataComponent } from "./fetch-data/fetch-data.component";
 import { SpUicModule } from "projects/sp-uic/src/public-api";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatMenuModule } from "@angular/material/menu";
@@ -29,8 +27,6 @@ import { ToolbarComponent } from "projects/sp-uic/src/lib/toolbar/toolbar.compon
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     OpenfileComponent
   ],
   imports: [
@@ -42,8 +38,8 @@ import { ToolbarComponent } from "projects/sp-uic/src/lib/toolbar/toolbar.compon
     RouterModule.forRoot([
       { path: ""          , component: HomeComponent, pathMatch: "full" },
       { path: "openfile"  , component: OpenfileComponent },
-      { path: "counter"   , component: CounterComponent  },
-      { path: "fetch-data", component: FetchDataComponent }
+      // { path: "counter"   , component: CounterComponent  },
+      // { path: "fetch-data", component: FetchDataComponent }
     ]),
     BrowserAnimationsModule,
     MatMenuModule,
