@@ -1,0 +1,17 @@
+.piece-selector {
+  display: grid;
+  grid-template-columns: repeat(6, 0.6in);
+  grid-template-rows: repeat(2, 0.6in);
+
+  lib-cbs {
+    cursor: pointer;
+    border-radius: 0.1in;
+    overflow: hidden;
+    border: dashed .1rem transparent;
+
+    &:hover {
+      border-color: gray;
+      z-index: 1
+    }
+  }
+}

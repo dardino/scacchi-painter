@@ -1,0 +1,5 @@
+<div class="piece-selector">
+  <ng-template ngFor let-item [ngForOf]="Pieces" let-i="index" [ngForTrackBy]="i">
+    <lib-cbs [active]="CurrentPiece === item" (click)="SelectPiece(item)" [piece]="item"></lib-cbs>
+  </ng-template>
+</div>
