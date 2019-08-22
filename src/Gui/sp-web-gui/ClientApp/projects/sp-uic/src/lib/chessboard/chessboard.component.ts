@@ -34,6 +34,11 @@ export class ChessboardComponent implements OnInit, OnChanges {
   @Input()
   pieces?: Piece[];
 
+  @Input()
+  mode: "edit" | "view";
+
+  public get Mode() { return this.mode; }
+
   public onSelectCell($event: Event) {
     console.log($event);
   }

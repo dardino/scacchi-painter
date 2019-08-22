@@ -1,10 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import {
-  Piece,
-  SquareLocation,
-  PieceColors,
-  GetSquareColor
-} from "projects/sp-dbm/src/public-api";
+import { Piece, SquareLocation, PieceColors, GetSquareColor } from "projects/sp-dbm/src/public-api";
 
 import { FontGliphs } from "canvas-chessboard";
 
@@ -24,21 +19,23 @@ const CodeToFont = {
 })
 export class CbsComponent implements OnInit {
   public get classList() {
-    const classlist = [];
+    const classlist = ["lib-cbs"];
     classlist.push(GetSquareColor(this.location));
     if (this.piece && this.piece.rotation) {
       classlist.push(this.piece.rotation.toLowerCase());
     }
     if (this.piece && this.piece.color) {
-      classlist.push(
-        `pc-${PieceColors[this.piece.color].substring(0, 1).toLowerCase()}`
-      );
+      classlist.push(`pc-${PieceColors[this.piece.color].substring(0, 1).toLowerCase()}`);
     }
+    if (this.active) classlist.push("active");
     return classlist.join(" ");
   }
 
   @Input()
   public piece?: Piece;
+
+  @Input()
+  public active?: boolean;
 
   @Input()
   public location: SquareLocation;
@@ -48,9 +45,7 @@ export class CbsComponent implements OnInit {
     return String.fromCharCode(CodeToFont[this.piece.appearance.toLowerCase()]);
   }
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() { }
-
+  ngOnInit() {}
 }
-

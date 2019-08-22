@@ -1,10 +1,9 @@
-@import "../../../../../node_modules/canvas-chessboard/src/font/chess-figurine.css";
+@import '../../../../../node_modules/canvas-chessboard/src/font/chess-figurine.css';
 
 $cwc = var(--cell-white-color);
 $cbc = var(--cell-black-color);
 $pwc = var(--white-color);
 $pbc = var(--black-color);
-
 
 :host {
   display: flex;
@@ -53,14 +52,43 @@ canvas {
   font-family: 'chess-figurine';
   font-style: normal;
 
-  .pc-b & { text-shadow: 1px 1px 0px $pwc, -1px -1px 0px $pwc, -1px 1px 0px $pwc, 1px -1px 0px $pwc; }
-  .pc-w & { text-shadow: 1px 1px 0px $pbc, -1px -1px 0px $pbc, -1px 1px 0px $pbc, 1px -1px 0px $pbc; }
+  .pc-b & {
+    text-shadow: 1px 1px 0px $pwc, -1px -1px 0px $pwc, -1px 1px 0px $pwc, 1px -1px 0px $pwc;
+  }
 
-  .clockwise45         & { transform: rotateZ(45deg); }
-  .clockwise90         & { transform: rotateZ(90deg); }
-  .clockwise135        & { transform: rotateZ(135deg); }
-  .upsidedown          & { transform: rotateZ(180deg); }
-  .counterclockwise45  & { transform: rotateZ(-45deg); }
-  .counterclockwise90  & { transform: rotateZ(-90deg); }
-  .counterclockwise135 & { transform: rotateZ(-135deg); }
+  .pc-w & {
+    text-shadow: 1px 1px 0px $pbc, -1px -1px 0px $pbc, -1px 1px 0px $pbc, 1px -1px 0px $pbc;
+  }
+
+  .clockwise45 & {
+    transform: rotateZ(45deg);
+  }
+
+  .clockwise90 & {
+    transform: rotateZ(90deg);
+  }
+
+  .clockwise135 & {
+    transform: rotateZ(135deg);
+  }
+
+  .upsidedown & {
+    transform: rotateZ(180deg);
+  }
+
+  .counterclockwise45 & {
+    transform: rotateZ(-45deg);
+  }
+
+  .counterclockwise90 & {
+    transform: rotateZ(-90deg);
+  }
+
+  .counterclockwise135 & {
+    transform: rotateZ(-135deg);
+  }
+}
+
+.active {
+  background-color: lime;
 }

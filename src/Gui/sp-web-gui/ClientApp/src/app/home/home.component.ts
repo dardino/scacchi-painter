@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit {
 
   currentPositionFen = "8/8/8/8/8/8/8/8";
   boardType: "canvas" | "HTML" = "HTML";
+  Mode: "edit" | "view" = "view";
 
   clickAction(action: ActionInfo<keyof ActionTypes>) {
     switch (action.type) {
