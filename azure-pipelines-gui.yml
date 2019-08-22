@@ -36,15 +36,20 @@ steps:
     arguments: '--filter Priority=1 --collect="Code Coverage"'
     configuration: '$(buildConfiguration)'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c Release'
+
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish Coverage'
   inputs:
     summaryFileLocation: '**/*.coverage'
 
-
 - task: CopyFiles@2
   inputs:
-    contents: '**/bin/**'
+    contents: '**/bin/Publish/**'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
