@@ -49,8 +49,10 @@ steps:
     summaryFileLocation: '**/*.coverage'
 
 - task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    contents: '**/Publish/**/*.*'
+    SourceFolder: '$(Build.SourcesDirectory)/src/Gui/sp-web-gui/bin/Release/netcoreapp*/publish'
+    contents: '**'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
