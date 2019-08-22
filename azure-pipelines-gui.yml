@@ -37,6 +37,7 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Dotnet Publish'
   inputs:
     command: 'publish'
     publishWebProjects: true
@@ -49,7 +50,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    contents: '**/bin/Publish/**'
+    contents: '**/Publish/**/*.*'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
