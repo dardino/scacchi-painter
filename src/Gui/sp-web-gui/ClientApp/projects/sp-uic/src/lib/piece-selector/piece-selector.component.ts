@@ -24,6 +24,10 @@ export class PieceSelectorComponent implements OnInit {
     { color: PieceColors.Black, appearance: "p", column: "ColA", traverse: "Row1", rotation: PieceRotation.NoRotation, fairyAttribute: "", fairyCode: "" }
   ];
 
+  public GetKey(piece: Piece) {
+    return this.Pieces.indexOf(piece);
+  }
+
   public SelectPiece(piece: Piece) {
     if (this.currentPiece !== piece) this.currentPiece = piece;
     else this.currentPiece = null;
