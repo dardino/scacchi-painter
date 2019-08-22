@@ -4,7 +4,12 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    include:
+      - src/Gui
 
 pool:
   vmImage: 'windows-latest'
@@ -49,9 +54,9 @@ steps:
     summaryFileLocation: '**/*.coverage'
 
 - task: CopyFiles@2
-  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy Files'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/src/Gui/sp-web-gui/bin/Release/netcoreapp*/publish'
+    SourceFolder: '$(Build.SourcesDirectory)/src/Gui/sp-web-gui/bin/Release/netcoreapp2.2/publish'
     contents: '**'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
