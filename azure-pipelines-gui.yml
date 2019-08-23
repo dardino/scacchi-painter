@@ -56,8 +56,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/src/Gui/sp-web-gui/bin/Release/netcoreapp2.2/publish'
-    contents: '**'
+    contents: '**\publish\**'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
