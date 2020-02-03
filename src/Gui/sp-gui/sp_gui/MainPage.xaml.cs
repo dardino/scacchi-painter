@@ -86,15 +86,15 @@ namespace sp_gui
 			{
 				Title = "Scacchi Painter",
 				Content = absoluteLayout,
-				Icon = "hamburger.png",
-				BackgroundImage = "bg.png"
+				IconImageSource = "hamburger.png",
+				BackgroundImageSource = "bg.png"
 			};
 
 			// Create the detail page using NamedColorPage and wrap it in a
 			// navigation page to provide a NavigationBar and Toggle button
 			Detail = new NavigationPage(new NamedColorPage(true)) {
 				BackgroundColor = Color.Transparent,
-				Icon = "hamburger.png",
+				IconImageSource = "hamburger.png",
 				Title = "Navigation Page",
 				BarBackgroundColor = Color.Transparent,
 				BarTextColor = Color.White
