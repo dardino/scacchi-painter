@@ -1464,10 +1464,10 @@ canonical-path@1.0.0:
   resolved "https://registry.yarnpkg.com/canonical-path/-/canonical-path-1.0.0.tgz#fcb470c23958def85081856be7a86e904f180d1d"
   integrity sha512-feylzsbDxi1gPZ1IjystzIQZagYYLvfKrSuygUCgf7z6x790VEzze5QEkdSV1U58RA7Hi0+v6fv4K54atOzATg==
 
-canvas-chessboard@0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/canvas-chessboard/-/canvas-chessboard-0.0.11.tgz#43b2b167c88048eb8ec341ffb2680574f31038b2"
-  integrity sha512-VTSZqkPg5ZePGzn5JOANS1ICTqzsQ8un4ZDV5pvOwbwag3yw+kHTBaqzDW803C7elLSLFg8DyO/SGoBfRf+IWQ==
+canvas-chessboard@0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/canvas-chessboard/-/canvas-chessboard-0.0.14.tgz#76e003925ada6c2efda9416630d55d518b89a4ea"
+  integrity sha512-pAJJe/6sv3hfppUUAQHAgDdpPoamFMc0U1BV10UHN/9WVW6YTdw0WwPk3IVE2cMN0TLkM91V6yI4eNX0ozcwGA==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -4103,10 +4103,10 @@ jasminewd2@^2.1.0:
   resolved "https://registry.yarnpkg.com/jasminewd2/-/jasminewd2-2.2.0.tgz#e37cf0b17f199cce23bea71b2039395246b4ec4e"
   integrity sha1-43zwsX8ZnM4jvqcbIDk5Uka07E4=
 
-jquery@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
-  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
+jquery@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
+  integrity sha512-Xb7SVYMvygPxbFMpTFQiHh1J7HClEaThguL15N/Gg37Lri/qKyhRGZYzHRyLH8Stq3Aow0LsHO2O2ci86fCrNQ==
 
 js-base64@^2.1.8:
   version "2.5.1"
