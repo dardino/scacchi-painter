@@ -1,0 +1,41 @@
+{
+  "author": "Gabriele Brunori",
+  "prductName": "Scacchi Painter 3",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dardino/scacchi-painter/issues"
+  },
+  "homepage": "https://github.com/dardino/scacchi-painter#readme",
+  "name": "sp-gui-electron",
+  "version": "0.0.1",
+  "description": "Scacchi Painter Universal",
+  "main": "main.js",
+  "scripts": {
+    "test": "test",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "build": "tsc -b",
+    "rebuild": "tsc -b --force",
+    "watch": "tsc -b -w",
+    "publish-win"   : "electron-packager . ScacchiPainter --icon=app/favicon.ico --overwrite --app-version 3.0.0-dev1 --out=release --platform=win32 --arch=x64",
+    "publish-linux" : "electron-packager . ScacchiPainter --icon=app/favicon.png --overwrite --app-version 3.0.0-dev1 --out=release --platform=linux --arch=x64",
+    "publish-darwin": "electron-packager . ScacchiPainter --icon=app/favicon.icns --overwrite --app-version 3.0.0-dev1 --out=release --platform=darwin --arch=x64"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dardino/scacchi-painter.git"
+  },
+  "keywords": [
+    "scacchi",
+    "chess",
+    "problems",
+    "problemi",
+    "popeye"
+  ],
+  "devDependencies": {
+    "electron": "^8.3.1",
+    "electron-builder": "^22.7.0",
+    "electron-packager": "^14.2.1"
+  }
+}

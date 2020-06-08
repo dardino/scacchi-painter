@@ -1,0 +1,41 @@
+<mat-toolbar-row class="lib-toolbar">
+  <lib-sp-toolbar-button
+    (click)="setCanvas()"
+    iconText="wallpaper"
+    iconLabel="Picture"
+    *ngIf="boardType !== 'canvas'"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="setHtml()"
+    iconText="format_shapes"
+    iconLabel="Vector"
+    *ngIf="boardType !== 'HTML'"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="goToFirst()"
+    iconText="first_page"
+    iconLabel="Go First"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="goToBefore()"
+    iconText="navigate_before"
+    iconLabel="Go Previous"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
+  <span class="sp-toolbar-label">problem {{ currentIndex }} of {{ totalCount }}</span>
+  <lib-sp-toolbar-button
+    (click)="goToNext()"
+    iconText="navigate_next"
+    iconLabel="Go Next"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="goToLast()"
+    iconText="last_page"
+    iconLabel="Go Last"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
+</mat-toolbar-row>

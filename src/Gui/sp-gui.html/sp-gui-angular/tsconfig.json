@@ -1,0 +1,46 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "chessboard": [
+        "dist/chessboard/chessboard",
+        "dist/chessboard"
+      ],
+      "dbmanager": [
+        "dist/dbmanager/dbmanager",
+        "dist/dbmanager"
+      ],
+      "ui-elements": [
+        "dist/ui-elements/ui-elements",
+        "dist/ui-elements"
+      ],
+      "host-bridge": [
+        "dist/host-bridge/host-bridge",
+        "dist/host-bridge"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

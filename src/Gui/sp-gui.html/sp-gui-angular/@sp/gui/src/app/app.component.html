@@ -1,0 +1,44 @@
+<div id="app-main" class="mat-app-background">
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      (click)="drawer.mode === 'over' && drawer.toggle()"
+      #drawer
+      class="sidenav"
+      fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false"
+    >
+      <mat-toolbar>Menu</mat-toolbar>
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="['/']">Home</a>
+        <a mat-list-item [routerLink]="['/openfile']">Open file</a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-toolbar color="primary">
+        <mat-toolbar-row style="-webkit-app-region: drag">
+          <lib-sp-toolbar-button
+            style="-webkit-app-region: no-drag"
+            (click)="drawer.toggle()"
+            color="accent"
+            iconText="menu"
+          ></lib-sp-toolbar-button>
+          <span style="-webkit-user-select: none; -webkit-app-region: drag;">Scacchi Painter</span>
+          <span class="fill-space"></span>
+          <lib-sp-toolbar-button
+            *ngIf="hasCloseButton"
+            style="-webkit-app-region: no-drag"
+            (click)="closeMe()"
+            color="accent"
+            type="inset"
+            iconText="close"
+          ></lib-sp-toolbar-button>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
