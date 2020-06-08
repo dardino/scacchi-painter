@@ -1,13 +1,16 @@
 {
 	"folders": [
 		{
-			"path": "src/Gui/sp-web-gui"
-		},
-		{
-			"path": "/home/dardino/Dev/popeye"
-		},
-		{
 			"path": "src/Core"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/sp-gui-angular"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/sp-gui-electron"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/sp-gui-web"
 		}
 	],
 	"settings": {

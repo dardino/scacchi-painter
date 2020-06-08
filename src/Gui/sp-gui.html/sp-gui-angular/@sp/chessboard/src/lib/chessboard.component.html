@@ -1,0 +1,23 @@
+<div class="chessboard-layout">
+  <div class="chessboard-image">
+    <canvas
+      [style.display]="BoardType === 'HTML' ? 'none' : 'block'"
+      #canvas
+      (selectcell)="onSelectCell($event)"
+    ></canvas>
+    <div
+      class="chessboard"
+      [style.display]="BoardType !== 'HTML' ? 'none' : undefined"
+    >
+      <lib-board-cell
+        class="clickable"
+        [ngClass]="{ current: item === currentCell }"
+        *ngFor="let item of cells"
+        [piece]="item.piece"
+        [location]="item.location"
+        (click)="onCellClick(item)"
+      ></lib-board-cell>
+    </div>
+  </div>
+  <lib-piece-selector *ngIf="Mode === 'edit'"></lib-piece-selector>
+</div>

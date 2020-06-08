@@ -1,0 +1,12 @@
+{
+  "name": "dbmanager",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^9.1.9",
+    "@angular/core": "^9.1.9",
+    "canvas-chessboard": "^0.0.14"
+  },
+  "dependencies": {
+    "tslib": "^1.10.0"
+  }
+}

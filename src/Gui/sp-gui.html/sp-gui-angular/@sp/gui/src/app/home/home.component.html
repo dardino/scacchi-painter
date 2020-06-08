@@ -1,0 +1,20 @@
+<div cols="2">
+  <section id="toolbar">
+    <mat-toolbar>
+      <lib-toolbar
+        [hideLabels]="true"
+        [boardType]="chessBoardType"
+        (action)="tlbAction($event)"
+      ></lib-toolbar>
+    </mat-toolbar>
+  </section>
+  <div class="workboard">
+    <section id="chessboard">
+      <lib-chessboard
+        [notation]="notation"
+        [boardType]="chessBoardType"
+      ></lib-chessboard>
+    </section>
+    <section id="info">Info</section>
+  </div>
+</div>
