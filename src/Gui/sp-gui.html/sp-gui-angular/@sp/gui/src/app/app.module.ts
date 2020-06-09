@@ -14,9 +14,19 @@ import { MatListModule } from "@angular/material/list";
 import { HomeComponent } from "./home/home.component";
 import { MatIconModule } from "@angular/material/icon";
 import { OpenfileComponent } from "./openfile/openfile.component";
-
+import { DatabaseListComponent } from "./database-list/database-list.component";
+import { MenuComponent } from "./menu/menu.component";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { ConfigurationComponent } from './configuration/configuration.component';
 @NgModule({
-  declarations: [AppComponent, HomeComponent, OpenfileComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    OpenfileComponent,
+    DatabaseListComponent,
+    MenuComponent,
+    ConfigurationComponent,
+  ],
   imports: [
     CommonModule,
     MatIconModule,
@@ -30,6 +40,7 @@ import { OpenfileComponent } from "./openfile/openfile.component";
     MatGridListModule,
     MatSidenavModule,
     MatListModule,
+    ScrollingModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

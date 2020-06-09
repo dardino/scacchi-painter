@@ -8,15 +8,16 @@ import {
 } from "@angular/core";
 import {
   IPiece,
-  Piece,
   SquareLocation,
   GetLocationFromIndex,
+  GetSquareIndex,
 } from "@sp/dbmanager/src/public-api";
 import { FenService } from "@sp/dbmanager/src/lib/fen.service";
 
 import "canvas-chessboard/src/font/chess-figurine.css";
 
 import { CanvasChessBoard, Piece as BP } from "canvas-chessboard";
+import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 
 @Component({
   selector: "lib-chessboard",
@@ -39,7 +40,7 @@ export class ChessboardComponent implements OnInit, OnChanges {
   private canvasBoard: CanvasChessBoard;
 
   @Input()
-  notation?: string;
+  position?: Problem;
 
   @Input()
   pieces?: IPiece[];
@@ -69,7 +70,7 @@ export class ChessboardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
     console.log("CHANGE");
-    if (changes.notation && !changes.notation.isFirstChange()) {
+    if (changes.position && !changes.position.isFirstChange()) {
       this.updateBoard();
     }
     if (
@@ -97,16 +98,20 @@ export class ChessboardComponent implements OnInit, OnChanges {
   updateBoard() {
     console.log("Update BOARD!");
     this.clearCells();
-    const data = this.fensvc.FenToChessBoard(
-      this.notation ?? "8/8/8/8/8/8/8/8"
-    );
-    console.log(data);
-    data.forEach((f, i, a) => {
-      this.cells[i].piece = Piece.fromPartial(f.data, GetLocationFromIndex(i));
-    });
-    if (this.canvasBoard) {
-      const pieces = this.cells.map(p => p.piece ?? null).filter<Piece>(notNull);
-      const bps = pieces.map((p) => p.ConvertToCanvasPiece()).filter<BP>(notNull);
+    const pp = this.position?.getPieces();
+    if (pp) {
+      for (const piece of pp) {
+        const index = GetSquareIndex(piece.column, piece.traverse);
+        if (index < 0 || index > 63) {
+          console.error(piece.column, piece.traverse);
+        }
+        this.cells[index].piece = piece;
+      }
+    }
+    if (this.canvasBoard && pp) {
+      const bps = pp
+        .map((p) => p.ConvertToCanvasPiece())
+        .filter<BP>(notNull);
       this.canvasBoard.SetPieces(bps);
     }
 

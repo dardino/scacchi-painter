@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IPiece, Columns, Traverse } from "./helpers";
+import { IPiece } from "./helpers";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Problem } from "./models/Problem";
 
@@ -10,6 +10,7 @@ export class DbmanagerService {
   CurrentDB: Document | null;
   private currentIndex = 0;
   private fileName = "";
+  public All: Element[] = [];
 
   get CurrentIndex() {
     return this.currentIndex;
@@ -27,11 +28,7 @@ export class DbmanagerService {
     return this.pieces;
   }
 
-  constructor(
-    private bridge: HostBridgeService
-  ) {}
-
-
+  constructor(private bridge: HostBridgeService) {}
 
   LoadFromLocalStorage() {
     const db = localStorage.getItem("spdb");
@@ -58,12 +55,13 @@ export class DbmanagerService {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
       this.CurrentDB = xmlDoc;
-      const problems = xmlDoc.querySelectorAll("SP_Item");
+      this.All = Array.from(xmlDoc.querySelectorAll("SP_Item"));
+      console.log(this.All);
       this.currentIndex = parseInt(
         this.CurrentDB.documentElement.getAttribute("lastIndex") ?? "0",
         10
       );
-      this.count = problems.length;
+      this.count = this.All.length;
       this.loadProblem();
       this.fileName = fileName;
       return null;
@@ -94,6 +92,9 @@ export class DbmanagerService {
     this.currentIndex = arg0;
     console.log("goto: ", arg0);
     this.loadProblem();
+  }
+  getPage(page: number, pageSize: number): Element[] {
+    return Array.from(this.CurrentDB?.querySelectorAll("SP_Item:nth-child(" + (page * pageSize + 1) + ")") ?? []).slice(0, pageSize);
   }
 
   private loadProblem() {

@@ -1,4 +1,4 @@
-import { Figurine, Piece as BP, Colors, Rotations } from "canvas-chessboard";
+import { Piece as BP } from "canvas-chessboard";
 
 import {
   IPiece,
@@ -13,6 +13,10 @@ import {
   getCanvasLocation,
   getCanvasRotation,
   SquareLocation,
+  Columns,
+  Traverse,
+  getRotationSymbol,
+  getCanvasColor,
 } from "../helpers";
 
 export class Piece implements IPiece {
@@ -28,16 +32,18 @@ export class Piece implements IPiece {
     const p = new Piece();
     p.appearance = getAppearance(source);
     p.color = getColor(source);
-    p.column = getColum(source);
+    p.column = getColum(source) ?? Columns[0];
     p.fairyAttribute = getFairyAttribute(source);
     p.fairyCode = getFairyCode(source);
     p.rotation = getRotation(source);
-    p.traverse = getTraverse(source);
+    p.traverse = getTraverse(source) ?? Traverse[0];
     return p;
   }
-  static fromPartial(data?: Partial<IPiece> | null, l?: SquareLocation): Piece | null {
+  static fromPartial(
+    data?: Partial<IPiece> | null,
+    l?: SquareLocation
+  ): Piece | null {
     if (data == null) return null;
-    console.log("location....", data, l);
     const p = new Piece();
     p.appearance = data.appearance ?? "";
     p.color = data.color ?? "White";
@@ -52,10 +58,25 @@ export class Piece implements IPiece {
   public ConvertToCanvasPiece(): BP {
     return {
       figurine: getFigurine(this.appearance),
-      color: getColor(this.color),
+      color: getCanvasColor(this.color),
       loc: getCanvasLocation(this.column, this.traverse),
       rot: getCanvasRotation(this.rotation),
     } as BP;
+  }
+
+  ToNotation() {
+    const parts = [];
+    parts.push(
+      this.color === "White"
+        ? this.appearance.toUpperCase()
+        : this.color === "Black"
+        ? this.appearance.toLowerCase()
+        : "*" + this.appearance.toUpperCase()
+    );
+    if (this.rotation !== "NoRotation") {
+      parts.push(getRotationSymbol(this.rotation));
+    }
+    return parts.join("");
   }
 
   private constructor() {}

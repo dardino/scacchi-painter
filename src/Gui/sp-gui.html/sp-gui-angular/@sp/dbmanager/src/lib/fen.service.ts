@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { PieceRotation, Piece, PieceColors } from "./helpers";
+import { PieceRotation, IPiece } from "./helpers";
 const RotationsCodes = [
   "+ ",
   "+/",
@@ -29,10 +29,11 @@ const RotationsCodeMap: {
   providedIn: "root",
 })
 export class FenService {
-  private rowToPieces(row: string): Array<Partial<Piece> | null> {
+  private rowToPieces(row: string): Array<Partial<IPiece> | null> {
     const fairies = row.match(/\{[a-z]*\}/);
     row = row.replace(/\{[a-z]*\}/g, "!");
-    row = row.replace(/([QKRTBNPAET1qkrtbnpaet1])/g, "|$1");
+    row = row.replace(/([QKRTBNPAETqkrtbnpaet]|^1)/g, "|$1");
+    row = row.replace(/([^:|])1/g, "$1|1");
     row = row.replace(/\*\|(.)/g, "|*$1");
     row = row.replace(/:0/g, RotationsCodes[0]);
     row = row.replace(/:1/g, RotationsCodes[1]);
@@ -50,9 +51,9 @@ export class FenService {
     row = row.replace(/[3]/g, Array(4).join("|#"));
     row = row.replace(/[2]/g, Array(3).join("|#"));
     row = row.replace(/[1]/g, "#");
-    row = row.substr(1);
+    row = row.trim().substr(1);
     const piecesStrings = row.split("|");
-    const pieces: Array<Partial<Piece> | null> = [];
+    const pieces: Array<Partial<IPiece> | null> = [];
     let f = 0;
     for (const c of piecesStrings) {
       // empty cell
@@ -60,7 +61,8 @@ export class FenService {
         pieces.push(null);
         continue;
       }
-      const pieceName = c.substr(0, 1);
+      const isNeutral = c[0] === "*";
+      const pieceName = isNeutral ? c.substr(1, 1) : c.substr(0, 1);
       const pieceRotation = c.substr(1, 2) as RotationsCodes;
       let rotation: PieceRotation = "NoRotation";
       let fairy = "";
@@ -76,10 +78,7 @@ export class FenService {
         appearance: pieceName,
         rotation,
         fairyCode: fairy.replace(/[\{\}]/g, ""),
-        color:
-          pieceName.toLowerCase() === pieceName
-            ? "White"
-            : "Black",
+        color: isNeutral ? "Neutral" : pieceName.toLowerCase() !== pieceName ? "White" : "Black",
       });
     }
 
@@ -90,7 +89,7 @@ export class FenService {
     const fenrows = fen.split("/");
     const cells = fenrows
       .map((f) => this.rowToPieces(f))
-      .reduce<Array<{ index: number; data: Partial<Piece> | null }>>(
+      .reduce<Array<{ index: number; data: Partial<IPiece> | null }>>(
         (a, b, i, m) => a.concat(b.map((e) => ({ index: i, data: e }))),
         []
       );

@@ -1,13 +1,13 @@
 import { Component, OnInit, Input } from "@angular/core";
 import {
-  Piece,
+  IPiece,
   SquareLocation,
   GetSquareColor,
 } from "@sp/dbmanager/src/public-api";
 
 import { FontGliphs } from "canvas-chessboard";
 
-type Appearance = "k" | "q" | "r" | "b" | "n" | "p";
+type Appearance = "k" | "q" | "r" | "b" | "n" | "p" | "e" | "t" | "a";
 
 const CodeToFont = {
   k: FontGliphs.code_BK,
@@ -16,6 +16,9 @@ const CodeToFont = {
   b: FontGliphs.code_BB,
   n: FontGliphs.code_BN,
   p: FontGliphs.code_BP,
+  e: FontGliphs.code_BQ,
+  t: FontGliphs.code_BR,
+  a: FontGliphs.code_BB,
 };
 
 @Component({
@@ -38,7 +41,7 @@ export class BoardCellComponent implements OnInit {
   }
 
   @Input()
-  public piece?: Piece;
+  public piece?: IPiece;
 
   @Input()
   public active?: boolean;
@@ -51,6 +54,16 @@ export class BoardCellComponent implements OnInit {
     return String.fromCharCode(
       CodeToFont[this.piece.appearance.toLowerCase() as Appearance]
     );
+  }
+
+  get figurine(): string {
+    return this.piece?.appearance.toLowerCase() ?? "";
+  }
+  get color(): string {
+    return this.piece?.color[0].toLowerCase() ?? "";
+  }
+  get fairy(): string {
+    return this.piece?.fairyCode ?? "";
   }
 
   constructor() {}
