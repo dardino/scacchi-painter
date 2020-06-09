@@ -1,7 +1,5 @@
 <div [class]="classList">
-  <div style="position: absolute; top: 0; left: 0; font-size: 9px; color: red;">
-    {{location.column}}
-    {{location.traverse}}
-  </div>
-  <em class="figurine" [innerHTML]="piecechar"></em>
+  <sup></sup>
+  <em [class]="figurine ? 'figurine' : ''" [attr.data-piece]="figurine" [attr.data-color]="color"></em>
+  <sub>{{fairy}}</sub>
 </div>

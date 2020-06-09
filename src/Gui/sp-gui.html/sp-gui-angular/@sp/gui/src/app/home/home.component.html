@@ -11,10 +11,12 @@
   <div class="workboard">
     <section id="chessboard">
       <lib-chessboard
-        [notation]="notation"
+        [position]="problem"
         [boardType]="chessBoardType"
       ></lib-chessboard>
     </section>
-    <section id="info">Info</section>
+    <section id="info">
+      <lib-sp-solution-desc [problem]="problem"></lib-sp-solution-desc>
+    </section>
   </div>
 </div>

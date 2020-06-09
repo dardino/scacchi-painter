@@ -1,0 +1,3 @@
+<h1>Solutions: </h1>
+<p *ngFor="let item of problem.getSolution().split('\n'); index as i" ngClass="{{class(item)}}" [innerHTML]="parse(item)">
+</p>

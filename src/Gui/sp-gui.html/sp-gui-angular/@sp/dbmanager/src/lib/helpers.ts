@@ -1,3 +1,11 @@
+import {
+  Rotations,
+  Colors,
+  BoardRank,
+  BoardFile,
+  Figurine,
+} from "canvas-chessboard";
+
 export interface Problem {
   stipulationType: string;
   moves: string;
@@ -11,7 +19,7 @@ export interface Problem {
   source: string;
   stipulation: string;
   authors: Author[];
-  pieces: Piece[];
+  pieces: IPiece[];
 }
 
 export interface Author {
@@ -25,7 +33,7 @@ export interface Author {
   language: string;
 }
 
-export interface Piece {
+export interface IPiece {
   appearance: string;
   fairyCode: string;
   color: PieceColors;
@@ -55,7 +63,7 @@ export const PieceRotation = [
 export type PieceRotation = typeof PieceRotation[number];
 export const PieceColors = ["White", "Black", "Neutral"] as const;
 export type PieceColors = typeof PieceColors[number];
-export const FairyAttributes = ["None"];
+export const FairyAttributes = ["None"] as const;
 export const Columns = [
   "ColA",
   "ColB",
@@ -116,16 +124,246 @@ export function GetSquareIndex(
   if (col == null) {
     return -1;
   }
-
   if (typeof col !== "string") {
     row = col.traverse;
     col = col.column;
   }
-  return 1 + Columns.indexOf(col) + 8 * Traverse.indexOf(row);
+  return Columns.indexOf(col) + 8 * Traverse.indexOf(row);
 }
 export function GetLocationFromIndex(index: number): SquareLocation {
   return {
     column: Columns[index % 8],
     traverse: Traverse[Math.floor(index / 8)],
   };
+}
+
+export function getTraverse(f: Element): Traverse | null {
+  return Traverse[
+    Math.max(
+      Traverse.indexOf((f.getAttribute("Traverse") as Traverse) || "Row1"),
+      0
+    )
+  ];
+}
+
+export function getFairyCode(f: Element): string {
+  const ft = f.querySelectorAll("FairyType");
+  if (ft.length > 0) {
+    // TODO: supporto MultiType
+    return ft[0].getAttribute("code") ?? "";
+  } else {
+    return "";
+  }
+}
+
+export function getFairyAttribute(f: Element): string {
+  return f.getAttribute("FairyAttribute") ?? "";
+}
+
+export function getColum(f: Element): Columns | null {
+  return Columns[
+    Math.max(
+      Columns.indexOf((f.getAttribute("Column") as Columns) || "ColA"),
+      0
+    )
+  ];
+}
+
+export function getAppearance(f: Element): string {
+  const pieceName = f.getAttribute("Type");
+  switch (pieceName) {
+    case "King":
+      return "k";
+    case "Queen":
+      return "q";
+    case "Rook":
+    /* @deprecated */ case "Rock":
+      return "r";
+    case "Horse":
+      return "n";
+    case "Bishop":
+      return "b";
+    case "Pawn":
+      return "p";
+    case "HorseQueen":
+      return "e";
+    case "HorseTower":
+      return "t";
+    case "HorseBishop":
+      return "a";
+    default:
+      return "";
+  }
+}
+
+export function getRotation(rotation: Element) {
+  return (rotation.getAttribute("Rotation") as PieceRotation) ?? "NoRotation";
+}
+
+export function getCanvasRotation(rotation: PieceRotation) {
+  switch (rotation) {
+    case "NoRotation":
+      return Rotations.NoRotation;
+    case "Clockwise45":
+      return Rotations.TopRight;
+    case "Clockwise90":
+      return Rotations.Right;
+    case "Clockwise135":
+      return Rotations.BottomRight;
+    case "UpsideDown":
+      return Rotations.UpsideDown;
+    case "Counterclockwise135":
+      return Rotations.BottomLeft;
+    case "Counterclockwise90":
+      return Rotations.Left;
+    case "Counterclockwise45":
+      return Rotations.TopLeft;
+    default:
+      return Rotations.NoRotation;
+  }
+}
+
+export function getCanvasLocation(x: Columns, y: Traverse) {
+  if (typeof x !== "string" || typeof y !== "string") {
+    return { col: BoardFile.A, row: BoardRank.R1 };
+  }
+  return {
+    col: getBoardFile(x),
+    row: getBoardRank(y),
+  };
+}
+export function getBoardFile(x: string | Columns): BoardFile {
+  if (typeof x === "number") x = Columns[x];
+  x = x.substr(3, 1); // extract col from "ColA";
+  return BoardFile[x as keyof typeof BoardFile];
+}
+export function getBoardRank(y: string | Traverse): BoardRank {
+  if (typeof y === "number") y = Traverse[y];
+  y = y.substr(3, 1); // extract row from "Row8";
+  return BoardRank[`R${y}` as keyof typeof BoardRank];
+}
+
+export function getColor(c: Element): PieceColors {
+  return c.getAttribute("Color") as PieceColors;
+}
+
+export function getCanvasColor(c: PieceColors): Colors {
+  switch (c) {
+    case "Black":
+      return Colors.Black;
+    case "White":
+      return Colors.White;
+    default:
+      return Colors.White;
+  }
+}
+
+export function getFigurine(appearance?: string): Figurine | null {
+  switch (appearance) {
+    case "K":
+    case "k":
+      return Figurine.k;
+    case "Q":
+    case "q":
+      return Figurine.q;
+    case "R":
+    case "r":
+      return Figurine.r;
+    case "S":
+    case "s":
+    case "N":
+    case "n":
+      return Figurine.n;
+    case "B":
+    case "b":
+      return Figurine.b;
+    case "P":
+    case "p":
+      return Figurine.p;
+    case "E":
+    case "e":
+      return Figurine.q;
+    case "T":
+    case "t":
+      return Figurine.q;
+    case "A":
+    case "a":
+      return Figurine.q;
+    default:
+      return null;
+  }
+}
+
+const mapRotations = {
+  [PieceRotation[0]]: "",
+  [PieceRotation[1]]: ":1",
+  [PieceRotation[2]]: ":2",
+  [PieceRotation[3]]: ":3",
+  [PieceRotation[4]]: ":4",
+  [PieceRotation[5]]: ":5",
+  [PieceRotation[6]]: ":6",
+  [PieceRotation[7]]: ":7",
+} as const;
+
+export function getRotationSymbol(rotation: IPiece["rotation"]): string {
+  return mapRotations[rotation];
+}
+
+/*
+<SP_Item ProblemType="Help" Moves="2" Date="2018-08-21T22:00:00Z" Maximum="false" Serie="false" PrizeRank="0" CompleteStipulationDesc="H#" PersonalID="214" PrizeDescription="" Source="Thematic Tourney of e4-e5 [squirrel]" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address/>
+        <City/>
+        <Phone/>
+        <ZipCode/>
+        <StateOrProvince/>
+        <Country/>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Valerio Agostini</NameAndSurname>
+        <Address/>
+        <City/>
+        <Phone/>
+        <ZipCode/>
+        <StateOrProvince/>
+        <Country/>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Queen" Color="White" Column="ColD" Traverse="Row8" Rotation="Clockwise90" FairyAttribute="None">
+        <FairyType code="sq"/>
+      </Piece>
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Horse" Color="Black" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Rock" Color="Black" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None"/>
+      <Piece Type="King" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None"/>
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal"/>
+    <Conditions/>
+    <Tags>
+      <Tag Value="Squirrel"/>
+      <Tag Value="Duale evitato attivo"/>
+      <Tag Value="Duale evitato passivo"/>
+    </Tags>
+    <Solution>CgogIDEuQmQxLWIzIGQ2LWQ3ISAoZTYtZTc/KSAgMi5CYjMtZDUgU1FkOC1kNiAjIChhY3RpdmUgZHVhbCBhdm9pZGFuY2UpCiAgMS5SYTItYTUgZTYtZTchIChkNi1kNz8pICAyLlJhNS1kNSBTUWQ4LWU2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSkKCiAgMS5CZDEtYzIhIChCZDEqZjM/KSBiNi1iNyEgKGY2LWY3PykgIDIuQmMyLWU0IFNRZDgtYjYgIyAocGFzc2l2ZSBkdWFsIGF2b2lkYW5jZSkKICAxLlJhMi1jMiEgKEFkMS1iMz8pIGY2LWY3ISAoYjYtYjc/KSAgMi5SYzItYzQgU1FkOC1mNiAjIChwYXNzaXZlIGR1YWwgYXZvaWRhbmNlKQoKU3F1aXJyZWwgZDgKCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMxOFxwYXINClxwYXINClxpMFxmczIwICAgMS5CZDEtYjMgZDYtZDchIChlNi1lNz8pICAyLkJiMy1kNSBTUWQ4LWQ2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyZFxmczIwICAgMS5SYTItYTUgZTYtZTchIChkNi1kNz8pICAyLlJhNS1kNSBTUWQ4LWU2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyDQpccGFyZFxmczIwICAgMS5CZDEtYzIhIChCZDEqZjM/KSBiNi1iNyEgKGY2LWY3PykgIDIuQmMyLWU0IFNRZDgtYjYgIyAocGFzc2l2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyZCAgIDEuUmEyLWMyISAoQWQxLWIzPykgZjYtZjchIChiNi1iNz8pICAyLlJjMi1jNCBTUWQ4LWY2ICNcZnMyMCAgKHBhc3NpdmUgZHVhbCBhdm9pZGFuY2UpXHBhcg0KXHBhcmRcZnMyMFxwYXINClNxdWlycmVsIGQ4XHBhcg0KXGlcZnMxOFxwYXINClxwYXINCn0NCg==</SolutionRtf>
+  </SP_Item>
+  */
+
+export function GetSolutionFromElement(el: Element): string {
+  const sol = el.querySelector("Solution");
+  if (!sol) return "";
+  return atob(sol.innerHTML);
 }

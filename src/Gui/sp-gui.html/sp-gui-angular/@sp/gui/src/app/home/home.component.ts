@@ -28,6 +28,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  public get problem() {
+    return this.db.CurrentProblem;
+  }
+
   public get notation(): string {
     return this.db.CurrentProblem?.getCurrentFen() ?? "8/8/8/8/8/8/8/8";
   }

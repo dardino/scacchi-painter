@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "src/Gui/sp-gui.html/sp-gui-web"
+		},
+		{
+			"path": "graphics"
 		}
 	],
 	"settings": {

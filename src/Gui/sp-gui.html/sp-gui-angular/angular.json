@@ -79,7 +79,7 @@
               ],
               "baseHref": "./",
               "optimization": true,
-              "outputHashing": "all",
+              "outputHashing": "none",
               "sourceMap": false,
               "es5BrowserSupport": false,
               "extractCss": true,

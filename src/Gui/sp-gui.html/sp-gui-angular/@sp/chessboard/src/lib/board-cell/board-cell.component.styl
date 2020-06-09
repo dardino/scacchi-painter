@@ -1,19 +1,35 @@
 @import '../../../../../node_modules/canvas-chessboard/src/font/chess-figurine.css';
+@import '../../../../gui/src/assets/ScacchiPainter.css';
 
 $cwc = var(--cell-white-color);
 $cbc = var(--cell-black-color);
 $pwc = var(--white-color);
 $pbc = var(--black-color);
+$pnc = var(--neutral-color);
 
-:host {
-  display: flex;
-  padding-top: 100%; /* 1:1 Aspect Ratio */
-  position: relative;
-}
+:host
+  display flex
+  padding-top 100%
+  position relative
 
-.white {
+
+sub
+  position absolute
+  color black
+  bottom 0
+  right 0
+  text-transform uppercase;
+  text-shadow 1px 1px 1px white, 1px -1px 1px white, -1px -1px 1px white, -1px 1px 1px white
+  font-size .5em
+  margin 0.2em
+  padding 0
+  line-height 1em
+  opacity .8
+
+
+.white
   background: $cwc;
-}
+
 
 .black {
   background: $cbc;
@@ -25,6 +41,10 @@ $pbc = var(--black-color);
 
 .pc-b {
   color: $pbc;
+}
+
+.pc-n {
+  color: $pnc;
 }
 
 div {
@@ -49,17 +69,6 @@ canvas {
 }
 
 .figurine {
-  font-family: 'chess-figurine';
-  font-style: normal;
-
-  .pc-b & {
-    text-shadow: 1px 1px 0px $pwc, -1px -1px 0px $pwc, -1px 1px 0px $pwc, 1px -1px 0px $pwc;
-  }
-
-  .pc-w & {
-    text-shadow: 1px 1px 0px $pbc, -1px -1px 0px $pbc, -1px 1px 0px $pbc, 1px -1px 0px $pbc;
-  }
-
   .clockwise45 & {
     transform: rotateZ(45deg);
   }
