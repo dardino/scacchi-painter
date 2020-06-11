@@ -1,11 +1,11 @@
 <mat-sidenav-container fullscreen id="app-main" class="sidenav-container">
   <mat-sidenav
-    (click)="drawer.mode === 'over' && drawer.toggle()"
+    (click)="drawer.toggle()"
     #drawer
     class="sidenav"
     fixedInViewport
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    role="dialog"
+    mode="over"
     [opened]="false"
   >
     <app-menu></app-menu>
