@@ -21,7 +21,9 @@ export class AppComponent implements OnInit {
     return this.bridge.supportsClose;
   }
 
-
+  get fileName() {
+    return this.db.FileName;
+  }
   title = "Scacchi Painter";
   chessBoardMode: "edit" | "view" = "view";
   isHandset$: Observable<boolean> = this.breakpointObserver

@@ -6,20 +6,83 @@ import {
   Figurine,
 } from "canvas-chessboard";
 
-export interface Problem {
-  stipulationType: string;
-  moves: string;
-  date: string;
+export enum ProblemTypes {
+  Direct,
+  Help,
+  HelpSelf,
+  Self,
+}
+export type ProblemTypesKeys = keyof typeof ProblemTypes;
+
+export enum StipulationTypes {
+  Mate,
+  Stale,
+}
+
+export interface IStipulation {
+  problemType: ProblemTypes;
+  stipulationType: StipulationTypes;
   maximum: boolean;
   serie: boolean;
-  prizeRank: string;
+  moves: number;
   completeStipulationDesc: string;
+}
+
+export interface XmlProblem {
+  stipulation: IStipulation;
+  htmlSolution: string;
+  date: string;
+  prizeRank: string;
   personalID: string;
   prizeDescription: string;
   source: string;
-  stipulation: string;
   authors: Author[];
-  pieces: IPiece[];
+  pieces: IPiece[] | null;
+  twins: ITwins | null;
+}
+
+export enum SequnceTypes {
+  Normal,
+}
+export enum TwinTypes {
+  Custom = -1,
+  Diagram = 0, // no values
+  MovePiece = 1, // 2 values
+  RemovePiece = 2, // 1 value
+  AddPiece = 3, // 2 values
+  Substitute = 4, // 3 values
+  SwapPieces = 5, // 2 values
+  Rotation90 = 6, // no value
+  Rotation180 = 7, // no value
+  Rotation270 = 8, // no value
+  TraslateNormal = 9, // 2 value
+  TraslateToroidal = 10, // 2 value
+  MirrorHorizontal = 11, // no value
+  MirrorVertical = 12, // no value
+  ChangeProblemType = 13, // 2 value
+  Duplex = 14, // no value
+  AfterKey = 15, // no value
+  SwapColors = 16, // no value
+  Stipulation = 17, // 1 value
+}
+
+export type TwinTypesKeys = keyof typeof TwinTypes;
+export enum TwinModes {
+  Normal,
+}
+export type TwinModesKeys = keyof typeof TwinModes;
+
+export interface ITwins {
+  TwinSequenceTypes: SequnceTypes;
+  Twins: ITwin[];
+}
+
+export interface ITwin {
+  TwinType: TwinTypes;
+  TwinModes: TwinModes;
+  ValueA: string;
+  ValueB: string;
+  ValueC: string;
 }
 
 export interface Author {
@@ -47,7 +110,7 @@ export interface ProblemDb {
   version: string;
   name: string;
   lastIndex: number;
-  problems: Problem[];
+  problems: XmlProblem[];
 }
 
 export const PieceRotation = [
@@ -310,7 +373,19 @@ export function getRotationSymbol(rotation: IPiece["rotation"]): string {
 }
 
 /*
-<SP_Item ProblemType="Help" Moves="2" Date="2018-08-21T22:00:00Z" Maximum="false" Serie="false" PrizeRank="0" CompleteStipulationDesc="H#" PersonalID="214" PrizeDescription="" Source="Thematic Tourney of e4-e5 [squirrel]" Stipulation="Mate">
+<SP_Item
+ProblemType="Help"
+Moves="2"
+Date="2018-08-21T22:00:00Z"
+Maximum="false"
+Serie="false"
+PrizeRank="0"
+CompleteStipulationDesc="H#"
+PersonalID="214"
+PrizeDescription=""
+Source="Thematic Tourney of e4-e5 [squirrel]"
+Stipulation="Mate"
+>
     <Authors>
       <Author>
         <NameAndSurname>Gabriele Brunori</NameAndSurname>
@@ -350,15 +425,30 @@ export function getRotationSymbol(rotation: IPiece["rotation"]): string {
       <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None"/>
       <Piece Type="King" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None"/>
     </Pieces>
-    <Twins TwinSequenceTypes="Normal"/>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="AddPiece" ValueA="white" ValueB="Bh5" ValueC="" TwinModes="Normal"/>
+    </Twins>
     <Conditions/>
     <Tags>
       <Tag Value="Squirrel"/>
       <Tag Value="Duale evitato attivo"/>
       <Tag Value="Duale evitato passivo"/>
     </Tags>
-    <Solution>CgogIDEuQmQxLWIzIGQ2LWQ3ISAoZTYtZTc/KSAgMi5CYjMtZDUgU1FkOC1kNiAjIChhY3RpdmUgZHVhbCBhdm9pZGFuY2UpCiAgMS5SYTItYTUgZTYtZTchIChkNi1kNz8pICAyLlJhNS1kNSBTUWQ4LWU2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSkKCiAgMS5CZDEtYzIhIChCZDEqZjM/KSBiNi1iNyEgKGY2LWY3PykgIDIuQmMyLWU0IFNRZDgtYjYgIyAocGFzc2l2ZSBkdWFsIGF2b2lkYW5jZSkKICAxLlJhMi1jMiEgKEFkMS1iMz8pIGY2LWY3ISAoYjYtYjc/KSAgMi5SYzItYzQgU1FkOC1mNiAjIChwYXNzaXZlIGR1YWwgYXZvaWRhbmNlKQoKU3F1aXJyZWwgZDgKCg==</Solution>
-    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMxOFxwYXINClxwYXINClxpMFxmczIwICAgMS5CZDEtYjMgZDYtZDchIChlNi1lNz8pICAyLkJiMy1kNSBTUWQ4LWQ2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyZFxmczIwICAgMS5SYTItYTUgZTYtZTchIChkNi1kNz8pICAyLlJhNS1kNSBTUWQ4LWU2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyDQpccGFyZFxmczIwICAgMS5CZDEtYzIhIChCZDEqZjM/KSBiNi1iNyEgKGY2LWY3PykgIDIuQmMyLWU0IFNRZDgtYjYgIyAocGFzc2l2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyZCAgIDEuUmEyLWMyISAoQWQxLWIzPykgZjYtZjchIChiNi1iNz8pICAyLlJjMi1jNCBTUWQ4LWY2ICNcZnMyMCAgKHBhc3NpdmUgZHVhbCBhdm9pZGFuY2UpXHBhcg0KXHBhcmRcZnMyMFxwYXINClNxdWlycmVsIGQ4XHBhcg0KXGlcZnMxOFxwYXINClxwYXINCn0NCg==</SolutionRtf>
+    <Solution>CgogIDEuQmQxLWIzIGQ2LWQ3ISAoZTYtZTc/KSAgMi5CYjMtZDUgU1FkOC1kNiAjIChhY3RpdmUgZH
+    VhbCBhdm9pZGFuY2UpCiAgMS5SYTItYTUgZTYtZTchIChkNi1kNz8pICAyLlJhNS1kNSBTUWQ4LWU2ICMgKGFjdG
+    l2ZSBkdWFsIGF2b2lkYW5jZSkKCiAgMS5CZDEtYzIhIChCZDEqZjM/KSBiNi1iNyEgKGY2LWY3PykgIDIuQmMyLW
+    U0IFNRZDgtYjYgIyAocGFzc2l2ZSBkdWFsIGF2b2lkYW5jZSkKICAxLlJhMi1jMiEgKEFkMS1iMz8pIGY2LWY3IS
+    AoYjYtYjc/KSAgMi5SYzItYzQgU1FkOC1mNiAjIChwYXNzaXZlIGR1YWwgYXZvaWRhbmNlKQoKU3F1aXJyZWwgZD
+    gKCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZ
+    uaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnM
+    xOFxwYXINClxwYXINClxpMFxmczIwICAgMS5CZDEtYjMgZDYtZDchIChlNi1lNz8pICAyLkJiMy1kNSBTUWQ4LWQ
+    2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyZFxmczIwICAgMS5SYTItYTUgZTYtZTchIChkNi1
+    kNz8pICAyLlJhNS1kNSBTUWQ4LWU2ICMgKGFjdGl2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyDQpccGFyZFx
+    mczIwICAgMS5CZDEtYzIhIChCZDEqZjM/KSBiNi1iNyEgKGY2LWY3PykgIDIuQmMyLWU0IFNRZDgtYjYgIyAocGF
+    zc2l2ZSBkdWFsIGF2b2lkYW5jZSlccGFyDQpccGFyZCAgIDEuUmEyLWMyISAoQWQxLWIzPykgZjYtZjchIChiNi1
+    iNz8pICAyLlJjMi1jNCBTUWQ4LWY2ICNcZnMyMCAgKHBhc3NpdmUgZHVhbCBhdm9pZGFuY2UpXHBhcg0KXHBhcmR
+    cZnMyMFxwYXINClNxdWlycmVsIGQ4XHBhcg0KXGlcZnMxOFxwYXINClxwYXINCn0NCg==</SolutionRtf>
   </SP_Item>
   */
 
@@ -366,4 +456,9 @@ export function GetSolutionFromElement(el: Element): string {
   const sol = el.querySelector("Solution");
   if (!sol) return "";
   return atob(sol.innerHTML);
+}
+
+export function GetTwins(el: Element): Element[] {
+  const twins = el.querySelectorAll("Twin");
+  return Array.from(twins);
 }

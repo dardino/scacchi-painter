@@ -1,73 +1,45 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { Problem } from "@sp/dbmanager/src/lib/models";
 import { DataSource, CollectionViewer } from "@angular/cdk/collections";
-import { BehaviorSubject, Subscription, Observable } from "rxjs";
+import { Observable, BehaviorSubject } from "rxjs";
 
 @Component({
   selector: "app-database-list",
   templateUrl: "./database-list.component.html",
   styleUrls: ["./database-list.component.styl"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatabaseListComponent implements OnInit {
-  ds = new MyDataSource(this.db);
+  itemSource = new MyDataSource(this.db.All);
   constructor(private db: DbmanagerService) {}
-  get problems() {
-    return this.db.All;
-  }
   ngOnInit(): void {}
+  stipulation(item: Problem) {
+    return `${item.stipulation.completeStipulationDesc}${
+      item.stipulation.moves
+    } ${item.getPieceCounter()}`;
+  }
+  realIndex(index: number){
+    return this.itemSource.realIndex(index);
+  }
 }
 
-export class MyDataSource extends DataSource<Element | undefined> {
-  private pageSize = 10;
-  private cachedData = Array.from<Element>({ length: this.db.Count });
-  private fetchedPages = new Set<number>();
-  private dataStream = new BehaviorSubject<Array<Element | undefined>>(
-    this.cachedData
-  );
-  private subscription = new Subscription();
-
-  constructor(private db: DbmanagerService) {
-    super();
+export class MyDataSource extends DataSource<Problem | undefined> {
+  private get items$() {
+    return this.itemsSubject.asObservable();
   }
-
+  private itemsSubject = new BehaviorSubject<Problem[]>([]);
+  constructor(items: Problem[]) {
+    super();
+    this.itemsSubject.next(items.slice().reverse());
+  }
   connect(
     collectionViewer: CollectionViewer
-  ): Observable<Array<Element | undefined>> {
-    this.subscription.add(
-      collectionViewer.viewChange.subscribe((range) => {
-        const startPage = this._getPageForIndex(range.start);
-        const endPage = this._getPageForIndex(range.end - 1);
-        for (let i = startPage; i <= endPage; i++) {
-          this._fetchPage(i);
-        }
-      })
-    );
-    return this.dataStream;
+  ): Observable<Array<Problem | undefined>> {
+    return this.items$;
   }
-
-  disconnect(): void {
-    this.subscription.unsubscribe();
+  disconnect(collectionViewer: CollectionViewer): void {
   }
-
-  private _getPageForIndex(index: number): number {
-    return Math.floor(index / this.pageSize);
-  }
-
-  private _fetchPage(page: number) {
-    if (this.fetchedPages.has(page)) {
-      return;
-    }
-    this.fetchedPages.add(page);
-
-    // Use `setTimeout` to simulate fetching data from server.
-    setTimeout(() => {
-      this.cachedData.splice(
-        page * this.pageSize,
-        this.pageSize,
-        ...Array.from(this.db.getPage(page, this.pageSize))
-      );
-      this.dataStream.next(this.cachedData);
-    }, Math.random() * 1000 + 200);
+  realIndex(index: number) {
+    return this.itemsSubject.getValue().length - index;
   }
 }

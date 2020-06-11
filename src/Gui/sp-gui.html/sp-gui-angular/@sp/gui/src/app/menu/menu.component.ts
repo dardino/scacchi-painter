@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 
 @Component({
@@ -7,8 +7,10 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
   styleUrls: ["./menu.component.styl"],
 })
 export class MenuComponent implements OnInit {
-  constructor(private db: DbmanagerService) {}
+  @Output()
+  selectElement = new EventEmitter<void>();
 
+  constructor(private db: DbmanagerService) {}
   get dbLoaded() {
     return this.db.CurrentDB != null;
   }

@@ -5,12 +5,14 @@ import {
   OnChanges,
   ViewChild,
   ElementRef,
+  AfterViewInit,
+  OnDestroy,
 } from "@angular/core";
 import {
-  IPiece,
   SquareLocation,
   GetLocationFromIndex,
   GetSquareIndex,
+  TwinTypes,
 } from "@sp/dbmanager/src/public-api";
 import { FenService } from "@sp/dbmanager/src/lib/fen.service";
 
@@ -24,11 +26,13 @@ import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
   templateUrl: "chessboard.component.html",
   styleUrls: ["chessboard.component.styl"],
 })
-export class ChessboardComponent implements OnInit, OnChanges {
+export class ChessboardComponent
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   cells: UiCell[] = [];
   currentCell: UiCell | null = null;
 
   @Input() boardType: "canvas" | "HTML";
+  @Input() hideInfo: boolean;
 
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
@@ -37,13 +41,13 @@ export class ChessboardComponent implements OnInit, OnChanges {
   @ViewChild("canvas", { static: true })
   canvas: ElementRef;
 
-  private canvasBoard: CanvasChessBoard;
+  @ViewChild("container")
+  chessboard: ElementRef;
+
+  private canvasBoard: CanvasChessBoard | null;
 
   @Input()
   position?: Problem;
-
-  @Input()
-  pieces?: IPiece[];
 
   @Input()
   mode: "edit" | "view";
@@ -52,36 +56,41 @@ export class ChessboardComponent implements OnInit, OnChanges {
     return this.mode;
   }
 
+  public fontSize: number;
+
   public onSelectCell($event: Event) {
     console.log($event);
   }
 
   constructor(private fensvc: FenService) {}
 
+  ngOnDestroy(): void {
+    // Later, you can stop observing
+    window.removeEventListener("resize", this.sizeMutated);
+  }
+
   ngOnInit() {
-    console.log("INIT");
-    this.canvasBoard = new CanvasChessBoard(this.canvas.nativeElement, {
-      BORDER_SIZE: 1,
-      CELLCOLORS: ["#f9f9f9", "#9f9f9f"],
-      PIECECOLORS: ["#fff", "#294053"],
-    });
     this.updateBoard();
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-    console.log("CHANGE");
     if (changes.position && !changes.position.isFirstChange()) {
       this.updateBoard();
     }
     if (
       changes.boardType &&
       !changes.boardType.isFirstChange() &&
-      changes.boardType.currentValue === "canvas"
+      changes.boardType.currentValue === "canvas" &&
+      this.canvas
     ) {
+      this.canvasBoard = new CanvasChessBoard(this.canvas.nativeElement, {
+        BORDER_SIZE: 1,
+        CELLCOLORS: ["#f9f9f9", "#9f9f9f"],
+        PIECECOLORS: ["#fff", "#294053"],
+      });
       this.updateBoard();
-    }
-    if (changes.pieces) {
-      // nopè
+    } else if (changes.boardType?.currentValue !== "canvas") {
+      this.canvasBoard = null;
     }
   }
 
@@ -96,9 +105,8 @@ export class ChessboardComponent implements OnInit, OnChanges {
   }
 
   updateBoard() {
-    console.log("Update BOARD!");
     this.clearCells();
-    const pp = this.position?.getPieces();
+    const pp = this.position?.pieces;
     if (pp) {
       for (const piece of pp) {
         const index = GetSquareIndex(piece.column, piece.traverse);
@@ -109,19 +117,44 @@ export class ChessboardComponent implements OnInit, OnChanges {
       }
     }
     if (this.canvasBoard && pp) {
-      const bps = pp
-        .map((p) => p.ConvertToCanvasPiece())
-        .filter<BP>(notNull);
+      const bps = pp.map((p) => p.ConvertToCanvasPiece()).filter<BP>(notNull);
       this.canvasBoard.SetPieces(bps);
     }
 
-    if (this.BoardType === "canvas") {
+    if (this.BoardType === "canvas" && this.canvasBoard) {
       this.canvasBoard.Redraw();
     }
   }
 
   onCellClick(cell: UiCell) {
     this.currentCell = cell;
+  }
+
+  private sizeMutated = (args: any) => {
+    console.log("args", args);
+    this.fontSize = Math.floor(
+      (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8 / 1.44
+    );
+  };
+
+  ngAfterViewInit() {
+    // Create an observer instance linked to the callback function
+    window.addEventListener("resize", this.sizeMutated);
+    setTimeout(() => {
+      this.sizeMutated(null);
+    }, 0);
+  }
+
+  get pieceCounter() {
+    return this.position?.getPieceCounter();
+  }
+
+  get twins(): string[] {
+    return this.position?.twins.Twins.map((t) => t.toString()) ?? [];
+  }
+
+  get viewDiagram(): any {
+    return (this.position?.twins.Twins.length ?? 0) && this.position?.twins.Twins.every((t) => t.TwinType !== TwinTypes.Diagram);
   }
 }
 function notNull<T>(v: T | null): v is T {

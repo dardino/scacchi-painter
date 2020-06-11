@@ -22,7 +22,7 @@ export class OpenfileComponent implements OnInit, OnDestroy {
     const error = this.db.LoadFromText(xmlText, this.fileName);
     if (!error) {
       this.db.SaveToLocalStorage(xmlText, this.fileName);
-      this.router.navigate(["id"]);
+      this.router.navigate([`/view/${this.db.CurrentIndex}`]);
     }
     this.fileName = "";
   };

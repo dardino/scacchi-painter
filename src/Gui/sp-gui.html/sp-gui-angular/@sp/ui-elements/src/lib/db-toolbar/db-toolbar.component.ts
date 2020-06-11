@@ -24,7 +24,7 @@ export const ActionInfo = {
 } as const;
 
 @Component({
-  selector: "lib-toolbar",
+  selector: "lib-db-toolbar",
   templateUrl: "./db-toolbar.component.html",
   styleUrls: ["./db-toolbar.component.styl"],
 })
@@ -51,17 +51,28 @@ export class DbToolbarComponent implements OnInit {
     }
   }
 
-  goToBefore() {
-    this.action.emit({
-      type: "PreviousProblem",
-      args: void 0,
-    });
+  public canGoPrev() {
+    return this.currentIndex > 1;
+  }
+  public canGoNext() {
+    return this.currentIndex < this.totalCount;
+  }
+
+  goToPrev() {
+    if (this.canGoPrev()) {
+      this.action.emit({
+        type: "PreviousProblem",
+        args: void 0,
+      });
+    }
   }
   goToNext() {
-    this.action.emit({
-      type: "NextProblem",
-      args: void 0,
-    });
+    if (this.canGoNext()) {
+      this.action.emit({
+        type: "NextProblem",
+        args: void 0,
+      });
+    }
   }
   setCanvas() {
     this.action.emit({

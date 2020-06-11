@@ -14,7 +14,7 @@ export class SpSolutionDescComponent implements OnInit {
   ngOnInit(): void {}
 
   get solution() {
-    return this.problem.getSolution();
+    return this.problem.htmlSolution;
   }
 
   public parse(text: string) {
@@ -31,7 +31,7 @@ export class SpSolutionDescComponent implements OnInit {
 }
 
 const istructionRegExp = new RegExp(
-  `^(BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition).*$`
+  `^(BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing).*$`
 );
 const outlogRegExp = new RegExp(`^(Execute|Popeye|solution finished).*$`);
 

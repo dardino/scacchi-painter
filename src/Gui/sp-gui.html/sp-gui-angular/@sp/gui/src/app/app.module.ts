@@ -11,25 +11,31 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { ChessboardModule } from "@sp/chessboard/src/lib/chessboard.module";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
-import { HomeComponent } from "./home/home.component";
+import { ViewProblemComponent } from "./view-problem/view-problem.component";
 import { MatIconModule } from "@angular/material/icon";
 import { OpenfileComponent } from "./openfile/openfile.component";
 import { DatabaseListComponent } from "./database-list/database-list.component";
 import { MenuComponent } from "./menu/menu.component";
-import { ScrollingModule } from "@angular/cdk/scrolling";
-import { ConfigurationComponent } from './configuration/configuration.component';
+import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
+import { ConfigurationComponent } from "./configuration/configuration.component";
+import { LandingComponent } from "./landing/landing.component";
+import { MatButtonModule } from "@angular/material/button";
+import { EditProblemComponent } from './edit-problem/edit-problem.component';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    ViewProblemComponent,
     OpenfileComponent,
     DatabaseListComponent,
     MenuComponent,
     ConfigurationComponent,
+    LandingComponent,
+    EditProblemComponent,
   ],
   imports: [
     CommonModule,
     MatIconModule,
+    MatButtonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -40,6 +46,7 @@ import { ConfigurationComponent } from './configuration/configuration.component'
     MatGridListModule,
     MatSidenavModule,
     MatListModule,
+    CdkScrollableModule,
     ScrollingModule,
   ],
   providers: [HttpClient],

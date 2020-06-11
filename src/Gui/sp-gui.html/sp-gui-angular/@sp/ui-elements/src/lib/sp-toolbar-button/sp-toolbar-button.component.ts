@@ -17,6 +17,8 @@ export class SpToolbarButtonComponent implements OnInit {
   iconLabel?: string;
   @Input()
   noLabel?: boolean;
+  @Input()
+  disabled?: boolean;
 
   get hasLabel(): boolean {
     return (this.iconLabel?.length ?? 0) > 0 && this.noLabel !== true;
