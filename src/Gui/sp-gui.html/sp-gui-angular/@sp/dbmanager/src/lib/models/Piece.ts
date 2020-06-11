@@ -79,5 +79,13 @@ export class Piece implements IPiece {
     return parts.join("");
   }
 
-  private constructor() {}
+  private constructor() {
+    this.appearance = "";
+    this.fairyCode = "";
+    this.color = "White";
+    this.column = "ColA";
+    this.traverse = "Row1";
+    this.rotation = "NoRotation";
+    this.fairyAttribute = "";
+  }
 }

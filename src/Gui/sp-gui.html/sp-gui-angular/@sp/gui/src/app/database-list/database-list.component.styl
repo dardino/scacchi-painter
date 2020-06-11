@@ -1,3 +1,51 @@
-.db_item
-  height 50px
-  border solid 1px white
+:host
+  position absolute
+  top 0;  left 0;  right 0;  bottom 0;
+  display grid
+  grid-template-rows auto 1fr
+
+.dbitem-container
+  height 16rem
+  margin 1rem 1rem 0 1rem
+  border solid 1px rgba(255,255,255,.3)
+  position relative
+  display flex
+  flex-direction column
+  box-sizing border-box
+
+.dbitem-status
+  flex 0 0 auto
+  display flex
+  .status-index
+    align-self flex-end
+    margin 0
+    display block
+    width 4em
+    background-color rgba(255,255,255,.2)
+    text-align right
+    padding 0 0.5rem
+    flex 0 0 auto
+
+  .status-stipulation
+    background-color rgba(80, 255, 0, 0.36)
+    width 11.5em
+    flex 0 0 auto
+    text-align center
+
+.dbitem
+  flex 1 1 0
+  display flex
+  align-items center
+  justify-content space-between
+
+.description
+  flex 1 1 0
+
+.dblist
+  height 100%
+  overflow-y scroll
+
+.miniboard
+  width: 14.6rem
+  height: 14.6rem
+  flex 0 0 auto

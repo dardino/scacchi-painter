@@ -1,18 +1,35 @@
-#app-main
-  position fixed
-  top 0
-  left 0
-  right 0
-  bottom 0
+.sidenav-content
+  display flex
+  flex-direction column
 
-.fill-space
-  /* This fills the remaining space, by using flexbox.
-     Every toolbar row uses a flexbox row layout. */
+.main-app-toolbar
+  flex 0 0 auto
+
+.container
+  flex 1 1 auto
+  overflow auto
+  position relative
+
+.app-title
   flex: 1 1 auto;
+  -webkit-user-select none
+  -webkit-app-region drag
+  display flex
+  flex-direction column;
+  align-items flex-start
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
 
-.sidenav-container
-  position absolute
-  top 0
-  left 0
-  right 0
-  bottom 0
+  span,sub
+    display block
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+
+  sub
+    padding 0 1em 0 0
+    margin 0
+    line-height 1em
+    font-style italic
+    font-size 0.6em;

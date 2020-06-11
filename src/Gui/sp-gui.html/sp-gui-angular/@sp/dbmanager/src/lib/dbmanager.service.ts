@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { IPiece } from "./helpers";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { Problem } from "./models/Problem";
+import { Problem } from "./models/problem";
+import { Observable, Subject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -10,8 +11,12 @@ export class DbmanagerService {
   CurrentDB: Document | null;
   private currentIndex = 0;
   private fileName = "";
-  public All: Element[] = [];
+  private solveOut$: Subject<string>;
+  public All: Problem[] = [];
 
+  get FileName() {
+    return this.fileName;
+  }
   get CurrentIndex() {
     return this.currentIndex;
   }
@@ -55,14 +60,16 @@ export class DbmanagerService {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
       this.CurrentDB = xmlDoc;
-      this.All = Array.from(xmlDoc.querySelectorAll("SP_Item"));
-      console.log(this.All);
       this.currentIndex = parseInt(
         this.CurrentDB.documentElement.getAttribute("lastIndex") ?? "0",
         10
       );
+      this.All = Array.from(xmlDoc.querySelectorAll("SP_Item")).map((e) =>
+        Problem.fromElement(e)
+      );
       this.count = this.All.length;
       this.loadProblem();
+      console.log("filename:", fileName);
       this.fileName = fileName;
       return null;
     } catch (ex) {
@@ -71,20 +78,6 @@ export class DbmanagerService {
     }
   }
 
-  MovePrevious() {
-    if (this.currentIndex <= 0) {
-      return;
-    }
-    this.currentIndex--;
-    this.loadProblem();
-  }
-  MoveNext() {
-    if (this.currentIndex >= this.count - 1) {
-      return;
-    }
-    this.currentIndex++;
-    this.loadProblem();
-  }
   GotoIndex(arg0: number) {
     if (arg0 >= this.count || arg0 < 0) {
       return;
@@ -92,9 +85,6 @@ export class DbmanagerService {
     this.currentIndex = arg0;
     console.log("goto: ", arg0);
     this.loadProblem();
-  }
-  getPage(page: number, pageSize: number): Element[] {
-    return Array.from(this.CurrentDB?.querySelectorAll("SP_Item:nth-child(" + (page * pageSize + 1) + ")") ?? []).slice(0, pageSize);
   }
 
   private loadProblem() {
@@ -110,7 +100,7 @@ export class DbmanagerService {
       return this.reset();
     }
 
-    this.pieces = this.currentProblem.getPieces();
+    this.pieces = this.currentProblem.pieces;
   }
 
   private reset() {
@@ -122,5 +112,18 @@ export class DbmanagerService {
   private getDbFile(): File {
     const text = this.CurrentDB?.documentElement.outerHTML ?? "";
     return new File([text], "test.sp2", { type: "text/xml" });
+  }
+
+  public startSolving(): Observable<string> | Error {
+    if (!this.CurrentProblem) return new Error("unable to solve a null problem!");
+    this.solveOut$ = new Subject();
+    this.bridge.runSolve(this.CurrentProblem);
+    return this.solveOut$.asObservable();
+  }
+
+  public stopSolving(): void {
+    this.bridge.stopSolve();
+    this.solveOut$.next("*** stopped by user ***");
+    this.solveOut$.unsubscribe();
   }
 }

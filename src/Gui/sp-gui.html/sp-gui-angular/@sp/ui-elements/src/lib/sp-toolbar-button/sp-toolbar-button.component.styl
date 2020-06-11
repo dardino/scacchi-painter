@@ -1,3 +1,5 @@
+@import "../../../../gui/src/mediaquery"
+
 .mat-icon
   font-size 2.0rem
   display flex
@@ -5,13 +7,19 @@
   align-items center
   height 3.2rem
   width 3.2rem
+  @media (max-width: $smallScreen)
+    height 2.8rem
+    width 2.8rem
 
 :host
-  display: inline-flex;
+  -webkit-app-region no-drag
+  display inline-flex
 
 button
   padding 0
   margin .2rem
+  @media (max-width: $smallScreen)
+    margin 0
 
 .icon_text
   display flex
