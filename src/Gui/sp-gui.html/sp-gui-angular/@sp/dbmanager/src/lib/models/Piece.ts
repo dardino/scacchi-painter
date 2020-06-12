@@ -1,4 +1,4 @@
-import { Piece as BP } from "canvas-chessboard";
+import { Piece as BP } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
 import {
   IPiece,
@@ -20,7 +20,7 @@ import {
 } from "../helpers";
 
 export class Piece implements IPiece {
-  public appearance: IPiece["appearance"];
+  public appearance: IPiece["appearance"] | "";
   public fairyCode: IPiece["fairyCode"];
   public color: IPiece["color"];
   public column: IPiece["column"];

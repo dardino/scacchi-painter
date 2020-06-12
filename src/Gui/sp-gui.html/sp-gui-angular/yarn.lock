@@ -2292,10 +2292,9 @@ canonical-path@1.0.0:
   resolved "https://registry.yarnpkg.com/canonical-path/-/canonical-path-1.0.0.tgz#fcb470c23958def85081856be7a86e904f180d1d"
   integrity sha512-feylzsbDxi1gPZ1IjystzIQZagYYLvfKrSuygUCgf7z6x790VEzze5QEkdSV1U58RA7Hi0+v6fv4K54atOzATg==
 
-canvas-chessboard@^0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/canvas-chessboard/-/canvas-chessboard-0.0.14.tgz#76e003925ada6c2efda9416630d55d518b89a4ea"
-  integrity sha512-pAJJe/6sv3hfppUUAQHAgDdpPoamFMc0U1BV10UHN/9WVW6YTdw0WwPk3IVE2cMN0TLkM91V6yI4eNX0ozcwGA==
+"canvas-chessboard@link:../../../../../canvas-chessboard":
+  version "0.0.0"
+  uid ""
 
 caseless@~0.12.0:
   version "0.12.0"

@@ -1,25 +1,12 @@
 import { Component, OnInit, Input } from "@angular/core";
+import Configs from "canvas-chessboard/modules/es2018/presets";
 import {
   IPiece,
   SquareLocation,
   GetSquareColor,
+  getCanvasColor,
+  getFigurine,
 } from "@sp/dbmanager/src/public-api";
-
-import { FontGliphs } from "canvas-chessboard";
-
-type Appearance = "k" | "q" | "r" | "b" | "n" | "p" | "e" | "t" | "a";
-
-const CodeToFont = {
-  k: FontGliphs.code_BK,
-  q: FontGliphs.code_BQ,
-  r: FontGliphs.code_BR,
-  b: FontGliphs.code_BB,
-  n: FontGliphs.code_BN,
-  p: FontGliphs.code_BP,
-  e: FontGliphs.code_BQ,
-  t: FontGliphs.code_BR,
-  a: FontGliphs.code_BB,
-};
 
 @Component({
   selector: "lib-board-cell",
@@ -51,9 +38,11 @@ export class BoardCellComponent implements OnInit {
 
   get piecechar(): string {
     if (!this.piece) return "";
-    return String.fromCharCode(
-      CodeToFont[this.piece.appearance.toLowerCase() as Appearance]
-    );
+    const color = getCanvasColor(this.piece.color);
+    const pieces = Configs.ScacchiPainter[color];
+    const fig = getFigurine(this.piece.appearance);
+    if (fig == null) return "";
+    return pieces[fig];
   }
 
   get figurine(): string {
