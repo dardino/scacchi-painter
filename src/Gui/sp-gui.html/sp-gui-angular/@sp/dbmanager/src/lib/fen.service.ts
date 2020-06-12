@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { PieceRotation, IPiece } from "./helpers";
+import { Figurine } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 const RotationsCodes = [
   "+ ",
   "+/",
@@ -62,7 +63,7 @@ export class FenService {
         continue;
       }
       const isNeutral = c[0] === "*";
-      const pieceName = isNeutral ? c.substr(1, 1) : c.substr(0, 1);
+      const pieceName = (isNeutral ? c.substr(1, 1) : c.substr(0, 1)) as Figurine;
       const pieceRotation = c.substr(1, 2) as RotationsCodes;
       let rotation: PieceRotation = "NoRotation";
       let fairy = "";

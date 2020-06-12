@@ -15,11 +15,12 @@ import {
   TwinTypes,
 } from "@sp/dbmanager/src/public-api";
 import { FenService } from "@sp/dbmanager/src/lib/fen.service";
-
-import "canvas-chessboard/src/font/chess-figurine.css";
-
-import { CanvasChessBoard, Piece as BP } from "canvas-chessboard";
+import {
+  CanvasChessBoard,
+  Piece as BP,
+} from "canvas-chessboard/modules/es2018/canvasChessBoard";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
+import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
   selector: "lib-chessboard",
@@ -85,9 +86,13 @@ export class ChessboardComponent
     ) {
       this.canvasBoard = new CanvasChessBoard(this.canvas.nativeElement, {
         BORDER_SIZE: 1,
-        CELLCOLORS: ["#f9f9f9", "#9f9f9f"],
-        PIECECOLORS: ["#fff", "#294053"],
+        CELLCOLORS: ["#fff", "#ddd"],
+        PIECECOLORS: ["#fff", "#333"],
       });
+      const cfg = GetConfig();
+      cfg.fontSize = 1;
+      this.canvasBoard.AddFontConfig("ScacchiPainter", cfg);
+      this.canvasBoard.SetFont("ScacchiPainter");
       this.updateBoard();
     } else if (changes.boardType?.currentValue !== "canvas") {
       this.canvasBoard = null;
@@ -154,7 +159,10 @@ export class ChessboardComponent
   }
 
   get viewDiagram(): any {
-    return (this.position?.twins.Twins.length ?? 0) && this.position?.twins.Twins.every((t) => t.TwinType !== TwinTypes.Diagram);
+    return (
+      (this.position?.twins.Twins.length ?? 0) &&
+      this.position?.twins.Twins.every((t) => t.TwinType !== TwinTypes.Diagram)
+    );
   }
 }
 function notNull<T>(v: T | null): v is T {

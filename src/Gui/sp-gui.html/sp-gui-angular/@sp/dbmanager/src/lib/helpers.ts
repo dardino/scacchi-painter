@@ -3,8 +3,8 @@ import {
   Colors,
   BoardRank,
   BoardFile,
-  Figurine,
-} from "canvas-chessboard";
+  Figurine
+} from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
 export enum ProblemTypes {
   Direct,
@@ -97,7 +97,7 @@ export interface Author {
 }
 
 export interface IPiece {
-  appearance: string;
+  appearance: Figurine | "";
   fairyCode: string;
   color: PieceColors;
   column: Columns;
@@ -232,7 +232,7 @@ export function getColum(f: Element): Columns | null {
   ];
 }
 
-export function getAppearance(f: Element): string {
+export function getAppearance(f: Element): Figurine | "" {
   const pieceName = f.getAttribute("Type");
   switch (pieceName) {
     case "King":
@@ -313,11 +313,12 @@ export function getColor(c: Element): PieceColors {
 export function getCanvasColor(c: PieceColors): Colors {
   switch (c) {
     case "Black":
-      return Colors.Black;
+      return "black";
+    case "Neutral":
+      return "neutral";
     case "White":
-      return Colors.White;
     default:
-      return Colors.White;
+      return "white";
   }
 }
 
@@ -325,33 +326,33 @@ export function getFigurine(appearance?: string): Figurine | null {
   switch (appearance) {
     case "K":
     case "k":
-      return Figurine.k;
+      return "k";
     case "Q":
     case "q":
-      return Figurine.q;
+      return "q";
     case "R":
     case "r":
-      return Figurine.r;
+      return "r";
     case "S":
     case "s":
     case "N":
     case "n":
-      return Figurine.n;
+      return "n";
     case "B":
     case "b":
-      return Figurine.b;
+      return "b";
     case "P":
     case "p":
-      return Figurine.p;
+      return "p";
     case "E":
     case "e":
-      return Figurine.q;
+      return "e";
     case "T":
     case "t":
-      return Figurine.q;
+      return "t";
     case "A":
     case "a":
-      return Figurine.q;
+      return "a";
     default:
       return null;
   }
