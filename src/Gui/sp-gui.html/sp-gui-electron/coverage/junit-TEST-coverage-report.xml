@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="1" failures="1" time="4.554">
+  <testsuite name="Popeye solver tests" errors="0" failures="1" skipped="0" timestamp="2020-06-12T14:33:03" time="4.433" tests="1">
+    <testcase classname="Popeye solver tests" name="build" time="0.003">
+      <failure>Error: Method not implemented.
+    at PopeyeSolver.start (C:\dev\github\scacchi-painter\src\Gui\sp-gui.html\sp-gui-electron\src\solver\PopeyeSolver.ts:8:11)
+    at Object.&lt;anonymous&gt; (C:\dev\github\scacchi-painter\src\Gui\sp-gui.html\sp-gui-electron\src\solver\PopeyeSolver.spec.ts:5:12)
+    at C:\dev\github\scacchi-painter\src\Gui\sp-gui.html\sp-gui-electron\node_modules\jest-jasmine2\build\queueRunner.js:47:12
+    at new Promise (&lt;anonymous&gt;)
+    at mapper (C:\dev\github\scacchi-painter\src\Gui\sp-gui.html\sp-gui-electron\node_modules\jest-jasmine2\build\queueRunner.js:30:19)
+    at C:\dev\github\scacchi-painter\src\Gui\sp-gui.html\sp-gui-electron\node_modules\jest-jasmine2\build\queueRunner.js:77:41
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
