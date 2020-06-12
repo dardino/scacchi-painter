@@ -1,3 +1,5 @@
 dist
 app
-*.js
+release
+tmp
+src/**/*.js
