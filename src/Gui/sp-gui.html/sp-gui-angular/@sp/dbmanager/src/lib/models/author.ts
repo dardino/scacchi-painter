@@ -22,6 +22,18 @@ export class Author implements IAuthor {
     a.language = el.getAttribute("Language") ?? "";
     return a;
   }
+  static fromJson(el: Partial<IAuthor>): Author {
+    const a = new Author();
+    a.nameAndSurname = el.nameAndSurname ?? "";
+    a.address = el.address ?? "";
+    a.city = el.city ?? "";
+    a.phone = el.phone ?? "";
+    a.zipCode = el.zipCode ?? "";
+    a.stateOrProvince = el.stateOrProvince ?? "";
+    a.country = el.country ?? "";
+    a.language = el.language ?? "";
+    return a;
+  }
 
   private constructor() {
     this.nameAndSurname = "";
