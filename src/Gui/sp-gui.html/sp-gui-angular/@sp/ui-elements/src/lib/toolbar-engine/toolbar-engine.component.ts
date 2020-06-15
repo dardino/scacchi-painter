@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, Output } from "@angular/core";
-import { EventEmitter } from "protractor";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
 @Component({
   selector: "lib-toolbar-engine",
