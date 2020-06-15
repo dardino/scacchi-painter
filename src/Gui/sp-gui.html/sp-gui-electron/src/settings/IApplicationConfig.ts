@@ -1,5 +1,6 @@
 export interface IProblemSolverConfig {
   executablePath: string;
+  extraOptions?: string[];
   enabled: boolean;
 }
 

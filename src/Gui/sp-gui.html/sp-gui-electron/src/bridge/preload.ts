@@ -23,6 +23,7 @@ function init() {
           "popeye",
           "pywin64.exe"
         ),
+        extraOptions: [`Try`, `NoBoard`, `SetPlay`, `Variation`],
       },
     },
   };
