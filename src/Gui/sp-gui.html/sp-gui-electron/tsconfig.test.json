@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./tmp"
+    "outDir": "./tmp",
+    "resolveJsonModule": true
   }
 }

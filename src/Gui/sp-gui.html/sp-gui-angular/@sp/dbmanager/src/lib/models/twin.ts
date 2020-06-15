@@ -14,7 +14,7 @@ export class Twin implements ITwin {
   ValueC: string;
 
   public static fromElement(el: Element): Twin {
-    const t = new Twin(el);
+    const t = new Twin();
     t.TwinType =
       TwinTypes[(el.getAttribute("TwinType") as TwinTypesKeys) ?? "Diagram"];
     t.TwinModes =
@@ -24,8 +24,17 @@ export class Twin implements ITwin {
     t.ValueC = el.getAttribute("ValueC") ?? "";
     return t;
   }
+  static fromJson(fromJson: Partial<ITwin>): Twin {
+    const t = new Twin();
+    t.TwinType = fromJson.TwinType ?? TwinTypes.Diagram;
+    t.TwinModes = fromJson.TwinModes ?? TwinModes.Normal;
+    t.ValueA = fromJson.ValueA ?? "";
+    t.ValueB = fromJson.ValueB ?? "";
+    t.ValueC = fromJson.ValueC ?? "";
+    return t;
+  }
 
-  private constructor(private original: Element) {
+  private constructor() {
     this.TwinType = TwinTypes.Diagram;
     this.TwinModes = TwinModes.Normal;
     this.ValueA = "";
