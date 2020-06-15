@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditToolbarComponent } from './edit-toolbar.component';
+import { ToolbarEngineComponent } from './toolbar-engine.component';
 
-describe('EditToolbarComponent', () => {
-  let component: EditToolbarComponent;
-  let fixture: ComponentFixture<EditToolbarComponent>;
+describe('ToolbarEngineComponent', () => {
+  let component: ToolbarEngineComponent;
+  let fixture: ComponentFixture<ToolbarEngineComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditToolbarComponent ]
+      declarations: [ ToolbarEngineComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditToolbarComponent);
+    fixture = TestBed.createComponent(ToolbarEngineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
