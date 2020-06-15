@@ -2,7 +2,11 @@
   <section id="toolbar">
     <mat-toolbar>
       <lib-toolbar-edit></lib-toolbar-edit>
-      <lib-toolbar-engine [hideLabels]="true"></lib-toolbar-engine>
+      <lib-toolbar-engine
+        (startSolve)="startSolve()"
+        (stopSolve)="stopSolve()"
+        [hideLabels]="true"
+      ></lib-toolbar-engine>
     </mat-toolbar>
   </section>
   <div class="workboard">
@@ -12,7 +16,9 @@
         [position]="problem"
         boardType="HTML"
       ></lib-chessboard>
-      <lib-problem-info></lib-problem-info>
+      <ul *ngFor="let row of rows">
+        <li>{{row}}</li>
+      </ul>
     </section>
     <section id="info">
       <lib-sp-solution-desc [problem]="problem"></lib-sp-solution-desc>

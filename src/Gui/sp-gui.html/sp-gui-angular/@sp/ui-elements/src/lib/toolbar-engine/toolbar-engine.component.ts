@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output } from "@angular/core";
+import { EventEmitter } from "protractor";
 
 @Component({
   selector: "lib-toolbar-engine",
@@ -6,16 +7,26 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./toolbar-engine.component.styl"],
 })
 export class ToolbarEngineComponent implements OnInit {
+  @Input()
+  public hideLabels: boolean;
+
+  @Output()
+  public startSolve = new EventEmitter();
+
+  @Output()
+  public stopSolve = new EventEmitter();
 
   @Input()
-  hideLabels: boolean;
-
-  isRunning = false;
+  isRunning: boolean;
 
   constructor() {}
 
-  start() {}
-  stop() {}
+  start() {
+    this.startSolve.emit("start");
+  }
+  stop() {
+    this.startSolve.emit("stop");
+  }
 
   ngOnInit(): void {}
 }
