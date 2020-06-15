@@ -92,6 +92,10 @@ export class Piece implements IPiece {
     return parts.join("");
   }
 
+  isFairy() {
+    return (this.fairyCode ?? "") !== "";
+  }
+
   private constructor() {
     this.appearance = "";
     this.fairyCode = "";
