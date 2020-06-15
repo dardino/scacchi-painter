@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DbToolbarComponent } from "./db-toolbar.component";
+import { ToolbarDbComponent } from "./toolbar-db.component";
 
 describe("ToolbarComponent", () => {
-  let component: DbToolbarComponent;
-  let fixture: ComponentFixture<DbToolbarComponent>;
+  let component: ToolbarDbComponent;
+  let fixture: ComponentFixture<ToolbarDbComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DbToolbarComponent],
+      declarations: [ToolbarDbComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DbToolbarComponent);
+    fixture = TestBed.createComponent(ToolbarDbComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

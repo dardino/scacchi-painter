@@ -3,20 +3,20 @@ import {
   Colors,
   BoardRank,
   BoardFile,
-  Figurine
+  Figurine,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
 export enum ProblemTypes {
-  Direct,
-  Help,
-  HelpSelf,
-  Self,
+  Direct = "Direct",
+  Help = "Help",
+  HelpSelf = "HelpSelf",
+  Self = "Self",
 }
 export type ProblemTypesKeys = keyof typeof ProblemTypes;
 
 export enum StipulationTypes {
-  Mate,
-  Stale,
+  Mate = "Mate",
+  Stale = "Stale",
 }
 
 export interface IStipulation {
@@ -28,7 +28,7 @@ export interface IStipulation {
   completeStipulationDesc: string;
 }
 
-export interface XmlProblem {
+export interface IProblem {
   stipulation: IStipulation;
   htmlSolution: string;
   date: string;
@@ -39,42 +39,44 @@ export interface XmlProblem {
   authors: Author[];
   pieces: IPiece[] | null;
   twins: ITwins | null;
+  conditions: string[];
 }
 
 export enum SequnceTypes {
-  Normal,
+  Normal = "Normal",
 }
 export enum TwinTypes {
-  Custom = -1,
-  Diagram = 0, // no values
-  MovePiece = 1, // 2 values
-  RemovePiece = 2, // 1 value
-  AddPiece = 3, // 2 values
-  Substitute = 4, // 3 values
-  SwapPieces = 5, // 2 values
-  Rotation90 = 6, // no value
-  Rotation180 = 7, // no value
-  Rotation270 = 8, // no value
-  TraslateNormal = 9, // 2 value
-  TraslateToroidal = 10, // 2 value
-  MirrorHorizontal = 11, // no value
-  MirrorVertical = 12, // no value
-  ChangeProblemType = 13, // 2 value
-  Duplex = 14, // no value
-  AfterKey = 15, // no value
-  SwapColors = 16, // no value
-  Stipulation = 17, // 1 value
+  Custom = "Custom",
+  Diagram = "Diagram", // no values
+  MovePiece = "MovePiece", // 2 values
+  RemovePiece = "RemovePiece", // 1 value
+  AddPiece = "AddPiece", // 2 values
+  Substitute = "Substitute", // 3 values
+  SwapPieces = "SwapPieces", // 2 values
+  Rotation90 = "Rotation90", // no value
+  Rotation180 = "Rotation180", // no value
+  Rotation270 = "Rotation270", // no value
+  TraslateNormal = "TraslateNormal", // 2 value
+  TraslateToroidal = "TraslateToroidal", // 2 value
+  MirrorHorizontal = "MirrorHorizontal", // no value
+  MirrorVertical = "MirrorVertical", // no value
+  ChangeProblemType = "ChangeProblemType", // 2 value
+  Duplex = "Duplex", // no value
+  AfterKey = "AfterKey", // no value
+  SwapColors = "SwapColors", // no value
+  Stipulation = "Stipulation", // 1 value
 }
 
 export type TwinTypesKeys = keyof typeof TwinTypes;
 export enum TwinModes {
-  Normal,
+  Normal = "Normal",
+  Combined = "Combined",
 }
 export type TwinModesKeys = keyof typeof TwinModes;
 
 export interface ITwins {
-  TwinSequenceTypes: SequnceTypes;
-  Twins: ITwin[];
+  TwinSequenceTypes?: SequnceTypes;
+  Twins?: ITwin[];
 }
 
 export interface ITwin {
@@ -110,7 +112,7 @@ export interface ProblemDb {
   version: string;
   name: string;
   lastIndex: number;
-  problems: XmlProblem[];
+  problems: IProblem[];
 }
 
 export const PieceRotation = [
@@ -306,8 +308,17 @@ export function getBoardRank(y: string | Traverse): BoardRank {
   return BoardRank[`R${y}` as keyof typeof BoardRank];
 }
 
+const colorMapper = {
+  Both: "Neutral",
+  Neutral: "Neutral",
+  White: "White",
+  Black: "Black",
+} as const;
+
 export function getColor(c: Element): PieceColors {
-  return c.getAttribute("Color") as PieceColors;
+  return colorMapper[
+    (c.getAttribute("Color") ?? "White") as keyof typeof colorMapper
+  ];
 }
 
 export function getCanvasColor(c: PieceColors): Colors {

@@ -24,11 +24,11 @@ export const ActionInfo = {
 } as const;
 
 @Component({
-  selector: "lib-db-toolbar",
-  templateUrl: "./db-toolbar.component.html",
-  styleUrls: ["./db-toolbar.component.styl"],
+  selector: "lib-toolbar-db",
+  templateUrl: "./toolbar-db.component.html",
+  styleUrls: ["./toolbar-db.component.styl"],
 })
-export class DbToolbarComponent implements OnInit {
+export class ToolbarDbComponent implements OnInit {
   constructor(private db: DbmanagerService) {}
 
   @Input() boardType: "canvas" | "HTML";

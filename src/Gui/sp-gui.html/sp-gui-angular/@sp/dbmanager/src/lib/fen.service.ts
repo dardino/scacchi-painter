@@ -96,4 +96,5 @@ export class FenService {
       );
     return cells;
   }
+
 }

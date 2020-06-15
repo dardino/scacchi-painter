@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { BridgeGlobal } from "./bridge-global";
-import { Observable } from "rxjs";
+import { BridgeGlobal, EOF } from "./bridge-global";
+import { Observable, BehaviorSubject, Subject, Subscription } from "rxjs";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 
 declare global {
@@ -13,11 +13,42 @@ declare global {
   providedIn: "root",
 })
 export class HostBridgeService {
-  stopSolve() {
-    throw new Error("Method not implemented.");
+  private solver$ = new Subject<string>();
+  private subscription: Subscription | null = null;
+  get Solver$() {
+    return this.solver$.asObservable();
   }
-  runSolve(CurrentProblem: Problem): Observable<string> {
-    throw new Error("Method not implemented.");
+
+  stopSolve() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+    }
+    return window.Bridge?.stopSolve();
+  }
+  runSolve(CurrentProblem: Problem): Error | undefined {
+    if (this.subscription) return new Error("Solver already started!");
+    const obs = window.Bridge?.runSolve(CurrentProblem, "Popeye");
+    if (!obs) return new Error("Engine not found!");
+    if (obs instanceof Error) return obs;
+    this.subscription = obs.subscribe((text) => {
+      if (typeof text === "string") {
+        this.solver$.next(text);
+      } else {
+        if (text.exitCode === 0) {
+          this.solver$.next(text.message);
+        } else {
+          this.solver$.next(
+            `Engine process exited with code: ${text.exitCode}`
+          );
+          this.solver$.next(`${text.message}`);
+          if (this.subscription) this.subscription.unsubscribe();
+          this.subscription = null;
+        }
+      }
+    });
+
+    return;
   }
   public async saveFile(content: File) {
     return window.Bridge?.saveFile(content);
@@ -26,6 +57,6 @@ export class HostBridgeService {
     return typeof window.Bridge?.closeApp === "function";
   }
   public closeApp() {
-    window.Bridge?.closeApp?.();
+    if (window.Bridge) return window.Bridge.closeApp?.();
   }
 }

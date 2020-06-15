@@ -39,6 +39,19 @@ export class Piece implements IPiece {
     p.traverse = getTraverse(source) ?? Traverse[0];
     return p;
   }
+
+  static fromJson(fromJson: Partial<IPiece>): Piece {
+    const p = new Piece();
+    p.appearance = fromJson.appearance ?? "";
+    p.color = fromJson.color ?? "White";
+    p.column = fromJson.column ?? "ColA";
+    p.fairyAttribute = fromJson.fairyAttribute ?? "";
+    p.fairyCode = fromJson.fairyCode ?? "";
+    p.rotation = fromJson.rotation ?? "NoRotation";
+    p.traverse = fromJson.traverse ?? "Row1";
+    return p;
+  }
+
   static fromPartial(
     data?: Partial<IPiece> | null,
     l?: SquareLocation
@@ -77,6 +90,10 @@ export class Piece implements IPiece {
       parts.push(getRotationSymbol(this.rotation));
     }
     return parts.join("");
+  }
+
+  isFairy() {
+    return (this.fairyCode ?? "") !== "";
   }
 
   private constructor() {

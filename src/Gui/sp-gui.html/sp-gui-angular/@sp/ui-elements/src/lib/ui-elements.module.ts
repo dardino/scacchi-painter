@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { DbToolbarComponent } from "./db-toolbar/db-toolbar.component";
+import { ToolbarDbComponent } from "./toolbar-db/toolbar-db.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -7,22 +7,25 @@ import { CommonModule } from "@angular/common";
 import { SpToolbarButtonComponent } from "./sp-toolbar-button/sp-toolbar-button.component";
 import { SpSolutionDescComponent } from "./sp-solution-desc/sp-solution-desc.component";
 import { ProblemInfoComponent } from "./problem-info/problem-info.component";
-import { EditToolbarComponent } from "./edit-toolbar/edit-toolbar.component";
+import { ToolbarEditComponent } from "./toolbar-edit/toolbar-edit.component";
+import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
 @NgModule({
   declarations: [
-    DbToolbarComponent,
+    ToolbarDbComponent,
     SpToolbarButtonComponent,
     SpSolutionDescComponent,
     ProblemInfoComponent,
-    EditToolbarComponent,
+    ToolbarEditComponent,
+    ToolbarEngineComponent,
   ],
   imports: [CommonModule, MatIconModule, MatButtonModule, MatToolbarModule],
   exports: [
-    DbToolbarComponent,
+    ToolbarDbComponent,
     SpToolbarButtonComponent,
     SpSolutionDescComponent,
     ProblemInfoComponent,
-    EditToolbarComponent,
+    ToolbarEditComponent,
+    ToolbarEngineComponent
   ],
 })
 export class UiElementsModule {}
