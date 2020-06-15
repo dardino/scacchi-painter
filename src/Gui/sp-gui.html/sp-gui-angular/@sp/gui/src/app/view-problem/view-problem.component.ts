@@ -17,17 +17,17 @@ export class ViewProblemComponent implements OnInit {
       this.chessBoardType = $event.args;
     }
     if (ActionInfo.is("PreviousProblem", $event)) {
-      this.router.navigate([`../${ this.db.CurrentIndex }`], {
+      this.router.navigate([`../${this.db.CurrentIndex}`], {
         relativeTo: this.route,
       });
     }
     if (ActionInfo.is("NextProblem", $event)) {
-      this.router.navigate([`../${ this.db.CurrentIndex + 2 }`], {
+      this.router.navigate([`../${this.db.CurrentIndex + 2}`], {
         relativeTo: this.route,
       });
     }
     if (ActionInfo.is("LastProblem", $event)) {
-      this.router.navigate([`../${ this.db.Count}`], {
+      this.router.navigate([`../${this.db.Count}`], {
         relativeTo: this.route,
       });
     }
@@ -37,7 +37,7 @@ export class ViewProblemComponent implements OnInit {
   }
 
   getProblemFromRoute(): void {
-    this.route.params.subscribe(obs => {
+    this.route.params.subscribe((obs) => {
       this.id = +(obs.id ?? 0) - 1;
       this.db.GotoIndex(this.id);
     });
