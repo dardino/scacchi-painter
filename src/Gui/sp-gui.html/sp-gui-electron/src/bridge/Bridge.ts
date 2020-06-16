@@ -32,7 +32,7 @@ export class Bridge implements BridgeGlobal {
   }
   stopSolve(): void {
     if (this.interval) clearInterval(this.interval);
-    this.solvers.forEach((s) => s.running && s.stop());
+    this.solvers.forEach((s) => s.stop());
     this.solver$.next("solution stopped!");
     this.solver$.unsubscribe();
   }

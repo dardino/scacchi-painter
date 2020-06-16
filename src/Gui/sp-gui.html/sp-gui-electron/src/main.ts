@@ -1,5 +1,6 @@
-import Electron, { BrowserWindow, app } from "electron";
+import Electron, { BrowserWindow, app, WebContents } from "electron";
 import path from "path";
+import url from "url";
 
 function createWindow() {
   console.log("create win");
@@ -8,7 +9,7 @@ function createWindow() {
     width: 800,
     height: 600,
     // frame: false,
-    // thickFrame: true,
+    thickFrame: true,
     maximizable: true,
     acceptFirstMouse: true,
     fullscreenable: true,
@@ -16,12 +17,23 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "bridge", "preload.js"),
     },
   });
-  win.setMenu(new Electron.Menu());
+  //  const mnu = new Electron.Menu();
+  //  mnu.append(
+  //    new Electron.MenuItem({
+  //      label: "File",
+  //    })
+  //  );
+  //  win.setMenu(mnu);
   win.maximize();
-  if (process.env.NODE_ENV === "development") win.webContents.openDevTools();
+  //if (process.env.NODE_ENV === "development")
+  win.webContents.openDevTools();
+
+  win.webContents.on("did-fail-load", (e) => {
+    win.loadFile("app/index.html");
+  });
 
   // e carica l'index.html dell'app.
   win.loadFile("app/index.html");

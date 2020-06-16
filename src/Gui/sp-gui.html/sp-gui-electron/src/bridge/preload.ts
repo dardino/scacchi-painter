@@ -4,7 +4,6 @@ import { ipcRenderer as ipc, remote } from "electron";
 import { Bridge } from "./Bridge";
 import { PopeyeSolver } from "../solver/PopeyeSolver";
 import { IApplicationConfig } from "settings/IApplicationConfig";
-import path from "path";
 
 init();
 
@@ -17,12 +16,7 @@ function init() {
     problemSolvers: {
       Popeye: {
         enabled: true,
-        executablePath: path.join(
-          __dirname,
-          "engines",
-          "popeye",
-          "pywin64.exe"
-        ),
+        executablePath: "C:\\dev\\github\\scacchi-painter\\src\\Gui\\sp-gui.html\\sp-gui-electron\\engines\\popeye\\pywin64.exe",
         extraOptions: [`Try`, `NoBoard`, `SetPlay`, `Variation`],
       },
     },

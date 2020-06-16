@@ -56,7 +56,6 @@ export class DbmanagerService {
 
   LoadFromText(xmlText: string, fileName: string): Error | null {
     try {
-      // tentativo 1: controllo se è un SP2
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
       this.CurrentDB = xmlDoc;
@@ -111,13 +110,13 @@ export class DbmanagerService {
 
   private getDbFile(): File {
     const text = this.CurrentDB?.documentElement.outerHTML ?? "";
-    return new File([text], "test.sp2", { type: "text/xml" });
+    return new File([text], this.fileName, { type: "text/xml" });
   }
 
   public startSolving(): Observable<string> | Error {
     if (!this.CurrentProblem) return new Error("unable to solve a null problem!");
     this.solveOut$ = new Subject();
-    this.bridge.runSolve(this.CurrentProblem);
+    this.bridge.startSolve(this.CurrentProblem);
     return this.solveOut$.asObservable();
   }
 

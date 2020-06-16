@@ -21,10 +21,12 @@ export class ToolbarEngineComponent implements OnInit {
   constructor() {}
 
   start() {
+    console.log("[LOG] -> try to start process...");
     this.startSolve.emit("start");
   }
   stop() {
-    this.startSolve.emit("stop");
+    console.log("[LOG] -> try to stop process...");
+    this.stopSolve.emit("stop");
   }
 
   ngOnInit(): void {}

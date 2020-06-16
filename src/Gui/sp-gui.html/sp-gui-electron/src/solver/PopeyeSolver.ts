@@ -35,7 +35,9 @@ export class PopeyeSolver implements ISolver {
     return false;
   }
   stop(): void {
-    if (this.childProcess && !this.childProcess.killed) this.childProcess.kill();
+    console.log("[POPEYE SOLVER] -> try to kill process...");
+    if (this.childProcess && !this.childProcess.killed) 
+      this.childProcess.kill();
     this.childProcess = null;
   }
   start(
