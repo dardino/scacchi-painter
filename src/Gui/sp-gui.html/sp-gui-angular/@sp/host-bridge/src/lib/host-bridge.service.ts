@@ -28,10 +28,6 @@ export class HostBridgeService {
   stopSolve() {
     console.log("[LOG] -> stop solve: cancel subscriptions...");
     if (window.Bridge) window.Bridge.stopSolve();
-    // if (this.subscription) {
-    //   this.subscription.unsubscribe();
-    //   this.subscription = null;
-    // }
   }
 
   startSolve(CurrentProblem: Problem): Error | undefined {
