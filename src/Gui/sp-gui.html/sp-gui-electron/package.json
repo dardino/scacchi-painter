@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@types/jest": "^26.0.0",
+    "canvas-chessboard": "^0.0.17",
     "electron-store": "^5.2.0",
     "jest": "^26.0.1",
     "jest-junit": "^10.0.0",

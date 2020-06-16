@@ -1162,6 +1162,11 @@ camelcase@^6.0.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.0.0.tgz#5259f7c30e35e278f1bdc2a4d91230b37cad981e"
   integrity sha512-8KMDF1Vz2gzOq54ONPJS65IvTUaB1cHJ2DMM7MbPmLZljDH1qpzzLsWdiN9pHh6qvkRVDTi/07+eNGch/oLU4w==
 
+canvas-chessboard@^0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/canvas-chessboard/-/canvas-chessboard-0.0.17.tgz#9ac0276bec1e9dec86bb5f34f2933cd835ee7a88"
+  integrity sha512-a/JfMFAocQtm9SdN/wnrZk+ikhA9xgccFU9a/vzbFDDjbFMubV0n0WshR0FkkvIaAAMtyyF9JvG1LppmMY/tcQ==
+
 capture-exit@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/capture-exit/-/capture-exit-2.0.0.tgz#fb953bfaebeb781f62898239dabb426d08a509a4"

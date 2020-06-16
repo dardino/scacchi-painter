@@ -5,6 +5,7 @@
       <lib-toolbar-engine
         (startSolve)="startSolve()"
         (stopSolve)="stopSolve()"
+        [isRunning]="solveInProgress"
         [hideLabels]="true"
       ></lib-toolbar-engine>
     </mat-toolbar>
@@ -16,7 +17,7 @@
         [position]="problem"
         boardType="HTML"
       ></lib-chessboard>
-      <ul *ngFor="let row of rows">
+      <ul class="solution-row" *ngFor="let row of rows$ | async">
         <li>{{row}}</li>
       </ul>
     </section>
