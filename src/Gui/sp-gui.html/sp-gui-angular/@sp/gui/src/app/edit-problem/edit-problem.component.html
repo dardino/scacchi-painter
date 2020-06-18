@@ -1,7 +1,9 @@
 <div>
   <section id="toolbar">
     <mat-toolbar>
-      <lib-toolbar-edit></lib-toolbar-edit>
+      <lib-toolbar-edit
+        (goBack)="goBack()"
+      ></lib-toolbar-edit>
       <lib-toolbar-engine
         (startSolve)="startSolve()"
         (stopSolve)="stopSolve()"
@@ -20,6 +22,7 @@
       <ul class="solution-row" *ngFor="let row of rows$ | async">
         <li>{{row}}</li>
       </ul>
+      <lib-piece-selector></lib-piece-selector>
     </section>
     <section id="info">
       <lib-sp-solution-desc [problem]="problem"></lib-sp-solution-desc>
