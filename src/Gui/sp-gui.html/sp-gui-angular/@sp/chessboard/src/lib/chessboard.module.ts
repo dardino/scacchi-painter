@@ -11,6 +11,6 @@ import { CommonModule } from "@angular/common";
     BoardCellComponent,
   ],
   imports: [CommonModule],
-  exports: [ChessboardComponent],
+  exports: [ChessboardComponent, PieceSelectorComponent],
 })
 export class ChessboardModule {}

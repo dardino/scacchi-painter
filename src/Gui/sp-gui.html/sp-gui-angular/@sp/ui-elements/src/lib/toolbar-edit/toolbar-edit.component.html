@@ -1,17 +1,16 @@
 <mat-toolbar-row class="lib-toolbar">
-  <lib-sp-toolbar-button
-    iconText="add"
-    iconLabel="Add mode"
-    [noLabel]="true"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
-    iconText="remove"
-    iconLabel="Delete mode"
-    [noLabel]="true"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
-    iconText="open_with"
-    iconLabel="Move mode"
-    [noLabel]="true"
-  ></lib-sp-toolbar-button>
+  <mat-button-toggle-group>
+    <mat-button-toggle value="select">
+      <mat-icon svgIcon="select_piece"></mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="add">
+      <mat-icon svgIcon="add_piece"></mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="remove">
+      <mat-icon svgIcon="remove_piece"></mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="move">
+      <mat-icon svgIcon="move_piece"></mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
 </mat-toolbar-row>

@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { Subscription, Subject, BehaviorSubject } from "rxjs";
+import { Subscription, BehaviorSubject } from "rxjs";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-edit-problem",
@@ -13,7 +14,9 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   public rows: string[] = [];
   public rows$ubject = new BehaviorSubject<string[]>([]);
 
-  public get rows$() { return this.rows$ubject.asObservable(); }
+  public get rows$() {
+    return this.rows$ubject.asObservable();
+  }
 
   public get problem() {
     return this.db.CurrentProblem;
@@ -21,6 +24,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 
   constructor(
     private db: DbmanagerService,
+    private location: Location,
     private bridge: HostBridgeService
   ) {}
 
@@ -34,12 +38,16 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.bridge.stopSolve();
   }
 
+  goBack() {
+    this.location.back();
+  }
+
   get solveInProgress() {
     return this.bridge.solveInProgress();
   }
 
   ngOnInit(): void {
-    this.subscribe = this.bridge.Solver$.subscribe(msg => {
+    this.subscribe = this.bridge.Solver$.subscribe((msg) => {
       this.rows.push(msg);
       this.rows$ubject.next(this.rows);
     });
