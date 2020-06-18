@@ -132,7 +132,8 @@ export class ChessboardComponent
   }
 
   onCellClick(cell: UiCell) {
-    this.currentCell = cell;
+    if (cell !== this.currentCell) this.currentCell = cell;
+    else this.currentCell = null;
   }
 
   private sizeMutated = (args: any) => {
