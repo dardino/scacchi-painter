@@ -2,7 +2,7 @@ import { ITwins, SequnceTypes } from "../helpers";
 import { Twin } from "./twin";
 
 export class Twins implements ITwins {
-  Twins: Twin[] = [];
+  TwinList: Twin[] = [];
   TwinSequenceTypes: SequnceTypes = SequnceTypes.Normal;
   public static fromElement(el: Element | null): Twins {
     const t = new Twins();
@@ -13,15 +13,20 @@ export class Twins implements ITwins {
         (el.getAttribute("TwinSequenceTypes") as keyof typeof SequnceTypes) ||
           "Normal"
       ];
-    t.Twins = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
+    t.TwinList = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
     return t;
   }
   static fromJson(twins: ITwins | null | undefined): Twins {
     const p = new Twins();
     if (twins == null) return p;
-    if (twins.TwinSequenceTypes != null) p.TwinSequenceTypes = twins.TwinSequenceTypes;
-    p.Twins = (twins.Twins || []).map(Twin.fromJson);
+    if (twins.TwinSequenceTypes != null) {
+      p.TwinSequenceTypes = twins.TwinSequenceTypes;
+    }
+    p.TwinList = (twins.TwinList || []).map(Twin.fromJson);
     return p;
+  }
+  toJson(): Partial<ITwins> {
+    const p: Partial<ITwins> = {};
   }
   private constructor() {}
 }
