@@ -37,6 +37,10 @@ export class Stipulation implements IStipulation {
     p.completeStipulationDesc = stipulation.completeStipulationDesc ?? "#2";
     return p;
   }
+  toJson(): Partial<IStipulation> {
+    const json: Partial<IStipulation> = {};
+    return json;
+  }
 
   private constructor() {}
 }

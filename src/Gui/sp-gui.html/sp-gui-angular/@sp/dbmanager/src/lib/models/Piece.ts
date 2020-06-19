@@ -96,6 +96,10 @@ export class Piece implements IPiece {
     return (this.fairyCode ?? "") !== "";
   }
 
+  toJson(): Partial<IPiece> {
+    const json: Partial<IPiece> = {};
+    return json;
+  }
   private constructor() {
     this.appearance = "";
     this.fairyCode = "";

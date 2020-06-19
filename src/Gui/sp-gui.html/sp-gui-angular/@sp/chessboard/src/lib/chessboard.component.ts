@@ -164,13 +164,13 @@ export class ChessboardComponent
   }
 
   get twins(): string[] {
-    return this.position?.twins.Twins.map((t) => t.toString()) ?? [];
+    return this.position?.twins.TwinList.map((t) => t.toString()) ?? [];
   }
 
   get viewDiagram(): any {
     return (
-      (this.position?.twins.Twins.length ?? 0) &&
-      this.position?.twins.Twins.every((t) => t.TwinType !== TwinTypes.Diagram)
+      (this.position?.twins.TwinList.length ?? 0) &&
+      this.position?.twins.TwinList.every((t) => t.TwinType !== TwinTypes.Diagram)
     );
   }
 }

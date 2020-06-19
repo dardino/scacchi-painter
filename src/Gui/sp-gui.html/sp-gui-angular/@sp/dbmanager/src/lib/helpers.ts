@@ -29,17 +29,18 @@ export interface IStipulation {
 }
 
 export interface IProblem {
-  stipulation: IStipulation;
+  stipulation: Partial<IStipulation>;
   htmlSolution: string;
   date: string;
   prizeRank: string;
   personalID: string;
   prizeDescription: string;
   source: string;
-  authors: Author[];
-  pieces: IPiece[] | null;
-  twins: ITwins | null;
+  authors: Array<Partial<Author>>;
+  pieces: Array<Partial<IPiece>> | null;
+  twins: Partial<ITwins> | null;
   conditions: string[];
+  snapshots: { [key in string | number]: string };
 }
 
 export enum SequnceTypes {
@@ -76,7 +77,7 @@ export type TwinModesKeys = keyof typeof TwinModes;
 
 export interface ITwins {
   TwinSequenceTypes?: SequnceTypes;
-  Twins?: ITwin[];
+  TwinList?: ITwin[];
 }
 
 export interface ITwin {

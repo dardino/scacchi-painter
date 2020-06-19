@@ -35,6 +35,11 @@ export class Author implements IAuthor {
     return a;
   }
 
+  toJson(): Partial<IAuthor> {
+    const json: Partial<IAuthor> = {};
+    return json;
+  }
+
   private constructor() {
     this.nameAndSurname = "";
     this.address = "";
