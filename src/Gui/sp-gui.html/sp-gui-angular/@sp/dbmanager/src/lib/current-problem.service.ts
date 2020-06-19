@@ -9,12 +9,17 @@ import { FairyPiecesCodes } from "./models/fairesDB";
 })
 export class CurrentProblemService {
   constructor(private dbManager: DbmanagerService) {}
-  AddPiece(piece: Piece) {}
-  RemovePiece(piece: Piece) {}
+  AddPieceAt(location: SquareLocation, piece: Piece) {}
   RemovePieceAt(location: SquareLocation) {}
-  MovePiece(piece: Piece, to: SquareLocation, mode: "swap" | "replace" = "replace") {}
-  RotatePiece(piece: Piece, angle: PieceRotation) {}
-  SetFairyAttribute(piece: Piece, attribute: string) {}
+  MovePiece(from: SquareLocation, to: SquareLocation, mode: "swap" | "replace" = "replace") {}
+  RotatePiece(location: SquareLocation, angle: PieceRotation) {}
+  SetFairyAttribute(location: SquareLocation, attribute: string) {}
   SetCellFairyAttribute(location: SquareLocation, attribute: string) {}
-  SetAsFairyPiece(fairyCode: FairyPiecesCodes) {}
+  SetAsFairyPiece(location: SquareLocation, fairyCode: FairyPiecesCodes) {}
+  RotateBoard(angle: "left" | "right") {}
+  FlipBoard(axis: "x" | "y") {}
+  ShiftBoard(axis: "x" | "y" | "-x" | "-y") {}
+  ClearBoard() {}
+  Reload(snapshotID?: number) {}
+  Snapshot() {}
 }
