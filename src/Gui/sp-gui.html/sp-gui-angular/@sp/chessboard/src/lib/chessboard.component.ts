@@ -7,6 +7,8 @@ import {
   ElementRef,
   AfterViewInit,
   OnDestroy,
+  Output,
+  EventEmitter,
 } from "@angular/core";
 import {
   SquareLocation,
@@ -52,6 +54,9 @@ export class ChessboardComponent
 
   @Input()
   mode: "edit" | "view";
+
+  @Output()
+  currentCellChanged: EventEmitter<SquareLocation | null>;
 
   public get Mode() {
     return this.mode;
@@ -134,6 +139,9 @@ export class ChessboardComponent
   onCellClick(cell: UiCell) {
     if (cell !== this.currentCell) this.currentCell = cell;
     else this.currentCell = null;
+    this.currentCellChanged.emit(
+      this.currentCell ? { ...this.currentCell?.location } : null
+    );
   }
 
   private sizeMutated = (args: any) => {
