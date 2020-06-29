@@ -18,13 +18,13 @@ namespace SP.Core
 
     internal static class StipulationTypeEnumEx
     {
-        private static Dictionary<StipulationTypeEnum, PieceColors> steColors = new Dictionary<StipulationTypeEnum, PieceColors> {
+        private static readonly Dictionary<StipulationTypeEnum, PieceColors> steColors = new Dictionary<StipulationTypeEnum, PieceColors> {
             { StipulationTypeEnum.Direct  , PieceColors.White },
             { StipulationTypeEnum.Help    , PieceColors.Black },
             { StipulationTypeEnum.Self    , PieceColors.White },
             { StipulationTypeEnum.HelpSelf, PieceColors.Black }
         };
-        private static Dictionary<StipulationTypeEnum, string> steStrings = new Dictionary<StipulationTypeEnum, string> {
+        private static readonly Dictionary<StipulationTypeEnum, string> steStrings = new Dictionary<StipulationTypeEnum, string> {
             { StipulationTypeEnum.Direct  , "" },
             { StipulationTypeEnum.Help    , "H" },
             { StipulationTypeEnum.Self    , "S" },

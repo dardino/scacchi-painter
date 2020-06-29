@@ -4,7 +4,7 @@ namespace SP.Core
 {
 	public class FigurineAttribute : Attribute
 	{
-		private PieceFigurine figurine = PieceFigurine.None;
+		private readonly PieceFigurine figurine = PieceFigurine.None;
 		public PieceFigurine Value {
 			get { return figurine; }
 		}

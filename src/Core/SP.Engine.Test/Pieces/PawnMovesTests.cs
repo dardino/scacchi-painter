@@ -15,8 +15,7 @@ namespace SP.Engine.Pieces
 	[TestCategory("Engine.Pieces.Pawn")]
 	public class PawnMovesTests
 	{
-
-		GameState g = new GameState
+        readonly GameState g = new GameState
 		{
 			BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
 				// WHITE:                                    BLACK:
@@ -50,10 +49,12 @@ namespace SP.Engine.Pieces
 		public void P_MoveInABlankBoard()
 		{
 
-			var pawn = new Pawn();
-			pawn.Color = PieceColors.White;
+            var pawn = new Pawn
+            {
+                Color = PieceColors.White
+            };
 
-			UInt64 movesA1 = 0x8000;
+            UInt64 movesA1 = 0x8000;
 			UInt64 movesB1 = 0x4000;
 			UInt64 movesC2 = 0x20200000;
 			UInt64 movesD4 = 0x1000000000;
@@ -91,10 +92,12 @@ namespace SP.Engine.Pieces
 		[Priority(1)]
 		public void P_MoveInOccupiedBoard() {
 
-			var pawn = new Pawn();
-			pawn.Color = PieceColors.White;
+            var pawn = new Pawn
+            {
+                Color = PieceColors.White
+            };
 
-			UInt64 movesA1 = 0xc000;
+            UInt64 movesA1 = 0xc000;
 			UInt64 movesB1 = 0x0;
 			UInt64 movesC2 = 0x20300000;
 			UInt64 movesD4 = 0x1000000000;
@@ -141,10 +144,12 @@ namespace SP.Engine.Pieces
 		[TestMethod]
 		public void P_CapturesTest()
 		{
-			var pawn = new Pawn();
-			pawn.Color = PieceColors.White;
+            var pawn = new Pawn
+            {
+                Color = PieceColors.White
+            };
 
-			ulong movesA1 = Square.B2.ToSquareBits();
+            ulong movesA1 = Square.B2.ToSquareBits();
 			ulong movesB1 = 0x0;
 			ulong movesC2 = Square.D3.ToSquareBits();
 			ulong movesD4 = 0x0;
@@ -194,9 +199,11 @@ namespace SP.Engine.Pieces
 		[Priority(1)]
 		public void P_IsAttackingSquare() {
 
-			var pawn = new Pawn();
-			pawn.Color = PieceColors.White;
-			Assert.IsTrue(pawn.IsAttackingSquare(Square.B2, Square.C3, g));
+            var pawn = new Pawn
+            {
+                Color = PieceColors.White
+            };
+            Assert.IsTrue(pawn.IsAttackingSquare(Square.B2, Square.C3, g));
 			Assert.IsFalse(pawn.IsAttackingSquare(Square.A1, Square.C2, g));
 			Assert.IsFalse(pawn.IsAttackingSquare(Square.A4, Square.H4, g));
 			Assert.IsTrue(pawn.IsAttackingSquare(Square.C5, Square.B6, g));

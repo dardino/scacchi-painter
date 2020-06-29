@@ -9,7 +9,7 @@ namespace SP.Engine.Pieces
 	[PieceName("N")]
 	public class Horse : EnginePiece
 	{
-		static ulong c3Moves = (ulong)(SquareBits.A2 | SquareBits.A4 | SquareBits.B1 | SquareBits.B5 | SquareBits.D5 | SquareBits.D1 | SquareBits.E2 | SquareBits.E4);
+		static readonly ulong c3Moves = (ulong)(SquareBits.A2 | SquareBits.A4 | SquareBits.B1 | SquareBits.B5 | SquareBits.D5 | SquareBits.D1 | SquareBits.E2 | SquareBits.E4);
 
 		public override ulong GetCapturesFromPosition(Square s, GameState gameState)
 		{
