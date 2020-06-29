@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import Configs from "canvas-chessboard/modules/es2018/presets";
+import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 import {
   IPiece,
   SquareLocation,
@@ -39,7 +39,7 @@ export class BoardCellComponent implements OnInit {
   get piecechar(): string {
     if (!this.piece) return "";
     const color = getCanvasColor(this.piece.color);
-    const pieces = Configs.ScacchiPainter[color];
+    const pieces = GetConfig()[color];
     const fig = getFigurine(this.piece.appearance);
     if (fig == null) return "";
     return pieces[fig];
