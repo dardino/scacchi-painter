@@ -15,7 +15,7 @@ namespace SP.Engine.Pieces
 	[TestCategory("Engine.Pieces.Bishop")]
 	public class BishopMovesTests
 	{
-		GameState g = new GameState
+        readonly GameState g = new GameState
 		{
 			BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
 				// WHITE:                                    BLACK:

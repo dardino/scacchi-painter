@@ -74,7 +74,12 @@ namespace SP.Core.Utils {
 
 		private static Type FindClass(PieceFigurine tipo, string name)
 		{
-			var filtered = piecetypes
+            if (name is null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            var filtered = piecetypes
 				.Where(p =>
 						(p.GetCustomAttributes(false)
 						.Where(f => f.GetType() == typeof(FigurineAttribute))

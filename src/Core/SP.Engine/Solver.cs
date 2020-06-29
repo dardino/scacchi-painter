@@ -77,7 +77,7 @@ namespace SP.Engine
             return taskSolver;
         }
 
-        private void findMovesOfMove(GameState gs, MoveTree mTree)
+        private void FindMovesOfMove(GameState gs, MoveTree mTree)
         {
             GameState subg = GameStateStatic.GetCloneOf(gs);
             GameStateStatic.ApplyMove(subg, mTree.Move, tokenSource.Token);
@@ -104,7 +104,7 @@ namespace SP.Engine
             var loop = Parallel.ForEach(gsml, (m) =>
             {
                 var mTree = new MoveTree(m, gs.ActualDepth + .5m);
-                findMovesOfMove(gs, mTree);
+                FindMovesOfMove(gs, mTree);
                 ml.Add(mTree);
             });
 
@@ -146,7 +146,7 @@ namespace SP.Engine
         public bool CheckMate { get; internal set; }
         public bool StaleMate { get; internal set; }
 
-        public MoveTree(HalfMove halfMove, decimal dept)
+        public MoveTree(HalfMove halfMove, decimal _)
         {
             Move = halfMove;
             ChildMoves = null;

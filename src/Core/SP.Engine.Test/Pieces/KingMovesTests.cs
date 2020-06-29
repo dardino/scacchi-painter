@@ -16,7 +16,7 @@ namespace SP.Engine.Pieces
 	[TestCategory("Engine.Pieces.King")]
 	public class KingMovesTests
 	{
-		GameState g = new GameState
+        readonly GameState g = new GameState
 		{
 			BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
 				// WHITE:                                    BLACK:
@@ -237,9 +237,9 @@ namespace SP.Engine.Pieces
 			var tokenSource = new CancellationTokenSource();
 			var gs = GameStateStatic.FromBoard(BoardUtils.FromNotation("7q/p2r4/4k3/R4p2/B1p4p/8/1n6/4K3"), tokenSource.Token);
 			var wk = new King() { Color = PieceColors.White };
-			var moves = wk.GetMovesFromPosition(Square.E1, gs);
+            _ = wk.GetMovesFromPosition(Square.E1, gs);
 
-		}
+        }
 
 
 		[TestMethod]

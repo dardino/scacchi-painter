@@ -193,9 +193,8 @@ namespace SP.Engine
 			{
 				var cell = game.Board.Cells[u];
 				var s = cell.Square;
-				var p = game.Board.GetPiece(s) as EnginePiece;
-				if (p == null) continue;
-				var x = s.ToSquareBits();
+                if (!(game.Board.GetPiece(s) is EnginePiece p)) continue;
+                var x = s.ToSquareBits();
 				game.BitBoardByColor[p.Color] |= x;
 			}
 
