@@ -23,10 +23,10 @@
           "options": {
             "deleteOutputPath": true,
             "outputPath": "dist/gui",
-            "index"     : "@sp/gui/src/index.html",
-            "main"      : "@sp/gui/src/main.ts",
-            "polyfills" : "@sp/gui/src/polyfills.ts",
-            "tsConfig"  : "@sp/gui/tsconfig.app.json",
+            "index": "@sp/gui/src/index.html",
+            "main": "@sp/gui/src/main.ts",
+            "polyfills": "@sp/gui/src/polyfills.ts",
+            "tsConfig": "@sp/gui/tsconfig.app.json",
             "aot": true,
             "assets": [
               "@sp/gui/src/favicon.ico",
@@ -149,9 +149,7 @@
               "@sp/gui/tsconfig.spec.json",
               "@sp/gui/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -201,9 +199,7 @@
               "@sp/chessboard/tsconfig.lib.json",
               "@sp/chessboard/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -241,9 +237,7 @@
               "@sp/dbmanager/tsconfig.lib.json",
               "@sp/dbmanager/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -281,9 +275,7 @@
               "@sp/ui-elements/tsconfig.lib.json",
               "@sp/ui-elements/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -321,9 +313,7 @@
               "@sp/host-bridge/tsconfig.lib.json",
               "@sp/host-bridge/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
