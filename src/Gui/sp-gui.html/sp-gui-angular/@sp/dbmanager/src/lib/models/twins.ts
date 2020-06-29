@@ -27,6 +27,7 @@ export class Twins implements ITwins {
   }
   toJson(): Partial<ITwins> {
     const p: Partial<ITwins> = {};
+    return p;
   }
   private constructor() {}
 }
