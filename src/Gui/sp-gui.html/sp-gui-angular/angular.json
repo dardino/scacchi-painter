@@ -82,12 +82,13 @@
               "optimization": true,
               "outputHashing": "none",
               "sourceMap": false,
-              "es5BrowserSupport": false,
               "extractCss": true,
-              "namedChunks": false,
+              "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "aot": true,
+              "deleteOutputPath": true,
               "budgets": [
                 {
                   "type": "initial",
