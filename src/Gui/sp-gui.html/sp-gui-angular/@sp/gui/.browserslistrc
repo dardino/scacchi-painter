@@ -13,4 +13,4 @@ not dead
 not IE 9-11 # For IE 9-11 support, remove 'not'.
 
 [electron]
-last 1 chrome version
+last 1 electron version
