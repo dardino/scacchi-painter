@@ -9,7 +9,7 @@
   "name": "sp-gui-electron",
   "version": "0.0.2",
   "description": "Scacchi Painter Universal",
-  "main": "dist/sp-gui-electron/src/main.js",
+  "main": "build/sp-gui-electron/src/main.js",
   "scripts": {
     "test": "jest",
     "start": "electron .",
@@ -18,10 +18,10 @@
     "build": "tsc -b",
     "rebuild": "tsc -b --force",
     "watch": "tsc -b -w",
-    "deploy": "yarn publish-win && yarn publish-linux && yarn publish-darwin",
-    "publish-win": "electron-packager . ScacchiPainter --icon=app/favicon.ico --overwrite --app-version 3.0.0-dev1 --out=release --platform=win32 --arch=x64",
-    "publish-linux": "electron-packager . ScacchiPainter --icon=app/favicon.png --overwrite --app-version 3.0.0-dev1 --out=release --platform=linux --arch=x64",
-    "publish-darwin": "electron-packager . ScacchiPainter --icon=app/favicon.icns --overwrite --app-version 3.0.0-dev1 --out=release --platform=darwin --arch=x64"
+    "deploy": "yarn build && yarn publish-win && yarn publish-linux && yarn publish-darwin",
+    "publish-win": "electron-packager . ScacchiPainter --icon=app/favicon.ico --overwrite --app-version 3.0.0 --out=release --platform=win32 --arch=x64 --asar",
+    "publish-linux": "electron-packager . ScacchiPainter --icon=app/favicon.png --overwrite --app-version 3.0.0 --out=release --platform=linux --arch=x64 --asar",
+    "publish-darwin": "electron-packager . ScacchiPainter --icon=app/favicon.icns --overwrite --app-version 3.0.0 --out=release --platform=darwin --arch=x64 --asar"
   },
   "repository": {
     "type": "git",
@@ -48,5 +48,11 @@
     "jest": "^26.0.1",
     "jest-junit": "^10.0.0",
     "rxjs": "^6.5.5"
+  },
+  "build": {
+    "appId": "org.accademiadelproblema.scacchipainter",
+    "mac": {
+      "category": "game"
+    }
   }
 }

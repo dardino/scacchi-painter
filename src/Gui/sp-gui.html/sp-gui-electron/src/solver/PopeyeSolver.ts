@@ -153,7 +153,7 @@ export class PopeyeSolver implements ISolver {
     rows.push(`Option ${extraOptions.join(" ")}`);
 
     // Twins
-    problem.twins.Twins.forEach((t) => {
+    problem.twins.TwinList.forEach((t) => {
       if (t.TwinType === TwinTypes.Diagram) return;
       rows.push(
         `Twin ${t.TwinModes === TwinModes.Combined ? "Cont " : ""}${twinmapper[

@@ -171,8 +171,8 @@ type FairiesArray<X extends FairyPiecesCodes> = Array<
   X extends infer T ? FairyItem<X> : never
 >;
 
-export const FairyPieces = Object.keys(FairyPiecesDB).map(
-  (k: FairyPiecesCodes) => ({
+export const FairyPieces = (Object.keys(FairyPiecesDB) as FairyPiecesCodes[]).map(
+  k => ({
     code: k,
     descr: FairyPiecesDB[k],
   })
