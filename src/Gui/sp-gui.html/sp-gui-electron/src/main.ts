@@ -1,6 +1,5 @@
-import Electron, { BrowserWindow, app, WebContents } from "electron";
+import { BrowserWindow, app } from "electron";
 import path from "path";
-import url from "url";
 
 function createWindow() {
   console.log("create win");
@@ -28,10 +27,9 @@ function createWindow() {
   //  );
   //  win.setMenu(mnu);
   win.maximize();
-  //if (process.env.NODE_ENV === "development")
-  win.webContents.openDevTools();
+  if (!app.isPackaged) win.webContents.openDevTools();
 
-  win.webContents.on("did-fail-load", (e) => {
+  win.webContents.on("did-fail-load", () => {
     win.loadFile("app/index.html");
   });
 

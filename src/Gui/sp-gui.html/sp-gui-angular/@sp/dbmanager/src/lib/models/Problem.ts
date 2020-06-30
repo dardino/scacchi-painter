@@ -109,7 +109,7 @@ export class Problem implements IProblem {
 
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
     const { snapshots, ...prob } = this.toJson();
-    const snap = btoa(JSON.stringify(prob));
+    const snap = btoa(unescape(encodeURIComponent(JSON.stringify(prob))));
     if (snapshotId == undefined) {
       const newKey = this.getNextId(this.currentSnapshotId);
       this.snapshots[newKey] = snap;

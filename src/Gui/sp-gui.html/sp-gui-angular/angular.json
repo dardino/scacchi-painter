@@ -81,7 +81,7 @@
               "baseHref": "./",
               "optimization": true,
               "outputHashing": "none",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": true,
               "extractLicenses": true,
