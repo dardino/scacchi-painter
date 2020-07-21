@@ -1,3 +1,7 @@
-<h1>Solutions: </h1>
-<p *ngFor="let item of problem.htmlSolution.split('\n'); index as i" ngClass="{{class(item)}}" [innerHTML]="parse(item)">
-</p>
+<quill-editor
+  class="quill-editor"
+  [modules]="{ toolbar: [['bold', 'italic', 'underline']] }"
+  [(ngModel)]="solution"
+  [preserveWhitespace]="true"
+  placeholder="Enter Text"
+></quill-editor>

@@ -12,9 +12,11 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "esnext",
+    "module": "es2020",
     "moduleResolution": "node",
     "importHelpers": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
     "target": "es2015",
     "lib": [
       "es2018",
@@ -36,11 +38,18 @@
       "host-bridge": [
         "dist/host-bridge/host-bridge",
         "dist/host-bridge"
+      ],
+      "rft-parser": [
+        "dist/rft-parser/rft-parser",
+        "dist/rft-parser"
       ]
     }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
-  }
+  },
+  "include": [
+    "../../@iarna__rft-to-html.d.ts"
+  ]
 }
