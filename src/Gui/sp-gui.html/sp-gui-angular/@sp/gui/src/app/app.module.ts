@@ -11,7 +11,6 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { ChessboardModule } from "@sp/chessboard/src/lib/chessboard.module";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
-import { ViewProblemComponent } from "./view-problem/view-problem.component";
 import { MatIconModule } from "@angular/material/icon";
 import { OpenfileComponent } from "./openfile/openfile.component";
 import { DatabaseListComponent } from "./database-list/database-list.component";
@@ -20,17 +19,18 @@ import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
 import { ConfigurationComponent } from "./configuration/configuration.component";
 import { LandingComponent } from "./landing/landing.component";
 import { MatButtonModule } from "@angular/material/button";
-import { EditProblemComponent } from './edit-problem/edit-problem.component';
+import { EditProblemComponent } from "./edit-problem/edit-problem.component";
+import { RecentsComponent } from './recents/recents.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ViewProblemComponent,
     OpenfileComponent,
     DatabaseListComponent,
     MenuComponent,
     ConfigurationComponent,
     LandingComponent,
     EditProblemComponent,
+    RecentsComponent,
   ],
   imports: [
     CommonModule,

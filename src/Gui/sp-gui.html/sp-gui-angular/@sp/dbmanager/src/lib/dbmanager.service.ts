@@ -35,14 +35,14 @@ export class DbmanagerService {
 
   constructor(private bridge: HostBridgeService) {}
 
-  LoadFromLocalStorage() {
+  async LoadFromLocalStorage() {
     const db = localStorage.getItem("spdb");
     const fileName = localStorage.getItem("spdb_fname") ?? "temp.sp2";
     if (!db) {
       return;
     }
     this.reset();
-    this.LoadFromText(db, fileName);
+    await this.LoadFromText(db, fileName);
   }
   SaveToLocalStorage(text: string, fileName: string) {
     localStorage.setItem("spdb", text);
