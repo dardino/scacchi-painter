@@ -77,6 +77,12 @@ export class Piece implements IPiece {
     } as BP;
   }
 
+  public SetLocation(newCol: Columns = this.column, newRow: Traverse = this.traverse) {
+    this.column = newCol;
+    this.traverse = newRow;
+  }
+
+
   ToNotation() {
     const parts = [];
     parts.push(
@@ -92,12 +98,24 @@ export class Piece implements IPiece {
     return parts.join("");
   }
 
+  ToFairyNotation(): string {
+    if (!this.isFairy()) return "";
+    return `${this.fairyCode.toUpperCase()}${this.column[3].toLowerCase()}${this.traverse[3]}`;
+  }
+
   isFairy() {
     return (this.fairyCode ?? "") !== "";
   }
 
   toJson(): Partial<IPiece> {
     const json: Partial<IPiece> = {};
+    if (this.appearance) json.appearance = this.appearance;
+    if (this.color) json.color = this.color;
+    if (this.column) json.column = this.column;
+    if (this.fairyAttribute) json.fairyAttribute = this.fairyAttribute;
+    if (this.fairyCode) json.fairyCode = this.fairyCode;
+    if (this.rotation) json.rotation = this.rotation;
+    if (this.traverse) json.traverse = this.traverse;
     return json;
   }
   private constructor() {

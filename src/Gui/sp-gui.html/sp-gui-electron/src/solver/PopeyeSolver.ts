@@ -12,6 +12,7 @@ import {
 import child, { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
+import os from "os";
 
 function pieceSortByName(a: Piece, b: Piece): -1 | 0 | 1 {
   return 0;
@@ -36,7 +37,7 @@ export class PopeyeSolver implements ISolver {
   }
   stop(): void {
     console.log("[POPEYE SOLVER] -> try to kill process...");
-    if (this.childProcess && !this.childProcess.killed) 
+    if (this.childProcess && !this.childProcess.killed)
       this.childProcess.kill();
     this.childProcess = null;
   }
@@ -45,53 +46,60 @@ export class PopeyeSolver implements ISolver {
     cbOut: (text: string) => void,
     done: (eof: EOF) => void
   ): void {
-
     if (this.childProcess) this.childProcess.kill();
 
-    this.writeTempFile(problem).then(async () => {
-      this.childProcess = await this.runProcess();
+    this.writeTempFile(problem)
+      .then(async () => {
+        this.childProcess = await this.runProcess();
 
-      if (!this.childProcess) {
+        if (!this.childProcess) {
+          done({
+            exitCode: -1,
+            message: "Process disconnected!",
+          });
+          return;
+        }
+
+        this.childProcess.on("error", (err) => {
+          console.error(err);
+          throw err;
+        });
+
+        this.childProcess.on("exit", (code, signal) => {
+          console.log("exit", code, signal);
+        });
+
+        if (this.childProcess.stdout)
+          this.childProcess.stdout.on("data", (data: Buffer) => {
+            console.log(data);
+            cbOut(data.toString("utf8"));
+          });
+        if (this.childProcess.stderr)
+          this.childProcess.stderr.on("data", (data: Buffer) => {
+            console.log(data);
+            cbOut(`ERR: ${data.toString("utf8")}`);
+          });
+
+        this.childProcess.on("close", (code) => {
+          this.childProcess = null;
+          done({
+            exitCode: code,
+            message: `program exited with code: ${code}`,
+          });
+        });
+      })
+      .catch((err) => {
         done({
           exitCode: -1,
-          message: "Process disconnected!",
-        });
-        return;
-      }
-
-      this.childProcess.on("error", (err) => {
-        console.error(err);
-        throw err;
-      });
-
-      this.childProcess.on("exit", (code, signal) => {
-        console.log("exit", code, signal);
-      })
-
-      if (this.childProcess.stdout) this.childProcess.stdout.on("data", (data: Buffer) => {
-        console.log(data);
-        cbOut(data.toString("utf8"));
-      });
-      if (this.childProcess.stderr) this.childProcess.stderr.on("data", (data: Buffer) => {
-        console.log(data);
-        cbOut(`ERR: ${data.toString("utf8")}`);
-      });
-
-      this.childProcess.on("close", (code) => {
-        this.childProcess = null;
-        done({
-          exitCode: code,
-          message: `program exited with code: ${code}`,
+          message: err.message,
         });
       });
-
-    });
   }
 
   private async writeTempFile(problem: Problem): Promise<void> {
     const content = this.problemToPopeye(problem);
     await fs.promises.writeFile(
-      path.join(__dirname, "problem.txt"),
+      path.join(os.tmpdir(), "problem.txt"),
       content.join("\n")
     );
   }
@@ -101,9 +109,9 @@ export class PopeyeSolver implements ISolver {
       this.cfg.problemSolvers.Popeye.executablePath,
       ["problem.txt"],
       {
-        cwd: __dirname,
+        cwd: os.tmpdir(),
         detached: false,
-        serialization: "json"
+        serialization: "json",
       }
     );
     return p;

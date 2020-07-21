@@ -54,7 +54,7 @@ export class DbmanagerService {
     this.bridge.saveFile(file);
   }
 
-  LoadFromText(xmlText: string, fileName: string): Error | null {
+  async LoadFromText(xmlText: string, fileName: string): Promise<Error | null> {
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
@@ -63,12 +63,11 @@ export class DbmanagerService {
         this.CurrentDB.documentElement.getAttribute("lastIndex") ?? "0",
         10
       );
-      this.All = Array.from(xmlDoc.querySelectorAll("SP_Item")).map((e) =>
+      this.All = await Promise.all(Array.from(xmlDoc.querySelectorAll("SP_Item")).map((e) =>
         Problem.fromElement(e)
-      );
+      ));
       this.count = this.All.length;
-      this.loadProblem();
-      console.log("filename:", fileName);
+      await this.loadProblem();
       this.fileName = fileName;
       return null;
     } catch (ex) {
@@ -77,16 +76,15 @@ export class DbmanagerService {
     }
   }
 
-  GotoIndex(arg0: number) {
+  async GotoIndex(arg0: number) {
     if (arg0 >= this.count || arg0 < 0) {
       return;
     }
     this.currentIndex = arg0;
-    console.log("goto: ", arg0);
-    this.loadProblem();
+    await this.loadProblem();
   }
 
-  private loadProblem() {
+  private async loadProblem() {
     if (this.CurrentDB == null) {
       return;
     }
@@ -94,7 +92,7 @@ export class DbmanagerService {
       this.CurrentDB?.querySelector(
         "SP_Item:nth-child(" + (this.currentIndex + 1) + ")"
       ) ?? null;
-    this.currentProblem = el ? Problem.fromElement(el) : null;
+    this.currentProblem = el ? await Problem.fromElement(el) : null;
     if (this.currentProblem == null) {
       return this.reset();
     }

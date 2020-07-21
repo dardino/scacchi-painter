@@ -14,11 +14,12 @@ export class DatabaseListComponent implements OnInit {
   constructor(private db: DbmanagerService) {}
   ngOnInit(): void {}
   stipulation(item: Problem) {
-    return `${item.stipulation.completeStipulationDesc}${
-      item.stipulation.moves
-    } ${item.getPieceCounter()}`;
+    return `${item.stipulation.completeStipulationDesc}${item.stipulation.moves}`;
   }
-  realIndex(index: number){
+  pieceCounter(item: Problem) {
+    return `${item.getPieceCounter()}`;
+  }
+  realIndex(index: number) {
     return this.itemSource.realIndex(index);
   }
 }
@@ -37,8 +38,7 @@ export class MyDataSource extends DataSource<Problem | undefined> {
   ): Observable<Array<Problem | undefined>> {
     return this.items$;
   }
-  disconnect(collectionViewer: CollectionViewer): void {
-  }
+  disconnect(collectionViewer: CollectionViewer): void {}
   realIndex(index: number) {
     return this.itemsSubject.getValue().length - index;
   }

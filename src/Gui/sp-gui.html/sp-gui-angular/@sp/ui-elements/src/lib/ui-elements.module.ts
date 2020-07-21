@@ -1,4 +1,3 @@
-import { NgModule } from "@angular/core";
 import { ToolbarDbComponent } from "./toolbar-db/toolbar-db.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
@@ -11,6 +10,11 @@ import { ProblemInfoComponent } from "./problem-info/problem-info.component";
 import { ToolbarEditComponent } from "./toolbar-edit/toolbar-edit.component";
 import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
 import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
+import { NgModule } from "@angular/core";
+import { QuillModule } from "ngx-quill";
+import { FormsModule } from "@angular/forms";
+
+import { QuillInitializeService } from "./services/quillInitialize.service";
 @NgModule({
   declarations: [
     ToolbarDbComponent,
@@ -27,6 +31,8 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     MatButtonModule,
     MatToolbarModule,
     MatButtonToggleModule,
+    QuillModule.forRoot(),
+    FormsModule,
   ],
   exports: [
     ToolbarDbComponent,
@@ -37,5 +43,6 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     ToolbarEngineComponent,
     ToolbarPieceComponent,
   ],
+  providers: [QuillInitializeService],
 })
 export class UiElementsModule {}

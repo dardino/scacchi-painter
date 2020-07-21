@@ -36,6 +36,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "./node_modules/quill/dist/quill.snow.css",
               "./custom-theme.scss",
               "@sp/gui/src/styles.styl"
             ],
@@ -92,8 +93,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -136,6 +137,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "./node_modules/quill/dist/quill.snow.css",
               "./custom-theme.scss",
               "@sp/gui/src/styles.styl"
             ],

@@ -1,5 +1,11 @@
-import { Component, OnInit, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input
+} from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
+
+/*https://stackblitz.com/edit/ngx-quill-example-btmh9i?file=src%2Fapp%2Fapp.component.ts*/
 
 @Component({
   selector: "lib-sp-solution-desc",
@@ -8,6 +14,7 @@ import { Problem } from "@sp/dbmanager/src/lib/models";
 })
 export class SpSolutionDescComponent implements OnInit {
   constructor() {}
+
   @Input()
   public problem: Problem;
 
@@ -16,18 +23,23 @@ export class SpSolutionDescComponent implements OnInit {
   get solution() {
     return this.problem.htmlSolution;
   }
+  set solution(txt: string) {
+    this.problem.htmlSolution = txt;
+  }
 
   public parse(text: string) {
-    return text.replace(/\t/g, "&nbsp;&nbsp;&nbsp;").replace(/  /g, "&nbsp; ").replace(/   /g, "&nbsp; &nbsp;");
+    return text
+      .replace(/\t/g, "&nbsp;&nbsp;&nbsp;")
+      .replace(/  /g, "&nbsp; ")
+      .replace(/   /g, "&nbsp; &nbsp;");
   }
 
   public class(text: string) {
     text = text.trim();
-    if (istructionRegExp.test(text)) return ("instruction");
-    else if (outlogRegExp.test(text)) return ("log");
-    else return ("solution");
+    if (istructionRegExp.test(text)) return "instruction";
+    else if (outlogRegExp.test(text)) return "log";
+    else return "solution";
   }
-
 }
 
 const istructionRegExp = new RegExp(

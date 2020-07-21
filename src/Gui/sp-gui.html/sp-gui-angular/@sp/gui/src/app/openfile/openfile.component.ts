@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import {
-  DbmanagerService,
-} from "@sp/dbmanager/src/public-api";
+import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Router } from "@angular/router";
 
 @Component({
@@ -10,22 +8,19 @@ import { Router } from "@angular/router";
   styleUrls: ["./openfile.component.styl"],
 })
 export class OpenfileComponent implements OnInit, OnDestroy {
-  constructor(
-    private db: DbmanagerService,
-    private router: Router
-  ) {}
+  constructor(private db: DbmanagerService, private router: Router) {}
 
   private reader = new FileReader();
   private fileName = "";
-  private fileReaderDone = (ev: ProgressEvent) => {
+  private fileReaderDone = async (ev: ProgressEvent) => {
     const xmlText = (ev.target as FileReader).result as string;
-    const error = this.db.LoadFromText(xmlText, this.fileName);
+    const error = await this.db.LoadFromText(xmlText, this.fileName);
     if (!error) {
       this.db.SaveToLocalStorage(xmlText, this.fileName);
       this.router.navigate([`/view/${this.db.CurrentIndex}`]);
     }
     this.fileName = "";
-  };
+  }
 
   selectLocalFile(args: FileList) {
     if (args.length === 1) {

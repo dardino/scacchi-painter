@@ -139,13 +139,14 @@ export class ChessboardComponent
   onCellClick(cell: UiCell) {
     if (cell !== this.currentCell) this.currentCell = cell;
     else this.currentCell = null;
-    this.currentCellChanged.emit(
-      this.currentCell ? { ...this.currentCell?.location } : null
-    );
+    if (this.currentCellChanged) {
+      this.currentCellChanged.emit(
+        this.currentCell ? { ...this.currentCell?.location } : null
+      );
+    }
   }
 
   private sizeMutated = (args: any) => {
-    console.log("args", args);
     this.fontSize = Math.floor(
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8 / 1.44
     );
@@ -170,7 +171,9 @@ export class ChessboardComponent
   get viewDiagram(): any {
     return (
       (this.position?.twins.TwinList.length ?? 0) &&
-      this.position?.twins.TwinList.every((t) => t.TwinType !== TwinTypes.Diagram)
+      this.position?.twins.TwinList.every(
+        (t) => t.TwinType !== TwinTypes.Diagram
+      )
     );
   }
 }

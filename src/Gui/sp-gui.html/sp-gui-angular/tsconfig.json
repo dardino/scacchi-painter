@@ -36,6 +36,12 @@
     },
     {
       "path": "./@sp/host-bridge/tsconfig.spec.json"
+    },
+    {
+      "path": "./@sp/rft-parser/tsconfig.lib.json"
+    },
+    {
+      "path": "./@sp/rft-parser/tsconfig.spec.json"
     }
   ]
 }

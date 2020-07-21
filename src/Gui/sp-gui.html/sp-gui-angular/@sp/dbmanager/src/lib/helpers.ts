@@ -381,6 +381,31 @@ const mapRotations = {
   [PieceRotation[7]]: ":7",
 } as const;
 
+const RotationsCodes = [
+  "+ ",
+  "+/",
+  "+-",
+  "+\\",
+  "- ",
+  "-/",
+  "--",
+  "-\\",
+] as const;
+type RotationsCodes = typeof RotationsCodes[number];
+
+const RotationsCodeMap: {
+  [key in RotationsCodes]: PieceRotation;
+} = {
+  "+ ": "NoRotation",
+  "+/": "Clockwise45",
+  "+-": "Clockwise90",
+  "+\\": "Clockwise135",
+  "- ": "UpsideDown",
+  "-/": "Counterclockwise135",
+  "--": "Counterclockwise90",
+  "-\\": "Counterclockwise45",
+};
+
 export function getRotationSymbol(rotation: IPiece["rotation"]): string {
   return mapRotations[rotation];
 }
@@ -465,13 +490,131 @@ Stipulation="Mate"
   </SP_Item>
   */
 
-export function GetSolutionFromElement(el: Element): string {
-  const sol = el.querySelector("Solution");
-  if (!sol) return "";
-  return atob(sol.innerHTML);
+export async function GetSolutionFromElement(
+  el: Element
+): Promise<string | HTMLElement[]> {
+  let solText: string | HTMLElement[];
+
+  const solRft = el.querySelector("SolutionRtf");
+  if (solRft != null && solRft.innerHTML.length > 0) {
+    solText = await convertFromRtf(atob(solRft.innerHTML));
+  } else {
+    const sol = el.querySelector("Solution");
+    if (!sol) solText = "";
+    else solText = atob(sol.innerHTML);
+  }
+  return solText;
 }
 
 export function GetTwins(el: Element): Element[] {
   const twins = el.querySelectorAll("Twin");
   return Array.from(twins);
+}
+
+export function rowToPieces(row: string): Array<Partial<IPiece> | null> {
+  const fairies = row.match(/\{[a-z]*\}/);
+  row = row.replace(/\{[a-z]*\}/g, "!");
+  row = row.replace(/([QKRTBNPAETqkrtbnpaet]|^1)/g, "|$1");
+  row = row.replace(/([^:|])1/g, "$1|1");
+  row = row.replace(/\*\|(.)/g, "|*$1");
+  row = row.replace(/:0/g, RotationsCodes[0]);
+  row = row.replace(/:1/g, RotationsCodes[1]);
+  row = row.replace(/:2/g, RotationsCodes[2]);
+  row = row.replace(/:3/g, RotationsCodes[3]);
+  row = row.replace(/:4/g, RotationsCodes[4]);
+  row = row.replace(/:5/g, RotationsCodes[5]);
+  row = row.replace(/:6/g, RotationsCodes[6]);
+  row = row.replace(/:7/g, RotationsCodes[7]);
+  row = row.replace(/[8]/g, Array(9).join("|#"));
+  row = row.replace(/[7]/g, Array(8).join("|#"));
+  row = row.replace(/[6]/g, Array(7).join("|#"));
+  row = row.replace(/[5]/g, Array(6).join("|#"));
+  row = row.replace(/[4]/g, Array(5).join("|#"));
+  row = row.replace(/[3]/g, Array(4).join("|#"));
+  row = row.replace(/[2]/g, Array(3).join("|#"));
+  row = row.replace(/[1]/g, "#");
+  row = row.trim().substr(1);
+  const piecesStrings = row.split("|");
+  const pieces: Array<Partial<IPiece> | null> = [];
+  let f = 0;
+  for (const c of piecesStrings) {
+    // empty cell
+    if (c === "#") {
+      pieces.push(null);
+      continue;
+    }
+    const isNeutral = c[0] === "*";
+    const pieceName = (isNeutral ? c.substr(1, 1) : c.substr(0, 1)) as Figurine;
+    const pieceRotation = c.substr(1, 2) as RotationsCodes;
+    let rotation: PieceRotation = "NoRotation";
+    let fairy = "";
+    if (c.length >= 3) {
+      rotation = RotationsCodeMap[pieceRotation];
+      if (c.indexOf("!") > -1) {
+        fairy = fairies?.[f] ?? "";
+        f++;
+      }
+    }
+
+    pieces.push({
+      appearance: pieceName,
+      rotation,
+      fairyCode: fairy.replace(/[\{\}]/g, ""),
+      color: isNeutral
+        ? "Neutral"
+        : pieceName.toLowerCase() !== pieceName
+        ? "White"
+        : "Black",
+    });
+  }
+
+  return pieces;
+}
+
+export function fenToChessBoard(original: string) {
+  const [fen, fairies] = original.split(" ");
+  const fenrows = fen.split("/");
+  const pieces = fenrows.map((f) => rowToPieces(f));
+  const cells = pieces.reduce<Array<Partial<IPiece> | null>>(
+    (a, b, i, m) => a.concat(b),
+    []
+  );
+  return cells;
+}
+
+export function notNull<T>(v: T): v is Exclude<T, null | undefined> {
+  return v != null;
+}
+
+function stringToArrayBuffer(stringText: string) {
+  const buffer = new ArrayBuffer(stringText.length);
+  const bufferView = new Uint8Array(buffer);
+  for (let i = 0; i < stringText.length; i++) {
+    bufferView[i] = stringText.charCodeAt(i);
+  }
+  return buffer;
+}
+
+export async function convertFromRtf(rtf: string) {
+  const { EMFJS, RTFJS, WMFJS } = await import("rtf.js");
+  RTFJS.loggingEnabled(false);
+  WMFJS.loggingEnabled(false);
+  EMFJS.loggingEnabled(false);
+  try {
+    const doc = new RTFJS.Document(stringToArrayBuffer(rtf), {});
+    // const meta = doc.metadata();
+    const htmlElements = await doc.render();
+    // console.log("Meta:");
+    // console.log(meta);
+    // console.log("Html:");
+    // console.log(htmlElements);
+    return htmlElements;
+  } catch (err) {
+    console.error(err, rtf);
+    return rtf.split("\n").map((d) => {
+      const div = document.createElement("div");
+      div.innerText = d;
+      return div;
+    });
+  }
 }

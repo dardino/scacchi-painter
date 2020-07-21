@@ -1,7 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
 import { DbmanagerService } from "./dbmanager.service";
-
 describe("DbmanagerService", () => {
   let service: DbmanagerService;
 
@@ -62,7 +61,6 @@ describe("DbmanagerService", () => {
     </SP_Item>
   </ScacchiPainterDatabase>`;
 
-
     it("Rotations", () => {
       service.LoadFromText(fileSample, "sample.sp2");
       expect(service.CurrentProblem?.getCurrentFen()).toBe(
@@ -70,4 +68,5 @@ describe("DbmanagerService", () => {
       );
     });
   });
+
 });
