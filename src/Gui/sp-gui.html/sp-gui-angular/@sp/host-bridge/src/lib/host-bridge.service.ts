@@ -21,6 +21,10 @@ export class HostBridgeService {
 
   constructor(private zone: NgZone) {}
 
+  getRecents(): string[] {
+    return [];
+  }
+
   solveInProgress() {
     return this.subscription != null;
   }

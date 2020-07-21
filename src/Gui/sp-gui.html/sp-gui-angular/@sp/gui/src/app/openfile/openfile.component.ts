@@ -17,7 +17,7 @@ export class OpenfileComponent implements OnInit, OnDestroy {
     const error = await this.db.LoadFromText(xmlText, this.fileName);
     if (!error) {
       this.db.SaveToLocalStorage(xmlText, this.fileName);
-      this.router.navigate([`/view/${this.db.CurrentIndex}`]);
+      this.router.navigate([`/edit/${this.db.CurrentIndex}`]);
     }
     this.fileName = "";
   }
