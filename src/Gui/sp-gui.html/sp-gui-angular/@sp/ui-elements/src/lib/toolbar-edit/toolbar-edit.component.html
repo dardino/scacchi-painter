@@ -5,7 +5,7 @@
     iconLabel="Picture/Vector"
     [noLabel]="true"
   ></lib-sp-toolbar-button>
-  <mat-button-toggle-group>
+  <mat-button-toggle-group [ngModel]="editMode">
     <mat-button-toggle value="select">
       <mat-icon svgIcon="select_piece"></mat-icon>
     </mat-button-toggle>

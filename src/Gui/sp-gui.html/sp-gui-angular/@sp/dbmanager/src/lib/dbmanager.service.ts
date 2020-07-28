@@ -44,9 +44,13 @@ export class DbmanagerService {
     this.reset();
     await this.LoadFromText(db, fileName);
   }
-  SaveToLocalStorage(text: string, fileName: string) {
-    localStorage.setItem("spdb", text);
-    localStorage.setItem("spdb_fname", fileName);
+  SaveToLocalStorage(text?: string, fileName?: string) {
+    localStorage.setItem("spdb", text ?? this.ToXML());
+    localStorage.setItem("spdb_fname", fileName ?? this.fileName);
+  }
+
+  private ToXML(): string {
+    throw new Error("Method not implemented.");
   }
 
   SaveToHost() {
@@ -82,6 +86,7 @@ export class DbmanagerService {
     }
     this.currentIndex = arg0;
     await this.loadProblem();
+    this.SaveToLocalStorage()
   }
 
   private async loadProblem() {
