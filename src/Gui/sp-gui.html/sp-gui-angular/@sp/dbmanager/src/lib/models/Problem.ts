@@ -51,7 +51,7 @@ export class Problem implements IProblem {
     if (typeof sol === "string") p.htmlSolution = sol;
     if (sol instanceof Array) {
       p.htmlElements = sol;
-      p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join("\n");
+      p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join("");
     }
     p.date = source.getAttribute("Date") ?? "";
     p.prizeRank = source.getAttribute("PrizeRank") ?? "";

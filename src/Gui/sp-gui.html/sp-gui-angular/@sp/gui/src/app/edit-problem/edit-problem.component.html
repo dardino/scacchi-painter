@@ -1,8 +1,9 @@
 <div class="problem-editor">
   <section id="toolbar">
+    <lib-toolbar-db *ngIf="dbLoaded" [hideLabels]="true"></lib-toolbar-db>
     <mat-toolbar>
       <lib-toolbar-edit
-        (goBack)="goBack()"
+        (switchBoardType)="switchBoardType()"
       ></lib-toolbar-edit>
       <lib-toolbar-engine
         (startSolve)="startSolve()"
@@ -12,20 +13,42 @@
       ></lib-toolbar-engine>
     </mat-toolbar>
   </section>
-  <div class="workboard">
-    <section id="chessboard">
+  <div class="workboard" (mousemove)="resize($event)">
+    <section id="chessboard" #panelright>
       <lib-chessboard
         class="lib-chessboard"
         [position]="problem"
-        boardType="HTML"
+        [boardType]="boardType"
+        (contextmenu)="onTriggerContextMenu($event)"
       ></lib-chessboard>
-      <ul class="solution-row" *ngFor="let row of rows$ | async">
-        <li>{{row}}</li>
-      </ul>
       <lib-piece-selector></lib-piece-selector>
+      <ul class="solution-row" *ngFor="let row of rows$ | async">
+        <li>{{ row }}</li>
+      </ul>
     </section>
+    <div
+      #verticalSplitter
+      (mouseleave)="leaveResize()"
+      (mouseenter)="clearResizeLeave()"
+      (mousedown)="startResize($event)"
+      (mouseup)="endResize()"
+      class="vertical-splitter"
+    ></div>
     <section id="info">
       <lib-sp-solution-desc [problem]="problem"></lib-sp-solution-desc>
     </section>
   </div>
 </div>
+<mat-menu #contextmenu>
+  <div>
+    <button mat-menu-item>
+      <mat-icon>delete</mat-icon><span>Remove</span>
+    </button>
+  </div>
+</mat-menu>
+<div
+  [matMenuTriggerFor]="contextmenu"
+  [style.position]="'absolute'"
+  [style.left.px]="menuX"
+  [style.top.px]="menuY"
+></div>

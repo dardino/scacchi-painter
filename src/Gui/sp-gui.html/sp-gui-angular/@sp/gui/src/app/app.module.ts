@@ -19,8 +19,9 @@ import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
 import { ConfigurationComponent } from "./configuration/configuration.component";
 import { LandingComponent } from "./landing/landing.component";
 import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
 import { EditProblemComponent } from "./edit-problem/edit-problem.component";
-import { RecentsComponent } from './recents/recents.component';
+import { RecentsComponent } from "./recents/recents.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +49,7 @@ import { RecentsComponent } from './recents/recents.component';
     MatListModule,
     CdkScrollableModule,
     ScrollingModule,
+    MatMenuModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

@@ -497,7 +497,7 @@ export async function GetSolutionFromElement(
 
   const solRft = el.querySelector("SolutionRtf");
   if (solRft != null && solRft.innerHTML.length > 0) {
-    solText = await convertFromRtf(atob(solRft.innerHTML));
+    solText = await convertFromRtf(atob(solRft.innerHTML).replace(/\r/g, ""));
   } else {
     const sol = el.querySelector("Solution");
     if (!sol) solText = "";
@@ -610,7 +610,7 @@ export async function convertFromRtf(rtf: string) {
     // console.log(htmlElements);
     return htmlElements;
   } catch (err) {
-    console.error(err, rtf);
+    console.warn(err, rtf);
     return rtf.split("\n").map((d) => {
       const div = document.createElement("div");
       div.innerText = d;

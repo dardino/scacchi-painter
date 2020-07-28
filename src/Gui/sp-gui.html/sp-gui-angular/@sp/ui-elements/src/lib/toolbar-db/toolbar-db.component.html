@@ -1,19 +1,5 @@
 <mat-toolbar-row class="lib-toolbar">
   <lib-sp-toolbar-button
-    (click)="setCanvas()"
-    iconText="wallpaper"
-    iconLabel="Picture"
-    *ngIf="boardType !== 'canvas'"
-    [noLabel]="hideLabels"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
-    (click)="setHtml()"
-    iconText="format_shapes"
-    iconLabel="Vector"
-    *ngIf="boardType !== 'HTML'"
-    [noLabel]="hideLabels"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
     (click)="goToFirst()"
     iconText="first_page"
     iconLabel="Go First"
