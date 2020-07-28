@@ -17,10 +17,6 @@ import { MatMenuTrigger } from "@angular/material/menu";
   styleUrls: ["./edit-problem.component.styl"],
 })
 export class EditProblemComponent implements OnInit, OnDestroy {
-  get dbLoaded() {
-    return this.db.CurrentProblem != null;
-  }
-
   public get rows$() {
     return this.rows$ubject.asObservable();
   }

@@ -21,6 +21,7 @@
           <span>Scacchi Painter</span>
           <sub>{{ fileName }}</sub>
         </div>
+        <lib-toolbar-db *ngIf="dbLoaded" [hideLabels]="true"></lib-toolbar-db>
         <lib-sp-toolbar-button
           *ngIf="hasCloseButton"
           (click)="closeMe()"

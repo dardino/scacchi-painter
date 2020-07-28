@@ -19,7 +19,9 @@ export class AppComponent implements OnInit {
   get hasCloseButton() {
     return this.bridge.supportsClose;
   }
-
+  get dbLoaded() {
+    return this.db.CurrentProblem != null;
+  }
   get fileName() {
     return this.db.FileName;
   }

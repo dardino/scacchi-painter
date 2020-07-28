@@ -9,15 +9,17 @@ import { environment } from "@sp/gui/src/environments/environment";
   styleUrls: ["./toolbar-edit.component.styl"],
 })
 export class ToolbarEditComponent implements OnInit {
-  @Output() switchBoardType = new EventEmitter<void>();
-  switchBT() {
-    this.switchBoardType.emit();
-  }
 
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {}
+  @Output() switchBoardType = new EventEmitter<void>();
+
+  editMode = "select";
+  switchBT() {
+    this.switchBoardType.emit();
+  }
 
   ngOnInit(): void {
     // tslint:disable: max-line-length
