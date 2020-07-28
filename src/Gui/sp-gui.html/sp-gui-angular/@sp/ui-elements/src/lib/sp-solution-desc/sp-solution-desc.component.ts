@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input
-} from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 
 /*https://stackblitz.com/edit/ngx-quill-example-btmh9i?file=src%2Fapp%2Fapp.component.ts*/
@@ -16,22 +12,21 @@ export class SpSolutionDescComponent implements OnInit {
   constructor() {}
 
   @Input()
-  public problem: Problem;
+  public problem: Problem | null;
 
   ngOnInit(): void {}
 
   get solution() {
-    return this.problem.htmlSolution;
+    return this.problem?.htmlSolution ?? "";
   }
   set solution(txt: string) {
-    this.problem.htmlSolution = txt;
+    if (this.problem) this.problem.htmlSolution = txt;
   }
 
   public parse(text: string) {
     return text
       .replace(/\t/g, "&nbsp;&nbsp;&nbsp;")
-      .replace(/  /g, "&nbsp; ")
-      .replace(/   /g, "&nbsp; &nbsp;");
+      .replace(/ /g, "&nbsp; ");
   }
 
   public class(text: string) {

@@ -1,4 +1,10 @@
 <mat-toolbar-row class="lib-toolbar">
+  <lib-sp-toolbar-button
+    (click)="switchBT()"
+    iconText="art_track"
+    iconLabel="Picture/Vector"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
   <mat-button-toggle-group>
     <mat-button-toggle value="select">
       <mat-icon svgIcon="select_piece"></mat-icon>

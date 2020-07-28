@@ -13,4 +13,11 @@
     [noLabel]="hideLabels"
     *ngIf="isRunning"
   ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="tryMove()"
+    iconText="play_arrow"
+    iconLabel="Try"
+    [noLabel]="hideLabels"
+    [disabled]="isRunning"
+  ></lib-sp-toolbar-button>
 </mat-toolbar-row>

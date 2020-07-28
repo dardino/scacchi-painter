@@ -28,6 +28,10 @@ export class ToolbarEngineComponent implements OnInit {
     console.log("[LOG] -> try to stop process...");
     this.stopSolve.emit("stop");
   }
+  tryMove() {
+    console.log("[LOG] -> start engine in try mode...");
+    this.stopSolve.emit("try");
+  }
 
   ngOnInit(): void {}
 }

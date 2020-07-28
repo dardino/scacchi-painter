@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { environment } from "@sp/gui/src/environments/environment";
@@ -9,6 +9,11 @@ import { environment } from "@sp/gui/src/environments/environment";
   styleUrls: ["./toolbar-edit.component.styl"],
 })
 export class ToolbarEditComponent implements OnInit {
+  @Output() switchBoardType = new EventEmitter<void>();
+  switchBT() {
+    this.switchBoardType.emit();
+  }
+
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer

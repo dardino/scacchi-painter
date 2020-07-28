@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private bridge: HostBridgeService
   ) {}
-
   get hasCloseButton() {
     return this.bridge.supportsClose;
   }
