@@ -69,7 +69,13 @@ export class HostBridgeService {
   }
 
   public async saveFile(content: File) {
-    return window.Bridge?.saveFile(content);
+    if (window.Bridge) {
+      return window.Bridge.saveFile(content);
+    } else {
+      const fls = await import("file-saver");
+      fls.saveAs(content, content.name);
+      return "OK";
+    }
   }
   public get supportsClose(): boolean {
     return typeof window.Bridge?.closeApp === "function";

@@ -51,4 +51,7 @@ export class ToolbarDbComponent implements OnInit {
   goToLast() {
     this.db.GotoIndex(this.db.Count - 1);
   }
+  save(){
+    this.db.SaveToHost("sp2");
+  }
 }
