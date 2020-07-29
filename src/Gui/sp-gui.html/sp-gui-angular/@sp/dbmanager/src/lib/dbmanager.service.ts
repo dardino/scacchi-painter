@@ -1,14 +1,20 @@
 import { Injectable } from "@angular/core";
-import { IPiece } from "./helpers";
+import { IPiece, IProblem } from "./helpers";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Problem } from "./models/problem";
 import { Observable, Subject } from "rxjs";
+
+interface IDbSpX {
+  lastIndex: number;
+  name: string;
+  problems: Array<Partial<IProblem>>;
+}
 
 @Injectable({
   providedIn: "root",
 })
 export class DbmanagerService {
-  CurrentDB: Document | null;
+  CurrentDB: Document | IDbSpX | null;
   private currentIndex = 0;
   private fileName = "";
   private solveOut$: Subject<string>;
@@ -37,20 +43,39 @@ export class DbmanagerService {
 
   async LoadFromLocalStorage() {
     const db = localStorage.getItem("spdb");
+    const dbtype = localStorage.getItem("spdb_type") as "sp2" | "spx";
     const fileName = localStorage.getItem("spdb_fname") ?? "temp.sp2";
     if (!db) {
       return;
     }
     this.reset();
-    await this.LoadFromText(db, fileName);
+    if (dbtype === "spx") await this.LoadFromJson(db, fileName);
+    else await this.LoadFromText(db, fileName);
   }
-  async SaveToLocalStorage(text?: string, fileName?: string) {
+  async SaveToLocalStorage(
+    text?: string,
+    fileName?: string,
+    type: "sp2" | "spx" = "spx"
+  ) {
     if (text == null) {
-      const xmlDoc = await this.ToXML();
-      text = new XMLSerializer().serializeToString(xmlDoc.documentElement);
+      if (type === "sp2") {
+        const xmlDoc = await this.ToXML();
+        text = new XMLSerializer().serializeToString(xmlDoc.documentElement);
+      } else {
+        text = JSON.stringify(this.toJSON());
+      }
     }
     localStorage.setItem("spdb", text);
+    localStorage.setItem("spdb_type", type);
     localStorage.setItem("spdb_fname", fileName ?? this.fileName);
+  }
+
+  toJSON(): IDbSpX {
+    return {
+      lastIndex: this.currentIndex,
+      problems: this.All.map((p) => p.toJson()),
+      name: "Scacchi Painter X Database",
+    };
   }
 
   private async ToXML(): Promise<XMLDocument> {
@@ -68,11 +93,21 @@ export class DbmanagerService {
     return doc;
   }
 
-  SaveToHost() {
-    const file = this.getDbFile();
+  async SaveToHost(type: "sp2" | "spx") {
+    const file = await this.getDbFile(type);
     this.bridge.saveFile(file);
   }
-
+  async LoadFromJson(jsonString: string, fName: string): Promise<Error | null> {
+    try {
+      const obj = JSON.parse(jsonString) as IDbSpX;
+      this.fileName = fName;
+      this.CurrentDB = obj;
+      this.currentIndex = obj.lastIndex;
+      return null;
+    } catch (err) {
+      return err;
+    }
+  }
   async LoadFromText(xmlText: string, fileName: string): Promise<Error | null> {
     try {
       const parser = new DOMParser();
@@ -110,11 +145,15 @@ export class DbmanagerService {
     if (this.CurrentDB == null) {
       return;
     }
-    const el =
-      this.CurrentDB?.querySelector(
-        "SP_Item:nth-child(" + (this.currentIndex + 1) + ")"
-      ) ?? null;
-    this.currentProblem = el ? await Problem.fromElement(el) : null;
+    if (this.CurrentDB instanceof Document) {
+      const el =
+        this.CurrentDB?.querySelector(
+          "SP_Item:nth-child(" + (this.currentIndex + 1) + ")"
+        ) ?? null;
+      this.currentProblem = el ? await Problem.fromElement(el) : null;
+    } else {
+      this.currentProblem = Problem.fromJson(this.CurrentDB.problems[this.currentIndex]);
+    }
     if (this.currentProblem == null) {
       return this.reset();
     }
@@ -128,14 +167,21 @@ export class DbmanagerService {
     this.pieces = [];
   }
 
-  private getDbFile(): File {
-    const text = this.CurrentDB?.documentElement.outerHTML ?? "";
-    return new File([text], this.fileName, { type: "text/xml" });
+  private async getDbFile(type: "sp2" | "spx" = "spx"): Promise<File> {
+    if (type === "sp2") {
+      const xmlDoc = await this.ToXML();
+      const text = new XMLSerializer().serializeToString(xmlDoc.documentElement);
+      return new File([text], this.fileName, { type: "application/xml" });
+    } else {
+      const text = JSON.stringify(this.toJSON());
+      return new File([text], this.fileName, { type: "application/json" });
+    }
   }
 
   public startSolving(): Observable<string> | Error {
-    if (!this.CurrentProblem)
+    if (!this.CurrentProblem) {
       return new Error("unable to solve a null problem!");
+    }
     this.solveOut$ = new Subject();
     this.bridge.startSolve(this.CurrentProblem);
     return this.solveOut$.asObservable();

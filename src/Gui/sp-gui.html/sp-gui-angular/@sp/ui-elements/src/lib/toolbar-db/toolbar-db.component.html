@@ -1,5 +1,11 @@
 <mat-toolbar-row class="lib-toolbar">
   <lib-sp-toolbar-button
+    (click)="save()"
+    iconText="archive"
+    iconLabel="Save"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
     (click)="goToFirst()"
     iconText="first_page"
     iconLabel="Go First"
