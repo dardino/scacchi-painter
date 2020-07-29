@@ -68,12 +68,12 @@ export class HostBridgeService {
     return;
   }
 
-  public async saveFile(content: File) {
+  public async saveFile(content: File, type: "sp2" | "sp3") {
     if (window.Bridge) {
       return window.Bridge.saveFile(content);
     } else {
       const fls = await import("file-saver");
-      fls.saveAs(content, content.name);
+      fls.saveAs(content, content.name + `.${type}`);
       return "OK";
     }
   }

@@ -12,7 +12,7 @@ export class MenuComponent implements OnInit {
 
   constructor(private db: DbmanagerService) {}
   get dbLoaded() {
-    return this.db.CurrentDB != null;
+    return this.db.All.length !== 0;
   }
 
   ngOnInit(): void {}

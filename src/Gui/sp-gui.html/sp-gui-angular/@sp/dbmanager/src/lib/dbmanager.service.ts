@@ -14,7 +14,6 @@ interface IDbSpX {
   providedIn: "root",
 })
 export class DbmanagerService {
-  CurrentDB: Document | IDbSpX | null;
   private currentIndex = 0;
   private fileName = "";
   private solveOut$: Subject<string>;
@@ -34,28 +33,27 @@ export class DbmanagerService {
   get CurrentProblem() {
     return this.currentProblem;
   }
-  private pieces: IPiece[] = [];
   get Pieces() {
-    return this.pieces;
+    return this.currentProblem?.pieces ?? [];
   }
 
   constructor(private bridge: HostBridgeService) {}
 
   async LoadFromLocalStorage() {
     const db = localStorage.getItem("spdb");
-    const dbtype = localStorage.getItem("spdb_type") as "sp2" | "spx";
+    const dbtype = localStorage.getItem("spdb_type") as "sp2" | "sp3";
     const fileName = localStorage.getItem("spdb_fname") ?? "temp.sp2";
     if (!db) {
       return;
     }
     this.reset();
-    if (dbtype === "spx") await this.LoadFromJson(db, fileName);
+    if (dbtype === "sp3") await this.LoadFromJson(db, fileName);
     else await this.LoadFromText(db, fileName);
   }
   async SaveToLocalStorage(
     text?: string,
     fileName?: string,
-    type: "sp2" | "spx" = "spx"
+    type: "sp2" | "sp3" = "sp3"
   ) {
     if (text == null) {
       if (type === "sp2") {
@@ -93,15 +91,15 @@ export class DbmanagerService {
     return doc;
   }
 
-  async SaveToHost(type: "sp2" | "spx") {
+  async SaveToHost(type: "sp2" | "sp3") {
     const file = await this.getDbFile(type);
-    this.bridge.saveFile(file);
+    this.bridge.saveFile(file, type);
   }
   async LoadFromJson(jsonString: string, fName: string): Promise<Error | null> {
     try {
       const obj = JSON.parse(jsonString) as IDbSpX;
       this.fileName = fName;
-      this.CurrentDB = obj;
+      this.All = obj.problems.map(p => Problem.fromJson(p));
       this.currentIndex = obj.lastIndex;
       return null;
     } catch (err) {
@@ -112,9 +110,8 @@ export class DbmanagerService {
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-      this.CurrentDB = xmlDoc;
       this.currentIndex = parseInt(
-        this.CurrentDB.documentElement.getAttribute("lastIndex") ?? "0",
+        xmlDoc.documentElement.getAttribute("lastIndex") ?? "0",
         10
       );
       this.All = await Promise.all(
@@ -138,36 +135,21 @@ export class DbmanagerService {
     }
     this.currentIndex = arg0;
     await this.loadProblem();
-    this.SaveToLocalStorage();
   }
 
   private async loadProblem() {
-    if (this.CurrentDB == null) {
-      return;
-    }
-    if (this.CurrentDB instanceof Document) {
-      const el =
-        this.CurrentDB?.querySelector(
-          "SP_Item:nth-child(" + (this.currentIndex + 1) + ")"
-        ) ?? null;
-      this.currentProblem = el ? await Problem.fromElement(el) : null;
-    } else {
-      this.currentProblem = Problem.fromJson(this.CurrentDB.problems[this.currentIndex]);
-    }
+    this.currentProblem = this.All[this.currentIndex];
     if (this.currentProblem == null) {
       return this.reset();
     }
-
-    this.pieces = this.currentProblem.pieces;
   }
 
   private reset() {
     this.currentIndex = 0;
     this.currentProblem = null;
-    this.pieces = [];
   }
 
-  private async getDbFile(type: "sp2" | "spx" = "spx"): Promise<File> {
+  private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {
     if (type === "sp2") {
       const xmlDoc = await this.ToXML();
       const text = new XMLSerializer().serializeToString(xmlDoc.documentElement);
