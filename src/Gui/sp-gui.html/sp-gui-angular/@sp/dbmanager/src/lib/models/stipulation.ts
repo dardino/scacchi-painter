@@ -2,7 +2,7 @@ import {
   IStipulation,
   ProblemTypes,
   StipulationTypes,
-  ProblemTypesKeys,
+  ProblemTypesKeys
 } from "../helpers";
 
 export class Stipulation implements IStipulation {
@@ -12,6 +12,7 @@ export class Stipulation implements IStipulation {
   serie                             = false;
   moves                             = 2;
   completeStipulationDesc           = "#2";
+  colorStarter: "White" | "Black";
 
   static fromElement(source: Element): Stipulation {
     const p = new Stipulation();

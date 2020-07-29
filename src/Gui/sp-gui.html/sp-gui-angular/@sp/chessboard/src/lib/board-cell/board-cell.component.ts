@@ -52,7 +52,7 @@ export class BoardCellComponent implements OnInit {
     return this.piece?.color[0].toLowerCase() ?? "";
   }
   get fairy(): string {
-    return this.piece?.fairyCode ?? "";
+    return (this.piece?.fairyCode ?? []).map(p => p.code).join("+");
   }
 
   constructor() {}

@@ -9,20 +9,25 @@ import {
   notNull,
   SquareLocation,
   GetSquareIndex,
+  convertToRtf,
+  createXmlElement,
 } from "../helpers";
 import { Twins } from "./twins";
 import { Stipulation } from "./stipulation";
 import { Author } from "./author";
+import { SP2 } from "../SP2";
+import { Base64 } from "../base64";
 
 // tslint:disable-next-line: variable-name
 const main_snapshot = "$_MAIN_$";
 
 export class Problem implements IProblem {
+  textSolution: any;
   private constructor() {}
 
   public date = new Date().toLocaleString();
   public stipulation = Stipulation.fromJson({});
-  public prizeRank = "";
+  public prizeRank = 0;
   public personalID = "";
   public prizeDescription = "";
   public source = "";
@@ -44,7 +49,7 @@ export class Problem implements IProblem {
     const p = new Problem();
     p.stipulation = Stipulation.fromElement(source);
     p.pieces = Array.from(source.querySelectorAll("Piece")).map(
-      Piece.fromElement
+      Piece.fromSP2Xml
     );
     p.twins = Twins.fromElement(source.querySelector("Twins") ?? null);
     const sol = await GetSolutionFromElement(source);
@@ -54,7 +59,7 @@ export class Problem implements IProblem {
       p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join("");
     }
     p.date = source.getAttribute("Date") ?? "";
-    p.prizeRank = source.getAttribute("PrizeRank") ?? "";
+    p.prizeRank = parseInt(source.getAttribute("PrizeRank") ?? "0", 10);
     p.personalID = source.getAttribute("PersonalID") ?? "";
     p.prizeDescription = source.getAttribute("PrizeDescription") ?? "";
     p.source = source.getAttribute("Source") ?? "";
@@ -107,7 +112,7 @@ export class Problem implements IProblem {
     b.htmlSolution = a.htmlSolution ? a.htmlSolution : "";
     b.date = a.date ? a.date : new Date().toISOString();
     b.personalID = a.personalID ? a.personalID : "";
-    b.prizeRank = a.prizeRank ? a.prizeRank : "";
+    b.prizeRank = a.prizeRank ?? 0;
     b.prizeDescription = a.prizeDescription ? a.prizeDescription : "";
     b.source = a.source ? a.source : "";
     b.conditions = a.conditions ? [...a.conditions] : [];
@@ -139,9 +144,41 @@ export class Problem implements IProblem {
     return json;
   }
 
+  async toSP2Xml(): Promise<Element> {
+    const item = createXmlElement("SP_Item");
+    SP2.setProblemType(item, this.stipulation.problemType);
+    SP2.setMoves(item, this.stipulation.moves);
+    SP2.setDate(item, this.date);
+    SP2.setPersonalID(item, this.personalID);
+    SP2.setStipulation(item, this.stipulation.stipulationType);
+    SP2.setSerie(item, this.stipulation.serie);
+    SP2.setMaximum(item, this.stipulation.maximum);
+    SP2.setSource(item, this.source);
+    SP2.setPrizeRank(item, this.prizeRank);
+    SP2.setPrizeDescription(item, this.prizeDescription);
+    SP2.setCompleteStipulationDesc(
+      item,
+      this.stipulation.completeStipulationDesc
+    );
+    SP2.setAuthors(
+      item,
+      this.authors.map((a) => a.toSP2Xml())
+    );
+    SP2.setPieces(
+      item,
+      this.pieces.map((p) => p.toSP2Xml())
+    );
+    SP2.setTwins(item, this.twins.toSP2Xml());
+    SP2.setConditions(item, this.conditions);
+    SP2.setSolution(item, this.textSolution);
+    SP2.setHtmlSolution(item, this.htmlSolution);
+    SP2.setRtfSolution(item, (await convertToRtf(this.htmlSolution)) ?? "");
+    return item;
+  }
+
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
     const { snapshots, ...prob } = this.toJson();
-    const snap = btoa(unescape(encodeURIComponent(JSON.stringify(prob))));
+    const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
       const newKey = this.getNextId(this.currentSnapshotId);
       this.snapshots[newKey] = snap;
@@ -183,7 +220,9 @@ export class Problem implements IProblem {
   ) {
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
-    const prob = JSON.parse(atob(this.snapshots[id])) as Partial<IProblem>;
+    const prob = JSON.parse(Base64.decode(this.snapshots[id])) as Partial<
+      IProblem
+    >;
     Problem.applyJson(prob, this);
     this.currentSnapshotId = id;
   }

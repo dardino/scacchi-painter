@@ -6,6 +6,8 @@ import {
   Figurine,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
+import { Base64 } from "./base64";
+
 export enum ProblemTypes {
   Direct = "Direct",
   Help = "Help",
@@ -32,7 +34,7 @@ export interface IProblem {
   stipulation: Partial<IStipulation>;
   htmlSolution: string;
   date: string;
-  prizeRank: string;
+  prizeRank: number;
   personalID: string;
   prizeDescription: string;
   source: string;
@@ -101,7 +103,7 @@ export interface Author {
 
 export interface IPiece {
   appearance: Figurine | "";
-  fairyCode: string;
+  fairyCode: Array<{ code: string; params: string[] }>;
   color: PieceColors;
   column: Columns;
   traverse: Traverse;
@@ -116,19 +118,6 @@ export interface ProblemDb {
   problems: IProblem[];
 }
 
-export const PieceRotation = [
-  "NoRotation",
-  "Clockwise45",
-  "Clockwise90",
-  "Clockwise135",
-  "UpsideDown",
-  "Counterclockwise135",
-  "Counterclockwise90",
-  "Counterclockwise45",
-] as const;
-export type PieceRotation = typeof PieceRotation[number];
-export const PieceColors = ["White", "Black", "Neutral"] as const;
-export type PieceColors = typeof PieceColors[number];
 export const FairyAttributes = ["None"] as const;
 export const Columns = [
   "ColA",
@@ -153,6 +142,8 @@ export const Traverse = [
   "Row1",
 ] as const;
 export type Traverse = typeof Traverse[number];
+export const PieceColors = ["White", "Black", "Neutral"] as const;
+export type PieceColors = typeof PieceColors[number];
 
 export type SquareColors = "black" | "white";
 
@@ -203,68 +194,29 @@ export function GetLocationFromIndex(index: number): SquareLocation {
   };
 }
 
-export function getTraverse(f: Element): Traverse | null {
-  return Traverse[
-    Math.max(
-      Traverse.indexOf((f.getAttribute("Traverse") as Traverse) || "Row1"),
-      0
-    )
-  ];
-}
+export const PieceRotation = [
+  "NoRotation",
+  "Clockwise45",
+  "Clockwise90",
+  "Clockwise135",
+  "UpsideDown",
+  "Counterclockwise135",
+  "Counterclockwise90",
+  "Counterclockwise45",
+] as const;
+export type PieceRotation = typeof PieceRotation[number];
 
-export function getFairyCode(f: Element): string {
-  const ft = f.querySelectorAll("FairyType");
-  if (ft.length > 0) {
-    // TODO: supporto MultiType
-    return ft[0].getAttribute("code") ?? "";
-  } else {
-    return "";
-  }
-}
-
-export function getFairyAttribute(f: Element): string {
-  return f.getAttribute("FairyAttribute") ?? "";
-}
-
-export function getColum(f: Element): Columns | null {
-  return Columns[
-    Math.max(
-      Columns.indexOf((f.getAttribute("Column") as Columns) || "ColA"),
-      0
-    )
-  ];
-}
-
-export function getAppearance(f: Element): Figurine | "" {
-  const pieceName = f.getAttribute("Type");
-  switch (pieceName) {
-    case "King":
-      return "k";
-    case "Queen":
-      return "q";
-    case "Rook":
-    /* @deprecated */ case "Rock":
-      return "r";
-    case "Horse":
-      return "n";
-    case "Bishop":
-      return "b";
-    case "Pawn":
-      return "p";
-    case "HorseQueen":
-      return "e";
-    case "HorseTower":
-      return "t";
-    case "HorseBishop":
-      return "a";
-    default:
-      return "";
-  }
-}
-
-export function getRotation(rotation: Element) {
-  return (rotation.getAttribute("Rotation") as PieceRotation) ?? "NoRotation";
-}
+export type SP2PieceName =
+  | "King"
+  | "Queen"
+  | "Rook"
+  | "Rock"
+  | "Horse"
+  | "Bishop"
+  | "Pawn"
+  | "HorseQueen"
+  | "HorseTower"
+  | "HorseBishop";
 
 export function getCanvasRotation(rotation: PieceRotation) {
   switch (rotation) {
@@ -307,19 +259,6 @@ export function getBoardRank(y: string | Traverse): BoardRank {
   if (typeof y === "number") y = Traverse[y];
   y = y.substr(3, 1); // extract row from "Row8";
   return BoardRank[`R${y}` as keyof typeof BoardRank];
-}
-
-const colorMapper = {
-  Both: "Neutral",
-  Neutral: "Neutral",
-  White: "White",
-  Black: "Black",
-} as const;
-
-export function getColor(c: Element): PieceColors {
-  return colorMapper[
-    (c.getAttribute("Color") ?? "White") as keyof typeof colorMapper
-  ];
 }
 
 export function getCanvasColor(c: PieceColors): Colors {
@@ -497,11 +436,11 @@ export async function GetSolutionFromElement(
 
   const solRft = el.querySelector("SolutionRtf");
   if (solRft != null && solRft.innerHTML.length > 0) {
-    solText = await convertFromRtf(atob(solRft.innerHTML).replace(/\r/g, ""));
+    solText = await convertFromRtf(Base64.decode(solRft.innerHTML).replace(/\r/g, ""));
   } else {
     const sol = el.querySelector("Solution");
     if (!sol) solText = "";
-    else solText = atob(sol.innerHTML);
+    else solText = Base64.decode(sol.innerHTML);
   }
   return solText;
 }
@@ -559,7 +498,11 @@ export function rowToPieces(row: string): Array<Partial<IPiece> | null> {
     pieces.push({
       appearance: pieceName,
       rotation,
-      fairyCode: fairy.replace(/[\{\}]/g, ""),
+      // TODO: in fen we haven't params for fairies?
+      fairyCode: fairy
+        .replace(/[\{\}]/g, "")
+        .split("+")
+        .map((fp) => ({ code: fp, params: [] })),
       color: isNeutral
         ? "Neutral"
         : pieceName.toLowerCase() !== pieceName
@@ -602,12 +545,7 @@ export async function convertFromRtf(rtf: string) {
   EMFJS.loggingEnabled(false);
   try {
     const doc = new RTFJS.Document(stringToArrayBuffer(rtf), {});
-    // const meta = doc.metadata();
     const htmlElements = await doc.render();
-    // console.log("Meta:");
-    // console.log(meta);
-    // console.log("Html:");
-    // console.log(htmlElements);
     return htmlElements;
   } catch (err) {
     console.warn(err, rtf);
@@ -617,4 +555,74 @@ export async function convertFromRtf(rtf: string) {
       return div;
     });
   }
+}
+
+export async function convertToRtf(html: string): Promise<string | null> {
+  if (!(typeof html === "string" && html)) {
+      return null;
+  }
+
+  let richText = html;
+  let tmpRichText: string;
+  let hasHyperlinks: boolean;
+
+  // Singleton tags
+  richText = richText.replace(/<(?:hr)(?:\s+[^>]*)?\s*[\/]?>/ig, "{\\pard \\brdrb \\brdrs \\brdrw10 \\brsp20 \\par}\n{\\pard\\par}\n");
+  richText = richText.replace(/<(?:br)(?:\s+[^>]*)?\s*[\/]?>/ig, "{\\pard\\par}\n");
+
+  // Empty tags
+  richText = richText.replace(/<(?:p|div|section|article)(?:\s+[^>]*)?\s*[\/]>/ig, "{\\pard\\par}\n");
+  richText = richText.replace(/<(?:[^>]+)\/>/g, "");
+
+  // Hyperlinks
+  richText = richText.replace(
+      /<a(?:\s+[^>]*)?(?:\s+href=(["'])(?:javascript:void\(0?\);?|#|return false;?|void\(0?\);?|)\1)(?:\s+[^>]*)?>/ig,
+      "{{{\n");
+  tmpRichText = richText;
+  richText = richText.replace(
+      /<a(?:\s+[^>]*)?(?:\s+href=(["'])(.+)\1)(?:\s+[^>]*)?>/ig,
+      "{\\field{\\*\\fldinst{HYPERLINK\n \"$2\"\n}}{\\fldrslt{\\ul\\cf1\n");
+  hasHyperlinks = richText !== tmpRichText;
+  richText = richText.replace(/<a(?:\s+[^>]*)?>/ig, "{{{\n");
+  richText = richText.replace(/<\/a(?:\s+[^>]*)?>/ig, "\n}}}");
+
+  // Start tags
+  richText = richText.replace(/<(?:b|strong)(?:\s+[^>]*)?>/ig, "{\\b\n");
+  richText = richText.replace(/<(?:i|em)(?:\s+[^>]*)?>/ig, "{\\i\n");
+  richText = richText.replace(/<(?:u|ins)(?:\s+[^>]*)?>/ig, "{\\ul\n");
+  richText = richText.replace(/<(?:strike|del)(?:\s+[^>]*)?>/ig, "{\\strike\n");
+  richText = richText.replace(/<sup(?:\s+[^>]*)?>/ig, "{\\super\n");
+  richText = richText.replace(/<sub(?:\s+[^>]*)?>/ig, "{\\sub\n");
+  richText = richText.replace(/<(?:p|div|section|article)(?:\s+[^>]*)?>/ig, "{\\pard\n");
+
+  // End tags
+  richText = richText.replace(/<\/(?:p|div|section|article)(?:\s+[^>]*)?>/ig, "\n\\par}\n");
+  richText = richText.replace(/<\/(?:b|strong|i|em|u|ins|strike|del|sup|sub)(?:\s+[^>]*)?>/ig, "\n}");
+
+  // Strip any other remaining HTML tags [but leave their contents]
+  richText = richText.replace(/<(?:[^>]+)>/g, "");
+
+  // Prefix and suffix the rich text with the necessary syntax
+  richText =
+      "{\\rtf1\\ansi\n" + (hasHyperlinks ? "{\\colortbl\n;\n\\red0\\green0\\blue255;\n}\n" : "") + richText +
+      "\n}";
+
+  return richText;
+}
+
+export function notEmpty<T>(v: T | null | undefined | ""): v is T {
+  return v != null && v !== "";
+}
+
+export function newTextElement(elName: string, content: string): Element {
+  const el = createXmlElement(elName);
+  el.innerHTML = content;
+  return el;
+}
+const parser = new DOMParser();
+export function createXmlElement(elName: string): Element {
+  // const dom = parser.parseFromString(`<${elName}></${elName}>`, "application/xml");
+  // return dom.querySelector(elName) as Element;
+  const newdiv = document.createElementNS("http://www.w3.org/1999/xml", elName);
+  return newdiv;
 }

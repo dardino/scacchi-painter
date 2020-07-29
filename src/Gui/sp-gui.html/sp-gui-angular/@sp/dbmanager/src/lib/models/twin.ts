@@ -4,6 +4,7 @@ import {
   TwinModes,
   TwinTypesKeys,
   TwinModesKeys,
+  createXmlElement,
 } from "../helpers";
 
 export class Twin implements ITwin {
@@ -43,6 +44,15 @@ export class Twin implements ITwin {
   }
   public toString(): string {
     return twinmapper[this.TwinType](this.ValueA, this.ValueB, this.ValueC);
+  }
+  toSP2Xml(): Element {
+    const twin = createXmlElement("Twin");
+    twin.setAttribute("TwinType", this.TwinType);
+    twin.setAttribute("ValueA", this.ValueA);
+    twin.setAttribute("ValueB", this.ValueB);
+    twin.setAttribute("ValueC", this.ValueC);
+    twin.setAttribute("TwinModes", this.TwinModes);
+    return twin;
   }
 }
 
