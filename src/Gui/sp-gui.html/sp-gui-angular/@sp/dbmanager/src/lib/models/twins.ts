@@ -1,4 +1,4 @@
-import { ITwins, SequnceTypes } from "../helpers";
+import { ITwins, SequnceTypes, createXmlElement } from "../helpers";
 import { Twin } from "./twin";
 
 export class Twins implements ITwins {
@@ -28,6 +28,14 @@ export class Twins implements ITwins {
   toJson(): Partial<ITwins> {
     const p: Partial<ITwins> = {};
     return p;
+  }
+  toSP2Xml(): Element {
+    const twins = createXmlElement("Twins");
+    twins.setAttribute("TwinSequenceTypes", this.TwinSequenceTypes);
+    this.TwinList.forEach(t => {
+      twins.appendChild(t.toSP2Xml());
+    });
+    return twins;
   }
   private constructor() {}
 }

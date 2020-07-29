@@ -44,13 +44,28 @@ export class DbmanagerService {
     this.reset();
     await this.LoadFromText(db, fileName);
   }
-  SaveToLocalStorage(text?: string, fileName?: string) {
-    localStorage.setItem("spdb", text ?? this.ToXML());
+  async SaveToLocalStorage(text?: string, fileName?: string) {
+    if (text == null) {
+      const xmlDoc = await this.ToXML();
+      text = new XMLSerializer().serializeToString(xmlDoc.documentElement);
+    }
+    localStorage.setItem("spdb", text);
     localStorage.setItem("spdb_fname", fileName ?? this.fileName);
   }
 
-  private ToXML(): string {
-    throw new Error("Method not implemented.");
+  private async ToXML(): Promise<XMLDocument> {
+    const problems = await Promise.all(this.All.map((f) => f.toSP2Xml()));
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(
+      `<ScacchiPainterDatabase></ScacchiPainterDatabase>`,
+      "text/xml"
+    );
+    const root = doc.querySelector("ScacchiPainterDatabase") as Element;
+    root.setAttribute("version", "0.1.0.0");
+    root.setAttribute("name", "Scacchi Painter 2 Database");
+    root.setAttribute("lastIndex", this.CurrentIndex.toFixed(0));
+    problems.forEach((p) => root.appendChild(p));
+    return doc;
   }
 
   SaveToHost() {
@@ -67,9 +82,11 @@ export class DbmanagerService {
         this.CurrentDB.documentElement.getAttribute("lastIndex") ?? "0",
         10
       );
-      this.All = await Promise.all(Array.from(xmlDoc.querySelectorAll("SP_Item")).map((e) =>
-        Problem.fromElement(e)
-      ));
+      this.All = await Promise.all(
+        Array.from(xmlDoc.querySelectorAll("SP_Item")).map((e) =>
+          Problem.fromElement(e)
+        )
+      );
       this.count = this.All.length;
       await this.loadProblem();
       this.fileName = fileName;
@@ -86,7 +103,7 @@ export class DbmanagerService {
     }
     this.currentIndex = arg0;
     await this.loadProblem();
-    this.SaveToLocalStorage()
+    this.SaveToLocalStorage();
   }
 
   private async loadProblem() {
@@ -117,7 +134,8 @@ export class DbmanagerService {
   }
 
   public startSolving(): Observable<string> | Error {
-    if (!this.CurrentProblem) return new Error("unable to solve a null problem!");
+    if (!this.CurrentProblem)
+      return new Error("unable to solve a null problem!");
     this.solveOut$ = new Subject();
     this.bridge.startSolve(this.CurrentProblem);
     return this.solveOut$.asObservable();

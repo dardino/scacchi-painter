@@ -44,4 +44,5 @@ describe("Helpers", () => {
     const color4 = GetSquareColor("ColH", "Row4" );
     expect(color4).toBe("black");
   });
+
 });

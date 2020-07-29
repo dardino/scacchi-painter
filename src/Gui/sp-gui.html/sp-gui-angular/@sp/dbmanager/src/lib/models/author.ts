@@ -1,4 +1,4 @@
-import { Author as IAuthor } from "../helpers";
+import { Author as IAuthor, newTextElement, createXmlElement } from "../helpers";
 
 export class Author implements IAuthor {
   nameAndSurname: string;
@@ -38,6 +38,19 @@ export class Author implements IAuthor {
   toJson(): Partial<IAuthor> {
     const json: Partial<IAuthor> = {};
     return json;
+  }
+
+  toSP2Xml(): Element {
+    const author = createXmlElement("Author");
+    author.appendChild(newTextElement("NameAndSurname", this.nameAndSurname));
+    author.appendChild(newTextElement("Address", this.address));
+    author.appendChild(newTextElement("City", this.city));
+    author.appendChild(newTextElement("Phone", this.phone));
+    author.appendChild(newTextElement("ZipCode", this.zipCode));
+    author.appendChild(newTextElement("StateOrProvince", this.stateOrProvince));
+    author.appendChild(newTextElement("Country", this.country));
+    author.appendChild(newTextElement("Language", this.language));
+    return author;
   }
 
   private constructor() {

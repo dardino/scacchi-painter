@@ -2,14 +2,7 @@ import { Piece as BP } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
 import {
   IPiece,
-  getAppearance,
   getFigurine,
-  getColor,
-  getColum,
-  getFairyAttribute,
-  getFairyCode,
-  getRotation,
-  getTraverse,
   getCanvasLocation,
   getCanvasRotation,
   SquareLocation,
@@ -17,7 +10,9 @@ import {
   Traverse,
   getRotationSymbol,
   getCanvasColor,
+  createXmlElement,
 } from "../helpers";
+import { SP2} from "../SP2";
 
 export class Piece implements IPiece {
   public appearance: IPiece["appearance"] | "";
@@ -28,15 +23,15 @@ export class Piece implements IPiece {
   public rotation: IPiece["rotation"];
   public fairyAttribute: IPiece["fairyAttribute"];
 
-  static fromElement(source: Element): Piece {
+  static fromSP2Xml(source: Element): Piece {
     const p = new Piece();
-    p.appearance = getAppearance(source);
-    p.color = getColor(source);
-    p.column = getColum(source) ?? Columns[0];
-    p.fairyAttribute = getFairyAttribute(source);
-    p.fairyCode = getFairyCode(source);
-    p.rotation = getRotation(source);
-    p.traverse = getTraverse(source) ?? Traverse[0];
+    p.appearance     = SP2.getAppearance(source);
+    p.color          = SP2.getColor(source);
+    p.column         = SP2.getColum(source) ?? Columns[0];
+    p.fairyAttribute = SP2.getFairyAttribute(source);
+    p.fairyCode      = SP2.getFairyCodes(source);
+    p.rotation       = SP2.getRotation(source);
+    p.traverse       = SP2.getTraverse(source) ?? Traverse[0];
     return p;
   }
 
@@ -46,7 +41,7 @@ export class Piece implements IPiece {
     p.color = fromJson.color ?? "White";
     p.column = fromJson.column ?? "ColA";
     p.fairyAttribute = fromJson.fairyAttribute ?? "";
-    p.fairyCode = fromJson.fairyCode ?? "";
+    p.fairyCode = fromJson.fairyCode ?? [];
     p.rotation = fromJson.rotation ?? "NoRotation";
     p.traverse = fromJson.traverse ?? "Row1";
     return p;
@@ -62,9 +57,21 @@ export class Piece implements IPiece {
     p.color = data.color ?? "White";
     p.column = data.column ?? l?.column ?? "ColA";
     p.fairyAttribute = data.fairyAttribute ?? "";
-    p.fairyCode = data.fairyCode ?? "";
+    p.fairyCode = data.fairyCode ?? [];
     p.rotation = data.rotation ?? "NoRotation";
     p.traverse = data.traverse ?? l?.traverse ?? "Row1";
+    return p;
+  }
+
+  public toSP2Xml() {
+    const p = createXmlElement("Piece");
+    SP2.setAppearance(p, this.appearance);
+    SP2.setColor(p, this.color);
+    SP2.setColum(p, this.column);
+    SP2.setTraverse(p, this.traverse);
+    SP2.setRotation(p, this.rotation);
+    SP2.setFairyAttribute(p, this.fairyAttribute);
+    SP2.setFairyCode(p, this.fairyCode);
     return p;
   }
 
@@ -77,11 +84,13 @@ export class Piece implements IPiece {
     } as BP;
   }
 
-  public SetLocation(newCol: Columns = this.column, newRow: Traverse = this.traverse) {
+  public SetLocation(
+    newCol: Columns = this.column,
+    newRow: Traverse = this.traverse
+  ) {
     this.column = newCol;
     this.traverse = newRow;
   }
-
 
   ToNotation() {
     const parts = [];
@@ -100,11 +109,13 @@ export class Piece implements IPiece {
 
   ToFairyNotation(): string {
     if (!this.isFairy()) return "";
-    return `${this.fairyCode.toUpperCase()}${this.column[3].toLowerCase()}${this.traverse[3]}`;
+    return `${this.fairyCode.map(c => c.code).join("/")}${this.column[3].toLowerCase()}${
+      this.traverse[3]
+    }`;
   }
 
   isFairy() {
-    return (this.fairyCode ?? "") !== "";
+    return (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? "") !== "";
   }
 
   toJson(): Partial<IPiece> {
@@ -120,7 +131,7 @@ export class Piece implements IPiece {
   }
   private constructor() {
     this.appearance = "";
-    this.fairyCode = "";
+    this.fairyCode = [];
     this.color = "White";
     this.column = "ColA";
     this.traverse = "Row1";
