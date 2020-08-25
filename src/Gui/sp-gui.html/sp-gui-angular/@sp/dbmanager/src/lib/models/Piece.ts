@@ -12,7 +12,7 @@ import {
   getCanvasColor,
   createXmlElement,
 } from "../helpers";
-import { SP2} from "../SP2";
+import { SP2 } from "../SP2";
 
 export class Piece implements IPiece {
   public appearance: IPiece["appearance"] | "";
@@ -25,13 +25,13 @@ export class Piece implements IPiece {
 
   static fromSP2Xml(source: Element): Piece {
     const p = new Piece();
-    p.appearance     = SP2.getAppearance(source);
-    p.color          = SP2.getColor(source);
-    p.column         = SP2.getColum(source) ?? Columns[0];
+    p.appearance = SP2.getAppearance(source);
+    p.color = SP2.getColor(source);
+    p.column = SP2.getColum(source) ?? Columns[0];
     p.fairyAttribute = SP2.getFairyAttribute(source);
-    p.fairyCode      = SP2.getFairyCodes(source);
-    p.rotation       = SP2.getRotation(source);
-    p.traverse       = SP2.getTraverse(source) ?? Traverse[0];
+    p.fairyCode = SP2.getFairyCodes(source);
+    p.rotation = SP2.getRotation(source);
+    p.traverse = SP2.getTraverse(source) ?? Traverse[0];
     return p;
   }
 
@@ -91,6 +91,12 @@ export class Piece implements IPiece {
     this.column = newCol;
     this.traverse = newRow;
   }
+  GetLocation(): SquareLocation {
+    return {
+      column: this.column,
+      traverse: this.traverse,
+    };
+  }
 
   ToNotation() {
     const parts = [];
@@ -109,13 +115,15 @@ export class Piece implements IPiece {
 
   ToFairyNotation(): string {
     if (!this.isFairy()) return "";
-    return `${this.fairyCode.map(c => c.code).join("/")}${this.column[3].toLowerCase()}${
-      this.traverse[3]
-    }`;
+    return `${this.fairyCode
+      .map((c) => c.code)
+      .join("/")}${this.column[3].toLowerCase()}${this.traverse[3]}`;
   }
 
   isFairy() {
-    return (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? "") !== "";
+    return (
+      (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? "") !== ""
+    );
   }
 
   toJson(): Partial<IPiece> {
@@ -128,6 +136,10 @@ export class Piece implements IPiece {
     if (this.rotation) json.rotation = this.rotation;
     if (this.traverse) json.traverse = this.traverse;
     return json;
+  }
+
+  cursor() {
+    return `${this.color === "White" ? "w" : this.color === "Black" ? "b" : "n"}_${this.appearance}`;
   }
   private constructor() {
     this.appearance = "";

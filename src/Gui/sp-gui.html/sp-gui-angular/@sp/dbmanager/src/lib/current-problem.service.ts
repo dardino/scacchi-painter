@@ -20,15 +20,9 @@ export class CurrentProblemService {
   constructor(private dbManager: DbmanagerService, private ngZone: NgZone) {}
   AddPieceAt(location: SquareLocation, piece: Piece) {
     const problem = this.Problem;
-    if (!problem) return;
-    this.removePieceAt(location);
-    this.Problem?.pieces.push(
-      Piece.fromJson({
-        ...piece,
-        column: location.column,
-        traverse: location.traverse,
-      })
-    ); // clone
+    if (!problem || !piece) return;
+    this.addPieceAt(location, piece);
+    // clone
     this.dbManager.setCurrentProblem(problem.clone());
   }
   RemovePieceAt(location: SquareLocation) {
@@ -42,8 +36,8 @@ export class CurrentProblemService {
     mode: "swap" | "replace" = "replace"
   ) {
     if (!this.Problem) return;
-    if (mode === "swap") return this.swapPieces(from, to);
-    if (mode === "replace") return this.movePiece(from, to);
+    if (mode === "swap") this.swapPieces(from, to);
+    if (mode === "replace") this.movePiece(from, to);
     this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   RotatePiece(location: SquareLocation, angle: PieceRotation) {
@@ -145,8 +139,20 @@ export class CurrentProblemService {
   private swapPieces(from: SquareLocation, to: SquareLocation) {
     const p1 = this.Problem?.GetPieceAt(from.column, from.traverse);
     const p2 = this.Problem?.GetPieceAt(to.column, to.traverse);
-    this.setPieceLocation(p1, to);
-    this.setPieceLocation(p2, from);
+    if (p2) this.removePiece(p2);
+    if (p1) this.removePiece(p1);
+    if (p2) this.addPieceAt(from, p2);
+    if (p1) this.addPieceAt(to, p1);
+  }
+  private addPieceAt(location: SquareLocation, piece: Piece) {
+    this.removePieceAt(location);
+    this.Problem?.pieces.push(
+      Piece.fromJson({
+        ...piece,
+        column: location.column,
+        traverse: location.traverse,
+      })
+    );
   }
   private removePiece(p: Piece): void {
     const ix = this.Problem?.pieces.indexOf(p) ?? null;

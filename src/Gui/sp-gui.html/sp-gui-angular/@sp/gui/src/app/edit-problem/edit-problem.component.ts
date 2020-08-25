@@ -14,7 +14,10 @@ import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
 import { Location } from "@angular/common";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
+import {
+  EditCommand,
+  EditModes,
+} from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { Piece } from "@sp/dbmanager/src/lib/models";
 
 @Component({
@@ -48,6 +51,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   @ViewChild("panelright") panelright: ElementRef;
 
   private subscribe: Subscription;
+
+  public editMode: EditModes = "select";
   public rows: string[] = [];
   public boardType: "HTML" | "canvas" = "HTML";
   public rows$ubject = new BehaviorSubject<string[]>([]);
@@ -70,28 +75,39 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   };
 
   pieceToAdd: string | null = null;
+  pieceToMove: Piece | null = null;
+
+  get boardCursor() {
+    return this.pieceToAdd ?? this.pieceToMove?.cursor() ?? this.editMode === "remove" ? "X" : null;
+  }
+
   switchBoardType() {
     this.boardType = this.boardType === "HTML" ? "canvas" : "HTML";
+    this.resetActions();
   }
   onTriggerContextMenu(event: MouseEvent) {
     event.preventDefault();
     this.menuX = event.x - 20;
-    this.menuY = event.y - 20;
+    this.menuY = event.y - 40;
     this.menu.openMenu();
+    this.resetActions();
   }
 
   startSolve() {
     this.rows = [];
     this.rows$ubject.next(this.rows);
     if (this.current.Problem) this.bridge.startSolve(this.current.Problem);
+    this.resetActions();
   }
 
   stopSolve() {
     this.bridge.stopSolve();
+    this.resetActions();
   }
 
   goBack() {
     this.location.back();
+    this.resetActions();
   }
 
   ngOnInit(): void {
@@ -102,6 +118,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.resetActions();
     this.rows$ubject.complete();
     this.rows$ubject.unsubscribe();
     this.subscribe.unsubscribe();
@@ -117,6 +134,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   startResize($event: MouseEvent) {
+    this.resetActions();
     const width = parseFloat(
       getComputedStyle(this.panelright.nativeElement as HTMLDivElement).width
     );
@@ -139,15 +157,36 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   editCommand($event: EditCommand) {
+    this.resetActions();
     this.commandMapper[$event]();
   }
   setPieceToAdd($event: string | null) {
+    this.resetActions();
+    this.editMode = $event == null ? "select" : "add";
     this.pieceToAdd = $event;
   }
   setCurrentCell($event: SquareLocation | null) {
+    if ($event == null) this.resetActions();
+    if (this.editMode === "remove" && $event != null) {
+      this.current.RemovePieceAt($event);
+    }
     if (this.pieceToAdd != null && $event != null) {
       this.addPiece(this.pieceToAdd, $event);
     }
+    if (this.editMode === "move" && $event != null) {
+      if (this.pieceToMove == null) {
+        this.prepareMovePiece(
+          this.current.Problem?.GetPieceAt($event.column, $event.traverse)
+        );
+      } else {
+        this.completeMove($event);
+      }
+    }
+  }
+  editModeChanged($event: EditModes) {
+    if ($event !== "add") this.pieceToAdd = null;
+    this.editMode = $event;
+    this.pieceToMove = null;
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {
@@ -161,5 +200,22 @@ export class EditProblemComponent implements OnInit, OnDestroy {
           : "Neutral",
     }) as Piece;
     this.current.AddPieceAt(loc, p);
+  }
+
+  private prepareMovePiece(p: Piece | undefined) {
+    if (!p) return;
+    this.pieceToMove = p;
+  }
+
+  private completeMove(loc: SquareLocation) {
+    if (!this.pieceToMove) return;
+    const from = this.pieceToMove.GetLocation();
+    this.current.MovePiece(from, loc, "replace");
+    this.pieceToMove = null;
+  }
+
+  private resetActions() {
+    this.pieceToMove = null;
+    this.pieceToAdd = null;
   }
 }
