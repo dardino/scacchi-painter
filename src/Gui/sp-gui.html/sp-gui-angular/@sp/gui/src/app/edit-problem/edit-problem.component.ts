@@ -65,6 +65,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     moveL: () => this.current.ShiftBoard("-x"),
     moveR: () => this.current.ShiftBoard("x"),
   };
+
+  pieceToAdd: string | null = null;
   switchBoardType() {
     this.boardType = this.boardType === "HTML" ? "canvas" : "HTML";
   }
@@ -130,5 +132,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 
   editCommand($event: EditCommand) {
     this.commandMapper[$event]();
+  }
+  setPieceToAdd($event: string | null) {
+    this.pieceToAdd = $event;
   }
 }

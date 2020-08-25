@@ -31,11 +31,22 @@ import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipaint
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+  private settings: {
+    CELLCOLORS: [string, string];
+    PIECECOLORS: [string, string];
+    BORDER_SIZE: number;
+  } = {
+    BORDER_SIZE: 1,
+    CELLCOLORS: ["#fff", "#ddd"],
+    PIECECOLORS: ["#fff", "#333"],
+  };
+
   cells: UiCell[] = [];
   currentCell: UiCell | null = null;
 
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
+  @Input() cursor: string;
 
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
@@ -47,20 +58,17 @@ export class ChessboardComponent
   @ViewChild("container")
   chessboard: ElementRef;
 
+  @ViewChild("container")
+  cbImage: ElementRef;
+
   private canvasBoard: CanvasChessBoard | null;
+  private cellSize = 32;
 
   @Input()
   position?: Problem;
 
-  @Input()
-  mode: "edit" | "view";
-
   @Output()
   currentCellChanged: EventEmitter<SquareLocation | null>;
-
-  public get Mode() {
-    return this.mode;
-  }
 
   public fontSize: number;
 
@@ -80,9 +88,19 @@ export class ChessboardComponent
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-    console.log(changes);
     if (changes.position && !changes.position.isFirstChange()) {
       this.updateBoard();
+    }
+    if (
+      changes.cursor &&
+      typeof changes.cursor.currentValue === "string" &&
+      this.cbImage
+    ) {
+      const dataURL = getPieceIcon(changes.cursor.currentValue, this.cellSize);
+      (this.cbImage
+        .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
+        this.cellSize / 2
+      )} ${Math.floor(this.cellSize / 2)}, auto`;
     }
     if (
       changes.boardType &&
@@ -90,12 +108,10 @@ export class ChessboardComponent
       changes.boardType.currentValue === "canvas" &&
       this.canvas
     ) {
-      console.log("canvas");
-      this.canvasBoard = new CanvasChessBoard(this.canvas.nativeElement, {
-        BORDER_SIZE: 1,
-        CELLCOLORS: ["#fff", "#ddd"],
-        PIECECOLORS: ["#fff", "#333"],
-      });
+      this.canvasBoard = new CanvasChessBoard(
+        this.canvas.nativeElement,
+        this.settings
+      );
       const cfg = GetConfig();
       cfg.fontSize = 1;
       this.canvasBoard.AddFontConfig("ScacchiPainter", cfg);
@@ -149,9 +165,9 @@ export class ChessboardComponent
   }
 
   private sizeMutated = (args: any) => {
-    this.fontSize = Math.floor(
-      (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8 / 1.44
-    );
+    this.cellSize =
+      (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
+    this.fontSize = Math.floor(this.cellSize / 1.44);
   }
 
   ngAfterViewInit() {
@@ -194,4 +210,34 @@ export declare class SimpleChange<T> {
 interface UiCell {
   piece: Piece | null;
   location: SquareLocation;
+}
+
+function getPieceIcon(figurine: string, cellSize: number) {
+  const canvas = document.createElement("canvas");
+  canvas.width = cellSize;
+  canvas.height = cellSize;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Can not create 2d context!");
+  }
+  const fsize = Math.floor(cellSize / 1.44);
+  const margin = Math.floor((cellSize - fsize) / 2);
+  ctx.font = `${fsize}px ScacchiPainter`;
+  ctx.lineWidth = 2;
+
+  ctx.save();
+
+  ctx.fillStyle = "#ffffff";
+  ctx.strokeStyle = "#ffffff";
+  ctx.strokeText("_" + figurine.substring(1), margin, margin + fsize);
+  ctx.fillText  ("_" + figurine.substring(1), margin, margin + fsize);
+  ctx.restore();
+
+  ctx.fillStyle = "#333333";
+  ctx.strokeStyle = "#ffffff";
+  ctx.strokeText(figurine, margin, margin + fsize);
+  ctx.fillText  (figurine, margin, margin + fsize);
+  ctx.restore();
+
+  return canvas.toDataURL("image/png");
 }

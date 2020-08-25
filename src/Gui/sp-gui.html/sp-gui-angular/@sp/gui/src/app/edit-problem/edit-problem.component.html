@@ -20,9 +20,10 @@
         class="lib-chessboard"
         [position]="problem"
         [boardType]="boardType"
+        [cursor]="pieceToAdd"
         (contextmenu)="onTriggerContextMenu($event)"
       ></lib-chessboard>
-      <lib-piece-selector></lib-piece-selector>
+      <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)"></lib-piece-selector>
       <ul class="solution-row" *ngFor="let row of rows$ | async">
         <li>{{ row }}</li>
       </ul>

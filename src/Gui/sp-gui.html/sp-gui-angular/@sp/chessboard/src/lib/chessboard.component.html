@@ -1,5 +1,5 @@
 <div class="chessboard-layout" #container>
-  <div class="chessboard-image">
+  <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
     <canvas
       [style.display.none]="BoardType !== 'canvas'"
       #canvas
@@ -30,5 +30,4 @@
     </span>
     <span class="piececounter">{{ pieceCounter }}</span>
   </div>
-  <lib-piece-selector *ngIf="Mode === 'edit'"></lib-piece-selector>
 </div>
