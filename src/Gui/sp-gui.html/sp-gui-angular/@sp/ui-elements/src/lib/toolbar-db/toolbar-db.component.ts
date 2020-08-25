@@ -23,9 +23,6 @@ export class ToolbarDbComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.currentProblem != null) {
-      console.log(this.currentProblem);
-    }
   }
 
   public canGoPrev() {

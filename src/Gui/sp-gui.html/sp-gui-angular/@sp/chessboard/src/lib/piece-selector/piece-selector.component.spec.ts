@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PieceSelectorComponent } from './piece-selector.component';
+import { PieceSelectorComponent } from "./piece-selector.component";
 
-describe('PieceSelectorComponent', () => {
+describe("PieceSelectorComponent", () => {
   let component: PieceSelectorComponent;
   let fixture: ComponentFixture<PieceSelectorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PieceSelectorComponent ]
-    })
-    .compileComponents();
+      declarations: [PieceSelectorComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('PieceSelectorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
