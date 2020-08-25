@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 
 @Component({
   selector: "lib-piece-selector",
@@ -6,6 +6,7 @@ import { Component, OnInit, EventEmitter, Output } from "@angular/core";
   styleUrls: ["./piece-selector.component.styl"],
 })
 export class PieceSelectorComponent implements OnInit {
+  @Input()
   current = "";
 
   @Output()

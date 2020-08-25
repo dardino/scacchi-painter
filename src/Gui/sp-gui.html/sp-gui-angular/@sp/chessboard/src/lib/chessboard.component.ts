@@ -168,7 +168,7 @@ export class ChessboardComponent
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
-  }
+  };
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function
@@ -227,16 +227,18 @@ function getPieceIcon(figurine: string, cellSize: number) {
 
   ctx.save();
 
-  ctx.fillStyle = "#ffffff";
-  ctx.strokeStyle = "#ffffff";
-  ctx.strokeText("_" + figurine.substring(1), margin, margin + fsize);
-  ctx.fillText  ("_" + figurine.substring(1), margin, margin + fsize);
-  ctx.restore();
+  if (figurine !== "X") {
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeStyle = "#ffffff";
+    ctx.strokeText("_" + figurine.substring(1), margin, margin + fsize);
+    ctx.fillText("_" + figurine.substring(1), margin, margin + fsize);
+    ctx.restore();
+  }
 
-  ctx.fillStyle = "#333333";
+  ctx.fillStyle = figurine === "X" ? "#ff3300" : "#333333";
   ctx.strokeStyle = "#ffffff";
   ctx.strokeText(figurine, margin, margin + fsize);
-  ctx.fillText  (figurine, margin, margin + fsize);
+  ctx.fillText(figurine, margin, margin + fsize);
   ctx.restore();
 
   return canvas.toDataURL("image/png");

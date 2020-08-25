@@ -11,6 +11,8 @@
       <lib-toolbar-edit
         (switchBoardType)="switchBoardType()"
         (editCommand)="editCommand($event)"
+        [editMode]="editMode"
+        (editModeChanged)="editModeChanged($event)"
       ></lib-toolbar-edit>
     </mat-toolbar>
   </section>
@@ -20,11 +22,11 @@
         class="lib-chessboard"
         [position]="problem"
         [boardType]="boardType"
-        [cursor]="pieceToAdd"
+        [cursor]="boardCursor"
         (contextmenu)="onTriggerContextMenu($event)"
         (currentCellChanged)="setCurrentCell($event)"
       ></lib-chessboard>
-      <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)"></lib-piece-selector>
+      <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)" [current]="pieceToAdd"></lib-piece-selector>
       <ul class="solution-row" *ngFor="let row of rows$ | async">
         <li>{{ row }}</li>
       </ul>
