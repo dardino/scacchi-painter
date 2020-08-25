@@ -7,12 +7,15 @@ import {
 } from "@angular/core";
 import {
   CurrentProblemService,
+  SquareLocation,
+  IPiece,
 } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
 import { Location } from "@angular/common";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
+import { Piece } from "@sp/dbmanager/src/lib/models";
 
 @Component({
   selector: "app-edit-problem",
@@ -103,6 +106,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.rows$ubject.unsubscribe();
     this.subscribe.unsubscribe();
   }
+
   resize($event: MouseEvent) {
     if (isNaN(this.resizing.x)) return;
     const delta = $event.x - this.resizing.x;
@@ -111,6 +115,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     }px`;
     window.dispatchEvent(new Event("resize"));
   }
+
   startResize($event: MouseEvent) {
     const width = parseFloat(
       getComputedStyle(this.panelright.nativeElement as HTMLDivElement).width
@@ -118,14 +123,17 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.resizing = { x: $event.x, initialW: width };
     console.log(`Initial W: ${width}`);
   }
+
   endResize() {
     this.resizing = { x: NaN, initialW: NaN };
   }
+
   leaveResize() {
     this.leaveTimeout = setTimeout(() => {
       this.endResize();
     }, 500);
   }
+
   clearResizeLeave() {
     clearTimeout(this.leaveTimeout);
   }
@@ -135,5 +143,23 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
   setPieceToAdd($event: string | null) {
     this.pieceToAdd = $event;
+  }
+  setCurrentCell($event: SquareLocation | null) {
+    if (this.pieceToAdd != null && $event != null) {
+      this.addPiece(this.pieceToAdd, $event);
+    }
+  }
+
+  private addPiece(figurine: string, loc: SquareLocation) {
+    const p = Piece.fromPartial({
+      appearance: figurine[2] as IPiece["appearance"],
+      color:
+        figurine[0] === "w"
+          ? "White"
+          : figurine[0] === "b"
+          ? "Black"
+          : "Neutral",
+    }) as Piece;
+    this.current.AddPieceAt(loc, p);
   }
 }

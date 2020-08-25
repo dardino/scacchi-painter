@@ -68,7 +68,7 @@ export class ChessboardComponent
   position?: Problem;
 
   @Output()
-  currentCellChanged: EventEmitter<SquareLocation | null>;
+  currentCellChanged = new EventEmitter<SquareLocation | null>();
 
   public fontSize: number;
 
