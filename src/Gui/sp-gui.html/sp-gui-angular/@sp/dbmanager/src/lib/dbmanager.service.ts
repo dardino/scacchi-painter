@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { IPiece, IProblem } from "./helpers";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Problem } from "./models/problem";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, BehaviorSubject } from "rxjs";
 
 interface IDbSpX {
   lastIndex: number;
@@ -38,6 +38,10 @@ export class DbmanagerService {
   }
 
   constructor(private bridge: HostBridgeService) {}
+
+  setCurrentProblem(problem: Problem) {
+    this.currentProblem = problem;
+  }
 
   async LoadFromLocalStorage() {
     const db = localStorage.getItem("spdb");
@@ -161,11 +165,11 @@ export class DbmanagerService {
   }
 
   public startSolving(): Observable<string> | Error {
-    if (!this.CurrentProblem) {
+    if (!this.currentProblem) {
       return new Error("unable to solve a null problem!");
     }
     this.solveOut$ = new Subject();
-    this.bridge.startSolve(this.CurrentProblem);
+    this.bridge.startSolve(this.currentProblem);
     return this.solveOut$.asObservable();
   }
 

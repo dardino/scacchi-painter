@@ -80,6 +80,9 @@ export class HostBridgeService {
   public get supportsClose(): boolean {
     return typeof window.Bridge?.closeApp === "function";
   }
+  public get supportsSolve(): boolean {
+    return typeof window.Bridge?.closeApp === "function";
+  }
   public closeApp() {
     if (window.Bridge) return window.Bridge.closeApp?.();
   }

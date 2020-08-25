@@ -5,11 +5,14 @@ import {
   ViewChild,
   ElementRef,
 } from "@angular/core";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import {
+  CurrentProblemService,
+} from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
 import { Location } from "@angular/common";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 
 @Component({
   selector: "app-edit-problem",
@@ -22,11 +25,15 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   public get problem() {
-    return this.db.CurrentProblem;
+    return this.current.Problem;
+  }
+
+  public get engineEnabled() {
+    return this.bridge && this.bridge.supportsSolve;
   }
 
   constructor(
-    private db: DbmanagerService,
+    private current: CurrentProblemService,
     private location: Location,
     private bridge: HostBridgeService
   ) {}
@@ -47,6 +54,17 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   private resizing = { x: NaN, initialW: NaN };
 
   private leaveTimeout = 0;
+
+  private commandMapper: { [key in EditCommand]: () => void } = {
+    flipH: () => this.current.FlipBoard("y"),
+    flipV: () => this.current.FlipBoard("x"),
+    rotateL: () => this.current.RotateBoard("left"),
+    rotateR: () => this.current.RotateBoard("right"),
+    moveU: () => this.current.ShiftBoard("y"),
+    moveD: () => this.current.ShiftBoard("-y"),
+    moveL: () => this.current.ShiftBoard("-x"),
+    moveR: () => this.current.ShiftBoard("x"),
+  };
   switchBoardType() {
     this.boardType = this.boardType === "HTML" ? "canvas" : "HTML";
   }
@@ -60,7 +78,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   startSolve() {
     this.rows = [];
     this.rows$ubject.next(this.rows);
-    if (this.db.CurrentProblem) this.bridge.startSolve(this.db.CurrentProblem);
+    if (this.current.Problem) this.bridge.startSolve(this.current.Problem);
   }
 
   stopSolve() {
@@ -86,7 +104,6 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   resize($event: MouseEvent) {
     if (isNaN(this.resizing.x)) return;
     const delta = $event.x - this.resizing.x;
-    console.log(`Y: ${$event.y}, DELTA: ${delta}`);
     (this.panelright.nativeElement as HTMLDivElement).style.width = `${
       this.resizing.initialW + delta
     }px`;
@@ -109,5 +126,9 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
   clearResizeLeave() {
     clearTimeout(this.leaveTimeout);
+  }
+
+  editCommand($event: EditCommand) {
+    this.commandMapper[$event]();
   }
 }

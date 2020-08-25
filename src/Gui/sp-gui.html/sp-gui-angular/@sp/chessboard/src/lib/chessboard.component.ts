@@ -80,6 +80,7 @@ export class ChessboardComponent
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
+    console.log(changes);
     if (changes.position && !changes.position.isFirstChange()) {
       this.updateBoard();
     }
@@ -89,6 +90,7 @@ export class ChessboardComponent
       changes.boardType.currentValue === "canvas" &&
       this.canvas
     ) {
+      console.log("canvas");
       this.canvasBoard = new CanvasChessBoard(this.canvas.nativeElement, {
         BORDER_SIZE: 1,
         CELLCOLORS: ["#fff", "#ddd"],
@@ -150,7 +152,7 @@ export class ChessboardComponent
     this.fontSize = Math.floor(
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8 / 1.44
     );
-  };
+  }
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function

@@ -232,6 +232,12 @@ $altTheme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
   }
 }
 
+.mat-toolbar{
+  .mat-button {
+    min-width: 1em;
+  }
+}
+
 quill-editor {
   background-color: #fff;
   color: #000;
