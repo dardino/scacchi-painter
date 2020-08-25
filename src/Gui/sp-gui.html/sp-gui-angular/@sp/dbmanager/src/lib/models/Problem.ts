@@ -144,6 +144,10 @@ export class Problem implements IProblem {
     return json;
   }
 
+  clone(): Problem {
+    return Problem.fromJson(this.toJson());
+  }
+
   async toSP2Xml(): Promise<Element> {
     const item = createXmlElement("SP_Item");
     SP2.setProblemType(item, this.stipulation.problemType);

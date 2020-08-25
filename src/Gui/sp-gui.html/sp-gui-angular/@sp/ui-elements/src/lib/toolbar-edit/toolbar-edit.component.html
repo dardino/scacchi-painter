@@ -19,4 +19,53 @@
       <mat-icon svgIcon="move_piece"></mat-icon>
     </mat-button-toggle>
   </mat-button-toggle-group>
+  <lib-sp-toolbar-button
+    (click)="rotateRight()"
+    iconText="rotate_right"
+    iconLabel="Rotate right"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="rotateLeft()"
+    iconText="rotate_left"
+    iconLabel="Rotate left"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="flipHorizontal()"
+    iconText="flip"
+    iconLabel="Flip horizontal"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="flipVertical()"
+    iconText="flip"
+    iconLabel="Flip vertical"
+    data-rotate="90"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="moveDown()"
+    iconText="keyboard_arrow_down"
+    iconLabel="Move down"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="moveUp()"
+    iconText="keyboard_arrow_up"
+    iconLabel="Move up"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="moveLeft()"
+    iconText="keyboard_arrow_left"
+    iconLabel="Move left"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="moveRight()"
+    iconText="keyboard_arrow_right"
+    iconLabel="Move right"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
 </mat-toolbar-row>

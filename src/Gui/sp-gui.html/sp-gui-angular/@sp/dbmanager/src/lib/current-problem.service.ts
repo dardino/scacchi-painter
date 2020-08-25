@@ -1,6 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { DbmanagerService } from "./dbmanager.service";
-import { PieceRotation, SquareLocation, Columns, Traverse, IProblem } from "./helpers";
+import {
+  PieceRotation,
+  SquareLocation,
+  Columns,
+  Traverse,
+  IProblem,
+} from "./helpers";
 import { Piece } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
 
@@ -8,65 +14,66 @@ import { FairyPiecesCodes } from "./models/fairesDB";
   providedIn: "root",
 })
 export class CurrentProblemService {
-  constructor(private dbManager: DbmanagerService) {}
+  public get Problem() {
+    return this.dbManager.CurrentProblem;
+  }
+  constructor(private dbManager: DbmanagerService, private ngZone: NgZone) {}
   AddPieceAt(location: SquareLocation, piece: Piece) {
-    const problem = this.dbManager.CurrentProblem;
+    const problem = this.Problem;
     if (!problem) return;
-    this.RemovePieceAt(location);
-    this.dbManager.CurrentProblem?.pieces.push(
+    this.removePieceAt(location);
+    this.Problem?.pieces.push(
       Piece.fromJson({
         ...piece,
         column: location.column,
         traverse: location.traverse,
       })
     ); // clone
+    this.dbManager.setCurrentProblem(problem.clone());
   }
   RemovePieceAt(location: SquareLocation) {
-    const problem = this.dbManager.CurrentProblem;
-    if (!problem) return;
-
-    const oldP = problem.GetPieceAt(location.column, location.traverse);
-    if (!oldP) return;
-
-    // remove piece;
-    this.RemovePiece(oldP);
+    if (!this.Problem) return;
+    this.removePieceAt(location);
+    this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   MovePiece(
     from: SquareLocation,
     to: SquareLocation,
     mode: "swap" | "replace" = "replace"
   ) {
+    if (!this.Problem) return;
     if (mode === "swap") return this.swapPieces(from, to);
     if (mode === "replace") return this.movePiece(from, to);
+    this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   RotatePiece(location: SquareLocation, angle: PieceRotation) {
-    const problem = this.dbManager.CurrentProblem;
-    if (!problem) return;
+    if (!this.Problem) return;
 
-    const p = problem.GetPieceAt(location.column, location.traverse);
+    const p = this.Problem.GetPieceAt(location.column, location.traverse);
     if (p) p.rotation = angle;
+    this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   SetPieceFairyAttribute(location: SquareLocation, attribute: string) {
-    const problem = this.dbManager.CurrentProblem;
-    if (!problem) return;
+    if (!this.Problem) return;
 
-    const p = problem.GetPieceAt(location.column, location.traverse);
+    const p = this.Problem.GetPieceAt(location.column, location.traverse);
     if (p) p.fairyAttribute = attribute;
+    this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   SetCellFairyAttribute(location: SquareLocation, attribute: string) {
-    const problem = this.dbManager.CurrentProblem;
+    const problem = this.Problem;
     if (!problem) return;
     problem.setCellFairyAttribute(location, attribute);
   }
   SetAsFairyPiece(location: SquareLocation, fairyCode: FairyPiecesCodes) {
-    const problem = this.dbManager.CurrentProblem;
+    const problem = this.Problem;
     if (!problem) return;
 
     const p = problem.GetPieceAt(location.column, location.traverse);
-    if (p) p.fairyCode = fairyCode;
+    if (p) p.fairyCode = [{ code: fairyCode, params: [] }];
   }
   RotateBoard(angle: "left" | "right") {
-    const problem = this.dbManager.CurrentProblem;
+    const problem = this.Problem;
     if (!problem) return;
     problem.pieces.forEach((p) => {
       this.setPieceLocation(p, {
@@ -84,9 +91,10 @@ export class CurrentProblemService {
           ],
       });
     });
+    this.dbManager.setCurrentProblem(problem.clone());
   }
   FlipBoard(axis: "x" | "y") {
-    const problem = this.dbManager.CurrentProblem;
+    const problem = this.Problem;
     if (!problem) return;
     problem.pieces.forEach((p) => {
       this.setPieceLocation(p, {
@@ -98,9 +106,10 @@ export class CurrentProblemService {
             : Traverse[7 - Traverse.indexOf(p.traverse)],
       });
     });
+    this.dbManager.setCurrentProblem(problem.clone());
   }
   ShiftBoard(axis: "x" | "y" | "-x" | "-y") {
-    const problem = this.dbManager.CurrentProblem;
+    const problem = this.Problem;
     if (!problem) return;
     problem.pieces.slice().forEach((p) => {
       const newCol =
@@ -111,39 +120,52 @@ export class CurrentProblemService {
         axis === "y" || axis === "-y"
           ? addToTraverse(p.traverse, axis === "y" ? -1 : 1)
           : p.traverse;
-      if (!newCol || !newRow) return this.RemovePiece(p);
+      if (!newCol || !newRow) return this.removePiece(p);
       this.setPieceLocation(p, { traverse: newRow, column: newCol });
     });
-  }
-  RemovePiece(p: Piece): void {
-    const ix = this.dbManager.CurrentProblem?.pieces.indexOf(p) ?? null;
-    if (ix === null) return;
-    this.dbManager.CurrentProblem?.pieces.splice(ix, 1);
+    this.dbManager.setCurrentProblem(problem.clone());
   }
   ClearBoard() {
-    if (this.dbManager.CurrentProblem) {
-      this.dbManager.CurrentProblem.pieces.length = 0;
-    }
+    if (!this.Problem) return;
+
+    this.Problem.pieces.length = 0;
+    this.dbManager.setCurrentProblem(this.Problem.clone());
   }
 
   Reload(snapshotID?: keyof IProblem["snapshots"]) {
-    if (!this.dbManager.CurrentProblem) return;
-    this.dbManager.CurrentProblem.loadSnapshot(snapshotID, true);
+    if (!this.Problem) return;
+    this.Problem.loadSnapshot(snapshotID, true);
+    this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   Snapshot() {
-    if (!this.dbManager.CurrentProblem) return;
-    this.dbManager.CurrentProblem.saveSnapshot();
+    if (!this.Problem) return;
+    this.Problem.saveSnapshot();
   }
 
   private swapPieces(from: SquareLocation, to: SquareLocation) {
-    const p1 = this.dbManager.CurrentProblem?.GetPieceAt(from.column, from.traverse);
-    const p2 = this.dbManager.CurrentProblem?.GetPieceAt(to.column, to.traverse);
+    const p1 = this.Problem?.GetPieceAt(from.column, from.traverse);
+    const p2 = this.Problem?.GetPieceAt(to.column, to.traverse);
     this.setPieceLocation(p1, to);
     this.setPieceLocation(p2, from);
   }
+  private removePiece(p: Piece): void {
+    const ix = this.Problem?.pieces.indexOf(p) ?? null;
+    if (ix === null || !this.Problem) return;
+    this.Problem?.pieces.splice(ix, 1);
+  }
   private movePiece(from: SquareLocation, to: SquareLocation) {
-    this.RemovePieceAt(to);
+    this.removePieceAt(to);
     this.swapPieces(from, to);
+  }
+  private removePieceAt(location: SquareLocation) {
+    const problem = this.Problem;
+    if (!problem) return;
+
+    const oldP = problem.GetPieceAt(location.column, location.traverse);
+    if (!oldP) return;
+
+    // remove piece;
+    this.removePiece(oldP);
   }
 
   private setPieceLocation(

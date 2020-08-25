@@ -1,7 +1,7 @@
 <mat-toolbar-row class="lib-toolbar">
   <lib-sp-toolbar-button
     (click)="start()"
-    iconText="play_arrow"
+    iconText="play_circle_filled"
     iconLabel="Start"
     [noLabel]="hideLabels"
     *ngIf="!isRunning"
@@ -15,7 +15,7 @@
   ></lib-sp-toolbar-button>
   <lib-sp-toolbar-button
     (click)="tryMove()"
-    iconText="play_arrow"
+    iconText="play_circle_outline"
     iconLabel="Try"
     [noLabel]="hideLabels"
     [disabled]="isRunning"

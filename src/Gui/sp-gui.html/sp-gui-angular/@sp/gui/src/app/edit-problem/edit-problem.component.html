@@ -1,15 +1,17 @@
 <div class="problem-editor">
   <section id="toolbar">
     <mat-toolbar>
-      <lib-toolbar-edit
-        (switchBoardType)="switchBoardType()"
-      ></lib-toolbar-edit>
       <lib-toolbar-engine
+        *ngIf="engineEnabled"
         (startSolve)="startSolve()"
         (stopSolve)="stopSolve()"
         [isRunning]="solveInProgress"
         [hideLabels]="true"
       ></lib-toolbar-engine>
+      <lib-toolbar-edit
+        (switchBoardType)="switchBoardType()"
+        (editCommand)="editCommand($event)"
+      ></lib-toolbar-edit>
     </mat-toolbar>
   </section>
   <div class="workboard" (mousemove)="resize($event)">
