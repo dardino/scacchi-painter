@@ -74,11 +74,11 @@ export class ChessboardComponent
 
   public fontSize: number;
 
-  public onSelectCell($event: Event) {
+  constructor(private fensvc: FenService) {}
+
+  onSelectCell($event: Event) {
     console.log($event);
   }
-
-  constructor(private fensvc: FenService) {}
 
   ngOnDestroy(): void {
     // Later, you can stop observing
@@ -128,6 +128,11 @@ export class ChessboardComponent
     }
   }
 
+  chessboardBlur() {
+    this.currentCell = null;
+    this.focusOut.emit();
+  }
+
   clearCells() {
     this.cells = [];
     for (let i = 0; i < 64; i++) {
@@ -174,7 +179,7 @@ export class ChessboardComponent
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
-  }
+  };
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function

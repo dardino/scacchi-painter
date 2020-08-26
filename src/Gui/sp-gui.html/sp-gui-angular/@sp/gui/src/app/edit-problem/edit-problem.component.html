@@ -25,7 +25,7 @@
         [cursor]="boardCursor"
         (contextmenu)="onTriggerContextMenu($event)"
         (currentCellChanged)="setCurrentCell($event)"
-        (focusOut)="resetActions()"
+        (focusOut)="boardBlur()"
       ></lib-chessboard>
       <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)" [current]="pieceToAdd"></lib-piece-selector>
       <ul class="solution-row" *ngFor="let row of rows$ | async">
