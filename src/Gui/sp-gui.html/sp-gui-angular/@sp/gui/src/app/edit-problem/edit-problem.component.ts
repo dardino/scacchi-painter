@@ -9,6 +9,7 @@ import {
   CurrentProblemService,
   SquareLocation,
   IPiece,
+  getCanvasRotation,
 } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
@@ -75,10 +76,29 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   };
 
   pieceToAdd: string | null = null;
+  rotationToAdd: number | null = null;
   pieceToMove: Piece | null = null;
 
-  get boardCursor() {
-    return this.pieceToAdd ?? this.pieceToMove?.cursor() ?? this.editMode === "remove" ? "X" : null;
+  get boardCursor(): {
+    figurine: string | null;
+    rotation: number | null;
+  } | null {
+    const figurine =
+      this.pieceToAdd ??
+      this.pieceToMove?.cursor() ??
+      (this.editMode === "remove" ? "X" : null);
+    const rotation =
+      this.rotationToAdd ??
+      (this.pieceToMove?.rotation
+        ? getCanvasRotation(this.pieceToMove.rotation)
+        : null) ??
+      null;
+    return figurine
+      ? {
+          figurine,
+          rotation,
+        }
+      : null;
   }
 
   switchBoardType() {
@@ -170,7 +190,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     if (this.editMode === "remove" && $event != null) {
       this.current.RemovePieceAt($event);
     }
-    if (this.pieceToAdd != null && $event != null) {
+    if (this.editMode === "add" && this.pieceToAdd != null && $event != null) {
       this.addPiece(this.pieceToAdd, $event);
     }
     if (this.editMode === "move" && $event != null) {

@@ -46,7 +46,7 @@ export class ChessboardComponent
 
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
-  @Input() cursor: string;
+  @Input() cursor: { figurine: string; rotation: number | null } | null;
 
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
@@ -91,16 +91,20 @@ export class ChessboardComponent
     if (changes.position && !changes.position.isFirstChange()) {
       this.updateBoard();
     }
-    if (
-      changes.cursor &&
-      typeof changes.cursor.currentValue === "string" &&
-      this.cbImage
-    ) {
-      const dataURL = getPieceIcon(changes.cursor.currentValue, this.cellSize);
-      (this.cbImage
-        .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
-        this.cellSize / 2
-      )} ${Math.floor(this.cellSize / 2)}, auto`;
+    if (changes.cursor && this.cbImage) {
+      if (typeof changes.cursor.currentValue != null) {
+        const dataURL = getPieceIcon(
+          changes.cursor.currentValue?.figurine ?? "q",
+          this.cellSize,
+          changes.cursor.currentValue?.rotation ?? null
+        );
+        (this.cbImage
+          .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
+          this.cellSize / 2
+        )} ${Math.floor(this.cellSize / 2)}, auto`;
+      } else {
+        (this.cbImage.nativeElement as HTMLDivElement).style.cursor = `unset`;
+      }
     }
     if (
       changes.boardType &&
@@ -212,7 +216,7 @@ interface UiCell {
   location: SquareLocation;
 }
 
-function getPieceIcon(figurine: string, cellSize: number) {
+function getPieceIcon(figurine: string, cellSize: number, rot: number | null) {
   const canvas = document.createElement("canvas");
   canvas.width = cellSize;
   canvas.height = cellSize;
@@ -225,20 +229,28 @@ function getPieceIcon(figurine: string, cellSize: number) {
   ctx.font = `${fsize}px ScacchiPainter`;
   ctx.lineWidth = 2;
 
+  if (rot != null) {
+    const center = Math.floor(cellSize / 2);
+    ctx.translate(center, center);
+    ctx.rotate(rot * (Math.PI / 180));
+    ctx.translate(-center, -center);
+  }
+
+  ctx.translate(margin, margin + fsize);
   ctx.save();
 
   if (figurine !== "X") {
     ctx.fillStyle = "#ffffff";
     ctx.strokeStyle = "#ffffff";
-    ctx.strokeText("_" + figurine.substring(1), margin, margin + fsize);
-    ctx.fillText("_" + figurine.substring(1), margin, margin + fsize);
+    ctx.strokeText("_" + figurine.substring(1), 0, 0);
+    ctx.fillText("_" + figurine.substring(1), 0, 0);
     ctx.restore();
   }
 
   ctx.fillStyle = figurine === "X" ? "#ff3300" : "#333333";
   ctx.strokeStyle = "#ffffff";
-  ctx.strokeText(figurine, margin, margin + fsize);
-  ctx.fillText(figurine, margin, margin + fsize);
+  ctx.strokeText(figurine, 0, 0);
+  ctx.fillText(figurine, 0, 0);
   ctx.restore();
 
   return canvas.toDataURL("image/png");
