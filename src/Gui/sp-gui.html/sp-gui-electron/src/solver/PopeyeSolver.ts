@@ -14,6 +14,8 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
+var txtName = `problem.txt`;
+
 function pieceSortByName(a: Piece, b: Piece): -1 | 0 | 1 {
   return 0;
 }
@@ -21,7 +23,7 @@ function pieceSortByName(a: Piece, b: Piece): -1 | 0 | 1 {
 function toPopeyePiece(a: Piece): string {
   return [
     a.isFairy()
-      ? a.fairyCode.toUpperCase()
+      ? a.fairyCode[0].code?.toUpperCase()
       : a.appearance.toUpperCase().replace("N", "S"),
     a.column[3].toLowerCase(),
     a.traverse[3],
@@ -31,6 +33,7 @@ function toPopeyePiece(a: Piece): string {
 export class PopeyeSolver implements ISolver {
   private childProcess: child.ChildProcessWithoutNullStreams | null = null;
   readonly key: string = "Popeye";
+  private static counter: number = 0;
   constructor(private cfg: IApplicationConfig) {}
   get running(): boolean {
     return false;
@@ -49,7 +52,8 @@ export class PopeyeSolver implements ISolver {
     if (this.childProcess) this.childProcess.kill();
 
     this.writeTempFile(problem)
-      .then(async () => {
+      .then(async (textContent) => {
+        cbOut(textContent.join("\r"));
         this.childProcess = await this.runProcess();
 
         if (!this.childProcess) {
@@ -67,6 +71,7 @@ export class PopeyeSolver implements ISolver {
 
         this.childProcess.on("exit", (code, signal) => {
           console.log("exit", code, signal);
+          this.deleteFile();
         });
 
         if (this.childProcess.stdout)
@@ -95,25 +100,28 @@ export class PopeyeSolver implements ISolver {
         });
       });
   }
-
-  private async writeTempFile(problem: Problem): Promise<void> {
+  private deleteFile() {
+    try {
+      fs.unlinkSync(this.txtFileName);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  txtFileName = "";
+  private async writeTempFile(problem: Problem): Promise<string[]> {
     const content = this.problemToPopeye(problem);
-    await fs.promises.writeFile(
-      path.join(os.tmpdir(), "problem.txt"),
-      content.join("\n")
-    );
+    this.txtFileName = path.join(os.tmpdir(), txtName);
+    if (fs.existsSync(this.txtFileName)) this.deleteFile();
+    fs.writeFileSync(this.txtFileName, content.join("\n"));
+    return content;
   }
 
   private async runProcess() {
-    const p = spawn(
-      this.cfg.problemSolvers.Popeye.executablePath,
-      ["problem.txt"],
-      {
-        cwd: os.tmpdir(),
-        detached: false,
-        serialization: "json",
-      }
-    );
+    const p = spawn(this.cfg.problemSolvers.Popeye.executablePath, [txtName], {
+      cwd: os.tmpdir(),
+      detached: false,
+      serialization: "json",
+    });
     return p;
   }
 

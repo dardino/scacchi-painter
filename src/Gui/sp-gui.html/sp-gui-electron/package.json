@@ -47,7 +47,7 @@
     "electron-store": "^6.0.0",
     "jest": "^26.1.0",
     "jest-junit": "^11.0.1",
-    "rxjs": "^6.6.0"
+    "rxjs": "^6.6.2"
   },
   "build": {
     "appId": "org.accademiadelproblema.scacchipainter",

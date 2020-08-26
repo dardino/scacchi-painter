@@ -28,13 +28,16 @@ function createWindow() {
   //  win.setMenu(mnu);
   win.maximize();
   if (!app.isPackaged) win.webContents.openDevTools();
+  const startPage = app.isPackaged
+    ? () => win.loadFile("app/index.html")
+    : () => win.loadURL("http://localhost:4200");
 
   win.webContents.on("did-fail-load", () => {
-    win.loadFile("app/index.html");
+    startPage();
   });
 
   // e carica l'index.html dell'app.
-  win.loadFile("app/index.html");
+  startPage();
 
   win.show();
 }
