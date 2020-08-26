@@ -234,7 +234,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.pieceToMove = null;
   }
 
-  private resetActions() {
+  resetActions() {
     this.pieceToMove = null;
     this.pieceToAdd = null;
   }

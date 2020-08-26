@@ -42,8 +42,10 @@ export class ChessboardComponent
   };
 
   cells: UiCell[] = [];
+
   currentCell: UiCell | null = null;
 
+  @Output() focusOut = new EventEmitter<void>();
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
   @Input() cursor: { figurine: string; rotation: number | null } | null;
@@ -55,10 +57,10 @@ export class ChessboardComponent
   @ViewChild("canvas", { static: true })
   canvas: ElementRef;
 
-  @ViewChild("container")
+  @ViewChild("container", { static: true })
   chessboard: ElementRef;
 
-  @ViewChild("container")
+  @ViewChild("container", { static: true })
   cbImage: ElementRef;
 
   private canvasBoard: CanvasChessBoard | null;
@@ -92,7 +94,7 @@ export class ChessboardComponent
       this.updateBoard();
     }
     if (changes.cursor && this.cbImage) {
-      if (typeof changes.cursor.currentValue != null) {
+      if (changes.cursor.currentValue?.figurine != null) {
         const dataURL = getPieceIcon(
           changes.cursor.currentValue?.figurine ?? "q",
           this.cellSize,
@@ -172,7 +174,7 @@ export class ChessboardComponent
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
-  };
+  }
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function
@@ -226,7 +228,9 @@ function getPieceIcon(figurine: string, cellSize: number, rot: number | null) {
   }
   const fsize = Math.floor(cellSize / 1.44);
   const margin = Math.floor((cellSize - fsize) / 2);
-  ctx.font = `${fsize}px ScacchiPainter`;
+  ctx.font = `${fsize}px ${
+    figurine === "X" ? "Arial, sans" : "ScacchiPainter"
+  }`;
   ctx.lineWidth = 2;
 
   if (rot != null) {
@@ -249,8 +253,8 @@ function getPieceIcon(figurine: string, cellSize: number, rot: number | null) {
 
   ctx.fillStyle = figurine === "X" ? "#ff3300" : "#333333";
   ctx.strokeStyle = "#ffffff";
-  ctx.strokeText(figurine, 0, 0);
-  ctx.fillText(figurine, 0, 0);
+  ctx.strokeText(figurine === "X" ? `🗙` : figurine, 0, 0);
+  ctx.fillText(figurine === "X" ? `🗙` : figurine, 0, 0);
   ctx.restore();
 
   return canvas.toDataURL("image/png");
