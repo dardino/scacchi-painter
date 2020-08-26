@@ -209,6 +209,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.pieceToMove = null;
   }
 
+  boardBlur() {
+    this.editMode = "select";
+    this.resetActions();
+  }
+
   private addPiece(figurine: string, loc: SquareLocation) {
     const p = Piece.fromPartial({
       appearance: figurine[2] as IPiece["appearance"],
@@ -234,8 +239,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.pieceToMove = null;
   }
 
-  resetActions() {
-    this.pieceToMove = null;
+  private resetActions() {
     this.pieceToAdd = null;
+    this.pieceToMove = null;
   }
 }

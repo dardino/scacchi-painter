@@ -1,4 +1,4 @@
-<div class="chessboard-layout" #container tabindex="-1" (blur)="currentCell = null && focusOut.emit()">
+<div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
   <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
     <canvas
       [style.display.none]="BoardType !== 'canvas'"
