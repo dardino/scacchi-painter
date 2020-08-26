@@ -10,6 +10,8 @@ import {
   SquareLocation,
   IPiece,
   getCanvasRotation,
+  notEmpty,
+  notNull,
 } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
@@ -116,7 +118,10 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   startSolve() {
     this.rows = [];
     this.rows$ubject.next(this.rows);
-    if (this.current.Problem) this.bridge.startSolve(this.current.Problem);
+    if (this.current.Problem) {
+      this.current.Problem.htmlSolution = "";
+      this.bridge.startSolve(this.current.Problem);
+    }
     this.resetActions();
   }
 
@@ -132,8 +137,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribe = this.bridge.Solver$.subscribe((msg) => {
-      this.rows.push(msg);
+      this.rows.push(...msg.replace(/\n/g, "").split("\r"));
       this.rows$ubject.next(this.rows);
+      if (this.current.Problem) {
+        this.current.Problem.htmlSolution = this.toHtml(this.rows);
+      }
     });
   }
 
@@ -243,4 +251,29 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.pieceToAdd = null;
     this.pieceToMove = null;
   }
+
+  private toHtml(rows: string[]) {
+    return rows
+      .map((f) => {
+        const t = tag(f);
+        if (t == null) return null;
+        return `<p><${t}>${f}</${t}></p>`;
+      })
+      .filter(notNull)
+      .join("");
+  }
+}
+
+const istructionRegExp = new RegExp(
+  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished).*$`
+);
+const outlogRegExp = new RegExp(
+  `^(ERR:|Execute|Popeye|starting engine|Engine process|program exited).*$`
+);
+
+function tag(text: string) {
+  text = text.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  if (istructionRegExp.test(text)) return "em";
+  else if (outlogRegExp.test(text)) return null;
+  else return "span";
 }

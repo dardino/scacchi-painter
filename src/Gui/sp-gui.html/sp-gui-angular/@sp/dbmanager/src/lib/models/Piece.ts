@@ -122,7 +122,7 @@ export class Piece implements IPiece {
 
   isFairy() {
     return (
-      (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? "") !== ""
+      (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? "None") !== "None"
     );
   }
 

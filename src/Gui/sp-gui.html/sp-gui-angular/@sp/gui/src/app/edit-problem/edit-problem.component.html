@@ -28,9 +28,9 @@
         (focusOut)="boardBlur()"
       ></lib-chessboard>
       <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)" [current]="pieceToAdd"></lib-piece-selector>
-      <ul class="solution-row" *ngFor="let row of rows$ | async">
+      <!-- <ul class="solution-row" *ngFor="let row of rows$ | async">
         <li>{{ row }}</li>
-      </ul>
+      </ul> -->
     </section>
     <div
       #verticalSplitter

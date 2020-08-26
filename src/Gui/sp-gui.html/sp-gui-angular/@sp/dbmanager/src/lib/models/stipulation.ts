@@ -12,7 +12,7 @@ export class Stipulation implements IStipulation {
   serie                             = false;
   moves                             = 2;
   completeStipulationDesc           = "#2";
-  colorStarter: "White" | "Black";
+  colorStarter: "White" | "Black"   = "White";
 
   static fromElement(source: Element): Stipulation {
     const p = new Stipulation();
