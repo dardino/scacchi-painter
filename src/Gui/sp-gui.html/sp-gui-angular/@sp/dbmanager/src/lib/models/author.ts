@@ -37,6 +37,14 @@ export class Author implements IAuthor {
 
   toJson(): Partial<IAuthor> {
     const json: Partial<IAuthor> = {};
+    if (this.nameAndSurname !== "") json.nameAndSurname = this.nameAndSurname;
+    if (this.address !== "") json.address = this.address;
+    if (this.city !== "") json.city = this.city;
+    if (this.phone !== "") json.phone = this.phone;
+    if (this.zipCode !== "") json.zipCode = this.zipCode;
+    if (this.stateOrProvince !== "") json.stateOrProvince = this.stateOrProvince;
+    if (this.country !== "") json.country = this.country;
+    if (this.language !== "") json.language = this.language;
     return json;
   }
 

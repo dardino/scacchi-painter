@@ -61,7 +61,7 @@ export class SP2 {
     node.innerHTML = Base64.encode(htmlSolution);
     item.appendChild(node);
   }
-  static setSolution(item: Element, textSolution: any) {
+  static setSolution(item: Element, textSolution: string) {
     const node = createXmlElement("Solution");
     node.innerHTML = Base64.encode(textSolution);
     item.appendChild(node);
@@ -157,7 +157,7 @@ export class SP2 {
     if (fairyCode == null) return;
     fairyCode.forEach((fc) => {
       const fel = createXmlElement("FairyType");
-      fel.setAttribute("Code", fc.code);
+      fel.setAttribute("code", fc.code); // retrocompatibility
       fc.params.forEach((p, i) => {
         const felParm = createXmlElement("Param");
         felParm.setAttribute("id", i.toFixed(0));
@@ -233,7 +233,7 @@ export class SP2 {
   static setAppearance(el: Element, f: Figurine | ""): void {
     if (f === "") return;
     let tp = mapAppearanceRe[f];
-    if (tp === "Rock") tp = "Rook";
+    if (tp === "Rook") tp = "Rock"; // retrocompatibility
     el.setAttribute("Type", tp);
   }
 }
