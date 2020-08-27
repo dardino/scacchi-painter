@@ -22,7 +22,9 @@ import { Base64 } from "../base64";
 const main_snapshot = "$_MAIN_$";
 
 export class Problem implements IProblem {
-  textSolution: any;
+  textSolution: string;
+  rtfSolution: string;
+
   private constructor() {}
 
   public date = new Date().toLocaleString();
@@ -53,17 +55,16 @@ export class Problem implements IProblem {
     );
     p.twins = Twins.fromElement(source.querySelector("Twins") ?? null);
     const sol = await GetSolutionFromElement(source);
-    if (typeof sol === "string") p.htmlSolution = sol;
-    if (sol instanceof Array) {
-      p.htmlElements = sol;
-      p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join("");
-    }
+    p.textSolution = sol.plain ?? "";
+    p.rtfSolution = sol.rtf ?? "";
+    p.htmlElements = sol.html;
+    p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join("");
     p.date = source.getAttribute("Date") ?? "";
     p.prizeRank = parseInt(source.getAttribute("PrizeRank") ?? "0", 10);
     p.personalID = source.getAttribute("PersonalID") ?? "";
     p.prizeDescription = source.getAttribute("PrizeDescription") ?? "";
     p.source = source.getAttribute("Source") ?? "";
-    p.authors = Array.from(source.querySelectorAll("Authors")).map((a) =>
+    p.authors = Array.from(source.querySelectorAll("Author")).map((a) =>
       Author.fromElement(a)
     );
     p.conditions = Array.from(source.querySelectorAll("Conditions") ?? []).map(
@@ -175,7 +176,7 @@ export class Problem implements IProblem {
     SP2.setTwins(item, this.twins.toSP2Xml());
     SP2.setConditions(item, this.conditions);
     SP2.setSolution(item, this.textSolution);
-    SP2.setHtmlSolution(item, this.htmlSolution);
+    // SP2.setHtmlSolution(item, this.htmlSolution);
     SP2.setRtfSolution(item, (await convertToRtf(this.htmlSolution)) ?? "");
     return item;
   }

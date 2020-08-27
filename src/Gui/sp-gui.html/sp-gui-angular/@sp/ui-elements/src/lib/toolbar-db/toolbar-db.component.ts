@@ -49,6 +49,6 @@ export class ToolbarDbComponent implements OnInit {
     this.db.GotoIndex(this.db.Count - 1);
   }
   save(){
-    this.db.SaveToHost("sp3");
+    this.db.SaveToHost();
   }
 }

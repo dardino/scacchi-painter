@@ -88,14 +88,15 @@ export class DbmanagerService {
       "text/xml"
     );
     const root = doc.querySelector("ScacchiPainterDatabase") as Element;
-    root.setAttribute("version", "0.1.0.0");
+    root.setAttribute("version", "0.1.0.2");
     root.setAttribute("name", "Scacchi Painter 2 Database");
     root.setAttribute("lastIndex", this.CurrentIndex.toFixed(0));
     problems.forEach((p) => root.appendChild(p));
     return doc;
   }
 
-  async SaveToHost(type: "sp2" | "sp3") {
+  async SaveToHost(type?: "sp2" | "sp3") {
+    if (!type) type = this.fileName.substr(-4) === ".sp2" ? "sp2" : "sp3";
     const file = await this.getDbFile(type);
     this.bridge.saveFile(file, type);
   }
@@ -156,7 +157,7 @@ export class DbmanagerService {
   private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {
     if (type === "sp2") {
       const xmlDoc = await this.ToXML();
-      const text = new XMLSerializer().serializeToString(xmlDoc.documentElement);
+      const text = `<?xml version="1.0" encoding="utf-8"?>\r` + new XMLSerializer().serializeToString(xmlDoc.documentElement);
       return new File([text], this.fileName, { type: "application/xml" });
     } else {
       const text = JSON.stringify(this.toJSON());
