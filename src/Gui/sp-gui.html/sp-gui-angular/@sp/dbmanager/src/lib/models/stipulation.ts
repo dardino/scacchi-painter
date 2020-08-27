@@ -2,17 +2,17 @@ import {
   IStipulation,
   ProblemTypes,
   StipulationTypes,
-  ProblemTypesKeys
+  ProblemTypesKeys,
 } from "../helpers";
 
 export class Stipulation implements IStipulation {
-  problemType: ProblemTypes         = ProblemTypes.Direct;
+  problemType: ProblemTypes = ProblemTypes.Direct;
   stipulationType: StipulationTypes = StipulationTypes.Mate;
-  maximum                           = false;
-  serie                             = false;
-  moves                             = 2;
-  completeStipulationDesc           = "#2";
-  colorStarter: "White" | "Black"   = "White";
+  maximum = false;
+  serie = false;
+  moves = 2;
+  completeStipulationDesc = "#2";
+  colorStarter: "White" | "Black" = "White";
 
   static fromElement(source: Element): Stipulation {
     const p = new Stipulation();
@@ -24,7 +24,7 @@ export class Stipulation implements IStipulation {
     p.maximum = source.getAttribute("Maximum") === "true";
     p.serie = source.getAttribute("Serie") === "true";
     p.completeStipulationDesc =
-      source.getAttribute("CompleteStipulationDesc") ?? "";
+      source.getAttribute("CompleteStipulationDesc") ?? "#2";
     return p;
   }
   static fromJson(stipulation: Partial<IStipulation> | undefined): Stipulation {
@@ -40,6 +40,12 @@ export class Stipulation implements IStipulation {
   }
   toJson(): Partial<IStipulation> {
     const json: Partial<IStipulation> = {};
+    if (this.problemType !== ProblemTypes.Direct) json.problemType = this.problemType;
+    if (this.stipulationType !== StipulationTypes.Mate) json.stipulationType = this.stipulationType;
+    if (this.maximum === true) json.maximum = this.maximum;
+    if (this.serie === true) json.serie = this.serie;
+    if (this.moves !== 2) json.moves = this.moves;
+    if (this.completeStipulationDesc !== "#2") json.completeStipulationDesc = this.completeStipulationDesc;
     return json;
   }
 

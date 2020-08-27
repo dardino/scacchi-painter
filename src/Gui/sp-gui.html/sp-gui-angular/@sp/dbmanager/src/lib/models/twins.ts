@@ -27,6 +27,8 @@ export class Twins implements ITwins {
   }
   toJson(): Partial<ITwins> {
     const p: Partial<ITwins> = {};
+    if (this.TwinSequenceTypes !== SequnceTypes.Normal) p.TwinSequenceTypes = this.TwinSequenceTypes;
+    if (this.TwinList.length > 0) p.TwinList = this.TwinList.map(t => t.toJson());
     return p;
   }
   toSP2Xml(): Element {

@@ -22,9 +22,8 @@ function pieceSortByName(a: Piece, b: Piece): -1 | 0 | 1 {
 
 function toPopeyePiece(a: Piece): string {
   return [
-    a.isFairy()
-      ? a.fairyCode[0].code?.toUpperCase()
-      : a.appearance.toUpperCase().replace("N", "S"),
+    (a.fairyCode[0] ?? {}).code?.toUpperCase() ||
+      a.appearance.toUpperCase().replace("N", "S"),
     a.column[3].toLowerCase(),
     a.traverse[3],
   ].join("");
