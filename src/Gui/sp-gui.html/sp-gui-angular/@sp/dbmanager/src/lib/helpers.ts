@@ -429,9 +429,7 @@ Stipulation="Mate"
   </SP_Item>
   */
 
-export async function GetSolutionFromElement(
-  el: Element
-) {
+export async function GetSolutionFromElement(el: Element) {
   let solText: HTMLElement[];
 
   const sol = el.querySelector("Solution")?.innerHTML;
@@ -603,16 +601,11 @@ export async function convertToRtf(html: string): Promise<string | null> {
   tmpRichText = richText;
   richText = richText.replace(
     /<a(?:\s+[^>]*)?(?:\s+href=(["'])(.+)\1)(?:\s+[^>]*)?>/gi,
-    '{\\field{\\*\\fldinst{HYPERLINK\n "$2"\n}}{\\fldrslt{\\ul\\cf1\n'
+    `{\\field{\\*\\fldinst{HYPERLINK\n "$2"\n}}{\\fldrslt{\\ul\\cf1\n`
   );
   hasHyperlinks = richText !== tmpRichText;
   richText = richText.replace(/<a(?:\s+[^>]*)?>/gi, "{{{\n");
   richText = richText.replace(/<\/a(?:\s+[^>]*)?>/gi, "\n}}}");
-
-  richText = richText.replace(/&gt;/gi, ">");
-  richText = richText.replace(/&lt;/gi, "<");
-  richText = richText.replace(/&amp;/gi, "&");
-  richText = richText.replace(/&nbsp;/gi, " ");
 
   // Start tags
   richText = richText.replace(/<(?:b|strong)(?:\s+[^>]*)?>/gi, "{\\b\n");
@@ -645,6 +638,11 @@ export async function convertToRtf(html: string): Promise<string | null> {
     (hasHyperlinks ? "{\\colortbl\n;\n\\red0\\green0\\blue255;\n}\n" : "") +
     richText +
     "\n}";
+
+  richText = richText.replace(/&gt;/gi, ">");
+  richText = richText.replace(/&lt;/gi, "<");
+  richText = richText.replace(/&amp;/gi, "&");
+  richText = richText.replace(/&nbsp;/gi, " ");
 
   return richText;
 }
