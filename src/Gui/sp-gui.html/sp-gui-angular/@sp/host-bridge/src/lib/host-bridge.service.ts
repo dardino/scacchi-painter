@@ -86,4 +86,8 @@ export class HostBridgeService {
   public closeApp() {
     if (window.Bridge) return window.Bridge.closeApp?.();
   }
+  public async openFile(): Promise<File | null> {
+    if (window.Bridge) return await window.Bridge.openFile();
+    return null;
+  }
 }

@@ -12,7 +12,7 @@
   "main": "build/sp-gui-electron/src/main.js",
   "scripts": {
     "test": "jest",
-    "start": "electron .",
+    "start": "yarn build && electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build": "tsc -b",

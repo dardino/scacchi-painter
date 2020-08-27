@@ -1,7 +1,7 @@
 <h1 class="title">Open from:</h1>
 <ul>
   <li>
-    <a mat-stroked-button (click)="fileloader.click()">
+    <a mat-stroked-button (click)="electron ? electronOpen() : fileloader.click()">
       <span class="open-button">
         <mat-icon>folder</mat-icon>
         <span>Local folder</span>

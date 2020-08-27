@@ -54,6 +54,16 @@ export class Twin implements ITwin {
     twin.setAttribute("TwinModes", this.TwinModes);
     return twin;
   }
+  toJson(): ITwin {
+    const twin: ITwin = {
+      TwinType: this.TwinType,
+      ValueA: this.ValueA,
+      ValueB: this.ValueB,
+      ValueC: this.ValueC,
+      TwinModes: this.TwinModes,
+    };
+    return twin;
+  }
 }
 
 const twinmapper = {

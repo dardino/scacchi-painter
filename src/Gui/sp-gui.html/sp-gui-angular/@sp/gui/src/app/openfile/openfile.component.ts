@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Router } from "@angular/router";
+import { HostBridgeService } from '@sp/host-bridge/src/public-api';
 
 @Component({
   selector: "app-sp-openfile",
@@ -8,7 +9,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./openfile.component.styl"],
 })
 export class OpenfileComponent implements OnInit, OnDestroy {
-  constructor(private db: DbmanagerService, private router: Router) {}
+  constructor(private db: DbmanagerService, private router: Router, private bridge: HostBridgeService) {}
 
   private reader = new FileReader();
   private fileName = "";
@@ -34,5 +35,20 @@ export class OpenfileComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.reader.removeEventListener("load", this.fileReaderDone);
+  }
+
+  get electron() {
+    return this.bridge.supportsClose;
+  }
+
+  async electronOpen() {
+    const file = await this.bridge.openFile();
+    if (!file) return;
+    const content = await file.text();
+    const error = await this.db.LoadFromText(content, file.name);
+    if (!error) {
+      this.db.SaveToLocalStorage(content, file.name, file.name.substr(-4) === ".sp2" ? "sp2" : "sp3");
+      this.router.navigate([`/edit/${this.db.CurrentIndex}`]);
+    }
   }
 }
