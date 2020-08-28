@@ -53,8 +53,8 @@ describe("Popeye solver tests", () => {
       },
     });
 
-    let solutions: string[] = [];
-    await new Promise((resolve, reject) => {
+    const solutions: string[] = [];
+    await new Promise((resolve) => {
       runner.start(
         problem,
         (msg: string) => {

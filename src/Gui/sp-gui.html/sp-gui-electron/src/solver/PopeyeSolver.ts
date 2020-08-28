@@ -14,10 +14,12 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
-var txtName = `problem.txt`;
+const txtName = `problem.txt`;
 
 function pieceSortByName(a: Piece, b: Piece): -1 | 0 | 1 {
-  return 0;
+  const na = a.ToNotation();
+  const nb = b.ToNotation();
+  return na < nb ? -1 : na > nb ? 1 : 0;
 }
 
 function toPopeyePiece(a: Piece): string {
@@ -32,7 +34,6 @@ function toPopeyePiece(a: Piece): string {
 export class PopeyeSolver implements ISolver {
   private childProcess: child.ChildProcessWithoutNullStreams | null = null;
   readonly key: string = "Popeye";
-  private static counter: number = 0;
   constructor(private cfg: IApplicationConfig) {}
   get running(): boolean {
     return false;

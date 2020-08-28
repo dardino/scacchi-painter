@@ -18,7 +18,8 @@
     "build": "tsc -b",
     "rebuild": "tsc -b --force",
     "watch": "tsc -b -w",
-    "deploy": "yarn build && yarn publish-win && yarn publish-linux && yarn publish-darwin",
+    "lint": "eslint ./src/**/*.ts",
+    "deploy": "yarn lint && yarn build && yarn publish-win && yarn publish-linux && yarn publish-darwin",
     "publish-win": "electron-packager . ScacchiPainter --icon=app/favicon.ico --overwrite --app-version 3.0.0 --out=release --platform=win32 --arch=x64 --asar",
     "publish-linux": "electron-packager . ScacchiPainter --icon=app/favicon.png --overwrite --app-version 3.0.0 --out=release --platform=linux --arch=x64 --asar",
     "publish-darwin": "electron-packager . ScacchiPainter --icon=app/favicon.icns --overwrite --app-version 3.0.0 --out=release --platform=darwin --arch=x64 --asar"
@@ -35,9 +36,12 @@
     "popeye"
   ],
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
     "electron": "^8.3.1",
     "electron-builder": "^22.7.0",
     "electron-packager": "^15.0.0",
+    "eslint": "^7.7.0",
     "ts-jest": "^26.1.3",
     "typescript": "^3.9.7"
   },

@@ -75,6 +75,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     moveD: () => this.current.ShiftBoard("-y"),
     moveL: () => this.current.ShiftBoard("-x"),
     moveR: () => this.current.ShiftBoard("x"),
+    resetPosition: () => this.current.Reload(), // reload current snapshot
+    clearBoard: () => this.current.ClearBoard(),
   };
 
   pieceToAdd: string | null = null;

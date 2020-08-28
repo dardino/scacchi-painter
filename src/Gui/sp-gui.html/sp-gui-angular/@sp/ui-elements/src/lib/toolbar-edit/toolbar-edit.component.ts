@@ -12,7 +12,9 @@ export type EditCommand =
   | "moveD"
   | "moveU"
   | "moveL"
-  | "moveR";
+  | "moveR"
+  | "resetPosition"
+  | "clearBoard";
 
 export type EditModes = "select" | "add" | "remove" | "move";
 
@@ -94,5 +96,11 @@ export class ToolbarEditComponent implements OnInit {
   }
   moveRight() {
     this.editCommand.emit("moveR");
+  }
+  resetPosition() {
+    this.editCommand.emit("resetPosition");
+  }
+  clearBoard() {
+    this.editCommand.emit("clearBoard");
   }
 }

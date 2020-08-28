@@ -7,7 +7,11 @@ import { IApplicationConfig } from "settings/IApplicationConfig";
 import fs from "fs";
 
 init();
-
+declare global {
+  interface Window {
+    Bridge: Bridge;
+  }
+}
 function init() {
   console.log(
     "------------------------------------ Preload ------------------------------------"
@@ -30,7 +34,7 @@ function init() {
   //
   // !CAREFUL! do not expose any functionality or APIs that could compromise the
   // user's computer. E.g. don't directly expose core Electron (even IPC) or node.js modules.
-  (window as any).Bridge = new Bridge(
+  window.Bridge = new Bridge(
     () => {
       remote.getCurrentWindow().close();
     },
@@ -44,7 +48,7 @@ function init() {
       });
       if (data.canceled || data.filePaths.length !== 1) return null;
       const buffer = fs.readFileSync(data.filePaths[0]);
-      var file = new File([buffer], data.filePaths[0]);
+      const file = new File([buffer], data.filePaths[0]);
       return file;
     }
   );
@@ -52,15 +56,6 @@ function init() {
   // we get this message from the main process
   ipc.on("markAllComplete", () => {
     // the todo app defines this function
-    (window as any).Bridge.markAllComplete();
+    // window.Bridge.markAllComplete();
   });
-}
-
-function toArrayBuffer(buffer: Buffer) {
-  var ab = new ArrayBuffer(buffer.length);
-  var view = new Uint8Array(ab);
-  for (var i = 0; i < buffer.length; ++i) {
-    view[i] = buffer[i];
-  }
-  return ab;
 }
