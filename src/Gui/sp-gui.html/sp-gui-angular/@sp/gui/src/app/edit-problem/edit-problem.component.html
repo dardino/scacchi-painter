@@ -41,7 +41,18 @@
       class="vertical-splitter"
     ></div>
     <section id="info">
-      <lib-sp-solution-desc [problem]="problem"></lib-sp-solution-desc>
+      <mat-tab-group class="tab-group">
+        <mat-tab label="Problem Data">
+          <div class="tab-content">
+            Tab-Content
+          </div>
+        </mat-tab>
+        <mat-tab label="Solution">
+          <div class="tab-content">
+            <lib-sp-solution-desc [problem]="problem"></lib-sp-solution-desc>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </section>
   </div>
 </div>

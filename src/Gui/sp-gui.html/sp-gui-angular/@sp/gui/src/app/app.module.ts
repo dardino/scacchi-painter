@@ -22,6 +22,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
 import { EditProblemComponent } from "./edit-problem/edit-problem.component";
 import { RecentsComponent } from "./recents/recents.component";
+import { MatTabsModule } from "@angular/material/tabs";
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,6 +51,7 @@ import { RecentsComponent } from "./recents/recents.component";
     CdkScrollableModule,
     ScrollingModule,
     MatMenuModule,
+    MatTabsModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

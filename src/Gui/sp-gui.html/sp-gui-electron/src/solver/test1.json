@@ -8,7 +8,7 @@
     "moves": 3.5,
     "completeStipulationDesc": "H#"
   },
-  "prizeRank": "0",
+  "prizeRank": 0,
   "personalID": "218",
   "prizeDescription": "",
   "source": "Original for Simoni's 60 jubilee",
@@ -27,7 +27,7 @@
   "pieces": [
     {
       "appearance": "k",
-      "fairyCode": "",
+      "fairyCode": [],
       "color": "White",
       "column": "ColD",
       "traverse": "Row1",

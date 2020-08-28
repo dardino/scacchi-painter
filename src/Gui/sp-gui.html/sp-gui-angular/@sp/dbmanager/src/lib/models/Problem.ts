@@ -22,11 +22,10 @@ import { Base64 } from "../base64";
 const main_snapshot = "$_MAIN_$";
 
 export class Problem implements IProblem {
-  textSolution: string;
-  rtfSolution: string;
-
   private constructor() {}
 
+  public rtfSolution = "";
+  public textSolution = "";
   public date = new Date().toLocaleString();
   public stipulation = Stipulation.fromJson({});
   public prizeRank = 0;

@@ -68,4 +68,16 @@
     iconLabel="Move right"
     [noLabel]="true"
   ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="clearBoard()"
+    iconText="photo_filter"
+    iconLabel="Reset position"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="resetPosition()"
+    iconText="settings_backup_restore"
+    iconLabel="Reset position"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
 </mat-toolbar-row>
