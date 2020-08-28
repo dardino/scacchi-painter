@@ -19,6 +19,7 @@ import { QuillModule } from "ngx-quill";
 import { FormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 import { QuillInitializeService } from "./services/quillInitialize.service";
 import { ProblemDefinitionsComponent } from "./problem-definitions/problem-definitions.component";
@@ -51,6 +52,7 @@ import { ProblemPublicationComponent } from "./problem-publication/problem-publi
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    DragDropModule
   ],
   exports: [
     ToolbarDbComponent,

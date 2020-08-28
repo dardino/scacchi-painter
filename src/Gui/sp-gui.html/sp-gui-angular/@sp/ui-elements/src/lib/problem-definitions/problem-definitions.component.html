@@ -1,6 +1,10 @@
 <mat-grid-list cols="3" rowHeight="25rem" gutterSize="1rem">
   <mat-grid-tile>
-    <mat-grid-tile-header>Stipulation</mat-grid-tile-header>
+    <mat-grid-tile-header
+      ><div class="tile-title">
+        <span>Stipulation</span><span matSuffix>{{ completeDesc }}</span>
+      </div></mat-grid-tile-header
+    >
     <div class="stipulation-tile">
       <p>
         <mat-form-field color="accent" appearance="standard">
@@ -55,9 +59,40 @@
     </div>
   </mat-grid-tile>
   <mat-grid-tile>
-    <mat-grid-tile-header>Twins</mat-grid-tile-header>
+    <mat-grid-tile-header
+      ><div class="tile-title">
+        <span>Twins</span
+        ><button mat-flat-button color="primary">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div></mat-grid-tile-header
+    >
+    <div cdkDropList class="list" (cdkDropListDropped)="dropTwin($event)">
+      <div
+        class="box"
+        *ngFor="let twin of twins"
+        cdkDrag
+        [cdkDragDisabled]="twin.TwinType === 'Diagram'"
+      >
+        <div class="placeholder" *cdkDragPlaceholder></div>
+        {{ twin.toString() }}
+      </div>
+    </div>
   </mat-grid-tile>
   <mat-grid-tile>
-    <mat-grid-tile-header>Conditions</mat-grid-tile-header>
+    <mat-grid-tile-header
+      ><div class="tile-title">
+        <span>Conditions</span
+        ><button mat-flat-button color="primary">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div></mat-grid-tile-header
+    >
+    <div cdkDropList class="list" (cdkDropListDropped)="dropCondition($event)">
+      <div class="box" *ngFor="let cond of conditions" cdkDrag>
+        <div class="placeholder" *cdkDragPlaceholder></div>
+        {{ cond.toString() }}
+      </div>
+    </div>
   </mat-grid-tile>
 </mat-grid-list>
