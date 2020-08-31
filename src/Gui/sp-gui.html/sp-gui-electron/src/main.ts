@@ -4,7 +4,7 @@ import path from "path";
 function createWindow() {
   console.log("create win");
   // Crea la finestra del browser
-  let win = new BrowserWindow({
+  const win = new BrowserWindow({
     width: 800,
     height: 600,
     // frame: false,
