@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Author } from "@sp/dbmanager/src/lib/models";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
-import { Twin } from '@sp/dbmanager/src/lib/models/twin';
+import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
 @Component({
   selector: "lib-problem-definitions",
