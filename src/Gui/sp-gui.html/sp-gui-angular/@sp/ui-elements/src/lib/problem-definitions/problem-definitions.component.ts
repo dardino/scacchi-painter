@@ -22,6 +22,9 @@ export class ProblemDefinitionsComponent implements OnInit {
   @Output()
   public addCondition = new EventEmitter<void>();
 
+  @Output()
+  public deleteCondition = new EventEmitter<string>();
+
   public get completeDesc() {
     return this.current.Problem?.stipulation.completeStipulationDesc;
   }

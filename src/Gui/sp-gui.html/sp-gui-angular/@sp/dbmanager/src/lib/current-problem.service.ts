@@ -19,8 +19,16 @@ export class CurrentProblemService {
   }
   constructor(private dbManager: DbmanagerService, private ngZone: NgZone) {}
   AddCondition(result: string | undefined) {
-    if (typeof result === "string" && result.length > 0) {
-      this.Problem?.conditions.push(result);
+    if (typeof result === "string" && result.length > 0 && this.Problem) {
+      this.Problem.conditions.push(result);
+    }
+  }
+  RemoveCondition(cond: string | undefined) {
+    if (typeof cond === "string" && cond.length > 0 && this.Problem) {
+      const index = this.Problem.conditions.indexOf(cond) ?? -1;
+      if (index > -1) this.Problem.conditions.splice(index, 1);
+      // clone
+      this.dbManager.setCurrentProblem(this.Problem.clone());
     }
   }
   AddPieceAt(location: SquareLocation, piece: Piece) {
