@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { IPiece, IProblem } from "./helpers";
+import { IProblem } from "./helpers";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Problem } from "./models/problem";
-import { Observable, Subject, BehaviorSubject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 
 interface IDbSpX {
   lastIndex: number;

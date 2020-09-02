@@ -1,7 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Author } from "@sp/dbmanager/src/lib/models";
-import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
+import {
+  CurrentProblemService,
+  ProblemTypes,
+  EndingTypes,
+} from "@sp/dbmanager/src/public-api";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
 @Component({
@@ -10,8 +14,9 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
   styleUrls: ["./problem-definitions.component.styl"],
 })
 export class ProblemDefinitionsComponent implements OnInit {
-  public completeDesc = "#2";
-  public moveNumber = 2;
+  public get completeDesc() {
+    return this.current.Problem?.stipulation.completeStipulationDesc;
+  }
   public get authors(): Author[] {
     return this.current.Problem?.authors ?? [];
   }
@@ -31,6 +36,25 @@ export class ProblemDefinitionsComponent implements OnInit {
   }
   public set conditions(v: string[]) {
     if (this.current.Problem) this.current.Problem.conditions = v;
+  }
+
+  public get problemType(): ProblemTypes {
+    return this.current.Problem?.stipulation.problemType ?? "-";
+  }
+  public set problemType(v: ProblemTypes) {
+    if (this.current.Problem) this.current.Problem.stipulation.problemType = v;
+  }
+  public get leadsTo(): EndingTypes {
+    return this.current.Problem?.stipulation.stipulationType ?? "#";
+  }
+  public set leadsTo(v: EndingTypes) {
+    if (this.current.Problem) this.current.Problem.stipulation.stipulationType = v;
+  }
+  public get moves(): number {
+    return this.current.Problem?.stipulation.moves ?? 2;
+  }
+  public set moves(v: number) {
+    if (this.current.Problem) this.current.Problem.stipulation.moves = v;
   }
 
   constructor(private current: CurrentProblemService) {}
