@@ -11,11 +11,12 @@ export class ProblemInfoComponent implements OnInit {
 
   @Output()
   public openTwin = new EventEmitter<Twin | null>();
-
   @Output()
   public addCondition = new EventEmitter<void>();
   @Output()
   public deleteCondition = new EventEmitter<string>();
+  @Output()
+  public deleteTwin = new EventEmitter<Twin>();
 
   ngOnInit(): void {}
 }
