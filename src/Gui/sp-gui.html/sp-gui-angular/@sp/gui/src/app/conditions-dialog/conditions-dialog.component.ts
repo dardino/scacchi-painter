@@ -3,6 +3,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
+import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanager/src/lib/models/fairesDB";
 
 @Component({
   selector: "app-conditions-dialog",
@@ -12,7 +13,6 @@ import { startWith, map } from "rxjs/operators";
 export class ConditionsDialogComponent implements OnInit {
   myControl = new FormControl();
   newCondition = "";
-  conditionsList: string[] = [];
   filteredOptions: Observable<string[]>;
 
   constructor(
@@ -31,11 +31,15 @@ export class ConditionsDialogComponent implements OnInit {
     );
   }
 
+  setValue(val: string) {
+    this.newCondition = val;
+  }
+
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.conditionsList.filter(
+    return [...FairyAttributesDBNames, ...TraditionalConditionsNames].filter(
       (option) => option.toLowerCase().indexOf(filterValue) === 0
-    );
+    ).sort();
   }
 }

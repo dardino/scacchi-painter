@@ -344,8 +344,6 @@ export const FairyAttributesDBNames: FairyAttributesDBNames[] = Object.keys(
   FairyAttributesDB
 ) as FairyAttributesDBNames[];
 
-export const FairyConditions = [] as const;
-
 export const CirceOptions = {
   RexInclusive: {
     description: "(default for AntiCirce and MarsCirce)",
@@ -490,4 +488,11 @@ export const TraditionalConditions = {
   SymmetryImmunChess     : (rex: "Inclusive"| "Exclusive") => `ImmunChess Symmetry`,
   AntipodeanImmunChess   : (rex: "Inclusive"| "Exclusive") => `ImmunChess Antipodes`,
   EquipollentsImmunChess : (rex: "Inclusive"| "Exclusive") => `ImmunChess Equipollents`,
-};
+} as const;
+
+export function isTraditionalCondition(v: any): v is TraditionalConditionsNames {
+  return TraditionalConditionsNames.indexOf(v) >= 0;
+}
+
+export type TraditionalConditionsNames = keyof typeof TraditionalConditions;
+export const TraditionalConditionsNames: TraditionalConditionsNames[] = Object.keys(TraditionalConditions) as TraditionalConditionsNames[];

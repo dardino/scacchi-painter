@@ -6,7 +6,7 @@
     <input type="text"
       placeholder="Pick one"
       matInput
-      [(ngModel)]="newCondition"
+      (ngModelChange)="setValue($event)"
       [formControl]="myControl"
       [matAutocomplete]="auto"
     />
