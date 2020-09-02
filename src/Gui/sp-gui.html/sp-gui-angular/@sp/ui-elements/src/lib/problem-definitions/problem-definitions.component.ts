@@ -1,10 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Author } from "@sp/dbmanager/src/lib/models";
 import {
   CurrentProblemService,
   ProblemTypes,
   EndingTypes,
+  TwinModes,
+  TwinTypes,
 } from "@sp/dbmanager/src/public-api";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
@@ -14,6 +16,12 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
   styleUrls: ["./problem-definitions.component.styl"],
 })
 export class ProblemDefinitionsComponent implements OnInit {
+  @Output()
+  public openTwin = new EventEmitter<Twin | null>();
+
+  @Output()
+  public addCondition = new EventEmitter<void>();
+
   public get completeDesc() {
     return this.current.Problem?.stipulation.completeStipulationDesc;
   }
@@ -25,7 +33,7 @@ export class ProblemDefinitionsComponent implements OnInit {
   }
 
   public get twins(): Twin[] {
-    return this.current.Problem?.twins.TwinList ?? [];
+    return this.current.Problem?.twins.TwinList ?? [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram })];
   }
   public set twins(v: Twin[]) {
     if (this.current.Problem) this.current.Problem.twins.TwinList = v;
@@ -71,6 +79,7 @@ export class ProblemDefinitionsComponent implements OnInit {
   dropCondition(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.conditions, event.previousIndex, event.currentIndex);
   }
+
 }
 
 /*

@@ -23,6 +23,10 @@ import { MatMenuModule } from "@angular/material/menu";
 import { EditProblemComponent } from "./edit-problem/edit-problem.component";
 import { RecentsComponent } from "./recents/recents.component";
 import { MatTabsModule } from "@angular/material/tabs";
+import { TwinDialogComponent } from "./twin-dialog/twin-dialog.component";
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConditionsDialogComponent } from './conditions-dialog/conditions-dialog.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +37,8 @@ import { MatTabsModule } from "@angular/material/tabs";
     LandingComponent,
     EditProblemComponent,
     RecentsComponent,
+    TwinDialogComponent,
+    ConditionsDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -51,7 +57,8 @@ import { MatTabsModule } from "@angular/material/tabs";
     CdkScrollableModule,
     ScrollingModule,
     MatMenuModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDialogModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

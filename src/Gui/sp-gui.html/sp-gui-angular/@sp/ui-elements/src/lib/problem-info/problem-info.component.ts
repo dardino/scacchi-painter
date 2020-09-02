@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
 @Component({
   selector: "lib-problem-info",
@@ -7,6 +8,12 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ProblemInfoComponent implements OnInit {
   constructor() {}
+
+  @Output()
+  public openTwin = new EventEmitter<Twin | null>();
+
+  @Output()
+  public addCondition = new EventEmitter<void>();
 
   ngOnInit(): void {}
 }

@@ -1,8 +1,8 @@
-import { ITwins, SequnceTypes, createXmlElement } from "../helpers";
+import { ITwins, SequnceTypes, createXmlElement, notEmpty, TwinModes, TwinTypes } from "../helpers";
 import { Twin } from "./twin";
 
 export class Twins implements ITwins {
-  TwinList: Twin[] = [];
+  TwinList: Twin[] = [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram })];
   TwinSequenceTypes: SequnceTypes = SequnceTypes.Normal;
   public static fromElement(el: Element | null): Twins {
     const t = new Twins();
@@ -14,6 +14,7 @@ export class Twins implements ITwins {
           "Normal"
       ];
     t.TwinList = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
+    if (t.TwinList.length === 0) t.TwinList.push(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram }));
     return t;
   }
   static fromJson(twins: ITwins | null | undefined): Twins {
@@ -23,6 +24,7 @@ export class Twins implements ITwins {
       p.TwinSequenceTypes = twins.TwinSequenceTypes;
     }
     p.TwinList = (twins.TwinList || []).map(Twin.fromJson);
+    if (p.TwinList.length === 0) p.TwinList.push(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram }));
     return p;
   }
   toJson(): Partial<ITwins> {

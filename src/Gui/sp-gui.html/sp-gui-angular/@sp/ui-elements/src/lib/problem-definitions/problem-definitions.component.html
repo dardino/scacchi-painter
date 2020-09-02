@@ -61,7 +61,7 @@
     <mat-grid-tile-header
       ><div class="tile-title">
         <span>Twins</span
-        ><button mat-flat-button color="primary">
+        ><button mat-flat-button color="primary" (click)="openTwin.emit(null)">
           <mat-icon>add</mat-icon>
         </button>
       </div></mat-grid-tile-header
@@ -82,12 +82,12 @@
     <mat-grid-tile-header
       ><div class="tile-title">
         <span>Conditions</span
-        ><button mat-flat-button color="primary">
+        ><button mat-flat-button color="primary" (click)="addCondition.emit()">
           <mat-icon>add</mat-icon>
         </button>
       </div></mat-grid-tile-header
     >
-    <div cdkDropList class="list" (cdkDropListDropped)="dropCondition($event)">
+    <div *ngIf="conditions.length > 0" cdkDropList class="list" (cdkDropListDropped)="dropCondition($event)">
       <div class="box" *ngFor="let cond of conditions" cdkDrag>
         <div class="placeholder" *cdkDragPlaceholder></div>
         {{ cond.toString() }}

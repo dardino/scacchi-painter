@@ -6,7 +6,7 @@
         define stipulation, twins and fairy conditions
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <lib-problem-definitions></lib-problem-definitions>
+    <lib-problem-definitions (openTwin)="openTwin.emit($event)" (addCondition)="addCondition.emit()"></lib-problem-definitions>
   </mat-expansion-panel>
 
   <mat-expansion-panel expanded>
