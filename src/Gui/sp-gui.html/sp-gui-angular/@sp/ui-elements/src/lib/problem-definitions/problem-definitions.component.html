@@ -69,12 +69,15 @@
     <div cdkDropList class="list" (cdkDropListDropped)="dropTwin($event)">
       <div
         class="box"
-        *ngFor="let twin of twins"
+        *ngFor="let twin of twins; let i = index"
         cdkDrag
         [cdkDragDisabled]="twin.TwinType === 'Diagram'"
       >
         <div class="placeholder" *cdkDragPlaceholder></div>
         {{ twin.toString() }}
+        <button *ngIf="i>0" mat-flat-button color="secondary" (click)="deleteTwin.emit(twin)" class="inlist-button">
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
     </div>
   </mat-grid-tile>

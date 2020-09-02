@@ -302,6 +302,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     console.log("remove condition", $event);
     this.current.RemoveCondition($event);
   }
+
+  deleteTwin($event: Twin) {
+    this.current.RemoveTwin($event);
+  }
+
 }
 
 const istructionRegExp = new RegExp(

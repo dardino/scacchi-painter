@@ -9,6 +9,7 @@ import {
 } from "./helpers";
 import { Piece } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
+import { Twin } from "./models/twin";
 
 @Injectable({
   providedIn: "root",
@@ -27,6 +28,24 @@ export class CurrentProblemService {
     if (typeof cond === "string" && cond.length > 0 && this.Problem) {
       const index = this.Problem.conditions.indexOf(cond) ?? -1;
       if (index > -1) this.Problem.conditions.splice(index, 1);
+      // clone
+      this.dbManager.setCurrentProblem(this.Problem.clone());
+    }
+  }
+  RemoveTwin($event: Twin) {
+    if (!this.Problem) return;
+    const original = this.Problem.twins.TwinList.find((f) => {
+      return (
+        f.ValueA === $event.ValueA &&
+        f.ValueB === $event.ValueB &&
+        f.ValueC === $event.ValueC &&
+        f.TwinType === $event.TwinType &&
+        f.TwinModes === $event.TwinModes
+      );
+    });
+    if (original) {
+      const ix = this.Problem.twins.TwinList.indexOf(original);
+      this.Problem.twins.TwinList.splice(ix, 1);
       // clone
       this.dbManager.setCurrentProblem(this.Problem.clone());
     }

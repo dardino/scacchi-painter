@@ -25,6 +25,9 @@ export class ProblemDefinitionsComponent implements OnInit {
   @Output()
   public deleteCondition = new EventEmitter<string>();
 
+  @Output()
+  public deleteTwin = new EventEmitter<Twin>();
+
   public get completeDesc() {
     return this.current.Problem?.stipulation.completeStipulationDesc;
   }

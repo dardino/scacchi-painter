@@ -8,6 +8,7 @@
     </mat-expansion-panel-header>
     <lib-problem-definitions
       (openTwin)="openTwin.emit($event)"
+      (deleteTwin)="deleteTwin.emit($event)"
       (addCondition)="addCondition.emit()"
       (deleteCondition)="deleteCondition.emit($event)"
     ></lib-problem-definitions>
