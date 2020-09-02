@@ -91,6 +91,9 @@
       <div class="box" *ngFor="let cond of conditions" cdkDrag>
         <div class="placeholder" *cdkDragPlaceholder></div>
         {{ cond.toString() }}
+        <button mat-flat-button color="secondary" (click)="deleteCondition.emit(cond)" class="inlist-button">
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
     </div>
   </mat-grid-tile>

@@ -14,6 +14,8 @@ export class ProblemInfoComponent implements OnInit {
 
   @Output()
   public addCondition = new EventEmitter<void>();
+  @Output()
+  public deleteCondition = new EventEmitter<string>();
 
   ngOnInit(): void {}
 }

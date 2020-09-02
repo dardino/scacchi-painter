@@ -297,6 +297,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       this.current.AddCondition(result);
     });
   }
+
+  deleteCondition($event: string) {
+    console.log("remove condition", $event);
+    this.current.RemoveCondition($event);
+  }
 }
 
 const istructionRegExp = new RegExp(
