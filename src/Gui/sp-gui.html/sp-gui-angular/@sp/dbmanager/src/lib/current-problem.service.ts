@@ -18,6 +18,11 @@ export class CurrentProblemService {
     return this.dbManager.CurrentProblem;
   }
   constructor(private dbManager: DbmanagerService, private ngZone: NgZone) {}
+  AddCondition(result: string | undefined) {
+    if (typeof result === "string" && result.length > 0) {
+      this.Problem?.conditions.push(result);
+    }
+  }
   AddPieceAt(location: SquareLocation, piece: Piece) {
     const problem = this.Problem;
     if (!problem || !piece) return;

@@ -1,15 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
+import { MatDialogRef } from "@angular/material/dialog";
+import { FormControl } from "@angular/forms";
+import { Observable } from "rxjs";
+import { startWith, map } from "rxjs/operators";
 
 @Component({
-  selector: 'app-conditions-dialog',
-  templateUrl: './conditions-dialog.component.html',
-  styleUrls: ['./conditions-dialog.component.styl']
+  selector: "app-conditions-dialog",
+  templateUrl: "./conditions-dialog.component.html",
+  styleUrls: ["./conditions-dialog.component.styl"],
 })
 export class ConditionsDialogComponent implements OnInit {
+  myControl = new FormControl();
+  newCondition = "";
+  conditionsList: string[] = [];
+  filteredOptions: Observable<string[]>;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(
+    public dialogRef: MatDialogRef<ConditionsDialogComponent, string>
+  ) {}
+  clickCancel() {
+    this.dialogRef.close();
+  }
+  clickAdd() {
+    this.dialogRef.close(this.newCondition);
+  }
+  ngOnInit() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(""),
+      map((value) => this._filter(value))
+    );
   }
 
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.conditionsList.filter(
+      (option) => option.toLowerCase().indexOf(filterValue) === 0
+    );
+  }
 }
