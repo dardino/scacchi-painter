@@ -24,8 +24,12 @@ import { EditProblemComponent } from "./edit-problem/edit-problem.component";
 import { RecentsComponent } from "./recents/recents.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { TwinDialogComponent } from "./twin-dialog/twin-dialog.component";
-import { MatDialogModule } from '@angular/material/dialog';
-import { ConditionsDialogComponent } from './conditions-dialog/conditions-dialog.component';
+import { MatDialogModule } from "@angular/material/dialog";
+import { ConditionsDialogComponent } from "./conditions-dialog/conditions-dialog.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
@@ -58,7 +62,12 @@ import { ConditionsDialogComponent } from './conditions-dialog/conditions-dialog
     ScrollingModule,
     MatMenuModule,
     MatTabsModule,
-    MatDialogModule
+    MatDialogModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

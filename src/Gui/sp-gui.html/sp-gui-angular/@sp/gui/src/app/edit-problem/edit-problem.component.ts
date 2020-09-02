@@ -24,7 +24,7 @@ import { Piece } from "@sp/dbmanager/src/lib/models";
 import { MatDialog } from "@angular/material/dialog";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { ConditionsDialogComponent } from '../conditions-dialog/conditions-dialog.component';
+import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 
 @Component({
   selector: "app-edit-problem",
@@ -273,7 +273,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin>(
       TwinDialogComponent,
       {
-        width: "250px",
+        width: "25rem",
+        maxWidth: "95%",
         data: Twin.fromJson($event?.toJson() ?? {}),
       }
     );
@@ -287,12 +288,13 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open<ConditionsDialogComponent, void, string>(
       ConditionsDialogComponent,
       {
-        width: "250px",
+        width: "25rem",
+        maxWidth: "95%",
       }
     );
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("The dialog was closed");
+      this.current.AddCondition(result);
     });
   }
 }
