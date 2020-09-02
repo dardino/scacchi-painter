@@ -11,6 +11,7 @@ import {
   GetSquareIndex,
   convertToRtf,
   createXmlElement,
+  notEmpty,
 } from "../helpers";
 import { Twins } from "./twins";
 import { Stipulation } from "./stipulation";
@@ -68,7 +69,7 @@ export class Problem implements IProblem {
     );
     p.conditions = Array.from(source.querySelectorAll("Conditions") ?? []).map(
       (el) => el.nodeValue ?? ""
-    );
+    ).filter(notEmpty);
 
     p.fairyCells = [];
     p.snapshots = {};
@@ -115,7 +116,7 @@ export class Problem implements IProblem {
     b.prizeRank = a.prizeRank ?? 0;
     b.prizeDescription = a.prizeDescription ? a.prizeDescription : "";
     b.source = a.source ? a.source : "";
-    b.conditions = a.conditions ? [...a.conditions] : [];
+    b.conditions = (a.conditions ? [...a.conditions] : []).filter(notEmpty);
   }
 
   toJson(): Partial<IProblem> {

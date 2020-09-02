@@ -31,9 +31,6 @@
         (selectedPieceChanged)="setPieceToAdd($event)"
         [current]="pieceToAdd"
       ></lib-piece-selector>
-      <!-- <ul class="solution-row" *ngFor="let row of rows$ | async">
-        <li>{{ row }}</li>
-      </ul> -->
     </section>
     <div
       #verticalSplitter
@@ -48,7 +45,7 @@
         <mat-tab label="Problem Data">
           <ng-template matTabContent>
             <div class="tab-content">
-              <lib-problem-info></lib-problem-info>
+              <lib-problem-info (openTwin)="openTwinDialog($event)" (addCondition)="openConditionDialog()"></lib-problem-info>
             </div>
           </ng-template>
         </mat-tab>

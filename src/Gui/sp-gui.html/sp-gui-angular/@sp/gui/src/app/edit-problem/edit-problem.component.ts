@@ -10,7 +10,6 @@ import {
   SquareLocation,
   IPiece,
   getCanvasRotation,
-  notEmpty,
   notNull,
 } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
@@ -22,6 +21,10 @@ import {
   EditModes,
 } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { Piece } from "@sp/dbmanager/src/lib/models";
+import { MatDialog } from "@angular/material/dialog";
+import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
+import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { ConditionsDialogComponent } from '../conditions-dialog/conditions-dialog.component';
 
 @Component({
   selector: "app-edit-problem",
@@ -44,7 +47,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   constructor(
     private current: CurrentProblemService,
     private location: Location,
-    private bridge: HostBridgeService
+    private bridge: HostBridgeService,
+    private dialog: MatDialog
   ) {}
 
   get solveInProgress() {
@@ -263,6 +267,33 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       })
       .filter(notNull)
       .join("");
+  }
+
+  openTwinDialog($event: Twin | null): void {
+    const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin>(
+      TwinDialogComponent,
+      {
+        width: "250px",
+        data: Twin.fromJson($event?.toJson() ?? {}),
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("The dialog was closed");
+    });
+  }
+
+  openConditionDialog(): void {
+    const dialogRef = this.dialog.open<ConditionsDialogComponent, void, string>(
+      ConditionsDialogComponent,
+      {
+        width: "250px",
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("The dialog was closed");
+    });
   }
 }
 
