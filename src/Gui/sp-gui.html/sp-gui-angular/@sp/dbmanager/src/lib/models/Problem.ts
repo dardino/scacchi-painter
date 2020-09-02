@@ -150,11 +150,11 @@ export class Problem implements IProblem {
 
   async toSP2Xml(): Promise<Element> {
     const item = createXmlElement("SP_Item");
-    SP2.setProblemType(item, this.stipulation.problemType);
+    SP2.setProblemType(item, this.stipulation.getXMLProblemType());
     SP2.setMoves(item, this.stipulation.moves);
     SP2.setDate(item, this.date);
     SP2.setPersonalID(item, this.personalID);
-    SP2.setStipulation(item, this.stipulation.stipulationType);
+    SP2.setStipulation(item, this.stipulation.getXMLEndingType());
     SP2.setSerie(item, this.stipulation.serie);
     SP2.setMaximum(item, this.stipulation.maximum);
     SP2.setSource(item, this.source);

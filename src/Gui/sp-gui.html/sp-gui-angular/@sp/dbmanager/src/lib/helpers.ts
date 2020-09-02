@@ -8,22 +8,79 @@ import {
 
 import { Base64 } from "./base64";
 
-export enum ProblemTypes {
-  Direct = "Direct",
-  Help = "Help",
-  HelpSelf = "HelpSelf",
-  Self = "Self",
-}
-export type ProblemTypesKeys = keyof typeof ProblemTypes;
+export type XMLProblemTypesKeys =
+  | "Direct"
+  | "Help"
+  | "Self"
+  | "HelpSelf"
+  | "Custom";
 
-export enum StipulationTypes {
-  Mate = "Mate",
-  Stale = "Stale",
+export const ProblemTypeCodes = {
+  "-": "Direct",
+  H: "Help",
+  S: "Self",
+  HS: "HelpSelf",
+  R: "Reflex",
+  HR: "HelpReflex",
+} as const;
+
+export const EndingTypeCodes = {
+  "#": `Mate (#)`,
+  "=": `Stalemate (=)`,
+  "+": `Check (+)`,
+  "%": `Gain Piece (%)`,
+  "~": `(~)`,
+  "##": `Double mate (##)`,
+  "==": `Double stalemate (==)`,
+  "#=": `(#=)`,
+  "!=": `(!=)`,
+  "!#": `(!#)`,
+  "00": `(00)`,
+  ep: `(ep)`,
+  Zxy: `(Zxy)`,
+  x: `(x)`,
+  "##!": `(##!)`,
+  ct: `(ct)`,
+  "<>": `(&lt;>)`,
+  ctr: `(ctr)`,
+  "<>r": `(&lt;>r)`,
+  c81: `(c81)`,
+} as const;
+
+export type XMLStipulationTypes = "Mate" | "Stalemate" | "Custom";
+
+export type ProblemTypes = keyof typeof ProblemTypeCodes;
+export function getProblemType(
+  original: XMLProblemTypesKeys | null = "Direct"
+): ProblemTypes {
+  switch (original) {
+    case "Direct":
+      return "-";
+    case "Help":
+      return "H";
+    case "HelpSelf":
+      return "HS";
+    case "Self":
+      return "S";
+    default:
+      return "-";
+  }
+}
+export type EndingTypes = keyof typeof EndingTypeCodes;
+export function getEndingType(original: XMLStipulationTypes): EndingTypes {
+  switch (original) {
+    case "Mate":
+      return "#";
+    case "Stalemate":
+      return "=";
+    default:
+      return "#";
+  }
 }
 
 export interface IStipulation {
   problemType: ProblemTypes;
-  stipulationType: StipulationTypes;
+  stipulationType: EndingTypes;
   maximum: boolean;
   serie: boolean;
   moves: number;

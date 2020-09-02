@@ -1,6 +1,5 @@
 import {
   Figurine,
-  Rotations,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 import {
   notNull,
@@ -9,12 +8,12 @@ import {
   SP2PieceName,
   PieceColors,
   PieceRotation,
-  ProblemTypes,
-  StipulationTypes,
   createXmlElement,
   notEmpty,
+  XMLProblemTypesKeys,
+  XMLStipulationTypes,
 } from "./helpers";
-import { Base64 } from './base64';
+import { Base64 } from "./base64";
 
 function invertMap<K extends string, V extends string>(
   o: { [key in K]: V }
@@ -111,7 +110,7 @@ export class SP2 {
   static setSerie(item: Element, serie: boolean) {
     item.setAttribute("Serie", serie ? "true" : "false");
   }
-  static setStipulation(item: Element, stipulationType: StipulationTypes) {
+  static setStipulation(item: Element, stipulationType: XMLStipulationTypes) {
     item.setAttribute("Stipulation", stipulationType);
   }
   static setPersonalID(item: Element, personalID: string) {
@@ -123,7 +122,7 @@ export class SP2 {
   static setMoves(item: Element, moves: number) {
     item.setAttribute("Moves", moves.toFixed(1));
   }
-  static setProblemType(item: Element, problemType: ProblemTypes) {
+  static setProblemType(item: Element, problemType: XMLProblemTypesKeys) {
     item.setAttribute("ProblemType", problemType);
   }
   //#endregion
