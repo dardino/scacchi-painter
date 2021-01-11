@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { TwinDialogComponent } from "./twin-dialog.component";
 
@@ -6,7 +6,7 @@ describe("TwinDialogComponent", () => {
   let component: TwinDialogComponent;
   let fixture: ComponentFixture<TwinDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TwinDialogComponent],
     }).compileComponents();

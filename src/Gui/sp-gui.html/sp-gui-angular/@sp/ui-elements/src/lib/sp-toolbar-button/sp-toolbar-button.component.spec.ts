@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { SpToolbarButtonComponent } from "./sp-toolbar-button.component";
 
@@ -6,7 +6,7 @@ describe("SpButtonComponent", () => {
   let component: SpToolbarButtonComponent;
   let fixture: ComponentFixture<SpToolbarButtonComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SpToolbarButtonComponent],
     }).compileComponents();
