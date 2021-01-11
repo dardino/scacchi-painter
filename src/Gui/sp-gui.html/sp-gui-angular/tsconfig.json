@@ -1,41 +1,52 @@
-/*
-  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
-  It is not intended to be used to perform a compilation.
-
-  To learn more about this file see: https://angular.io/config/solution-tsconfig.
-*/
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./@sp/gui/tsconfig.app.json"
-    },
-    {
-      "path": "./@sp/gui/tsconfig.spec.json"
-    },
-    {
-      "path": "./@sp/chessboard/tsconfig.lib.json"
-    },
-    {
-      "path": "./@sp/chessboard/tsconfig.spec.json"
-    },
-    {
-      "path": "./@sp/dbmanager/tsconfig.lib.json"
-    },
-    {
-      "path": "./@sp/dbmanager/tsconfig.spec.json"
-    },
-    {
-      "path": "./@sp/ui-elements/tsconfig.lib.json"
-    },
-    {
-      "path": "./@sp/ui-elements/tsconfig.spec.json"
-    },
-    {
-      "path": "./@sp/host-bridge/tsconfig.lib.json"
-    },
-    {
-      "path": "./@sp/host-bridge/tsconfig.spec.json"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "target": "es2015",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "chessboard": [
+        "dist/chessboard/chessboard",
+        "dist/chessboard"
+      ],
+      "dbmanager": [
+        "dist/dbmanager/dbmanager",
+        "dist/dbmanager"
+      ],
+      "ui-elements": [
+        "dist/ui-elements/ui-elements",
+        "dist/ui-elements"
+      ],
+      "host-bridge": [
+        "dist/host-bridge/host-bridge",
+        "dist/host-bridge"
+      ],
+      "rft-parser": [
+        "dist/rft-parser/rft-parser",
+        "dist/rft-parser"
+      ]
     }
-  ]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
 }
