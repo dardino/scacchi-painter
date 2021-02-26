@@ -3,7 +3,7 @@
 import { ipcRenderer as ipc, remote } from "electron";
 import { Bridge } from "./Bridge";
 import { PopeyeSolver } from "../solver/PopeyeSolver";
-import { IApplicationConfig } from "../settings/IApplicationConfig";
+import { IApplicationConfig } from "settings/IApplicationConfig";
 import fs from "fs";
 
 init();
@@ -13,31 +13,19 @@ declare global {
   }
 }
 function init() {
+  console.log(
+    "------------------------------------ Preload ------------------------------------"
+  );
 
   const cfg: IApplicationConfig = {
     problemSolvers: {
       Popeye: {
         enabled: true,
         executablePath:
-          "D:\\dev\\github\\scacchi-painter\\src\\Gui\\sp-gui.html\\sp-gui-electron\\engines\\popeye\\pywin64.exe",
+          "C:\\dev\\github\\scacchi-painter\\src\\Gui\\sp-gui.html\\sp-gui-electron\\engines\\popeye\\pywin64.exe",
         extraOptions: [`Try`, `NoBoard`, `SetPlay`, `Variation`],
       },
     },
-  };
-
-  const closeApp = () => remote.getCurrentWindow().close();
-
-  const openFile = async () => {
-    const data = await remote.dialog.showOpenDialog({
-      filters: [{ name: "Scacchi Painter", extensions: ["sp2", "sp3"] }],
-      message: "Select your problems database file",
-      properties: ["openFile"],
-      title: "Open Database file",
-    });
-    if (data.canceled || data.filePaths.length !== 1) return null;
-    const buffer = fs.readFileSync(data.filePaths[0]);
-    const file = new File([buffer], data.filePaths[0]);
-    return file;
   };
 
   // Expose a bridging API to by setting an global on `window`.
@@ -47,9 +35,22 @@ function init() {
   // !CAREFUL! do not expose any functionality or APIs that could compromise the
   // user's computer. E.g. don't directly expose core Electron (even IPC) or node.js modules.
   window.Bridge = new Bridge(
-    closeApp,
+    () => {
+      remote.getCurrentWindow().close();
+    },
     [new PopeyeSolver(cfg)],
-    openFile
+    async () => {
+      const data = await remote.dialog.showOpenDialog({
+        filters: [{ name: "Scacchi Painter", extensions: ["sp2", "sp3"] }],
+        message: "Select your problems database file",
+        properties: ["openFile"],
+        title: "Open Database file",
+      });
+      if (data.canceled || data.filePaths.length !== 1) return null;
+      const buffer = fs.readFileSync(data.filePaths[0]);
+      const file = new File([buffer], data.filePaths[0]);
+      return file;
+    }
   );
 
   // we get this message from the main process
