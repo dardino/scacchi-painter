@@ -1,0 +1,95 @@
+{
+  "author": "Gabriele Brunori",
+  "prductName": "Scacchi Painter 3",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dardino/scacchi-painter/issues"
+  },
+  "homepage": "https://github.com/dardino/scacchi-painter#readme",
+  "name": "sp-gui-electron",
+  "version": "0.0.2",
+  "description": "Scacchi Painter Universal",
+  "main": "build/sp-gui-electron/src/main.js",
+  "scripts": {
+    "test": "jest",
+    "start": "electron-forge start",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "build": "tsc -b",
+    "rebuild": "tsc -b --force",
+    "watch": "tsc -b -w",
+    "lint": "eslint ./src/**/*.ts",
+    "deploy": "yarn lint && yarn build && yarn publish-win && yarn publish-linux && yarn publish-darwin",
+    "publish-win": "electron-packager . ScacchiPainter --icon=app/favicon.ico --overwrite --app-version 3.0.0 --out=release --platform=win32 --arch=x64 --asar",
+    "publish-linux": "electron-packager . ScacchiPainter --icon=app/favicon.png --overwrite --app-version 3.0.0 --out=release --platform=linux --arch=x64 --asar",
+    "publish-darwin": "electron-packager . ScacchiPainter --icon=app/favicon.icns --overwrite --app-version 3.0.0 --out=release --platform=darwin --arch=x64 --asar",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dardino/scacchi-painter.git"
+  },
+  "keywords": [
+    "scacchi",
+    "chess",
+    "problems",
+    "problemi",
+    "popeye"
+  ],
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "electron": "^8.3.1",
+    "eslint": "^7.7.0",
+    "ts-jest": "^26.1.3",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@types/jest": "^26.0.5",
+    "canvas-chessboard": "^0.0.17",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^6.0.0",
+    "jest": "^26.1.0",
+    "jest-junit": "^11.0.1",
+    "rxjs": "^6.6.2"
+  },
+  "build": {
+    "appId": "org.accademiadelproblema.scacchipainter",
+    "mac": {
+      "category": "game"
+    }
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "sp_gui_electron"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  }
+}

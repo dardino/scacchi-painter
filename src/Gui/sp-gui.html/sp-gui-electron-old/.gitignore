@@ -1,0 +1,8 @@
+dist
+build
+app
+release
+tmp
+src/**/*.js
+
+out/
