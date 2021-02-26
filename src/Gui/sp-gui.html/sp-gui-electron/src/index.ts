@@ -39,12 +39,10 @@ const createWindow = (): void => {
   // and load the index.html of the app.
   if (!app.isPackaged) {
     mainWindow.loadURL("http://localhost:4200");
-    // mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    mainWindow.webContents.openDevTools();
   } else {
-    // mainWindow.loadFile("./webpack/renderer/index.html");
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   }
-  mainWindow.webContents.openDevTools();
   mainWindow.maximize();
 
 };
