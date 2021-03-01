@@ -25,6 +25,7 @@ import { QuillInitializeService } from "./services/quillInitialize.service";
 import { ProblemDefinitionsComponent } from "./problem-definitions/problem-definitions.component";
 import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.component";
 import { ProblemPublicationComponent } from "./problem-publication/problem-publication.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
 @NgModule({
   declarations: [
     ToolbarDbComponent,
@@ -43,6 +44,7 @@ import { ProblemPublicationComponent } from "./problem-publication/problem-publi
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
+    MatTooltipModule,
     MatButtonToggleModule,
     QuillModule.forRoot(),
     FormsModule,

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+
+<body>
+    <script>
+        var ww = new Worker("./out/popeye_ww.js");
+        ww.addEventListener("message", e => {
+            document.body.append(e.data);
+        })
+        ww.addEventListener("messageerror", e => {
+            document.body.append(e.data);
+        })
+        ww.addEventListener("error", e => {
+            document.body.append(e.message);
+        })
+        function Go(problem) {
+            ww.postMessage({ problem })
+        }
+    </script>
+</body>
+
+</html>

@@ -68,7 +68,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 
   private resizing = { x: NaN, initialW: NaN };
 
-  private leaveTimeout = 0;
+  private leaveTimeout?: ReturnType<typeof setTimeout>;
 
   private commandMapper: { [key in EditCommand]: () => void } = {
     flipH: () => this.current.FlipBoard("y"),
@@ -126,6 +126,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.rows$ubject.next(this.rows);
     if (this.current.Problem) {
       this.current.Problem.htmlSolution = "";
+      this.current.Problem.textSolution = "";
       this.bridge.startSolve(this.current.Problem);
     }
     this.resetActions();
@@ -143,10 +144,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribe = this.bridge.Solver$.subscribe((msg) => {
-      this.rows.push(...msg.replace(/\n/g, "").split("\r"));
+      this.rows.push(...msg.replace(/\r/g, "").split("\n"));
       this.rows$ubject.next(this.rows);
       if (this.current.Problem) {
         this.current.Problem.htmlSolution = this.toHtml(this.rows);
+        this.current.Problem.textSolution = this.rows.join(`\n`);
       }
     });
   }
@@ -187,7 +189,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   clearResizeLeave() {
-    clearTimeout(this.leaveTimeout);
+    if (this.leaveTimeout != null) clearTimeout(this.leaveTimeout);
   }
 
   editCommand($event: EditCommand) {
@@ -263,7 +265,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       .map((f) => {
         const t = tag(f);
         if (t == null) return null;
-        return `<p><${t}>${f}</${t}></p>`;
+        return `<div><${t}>${f}</${t}></div>`;
       })
       .filter(notNull)
       .join("");
@@ -310,7 +312,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 }
 
 const istructionRegExp = new RegExp(
-  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished).*$`
+  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye).*$`
 );
 const outlogRegExp = new RegExp(
   `^(ERR:|Execute|Popeye|starting engine|Engine process|program exited).*$`

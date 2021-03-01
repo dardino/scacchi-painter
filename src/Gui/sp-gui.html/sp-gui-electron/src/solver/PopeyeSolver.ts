@@ -25,7 +25,7 @@ function pieceSortByName(a: Piece, b: Piece): -1 | 0 | 1 {
 function toPopeyePiece(a: Piece): string {
   return [
     (a.fairyCode[0] ?? {}).code?.toUpperCase() ||
-      a.appearance.toUpperCase().replace("N", "S"),
+    a.appearance.toUpperCase().replace("N", "S"),
     a.column[3].toLowerCase(),
     a.traverse[3],
   ].join("");
@@ -34,7 +34,7 @@ function toPopeyePiece(a: Piece): string {
 export class PopeyeSolver implements ISolver {
   private childProcess: child.ChildProcessWithoutNullStreams | null = null;
   readonly key: string = "Popeye";
-  constructor(private cfg: IApplicationConfig) {}
+  constructor(private cfg: IApplicationConfig) { }
   get running(): boolean {
     return false;
   }
@@ -66,7 +66,8 @@ export class PopeyeSolver implements ISolver {
 
         this.childProcess.on("error", (err) => {
           console.error(err);
-          throw err;
+          cbOut(err.message);
+          this.stop();
         });
 
         this.childProcess.on("exit", (code, signal) => {
@@ -121,6 +122,7 @@ export class PopeyeSolver implements ISolver {
       cwd: os.tmpdir(),
       detached: false,
       serialization: "json",
+      stdio: ["pipe"]
     });
     return p;
   }

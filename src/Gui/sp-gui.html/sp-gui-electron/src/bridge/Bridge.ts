@@ -9,10 +9,8 @@ import path from "path";
 import fs from "fs";
 
 export class Bridge implements BridgeGlobal {
-  private solver$: Subject<string | EOF> = new BehaviorSubject<string | EOF>(
-    ""
-  );
-  private interval: NodeJS.Timeout | null = null;
+  private solver$: Subject<string | EOF> = new BehaviorSubject<string | EOF>("");
+  private interval: ReturnType<typeof setInterval> | null = null;
   constructor(
     public closeApp: () => void,
     private solvers: ISolver[],

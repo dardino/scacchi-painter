@@ -19,7 +19,7 @@ function init() {
       Popeye: {
         enabled: true,
         executablePath:
-          "D:\\dev\\github\\scacchi-painter\\src\\Gui\\sp-gui.html\\sp-gui-electron\\engines\\popeye\\pywin64.exe",
+          `D:\\dev\\scacchi-painter\\src\\Gui\\sp-gui.html\\sp-gui-electron\\engines\\popeye_\\pywin64.exe`,
         extraOptions: [`Try`, `NoBoard`, `SetPlay`, `Variation`],
       },
     },

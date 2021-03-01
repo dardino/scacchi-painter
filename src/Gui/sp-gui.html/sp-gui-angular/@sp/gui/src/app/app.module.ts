@@ -30,6 +30,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
   imports: [
     CommonModule,
     MatIconModule,
+    MatTooltipModule,
     MatButtonModule,
     BrowserModule,
     AppRoutingModule,
@@ -67,7 +69,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],
