@@ -8,6 +8,7 @@ interface IDbSpX {
   lastIndex: number;
   name: string;
   problems: Array<Partial<IProblem>>;
+  version: 3
 }
 
 @Injectable({
@@ -77,6 +78,7 @@ export class DbmanagerService {
       lastIndex: this.currentIndex,
       problems: this.All.map((p) => p.toJson()),
       name: "Scacchi Painter X Database",
+      version: 3
     };
   }
 

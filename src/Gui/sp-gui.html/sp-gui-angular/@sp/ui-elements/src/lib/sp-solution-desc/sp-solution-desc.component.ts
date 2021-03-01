@@ -17,30 +17,31 @@ export class SpSolutionDescComponent implements OnInit {
   ngOnInit(): void {}
 
   get solution() {
-    return this.problem?.htmlSolution ?? "";
+    return this.problem?.textSolution ?? "";
   }
   set solution(txt: string) {
-    if (this.problem) this.problem.htmlSolution = txt;
+    if (this.problem) this.problem.textSolution = txt;
   }
 
-  public parse(text: string) {
-    return text
-      .replace(/\t/g, "&nbsp;&nbsp;&nbsp;")
-      .replace(/ /g, "&nbsp; ");
+  get rows() {
+    return this.problem?.textSolution.split("\n") ?? [];
   }
 
-  public class(text: string) {
-    text = text.trim();
-    if (istructionRegExp.test(text)) return "instruction";
-    else if (outlogRegExp.test(text)) return "log";
+  getClass(item: string): string {
+    item= item.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    if (istructionRegExp.test(item)) return "instruction";
+    else if (outlogRegExp.test(item)) return "log";
     else return "solution";
   }
 }
 
 const istructionRegExp = new RegExp(
-  `^(BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing).*$`
+  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye).*$`
 );
-const outlogRegExp = new RegExp(`^(Execute|Popeye|solution finished).*$`);
+const outlogRegExp = new RegExp(
+  `^(ERR:|Execute|Popeye|starting engine|Engine process|program exited).*$`
+);
+
 
 /*
  * BeginProblem

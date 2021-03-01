@@ -14,8 +14,8 @@ const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    frame: false,
-    // thickFrame: true,
+    frame: !app.isPackaged,
+    thickFrame: true,
     maximizable: true,
     acceptFirstMouse: true,
     fullscreenable: true,

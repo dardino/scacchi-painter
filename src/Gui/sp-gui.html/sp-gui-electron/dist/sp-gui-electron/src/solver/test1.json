@@ -1,0 +1,214 @@
+{
+    "date": "2020-06-12T22:00:00Z",
+    "stipulation": {
+        "problemType": "Help",
+        "stipulationType": "Mate",
+        "maximum": false,
+        "serie": false,
+        "moves": 3.5,
+        "completeStipulationDesc": "H#"
+    },
+    "prizeRank": 0,
+    "personalID": "218",
+    "prizeDescription": "",
+    "source": "Original for Simoni's 60 jubilee",
+    "authors": [
+        {
+            "nameAndSurname": "",
+            "address": "",
+            "city": "",
+            "phone": "",
+            "zipCode": "",
+            "stateOrProvince": "",
+            "country": "",
+            "language": ""
+        }
+    ],
+    "pieces": [
+        {
+            "appearance": "k",
+            "fairyCode": [],
+            "color": "White",
+            "column": "ColD",
+            "traverse": "Row1",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "r",
+            "fairyCode": "",
+            "color": "White",
+            "column": "ColE",
+            "traverse": "Row2",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "b",
+            "fairyCode": "",
+            "color": "White",
+            "column": "ColE",
+            "traverse": "Row1",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "p",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColG",
+            "traverse": "Row2",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "r",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColG",
+            "traverse": "Row1",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "b",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColH",
+            "traverse": "Row5",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "k",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColB",
+            "traverse": "Row6",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "p",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColB",
+            "traverse": "Row5",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "p",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColG",
+            "traverse": "Row6",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "p",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColA",
+            "traverse": "Row6",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "b",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColH",
+            "traverse": "Row6",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "p",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColC",
+            "traverse": "Row3",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "p",
+            "fairyCode": "",
+            "color": "White",
+            "column": "ColC",
+            "traverse": "Row2",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "n",
+            "fairyCode": "",
+            "color": "White",
+            "column": "ColD",
+            "traverse": "Row3",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "n",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColA",
+            "traverse": "Row2",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "p",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColA",
+            "traverse": "Row5",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "q",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColA",
+            "traverse": "Row3",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "n",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColC",
+            "traverse": "Row6",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        },
+        {
+            "appearance": "r",
+            "fairyCode": "",
+            "color": "Black",
+            "column": "ColC",
+            "traverse": "Row5",
+            "rotation": "NoRotation",
+            "fairyAttribute": "None"
+        }
+    ],
+    "twins": {
+        "Twins": [
+            {
+                "TwinType": "MovePiece",
+                "TwinModes": "Normal",
+                "ValueA": "d3",
+                "ValueB": "b2",
+                "ValueC": ""
+            }
+        ],
+        "TwinSequenceTypes": "Normal"
+    },
+    "htmlSolution": "a) diagram\n\n  1...  ...  2.Bh5*e2 + Kd1*e2   3.a5-a4 Be1-g3   4.Kb6-a5 Bg3-c7 #\n\n  1...Sd3-b2   2.Rg1*e1 + Kd1*e1   3.b5-b4 Re2-e7 (Re2-e8?)  4.Kb6-b5 Re7-b7 #\n\nb) after the key\n\n  1...  ...  2.Rg1*e1 + Kd1*e1   3.b5-b4 Re2-e7   4.Kb6-b5 Re7-b7 #\n\n  1...Sb2-d3   2.Bh5*e2 + Kd1*e2   3.a5-a4 Be1-g3 (Be1-h4?)   4.Kb6-a5 Bg3-c7 #\n\n\n ZILAHI\n PERPETUUM MOBILE\n DUAL AVOIDANCE\n",
+    "conditions": [""]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "popeye-js",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "concat": "^1.0.3",
+    "google-closure-compiler": "^20210202.0.0",
+    "serve": "^11.3.2",
+    "typescript": "^4.2.2"
+  },
+  "scripts": {
+    "compile": "yarn tsc -p ./src/tsconfig.json",
+    "minify": "google-closure-compiler out/popeye_ww.tmp --js_output_file out/popeye_ww.min.tmp",
+    "concat": "concat -o ./out/popeye_ww.js ./out/popeye_ww.min.tmp ./src/py.js",
+    "clear": "del /Q out\\*.tmp",
+    "build": "yarn compile && yarn minify && yarn concat && yarn clear"
+  }
+}

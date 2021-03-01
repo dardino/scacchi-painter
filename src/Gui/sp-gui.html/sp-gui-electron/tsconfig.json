@@ -6,16 +6,16 @@
     "esModuleInterop": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "ES6",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "target": "ES6"
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.d.ts",
+    "src/**/*.spec.ts"
   ]
 }

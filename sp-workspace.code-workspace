@@ -14,6 +14,12 @@
 		},
 		{
 			"path": "graphics"
+		},
+		{
+			"path": "../olive-gui"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/popeye-js"
 		}
 	],
 	"settings": {

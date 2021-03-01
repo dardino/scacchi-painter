@@ -491,6 +491,7 @@ export async function GetSolutionFromElement(el: Element) {
 
   const sol = el.querySelector("Solution")?.innerHTML;
   const solRft = el.querySelector("SolutionRtf");
+  const solDec = sol ? Base64.decode(sol) : "";
 
   if (solRft != null && solRft.innerHTML.length > 0) {
     solText = await convertFromRtf(
@@ -499,7 +500,7 @@ export async function GetSolutionFromElement(el: Element) {
   } else {
     if (!sol) solText = [];
     else {
-      solText = Base64.decode(sol)
+      solText = solDec
         .replace(/\r\n/g, "\r")
         .split("\r")
         .map((txt) => {
@@ -509,7 +510,7 @@ export async function GetSolutionFromElement(el: Element) {
         });
     }
   }
-  return { plain: sol, html: solText, rtf: solRft?.innerHTML };
+  return { plain: solDec, html: solText, rtf: solRft?.innerHTML };
 }
 
 export function GetTwins(el: Element): Element[] {
