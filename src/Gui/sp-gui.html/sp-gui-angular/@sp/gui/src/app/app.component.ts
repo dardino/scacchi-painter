@@ -61,6 +61,12 @@ export class AppComponent implements OnInit {
         `${environment.assetFolder}/toolbar/move_piece.svg`
       )
     );
+    this.matIconRegistry.addSvgIcon(
+      `dropbox_icon`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        `${environment.assetFolder}/toolbar/dropbox_icon.svg`
+      )
+    );
   }
   async closeMe() {
     this.bridge.closeApp();

@@ -1,18 +1,28 @@
-<h1 class="title">Open from:</h1>
-<ul>
-  <li>
-    <a mat-stroked-button (click)="electron ? electronOpen() : fileloader.click()">
-      <span class="open-button">
-        <mat-icon>folder</mat-icon>
-        <span>Local folder</span>
-      </span>
-    </a>
-  </li>
-  <!-- <li>
-    <a mat-stroked-button>
-      <span class="open-button">
-        <mat-icon>
-          <svg
+<div>
+  <div>
+    <h1 class="title">Open from:</h1>
+    <ul>
+      <li>
+        <a mat-stroked-button (click)="localFolder()">
+          <span class="open-button">
+            <mat-icon>folder</mat-icon>
+            <span>Local folder</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a mat-stroked-button (click)="fromDropbox()">
+          <span class="open-button">
+            <mat-icon svgIcon="dropbox_icon"></mat-icon>
+            <span>Dropbox</span>
+          </span>
+        </a>
+      </li>
+      <!-- <li>
+      <a mat-stroked-button>
+        <span class="open-button">
+          <mat-icon>
+            <svg
             xmlns="http://www.w3.org/2000/svg"
             width="90%"
             viewBox="0 0 230 260"
@@ -29,5 +39,16 @@
       </span>
     </a>
   </li> -->
-</ul>
-<input type="file" accept="sp2" (change)="selectLocalFile(fileloader.files)" #fileloader style="display: none;" />
+    </ul>
+    <input
+      type="file"
+      accept="sp2"
+      (change)="selectLocalFile(fileloader.files)"
+      #fileloader
+      style="display: none"
+    />
+  </div>
+  <div *ngIf="showDropboxFolder">
+    <lib-file-explorer [service]="dropboxService" (select)="openFile($event)"></lib-file-explorer>
+  </div>
+</div>

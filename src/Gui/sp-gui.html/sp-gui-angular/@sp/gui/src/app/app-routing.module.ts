@@ -5,11 +5,13 @@ import { DatabaseListComponent } from "./database-list/database-list.component";
 import { ConfigurationComponent } from "./configuration/configuration.component";
 import { LandingComponent } from "./landing/landing.component";
 import { EditProblemComponent } from "./edit-problem/edit-problem.component";
+import { AuthRedirectComponent } from "./auth-redirect/auth-redirect.component";
 
 const routes: Routes = [
   { path: "edit/:id", component: EditProblemComponent, pathMatch: "full" },
   { path: "openfile", component: OpenfileComponent },
   { path: "list", component: DatabaseListComponent },
+  { path: "redirect", component: AuthRedirectComponent },
   { path: "config", component: ConfigurationComponent },
   { path: "", component: LandingComponent, pathMatch: "full" },
 ];
