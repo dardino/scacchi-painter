@@ -26,6 +26,7 @@ import { ProblemDefinitionsComponent } from "./problem-definitions/problem-defin
 import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.component";
 import { ProblemPublicationComponent } from "./problem-publication/problem-publication.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { FileExplorerComponent } from './file-explorer/file-explorer.component';
 @NgModule({
   declarations: [
     ToolbarDbComponent,
@@ -38,6 +39,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     ProblemDefinitionsComponent,
     ProblemAuthorsComponent,
     ProblemPublicationComponent,
+    FileExplorerComponent
   ],
   imports: [
     CommonModule,
@@ -64,6 +66,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     ToolbarEditComponent,
     ToolbarEngineComponent,
     ToolbarPieceComponent,
+    FileExplorerComponent
   ],
   providers: [QuillInitializeService],
 })

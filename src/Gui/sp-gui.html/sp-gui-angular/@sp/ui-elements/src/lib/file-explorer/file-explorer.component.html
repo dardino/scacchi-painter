@@ -1,0 +1,7 @@
+<p>Current Path: {{currentItem.fullPath}}</p>
+<ul>
+  <li *ngFor="let item of items; index as i; trackBy: trackByFn" (click)="clickElement(item)">
+    <mat-icon *ngIf="item.type == 'folder'">folder</mat-icon>
+    {{item.itemName}}
+  </li>
+</ul>

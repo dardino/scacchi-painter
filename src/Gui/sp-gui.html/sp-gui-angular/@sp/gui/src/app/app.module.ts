@@ -31,6 +31,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { AuthRedirectComponent } from './auth-redirect/auth-redirect.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     RecentsComponent,
     TwinDialogComponent,
     ConditionsDialogComponent,
+    AuthRedirectComponent,
   ],
   imports: [
     CommonModule,

@@ -20,6 +20,9 @@
 		},
 		{
 			"path": "src/Gui/sp-gui.html/popeye-js"
+		},
+		{
+			"path": "../dropbox-sdk-js"
 		}
 	],
 	"settings": {

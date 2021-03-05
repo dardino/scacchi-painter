@@ -83,6 +83,9 @@ export class HostBridgeService {
   public get supportsSolve(): boolean {
     return typeof window.Bridge?.runSolve === "function";
   }
+  public get supportsOpen(): boolean {
+    return typeof window.Bridge?.openFile === "function";
+  }
   public closeApp() {
     if (window.Bridge) return window.Bridge.closeApp?.();
   }
