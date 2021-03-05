@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FileService, FolderItemInfo } from "@sp/dbmanager/src/lib/fileService";
+import { FileSelected, FileService, FolderItemInfo } from "@sp/dbmanager/src/lib/fileService";
 
 @Component({
   selector: "lib-file-explorer",
@@ -8,7 +8,7 @@ import { FileService, FolderItemInfo } from "@sp/dbmanager/src/lib/fileService";
 })
 export class FileExplorerComponent implements OnInit {
   @Input() service: FileService;
-  @Output() select = new EventEmitter<FolderItemInfo>();
+  @Output() select = new EventEmitter<FileSelected>();
 
   public currentItem: FolderItemInfo = {
     fullPath: "/",
@@ -39,9 +39,9 @@ export class FileExplorerComponent implements OnInit {
     this.refresh();
   }
 
-  private clickFile(item: FolderItemInfo): void {
-    const file = this.service.getFileContent(item);
-    this.select.emit(item);
+  private async clickFile(item: FolderItemInfo): Promise<void> {
+    const file = await this.service.getFileContent(item);
+    this.select.emit({ file, meta: item, source: "dropbox" });
   }
 
   private refresh() {

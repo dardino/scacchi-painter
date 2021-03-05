@@ -29,18 +29,23 @@ export class DropboxdbService implements FileService {
 
   constructor() {}
 
+  saveFileContent(file: File, item: FolderItemInfo): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
   async getFileContent(item: FolderItemInfo): Promise<File> {
     const urlToCall = `https://content.dropboxapi.com/2/files/download`;
     const result = await fetch(urlToCall, {
-      headers: this.getHeaders(),
+      headers: {
+        ...this.getHeaders(),
+        "Dropbox-API-Arg": JSON.stringify({
+          path: item.id,
+        }),
+      },
       method: "POST",
-      body: JSON.stringify({
-        path: item.id,
-      }),
     });
-    debugger;
-    console.log(result);
-    return new File([], item.itemName);
+    const blob = await result.blob();
+    return new File([blob], item.itemName);
   }
 
   async enumContent(
@@ -61,7 +66,7 @@ export class DropboxdbService implements FileService {
         ? `https://api.dropboxapi.com/2/files/list_folder/continue`
         : `https://api.dropboxapi.com/2/files/list_folder`;
     const result = await fetch(urlToCall, {
-      headers: this.getHeaders(),
+      headers: { ...this.getHeaders(), "Content-Type": `application/json` },
       method: "POST",
       body: JSON.stringify({
         path: folder,
@@ -90,7 +95,6 @@ export class DropboxdbService implements FileService {
   private getHeaders() {
     return {
       Authorization: `Bearer ${this.token?.access_token}`,
-      "Content-Type": `application/json`,
     };
   }
 }

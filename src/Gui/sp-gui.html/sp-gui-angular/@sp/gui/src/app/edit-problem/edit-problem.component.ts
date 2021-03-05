@@ -11,6 +11,7 @@ import {
   IPiece,
   getCanvasRotation,
   notNull,
+  DbmanagerService,
 } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
@@ -25,6 +26,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-edit-problem",
@@ -47,8 +49,10 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   constructor(
     private current: CurrentProblemService,
     private location: Location,
+    private route: ActivatedRoute,
     private bridge: HostBridgeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dbManager: DbmanagerService
   ) {}
 
   get solveInProgress() {
@@ -151,6 +155,17 @@ export class EditProblemComponent implements OnInit, OnDestroy {
         this.current.Problem.textSolution = this.rows.join(`\n`);
       }
     });
+
+    this.route.params.subscribe((params) => {
+      setTimeout(() => {
+        if (this.dbManager.All.length === 0) {
+          this.dbManager.Init(+params.id);
+        } else {
+          this.dbManager.GotoIndex(+params.id);
+        }
+      }, 1);
+    });
+
   }
 
   ngOnDestroy(): void {

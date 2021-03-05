@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     .observe(Breakpoints.Handset)
     .pipe(map((result) => result.matches));
   ngOnInit(): void {
-    this.db.LoadFromLocalStorage();
+
     this.matIconRegistry.addSvgIcon(
       `select_piece`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
