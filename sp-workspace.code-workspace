@@ -23,6 +23,9 @@
 		},
 		{
 			"path": "../dropbox-sdk-js"
+		},
+		{
+			"path": ".github"
 		}
 	],
 	"settings": {
