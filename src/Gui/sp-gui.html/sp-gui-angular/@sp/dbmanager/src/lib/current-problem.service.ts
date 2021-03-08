@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { DbmanagerService } from "./dbmanager.service";
 import {
   PieceRotation,
@@ -18,7 +18,7 @@ export class CurrentProblemService {
   public get Problem() {
     return this.dbManager.CurrentProblem;
   }
-  constructor(private dbManager: DbmanagerService, private ngZone: NgZone) {}
+  constructor(private dbManager: DbmanagerService) {}
   AddCondition(result: string | undefined) {
     if (typeof result === "string" && result.length > 0 && this.Problem) {
       this.Problem.conditions.push(result);

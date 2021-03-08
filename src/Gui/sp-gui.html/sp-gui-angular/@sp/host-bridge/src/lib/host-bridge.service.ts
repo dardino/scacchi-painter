@@ -25,7 +25,7 @@ export class HostBridgeService {
     return [];
   }
 
-  solveInProgress() {
+  get solveInProgress() {
     return this.subscription != null;
   }
 
@@ -34,8 +34,12 @@ export class HostBridgeService {
     if (window.Bridge) window.Bridge.stopSolve();
   }
 
+  supportsEngine(engine: string) {
+    return window.Bridge?.supportsEngine(engine);
+  }
+
   startSolve(CurrentProblem: Problem): Error | undefined {
-    if (this.subscription) {
+    if (this.solveInProgress) {
       console.warn("[WARN] -> Solver already started!");
       return new Error("Solver already started!");
     }

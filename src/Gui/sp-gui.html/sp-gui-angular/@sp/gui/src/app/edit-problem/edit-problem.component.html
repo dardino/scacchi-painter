@@ -1,13 +1,6 @@
 <div class="problem-editor">
   <section id="toolbar">
     <mat-toolbar>
-      <lib-toolbar-engine
-        *ngIf="engineEnabled"
-        (startSolve)="startSolve()"
-        (stopSolve)="stopSolve()"
-        [isRunning]="solveInProgress"
-        [hideLabels]="true"
-      ></lib-toolbar-engine>
       <lib-toolbar-edit
         (switchBoardType)="switchBoardType()"
         (editCommand)="editCommand($event)"
@@ -45,12 +38,26 @@
         <mat-tab label="Problem Data">
           <ng-template matTabContent>
             <div class="tab-content">
-              <lib-problem-info (openTwin)="openTwinDialog($event)" (deleteTwin)="deleteTwin($event)" (addCondition)="openConditionDialog()" (deleteCondition)="deleteCondition($event)"></lib-problem-info>
+              <lib-problem-info
+                (openTwin)="openTwinDialog($event)"
+                (deleteTwin)="deleteTwin($event)"
+                (addCondition)="openConditionDialog()"
+                (deleteCondition)="deleteCondition($event)"
+              ></lib-problem-info>
             </div>
           </ng-template>
         </mat-tab>
         <mat-tab label="Solution">
           <ng-template matTabContent>
+            <mat-toolbar>
+              <lib-toolbar-engine
+                *ngIf="engineEnabled"
+                (startSolve)="startSolve()"
+                (stopSolve)="stopSolve()"
+                [isRunning]="solveInProgress"
+                [hideLabels]="true"
+              ></lib-toolbar-engine>
+            </mat-toolbar>
             <div class="tab-content">
               <lib-sp-solution-desc [problem]="problem"></lib-sp-solution-desc>
             </div>

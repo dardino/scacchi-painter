@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FileSelected, FileService, FolderItemInfo } from "@sp/dbmanager/src/lib/fileService";
+import { FileSelected, FileService, FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
   selector: "lib-file-explorer",

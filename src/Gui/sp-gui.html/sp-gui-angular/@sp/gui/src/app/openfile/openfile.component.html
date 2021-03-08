@@ -49,6 +49,6 @@
     />
   </div>
   <div *ngIf="showDropboxFolder">
-    <lib-file-explorer [service]="dropboxService" (select)="openFile($event)"></lib-file-explorer>
+    <lib-file-explorer [service]="dropboxService" (select)="openFile($event, dropboxService)"></lib-file-explorer>
   </div>
 </div>
