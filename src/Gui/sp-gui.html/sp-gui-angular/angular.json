@@ -41,7 +41,8 @@
               "./custom-theme.scss",
               "@sp/gui/src/styles.styl"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": ["file-saver"]
           },
           "configurations": {
             "production": {
