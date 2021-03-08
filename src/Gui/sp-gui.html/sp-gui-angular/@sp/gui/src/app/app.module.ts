@@ -32,6 +32,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AuthRedirectComponent } from './auth-redirect/auth-redirect.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -72,6 +74,7 @@ import { AuthRedirectComponent } from './auth-redirect/auth-redirect.component';
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],
