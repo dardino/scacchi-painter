@@ -34,15 +34,6 @@ export function getImplicitAuthorizationUrl({
   return authUrl;
 }
 
-/*
-{
-  "token_type": "Bearer",
-  "expires_in": 86400,
-  "access_token": "NQbj5vOFbnwqgGNMz-j43E5dbAhIYk_5o3fSHrYUSmvPlRPEcwvV3A3Ruy_l0xpzas4QxUtG",
-  "scope": "photo offline_access",
-  "refresh_token": "6nYhlcrlILBzU4goWcZjbLJY"
-}
-*/
 export interface TokenResponse {
   uid: string,
   access_token: string,

@@ -27,7 +27,9 @@ class WebBridge implements BridgeGlobal {
   }
   private startSolve(problem: string) {
     problem.split("\n").forEach(row=> {
-      this.solver$.next(row);
+      setTimeout(() => {
+        this.solver$.next(row);
+      }, 1);
     })
     this.startWorker();
   }
@@ -44,7 +46,9 @@ class WebBridge implements BridgeGlobal {
   private messageError = (e: MessageEvent<string>) => {
     this.solver$.next({ exitCode: -1, message: e.data });
   }
-
+  supportsEngine(engine: string): boolean{
+    return engine === "Popeye";
+  }
   openFile(): File | PromiseLike<File | null> | null {
     throw new Error("Method not implemented.");
   }

@@ -13,7 +13,6 @@ import {
   notNull,
   DbmanagerService,
 } from "@sp/dbmanager/src/public-api";
-import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
 import { Location } from "@angular/common";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -27,6 +26,7 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { ActivatedRoute } from "@angular/router";
+import { EngineManagerService } from "@sp/dbmanager/src/public-api";
 
 @Component({
   selector: "app-edit-problem",
@@ -43,21 +43,25 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   public get engineEnabled() {
-    return this.bridge && this.bridge.supportsSolve;
+    return this.engine && this.engine.supportsSolve;
   }
+
+  solveInProgress: boolean;
 
   constructor(
     private current: CurrentProblemService,
     private location: Location,
     private route: ActivatedRoute,
-    private bridge: HostBridgeService,
+    private engine: EngineManagerService,
     private dialog: MatDialog,
     private dbManager: DbmanagerService
-  ) {}
-
-  get solveInProgress() {
-    return this.bridge.solveInProgress();
+  ) {
+    this.engine.isSolving$.subscribe(state => {
+      this.solveInProgress = state;
+    });
   }
+
+
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
   @ViewChild("panelright") panelright: ElementRef;
 
@@ -131,13 +135,13 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     if (this.current.Problem) {
       this.current.Problem.htmlSolution = "";
       this.current.Problem.textSolution = "";
-      this.bridge.startSolve(this.current.Problem);
+      this.engine.startSolving(this.current.Problem);
     }
     this.resetActions();
   }
 
   stopSolve() {
-    this.bridge.stopSolve();
+    this.engine.stopSolving();
     this.resetActions();
   }
 
@@ -147,7 +151,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscribe = this.bridge.Solver$.subscribe((msg) => {
+    this.subscribe = this.engine.solution$.subscribe((msg) => {
       this.rows.push(...msg.replace(/\r/g, "").split("\n"));
       this.rows$ubject.next(this.rows);
       if (this.current.Problem) {

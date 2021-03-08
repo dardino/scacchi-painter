@@ -22,6 +22,12 @@ export class SpSolutionDescComponent implements OnInit {
   set solution(txt: string) {
     if (this.problem) this.problem.textSolution = txt;
   }
+  get solutionHTML() {
+    return this.problem?.htmlSolution ?? "";
+  }
+  set solutionHTML(txt: string) {
+    if (this.problem) this.problem.htmlSolution = txt;
+  }
 
   get rows() {
     return this.problem?.textSolution.split("\n") ?? [];

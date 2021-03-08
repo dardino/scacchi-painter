@@ -12,7 +12,6 @@ import { SpToolbarButtonComponent } from "./sp-toolbar-button/sp-toolbar-button.
 import { SpSolutionDescComponent } from "./sp-solution-desc/sp-solution-desc.component";
 import { ProblemInfoComponent } from "./problem-info/problem-info.component";
 import { ToolbarEditComponent } from "./toolbar-edit/toolbar-edit.component";
-import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
 import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
 import { NgModule } from "@angular/core";
 import { QuillModule } from "ngx-quill";
@@ -20,13 +19,14 @@ import { FormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { DragDropModule } from "@angular/cdk/drag-drop";
-
 import { QuillInitializeService } from "./services/quillInitialize.service";
 import { ProblemDefinitionsComponent } from "./problem-definitions/problem-definitions.component";
 import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.component";
 import { ProblemPublicationComponent } from "./problem-publication/problem-publication.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { FileExplorerComponent } from './file-explorer/file-explorer.component';
+import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
+
 @NgModule({
   declarations: [
     ToolbarDbComponent,
@@ -34,8 +34,8 @@ import { FileExplorerComponent } from './file-explorer/file-explorer.component';
     SpSolutionDescComponent,
     ProblemInfoComponent,
     ToolbarEditComponent,
-    ToolbarEngineComponent,
     ToolbarPieceComponent,
+    ToolbarEngineComponent,
     ProblemDefinitionsComponent,
     ProblemAuthorsComponent,
     ProblemPublicationComponent,

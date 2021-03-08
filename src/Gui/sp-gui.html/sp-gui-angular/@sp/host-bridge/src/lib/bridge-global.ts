@@ -7,6 +7,7 @@ export interface BridgeGlobal {
   closeApp?(): void;
   stopSolve(): void;
   runSolve(CurrentProblem: Problem, engine: string): Observable<string | EOF> | Error;
+  supportsEngine(engine: string): boolean;
 }
 
 export interface EOF {

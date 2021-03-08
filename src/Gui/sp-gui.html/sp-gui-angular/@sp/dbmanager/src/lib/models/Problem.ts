@@ -33,6 +33,7 @@ export class Problem implements IProblem {
   public personalID = "";
   public prizeDescription = "";
   public source = "";
+  public engine = "Popeye";
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});

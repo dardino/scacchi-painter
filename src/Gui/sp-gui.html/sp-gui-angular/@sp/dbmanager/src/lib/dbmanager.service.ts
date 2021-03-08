@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IProblem } from "./helpers";
-import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Problem } from "./models/problem";
-import { Observable, Subject } from "rxjs";
-import { FileSelected } from "./fileService";
+import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 
 interface IDbSpX {
   lastIndex: number;
@@ -18,7 +16,8 @@ interface IDbSpX {
 export class DbmanagerService {
   private currentIndex = 0;
   private currentFile: Omit<FileSelected, "file"> | null = null;
-  private solveOut$: Subject<string>;
+  private fileService: FileService | null;
+
   public All: Problem[] = [];
 
   get FileName() {
@@ -39,12 +38,14 @@ export class DbmanagerService {
     return this.currentProblem?.pieces ?? [];
   }
 
-  constructor(private bridge: HostBridgeService) {}
+  constructor() {
+  }
 
   //#region PUBLIC LOADS
-  async Load({ file, meta, source }: FileSelected): Promise<Error | null> {
+  async Load({ file, meta, source }: FileSelected, fileService: FileService | null): Promise<Error | null> {
     this.reset();
     this.currentFile = { meta, source };
+    this.fileService = fileService;
     const content = await file.text();
     return await this.loadFromContent(content);
   }
@@ -110,7 +111,7 @@ export class DbmanagerService {
     const type =
       this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3";
     const file = await this.getDbFile(type);
-    this.bridge.saveFile(file, type);
+    if (this.fileService && this.currentFile) this.fileService?.saveFileContent(file, this.currentFile?.meta);
   }
   private async loadFromJson(jsonString: string): Promise<Error | null> {
     try {
@@ -182,6 +183,7 @@ export class DbmanagerService {
   private reset() {
     this.currentIndex = 0;
     this.currentProblem = null;
+    this.fileService = null;
   }
 
   private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {
@@ -199,18 +201,4 @@ export class DbmanagerService {
     }
   }
 
-  public startSolving(): Observable<string> | Error {
-    if (!this.currentProblem) {
-      return new Error("unable to solve a null problem!");
-    }
-    this.solveOut$ = new Subject();
-    this.bridge.startSolve(this.currentProblem);
-    return this.solveOut$.asObservable();
-  }
-
-  public stopSolving(): void {
-    this.bridge.stopSolve();
-    this.solveOut$.next("*** stopped by user ***");
-    this.solveOut$.unsubscribe();
-  }
 }
