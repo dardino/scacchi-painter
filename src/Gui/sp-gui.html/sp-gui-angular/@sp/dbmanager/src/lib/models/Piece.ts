@@ -122,7 +122,8 @@ export class Piece implements IPiece {
 
   isFairy() {
     return (
-      (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? "None") !== "None"
+      (this.fairyCode ?? []).length > 0 ||
+      (this.fairyAttribute ?? "None") !== "None"
     );
   }
 
@@ -139,7 +140,9 @@ export class Piece implements IPiece {
   }
 
   cursor() {
-    return `${this.color === "White" ? "w" : this.color === "Black" ? "b" : "n"}_${this.appearance}`;
+    return `${
+      this.color === "White" ? "w" : this.color === "Black" ? "b" : "n"
+    }_${this.appearance}`;
   }
   private constructor() {
     this.appearance = "";

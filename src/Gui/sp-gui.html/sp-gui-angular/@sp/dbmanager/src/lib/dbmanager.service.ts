@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IProblem } from "./helpers";
-import { Problem } from "./models/problem";
+import { Problem } from "./models/Problem";
 import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 
 interface IDbSpX {

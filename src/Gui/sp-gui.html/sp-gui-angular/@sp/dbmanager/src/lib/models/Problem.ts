@@ -68,9 +68,9 @@ export class Problem implements IProblem {
     p.authors = Array.from(source.querySelectorAll("Author")).map((a) =>
       Author.fromElement(a)
     );
-    p.conditions = Array.from(source.querySelectorAll("Conditions") ?? []).map(
-      (el) => el.nodeValue ?? ""
-    ).filter(notEmpty);
+    p.conditions = Array.from(source.querySelectorAll("Conditions") ?? [])
+      .map((el) => el.nodeValue ?? "")
+      .filter(notEmpty);
 
     p.fairyCells = [];
     p.snapshots = {};
@@ -226,9 +226,9 @@ export class Problem implements IProblem {
   ) {
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
-    const prob = JSON.parse(Base64.decode(this.snapshots[id])) as Partial<
-      IProblem
-    >;
+    const prob = JSON.parse(
+      Base64.decode(this.snapshots[id])
+    ) as Partial<IProblem>;
     Problem.applyJson(prob, this);
     this.currentSnapshotId = id;
   }
