@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { IProblem } from './helpers';
-import { Problem } from './models/problem';
-import { FileSelected, FileService } from '@sp/host-bridge/src/lib/fileService';
+import { Injectable } from "@angular/core";
+import { IProblem } from "./helpers";
+import { Problem } from "./models/problem";
+import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 
 interface IDbSpX {
   lastIndex: number;
@@ -11,11 +11,11 @@ interface IDbSpX {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class DbmanagerService {
   private currentIndex = 0;
-  private currentFile: Omit<FileSelected, 'file'> | null = null;
+  private currentFile: Omit<FileSelected, "file"> | null = null;
   private fileService: FileService | null;
 
   public All: Problem[] = [];
@@ -58,18 +58,18 @@ export class DbmanagerService {
   }
 
   private async loadFromLocalStorage() {
-    const spdb = localStorage.getItem('spdb') ?? null;
-    const spdbInfo = localStorage.getItem('spdb_info') ?? null;
+    const spdb = localStorage.getItem("spdb") ?? null;
+    const spdbInfo = localStorage.getItem("spdb_info") ?? null;
     if (spdb == null || spdbInfo == null) {
       return;
     }
     const { meta, source } = JSON.parse(spdbInfo) as Omit<
       FileSelected,
-      'file'
+      "file"
     >;
     this.reset();
     this.currentFile = { meta, source };
-    await this.loadFromContent(spdb, 'sp3');
+    await this.loadFromContent(spdb, "sp3");
   }
 
   setCurrentProblem(problem: Problem) {
@@ -79,15 +79,15 @@ export class DbmanagerService {
   private async saveToLocalStorage() {
     if (!this.currentFile) return;
     const text = JSON.stringify(this.toJSON());
-    localStorage.setItem('spdb', text);
-    localStorage.setItem('spdb_info', JSON.stringify(this.currentFile));
+    localStorage.setItem("spdb", text);
+    localStorage.setItem("spdb_info", JSON.stringify(this.currentFile));
   }
 
   private toJSON(): IDbSpX {
     return {
       lastIndex: this.currentIndex,
       problems: this.All.map((p) => p.toJson()),
-      name: 'Scacchi Painter X Database',
+      name: "Scacchi Painter X Database",
       version: 3,
     };
   }
@@ -96,20 +96,20 @@ export class DbmanagerService {
     const problems = await Promise.all(this.All.map((f) => f.toSP2Xml()));
     const parser = new DOMParser();
     const doc = parser.parseFromString(
-      `<ScacchiPainterDatabase></ScacchiPainterDatabase>`,
-      'text/xml'
+      "<ScacchiPainterDatabase></ScacchiPainterDatabase>",
+      "text/xml"
     );
-    const root = doc.querySelector('ScacchiPainterDatabase') as Element;
-    root.setAttribute('version', '0.1.0.2');
-    root.setAttribute('name', 'Scacchi Painter 2 Database');
-    root.setAttribute('lastIndex', this.CurrentIndex.toFixed(0));
+    const root = doc.querySelector("ScacchiPainterDatabase") as Element;
+    root.setAttribute("version", "0.1.0.2");
+    root.setAttribute("name", "Scacchi Painter 2 Database");
+    root.setAttribute("lastIndex", this.CurrentIndex.toFixed(0));
     problems.forEach((p) => root.appendChild(p));
     return doc;
   }
 
   public async Save() {
     const type =
-      this.currentFile?.meta.fullPath.substr(-4) === '.sp2' ? 'sp2' : 'sp3';
+      this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3";
     const file = await this.getDbFile(type);
     if (this.fileService && this.currentFile) this.fileService?.saveFileContent(file, this.currentFile?.meta);
   }
@@ -126,14 +126,14 @@ export class DbmanagerService {
   private async loadFromXML(xmlText: string) {
     try {
       const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+      const xmlDoc = parser.parseFromString(xmlText, "text/xml");
       this.All = await Promise.all(
-        Array.from(xmlDoc.querySelectorAll('SP_Item')).map((e) =>
+        Array.from(xmlDoc.querySelectorAll("SP_Item")).map((e) =>
           Problem.fromElement(e)
         )
       );
       this.currentIndex = parseInt(
-        xmlDoc.documentElement.getAttribute('lastIndex') ?? '0',
+        xmlDoc.documentElement.getAttribute("lastIndex") ?? "0",
         10
       );
       return null;
@@ -145,16 +145,16 @@ export class DbmanagerService {
 
   private async loadFromContent(
     content: string,
-    forceVersion?: 'sp2' | 'sp3'
+    forceVersion?: "sp2" | "sp3"
   ): Promise<Error | null> {
-    const version: 'sp2' | 'sp3' =
+    const version: "sp2" | "sp3" =
       forceVersion ??
-      (this.currentFile?.meta.fullPath.substr(-4) === '.sp2' ? 'sp2' : 'sp3');
+      (this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3");
     switch (version) {
-      case 'sp2':
+      case "sp2":
         await this.loadFromXML(content);
         break;
-      case 'sp3':
+      case "sp3":
         await this.loadFromJson(content);
         break;
       default:
@@ -186,18 +186,18 @@ export class DbmanagerService {
     this.fileService = null;
   }
 
-  private async getDbFile(type: 'sp2' | 'sp3' = 'sp3'): Promise<File> {
-    if (type === 'sp2') {
+  private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {
+    if (type === "sp2") {
       const xmlDoc = await this.ToXML();
       const text =
-        `<?xml version="1.0" encoding="utf-8"?>\r` +
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r" +
         new XMLSerializer().serializeToString(xmlDoc.documentElement);
-      const fullpath = this.currentFile?.meta.fullPath ?? 'temp.sp2';
-      return new File([text], fullpath, { type: 'application/xml' });
+      const fullpath = this.currentFile?.meta.fullPath ?? "temp.sp2";
+      return new File([text], fullpath, { type: "application/xml" });
     } else {
       const text = JSON.stringify(this.toJSON());
-      const fullpath = this.currentFile?.meta.fullPath ?? 'temp.sp3';
-      return new File([text], fullpath, { type: 'application/json' });
+      const fullpath = this.currentFile?.meta.fullPath ?? "temp.sp3";
+      return new File([text], fullpath, { type: "application/json" });
     }
   }
 

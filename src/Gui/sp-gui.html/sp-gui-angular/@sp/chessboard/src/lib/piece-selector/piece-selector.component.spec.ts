@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { PieceSelectorComponent } from './piece-selector.component';
+import { PieceSelectorComponent } from "./piece-selector.component";
 
-describe('PieceSelectorComponent', () => {
+describe("PieceSelectorComponent", () => {
   let component: PieceSelectorComponent;
   let fixture: ComponentFixture<PieceSelectorComponent>;
 
@@ -18,7 +18,7 @@ describe('PieceSelectorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

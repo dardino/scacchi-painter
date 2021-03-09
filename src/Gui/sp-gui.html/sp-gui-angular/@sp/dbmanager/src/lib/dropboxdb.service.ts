@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { FileService, FolderItemInfo } from '@sp/host-bridge/src/lib/fileService';
-import { getDropboxToken } from './dropbox/dropboxcli';
-import { TokenResponse } from './oauth_funcs/pkce';
+import { Injectable } from "@angular/core";
+import { FileService, FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
+import { getDropboxToken } from "./dropbox/dropboxcli";
+import { TokenResponse } from "./oauth_funcs/pkce";
 
 interface DropboxFileInfo {
-  '.tag': 'folder' | 'file';
+  ".tag": "folder" | "file";
   id: string;
   name: string;
   path_display: string;
@@ -12,7 +12,7 @@ interface DropboxFileInfo {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class DropboxdbService implements FileService {
 
@@ -30,19 +30,19 @@ export class DropboxdbService implements FileService {
   }
 
   saveFileContent(file: File, item: FolderItemInfo): Promise<void> {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
   }
 
   async getFileContent(item: FolderItemInfo): Promise<File> {
-    const urlToCall = `https://content.dropboxapi.com/2/files/download`;
+    const urlToCall = "https://content.dropboxapi.com/2/files/download";
     const result = await fetch(urlToCall, {
       headers: {
         ...this.getHeaders(),
-        'Dropbox-API-Arg': JSON.stringify({
+        "Dropbox-API-Arg": JSON.stringify({
           path: item.id,
         }),
       },
-      method: 'POST',
+      method: "POST",
     });
     const blob = await result.blob();
     return new File([blob], item.itemName);
@@ -63,11 +63,11 @@ export class DropboxdbService implements FileService {
   ): Promise<FolderItemInfo[]> {
     const urlToCall =
       this.currentCursor?.length ?? 0 > 0
-        ? `https://api.dropboxapi.com/2/files/list_folder/continue`
-        : `https://api.dropboxapi.com/2/files/list_folder`;
+        ? "https://api.dropboxapi.com/2/files/list_folder/continue"
+        : "https://api.dropboxapi.com/2/files/list_folder";
     const result = await fetch(urlToCall, {
-      headers: { ...this.getHeaders(), 'Content-Type': `application/json` },
-      method: 'POST',
+      headers: { ...this.getHeaders(), "Content-Type": "application/json" },
+      method: "POST",
       body: JSON.stringify({
         path: folder,
         limit: this.pagesize,
@@ -82,7 +82,7 @@ export class DropboxdbService implements FileService {
       this.currentCursor = respJson.cursor;
       this.hasMore = respJson.has_more;
       return respJson.entries.map((ent) => ({
-        type: ent['.tag'],
+        type: ent[".tag"],
         id: ent.id,
         fullPath: ent.path_display,
         itemName: ent.name,

@@ -1,41 +1,41 @@
 /* eslint-disable max-len */
 export const EngineOptions = {
-  Try: { argsCount: 0, help: `calculate if a move is a try.` },
+  Try: { argsCount: 0, help: "calculate if a move is a try." },
   Defence: {
     argsCount: 0,
     help: `this option is followed by a number indicating the number of defences which should be taken into consideration.
     For instance Defence 1 all real tries are calculated.`,
   },
-  SetPlay: { argsCount: 0, help: `calculate setplay.` },
+  SetPlay: { argsCount: 0, help: "calculate setplay." },
   NullMoves: {
     argsCount: 0,
-    help: `Allows the moving side to play a null move. Servers for finding tempo tries.`,
+    help: "Allows the moving side to play a null move. Servers for finding tempo tries.",
   },
   Threat: {
     argsCount: 0,
     help: `for moremovers: This option must be followed by an integer.
     The opposit party has defended when there is no threat in less or equal this number of moves.`,
   },
-  WhiteToPlay: { argsCount: 0, help: `white starts moving in helpplay.` },
-  Variation: { argsCount: 0, help: `show threats and variations.` },
+  WhiteToPlay: { argsCount: 0, help: "white starts moving in helpplay." },
+  Variation: { argsCount: 0, help: "show threats and variations." },
   MoveNumbers: {
     argsCount: 0,
-    help: `Movenumber, already calculated move and cumulated solving time on output.`,
+    help: "Movenumber, already calculated move and cumulated solving time on output.",
   },
   StartMoveNumber: {
     argsCount: 0,
-    help: `This option is followed by the Movenumber popeye was interrupted at.`,
+    help: "This option is followed by the Movenumber popeye was interrupted at.",
   },
-  NoWk: { argsCount: 0, help: `without white king` },
-  NoBk: { argsCount: 0, help: `without black king` },
-  Duplex: { argsCount: 0, help: `calculate stipulation for both sides` },
+  NoWk: { argsCount: 0, help: "without white king" },
+  NoBk: { argsCount: 0, help: "without black king" },
+  Duplex: { argsCount: 0, help: "calculate stipulation for both sides" },
   NoThreat: {
     argsCount: 0,
-    help: `calculate variations without calculating threats`,
+    help: "calculate variations without calculating threats",
   },
   MaxSolutions: {
     argsCount: 0,
-    help: `This option must be followed by an integer. Popeye stops calculating if this number of solutions are reached.`,
+    help: "This option must be followed by an integer. Popeye stops calculating if this number of solutions are reached.",
   },
   MaxFlightsquares: {
     argsCount: 0,
@@ -63,19 +63,19 @@ export const EngineOptions = {
   },
   NoBoard: {
     argsCount: 0,
-    help: `chessboard is not printed to screen or into file.`,
+    help: "chessboard is not printed to screen or into file.",
   },
   NoShortVariations: {
     argsCount: 0,
-    help: `Short variations are suppressed on output.`,
+    help: "Short variations are suppressed on output.",
   },
   HalfDuplex: {
     argsCount: 0,
-    help: `calculate stipulation only for the opponent side.`,
+    help: "calculate stipulation only for the opponent side.",
   },
   PostKeyPlay: {
     argsCount: 0,
-    help: `The position entered is considered to be the position after the key. Just the solution play is analysed.`,
+    help: "The position entered is considered to be the position after the key. Just the solution play is analysed.",
   },
   NonTrivial: {
     argsCount: 2,
@@ -99,23 +99,23 @@ export const EngineOptions = {
   },
   NoCastling: {
     argsCount: 0,
-    help: `This option must be followed by the squares of those pieces that cannot castle anymore in the diagram position.`,
+    help: "This option must be followed by the squares of those pieces that cannot castle anymore in the diagram position.",
   },
   Quodlibet: {
     argsCount: 0,
-    help: `In s# or r# also direct mates are a solution.`,
+    help: "In s# or r# also direct mates are a solution.",
   },
   StopOnShortSolutions: {
     argsCount: 0,
-    help: `Calculation is terminated after detecting of short solutions.`,
+    help: "Calculation is terminated after detecting of short solutions.",
   },
   Beep: {
     argsCount: 0,
-    help: `This option can be followed by an integer. Each time Popeye has found a solution it beeps a number of times.`,
+    help: "This option can be followed by an integer. Each time Popeye has found a solution it beeps a number of times.",
   },
   SuppressGrid: {
     argsCount: 0,
-    help: `(Grid Chess) Suppress the rendition of grid lines in text and LaTeX output.`,
+    help: "(Grid Chess) Suppress the rendition of grid lines in text and LaTeX output.",
   },
   WriteGrid: {
     argsCount: 0,
@@ -124,7 +124,7 @@ export const EngineOptions = {
   },
   KeepMatingPiece: {
     argsCount: 0,
-    help: `Stop solving when there is no piece left that could deliver mate.`,
+    help: "Stop solving when there is no piece left that could deliver mate.",
   },
   LastCapture: {
     argsCount: 1,
@@ -133,6 +133,6 @@ export const EngineOptions = {
   },
   GoalIsEnd: {
     argsCount: 0,
-    help: `applicable if the goal doesn't lead to immobility (e.g. z, x): the play ends if the wrong side reaches the goal.`,
+    help: "applicable if the goal doesn't lead to immobility (e.g. z, x): the play ends if the wrong side reaches the goal.",
   },
 } as const;

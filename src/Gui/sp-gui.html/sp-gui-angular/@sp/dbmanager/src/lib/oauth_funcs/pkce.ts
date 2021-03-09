@@ -1,7 +1,7 @@
-const charecters = `qwertzuioplkjhgfdsayxcvbnm1234567890YAQWSXCDERFVBGTZHNMJUIKLOP-_.~`;
+const charecters = "qwertzuioplkjhgfdsayxcvbnm1234567890YAQWSXCDERFVBGTZHNMJUIKLOP-_.~";
 export const generateStateString = (): string => {
   let len = 16;
-  let generated = '';
+  let generated = "";
   while (len--) {
     const i = Math.floor(Math.random() * charecters.length);
     generated += charecters[i];
@@ -24,11 +24,11 @@ export const getImplicitAuthorizationUrl = ({
 }): string => {
   const authUrl =
     authEp +
-    `?` +
-    `response_type=token` +
+    "?" +
+    "response_type=token" +
     `&client_id=${clientId}` +
     `&redirect_uri=${redirectUri}` +
-    `&scope=${scopes.join('+')}` +
+    `&scope=${scopes.join("+")}` +
     `&state=${state}`;
 
   return authUrl;
