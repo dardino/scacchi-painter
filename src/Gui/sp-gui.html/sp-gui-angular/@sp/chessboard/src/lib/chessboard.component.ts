@@ -156,7 +156,8 @@ export class ChessboardComponent
       }
     }
     if (this.canvasBoard && pp) {
-      const bps = pp.map((p) => p.ConvertToCanvasPiece()).filter<BP>(notNull);
+      const mappedPieces: BP[] = pp.map((p) => p.ConvertToCanvasPiece())
+      const bps = mappedPieces.filter(notNull);
       this.canvasBoard.SetPieces(bps);
     }
 

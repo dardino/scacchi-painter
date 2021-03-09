@@ -18,7 +18,7 @@ export async function getDropboxToken(): Promise<TokenResponse | null> {
   const authUrl = getImplicitAuthorizationUrl({
     auth_ep: `https://www.dropbox.com/oauth2/authorize`,
     client_id: `17wgnjkqr3zs4sa`,
-    redirect_uri: `https://localhost:4200/redirect`,
+    redirect_uri: `${location.origin}/redirect`,
     scopes: [
       "files.content.write",
       "files.content.read",
