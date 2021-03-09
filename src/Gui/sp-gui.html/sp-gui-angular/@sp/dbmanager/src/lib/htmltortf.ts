@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export default `<?xml version="1.0" encoding="Windows-1252"?>
 <!-- $Id: xhtml2rtf.xsl 166 2005-12-15 09:38:34Z wpc0756\\Emmanuel $ -->
 <!--

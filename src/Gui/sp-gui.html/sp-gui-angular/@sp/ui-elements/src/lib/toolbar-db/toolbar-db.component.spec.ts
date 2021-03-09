@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ToolbarDbComponent } from "./toolbar-db.component";
+import { ToolbarDbComponent } from './toolbar-db.component';
 
-describe("ToolbarComponent", () => {
+describe('ToolbarComponent', () => {
   let component: ToolbarDbComponent;
   let fixture: ComponentFixture<ToolbarDbComponent>;
 
@@ -18,7 +18,7 @@ describe("ToolbarComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

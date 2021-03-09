@@ -1,7 +1,7 @@
-import { TestBed } from "@angular/core/testing";
+import { TestBed } from '@angular/core/testing';
 
-import { DbmanagerService } from "./dbmanager.service";
-describe("DbmanagerService", () => {
+import { DbmanagerService } from './dbmanager.service';
+describe('DbmanagerService', () => {
   let service: DbmanagerService;
 
   beforeEach(() => {
@@ -9,11 +9,11 @@ describe("DbmanagerService", () => {
     service = TestBed.inject(DbmanagerService);
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  describe("parsing SP2", () => {
+  describe('parsing SP2', () => {
     const fileSample = `<ScacchiPainterDatabase version="0.1.0.3" name="Scacchi Painter 2 Database" lastIndex="0">
     <SP_Item ProblemType="Direct" Moves="2" Date="2020-06-07T22:00:00Z" Maximum="false" Serie="false" PrizeRank="0" CompleteStipulationDesc="#" PersonalID="" PrizeDescription="" Source="" Stipulation="Mate">
       <Authors />
@@ -61,10 +61,10 @@ describe("DbmanagerService", () => {
     </SP_Item>
   </ScacchiPainterDatabase>`;
 
-    it("Rotations", () => {
-      service.LoadFromText(fileSample, "sample.sp2");
+    it('Rotations', () => {
+      service.LoadFromText(fileSample, 'sample.sp2');
       expect(service.CurrentProblem?.getCurrentFen()).toBe(
-        "KQRBNP2/kqrbnp2/*K*Q*R*B*N*P2/8/ETA1QQ:1Q:2Q:3/eta1Q:4Q:5Q:6Q:7/*E*T*A5/8"
+        'KQRBNP2/kqrbnp2/*K*Q*R*B*N*P2/8/ETA1QQ:1Q:2Q:3/eta1Q:4Q:5Q:6Q:7/*E*T*A5/8'
       );
     });
   });

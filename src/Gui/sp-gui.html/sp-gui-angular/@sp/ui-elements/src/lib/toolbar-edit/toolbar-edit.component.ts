@@ -1,26 +1,26 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { MatIconRegistry } from "@angular/material/icon";
-import { DomSanitizer } from "@angular/platform-browser";
-import { MatButtonToggleChange } from "@angular/material/button-toggle";
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 export type EditCommand =
-  | "rotateL"
-  | "rotateR"
-  | "flipH"
-  | "flipV"
-  | "moveD"
-  | "moveU"
-  | "moveL"
-  | "moveR"
-  | "resetPosition"
-  | "clearBoard";
+  | 'rotateL'
+  | 'rotateR'
+  | 'flipH'
+  | 'flipV'
+  | 'moveD'
+  | 'moveU'
+  | 'moveL'
+  | 'moveR'
+  | 'resetPosition'
+  | 'clearBoard';
 
-export type EditModes = "select" | "add" | "remove" | "move";
+export type EditModes = 'select' | 'add' | 'remove' | 'move';
 
 @Component({
-  selector: "lib-toolbar-edit",
-  templateUrl: "./toolbar-edit.component.html",
-  styleUrls: ["./toolbar-edit.component.styl"],
+  selector: 'lib-toolbar-edit',
+  templateUrl: './toolbar-edit.component.html',
+  styleUrls: ['./toolbar-edit.component.styl'],
 })
 export class ToolbarEditComponent implements OnInit {
   constructor() {}
@@ -30,7 +30,7 @@ export class ToolbarEditComponent implements OnInit {
   @Output() editModeChanged = new EventEmitter<EditModes>();
 
   @Input()
-  editMode: EditModes = "select";
+  editMode: EditModes = 'select';
 
   switchBT() {
     this.switchBoardType.emit();
@@ -44,33 +44,33 @@ export class ToolbarEditComponent implements OnInit {
   }
 
   rotateRight() {
-    this.editCommand.emit("rotateR");
+    this.editCommand.emit('rotateR');
   }
   rotateLeft() {
-    this.editCommand.emit("rotateL");
+    this.editCommand.emit('rotateL');
   }
   flipHorizontal() {
-    this.editCommand.emit("flipH");
+    this.editCommand.emit('flipH');
   }
   flipVertical() {
-    this.editCommand.emit("flipV");
+    this.editCommand.emit('flipV');
   }
   moveDown() {
-    this.editCommand.emit("moveD");
+    this.editCommand.emit('moveD');
   }
   moveUp() {
-    this.editCommand.emit("moveU");
+    this.editCommand.emit('moveU');
   }
   moveLeft() {
-    this.editCommand.emit("moveL");
+    this.editCommand.emit('moveL');
   }
   moveRight() {
-    this.editCommand.emit("moveR");
+    this.editCommand.emit('moveR');
   }
   resetPosition() {
-    this.editCommand.emit("resetPosition");
+    this.editCommand.emit('resetPosition');
   }
   clearBoard() {
-    this.editCommand.emit("clearBoard");
+    this.editCommand.emit('clearBoard');
   }
 }

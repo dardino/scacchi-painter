@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export const EngineOptions = {
   Try: { argsCount: 0, help: `calculate if a move is a try.` },
   Defence: {

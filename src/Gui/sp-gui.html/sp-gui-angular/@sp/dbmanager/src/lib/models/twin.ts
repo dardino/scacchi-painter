@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   ITwin,
   TwinTypes,
@@ -5,7 +6,7 @@ import {
   TwinTypesKeys,
   TwinModesKeys,
   createXmlElement,
-} from "../helpers";
+} from '../helpers';
 
 export class Twin implements ITwin {
   TwinType: TwinTypes;
@@ -17,41 +18,41 @@ export class Twin implements ITwin {
   public static fromElement(el: Element): Twin {
     const t = new Twin();
     t.TwinType =
-      TwinTypes[(el.getAttribute("TwinType") as TwinTypesKeys) ?? "Diagram"];
+      TwinTypes[(el.getAttribute('TwinType') as TwinTypesKeys) ?? 'Diagram'];
     t.TwinModes =
-      TwinModes[(el.getAttribute("TwinModes") as TwinModesKeys) ?? "Normal"];
-    t.ValueA = el.getAttribute("ValueA") ?? "";
-    t.ValueB = el.getAttribute("ValueB") ?? "";
-    t.ValueC = el.getAttribute("ValueC") ?? "";
+      TwinModes[(el.getAttribute('TwinModes') as TwinModesKeys) ?? 'Normal'];
+    t.ValueA = el.getAttribute('ValueA') ?? '';
+    t.ValueB = el.getAttribute('ValueB') ?? '';
+    t.ValueC = el.getAttribute('ValueC') ?? '';
     return t;
   }
   static fromJson(fromJson: Partial<ITwin>): Twin {
     const t = new Twin();
     t.TwinType = fromJson.TwinType ?? TwinTypes.Diagram;
     t.TwinModes = fromJson.TwinModes ?? TwinModes.Normal;
-    t.ValueA = fromJson.ValueA ?? "";
-    t.ValueB = fromJson.ValueB ?? "";
-    t.ValueC = fromJson.ValueC ?? "";
+    t.ValueA = fromJson.ValueA ?? '';
+    t.ValueB = fromJson.ValueB ?? '';
+    t.ValueC = fromJson.ValueC ?? '';
     return t;
   }
 
   private constructor() {
     this.TwinType = TwinTypes.Diagram;
     this.TwinModes = TwinModes.Normal;
-    this.ValueA = "";
-    this.ValueB = "";
-    this.ValueC = "";
+    this.ValueA = '';
+    this.ValueB = '';
+    this.ValueC = '';
   }
   public toString(): string {
     return twinmapper[this.TwinType](this.ValueA, this.ValueB, this.ValueC);
   }
   toSP2Xml(): Element {
-    const twin = createXmlElement("Twin");
-    twin.setAttribute("TwinType", this.TwinType);
-    twin.setAttribute("ValueA", this.ValueA);
-    twin.setAttribute("ValueB", this.ValueB);
-    twin.setAttribute("ValueC", this.ValueC);
-    twin.setAttribute("TwinModes", this.TwinModes);
+    const twin = createXmlElement('Twin');
+    twin.setAttribute('TwinType', this.TwinType);
+    twin.setAttribute('ValueA', this.ValueA);
+    twin.setAttribute('ValueB', this.ValueB);
+    twin.setAttribute('ValueC', this.ValueC);
+    twin.setAttribute('TwinModes', this.TwinModes);
     return twin;
   }
   toJson(): ITwin {
@@ -67,7 +68,7 @@ export class Twin implements ITwin {
 }
 
 const twinmapper = {
-  [TwinTypes.Custom]: (...args: string[]) => args.join(" ").trim(),
+  [TwinTypes.Custom]: (...args: string[]) => args.join(' ').trim(),
   [TwinTypes.Diagram]: () => `Diagram`,
   [TwinTypes.MovePiece]: (...args: string[]) =>
     `${args[0]} -> ${args[1]}`.trim(),

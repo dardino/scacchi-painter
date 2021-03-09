@@ -1,4 +1,4 @@
-import { Piece as BP } from "canvas-chessboard/modules/es2018/canvasChessBoard";
+import { Piece as BP } from 'canvas-chessboard/modules/es2018/canvasChessBoard';
 
 import {
   IPiece,
@@ -11,17 +11,17 @@ import {
   getRotationSymbol,
   getCanvasColor,
   createXmlElement,
-} from "../helpers";
-import { SP2 } from "../SP2";
+} from '../helpers';
+import { SP2 } from '../SP2';
 
 export class Piece implements IPiece {
-  public appearance: IPiece["appearance"] | "";
-  public fairyCode: IPiece["fairyCode"];
-  public color: IPiece["color"];
-  public column: IPiece["column"];
-  public traverse: IPiece["traverse"];
-  public rotation: IPiece["rotation"];
-  public fairyAttribute: IPiece["fairyAttribute"];
+  public appearance: IPiece['appearance'] | '';
+  public fairyCode: IPiece['fairyCode'];
+  public color: IPiece['color'];
+  public column: IPiece['column'];
+  public traverse: IPiece['traverse'];
+  public rotation: IPiece['rotation'];
+  public fairyAttribute: IPiece['fairyAttribute'];
 
   static fromSP2Xml(source: Element): Piece {
     const p = new Piece();
@@ -37,13 +37,13 @@ export class Piece implements IPiece {
 
   static fromJson(fromJson: Partial<IPiece>): Piece {
     const p = new Piece();
-    p.appearance = fromJson.appearance ?? "";
-    p.color = fromJson.color ?? "White";
-    p.column = fromJson.column ?? "ColA";
-    p.fairyAttribute = fromJson.fairyAttribute ?? "";
+    p.appearance = fromJson.appearance ?? '';
+    p.color = fromJson.color ?? 'White';
+    p.column = fromJson.column ?? 'ColA';
+    p.fairyAttribute = fromJson.fairyAttribute ?? '';
     p.fairyCode = fromJson.fairyCode ?? [];
-    p.rotation = fromJson.rotation ?? "NoRotation";
-    p.traverse = fromJson.traverse ?? "Row1";
+    p.rotation = fromJson.rotation ?? 'NoRotation';
+    p.traverse = fromJson.traverse ?? 'Row1';
     return p;
   }
 
@@ -53,18 +53,18 @@ export class Piece implements IPiece {
   ): Piece | null {
     if (data == null) return null;
     const p = new Piece();
-    p.appearance = data.appearance ?? "";
-    p.color = data.color ?? "White";
-    p.column = data.column ?? l?.column ?? "ColA";
-    p.fairyAttribute = data.fairyAttribute ?? "";
+    p.appearance = data.appearance ?? '';
+    p.color = data.color ?? 'White';
+    p.column = data.column ?? l?.column ?? 'ColA';
+    p.fairyAttribute = data.fairyAttribute ?? '';
     p.fairyCode = data.fairyCode ?? [];
-    p.rotation = data.rotation ?? "NoRotation";
-    p.traverse = data.traverse ?? l?.traverse ?? "Row1";
+    p.rotation = data.rotation ?? 'NoRotation';
+    p.traverse = data.traverse ?? l?.traverse ?? 'Row1';
     return p;
   }
 
   public toSP2Xml() {
-    const p = createXmlElement("Piece");
+    const p = createXmlElement('Piece');
     SP2.setAppearance(p, this.appearance);
     SP2.setColor(p, this.color);
     SP2.setColum(p, this.column);
@@ -101,28 +101,28 @@ export class Piece implements IPiece {
   ToNotation() {
     const parts = [];
     parts.push(
-      this.color === "White"
+      this.color === 'White'
         ? this.appearance.toUpperCase()
-        : this.color === "Black"
+        : this.color === 'Black'
         ? this.appearance.toLowerCase()
-        : "*" + this.appearance.toUpperCase()
+        : '*' + this.appearance.toUpperCase()
     );
-    if (this.rotation !== "NoRotation") {
+    if (this.rotation !== 'NoRotation') {
       parts.push(getRotationSymbol(this.rotation));
     }
-    return parts.join("");
+    return parts.join('');
   }
 
   ToFairyNotation(): string {
-    if (!this.isFairy()) return "";
+    if (!this.isFairy()) return '';
     return `${this.fairyCode
       .map((c) => c.code)
-      .join("/")}${this.column[3].toLowerCase()}${this.traverse[3]}`;
+      .join('/')}${this.column[3].toLowerCase()}${this.traverse[3]}`;
   }
 
   isFairy() {
     return (
-      (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? "None") !== "None"
+      (this.fairyCode ?? []).length > 0 || (this.fairyAttribute ?? 'None') !== 'None'
     );
   }
 
@@ -139,15 +139,15 @@ export class Piece implements IPiece {
   }
 
   cursor() {
-    return `${this.color === "White" ? "w" : this.color === "Black" ? "b" : "n"}_${this.appearance}`;
+    return `${this.color === 'White' ? 'w' : this.color === 'Black' ? 'b' : 'n'}_${this.appearance}`;
   }
   private constructor() {
-    this.appearance = "";
+    this.appearance = '';
     this.fairyCode = [];
-    this.color = "White";
-    this.column = "ColA";
-    this.traverse = "Row1";
-    this.rotation = "NoRotation";
-    this.fairyAttribute = "";
+    this.color = 'White';
+    this.column = 'ColA';
+    this.traverse = 'Row1';
+    this.rotation = 'NoRotation';
+    this.fairyAttribute = '';
   }
 }

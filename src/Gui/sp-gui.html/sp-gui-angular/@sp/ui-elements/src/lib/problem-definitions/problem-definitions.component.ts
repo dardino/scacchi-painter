@@ -1,19 +1,19 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { Author } from "@sp/dbmanager/src/lib/models";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Author } from '@sp/dbmanager/src/lib/models';
 import {
   CurrentProblemService,
   ProblemTypes,
   EndingTypes,
   TwinModes,
   TwinTypes,
-} from "@sp/dbmanager/src/public-api";
-import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+} from '@sp/dbmanager/src/public-api';
+import { Twin } from '@sp/dbmanager/src/lib/models/twin';
 
 @Component({
-  selector: "lib-problem-definitions",
-  templateUrl: "./problem-definitions.component.html",
-  styleUrls: ["./problem-definitions.component.styl"],
+  selector: 'lib-problem-definitions',
+  templateUrl: './problem-definitions.component.html',
+  styleUrls: ['./problem-definitions.component.styl'],
 })
 export class ProblemDefinitionsComponent implements OnInit {
   @Output()
@@ -53,13 +53,13 @@ export class ProblemDefinitionsComponent implements OnInit {
   }
 
   public get problemType(): ProblemTypes {
-    return this.current.Problem?.stipulation.problemType ?? "-";
+    return this.current.Problem?.stipulation.problemType ?? '-';
   }
   public set problemType(v: ProblemTypes) {
     if (this.current.Problem) this.current.Problem.stipulation.problemType = v;
   }
   public get leadsTo(): EndingTypes {
-    return this.current.Problem?.stipulation.stipulationType ?? "#";
+    return this.current.Problem?.stipulation.stipulationType ?? '#';
   }
   public set leadsTo(v: EndingTypes) {
     if (this.current.Problem) this.current.Problem.stipulation.stipulationType = v;

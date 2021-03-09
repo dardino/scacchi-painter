@@ -1,19 +1,21 @@
-import { ITwins, SequnceTypes, createXmlElement, notEmpty, TwinModes, TwinTypes } from "../helpers";
-import { Twin } from "./twin";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { ITwins, SequnceTypes, createXmlElement, notEmpty, TwinModes, TwinTypes } from '../helpers';
+import { Twin } from './twin';
 
 export class Twins implements ITwins {
   TwinList: Twin[] = [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram })];
   TwinSequenceTypes: SequnceTypes = SequnceTypes.Normal;
+  private constructor() {}
   public static fromElement(el: Element | null): Twins {
     const t = new Twins();
     if (el == null) return t;
 
     t.TwinSequenceTypes =
       SequnceTypes[
-        (el.getAttribute("TwinSequenceTypes") as keyof typeof SequnceTypes) ||
-          "Normal"
+        (el.getAttribute('TwinSequenceTypes') as keyof typeof SequnceTypes) ||
+          'Normal'
       ];
-    t.TwinList = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
+    t.TwinList = Array.from(el.querySelectorAll('Twin')).map(Twin.fromElement);
     if (t.TwinList.length === 0) t.TwinList.push(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram }));
     return t;
   }
@@ -34,12 +36,11 @@ export class Twins implements ITwins {
     return p;
   }
   toSP2Xml(): Element {
-    const twins = createXmlElement("Twins");
-    twins.setAttribute("TwinSequenceTypes", this.TwinSequenceTypes);
+    const twins = createXmlElement('Twins');
+    twins.setAttribute('TwinSequenceTypes', this.TwinSequenceTypes);
     this.TwinList.forEach(t => {
       twins.appendChild(t.toSP2Xml());
     });
     return twins;
   }
-  private constructor() {}
 }

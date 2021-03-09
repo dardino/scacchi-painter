@@ -1,18 +1,18 @@
-import { Injectable } from "@angular/core";
-import { DbmanagerService } from "./dbmanager.service";
+import { Injectable } from '@angular/core';
+import { DbmanagerService } from './dbmanager.service';
 import {
   PieceRotation,
   SquareLocation,
   Columns,
   Traverse,
   IProblem,
-} from "./helpers";
-import { Piece } from "./models";
-import { FairyPiecesCodes } from "./models/fairesDB";
-import { Twin } from "./models/twin";
+} from './helpers';
+import { Piece } from './models';
+import { FairyPiecesCodes } from './models/fairesDB';
+import { Twin } from './models/twin';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class CurrentProblemService {
   public get Problem() {
@@ -20,12 +20,12 @@ export class CurrentProblemService {
   }
   constructor(private dbManager: DbmanagerService) {}
   AddCondition(result: string | undefined) {
-    if (typeof result === "string" && result.length > 0 && this.Problem) {
+    if (typeof result === 'string' && result.length > 0 && this.Problem) {
       this.Problem.conditions.push(result);
     }
   }
   RemoveCondition(cond: string | undefined) {
-    if (typeof cond === "string" && cond.length > 0 && this.Problem) {
+    if (typeof cond === 'string' && cond.length > 0 && this.Problem) {
       const index = this.Problem.conditions.indexOf(cond) ?? -1;
       if (index > -1) this.Problem.conditions.splice(index, 1);
       // clone
@@ -34,15 +34,13 @@ export class CurrentProblemService {
   }
   RemoveTwin($event: Twin) {
     if (!this.Problem) return;
-    const original = this.Problem.twins.TwinList.find((f) => {
-      return (
+    const original = this.Problem.twins.TwinList.find((f) => (
         f.ValueA === $event.ValueA &&
         f.ValueB === $event.ValueB &&
         f.ValueC === $event.ValueC &&
         f.TwinType === $event.TwinType &&
         f.TwinModes === $event.TwinModes
-      );
-    });
+      ));
     if (original) {
       const ix = this.Problem.twins.TwinList.indexOf(original);
       this.Problem.twins.TwinList.splice(ix, 1);
@@ -65,11 +63,11 @@ export class CurrentProblemService {
   MovePiece(
     from: SquareLocation,
     to: SquareLocation,
-    mode: "swap" | "replace" = "replace"
+    mode: 'swap' | 'replace' = 'replace'
   ) {
     if (!this.Problem) return;
-    if (mode === "swap") this.swapPieces(from, to);
-    if (mode === "replace") this.movePiece(from, to);
+    if (mode === 'swap') this.swapPieces(from, to);
+    if (mode === 'replace') this.movePiece(from, to);
     this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   RotatePiece(location: SquareLocation, angle: PieceRotation) {
@@ -98,20 +96,20 @@ export class CurrentProblemService {
     const p = problem.GetPieceAt(location.column, location.traverse);
     if (p) p.fairyCode = [{ code: fairyCode, params: [] }];
   }
-  RotateBoard(angle: "left" | "right") {
+  RotateBoard(angle: 'left' | 'right') {
     const problem = this.Problem;
     if (!problem) return;
     problem.pieces.forEach((p) => {
       this.setPieceLocation(p, {
         column:
           Columns[
-            angle === "right"
+            angle === 'right'
               ? 7 - Traverse.indexOf(p.traverse)
               : Traverse.indexOf(p.traverse)
           ],
         traverse:
           Traverse[
-            angle === "left"
+            angle === 'left'
               ? 7 - Columns.indexOf(p.column)
               : Columns.indexOf(p.column)
           ],
@@ -119,32 +117,32 @@ export class CurrentProblemService {
     });
     this.dbManager.setCurrentProblem(problem.clone());
   }
-  FlipBoard(axis: "x" | "y") {
+  FlipBoard(axis: 'x' | 'y') {
     const problem = this.Problem;
     if (!problem) return;
     problem.pieces.forEach((p) => {
       this.setPieceLocation(p, {
         column:
-          axis === "x" ? p.column : Columns[7 - Columns.indexOf(p.column)],
+          axis === 'x' ? p.column : Columns[7 - Columns.indexOf(p.column)],
         traverse:
-          axis === "y"
+          axis === 'y'
             ? p.traverse
             : Traverse[7 - Traverse.indexOf(p.traverse)],
       });
     });
     this.dbManager.setCurrentProblem(problem.clone());
   }
-  ShiftBoard(axis: "x" | "y" | "-x" | "-y") {
+  ShiftBoard(axis: 'x' | 'y' | '-x' | '-y') {
     const problem = this.Problem;
     if (!problem) return;
     problem.pieces.slice().forEach((p) => {
       const newCol =
-        axis === "x" || axis === "-x"
-          ? addToColumn(p.column, axis === "x" ? 1 : -1)
+        axis === 'x' || axis === '-x'
+          ? addToColumn(p.column, axis === 'x' ? 1 : -1)
           : p.column;
       const newRow =
-        axis === "y" || axis === "-y"
-          ? addToTraverse(p.traverse, axis === "y" ? -1 : 1)
+        axis === 'y' || axis === '-y'
+          ? addToTraverse(p.traverse, axis === 'y' ? -1 : 1)
           : p.traverse;
       if (!newCol || !newRow) return this.removePiece(p);
       this.setPieceLocation(p, { traverse: newRow, column: newCol });
@@ -158,7 +156,7 @@ export class CurrentProblemService {
     this.dbManager.setCurrentProblem(this.Problem.clone());
   }
 
-  Reload(snapshotID?: keyof IProblem["snapshots"]) {
+  Reload(snapshotID?: keyof IProblem['snapshots']) {
     if (!this.Problem) return;
     this.Problem.loadSnapshot(snapshotID, true);
     this.dbManager.setCurrentProblem(this.Problem.clone());
