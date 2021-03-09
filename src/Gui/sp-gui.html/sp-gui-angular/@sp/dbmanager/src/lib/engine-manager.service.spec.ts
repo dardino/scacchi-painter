@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { EngineManagerService } from './engine-manager.service';
+import { EngineManagerService } from "./engine-manager.service";
 
-describe('EngineManagerService', () => {
+describe("EngineManagerService", () => {
   let service: EngineManagerService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('EngineManagerService', () => {
     service = TestBed.inject(EngineManagerService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

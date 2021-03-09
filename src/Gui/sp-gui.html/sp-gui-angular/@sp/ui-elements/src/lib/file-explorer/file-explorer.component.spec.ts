@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { FileExplorerComponent } from './file-explorer.component';
+import { FileExplorerComponent } from "./file-explorer.component";
 
-describe('FileExplorerComponent', () => {
+describe("FileExplorerComponent", () => {
   let component: FileExplorerComponent;
   let fixture: ComponentFixture<FileExplorerComponent>;
 
@@ -19,7 +19,7 @@ describe('FileExplorerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

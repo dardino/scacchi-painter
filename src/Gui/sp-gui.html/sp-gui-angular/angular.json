@@ -42,7 +42,9 @@
               "@sp/gui/src/styles.styl"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": ["file-saver"]
+            "allowedCommonJsDependencies": [
+              "file-saver"
+            ]
           },
           "configurations": {
             "production": {
@@ -148,14 +150,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "@sp/gui/tsconfig.app.json",
-              "@sp/gui/tsconfig.spec.json",
-              "@sp/gui/e2e/tsconfig.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "@sp/gui/**/*.ts",
+              "@sp/gui/**/*.html"
+            ]
           }
         },
         "e2e": {
@@ -199,13 +199,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "@sp/chessboard/tsconfig.lib.json",
-              "@sp/chessboard/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "@sp/chessboard/**/*.ts",
+              "@sp/chessboard/**/*.html"
+            ]
           }
         }
       }
@@ -237,13 +236,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "@sp/dbmanager/tsconfig.lib.json",
-              "@sp/dbmanager/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "@sp/dbmanager/**/*.ts",
+              "@sp/dbmanager/**/*.html"
+            ]
           }
         }
       }
@@ -275,13 +273,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "@sp/ui-elements/tsconfig.lib.json",
-              "@sp/ui-elements/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "@sp/ui-elements/**/*.ts",
+              "@sp/ui-elements/**/*.html"
+            ]
           }
         }
       }
@@ -313,13 +310,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "@sp/host-bridge/tsconfig.lib.json",
-              "@sp/host-bridge/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
+            "lintFilePatterns": [
+              "@sp/host-bridge/**/*.ts",
+              "@sp/host-bridge/**/*.html"
+            ]
           }
         }
       }

@@ -35,10 +35,10 @@ export function getImplicitAuthorizationUrl({
 }
 
 export interface TokenResponse {
-  uid: string,
-  access_token: string,
-  token_type: string,
-  state: string,
-  scope: string,
-  account_id: string,
+  uid: string;
+  access_token: string;
+  token_type: string;
+  state: string;
+  scope: string;
+  account_id: string;
 }

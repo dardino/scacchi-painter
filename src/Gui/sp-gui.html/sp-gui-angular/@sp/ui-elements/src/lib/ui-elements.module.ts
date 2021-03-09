@@ -24,7 +24,7 @@ import { ProblemDefinitionsComponent } from "./problem-definitions/problem-defin
 import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.component";
 import { ProblemPublicationComponent } from "./problem-publication/problem-publication.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { FileExplorerComponent } from './file-explorer/file-explorer.component';
+import { FileExplorerComponent } from "./file-explorer/file-explorer.component";
 import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
 
 @NgModule({

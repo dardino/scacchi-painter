@@ -1,18 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
-import { FormControl } from "@angular/forms";
-import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
-import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanager/src/lib/models/fairesDB";
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
+import { FairyAttributesDBNames, TraditionalConditionsNames } from '@sp/dbmanager/src/lib/models/fairesDB';
 
 @Component({
-  selector: "app-conditions-dialog",
-  templateUrl: "./conditions-dialog.component.html",
-  styleUrls: ["./conditions-dialog.component.styl"],
+  selector: 'app-conditions-dialog',
+  templateUrl: './conditions-dialog.component.html',
+  styleUrls: ['./conditions-dialog.component.styl'],
 })
 export class ConditionsDialogComponent implements OnInit {
   myControl = new FormControl();
-  newCondition = "";
+  newCondition = '';
   filteredOptions: Observable<string[]>;
 
   constructor(
@@ -26,7 +26,7 @@ export class ConditionsDialogComponent implements OnInit {
   }
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(""),
+      startWith(''),
       map((value) => this._filter(value))
     );
   }

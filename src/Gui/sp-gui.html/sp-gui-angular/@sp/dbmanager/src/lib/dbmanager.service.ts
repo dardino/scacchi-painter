@@ -59,11 +59,11 @@ export class DbmanagerService {
 
   private async loadFromLocalStorage() {
     const spdb = localStorage.getItem("spdb") ?? null;
-    const spdb_info = localStorage.getItem("spdb_info") ?? null;
-    if (spdb == null || spdb_info == null) {
+    const spdbInfo = localStorage.getItem("spdb_info") ?? null;
+    if (spdb == null || spdbInfo == null) {
       return;
     }
-    const { meta, source } = JSON.parse(spdb_info) as Omit<
+    const { meta, source } = JSON.parse(spdbInfo) as Omit<
       FileSelected,
       "file"
     >;
