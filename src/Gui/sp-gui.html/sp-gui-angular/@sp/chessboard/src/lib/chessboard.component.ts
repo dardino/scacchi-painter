@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Component,
   OnInit,
@@ -9,62 +10,46 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-} from "@angular/core";
+} from '@angular/core';
 import {
   SquareLocation,
   GetLocationFromIndex,
   GetSquareIndex,
   TwinTypes,
-} from "@sp/dbmanager/src/public-api";
-import { FenService } from "@sp/dbmanager/src/lib/fen.service";
+} from '@sp/dbmanager/src/public-api';
+import { FenService } from '@sp/dbmanager/src/lib/fen.service';
 import {
   CanvasChessBoard,
   Piece as BP,
-} from "canvas-chessboard/modules/es2018/canvasChessBoard";
-import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
-import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+} from 'canvas-chessboard/modules/es2018/canvasChessBoard';
+import { Piece, Problem } from '@sp/dbmanager/src/lib/models';
+import { GetConfig } from 'canvas-chessboard/modules/es2018/presets/scacchipainter';
 
 @Component({
-  selector: "lib-chessboard",
-  templateUrl: "chessboard.component.html",
-  styleUrls: ["chessboard.component.styl"],
+  selector: 'lib-chessboard',
+  templateUrl: 'chessboard.component.html',
+  styleUrls: ['chessboard.component.styl'],
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-  private settings: {
-    CELLCOLORS: [string, string];
-    PIECECOLORS: [string, string];
-    BORDER_SIZE: number;
-  } = {
-    BORDER_SIZE: 1,
-    CELLCOLORS: ["#fff", "#ddd"],
-    PIECECOLORS: ["#fff", "#333"],
-  };
-
-  cells: UiCell[] = [];
-
-  currentCell: UiCell | null = null;
 
   @Output() focusOut = new EventEmitter<void>();
-  @Input() boardType: "canvas" | "HTML";
+  @Input() boardType: 'canvas' | 'HTML';
   @Input() hideInfo: boolean;
   @Input() cursor: { figurine: string; rotation: number | null } | null;
 
   get BoardType() {
-    return this.boardType ? this.boardType : "HTML";
+    return this.boardType ? this.boardType : 'HTML';
   }
 
-  @ViewChild("canvas", { static: true })
+  @ViewChild('canvas', { static: true })
   canvas: ElementRef;
 
-  @ViewChild("container", { static: true })
+  @ViewChild('container', { static: true })
   chessboard: ElementRef;
 
-  @ViewChild("container", { static: true })
+  @ViewChild('container', { static: true })
   cbImage: ElementRef;
-
-  private canvasBoard: CanvasChessBoard | null;
-  private cellSize = 32;
 
   @Input()
   position?: Problem;
@@ -72,9 +57,24 @@ export class ChessboardComponent
   @Output()
   currentCellChanged = new EventEmitter<SquareLocation | null>();
 
-  public fontSize: number;
+  cells: UiCell[] = [];
+  currentCell: UiCell | null = null;
+  fontSize: number;
+
+  private settings: {
+    CELLCOLORS: [string, string];
+    PIECECOLORS: [string, string];
+    BORDER_SIZE: number;
+  } = {
+    BORDER_SIZE: 1,
+    CELLCOLORS: ['#fff', '#ddd'],
+    PIECECOLORS: ['#fff', '#333'],
+  };
+  private canvasBoard: CanvasChessBoard | null;
+  private cellSize = 32;
 
   constructor(private fensvc: FenService) {}
+
 
   onSelectCell($event: Event) {
     console.log($event);
@@ -82,7 +82,7 @@ export class ChessboardComponent
 
   ngOnDestroy(): void {
     // Later, you can stop observing
-    window.removeEventListener("resize", this.sizeMutated);
+    window.removeEventListener('resize', this.sizeMutated);
   }
 
   ngOnInit() {
@@ -96,7 +96,7 @@ export class ChessboardComponent
     if (changes.cursor && this.cbImage) {
       if (changes.cursor.currentValue?.figurine != null) {
         const dataURL = getPieceIcon(
-          changes.cursor.currentValue?.figurine ?? "q",
+          changes.cursor.currentValue?.figurine ?? 'q',
           this.cellSize,
           changes.cursor.currentValue?.rotation ?? null
         );
@@ -111,7 +111,7 @@ export class ChessboardComponent
     if (
       changes.boardType &&
       !changes.boardType.isFirstChange() &&
-      changes.boardType.currentValue === "canvas" &&
+      changes.boardType.currentValue === 'canvas' &&
       this.canvas
     ) {
       this.canvasBoard = new CanvasChessBoard(
@@ -120,10 +120,10 @@ export class ChessboardComponent
       );
       const cfg = GetConfig();
       cfg.fontSize = 1;
-      this.canvasBoard.AddFontConfig("ScacchiPainter", cfg);
-      this.canvasBoard.SetFont("ScacchiPainter");
+      this.canvasBoard.AddFontConfig('ScacchiPainter', cfg);
+      this.canvasBoard.SetFont('ScacchiPainter');
       this.updateBoard();
-    } else if (changes.boardType?.currentValue !== "canvas") {
+    } else if (changes.boardType?.currentValue !== 'canvas') {
       this.canvasBoard = null;
     }
   }
@@ -161,7 +161,7 @@ export class ChessboardComponent
       this.canvasBoard.SetPieces(bps);
     }
 
-    if (this.BoardType === "canvas" && this.canvasBoard) {
+    if (this.BoardType === 'canvas' && this.canvasBoard) {
       this.canvasBoard.Redraw();
     }
   }
@@ -176,15 +176,9 @@ export class ChessboardComponent
     }
   }
 
-  private sizeMutated = (args: any) => {
-    this.cellSize =
-      (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
-    this.fontSize = Math.floor(this.cellSize / 1.44);
-  }
-
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function
-    window.addEventListener("resize", this.sizeMutated);
+    window.addEventListener('resize', this.sizeMutated);
     setTimeout(() => {
       this.sizeMutated(null);
     }, 0);
@@ -206,10 +200,17 @@ export class ChessboardComponent
       )
     );
   }
+
+  private sizeMutated = (args: any) => {
+    this.cellSize =
+      (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
+    this.fontSize = Math.floor(this.cellSize / 1.44);
+  };
+
+
 }
-function notNull<T>(v: T | null): v is T {
-  return v != null;
-}
+const notNull = <T>(v: T | null): v is T => v != null;
+
 export declare type SimpleChanges2<T> = { [P in keyof T]?: SimpleChange<T[P]> };
 export declare class SimpleChange<T> {
   previousValue: T;
@@ -224,18 +225,22 @@ interface UiCell {
   location: SquareLocation;
 }
 
-function getPieceIcon(figurine: string, cellSize: number, rot: number | null) {
-  const canvas = document.createElement("canvas");
+const getPieceIcon = (
+  figurine: string,
+  cellSize: number,
+  rot: number | null
+) => {
+  const canvas = document.createElement('canvas');
   canvas.width = cellSize;
   canvas.height = cellSize;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
   if (!ctx) {
-    throw new Error("Can not create 2d context!");
+    throw new Error('Can not create 2d context!');
   }
   const fsize = Math.floor(cellSize / 1.44);
   const margin = Math.floor((cellSize - fsize) / 2);
   ctx.font = `${fsize}px ${
-    figurine === "X" ? "Arial, sans" : "ScacchiPainter"
+    figurine === 'X' ? 'Arial, sans' : 'ScacchiPainter'
   }`;
   ctx.lineWidth = 2;
 
@@ -249,19 +254,19 @@ function getPieceIcon(figurine: string, cellSize: number, rot: number | null) {
   ctx.translate(margin, margin + fsize);
   ctx.save();
 
-  if (figurine !== "X") {
-    ctx.fillStyle = "#ffffff";
-    ctx.strokeStyle = "#ffffff";
-    ctx.strokeText("_" + figurine.substring(1), 0, 0);
-    ctx.fillText("_" + figurine.substring(1), 0, 0);
+  if (figurine !== 'X') {
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#ffffff';
+    ctx.strokeText('_' + figurine.substring(1), 0, 0);
+    ctx.fillText('_' + figurine.substring(1), 0, 0);
     ctx.restore();
   }
 
-  ctx.fillStyle = figurine === "X" ? "#ff3300" : "#333333";
-  ctx.strokeStyle = "#ffffff";
-  ctx.strokeText(figurine === "X" ? `🗙` : figurine, 0, 0);
-  ctx.fillText(figurine === "X" ? `🗙` : figurine, 0, 0);
+  ctx.fillStyle = figurine === 'X' ? '#ff3300' : '#333333';
+  ctx.strokeStyle = '#ffffff';
+  ctx.strokeText(figurine === 'X' ? `🗙` : figurine, 0, 0);
+  ctx.fillText(figurine === 'X' ? `🗙` : figurine, 0, 0);
   ctx.restore();
 
-  return canvas.toDataURL("image/png");
-}
+  return canvas.toDataURL('image/png');
+};

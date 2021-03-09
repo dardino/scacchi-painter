@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, HostBinding } from "@angular/core";
-import { MatButton } from "@angular/material/button";
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: "lib-sp-toolbar-button",
-  templateUrl: "./sp-toolbar-button.component.html",
-  styleUrls: ["./sp-toolbar-button.component.styl"],
+  selector: 'lib-sp-toolbar-button',
+  templateUrl: './sp-toolbar-button.component.html',
+  styleUrls: ['./sp-toolbar-button.component.styl'],
 })
 export class SpToolbarButtonComponent implements OnInit {
   constructor() {}
 
   @Input()
-  color?: MatButton["color"];
+  color?: MatButton['color'];
   @Input()
   iconText?: string;
   @Input()

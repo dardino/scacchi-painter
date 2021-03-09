@@ -1,5 +1,5 @@
 export interface FolderItemInfo {
-  type: "file" | "folder";
+  type: 'file' | 'folder';
   itemName: string;
   fullPath: string;
   id: string;
@@ -14,5 +14,5 @@ export interface FileService {
 export interface FileSelected {
   file: File;
   meta: FolderItemInfo;
-  source: "local" | "dropbox";
+  source: 'local' | 'dropbox';
 }

@@ -1,4 +1,4 @@
-import { Piece } from "./piece";
+import { Piece } from './piece';
 import {
   Columns,
   Traverse,
@@ -12,38 +12,38 @@ import {
   convertToRtf,
   createXmlElement,
   notEmpty,
-} from "../helpers";
-import { Twins } from "./twins";
-import { Stipulation } from "./stipulation";
-import { Author } from "./author";
-import { SP2 } from "../SP2";
-import { Base64 } from "../base64";
+} from '../helpers';
+import { Twins } from './twins';
+import { Stipulation } from './stipulation';
+import { Author } from './author';
+import { SP2 } from '../SP2';
+import { Base64 } from '../base64';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
-const main_snapshot = "$_MAIN_$";
+const main_snapshot = '$_MAIN_$';
 
 export class Problem implements IProblem {
   private constructor() {}
 
-  public rtfSolution = "";
-  public textSolution = "";
+  public rtfSolution = '';
+  public textSolution = '';
   public date = new Date().toLocaleString();
   public stipulation = Stipulation.fromJson({});
   public prizeRank = 0;
-  public personalID = "";
-  public prizeDescription = "";
-  public source = "";
-  public engine = "Popeye";
+  public personalID = '';
+  public prizeDescription = '';
+  public source = '';
+  public engine = 'Popeye';
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
-  public htmlSolution = "";
+  public htmlSolution = '';
   public htmlElements: HTMLElement[] = [];
   public conditions: string[] = [];
   public fairyCells: string[] = [];
 
-  public snapshots: IProblem["snapshots"] = {};
-  public currentSnapshotId: keyof IProblem["snapshots"] = main_snapshot;
+  public snapshots: IProblem['snapshots'] = {};
+  public currentSnapshotId: keyof IProblem['snapshots'] = main_snapshot;
   private get snap_keys(): Array<string | number> {
     return Object.keys(this.snapshots).filter((f) => this.snapshots[f] != null);
   }
@@ -51,25 +51,25 @@ export class Problem implements IProblem {
   static async fromElement(source: Element) {
     const p = new Problem();
     p.stipulation = Stipulation.fromElement(source);
-    p.pieces = Array.from(source.querySelectorAll("Piece")).map(
+    p.pieces = Array.from(source.querySelectorAll('Piece')).map(
       Piece.fromSP2Xml
     );
-    p.twins = Twins.fromElement(source.querySelector("Twins") ?? null);
+    p.twins = Twins.fromElement(source.querySelector('Twins') ?? null);
     const sol = await GetSolutionFromElement(source);
-    p.textSolution = sol.plain ?? "";
-    p.rtfSolution = sol.rtf ?? "";
+    p.textSolution = sol.plain ?? '';
+    p.rtfSolution = sol.rtf ?? '';
     p.htmlElements = sol.html;
-    p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join("");
-    p.date = source.getAttribute("Date") ?? "";
-    p.prizeRank = parseInt(source.getAttribute("PrizeRank") ?? "0", 10);
-    p.personalID = source.getAttribute("PersonalID") ?? "";
-    p.prizeDescription = source.getAttribute("PrizeDescription") ?? "";
-    p.source = source.getAttribute("Source") ?? "";
-    p.authors = Array.from(source.querySelectorAll("Author")).map((a) =>
+    p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join('');
+    p.date = source.getAttribute('Date') ?? '';
+    p.prizeRank = parseInt(source.getAttribute('PrizeRank') ?? '0', 10);
+    p.personalID = source.getAttribute('PersonalID') ?? '';
+    p.prizeDescription = source.getAttribute('PrizeDescription') ?? '';
+    p.source = source.getAttribute('Source') ?? '';
+    p.authors = Array.from(source.querySelectorAll('Author')).map((a) =>
       Author.fromElement(a)
     );
-    p.conditions = Array.from(source.querySelectorAll("Conditions") ?? []).map(
-      (el) => el.nodeValue ?? ""
+    p.conditions = Array.from(source.querySelectorAll('Conditions') ?? []).map(
+      (el) => el.nodeValue ?? ''
     ).filter(notEmpty);
 
     p.fairyCells = [];
@@ -111,12 +111,12 @@ export class Problem implements IProblem {
         ? Stipulation.fromJson(a.stipulation ?? {})
         : Stipulation.fromJson({});
     b.twins = a.twins ? Twins.fromJson(a.twins) : Twins.fromJson({});
-    b.htmlSolution = a.htmlSolution ? a.htmlSolution : "";
+    b.htmlSolution = a.htmlSolution ? a.htmlSolution : '';
     b.date = a.date ? a.date : new Date().toISOString();
-    b.personalID = a.personalID ? a.personalID : "";
+    b.personalID = a.personalID ? a.personalID : '';
     b.prizeRank = a.prizeRank ?? 0;
-    b.prizeDescription = a.prizeDescription ? a.prizeDescription : "";
-    b.source = a.source ? a.source : "";
+    b.prizeDescription = a.prizeDescription ? a.prizeDescription : '';
+    b.source = a.source ? a.source : '';
     b.conditions = (a.conditions ? [...a.conditions] : []).filter(notEmpty);
   }
 
@@ -151,7 +151,7 @@ export class Problem implements IProblem {
   }
 
   async toSP2Xml(): Promise<Element> {
-    const item = createXmlElement("SP_Item");
+    const item = createXmlElement('SP_Item');
     SP2.setProblemType(item, this.stipulation.getXMLProblemType());
     SP2.setMoves(item, this.stipulation.moves);
     SP2.setDate(item, this.date);
@@ -178,11 +178,11 @@ export class Problem implements IProblem {
     SP2.setConditions(item, this.conditions);
     SP2.setSolution(item, this.textSolution);
     // SP2.setHtmlSolution(item, this.htmlSolution);
-    SP2.setRtfSolution(item, (await convertToRtf(this.htmlSolution)) ?? "");
+    SP2.setRtfSolution(item, (await convertToRtf(this.htmlSolution)) ?? '');
     return item;
   }
 
-  saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
+  saveSnapshot(snapshotId?: keyof IProblem['snapshots']) {
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
@@ -199,29 +199,29 @@ export class Problem implements IProblem {
   }
 
   getNextId(
-    currentSnapshotId: keyof IProblem["snapshots"]
-  ): keyof IProblem["snapshots"] {
+    currentSnapshotId: keyof IProblem['snapshots']
+  ): keyof IProblem['snapshots'] {
     if (currentSnapshotId === main_snapshot) {
       currentSnapshotId = -1;
     }
-    if (typeof currentSnapshotId === "number") {
+    if (typeof currentSnapshotId === 'number') {
       return (
         Math.max(currentSnapshotId, 0, ...this.snap_keys.filter(filterNumber)) +
         1
       );
     } else {
-      return currentSnapshotId + "*";
+      return currentSnapshotId + '*';
     }
   }
 
   deleteSnapshot(id: number | string) {
     if (!this.snapshots[id]) {
-      throw new Error("Snapshot not found!");
+      throw new Error('Snapshot not found!');
     }
     delete this.snapshots[id];
   }
   loadSnapshot(
-    id?: keyof IProblem["snapshots"],
+    id?: keyof IProblem['snapshots'],
     ignoreChanges: boolean = false
   ) {
     if (id == null) id = this.currentSnapshotId;
@@ -238,25 +238,25 @@ export class Problem implements IProblem {
 
   public getPieceCounter() {
     return `(${this.whitePieces}+${this.blackPieces}${
-      this.neutralPieces ? "+" + this.neutralPieces : ""
+      this.neutralPieces ? '+' + this.neutralPieces : ''
     })`;
   }
 
   get whitePieces() {
-    return this.pieces?.filter((f) => f.color === "White").length ?? 0;
+    return this.pieces?.filter((f) => f.color === 'White').length ?? 0;
   }
   get blackPieces() {
-    return this.pieces?.filter((f) => f.color === "Black").length ?? 0;
+    return this.pieces?.filter((f) => f.color === 'Black').length ?? 0;
   }
   get neutralPieces() {
-    return this.pieces?.filter((f) => f.color === "Neutral").length ?? 0;
+    return this.pieces?.filter((f) => f.color === 'Neutral').length ?? 0;
   }
 
   public getCurrentFen(): string {
     const rows: string[] = [];
     for (let r = 7; r >= 0; r--) {
       let empty = 0;
-      let row = "";
+      let row = '';
       for (let c = 0; c <= 7; c++) {
         const p = this.getPieceAt(r, c);
         if (p) {
@@ -272,13 +272,13 @@ export class Problem implements IProblem {
       }
       rows.push(row);
     }
-    return rows.join("/") + this.getFairiesFen();
+    return rows.join('/') + this.getFairiesFen();
   }
 
   private getFairiesFen(): string {
     const fps = this.pieces.filter((p) => p.isFairy());
     if (fps.length === 0) return ``;
-    return ` [${fps.map((p) => p.ToFairyNotation()).join(",")}]`;
+    return ` [${fps.map((p) => p.ToFairyNotation()).join(',')}]`;
   }
 
   private getPieceAt(row: number, col: number) {
@@ -302,6 +302,4 @@ export class Problem implements IProblem {
   }
 }
 
-function filterNumber(v: any): v is number {
-  return typeof v === "number";
-}
+const filterNumber = (v: any): v is number => typeof v === 'number';

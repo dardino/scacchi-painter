@@ -27,6 +27,8 @@
             "default": "array-simple"
           }
         ],
+        "@typescript-eslint/naming-convention": ["off"],
+        "@typescript-eslint/member-ordering": ["off"],
         "brace-style": [
           "error",
           "1tbs"
@@ -34,7 +36,8 @@
         "curly": [
           "error",
           "multi-line"
-        ]
+        ],
+        "quotes": ["error", "double"]
       }
     },
     {

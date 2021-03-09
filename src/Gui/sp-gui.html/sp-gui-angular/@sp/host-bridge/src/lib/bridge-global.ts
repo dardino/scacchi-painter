@@ -1,5 +1,5 @@
-import { Observable } from "rxjs";
-import { Problem } from "../../../dbmanager/src/lib/models/problem";
+import { Observable } from 'rxjs';
+import { Problem } from '../../../dbmanager/src/lib/models/problem';
 
 export interface BridgeGlobal {
   openFile(): File | PromiseLike<File | null> | null;

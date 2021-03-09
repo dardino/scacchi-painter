@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ToolbarEditComponent } from "./toolbar-edit.component";
+import { ToolbarEditComponent } from './toolbar-edit.component';
 
-describe("EditToolbarComponent", () => {
+describe('EditToolbarComponent', () => {
   let component: ToolbarEditComponent;
   let fixture: ComponentFixture<ToolbarEditComponent>;
 
@@ -18,7 +18,7 @@ describe("EditToolbarComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
