@@ -4,14 +4,15 @@
   "scripts": {
     "startinsecure": "yarn ng serve",
     "start": "yarn ng serve --ssl true --host=0.0.0.0 --disable-host-check",
-    "build": "npm i -g typescript && yarn ng build --prod",
+    "build": "yarn ng build --prod",
     "build:electron": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron",
     "build:watch": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron --watch",
     "test": "yarn ng test",
     "lint": "yarn ng lint",
     "e2e": "yarn ng e2e",
     "build:stats": "yarn build --stats-json",
-    "analyze": "webpack-bundle-analyzer dist/gui/stats.json"
+    "analyze": "webpack-bundle-analyzer dist/gui/stats.json",
+    "build:Azure": "yarn tsc --version && yarn ng --version && yarn build"
   },
   "private": true,
   "dependencies": {

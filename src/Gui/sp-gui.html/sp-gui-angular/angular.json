@@ -246,7 +246,7 @@
         }
       }
     },
-    "ui-elements": {
+    "uiElements": {
       "projectType": "library",
       "root": "@sp/ui-elements",
       "sourceRoot": "@sp/ui-elements/src",
