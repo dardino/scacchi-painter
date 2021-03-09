@@ -4,79 +4,79 @@ import {
   BoardRank,
   BoardFile,
   Figurine,
-} from 'canvas-chessboard/modules/es2018/canvasChessBoard';
+} from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
-import { Base64 } from './base64';
+import { Base64 } from "./base64";
 
 export type XMLProblemTypesKeys =
-  | 'Direct'
-  | 'Help'
-  | 'Self'
-  | 'HelpSelf'
-  | 'Custom';
+  | "Direct"
+  | "Help"
+  | "Self"
+  | "HelpSelf"
+  | "Custom";
 
 export const ProblemTypeCodes = {
-  '-': 'Direct',
-  H: 'Help',
-  S: 'Self',
-  HS: 'HelpSelf',
-  R: 'Reflex',
-  HR: 'HelpReflex',
+  "-": "Direct",
+  H: "Help",
+  S: "Self",
+  HS: "HelpSelf",
+  R: "Reflex",
+  HR: "HelpReflex",
 } as const;
 
 export const EndingTypeCodes = {
-  '#': `Mate (#)`,
-  '=': `Stalemate (=)`,
-  '+': `Check (+)`,
-  '%': `Gain Piece (%)`,
-  '~': `(~)`,
-  '##': `Double mate (##)`,
-  '==': `Double stalemate (==)`,
-  '#=': `(#=)`,
-  '!=': `(!=)`,
-  '!#': `(!#)`,
-  '00': `(00)`,
-  ep: `(ep)`,
-  Zxy: `(Zxy)`,
-  x: `(x)`,
-  '##!': `(##!)`,
-  ct: `(ct)`,
-  '<>': `(&lt;>)`,
-  ctr: `(ctr)`,
-  '<>r': `(&lt;>r)`,
-  c81: `(c81)`,
+  "#": "Mate (#)",
+  "=": "Stalemate (=)",
+  "+": "Check (+)",
+  "%": "Gain Piece (%)",
+  "~": "(~)",
+  "##": "Double mate (##)",
+  "==": "Double stalemate (==)",
+  "#=": "(#=)",
+  "!=": "(!=)",
+  "!#": "(!#)",
+  "00": "(00)",
+  ep: "(ep)",
+  Zxy: "(Zxy)",
+  x: "(x)",
+  "##!": "(##!)",
+  ct: "(ct)",
+  "<>": "(&lt;>)",
+  ctr: "(ctr)",
+  "<>r": "(&lt;>r)",
+  c81: "(c81)",
 } as const;
 
-export type XMLStipulationTypes = 'Mate' | 'Stalemate' | 'Custom';
+export type XMLStipulationTypes = "Mate" | "Stalemate" | "Custom";
 
 export type ProblemTypes = keyof typeof ProblemTypeCodes;
-export function getProblemType(
-  original: XMLProblemTypesKeys | null = 'Direct'
-): ProblemTypes {
+export const getProblemType = (
+  original: XMLProblemTypesKeys | null = "Direct"
+): ProblemTypes => {
   switch (original) {
-    case 'Direct':
-      return '-';
-    case 'Help':
-      return 'H';
-    case 'HelpSelf':
-      return 'HS';
-    case 'Self':
-      return 'S';
+    case "Direct":
+      return "-";
+    case "Help":
+      return "H";
+    case "HelpSelf":
+      return "HS";
+    case "Self":
+      return "S";
     default:
-      return '-';
+      return "-";
   }
-}
+};
 export type EndingTypes = keyof typeof EndingTypeCodes;
-export function getEndingType(original: XMLStipulationTypes): EndingTypes {
+export const getEndingType = (original: XMLStipulationTypes): EndingTypes => {
   switch (original) {
-    case 'Mate':
-      return '#';
-    case 'Stalemate':
-      return '=';
+    case "Mate":
+      return "#";
+    case "Stalemate":
+      return "=";
     default:
-      return '#';
+      return "#";
   }
-}
+};
 
 export interface IStipulation {
   problemType: ProblemTypes;
@@ -103,34 +103,34 @@ export interface IProblem {
 }
 
 export enum SequnceTypes {
-  Normal = 'Normal',
+  Normal = "Normal",
 }
 export enum TwinTypes {
-  Custom = 'Custom',
-  Diagram = 'Diagram', // no values
-  MovePiece = 'MovePiece', // 2 values
-  RemovePiece = 'RemovePiece', // 1 value
-  AddPiece = 'AddPiece', // 2 values
-  Substitute = 'Substitute', // 3 values
-  SwapPieces = 'SwapPieces', // 2 values
-  Rotation90 = 'Rotation90', // no value
-  Rotation180 = 'Rotation180', // no value
-  Rotation270 = 'Rotation270', // no value
-  TraslateNormal = 'TraslateNormal', // 2 value
-  TraslateToroidal = 'TraslateToroidal', // 2 value
-  MirrorHorizontal = 'MirrorHorizontal', // no value
-  MirrorVertical = 'MirrorVertical', // no value
-  ChangeProblemType = 'ChangeProblemType', // 2 value
-  Duplex = 'Duplex', // no value
-  AfterKey = 'AfterKey', // no value
-  SwapColors = 'SwapColors', // no value
-  Stipulation = 'Stipulation', // 1 value
+  Custom = "Custom",
+  Diagram = "Diagram", // no values
+  MovePiece = "MovePiece", // 2 values
+  RemovePiece = "RemovePiece", // 1 value
+  AddPiece = "AddPiece", // 2 values
+  Substitute = "Substitute", // 3 values
+  SwapPieces = "SwapPieces", // 2 values
+  Rotation90 = "Rotation90", // no value
+  Rotation180 = "Rotation180", // no value
+  Rotation270 = "Rotation270", // no value
+  TraslateNormal = "TraslateNormal", // 2 value
+  TraslateToroidal = "TraslateToroidal", // 2 value
+  MirrorHorizontal = "MirrorHorizontal", // no value
+  MirrorVertical = "MirrorVertical", // no value
+  ChangeProblemType = "ChangeProblemType", // 2 value
+  Duplex = "Duplex", // no value
+  AfterKey = "AfterKey", // no value
+  SwapColors = "SwapColors", // no value
+  Stipulation = "Stipulation", // 1 value
 }
 
 export type TwinTypesKeys = keyof typeof TwinTypes;
 export enum TwinModes {
-  Normal = 'Normal',
-  Combined = 'Combined',
+  Normal = "Normal",
+  Combined = "Combined",
 }
 export type TwinModesKeys = keyof typeof TwinModes;
 
@@ -159,7 +159,7 @@ export interface Author {
 }
 
 export interface IPiece {
-  appearance: Figurine | '';
+  appearance: Figurine | "";
   fairyCode: Array<{ code: string; params: string[] }>;
   color: PieceColors;
   column: Columns;
@@ -175,236 +175,227 @@ export interface ProblemDb {
   problems: IProblem[];
 }
 
-export const FairyAttributes = ['None'] as const;
+export const FairyAttributes = ["None"] as const;
 export const Columns = [
-  'ColA',
-  'ColB',
-  'ColC',
-  'ColD',
-  'ColE',
-  'ColF',
-  'ColG',
-  'ColH',
+  "ColA",
+  "ColB",
+  "ColC",
+  "ColD",
+  "ColE",
+  "ColF",
+  "ColG",
+  "ColH",
 ] as const;
 export type Columns = typeof Columns[number];
 
 export const Traverse = [
-  'Row8',
-  'Row7',
-  'Row6',
-  'Row5',
-  'Row4',
-  'Row3',
-  'Row2',
-  'Row1',
+  "Row8",
+  "Row7",
+  "Row6",
+  "Row5",
+  "Row4",
+  "Row3",
+  "Row2",
+  "Row1",
 ] as const;
 export type Traverse = typeof Traverse[number];
-export const PieceColors = ['White', 'Black', 'Neutral'] as const;
+export const PieceColors = ["White", "Black", "Neutral"] as const;
 export type PieceColors = typeof PieceColors[number];
 
-export type SquareColors = 'black' | 'white';
+export type SquareColors = "black" | "white";
 
-export function GetSquareColor(loc: SquareLocation): SquareColors;
-export function GetSquareColor(col: Columns, row: Traverse): SquareColors;
-
-export function GetSquareColor(
-  col: Columns | SquareLocation,
-  row: Traverse = Traverse[0]
-): SquareColors {
+export const GetSquareColor = (...args: [loc: SquareLocation] | [col: Columns, row: Traverse]): SquareColors => {
+  let col = args[0];
+  let row = args[1];
   if (col == null) {
-    return 'white';
+    return "white";
   }
-  if (typeof col !== 'string') {
+  if (typeof col !== "string") {
     row = col.traverse;
     col = col.column;
   }
+  if (row == null) throw new Error("invalid parameters 'row'");
 
   return ((Columns.indexOf(col) % 2) + Traverse.indexOf(row)) % 2
-    ? 'black'
-    : 'white';
-}
+    ? "black"
+    : "white";
+};
 
 export interface SquareLocation {
   column: Columns;
   traverse: Traverse;
 }
 
-export function GetSquareIndex(loc: SquareLocation): number;
-export function GetSquareIndex(col: Columns, row: Traverse): number;
-export function GetSquareIndex(
-  col: Columns | SquareLocation,
-  row: Traverse = Traverse[0]
-): number {
+export const GetSquareIndex = (...args: [loc: SquareLocation] | [col: Columns, row: Traverse]): number => {
+  let col = args[0];
+  let row = args[1];
   if (col == null) {
     return -1;
   }
-  if (typeof col !== 'string') {
+  if (typeof col !== "string") {
     row = col.traverse;
     col = col.column;
   }
+  if (row == null) throw new Error("invalid parameters 'row'");
   return Columns.indexOf(col) + 8 * Traverse.indexOf(row);
-}
-export function GetLocationFromIndex(index: number): SquareLocation {
-  return {
-    column: Columns[index % 8],
-    traverse: Traverse[Math.floor(index / 8)],
-  };
-}
+};
+export const GetLocationFromIndex = (index: number): SquareLocation => ({
+  column: Columns[index % 8],
+  traverse: Traverse[Math.floor(index / 8)],
+});
 
 export const PieceRotation = [
-  'NoRotation',
-  'Clockwise45',
-  'Clockwise90',
-  'Clockwise135',
-  'UpsideDown',
-  'Counterclockwise135',
-  'Counterclockwise90',
-  'Counterclockwise45',
+  "NoRotation",
+  "Clockwise45",
+  "Clockwise90",
+  "Clockwise135",
+  "UpsideDown",
+  "Counterclockwise135",
+  "Counterclockwise90",
+  "Counterclockwise45",
 ] as const;
 export type PieceRotation = typeof PieceRotation[number];
 
 export type SP2PieceName =
-  | 'King'
-  | 'Queen'
-  | 'Rook'
-  | 'Rock'
-  | 'Horse'
-  | 'Bishop'
-  | 'Pawn'
-  | 'HorseQueen'
-  | 'HorseTower'
-  | 'HorseBishop';
+  | "King"
+  | "Queen"
+  | "Rook"
+  | "Rock"
+  | "Horse"
+  | "Bishop"
+  | "Pawn"
+  | "HorseQueen"
+  | "HorseTower"
+  | "HorseBishop";
 
-export function getCanvasRotation(rotation: PieceRotation) {
+export const getCanvasRotation = (rotation: PieceRotation) => {
   switch (rotation) {
-    case 'NoRotation':
+    case "NoRotation":
       return Rotations.NoRotation;
-    case 'Clockwise45':
+    case "Clockwise45":
       return Rotations.TopRight;
-    case 'Clockwise90':
+    case "Clockwise90":
       return Rotations.Right;
-    case 'Clockwise135':
+    case "Clockwise135":
       return Rotations.BottomRight;
-    case 'UpsideDown':
+    case "UpsideDown":
       return Rotations.UpsideDown;
-    case 'Counterclockwise135':
+    case "Counterclockwise135":
       return Rotations.BottomLeft;
-    case 'Counterclockwise90':
+    case "Counterclockwise90":
       return Rotations.Left;
-    case 'Counterclockwise45':
+    case "Counterclockwise45":
       return Rotations.TopLeft;
     default:
       return Rotations.NoRotation;
   }
-}
+};
 
-export function getCanvasLocation(x: Columns, y: Traverse) {
-  if (typeof x !== 'string' || typeof y !== 'string') {
+export const getCanvasLocation = (x: Columns, y: Traverse) => {
+  if (typeof x !== "string" || typeof y !== "string") {
     return { col: BoardFile.A, row: BoardRank.R1 };
   }
   return {
     col: getBoardFile(x),
     row: getBoardRank(y),
   };
-}
-export function getBoardFile(x: string | Columns): BoardFile {
-  if (typeof x === 'number') x = Columns[x];
+};
+export const getBoardFile = (x: string | Columns): BoardFile => {
+  if (typeof x === "number") x = Columns[x];
   x = x.substr(3, 1); // extract col from "ColA";
   return BoardFile[x as keyof typeof BoardFile];
-}
-export function getBoardRank(y: string | Traverse): BoardRank {
-  if (typeof y === 'number') y = Traverse[y];
+};
+export const getBoardRank = (y: string | Traverse): BoardRank => {
+  if (typeof y === "number") y = Traverse[y];
   y = y.substr(3, 1); // extract row from "Row8";
   return BoardRank[`R${y}` as keyof typeof BoardRank];
-}
+};
 
-export function getCanvasColor(c: PieceColors): Colors {
+export const getCanvasColor = (c: PieceColors): Colors => {
   switch (c) {
-    case 'Black':
-      return 'black';
-    case 'Neutral':
-      return 'neutral';
-    case 'White':
+    case "Black":
+      return "black";
+    case "Neutral":
+      return "neutral";
+    case "White":
     default:
-      return 'white';
+      return "white";
   }
-}
+};
 
-export function getFigurine(appearance?: string): Figurine | null {
+export const getFigurine = (appearance?: string): Figurine | null => {
   switch (appearance) {
-    case 'K':
-    case 'k':
-      return 'k';
-    case 'Q':
-    case 'q':
-      return 'q';
-    case 'R':
-    case 'r':
-      return 'r';
-    case 'S':
-    case 's':
-    case 'N':
-    case 'n':
-      return 'n';
-    case 'B':
-    case 'b':
-      return 'b';
-    case 'P':
-    case 'p':
-      return 'p';
-    case 'E':
-    case 'e':
-      return 'e';
-    case 'T':
-    case 't':
-      return 't';
-    case 'A':
-    case 'a':
-      return 'a';
+    case "K":
+    case "k":
+      return "k";
+    case "Q":
+    case "q":
+      return "q";
+    case "R":
+    case "r":
+      return "r";
+    case "S":
+    case "s":
+    case "N":
+    case "n":
+      return "n";
+    case "B":
+    case "b":
+      return "b";
+    case "P":
+    case "p":
+      return "p";
+    case "E":
+    case "e":
+      return "e";
+    case "T":
+    case "t":
+      return "t";
+    case "A":
+    case "a":
+      return "a";
     default:
       return null;
   }
-}
+};
 
 const mapRotations = {
-  [PieceRotation[0]]: '',
-  [PieceRotation[1]]: ':1',
-  [PieceRotation[2]]: ':2',
-  [PieceRotation[3]]: ':3',
-  [PieceRotation[4]]: ':4',
-  [PieceRotation[5]]: ':5',
-  [PieceRotation[6]]: ':6',
-  [PieceRotation[7]]: ':7',
+  [PieceRotation[0]]: "",
+  [PieceRotation[1]]: ":1",
+  [PieceRotation[2]]: ":2",
+  [PieceRotation[3]]: ":3",
+  [PieceRotation[4]]: ":4",
+  [PieceRotation[5]]: ":5",
+  [PieceRotation[6]]: ":6",
+  [PieceRotation[7]]: ":7",
 } as const;
 
 const RotationsCodes = [
-  '+ ',
-  '+/',
-  '+-',
-  '+\\',
-  '- ',
-  '-/',
-  '--',
-  '-\\',
+  "+ ",
+  "+/",
+  "+-",
+  "+\\",
+  "- ",
+  "-/",
+  "--",
+  "-\\",
 ] as const;
 type RotationsCodes = typeof RotationsCodes[number];
 
 const RotationsCodeMap: {
   [key in RotationsCodes]: PieceRotation;
 } = {
-  '+ ': 'NoRotation',
-  '+/': 'Clockwise45',
-  '+-': 'Clockwise90',
-  '+\\': 'Clockwise135',
-  '- ': 'UpsideDown',
-  '-/': 'Counterclockwise135',
-  '--': 'Counterclockwise90',
-  '-\\': 'Counterclockwise45',
+  "+ ": "NoRotation",
+  "+/": "Clockwise45",
+  "+-": "Clockwise90",
+  "+\\": "Clockwise135",
+  "- ": "UpsideDown",
+  "-/": "Counterclockwise135",
+  "--": "Counterclockwise90",
+  "-\\": "Counterclockwise45",
 };
 
-export function getRotationSymbol(rotation: IPiece['rotation']): string {
-  return mapRotations[rotation];
-}
+export const getRotationSymbol = (rotation: IPiece["rotation"]): string => mapRotations[rotation];
 
 /*
 <SP_Item
@@ -486,44 +477,44 @@ Stipulation="Mate"
   </SP_Item>
   */
 
-export async function GetSolutionFromElement(el: Element) {
+export const GetSolutionFromElement = async (el: Element) => {
   let solText: HTMLElement[];
 
-  const sol = el.querySelector('Solution')?.innerHTML;
-  const solRft = el.querySelector('SolutionRtf');
-  const solDec = sol ? Base64.decode(sol) : '';
+  const sol = el.querySelector("Solution")?.innerHTML;
+  const solRft = el.querySelector("SolutionRtf");
+  const solDec = sol ? Base64.decode(sol) : "";
 
   if (solRft != null && solRft.innerHTML.length > 0) {
     solText = await convertFromRtf(
-      Base64.decode(solRft.innerHTML).replace(/\r/g, '')
+      Base64.decode(solRft.innerHTML).replace(/\r/g, "")
     );
   } else {
     if (!sol) solText = [];
     else {
       solText = solDec
-        .replace(/\r\n/g, '\r')
-        .split('\r')
+        .replace(/\r\n/g, "\r")
+        .split("\r")
         .map((txt) => {
-          const div = document.createElement('div');
+          const div = document.createElement("div");
           div.innerText = txt;
           return div;
         });
     }
   }
   return { plain: solDec, html: solText, rtf: solRft?.innerHTML };
-}
+};
 
-export function GetTwins(el: Element): Element[] {
-  const twins = el.querySelectorAll('Twin');
+export const GetTwins = (el: Element): Element[] => {
+  const twins = el.querySelectorAll("Twin");
   return Array.from(twins);
-}
+};
 
-export function rowToPieces(row: string): Array<Partial<IPiece> | null> {
+export const rowToPieces = (row: string): Array<Partial<IPiece> | null> => {
   const fairies = row.match(/\{[a-z]*\}/);
-  row = row.replace(/\{[a-z]*\}/g, '!');
-  row = row.replace(/([QKRTBNPAETqkrtbnpaet]|^1)/g, '|$1');
-  row = row.replace(/([^:|])1/g, '$1|1');
-  row = row.replace(/\*\|(.)/g, '|*$1');
+  row = row.replace(/\{[a-z]*\}/g, "!");
+  row = row.replace(/([QKRTBNPAETqkrtbnpaet]|^1)/g, "|$1");
+  row = row.replace(/([^:|])1/g, "$1|1");
+  row = row.replace(/\*\|(.)/g, "|*$1");
   row = row.replace(/:0/g, RotationsCodes[0]);
   row = row.replace(/:1/g, RotationsCodes[1]);
   row = row.replace(/:2/g, RotationsCodes[2]);
@@ -532,33 +523,33 @@ export function rowToPieces(row: string): Array<Partial<IPiece> | null> {
   row = row.replace(/:5/g, RotationsCodes[5]);
   row = row.replace(/:6/g, RotationsCodes[6]);
   row = row.replace(/:7/g, RotationsCodes[7]);
-  row = row.replace(/[8]/g, Array(9).join('|#'));
-  row = row.replace(/[7]/g, Array(8).join('|#'));
-  row = row.replace(/[6]/g, Array(7).join('|#'));
-  row = row.replace(/[5]/g, Array(6).join('|#'));
-  row = row.replace(/[4]/g, Array(5).join('|#'));
-  row = row.replace(/[3]/g, Array(4).join('|#'));
-  row = row.replace(/[2]/g, Array(3).join('|#'));
-  row = row.replace(/[1]/g, '#');
+  row = row.replace(/[8]/g, Array(9).join("|#"));
+  row = row.replace(/[7]/g, Array(8).join("|#"));
+  row = row.replace(/[6]/g, Array(7).join("|#"));
+  row = row.replace(/[5]/g, Array(6).join("|#"));
+  row = row.replace(/[4]/g, Array(5).join("|#"));
+  row = row.replace(/[3]/g, Array(4).join("|#"));
+  row = row.replace(/[2]/g, Array(3).join("|#"));
+  row = row.replace(/[1]/g, "#");
   row = row.trim().substr(1);
-  const piecesStrings = row.split('|');
+  const piecesStrings = row.split("|");
   const pieces: Array<Partial<IPiece> | null> = [];
   let f = 0;
   for (const c of piecesStrings) {
     // empty cell
-    if (c === '#') {
+    if (c === "#") {
       pieces.push(null);
       continue;
     }
-    const isNeutral = c[0] === '*';
+    const isNeutral = c[0] === "*";
     const pieceName = (isNeutral ? c.substr(1, 1) : c.substr(0, 1)) as Figurine;
     const pieceRotation = c.substr(1, 2) as RotationsCodes;
-    let rotation: PieceRotation = 'NoRotation';
-    let fairy = '';
+    let rotation: PieceRotation = "NoRotation";
+    let fairy = "";
     if (c.length >= 3) {
       rotation = RotationsCodeMap[pieceRotation];
-      if (c.indexOf('!') > -1) {
-        fairy = fairies?.[f] ?? '';
+      if (c.indexOf("!") > -1) {
+        fairy = fairies?.[f] ?? "";
         f++;
       }
     }
@@ -568,46 +559,44 @@ export function rowToPieces(row: string): Array<Partial<IPiece> | null> {
       rotation,
       // TODO: in fen we haven't params for fairies?
       fairyCode: fairy
-        .replace(/[\{\}]/g, '')
-        .split('+')
+        .replace(/[\{\}]/g, "")
+        .split("+")
         .map((fp) => ({ code: fp, params: [] })),
       color: isNeutral
-        ? 'Neutral'
+        ? "Neutral"
         : pieceName.toLowerCase() !== pieceName
-        ? 'White'
-        : 'Black',
+        ? "White"
+        : "Black",
     });
   }
 
   return pieces;
-}
+};
 
-export function fenToChessBoard(original: string) {
-  const [fen, fairies] = original.split(' ');
-  const fenrows = fen.split('/');
+export const fenToChessBoard = (original: string) => {
+  const [fen, fairies] = original.split(" ");
+  const fenrows = fen.split("/");
   const pieces = fenrows.map((f) => rowToPieces(f));
   const cells = pieces.reduce<Array<Partial<IPiece> | null>>(
     (a, b, i, m) => a.concat(b),
     []
   );
   return cells;
-}
+};
 
-export function notNull<T>(v: T): v is Exclude<T, null | undefined> {
-  return v != null;
-}
+export const notNull = <T>(v: T): v is Exclude<T, null | undefined> => v != null;
 
-function stringToArrayBuffer(stringText: string) {
+const stringToArrayBuffer = (stringText: string) => {
   const buffer = new ArrayBuffer(stringText.length);
   const bufferView = new Uint8Array(buffer);
   for (let i = 0; i < stringText.length; i++) {
     bufferView[i] = stringText.charCodeAt(i);
   }
   return buffer;
-}
+};
 
-export async function convertFromRtf(rtf: string) {
-  const { EMFJS, RTFJS, WMFJS } = await import('rtf.js');
+export const convertFromRtf = async (rtf: string) => {
+  const { EMFJS, RTFJS, WMFJS } = await import("rtf.js");
   RTFJS.loggingEnabled(false);
   WMFJS.loggingEnabled(false);
   EMFJS.loggingEnabled(false);
@@ -617,110 +606,105 @@ export async function convertFromRtf(rtf: string) {
     return htmlElements;
   } catch (err) {
     console.warn(err, rtf);
-    return rtf.split('\n').map((d) => {
-      const div = document.createElement('div');
+    return rtf.split("\n").map((d) => {
+      const div = document.createElement("div");
       div.innerText = d;
       return div;
     });
   }
-}
+};
 
-export async function convertToRtf(html: string): Promise<string | null> {
-  if (!(typeof html === 'string' && html)) {
+export const convertToRtf = async (html: string): Promise<string | null> => {
+  if (!(typeof html === "string" && html)) {
     return null;
   }
 
   let richText = html;
-  let tmpRichText: string;
-  let hasHyperlinks: boolean;
 
   // Singleton tags
   richText = richText.replace(
     /<(?:hr)(?:\s+[^>]*)?\s*[\/]?>/gi,
-    '{\\pard \\brdrb \\brdrs \\brdrw10 \\brsp20 \\par}\n{\\pard\\par}\n'
+    "{\\pard \\brdrb \\brdrs \\brdrw10 \\brsp20 \\par}\n{\\pard\\par}\n"
   );
   richText = richText.replace(
     /<(?:br)(?:\s+[^>]*)?\s*[\/]?>/gi,
-    '{\\pard\\par}\n'
+    "{\\pard\\par}\n"
   );
 
   // Empty tags
   richText = richText.replace(
     /<(?:p|div|section|article)(?:\s+[^>]*)?\s*[\/]>/gi,
-    '{\\pard\\par}\n'
+    "{\\pard\\par}\n"
   );
-  richText = richText.replace(/<(?:[^>]+)\/>/g, '');
+  richText = richText.replace(/<(?:[^>]+)\/>/g, "");
 
   // Hyperlinks
   richText = richText.replace(
     /<a(?:\s+[^>]*)?(?:\s+href=(["'])(?:javascript:void\(0?\);?|#|return false;?|void\(0?\);?|)\1)(?:\s+[^>]*)?>/gi,
-    '{{{\n'
+    "{{{\n"
   );
-  tmpRichText = richText;
+  const tmpRichText = richText;
   richText = richText.replace(
     /<a(?:\s+[^>]*)?(?:\s+href=(["'])(.+)\1)(?:\s+[^>]*)?>/gi,
-    `{\\field{\\*\\fldinst{HYPERLINK\n "$2"\n}}{\\fldrslt{\\ul\\cf1\n`
+    "{\\field{\\*\\fldinst{HYPERLINK\n \"$2\"\n}}{\\fldrslt{\\ul\\cf1\n"
   );
-  hasHyperlinks = richText !== tmpRichText;
-  richText = richText.replace(/<a(?:\s+[^>]*)?>/gi, '{{{\n');
-  richText = richText.replace(/<\/a(?:\s+[^>]*)?>/gi, '\n}}}');
+  const hasHyperlinks = richText !== tmpRichText;
+  richText = richText.replace(/<a(?:\s+[^>]*)?>/gi, "{{{\n");
+  richText = richText.replace(/<\/a(?:\s+[^>]*)?>/gi, "\n}}}");
 
   // Start tags
-  richText = richText.replace(/<(?:b|strong)(?:\s+[^>]*)?>/gi, '{\\b\n');
-  richText = richText.replace(/<(?:i|em)(?:\s+[^>]*)?>/gi, '{\\i\n');
-  richText = richText.replace(/<(?:u|ins)(?:\s+[^>]*)?>/gi, '{\\ul\n');
-  richText = richText.replace(/<(?:strike|del)(?:\s+[^>]*)?>/gi, '{\\strike\n');
-  richText = richText.replace(/<sup(?:\s+[^>]*)?>/gi, '{\\super\n');
-  richText = richText.replace(/<sub(?:\s+[^>]*)?>/gi, '{\\sub\n');
+  richText = richText.replace(/<(?:b|strong)(?:\s+[^>]*)?>/gi, "{\\b\n");
+  richText = richText.replace(/<(?:i|em)(?:\s+[^>]*)?>/gi, "{\\i\n");
+  richText = richText.replace(/<(?:u|ins)(?:\s+[^>]*)?>/gi, "{\\ul\n");
+  richText = richText.replace(/<(?:strike|del)(?:\s+[^>]*)?>/gi, "{\\strike\n");
+  richText = richText.replace(/<sup(?:\s+[^>]*)?>/gi, "{\\super\n");
+  richText = richText.replace(/<sub(?:\s+[^>]*)?>/gi, "{\\sub\n");
   richText = richText.replace(
     /<(?:p|div|section|article)(?:\s+[^>]*)?>/gi,
-    '{\\pard\n'
+    "{\\pard\n"
   );
 
   // End tags
   richText = richText.replace(
     /<\/(?:p|div|section|article)(?:\s+[^>]*)?>/gi,
-    '\n\\par}\n'
+    "\n\\par}\n"
   );
   richText = richText.replace(
     /<\/(?:b|strong|i|em|u|ins|strike|del|sup|sub)(?:\s+[^>]*)?>/gi,
-    '\n}'
+    "\n}"
   );
 
   // Strip any other remaining HTML tags [but leave their contents]
-  richText = richText.replace(/<(?:[^>]+)>/g, '');
+  richText = richText.replace(/<(?:[^>]+)>/g, "");
 
   // Prefix and suffix the rich text with the necessary syntax
   richText =
-    '{\\rtf1\\ansi\n' +
-    (hasHyperlinks ? '{\\colortbl\n;\n\\red0\\green0\\blue255;\n}\n' : '') +
+    "{\\rtf1\\ansi\n" +
+    (hasHyperlinks ? "{\\colortbl\n;\n\\red0\\green0\\blue255;\n}\n" : "") +
     richText +
-    '\n}';
+    "\n}";
 
-  richText = richText.replace(/&gt;/gi, '>');
-  richText = richText.replace(/&lt;/gi, '<');
-  richText = richText.replace(/&amp;/gi, '&');
-  richText = richText.replace(/&nbsp;/gi, ' ');
+  richText = richText.replace(/&gt;/gi, ">");
+  richText = richText.replace(/&lt;/gi, "<");
+  richText = richText.replace(/&amp;/gi, "&");
+  richText = richText.replace(/&nbsp;/gi, " ");
 
   return richText;
-}
+};
 
-export function notEmpty<T>(v: T | null | undefined | ''): v is T {
-  return v != null && v !== '';
-}
+export const notEmpty = <T>(v: T | null | undefined | ""): v is T => v != null && v !== "";
 
-export function newTextElement(elName: string, content: string): Element {
+export const newTextElement = (elName: string, content: string): Element => {
   const el = createXmlElement(elName);
   el.innerHTML = content;
   return el;
-}
+};
+
 const parser = new DOMParser();
-export function createXmlElement(elName: string): Element {
+export const createXmlElement = (elName: string): Element => {
   const dom = parser.parseFromString(
     `<${elName}></${elName}>`,
-    'application/xml'
+    "application/xml"
   );
   return dom.querySelector(elName) as Element;
-  // const newdiv = document.createElementNS("http://www.w3.org/1999/xml", elName);
-  // return newdiv;
-}
+};

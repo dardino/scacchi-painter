@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable one-var */
 /* eslint-disable no-bitwise */
 
@@ -8,13 +9,13 @@
  * @export
  */
 export class Base64 {
-  private static keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  private static keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
   // private property
 
   // public method for encoding
   public static encode(input: string) {
-    if ((input ?? '') === '') return '';
-    let output = '';
+    if ((input ?? "") === "") return "";
+    let output = "";
     let chr1: number,
       chr2: number,
       chr3: number,
@@ -55,13 +56,13 @@ export class Base64 {
 
   // public method for decoding
   public static decode(input: string) {
-    if ((input ?? '') === '') return '';
-    let output = '';
+    if ((input ?? "") === "") return "";
+    let output = "";
     let chr1: number, chr2: number, chr3: number;
     let enc1: number, enc2: number, enc3: number, enc4: number;
     let i = 0;
 
-    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
+    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
     while (i < input.length) {
       enc1 = Base64.keyStr.indexOf(input.charAt(i++));
       enc2 = Base64.keyStr.indexOf(input.charAt(i++));
@@ -90,8 +91,8 @@ export class Base64 {
 
   // private method for UTF-8 encoding
   private static _utf8_encode(textString: string) {
-    let utftext = '';
-    textString = textString.replace(/\r\n/g, '\n');
+    let utftext = "";
+    textString = textString.replace(/\r\n/g, "\n");
 
     for (let n = 0; n < textString.length; n++) {
       const c = textString.charCodeAt(n);
@@ -113,7 +114,7 @@ export class Base64 {
 
   // private method for UTF-8 decoding
   private static _utf8_decode(utftext: string) {
-    let textString = '';
+    let textString = "";
     let i = 0;
     let c: number, c1: number, c2: number, c3: number;
     c = c1 = c2 = 0;
