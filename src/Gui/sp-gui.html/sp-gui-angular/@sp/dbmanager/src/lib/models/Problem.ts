@@ -1,4 +1,4 @@
-import { Piece } from "./piece";
+import { Piece } from "./Piece";
 import {
   Columns,
   Traverse,
