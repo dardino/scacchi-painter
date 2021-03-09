@@ -4,7 +4,7 @@
   "scripts": {
     "startinsecure": "yarn ng serve",
     "start": "yarn ng serve --ssl true --host=0.0.0.0 --disable-host-check",
-    "build": "yarn ng build --prod",
+    "build": "npm i -g typescript && yarn ng build --prod",
     "build:electron": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron",
     "build:watch": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron --watch",
     "test": "yarn ng test",
