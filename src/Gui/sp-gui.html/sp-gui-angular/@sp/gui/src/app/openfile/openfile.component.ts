@@ -1,19 +1,14 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
-import { DbmanagerService } from '@sp/dbmanager/src/public-api';
-import { Router } from '@angular/router';
-import { HostBridgeService } from '@sp/host-bridge/src/public-api';
-import { DropboxdbService } from '@sp/dbmanager/src/lib/dropboxdb.service';
-import { FileSelected, FileService } from '@sp/host-bridge/src/lib/fileService';
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { Router } from "@angular/router";
+import { HostBridgeService } from "@sp/host-bridge/src/public-api";
+import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
+import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-  selector: 'app-sp-openfile',
-  templateUrl: './openfile.component.html',
-  styleUrls: ['./openfile.component.styl'],
+  selector: "app-sp-openfile",
+  templateUrl: "./openfile.component.html",
+  styleUrls: ["./openfile.component.styl"],
 })
 export class OpenfileComponent implements OnInit {
   constructor(
@@ -24,26 +19,28 @@ export class OpenfileComponent implements OnInit {
   ) {}
 
   public showDropboxFolder = false;
-  @ViewChild('fileloader') fileloader: ElementRef;
+  @ViewChild("fileloader") fileloader: ElementRef;
 
   selectLocalFile(args: FileList) {
     if (args.length === 1) {
       const file = args.item(0);
       if (file == null) return;
-      this.loadFromFile({
-        meta: {
-          fullPath: file?.name,
-          id: file.name,
-          itemName: file.name,
-          type: 'file',
+      this.loadFromFile(
+        {
+          meta: {
+            fullPath: file?.name,
+            id: file.name,
+            itemName: file.name,
+            type: "file",
+          },
+          file,
+          source: "local",
         },
-        file,
-        source: 'local',
-      }, null);
+        null
+      );
     }
   }
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   get electron() {
     return this.bridge.supportsClose;
@@ -53,16 +50,19 @@ export class OpenfileComponent implements OnInit {
     if (this.bridge.supportsOpen) {
       const file = await this.bridge.openFile();
       if (file == null) return;
-      await this.loadFromFile({
-        file,
-        source: 'local',
-        meta: {
-          fullPath: file.name,
-          itemName: file.name,
-          id: file.name,
-          type: 'file',
+      await this.loadFromFile(
+        {
+          file,
+          source: "local",
+          meta: {
+            fullPath: file.name,
+            itemName: file.name,
+            id: file.name,
+            type: "file",
+          },
         },
-      }, null);
+        null
+      );
     } else this.fileloader.nativeElement.click();
   }
 
@@ -71,7 +71,10 @@ export class OpenfileComponent implements OnInit {
     this.showDropboxFolder = true;
   }
 
-  async loadFromFile(fileInfo: FileSelected | null, fileSerivce: FileService | null) {
+  async loadFromFile(
+    fileInfo: FileSelected | null,
+    fileSerivce: FileService | null
+  ) {
     if (!fileInfo) return;
     const error = await this.db.Load(fileInfo, fileSerivce);
     if (!error) {

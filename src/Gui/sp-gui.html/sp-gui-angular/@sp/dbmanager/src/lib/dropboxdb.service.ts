@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
-import { FileService, FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
+import {
+  FileService,
+  FolderItemInfo,
+} from "@sp/host-bridge/src/lib/fileService";
 import { getDropboxToken } from "./dropbox/dropboxcli";
 import { TokenResponse } from "./oauth_funcs/pkce";
 
@@ -15,7 +18,6 @@ interface DropboxFileInfo {
   providedIn: "root",
 })
 export class DropboxdbService implements FileService {
-
   constructor() {}
   private token: TokenResponse | null;
 
