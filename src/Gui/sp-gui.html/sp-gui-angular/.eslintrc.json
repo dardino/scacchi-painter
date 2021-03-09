@@ -25,7 +25,11 @@
         "brace-style": ["error", "1tbs"],
         "curly": ["error", "multi-line"],
         "quotes": "off",
-        "@typescript-eslint/quotes": ["error", "double"],
+        "@typescript-eslint/quotes": [
+          "error",
+          "double",
+          { "avoidEscape": true, "allowTemplateLiterals": true }
+        ],
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["error"]
       }

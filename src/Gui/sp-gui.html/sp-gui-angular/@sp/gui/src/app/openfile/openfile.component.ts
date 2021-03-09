@@ -40,7 +40,14 @@ export class OpenfileComponent implements OnInit {
       );
     }
   }
-  ngOnInit() {}
+  ngOnInit() {
+    const urlhash = location.hash;
+    if (urlhash === "#dropbox") {
+      setTimeout(() => {
+        this.fromDropbox();
+      }, 1);
+    }
+  }
 
   get electron() {
     return this.bridge.supportsClose;
