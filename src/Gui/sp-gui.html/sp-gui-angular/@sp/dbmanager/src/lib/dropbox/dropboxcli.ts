@@ -13,8 +13,9 @@ export const getDropboxToken = async (): Promise<TokenResponse | null> => {
   }
 
   // : generate state string:
-  const stateString = generateStateString();
+  const stateString = generateStateString(location.href);
   localStorage.setItem("state", stateString);
+  localStorage.setItem("redirect", location.href + "#dropbox");
   // : generate authorization url
   const authUrl = getImplicitAuthorizationUrl({
     authEp: "https://www.dropbox.com/oauth2/authorize",
@@ -24,36 +25,6 @@ export const getDropboxToken = async (): Promise<TokenResponse | null> => {
     state: stateString,
   });
   // : open window with this authUrl and wait for return url
-  const w = window.open(authUrl, "_blank");
-  if (!w) throw new Error("unable to open window for login access");
-
-  const promise = new Promise<TokenResponse | null>((resolve, reject) => {
-    const onMessage = (ev: MessageEvent<TokenResponse>) => {
-      destroy();
-      if (ev.origin !== location.origin) {
-        reject(ev.data);
-      } else {
-        setTimeout(() => {
-          resolve(ev.data);
-        }, 200);
-      }
-    };
-    const onClose = () => {
-      destroy();
-      resolve(null);
-    };
-    window.addEventListener("message", onMessage);
-    w?.addEventListener("close", onClose);
-
-    const destroy = () => {
-      window.removeEventListener("message", onMessage);
-      w?.removeEventListener("close", onClose);
-    };
-  });
-  const code = await promise;
-  w.close();
-
-  if (!code) return null;
-  localStorage.setItem("dropbox_token", JSON.stringify(code));
-  return code;
+  location.href = authUrl;
+  return null;
 };

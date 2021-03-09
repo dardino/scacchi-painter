@@ -19,9 +19,15 @@ export class AuthRedirectComponent implements OnInit {
       scope: search.get("scope") ?? "",
       account_id: search.get("account_id") ?? "",
     };
-    localStorage.setItem("dropbox_token", JSON.stringify(tokenMessage));
-    setTimeout(() => {
-      window.opener.postMessage(tokenMessage, location.origin);
-    }, 100);
+    const state = localStorage.getItem("state") ?? "";
+    if (tokenMessage.state === state && state !== "") {
+      localStorage.setItem("dropbox_token", JSON.stringify(tokenMessage));
+      setTimeout(() => {
+        const urlredirect = localStorage.getItem("redirect") ?? "/openfile";
+        location.href = urlredirect;
+      }, 100);
+    } else {
+      location.href = "/";
+    }
   }
 }

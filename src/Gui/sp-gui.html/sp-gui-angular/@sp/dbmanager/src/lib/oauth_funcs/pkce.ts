@@ -1,12 +1,13 @@
-const charecters = "qwertzuioplkjhgfdsayxcvbnm1234567890YAQWSXCDERFVBGTZHNMJUIKLOP-_.~";
-export const generateStateString = (): string => {
+const charecters =
+  "qwertzuioplkjhgfdsayxcvbnm1234567890YAQWSXCDERFVBGTZHNMJUIKLOP";
+export const generateStateString = (url: string): string => {
   let len = 16;
   let generated = "";
   while (len--) {
     const i = Math.floor(Math.random() * charecters.length);
     generated += charecters[i];
   }
-  return generated;
+  return generated + "_" + btoa(url);
 };
 
 export const getImplicitAuthorizationUrl = ({
