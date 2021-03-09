@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { BoardCellComponent } from './board-cell.component';
+import { BoardCellComponent } from "./board-cell.component";
 
-describe('BoardCellComponent', () => {
+describe("BoardCellComponent", () => {
   let component: BoardCellComponent;
   let fixture: ComponentFixture<BoardCellComponent>;
 
@@ -19,7 +19,7 @@ describe('BoardCellComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

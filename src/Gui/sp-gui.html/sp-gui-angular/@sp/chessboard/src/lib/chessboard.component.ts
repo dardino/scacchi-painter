@@ -156,7 +156,7 @@ export class ChessboardComponent
       }
     }
     if (this.canvasBoard && pp) {
-      const mappedPieces: BP[] = pp.map((p: Piece) => p.ConvertToCanvasPiece())
+      const mappedPieces: BP[] = pp.map((p: Piece) => p.ConvertToCanvasPiece());
       const bps = mappedPieces.filter(notNull);
       this.canvasBoard.SetPieces(bps);
     }
@@ -180,7 +180,7 @@ export class ChessboardComponent
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
-  };
+  }
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function

@@ -1,5 +1,5 @@
-// tslint:disable: object-literal-key-quotes
-// tslint:disable: max-line-length
+/* eslint-disable quote-props */
+/* eslint-disable max-len */
 
 export const FairyPiecesDB = {
   "15": "1,5-leaper",

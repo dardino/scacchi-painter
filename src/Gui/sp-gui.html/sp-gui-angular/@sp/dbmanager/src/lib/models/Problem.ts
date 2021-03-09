@@ -19,7 +19,7 @@ import { Author } from "./author";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
 
-// tslint:disable-next-line: variable-name
+// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
 const main_snapshot = "$_MAIN_$";
 
 export class Problem implements IProblem {

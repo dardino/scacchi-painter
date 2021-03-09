@@ -3,17 +3,17 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-} from "@angular/core";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
-import { Router } from "@angular/router";
-import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
-import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
+} from '@angular/core';
+import { DbmanagerService } from '@sp/dbmanager/src/public-api';
+import { Router } from '@angular/router';
+import { HostBridgeService } from '@sp/host-bridge/src/public-api';
+import { DropboxdbService } from '@sp/dbmanager/src/lib/dropboxdb.service';
+import { FileSelected, FileService } from '@sp/host-bridge/src/lib/fileService';
 
 @Component({
-  selector: "app-sp-openfile",
-  templateUrl: "./openfile.component.html",
-  styleUrls: ["./openfile.component.styl"],
+  selector: 'app-sp-openfile',
+  templateUrl: './openfile.component.html',
+  styleUrls: ['./openfile.component.styl'],
 })
 export class OpenfileComponent implements OnInit {
   constructor(
@@ -23,8 +23,8 @@ export class OpenfileComponent implements OnInit {
     private bridge: HostBridgeService
   ) {}
 
-  public showDropboxFolder: boolean = false;
-  @ViewChild("fileloader") fileloader: ElementRef;
+  public showDropboxFolder = false;
+  @ViewChild('fileloader') fileloader: ElementRef;
 
   selectLocalFile(args: FileList) {
     if (args.length === 1) {
@@ -35,10 +35,10 @@ export class OpenfileComponent implements OnInit {
           fullPath: file?.name,
           id: file.name,
           itemName: file.name,
-          type: "file",
+          type: 'file',
         },
         file,
-        source: "local",
+        source: 'local',
       }, null);
     }
   }
@@ -55,12 +55,12 @@ export class OpenfileComponent implements OnInit {
       if (file == null) return;
       await this.loadFromFile({
         file,
-        source: "local",
+        source: 'local',
         meta: {
           fullPath: file.name,
           itemName: file.name,
           id: file.name,
-          type: "file",
+          type: 'file',
         },
       }, null);
     } else this.fileloader.nativeElement.click();

@@ -8,7 +8,7 @@ import { FileSelected, FileService, FolderItemInfo } from "@sp/host-bridge/src/l
 })
 export class FileExplorerComponent implements OnInit {
   @Input() service: FileService;
-  @Output() select = new EventEmitter<FileSelected>();
+  @Output() selectFile = new EventEmitter<FileSelected>();
 
   public currentItem: FolderItemInfo = {
     fullPath: "/",
@@ -41,7 +41,7 @@ export class FileExplorerComponent implements OnInit {
 
   private async clickFile(item: FolderItemInfo): Promise<void> {
     const file = await this.service.getFileContent(item);
-    this.select.emit({ file, meta: item, source: "dropbox" });
+    this.selectFile.emit({ file, meta: item, source: "dropbox" });
   }
 
   private refresh() {

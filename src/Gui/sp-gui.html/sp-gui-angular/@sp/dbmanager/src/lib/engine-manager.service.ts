@@ -9,12 +9,12 @@ import { Problem } from "./models";
 export class EngineManagerService {
   solution$: BehaviorSubject<string> = new BehaviorSubject("");
   isSolving$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  supportsSolve: boolean = true;
+  supportsSolve = true;
 
   constructor(private bridge: HostBridgeService) {
     this.bridge.Solver$.subscribe(msg => {
       this.solution$.next(msg);
-    })
+    });
   }
 
   public startSolving(problem: Problem): void {

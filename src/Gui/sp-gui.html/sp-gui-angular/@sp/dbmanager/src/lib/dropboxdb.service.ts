@@ -15,19 +15,19 @@ interface DropboxFileInfo {
   providedIn: "root",
 })
 export class DropboxdbService implements FileService {
+
+  constructor() {}
   private token: TokenResponse | null;
+
+  private currentCursor: string | null = null;
+  private pagesize = 1000;
+  private hasMore = true;
 
   async authorize(): Promise<boolean> {
     const token = await getDropboxToken();
     this.token = token;
     return token != null;
   }
-
-  private currentCursor: string | null = null;
-  private pagesize = 1000;
-  private hasMore: boolean = true;
-
-  constructor() {}
 
   saveFileContent(file: File, item: FolderItemInfo): Promise<void> {
     throw new Error("Method not implemented.");

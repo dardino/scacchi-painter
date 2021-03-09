@@ -34,7 +34,7 @@ export class SpSolutionDescComponent implements OnInit {
   }
 
   getClass(item: string): string {
-    item= item.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    item = item.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
     if (istructionRegExp.test(item)) return "instruction";
     else if (outlogRegExp.test(item)) return "log";
     else return "solution";

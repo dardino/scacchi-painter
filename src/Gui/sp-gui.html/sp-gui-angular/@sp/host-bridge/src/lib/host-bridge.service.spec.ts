@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { HostBridgeService } from './host-bridge.service';
+import { HostBridgeService } from "./host-bridge.service";
 
-describe('HostBridgeService', () => {
+describe("HostBridgeService", () => {
   let service: HostBridgeService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('HostBridgeService', () => {
     service = TestBed.inject(HostBridgeService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

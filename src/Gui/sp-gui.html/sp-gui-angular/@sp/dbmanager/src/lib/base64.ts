@@ -1,5 +1,5 @@
-// tslint:disable: one-variable-per-declaration
-// tslint:disable: no-bitwise
+/* eslint-disable one-var */
+/* eslint-disable no-bitwise */
 
 /**
  *  Base64 encode / decode

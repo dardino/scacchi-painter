@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
-import { Problem } from "@sp/dbmanager/src/lib/models";
-import { DataSource, CollectionViewer } from "@angular/cdk/collections";
-import { Observable, BehaviorSubject } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { DbmanagerService } from '@sp/dbmanager/src/public-api';
+import { Problem } from '@sp/dbmanager/src/lib/models';
+import { DataSource, CollectionViewer } from '@angular/cdk/collections';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: "app-database-list",
-  templateUrl: "./database-list.component.html",
-  styleUrls: ["./database-list.component.styl"],
+  selector: 'app-database-list',
+  templateUrl: './database-list.component.html',
+  styleUrls: ['./database-list.component.styl'],
 })
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db.All);

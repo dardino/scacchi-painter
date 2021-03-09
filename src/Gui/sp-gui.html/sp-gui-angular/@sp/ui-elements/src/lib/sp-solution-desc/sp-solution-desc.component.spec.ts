@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { SpSolutionDescComponent } from './sp-solution-desc.component';
+import { SpSolutionDescComponent } from "./sp-solution-desc.component";
 
-describe('SpSolutionDescComponent', () => {
+describe("SpSolutionDescComponent", () => {
   let component: SpSolutionDescComponent;
   let fixture: ComponentFixture<SpSolutionDescComponent>;
 
@@ -19,7 +19,7 @@ describe('SpSolutionDescComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
