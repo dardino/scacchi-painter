@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "startinsecure": "ng serve",
-    "start": "ng serve --ssl true",
+    "start": "ng serve --ssl true --host=0.0.0.0 --disable-host-check",
     "build": "ng build --prod",
     "build:electron": "export BROWSERSLIST_ENV=\"electron\" && ng build -c electron",
     "build:watch": "export BROWSERSLIST_ENV=\"electron\" && ng build -c electron --watch",
