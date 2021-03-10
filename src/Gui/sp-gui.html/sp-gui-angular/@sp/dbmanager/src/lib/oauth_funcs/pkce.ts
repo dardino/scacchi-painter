@@ -7,7 +7,7 @@ export const generateStateString = (url: string): string => {
     const i = Math.floor(Math.random() * charecters.length);
     generated += charecters[i];
   }
-  return generated + "_" + btoa(url);
+  return generated;
 };
 
 export const getImplicitAuthorizationUrl = ({

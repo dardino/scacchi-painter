@@ -90,6 +90,10 @@ export class DropboxdbService implements FileService {
         itemName: ent.name,
       }));
     } else {
+      if (result.status === 400 || result.status === 401) {
+        localStorage.removeItem("dropbox_token");
+        this.authorize();
+      }
       return [];
     }
   }
