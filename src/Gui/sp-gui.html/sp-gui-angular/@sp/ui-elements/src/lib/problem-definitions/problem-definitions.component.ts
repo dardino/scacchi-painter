@@ -35,40 +35,40 @@ export class ProblemDefinitionsComponent implements OnInit {
     return this.current.Problem?.authors ?? [];
   }
   public set authors(v: Author[]) {
-    if (this.current.Problem) this.current.Problem.authors = v;
+    this.current.SetAuthors(v);
   }
 
   public get twins(): Twin[] {
     return this.current.Problem?.twins.TwinList ?? [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram })];
   }
   public set twins(v: Twin[]) {
-    if (this.current.Problem) this.current.Problem.twins.TwinList = v;
+    this.current.SetTwins(v);
   }
 
   public get conditions(): string[] {
     return this.current.Problem?.conditions ?? [];
   }
   public set conditions(v: string[]) {
-    if (this.current.Problem) this.current.Problem.conditions = v;
+    this.current.SetConditions(v);
   }
 
   public get problemType(): ProblemTypes {
     return this.current.Problem?.stipulation.problemType ?? "-";
   }
   public set problemType(v: ProblemTypes) {
-    if (this.current.Problem) this.current.Problem.stipulation.problemType = v;
+    this.current.SetProblemType(v);
   }
   public get leadsTo(): EndingTypes {
     return this.current.Problem?.stipulation.stipulationType ?? "#";
   }
   public set leadsTo(v: EndingTypes) {
-    if (this.current.Problem) this.current.Problem.stipulation.stipulationType = v;
+    this.current.SetStipulationType(v);
   }
   public get moves(): number {
     return this.current.Problem?.stipulation.moves ?? 2;
   }
   public set moves(v: number) {
-    if (this.current.Problem) this.current.Problem.stipulation.moves = v;
+    this.current.SetStipulationMoves(v);
   }
 
   constructor(private current: CurrentProblemService) {}

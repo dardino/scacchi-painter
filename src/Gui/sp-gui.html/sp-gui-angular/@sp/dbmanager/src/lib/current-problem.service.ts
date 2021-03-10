@@ -6,8 +6,10 @@ import {
   Columns,
   Traverse,
   IProblem,
+  ProblemTypes,
+  EndingTypes
 } from "./helpers";
-import { Piece } from "./models";
+import { Author, Piece } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
 import { Twin } from "./models/twin";
 
@@ -15,6 +17,33 @@ import { Twin } from "./models/twin";
   providedIn: "root",
 })
 export class CurrentProblemService {
+  SetStipulationMoves(v: number) {
+    if (this.Problem) {
+      this.Problem.stipulation.moves = v;
+      this.recalcStipulationDesc();
+    }
+  }
+  SetStipulationType(v: EndingTypes) {
+    if (this.Problem) {
+      this.Problem.stipulation.stipulationType = v;
+      this.recalcStipulationDesc();
+    }
+  }
+  SetProblemType(v: ProblemTypes) {
+    if (this.Problem) {
+      this.Problem.stipulation.problemType = v;
+      this.recalcStipulationDesc();
+    }
+  }
+  SetConditions(v: string[]) {
+    if (this.Problem) this.Problem.conditions = v;
+  }
+  SetTwins(v: Twin[]) {
+    if (this.Problem) this.Problem.twins.TwinList = v;
+  }
+  SetAuthors(v: Author[]) {
+    if (this.Problem) this.Problem.authors = v;
+  }
   public get Problem() {
     return this.dbManager.CurrentProblem;
   }
@@ -210,6 +239,12 @@ export class CurrentProblemService {
   ): void {
     if (!piece) return;
     piece.SetLocation(location.column, location.traverse);
+  }
+
+  private recalcStipulationDesc() {
+    if (!this.Problem) return;
+    const { problemType, stipulationType, moves } = this.Problem.stipulation;
+    this.Problem.stipulation.completeStipulationDesc = (problemType === "-" ? "" : problemType) + stipulationType + moves;
   }
 }
 

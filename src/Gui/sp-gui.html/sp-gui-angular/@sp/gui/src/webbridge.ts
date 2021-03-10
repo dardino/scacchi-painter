@@ -105,7 +105,7 @@ class WebBridge implements BridgeGlobal {
       dmoves++;
     }
     rows.push(
-      `Stipulation ${problem.stipulation.completeStipulationDesc}${dmoves}`
+      `Stipulation ${problem.stipulation.simpleStipulationDesc}${dmoves}`
     );
 
     // Options
