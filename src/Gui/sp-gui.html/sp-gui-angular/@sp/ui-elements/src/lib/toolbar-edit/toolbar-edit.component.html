@@ -5,20 +5,7 @@
     iconLabel="Picture/Vector"
     [noLabel]="true"
   ></lib-sp-toolbar-button>
-  <mat-button-toggle-group [value]="editMode" (change)="modeChange($event)">
-    <mat-button-toggle value="select" matTooltip="Select mode">
-      <mat-icon svgIcon="select_piece"></mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle value="add" matTooltip="Add mode">
-      <mat-icon svgIcon="add_piece"></mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle value="remove" matTooltip="Delete mode">
-      <mat-icon svgIcon="remove_piece"></mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle value="move" matTooltip="Move mode">
-      <mat-icon svgIcon="move_piece"></mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  <lib-toolbar-piece [editMode]="editMode" (editModeChanged)="modeChange($event)"></lib-toolbar-piece>
   <lib-sp-toolbar-button
     (click)="rotateRight()"
     iconText="rotate_right"
