@@ -213,12 +213,18 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.commandMapper[$event]();
   }
   setPieceToAdd($event: string | null) {
-    this.resetActions();
-    this.editMode = $event == null ? "select" : "add";
-    this.pieceToAdd = $event;
+    if (this.pieceToAdd === null) {
+      this.resetActions();
+      this.editMode = $event == null ? "select" : "add";
+      this.pieceToAdd = $event;
+    } else {
+      this.resetActions();
+    }
   }
-  setCurrentCell($event: SquareLocation | null) {
+  currentCellChange($event: SquareLocation | null) {
     if ($event == null) this.resetActions();
+  }
+  clickOnCell($event: SquareLocation) {
     if (this.editMode === "remove" && $event != null) {
       this.current.RemovePieceAt($event);
     }
@@ -248,8 +254,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   boardBlur() {
-    this.editMode = "select";
-    this.resetActions();
+    // this.editMode = "select";
+    // this.resetActions();
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {
