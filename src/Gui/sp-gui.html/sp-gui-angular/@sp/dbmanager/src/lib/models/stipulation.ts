@@ -17,6 +17,11 @@ export class Stipulation implements IStipulation {
   completeStipulationDesc = "#2";
   colorStarter: "White" | "Black" = "White";
 
+  get simpleStipulationDesc(): string {
+    const { problemType, stipulationType } = this;
+    return (problemType === "-" ? "" : problemType) + stipulationType;
+  }
+
   static fromElement(source: Element): Stipulation {
     const p = new Stipulation();
     p.problemType = getProblemType(source.getAttribute("ProblemType") as XMLProblemTypesKeys);
