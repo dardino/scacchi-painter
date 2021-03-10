@@ -1,7 +1,15 @@
 <div>
   <div>
     <h1 class="title">Open from:</h1>
-    <ul>
+    <ul class="open-from">
+      <li>
+        <a mat-stroked-button (click)="newFile()">
+          <span class="open-button">
+            <mat-icon>library_add</mat-icon>
+            <span>New file</span>
+          </span>
+        </a>
+      </li>
       <li>
         <a mat-stroked-button (click)="localFolder()">
           <span class="open-button">
@@ -18,6 +26,9 @@
           </span>
         </a>
       </li>
+      <!-- we needs a 'n-1' fillers to grant the correct ui -->
+      <li class="filler"></li>
+      <li class="filler"></li>
       <!-- <li>
       <a mat-stroked-button>
         <span class="open-button">
@@ -50,5 +61,8 @@
   </div>
   <div *ngIf="showDropboxFolder">
     <lib-file-explorer [service]="dropboxService" (selectFile)="openFile($event, dropboxService)"></lib-file-explorer>
+  </div>
+  <div *ngIf="showNewFileWizard">
+    <lib-create-file-wizard (save)="createFile($event)"></lib-create-file-wizard>
   </div>
 </div>

@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { MatIconRegistry } from "@angular/material/icon";
-import { DomSanitizer } from "@angular/platform-browser";
 import { MatButtonToggleChange } from "@angular/material/button-toggle";
+import { EditModes } from "../toolbar-piece/toolbar-piece.component";
 
 export type EditCommand =
   | "rotateL"
@@ -14,8 +13,6 @@ export type EditCommand =
   | "moveR"
   | "resetPosition"
   | "clearBoard";
-
-export type EditModes = "select" | "add" | "remove" | "move";
 
 @Component({
   selector: "lib-toolbar-edit",
@@ -36,8 +33,8 @@ export class ToolbarEditComponent implements OnInit {
     this.switchBoardType.emit();
   }
 
-  modeChange($event: MatButtonToggleChange) {
-    this.editModeChanged.emit($event.value);
+  modeChange($event: EditModes) {
+    this.editModeChanged.emit($event);
   }
 
   ngOnInit(): void {

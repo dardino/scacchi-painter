@@ -1,5 +1,5 @@
 <mat-toolbar-row class="lib-toolbar">
-  <mat-button-toggle-group>
+  <mat-button-toggle-group [value]="editMode" (change)="modeChange($event)">
     <mat-button-toggle value="select">
       <mat-icon svgIcon="select_piece"></mat-icon>
     </mat-button-toggle>

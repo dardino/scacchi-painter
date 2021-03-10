@@ -117,7 +117,7 @@ export class DbmanagerService {
     try {
       const obj = JSON.parse(jsonString) as IDbSpX;
       this.All = obj.problems.map((p) => Problem.fromJson(p));
-      this.currentIndex = obj.lastIndex;
+      this.currentIndex = obj.lastIndex ?? 0;
       return null;
     } catch (err) {
       return err;

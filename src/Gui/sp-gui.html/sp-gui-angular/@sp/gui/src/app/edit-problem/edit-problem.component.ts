@@ -16,10 +16,7 @@ import {
 import { Subscription, BehaviorSubject } from "rxjs";
 import { Location } from "@angular/common";
 import { MatMenuTrigger } from "@angular/material/menu";
-import {
-  EditCommand,
-  EditModes,
-} from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
+import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { Piece } from "@sp/dbmanager/src/lib/models";
 import { MatDialog } from "@angular/material/dialog";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
@@ -28,6 +25,7 @@ import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialo
 import { ActivatedRoute } from "@angular/router";
 import { EngineManagerService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
+import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 
 @Component({
   selector: "app-edit-problem",
@@ -235,6 +233,12 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       } else {
         this.completeMove($event);
       }
+    }
+    if (this.editMode === "select" && $event != null) {
+      this.editMode = "move";
+      this.prepareMovePiece(
+        this.current.Problem?.GetPieceAt($event.column, $event.traverse)
+      );
     }
   }
   editModeChanged($event: EditModes) {

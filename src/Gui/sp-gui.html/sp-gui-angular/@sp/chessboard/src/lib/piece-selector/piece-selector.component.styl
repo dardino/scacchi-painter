@@ -1,3 +1,5 @@
+
+
 .piece-selector
   display flex
   background-color #fff
@@ -10,6 +12,15 @@
     justify-content: center
     min-width: 3rem
     height: 3rem
+
+  @media (max-width: 440px)
+    font-size: calc(calc(100vw - 1rem) / 13);
+    em
+      flex 0 0 calc(100% / 9)
+      min-width calc(100% / 9)
+      height calc(calc(100vw - 1rem) / 9)
+
+
 .piece-selector-item
   &:hover
     outline: solid .1rem red
