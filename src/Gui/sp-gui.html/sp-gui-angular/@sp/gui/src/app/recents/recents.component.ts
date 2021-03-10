@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-recents',
-  templateUrl: './recents.component.html',
-  styleUrls: ['./recents.component.styl'],
+  selector: "app-recents",
+  templateUrl: "./recents.component.html",
+  styleUrls: ["./recents.component.styl"],
 })
 export class RecentsComponent implements OnInit {
   recents: string[] = [];

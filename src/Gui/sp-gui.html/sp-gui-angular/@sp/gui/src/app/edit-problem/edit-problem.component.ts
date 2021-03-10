@@ -4,7 +4,7 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
-} from '@angular/core';
+} from "@angular/core";
 import {
   CurrentProblemService,
   SquareLocation,
@@ -12,26 +12,26 @@ import {
   getCanvasRotation,
   notNull,
   DbmanagerService,
-} from '@sp/dbmanager/src/public-api';
-import { Subscription, BehaviorSubject } from 'rxjs';
-import { Location } from '@angular/common';
-import { MatMenuTrigger } from '@angular/material/menu';
+} from "@sp/dbmanager/src/public-api";
+import { Subscription, BehaviorSubject } from "rxjs";
+import { Location } from "@angular/common";
+import { MatMenuTrigger } from "@angular/material/menu";
 import {
   EditCommand,
   EditModes,
-} from '@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component';
-import { Piece } from '@sp/dbmanager/src/lib/models';
-import { MatDialog } from '@angular/material/dialog';
-import { TwinDialogComponent } from '../twin-dialog/twin-dialog.component';
-import { Twin } from '@sp/dbmanager/src/lib/models/twin';
-import { ConditionsDialogComponent } from '../conditions-dialog/conditions-dialog.component';
-import { ActivatedRoute } from '@angular/router';
-import { EngineManagerService } from '@sp/dbmanager/src/public-api';
+} from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
+import { Piece } from "@sp/dbmanager/src/lib/models";
+import { MatDialog } from "@angular/material/dialog";
+import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
+import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
+import { ActivatedRoute } from "@angular/router";
+import { EngineManagerService } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: 'app-edit-problem',
-  templateUrl: './edit-problem.component.html',
-  styleUrls: ['./edit-problem.component.styl'],
+  selector: "app-edit-problem",
+  templateUrl: "./edit-problem.component.html",
+  styleUrls: ["./edit-problem.component.styl"],
 })
 export class EditProblemComponent implements OnInit, OnDestroy {
   public get rows$() {
@@ -63,13 +63,13 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
-  @ViewChild('panelright') panelright: ElementRef;
+  @ViewChild("panelright") panelright: ElementRef;
 
   private subscribe: Subscription;
 
-  public editMode: EditModes = 'select';
+  public editMode: EditModes = "select";
   public rows: string[] = [];
-  public boardType: 'HTML' | 'canvas' = 'HTML';
+  public boardType: "HTML" | "canvas" = "HTML";
   public rows$ubject = new BehaviorSubject<string[]>([]);
   menuX = 0;
   menuY = 0;
@@ -79,14 +79,14 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   private leaveTimeout?: ReturnType<typeof setTimeout>;
 
   private commandMapper: { [key in EditCommand]: () => void } = {
-    flipH: () => this.current.FlipBoard('y'),
-    flipV: () => this.current.FlipBoard('x'),
-    rotateL: () => this.current.RotateBoard('left'),
-    rotateR: () => this.current.RotateBoard('right'),
-    moveU: () => this.current.ShiftBoard('y'),
-    moveD: () => this.current.ShiftBoard('-y'),
-    moveL: () => this.current.ShiftBoard('-x'),
-    moveR: () => this.current.ShiftBoard('x'),
+    flipH: () => this.current.FlipBoard("y"),
+    flipV: () => this.current.FlipBoard("x"),
+    rotateL: () => this.current.RotateBoard("left"),
+    rotateR: () => this.current.RotateBoard("right"),
+    moveU: () => this.current.ShiftBoard("y"),
+    moveD: () => this.current.ShiftBoard("-y"),
+    moveL: () => this.current.ShiftBoard("-x"),
+    moveR: () => this.current.ShiftBoard("x"),
     resetPosition: () => this.current.Reload(), // reload current snapshot
     clearBoard: () => this.current.ClearBoard(),
   };
@@ -102,7 +102,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     const figurine =
       this.pieceToAdd ??
       this.pieceToMove?.cursor() ??
-      (this.editMode === 'remove' ? 'X' : null);
+      (this.editMode === "remove" ? "X" : null);
     const rotation =
       this.rotationToAdd ??
       (this.pieceToMove?.rotation
@@ -118,7 +118,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   switchBoardType() {
-    this.boardType = this.boardType === 'HTML' ? 'canvas' : 'HTML';
+    this.boardType = this.boardType === "HTML" ? "canvas" : "HTML";
     this.resetActions();
   }
   onTriggerContextMenu(event: MouseEvent) {
@@ -133,8 +133,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.rows = [];
     this.rows$ubject.next(this.rows);
     if (this.current.Problem) {
-      this.current.Problem.htmlSolution = '';
-      this.current.Problem.textSolution = '';
+      this.current.Problem.htmlSolution = "";
+      this.current.Problem.textSolution = "";
       this.engine.startSolving(this.current.Problem);
     }
     this.resetActions();
@@ -152,7 +152,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribe = this.engine.solution$.subscribe((msg) => {
-      this.rows.push(...msg.replace(/\r/g, '').split('\n'));
+      this.rows.push(...msg.replace(/\r/g, "").split("\n"));
       this.rows$ubject.next(this.rows);
       if (this.current.Problem) {
         this.current.Problem.htmlSolution = this.toHtml(this.rows);
@@ -185,7 +185,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     (this.panelright.nativeElement as HTMLDivElement).style.width = `${
       this.resizing.initialW + delta
     }px`;
-    window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event("resize"));
   }
 
   startResize($event: MouseEvent) {
@@ -217,18 +217,18 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
   setPieceToAdd($event: string | null) {
     this.resetActions();
-    this.editMode = $event == null ? 'select' : 'add';
+    this.editMode = $event == null ? "select" : "add";
     this.pieceToAdd = $event;
   }
   setCurrentCell($event: SquareLocation | null) {
     if ($event == null) this.resetActions();
-    if (this.editMode === 'remove' && $event != null) {
+    if (this.editMode === "remove" && $event != null) {
       this.current.RemovePieceAt($event);
     }
-    if (this.editMode === 'add' && this.pieceToAdd != null && $event != null) {
+    if (this.editMode === "add" && this.pieceToAdd != null && $event != null) {
       this.addPiece(this.pieceToAdd, $event);
     }
-    if (this.editMode === 'move' && $event != null) {
+    if (this.editMode === "move" && $event != null) {
       if (this.pieceToMove == null) {
         this.prepareMovePiece(
           this.current.Problem?.GetPieceAt($event.column, $event.traverse)
@@ -239,25 +239,25 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     }
   }
   editModeChanged($event: EditModes) {
-    if ($event !== 'add') this.pieceToAdd = null;
+    if ($event !== "add") this.pieceToAdd = null;
     this.editMode = $event;
     this.pieceToMove = null;
   }
 
   boardBlur() {
-    this.editMode = 'select';
+    this.editMode = "select";
     this.resetActions();
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {
     const p = Piece.fromPartial({
-      appearance: figurine[2] as IPiece['appearance'],
+      appearance: figurine[2] as IPiece["appearance"],
       color:
-        figurine[0] === 'w'
-          ? 'White'
-          : figurine[0] === 'b'
-          ? 'Black'
-          : 'Neutral',
+        figurine[0] === "w"
+          ? "White"
+          : figurine[0] === "b"
+          ? "Black"
+          : "Neutral",
     }) as Piece;
     this.current.AddPieceAt(loc, p);
   }
@@ -270,7 +270,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   private completeMove(loc: SquareLocation) {
     if (!this.pieceToMove) return;
     const from = this.pieceToMove.GetLocation();
-    this.current.MovePiece(from, loc, 'replace');
+    this.current.MovePiece(from, loc, "replace");
     this.pieceToMove = null;
   }
 
@@ -287,21 +287,21 @@ export class EditProblemComponent implements OnInit, OnDestroy {
         return `<div><${t}>${f}</${t}></div>`;
       })
       .filter(notNull)
-      .join('');
+      .join("");
   }
 
   openTwinDialog($event: Twin | null): void {
     const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin>(
       TwinDialogComponent,
       {
-        width: '25rem',
-        maxWidth: '95%',
+        width: "25rem",
+        maxWidth: "95%",
         data: Twin.fromJson($event?.toJson() ?? {}),
       }
     );
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
+      console.log("The dialog was closed");
     });
   }
 
@@ -309,8 +309,8 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open<ConditionsDialogComponent, void, string>(
       ConditionsDialogComponent,
       {
-        width: '25rem',
-        maxWidth: '95%',
+        width: "25rem",
+        maxWidth: "95%",
       }
     );
 
@@ -320,7 +320,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   deleteCondition($event: string) {
-    console.log('remove condition', $event);
+    console.log("remove condition", $event);
     this.current.RemoveCondition($event);
   }
 
@@ -338,8 +338,8 @@ const outlogRegExp = new RegExp(
 );
 
 function tag(text: string) {
-  text = text.trim().replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  if (istructionRegExp.test(text)) return 'em';
+  text = text.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  if (istructionRegExp.test(text)) return "em";
   else if (outlogRegExp.test(text)) return null;
-  else return 'span';
+  else return "span";
 }

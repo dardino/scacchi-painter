@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { OpenfileComponent } from './openfile.component';
+import { OpenfileComponent } from "./openfile.component";
 
-describe('OpenfileComponent', () => {
+describe("OpenfileComponent", () => {
   let component: OpenfileComponent;
   let fixture: ComponentFixture<OpenfileComponent>;
 
@@ -19,7 +19,7 @@ describe('OpenfileComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

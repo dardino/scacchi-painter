@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ConditionsDialogComponent } from './conditions-dialog.component';
+import { ConditionsDialogComponent } from "./conditions-dialog.component";
 
-describe('ConditionsDialogComponent', () => {
+describe("ConditionsDialogComponent", () => {
   let component: ConditionsDialogComponent;
   let fixture: ComponentFixture<ConditionsDialogComponent>;
 
@@ -19,7 +19,7 @@ describe('ConditionsDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

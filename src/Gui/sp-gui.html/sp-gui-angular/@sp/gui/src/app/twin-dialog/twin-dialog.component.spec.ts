@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { TwinDialogComponent } from './twin-dialog.component';
+import { TwinDialogComponent } from "./twin-dialog.component";
 
-describe('TwinDialogComponent', () => {
+describe("TwinDialogComponent", () => {
   let component: TwinDialogComponent;
   let fixture: ComponentFixture<TwinDialogComponent>;
 
@@ -18,7 +18,7 @@ describe('TwinDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

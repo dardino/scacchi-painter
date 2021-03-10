@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AuthRedirectComponent } from './auth-redirect.component';
+import { AuthRedirectComponent } from "./auth-redirect.component";
 
-describe('AuthRedirectComponent', () => {
+describe("AuthRedirectComponent", () => {
   let component: AuthRedirectComponent;
   let fixture: ComponentFixture<AuthRedirectComponent>;
 
@@ -19,7 +19,7 @@ describe('AuthRedirectComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

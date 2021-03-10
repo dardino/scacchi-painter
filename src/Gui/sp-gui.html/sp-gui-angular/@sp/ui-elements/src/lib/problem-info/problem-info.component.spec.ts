@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ProblemInfoComponent } from './problem-info.component';
+import { ProblemInfoComponent } from "./problem-info.component";
 
-describe('ProblemInfoComponent', () => {
+describe("ProblemInfoComponent", () => {
   let component: ProblemInfoComponent;
   let fixture: ComponentFixture<ProblemInfoComponent>;
 
@@ -19,7 +19,7 @@ describe('ProblemInfoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
