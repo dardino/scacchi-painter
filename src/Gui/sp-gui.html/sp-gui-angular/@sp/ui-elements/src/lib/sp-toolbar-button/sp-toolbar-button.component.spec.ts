@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { SpToolbarButtonComponent } from './sp-toolbar-button.component';
+import { SpToolbarButtonComponent } from "./sp-toolbar-button.component";
 
-describe('SpButtonComponent', () => {
+describe("SpButtonComponent", () => {
   let component: SpToolbarButtonComponent;
   let fixture: ComponentFixture<SpToolbarButtonComponent>;
 
@@ -18,7 +18,7 @@ describe('SpButtonComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

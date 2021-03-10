@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { DatabaseListComponent } from './database-list.component';
+import { DatabaseListComponent } from "./database-list.component";
 
-describe('DatabaseListComponent', () => {
+describe("DatabaseListComponent", () => {
   let component: DatabaseListComponent;
   let fixture: ComponentFixture<DatabaseListComponent>;
 
@@ -19,7 +19,7 @@ describe('DatabaseListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

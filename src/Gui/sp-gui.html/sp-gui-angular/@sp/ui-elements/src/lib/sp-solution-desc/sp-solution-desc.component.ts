@@ -1,12 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Problem } from '@sp/dbmanager/src/lib/models';
+import { Component, OnInit, Input } from "@angular/core";
+import { Problem } from "@sp/dbmanager/src/lib/models";
 
 /*https://stackblitz.com/edit/ngx-quill-example-btmh9i?file=src%2Fapp%2Fapp.component.ts*/
 
 @Component({
-  selector: 'lib-sp-solution-desc',
-  templateUrl: './sp-solution-desc.component.html',
-  styleUrls: ['./sp-solution-desc.component.styl'],
+  selector: "lib-sp-solution-desc",
+  templateUrl: "./sp-solution-desc.component.html",
+  styleUrls: ["./sp-solution-desc.component.styl"],
 })
 export class SpSolutionDescComponent implements OnInit {
   constructor() {}
@@ -17,27 +17,27 @@ export class SpSolutionDescComponent implements OnInit {
   ngOnInit(): void {}
 
   get solution() {
-    return this.problem?.textSolution ?? '';
+    return this.problem?.textSolution ?? "";
   }
   set solution(txt: string) {
     if (this.problem) this.problem.textSolution = txt;
   }
   get solutionHTML() {
-    return this.problem?.htmlSolution ?? '';
+    return this.problem?.htmlSolution ?? "";
   }
   set solutionHTML(txt: string) {
     if (this.problem) this.problem.htmlSolution = txt;
   }
 
   get rows() {
-    return this.problem?.textSolution.split('\n') ?? [];
+    return this.problem?.textSolution.split("\n") ?? [];
   }
 
   getClass(item: string): string {
-    item = item.trim().replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    if (istructionRegExp.test(item)) return 'instruction';
-    else if (outlogRegExp.test(item)) return 'log';
-    else return 'solution';
+    item = item.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    if (istructionRegExp.test(item)) return "instruction";
+    else if (outlogRegExp.test(item)) return "log";
+    else return "solution";
   }
 }
 

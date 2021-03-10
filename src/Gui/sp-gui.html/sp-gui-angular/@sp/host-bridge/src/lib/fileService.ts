@@ -1,12 +1,15 @@
 export interface FolderItemInfo {
-  type: 'file' | 'folder';
+  type: "file" | "folder";
   itemName: string;
   fullPath: string;
   id: string;
 }
 
 export interface FileService {
-  enumContent(folder: string, ...extensions: string[]): Promise<FolderItemInfo[]>;
+  enumContent(
+    folder: string,
+    ...extensions: string[]
+  ): Promise<FolderItemInfo[]>;
   getFileContent(item: FolderItemInfo): Promise<File>;
   saveFileContent(file: File, item: FolderItemInfo): Promise<void>;
 }
@@ -14,5 +17,5 @@ export interface FileService {
 export interface FileSelected {
   file: File;
   meta: FolderItemInfo;
-  source: 'local' | 'dropbox';
+  source: "local" | "dropbox";
 }
