@@ -1,18 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { DbmanagerService } from '@sp/dbmanager/src/public-api';
-import { Problem } from '@sp/dbmanager/src/lib/models';
-import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Component, OnInit } from "@angular/core";
+import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { Problem } from "@sp/dbmanager/src/lib/models";
+import { DataSource, CollectionViewer } from "@angular/cdk/collections";
+import { Observable, BehaviorSubject } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-database-list',
-  templateUrl: './database-list.component.html',
-  styleUrls: ['./database-list.component.styl'],
+  selector: "app-database-list",
+  templateUrl: "./database-list.component.html",
+  styleUrls: ["./database-list.component.styl"],
 })
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db.All);
-  constructor(private db: DbmanagerService) {}
-  ngOnInit(): void {}
+  constructor(private db: DbmanagerService, private route: Router) {}
+  ngOnInit(): void {
+    if (this.db.All.length < 1) {
+      this.route.navigate(["/openfile"]);
+    }
+  }
   stipulation(item: Problem) {
     return `${item.stipulation.completeStipulationDesc}${item.stipulation.moves}`;
   }
