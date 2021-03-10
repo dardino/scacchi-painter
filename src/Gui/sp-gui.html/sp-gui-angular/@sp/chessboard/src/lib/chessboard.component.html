@@ -12,12 +12,11 @@
     >
       <lib-board-cell
         class="clickable"
-        [ngClass]="{ current: item === currentCell }"
+        [active]="item === currentCell"
         *ngFor="let item of cells"
         [piece]="item.piece"
         [location]="item.location"
         (click)="onCellClick(item)"
-        (tap)="onCellClick(item)"
       ></lib-board-cell>
     </div>
   </div>

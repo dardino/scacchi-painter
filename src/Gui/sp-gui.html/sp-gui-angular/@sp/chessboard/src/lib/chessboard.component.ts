@@ -127,7 +127,6 @@ export class ChessboardComponent
   }
 
   chessboardBlur() {
-    this.currentCell = null;
     this.focusOut.emit();
   }
 

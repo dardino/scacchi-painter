@@ -3,7 +3,7 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Router } from "@angular/router";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
-import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
+import { FileSelected, FileService, FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
   selector: "app-sp-openfile",
@@ -20,6 +20,8 @@ export class OpenfileComponent implements OnInit {
 
   public showDropboxFolder = false;
   @ViewChild("fileloader") fileloader: ElementRef;
+
+  public showNewFileWizard = false;
 
   selectLocalFile(args: FileList) {
     if (args.length === 1) {
@@ -47,10 +49,19 @@ export class OpenfileComponent implements OnInit {
         this.fromDropbox();
       }, 1);
     }
+    if (urlhash === "#newfile") {
+      setTimeout(() => {
+        this.newFile();
+      }, 1);
+    }
   }
 
   get electron() {
     return this.bridge.supportsClose;
+  }
+
+  async newFile() {
+    this.showNewFileWizard = true;
   }
 
   async localFolder() {
@@ -87,6 +98,10 @@ export class OpenfileComponent implements OnInit {
     if (!error) {
       this.router.navigate([`/edit/${this.db.CurrentIndex}`]);
     }
+  }
+
+  async createFile($event: FileSelected) {
+    await this.loadFromFile($event, null);
   }
 
   async openFile($event: FileSelected, fileService: FileService) {
