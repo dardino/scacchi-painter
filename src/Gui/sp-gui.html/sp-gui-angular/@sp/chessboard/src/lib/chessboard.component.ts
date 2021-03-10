@@ -55,9 +55,11 @@ export class ChessboardComponent
 
   @Output()
   currentCellChanged = new EventEmitter<SquareLocation | null>();
+  @Output()
+  cellClick = new EventEmitter<SquareLocation>();
 
-  cells: UiCell[] = [];
   currentCell: UiCell | null = null;
+  cells: UiCell[] = [];
   fontSize: number;
 
   private settings: {
@@ -164,13 +166,12 @@ export class ChessboardComponent
   }
 
   onCellClick(cell: UiCell) {
+    this.cellClick.emit({ ...cell.location });
     if (cell !== this.currentCell) this.currentCell = cell;
     else this.currentCell = null;
-    if (this.currentCellChanged) {
-      this.currentCellChanged.emit(
-        this.currentCell ? { ...this.currentCell?.location } : null
-      );
-    }
+    this.currentCellChanged.emit(
+      this.currentCell ? { ...this.currentCell?.location } : null
+    );
   }
 
   ngAfterViewInit() {
