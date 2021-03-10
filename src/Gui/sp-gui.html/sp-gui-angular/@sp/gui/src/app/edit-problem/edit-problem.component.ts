@@ -27,6 +27,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { ActivatedRoute } from "@angular/router";
 import { EngineManagerService } from "@sp/dbmanager/src/public-api";
+import { istructionRegExp, outlogRegExp } from "../constants/constants";
 
 @Component({
   selector: "app-edit-problem",
@@ -56,11 +57,10 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private dbManager: DbmanagerService
   ) {
-    this.engine.isSolving$.subscribe(state => {
+    this.engine.isSolving$.subscribe((state) => {
       this.solveInProgress = state;
     });
   }
-
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
   @ViewChild("panelright") panelright: ElementRef;
@@ -169,7 +169,6 @@ export class EditProblemComponent implements OnInit, OnDestroy {
         }
       }, 1);
     });
-
   }
 
   ngOnDestroy(): void {
@@ -327,19 +326,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   deleteTwin($event: Twin) {
     this.current.RemoveTwin($event);
   }
-
 }
 
-const istructionRegExp = new RegExp(
-  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye).*$`
-);
-const outlogRegExp = new RegExp(
-  `^(ERR:|Execute|Popeye|starting engine|Engine process|program exited).*$`
-);
-
-function tag(text: string) {
+const tag = (text: string) => {
   text = text.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
   if (istructionRegExp.test(text)) return "em";
   else if (outlogRegExp.test(text)) return null;
   else return "span";
-}
+};

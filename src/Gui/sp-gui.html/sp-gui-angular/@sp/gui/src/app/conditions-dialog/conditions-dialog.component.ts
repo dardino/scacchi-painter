@@ -27,7 +27,7 @@ export class ConditionsDialogComponent implements OnInit {
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(""),
-      map((value) => this._filter(value))
+      map((value) => this.filter(value))
     );
   }
 
@@ -35,7 +35,7 @@ export class ConditionsDialogComponent implements OnInit {
     this.newCondition = val;
   }
 
-  private _filter(value: string): string[] {
+  private filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return [...FairyAttributesDBNames, ...TraditionalConditionsNames].filter(
