@@ -32,6 +32,7 @@
               "@sp/gui/src/favicon.ico",
               "@sp/gui/src/favicon.png",
               "@sp/gui/src/favicon.icns",
+              "@sp/gui/src/apple-touch-icon.png",
               "@sp/gui/src/assets",
               "@sp/gui/src/manifest.webmanifest"
             ],
@@ -137,6 +138,7 @@
               "@sp/gui/src/favicon.ico",
               "@sp/gui/src/favicon.png",
               "@sp/gui/src/favicon.icns",
+              "@sp/gui/src/apple-touch-icon.png",
               "@sp/gui/src/assets",
               "@sp/gui/src/manifest.webmanifest"
             ],
