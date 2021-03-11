@@ -10,21 +10,23 @@
     </mat-toolbar>
   </section>
   <div class="workboard" (mousemove)="resize($event)">
-    <section id="chessboard" #panelright>
-      <lib-chessboard
-        class="lib-chessboard"
-        [position]="problem"
-        [boardType]="boardType"
-        [cursor]="boardCursor"
-        (contextmenu)="onTriggerContextMenu($event)"
-        (currentCellChanged)="currentCellChange($event)"
-        (cellClick)="clickOnCell($event)"
-        (focusOut)="boardBlur()"
-      ></lib-chessboard>
-      <lib-piece-selector
-        (selectedPieceChanged)="setPieceToAdd($event)"
-        [current]="pieceToAdd"
-      ></lib-piece-selector>
+    <section id="chessboard">
+      <div class="chessboard-workarea" #panelleft>
+        <lib-chessboard
+          class="lib-chessboard"
+          [position]="problem"
+          [boardType]="boardType"
+          [cursor]="boardCursor"
+          (contextmenu)="onTriggerContextMenu($event)"
+          (currentCellChanged)="currentCellChange($event)"
+          (cellClick)="clickOnCell($event)"
+          (focusOut)="boardBlur()"
+        ></lib-chessboard>
+        <lib-piece-selector
+          (selectedPieceChanged)="setPieceToAdd($event)"
+          [current]="pieceToAdd"
+        ></lib-piece-selector>
+      </div>
     </section>
     <div
       #verticalSplitter
