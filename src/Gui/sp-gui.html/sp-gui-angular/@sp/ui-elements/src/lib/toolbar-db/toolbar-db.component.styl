@@ -5,7 +5,11 @@
   padding .1rem
   justify-content center
   align-items center
-  @media (max-width: $smallScreen )
+  @media (max-width: $smallScreen)
+    display none
+
+.lib-toolbar-smallscreen
+  @media (min-width: ($smallScreen + 1))
     display none
 
 .sp-toolbar-label

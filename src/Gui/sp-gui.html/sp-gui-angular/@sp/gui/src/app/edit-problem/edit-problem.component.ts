@@ -61,7 +61,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
-  @ViewChild("panelright") panelright: ElementRef;
+  @ViewChild("panelleft") panelleft: ElementRef;
 
   private subscribe: Subscription;
 
@@ -179,7 +179,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   resize($event: MouseEvent) {
     if (isNaN(this.resizing.x)) return;
     const delta = $event.x - this.resizing.x;
-    (this.panelright.nativeElement as HTMLDivElement).style.width = `${
+    (this.panelleft.nativeElement as HTMLDivElement).style.width = `${
       this.resizing.initialW + delta
     }px`;
     window.dispatchEvent(new Event("resize"));
@@ -188,7 +188,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   startResize($event: MouseEvent) {
     this.resetActions();
     const width = parseFloat(
-      getComputedStyle(this.panelright.nativeElement as HTMLDivElement).width
+      getComputedStyle(this.panelleft.nativeElement as HTMLDivElement).width
     );
     this.resizing = { x: $event.x, initialW: width };
     console.log(`Initial W: ${width}`);

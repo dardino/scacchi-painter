@@ -8,16 +8,14 @@
   @media (max-width: $smallScreen )
     width: calc(100% - 1rem)
 
-  .lib-chessboard
+  .chessboard-workarea
     z-index: 1;
-    @media (min-width: $smallScreen )
+    @media (min-width: ($smallScreen + 1))
       position sticky
       top .5em
 
 #toolbar
   flex 0 0 auto
-  // @media (max-width: $smallScreen )
-  //   display none
 
 .toolbar-row
   overflow-y: auto;
@@ -61,6 +59,6 @@
   flex-direction column
 
 lib-sp-solution-desc
-    display: flex;
-    min-height: 100%;
-    flex: 1 1 auto;
+  display: flex;
+  min-height: 100%;
+  flex: 1 1 auto;

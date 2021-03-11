@@ -34,7 +34,6 @@ export class EngineManagerService {
       this.bridge.stopSolve();
     } catch {
     } finally {
-      this.solution$.next("*** stopped by user ***");
     }
   }
 
