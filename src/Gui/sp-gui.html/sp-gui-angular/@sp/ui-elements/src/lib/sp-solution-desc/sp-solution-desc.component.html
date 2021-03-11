@@ -6,5 +6,7 @@
   placeholder="Enter Text"
 ></quill-editor> -->
 <div class="solutions">
-  <div *ngFor="let item of rows" [class]="getClass(item)">{{item}}</div>
+  <ng-template [ngForOf]="rows" ngFor let-item>
+    <div [class]="getClass(item)">{{item}}</div>
+  </ng-template>
 </div>
