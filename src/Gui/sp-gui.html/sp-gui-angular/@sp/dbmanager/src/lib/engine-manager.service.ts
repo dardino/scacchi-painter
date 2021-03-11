@@ -15,13 +15,13 @@ export class EngineManagerService {
     this.bridge.Solver$.subscribe(msg => {
       this.solution$.next(msg);
     });
+    this.bridge.solveInProgress$.subscribe(v => this.isSolving$.next(v));
   }
 
   public startSolving(problem: Problem): void {
     if (!problem) {
       throw new Error("unable to solve a null problem!");
     }
-    this.isSolving$.next(true);
     if (this.bridge.supportsEngine(problem.engine)) {
       this.bridge.startSolve(problem);
       return;
@@ -33,9 +33,7 @@ export class EngineManagerService {
     try {
       this.bridge.stopSolve();
     } catch {
-
     } finally {
-      this.isSolving$.next(false);
       this.solution$.next("*** stopped by user ***");
     }
   }
