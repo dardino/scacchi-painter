@@ -161,7 +161,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       setTimeout(() => {
         if (this.dbManager.All.length === 0) {
-          this.dbManager.Init(+params.id);
+          this.dbManager.Reload(+params.id);
         } else {
           this.dbManager.GotoIndex(+params.id);
         }

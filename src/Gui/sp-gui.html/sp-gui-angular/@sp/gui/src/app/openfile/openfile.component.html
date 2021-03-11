@@ -60,7 +60,7 @@
     />
   </div>
   <div *ngIf="showDropboxFolder">
-    <lib-file-explorer [service]="dropboxService" (selectFile)="openFile($event, dropboxService)"></lib-file-explorer>
+    <lib-file-explorer [service]="dropboxService" (selectFile)="openFile($event)"></lib-file-explorer>
   </div>
   <div *ngIf="showNewFileWizard">
     <lib-create-file-wizard (save)="createFile($event)"></lib-create-file-wizard>
