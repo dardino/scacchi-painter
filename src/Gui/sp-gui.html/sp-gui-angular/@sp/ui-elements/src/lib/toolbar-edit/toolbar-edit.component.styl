@@ -1,10 +1,6 @@
 @import "../../../../mediaquery"
-
-.lib-toolbar
-  display flex
-  padding .1rem
-  justify-content center
-  align-items center
+:host
+  display: contents;
 
 .sp-toolbar-label
   display inline-flex
@@ -12,3 +8,8 @@
 
 [data-rotate="90"]
   transform rotateZ(90deg)
+
+
+.boardtype_switch
+  @media (max-width: $smallScreen)
+    display none
