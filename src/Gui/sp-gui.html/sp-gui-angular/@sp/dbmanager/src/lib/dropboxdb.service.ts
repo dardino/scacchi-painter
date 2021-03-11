@@ -13,6 +13,18 @@ interface DropboxFileInfo {
   path_display: string;
   path_lower: string;
 }
+interface DropboxFileSavedInfo {
+  name: string; // "Database Problemi Gabriele (1).sp2";
+  path_lower: string; // "/sp_test_files/database problemi gabriele (1).sp2";
+  path_display: string; // "/SP_TEST_FILES/Database Problemi Gabriele (1).sp2";
+  id: string; // "id:fDSZAwF2EeQAAAAAAAB4Qw";
+  client_modified: string; // "2021-03-11T15:25:39Z";
+  server_modified: string; // "2021-03-11T15:25:40Z";
+  rev: string; // "5bd446568a0ae060f1482";
+  size: number; // 706507;
+  is_downloadable: boolean; //true;
+  content_hash: string; // "b3d449e5a836d3ad55c153d360466f6f5d4e3891209a9094504636c5091f1286";
+}
 
 @Injectable({
   providedIn: "root",
@@ -25,14 +37,53 @@ export class DropboxdbService implements FileService {
   private pagesize = 1000;
   private hasMore = true;
 
+  get sourceName() {
+    return "dropbox" as const;
+  }
+
   async authorize(): Promise<boolean> {
     const token = await getDropboxToken();
     this.token = token;
     return token != null;
   }
 
-  saveFileContent(file: File, item: FolderItemInfo): Promise<void> {
-    throw new Error("Method not implemented.");
+  async saveFileContent(
+    file: File,
+    item: FolderItemInfo
+  ): Promise<FolderItemInfo | Error> {
+    if (this.token == null) {
+      await this.authorize();
+    }
+    const urlToCall = "https://content.dropboxapi.com/2/files/upload";
+    const apiArg = JSON.stringify({
+      path: item.id,
+      mode: "overwrite",
+      autorename: true,
+      mute: true,
+      strict_conflict: false,
+    });
+    const result = await fetch(urlToCall, {
+      headers: {
+        ...this.getHeaders(),
+        "Dropbox-API-Arg": apiArg,
+        "Content-Type": "application/octet-stream",
+      },
+      method: "POST",
+      body: file,
+    });
+    if (result.status === 200) {
+      const json = (await result.json()) as DropboxFileSavedInfo;
+      return {
+        fullPath: json.path_display,
+        id: json.id,
+        itemName: json.name,
+        type: "folder",
+      };
+    } else {
+      const message = await result.text();
+      console.error(message);
+      return new Error(message);
+    }
   }
 
   async getFileContent(item: FolderItemInfo): Promise<File> {

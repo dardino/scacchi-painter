@@ -37,8 +37,7 @@ export class OpenfileComponent implements OnInit {
           },
           file,
           source: "local",
-        },
-        null
+        }
       );
     }
   }
@@ -78,8 +77,7 @@ export class OpenfileComponent implements OnInit {
             id: file.name,
             type: "file",
           },
-        },
-        null
+        }
       );
     } else this.fileloader.nativeElement.click();
   }
@@ -90,21 +88,20 @@ export class OpenfileComponent implements OnInit {
   }
 
   async loadFromFile(
-    fileInfo: FileSelected | null,
-    fileSerivce: FileService | null
+    fileInfo: FileSelected | null
   ) {
     if (!fileInfo) return;
-    const error = await this.db.Load(fileInfo, fileSerivce);
+    const error = await this.db.Load(fileInfo);
     if (!error) {
       this.router.navigate([`/edit/${this.db.CurrentIndex}`]);
     }
   }
 
   async createFile($event: FileSelected) {
-    await this.loadFromFile($event, null);
+    await this.loadFromFile($event);
   }
 
-  async openFile($event: FileSelected, fileService: FileService) {
-    await this.loadFromFile($event, fileService);
+  async openFile($event: FileSelected) {
+    await this.loadFromFile($event);
   }
 }

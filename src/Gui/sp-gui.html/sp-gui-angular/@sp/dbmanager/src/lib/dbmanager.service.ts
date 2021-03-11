@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { IProblem } from "./helpers";
 import { Problem } from "./models/Problem";
 import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
+import { DropboxdbService } from "./dropboxdb.service";
 
 interface IDbSpX {
   lastIndex: number;
@@ -16,7 +17,6 @@ interface IDbSpX {
 export class DbmanagerService {
   private currentIndex = 0;
   private currentFile: Omit<FileSelected, "file"> | null = null;
-  private fileService: FileService | null;
 
   public All: Problem[] = [];
 
@@ -38,38 +38,40 @@ export class DbmanagerService {
     return this.currentProblem?.pieces ?? [];
   }
 
-  constructor() {
+  constructor(private dropboxFS: DropboxdbService) {}
+
+  private get fileService(): FileService | null {
+    switch (this.currentFile?.source) {
+      case "dropbox":
+        return this.dropboxFS;
+      default:
+        return null;
+    }
   }
 
   //#region PUBLIC LOADS
-  async Load({ file, meta, source }: FileSelected, fileService: FileService | null): Promise<Error | null> {
+  async Load({ file, meta, source }: FileSelected): Promise<Error | null> {
     this.reset();
     this.currentFile = { meta, source };
-    this.fileService = fileService;
     const content = await file.text();
     return await this.loadFromContent(content);
   }
-  //#endregion PUBLIC LOADS
-
-  async Init(id: number) {
-    await this.loadFromLocalStorage();
+  async Reload(id: number) {
+    this.reset();
+    this.currentFile = await this.loadFromLocalStorage();
     this.currentIndex = id;
     this.loadProblem();
   }
+  //#endregion PUBLIC LOADS
 
   private async loadFromLocalStorage() {
     const spdb = localStorage.getItem("spdb") ?? null;
     const spdbInfo = localStorage.getItem("spdb_info") ?? null;
     if (spdb == null || spdbInfo == null) {
-      return;
+      return null;
     }
-    const { meta, source } = JSON.parse(spdbInfo) as Omit<
-      FileSelected,
-      "file"
-    >;
-    this.reset();
-    this.currentFile = { meta, source };
     await this.loadFromContent(spdb, "sp3");
+    return JSON.parse(spdbInfo) as Pick<FileSelected, "meta" | "source">;
   }
 
   setCurrentProblem(problem: Problem) {
@@ -111,7 +113,13 @@ export class DbmanagerService {
     const type =
       this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3";
     const file = await this.getDbFile(type);
-    if (this.fileService && this.currentFile) this.fileService?.saveFileContent(file, this.currentFile?.meta);
+    const fs = this.fileService;
+    const cf = this.currentFile;
+    if (fs && cf) {
+      const result = await fs.saveFileContent(file, cf.meta);
+      if (result instanceof Error) return;
+      this.currentFile = { meta: result, source: fs.sourceName };
+    }
   }
   private async loadFromJson(jsonString: string): Promise<Error | null> {
     try {
@@ -183,14 +191,13 @@ export class DbmanagerService {
   private reset() {
     this.currentIndex = 0;
     this.currentProblem = null;
-    this.fileService = null;
   }
 
   private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {
     if (type === "sp2") {
       const xmlDoc = await this.ToXML();
       const text =
-        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r" +
+        '<?xml version="1.0" encoding="utf-8"?>\r' +
         new XMLSerializer().serializeToString(xmlDoc.documentElement);
       const fullpath = this.currentFile?.meta.fullPath ?? "temp.sp2";
       return new File([text], fullpath, { type: "application/xml" });
@@ -200,5 +207,4 @@ export class DbmanagerService {
       return new File([text], fullpath, { type: "application/json" });
     }
   }
-
 }
