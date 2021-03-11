@@ -15,18 +15,20 @@ declare global {
 export class HostBridgeService {
   private solver$ = new Subject<string>();
   private subscription: Subscription | null = null;
+  private solveInProgress = new Subject<boolean>();
+
   get Solver$() {
     return this.solver$.asObservable();
+  }
+
+  get solveInProgress$() {
+    return this.solveInProgress.asObservable();
   }
 
   constructor(private zone: NgZone) {}
 
   getRecents(): string[] {
     return [];
-  }
-
-  get solveInProgress() {
-    return this.subscription != null;
   }
 
   stopSolve() {
@@ -39,13 +41,15 @@ export class HostBridgeService {
   }
 
   startSolve(CurrentProblem: Problem): Error | undefined {
-    if (this.solveInProgress) {
+    if (this.subscription != null) {
       console.warn("[WARN] -> Solver already started!");
       return new Error("Solver already started!");
     }
     const obs = window.Bridge?.runSolve(CurrentProblem, "Popeye");
     if (!obs) return new Error("Engine not found!");
     if (obs instanceof Error) return obs;
+
+    this.solveInProgress.next(true);
 
     this.subscription = obs.subscribe((text) => {
       this.zone.run(() => {
@@ -64,6 +68,7 @@ export class HostBridgeService {
             this.solver$.next(`${text.message}`);
             if (this.subscription) this.subscription.unsubscribe();
             this.subscription = null;
+            this.solveInProgress.next(false);
           }
         }
       });
