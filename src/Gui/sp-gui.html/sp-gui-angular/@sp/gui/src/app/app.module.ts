@@ -34,6 +34,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { AuthRedirectComponent } from "./auth-redirect/auth-redirect.component";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -74,7 +76,11 @@ import { environment } from "../environments/environment";
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production }),
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production,
+    }),
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

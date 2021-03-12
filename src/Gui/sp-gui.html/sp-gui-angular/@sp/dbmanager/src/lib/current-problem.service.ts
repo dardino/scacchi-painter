@@ -95,6 +95,7 @@ export class CurrentProblemService {
     mode: "swap" | "replace" = "replace"
   ) {
     if (!this.Problem) return;
+    if (from.column === to.column && from.traverse === to.traverse) return;
     if (mode === "swap") this.swapPieces(from, to);
     if (mode === "replace") this.movePiece(from, to);
     this.dbManager.setCurrentProblem(this.Problem.clone());

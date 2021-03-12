@@ -26,7 +26,6 @@ import { ProblemPublicationComponent } from "./problem-publication/problem-publi
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { FileExplorerComponent } from "./file-explorer/file-explorer.component";
 import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
-import { CreateFileWizardComponent } from "./create-file-wizard/create-file-wizard.component";
 
 @NgModule({
   declarations: [
@@ -40,8 +39,7 @@ import { CreateFileWizardComponent } from "./create-file-wizard/create-file-wiza
     ProblemDefinitionsComponent,
     ProblemAuthorsComponent,
     ProblemPublicationComponent,
-    FileExplorerComponent,
-    CreateFileWizardComponent,
+    FileExplorerComponent
   ],
   imports: [
     CommonModule,
@@ -68,8 +66,7 @@ import { CreateFileWizardComponent } from "./create-file-wizard/create-file-wiza
     ToolbarEditComponent,
     ToolbarEngineComponent,
     ToolbarPieceComponent,
-    FileExplorerComponent,
-    CreateFileWizardComponent,
+    FileExplorerComponent
   ],
   providers: [QuillInitializeService],
 })
