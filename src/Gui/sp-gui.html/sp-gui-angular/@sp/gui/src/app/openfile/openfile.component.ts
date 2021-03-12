@@ -3,7 +3,7 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Router } from "@angular/router";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
-import { FileSelected, FileService, FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
+import { FileSelected } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
   selector: "app-sp-openfile",
@@ -60,7 +60,16 @@ export class OpenfileComponent implements OnInit {
   }
 
   async newFile() {
-    this.showNewFileWizard = true;
+    this.createFile({
+      meta: {
+        fullPath: "newfile.sp3",
+        id: "newfile.sp3",
+        itemName: "newfile.sp3",
+        type: "file",
+      },
+      source: "local",
+      file: new File([`{"problems":[{}]}`],"newfile.sp3")
+    });
   }
 
   async localFolder() {

@@ -3,6 +3,8 @@ import { IProblem } from "./helpers";
 import { Problem } from "./models/Problem";
 import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { DropboxdbService } from "./dropboxdb.service";
+import { Subject } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 interface IDbSpX {
   lastIndex: number;
@@ -17,9 +19,12 @@ interface IDbSpX {
 export class DbmanagerService {
   private currentIndex = 0;
   private currentFile: Omit<FileSelected, "file"> | null = null;
+  private workInProgress: Subject<boolean> = new Subject<boolean>();
 
   public All: Problem[] = [];
-
+  get wip$() {
+    return this.workInProgress.asObservable();
+  }
   get FileName() {
     return this.currentFile?.meta.itemName;
   }
@@ -38,7 +43,10 @@ export class DbmanagerService {
     return this.currentProblem?.pieces ?? [];
   }
 
-  constructor(private dropboxFS: DropboxdbService) {}
+  constructor(
+    private dropboxFS: DropboxdbService,
+    private snackBar: MatSnackBar
+  ) {}
 
   private get fileService(): FileService | null {
     switch (this.currentFile?.source) {
@@ -51,16 +59,31 @@ export class DbmanagerService {
 
   //#region PUBLIC LOADS
   async Load({ file, meta, source }: FileSelected): Promise<Error | null> {
+    this.workInProgress.next(true);
     this.reset();
     this.currentFile = { meta, source };
     const content = await file.text();
-    return await this.loadFromContent(content);
+    const result = await this.loadFromContent(content);
+    this.workInProgress.next(false);
+    this.snackBar.open("Load db completed!", undefined, {
+      verticalPosition: "top",
+      politeness: "assertive",
+      duration: 2000
+    });
+    return result;
   }
-  async Reload(id: number) {
+  async Reload(id?: number) {
+    this.workInProgress.next(true);
     this.reset();
     this.currentFile = await this.loadFromLocalStorage();
-    this.currentIndex = id;
-    this.loadProblem();
+    this.currentIndex = id ?? this.currentIndex;
+    await this.loadProblem();
+    this.workInProgress.next(false);
+    this.snackBar.open("Load db completed!", undefined, {
+      verticalPosition: "top",
+      politeness: "assertive",
+      duration: 2000
+    });
   }
   //#endregion PUBLIC LOADS
 
@@ -110,6 +133,7 @@ export class DbmanagerService {
   }
 
   public async Save() {
+    this.workInProgress.next(true);
     const type =
       this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3";
     const file = await this.getDbFile(type);
@@ -117,10 +141,18 @@ export class DbmanagerService {
     const cf = this.currentFile;
     if (fs && cf) {
       const result = await fs.saveFileContent(file, cf.meta);
-      if (result instanceof Error) return;
-      this.currentFile = { meta: result, source: fs.sourceName };
+      if (!(result instanceof Error)) {
+        this.currentFile = { meta: result, source: fs.sourceName };
+      }
     }
+    this.workInProgress.next(false);
+    this.snackBar.open("Save done!", undefined, {
+      verticalPosition: "top",
+      politeness: "assertive",
+      duration: 2000
+    });
   }
+
   private async loadFromJson(jsonString: string): Promise<Error | null> {
     try {
       const obj = JSON.parse(jsonString) as IDbSpX;
@@ -179,6 +211,7 @@ export class DbmanagerService {
     }
     this.currentIndex = arg0;
     await this.loadProblem();
+    await this.saveToLocalStorage();
   }
 
   private async loadProblem() {

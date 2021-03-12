@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { MatIconRegistry } from "@angular/material/icon";
@@ -13,7 +13,7 @@ import { environment } from "../environments/environment";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.styl"],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private db: DbmanagerService,
     private breakpointObserver: BreakpointObserver,
@@ -32,11 +32,19 @@ export class AppComponent implements OnInit {
   }
   title = "Scacchi Painter";
   chessBoardMode: "edit" | "view" = "view";
+  fsWip = false;
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(map((result) => result.matches));
+  subscription: Subscription | null;
+  ngOnDestroy(): void {
+    if (this.subscription) this.subscription.unsubscribe();
+    this.subscription = null;
+  }
   ngOnInit(): void {
-
+    this.subscription = this.db.wip$.subscribe((v) => {
+      this.fsWip = v;
+    });
     this.matIconRegistry.addSvgIcon(
       `select_piece`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
@@ -67,6 +75,7 @@ export class AppComponent implements OnInit {
         `${environment.assetFolder}/toolbar/dropbox_icon.svg`
       )
     );
+    this.db.Reload();
   }
   async closeMe() {
     this.bridge.closeApp();
