@@ -13,7 +13,7 @@ export const getDropboxToken = async (): Promise<TokenResponse | null> => {
   }
 
   // : generate state string:
-  const stateString = generateStateString(location.href);
+  const stateString = generateStateString();
   localStorage.setItem("state", stateString);
   localStorage.setItem("redirect", location.href + "#dropbox");
   // : generate authorization url

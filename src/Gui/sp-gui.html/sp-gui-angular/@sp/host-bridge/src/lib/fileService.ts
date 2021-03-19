@@ -1,14 +1,17 @@
 export interface FolderItemInfo {
-  type: "file" | "folder";
+  type: "file" | "folder" | "drive" | "root";
   itemName: string;
   fullPath: string;
   id: string;
 }
 
+export type AvaliableFileServices = "local" | "dropbox" | "onedrive" | "unknown";
+
 export interface FileService {
-  readonly sourceName: "local" | "dropbox" | "unknown";
+  readonly sourceName: AvaliableFileServices;
   enumContent(
-    folder: string,
+    itemID: string,
+    itemType: FolderItemInfo["type"],
     ...extensions: string[]
   ): Promise<FolderItemInfo[]>;
   getFileContent(item: FolderItemInfo): Promise<File>;
@@ -18,5 +21,5 @@ export interface FileService {
 export interface FileSelected {
   file: File;
   meta: FolderItemInfo;
-  source: "local" | "dropbox" | "unknown";
+  source: "local" | "dropbox" | "unknown" | "onedrive";
 }

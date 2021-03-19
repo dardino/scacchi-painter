@@ -15,10 +15,10 @@ export class FileExplorerComponent implements OnInit {
   @Output() selectFile = new EventEmitter<FileSelected>();
 
   public currentItem: FolderItemInfo = {
-    fullPath: "/",
+    fullPath: "",
     id: "",
     itemName: "/",
-    type: "folder",
+    type: "root",
   };
   public items: FolderItemInfo[] = [];
 
@@ -29,12 +29,12 @@ export class FileExplorerComponent implements OnInit {
   }
 
   trackByFn(index: number, item: FolderItemInfo): string {
-    return item.fullPath;
+    return item.fullPath ?? "$";
   }
 
   clickElement(item: FolderItemInfo): void {
     if (item.type === "file") this.clickFile(item);
-    if (item.type === "folder") this.clickFolder(item);
+    if (item.type === "folder" || item.type === "drive") this.clickFolder(item);
   }
 
   private clickFolder(item: FolderItemInfo): void {
@@ -45,11 +45,11 @@ export class FileExplorerComponent implements OnInit {
 
   private async clickFile(item: FolderItemInfo): Promise<void> {
     const file = await this.service.getFileContent(item);
-    this.selectFile.emit({ file, meta: item, source: "dropbox" });
+    this.selectFile.emit({ file, meta: item, source: this.service.sourceName });
   }
 
   private refresh() {
-    this.service.enumContent(this.currentItem.id, "sp2").then((items) => {
+    this.service.enumContent(this.currentItem.id, this.currentItem.type, "sp2").then((items) => {
       this.items = items;
     });
   }

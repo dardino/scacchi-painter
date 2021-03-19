@@ -75,6 +75,12 @@ export class AppComponent implements OnInit, OnDestroy {
         `${environment.assetFolder}/toolbar/dropbox_icon.svg`
       )
     );
+    this.matIconRegistry.addSvgIcon(
+      `onedrive_icon`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        `${environment.assetFolder}/toolbar/onedrive_icon.svg`
+      )
+    );
     this.db.Reload();
   }
   async closeMe() {

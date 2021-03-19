@@ -1,6 +1,6 @@
 const charecters =
   "qwertzuioplkjhgfdsayxcvbnm1234567890YAQWSXCDERFVBGTZHNMJUIKLOP";
-export const generateStateString = (url: string): string => {
+export const generateStateString = (): string => {
   let len = 16;
   let generated = "";
   while (len--) {
@@ -46,3 +46,4 @@ export interface TokenResponse {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   account_id: string;
 }
+
