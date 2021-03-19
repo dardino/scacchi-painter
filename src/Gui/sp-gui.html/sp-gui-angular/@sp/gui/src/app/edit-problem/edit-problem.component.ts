@@ -213,11 +213,15 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.commandMapper[$event]();
   }
   setPieceToAdd($event: string | null) {
-    if (this.pieceToAdd === null) {
+    if (
+      this.pieceToAdd === null ||
+      ($event != null && this.pieceToAdd !== $event)
+    ) {
       this.resetActions();
       this.editMode = $event == null ? "select" : "add";
       this.pieceToAdd = $event;
     } else {
+      this.editMode = "select";
       this.resetActions();
     }
   }
@@ -225,13 +229,20 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     if ($event == null) this.resetActions();
   }
   clickOnCell($event: SquareLocation) {
-    if (this.editMode === "remove" && $event != null) {
+    if ($event == null || this.sameCell($event, this.pieceToMove)) {
+      this.editMode = "select";
+      this.resetActions();
+      return;
+    }
+    if (this.editMode === "remove") {
       this.current.RemovePieceAt($event);
+      return;
     }
-    if (this.editMode === "add" && this.pieceToAdd != null && $event != null) {
+    if (this.editMode === "add" && this.pieceToAdd != null) {
       this.addPiece(this.pieceToAdd, $event);
+      return;
     }
-    if (this.editMode === "move" && $event != null) {
+    if (this.editMode === "move") {
       if (this.pieceToMove == null) {
         this.prepareMovePiece(
           this.current.Problem?.GetPieceAt($event.column, $event.traverse)
@@ -239,12 +250,15 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       } else {
         this.completeMove($event);
       }
+      return;
     }
-    if (this.editMode === "select" && $event != null) {
-      this.editMode = "move";
-      this.prepareMovePiece(
-        this.current.Problem?.GetPieceAt($event.column, $event.traverse)
-      );
+    if (this.editMode === "select") {
+      const piece = this.current.Problem?.GetPieceAt($event.column, $event.traverse);
+      if (piece != null) {
+        this.editMode = "move";
+        this.prepareMovePiece(piece);
+      }
+      return;
     }
   }
   editModeChanged($event: EditModes) {
@@ -280,6 +294,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     if (!this.pieceToMove) return;
     const from = this.pieceToMove.GetLocation();
     this.current.MovePiece(from, loc, "replace");
+    this.editMode = "select";
     this.pieceToMove = null;
   }
 
@@ -297,6 +312,10 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       })
       .filter(notNull)
       .join("");
+  }
+
+  private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {
+    return loc1?.column === loc2?.column && loc1?.traverse === loc2?.traverse;
   }
 
   openTwinDialog($event: Twin | null): void {
