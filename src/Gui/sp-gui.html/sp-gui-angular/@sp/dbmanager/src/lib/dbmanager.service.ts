@@ -5,6 +5,7 @@ import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { DropboxdbService } from "./dropboxdb.service";
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OneDriveService } from "./one-drive.service";
 
 interface IDbSpX {
   lastIndex: number;
@@ -45,6 +46,7 @@ export class DbmanagerService {
 
   constructor(
     private dropboxFS: DropboxdbService,
+    private oneDriveFS: OneDriveService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -52,6 +54,10 @@ export class DbmanagerService {
     switch (this.currentFile?.source) {
       case "dropbox":
         return this.dropboxFS;
+      case "onedrive":
+        return this.oneDriveFS;
+      case "local":
+      case "unknown":
       default:
         return null;
     }
@@ -68,7 +74,7 @@ export class DbmanagerService {
     this.snackBar.open("Load db completed!", undefined, {
       verticalPosition: "top",
       politeness: "assertive",
-      duration: 2000
+      duration: 2000,
     });
     return result;
   }
@@ -82,7 +88,7 @@ export class DbmanagerService {
     this.snackBar.open("Load db completed!", undefined, {
       verticalPosition: "top",
       politeness: "assertive",
-      duration: 2000
+      duration: 2000,
     });
   }
   //#endregion PUBLIC LOADS
@@ -134,6 +140,8 @@ export class DbmanagerService {
 
   public async Save() {
     this.workInProgress.next(true);
+    // first of all save the current problem into local storage
+    await this.saveToLocalStorage();
     const type =
       this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3";
     const file = await this.getDbFile(type);
@@ -143,14 +151,26 @@ export class DbmanagerService {
       const result = await fs.saveFileContent(file, cf.meta);
       if (!(result instanceof Error)) {
         this.currentFile = { meta: result, source: fs.sourceName };
+        this.snackBar.open(`Save done in: <${this.currentFile.meta.fullPath}>`, undefined, {
+          verticalPosition: "top",
+          politeness: "assertive",
+          duration: 1500,
+        });
+      } else {
+        this.snackBar.open("Unable to save: " + result.message, undefined, {
+          verticalPosition: "top",
+          politeness: "off",
+          duration: 2000,
+        });
       }
+    } else {
+      this.snackBar.open("Unable to save!", undefined, {
+        verticalPosition: "top",
+        politeness: "off",
+        duration: 2000,
+      });
     }
     this.workInProgress.next(false);
-    this.snackBar.open("Save done!", undefined, {
-      verticalPosition: "top",
-      politeness: "assertive",
-      duration: 2000
-    });
   }
 
   private async loadFromJson(jsonString: string): Promise<Error | null> {
