@@ -96,7 +96,7 @@ export class OneDriveService implements FileService {
       },
     });
     try {
-      const save: DriveItem = await client.api(`drive/items/${item.id}/content`).putStream(file.stream());
+      const save: DriveItem = await client.api(`drive/items/${item.id}/content`).putStream(await file.text());
       console.log(save);
       item.itemName = save.name ?? item.itemName;
       item.fullPath = `${save.parentReference?.path ?? ""}/${save.name ?? save.id}`;
