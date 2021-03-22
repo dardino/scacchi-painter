@@ -29,10 +29,33 @@ export class SaveFileComponent implements OnInit {
   public fileName = "";
   public currentFileService: FileService | null = null;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const urlhash = location.hash;
+    this.fileName = this.db.CurrentFile?.meta.itemName ?? "new_file.sp3";
+    this.currentFolder = this.db.CurrentFile ?? null;
+    if (urlhash === "#dropbox") {
+      setTimeout(() => {
+        this.toDropbox();
+      }, 1);
+    }
+    if (urlhash === "#onedrive") {
+      setTimeout(() => {
+        this.toOneDrive();
+      }, 1);
+    }
+    if (this.currentFolder?.source === "dropbox") {
+      setTimeout(() => {
+        this.toDropbox();
+      }, 1);
+    }
+    if (this.currentFolder?.source === "onedrive") {
+      setTimeout(() => {
+        this.toOneDrive();
+      }, 1);
+    }
+  }
 
   async sourceSelected(source: AvaliableFileServices) {
-    this.currentSource = source;
     switch (source) {
       case "local":
         await this.download();
@@ -68,17 +91,21 @@ export class SaveFileComponent implements OnInit {
    * open dropbox folder selector
    */
   public async toDropbox() {
+    this.currentSource = "dropbox";
     this.currentFileService = this.dropboxFS;
   }
   /**
    * open onedrive folder selector
    */
   public async toOneDrive() {
+    this.currentSource = "onedrive";
     this.currentFileService = this.onedriveFS;
   }
 
   public async saveFile() {
     if (this.currentFolder == null) return this.download();
+    else await this.db.Save();
+    return null;
   }
 
   public expandFolder(folder: FolderSelected) {

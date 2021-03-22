@@ -50,6 +50,8 @@ export class ToolbarDbComponent implements OnInit {
     this.router.navigate(["/edit", this.db.Count - 1]);
   }
   save(){
-    this.db.Save();
+    this.db.Save().then(success => {
+      if (!success) this.router.navigate(["/savefile"]);
+    });
   }
 }

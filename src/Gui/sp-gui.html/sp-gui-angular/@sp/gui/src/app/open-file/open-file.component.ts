@@ -94,7 +94,7 @@ export class OpenFileComponent implements OnInit {
         itemName: "newfile.sp3",
         type: "file",
       },
-      source: "local",
+      source: "unknown",
       file: new File([`{"problems":[{}]}`], "newfile.sp3"),
     });
   }

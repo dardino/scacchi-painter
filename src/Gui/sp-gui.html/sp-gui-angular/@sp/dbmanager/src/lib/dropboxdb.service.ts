@@ -87,6 +87,9 @@ export class DropboxdbService implements FileService {
   }
 
   async getFileContent(item: FolderItemInfo): Promise<File> {
+    if (this.token == null) {
+      await this.authorize();
+    }
     const urlToCall = "https://content.dropboxapi.com/2/files/download";
     const result = await fetch(urlToCall, {
       headers: {
@@ -105,6 +108,9 @@ export class DropboxdbService implements FileService {
     folder: string,
     ...extensions: string[]
   ): Promise<FolderItemInfo[]> {
+    if (this.token == null) {
+      await this.authorize();
+    }
     this.currentCursor = null;
     const result = await this.getList(folder, ...extensions);
     return result;
