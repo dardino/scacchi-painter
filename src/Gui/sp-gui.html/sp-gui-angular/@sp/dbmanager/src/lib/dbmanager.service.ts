@@ -184,14 +184,15 @@ export class DbmanagerService {
         });
       }
     } else {
-      this.download(file);
-      this.snackBar.open("Unable to save!", undefined, {
-        verticalPosition: "top",
-        politeness: "off",
-        duration: 2000,
-      });
+      if (this.currentFile?.source === "local") {
+        this.download(file);
+      } else {
+        this.workInProgress.next(false);
+        return false;
+      }
     }
     this.workInProgress.next(false);
+    return true;
   }
 
   private async loadFromJson(jsonString: string): Promise<Error | null> {

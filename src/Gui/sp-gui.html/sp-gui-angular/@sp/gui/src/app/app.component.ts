@@ -7,6 +7,8 @@ import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
+import { Router, ActivatedRoute } from "@angular/router";
+import { RoutesList } from "./app-routing-list";
 
 @Component({
   selector: "app-root",
@@ -19,13 +21,18 @@ export class AppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private matIconRegistry: MatIconRegistry,
     private bridge: HostBridgeService,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private route: ActivatedRoute
   ) {}
   get hasCloseButton() {
     return this.bridge.supportsClose;
   }
   get dbLoaded() {
     return this.db.CurrentProblem != null;
+  }
+  get pathIsEdit() {
+    const path = RoutesList.edit.path;
+    return this.route.firstChild?.routeConfig?.path === path;
   }
   get fileName() {
     return this.db.FileName;
