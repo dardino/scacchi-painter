@@ -48,6 +48,9 @@ export class Problem implements IProblem {
     return Object.keys(this.snapshots).filter((f) => this.snapshots[f] != null);
   }
 
+  public get currentHash(): string {
+    return this.getCurrentFen();
+  }
   static async fromElement(source: Element) {
     const p = new Problem();
     p.stipulation = Stipulation.fromElement(source);

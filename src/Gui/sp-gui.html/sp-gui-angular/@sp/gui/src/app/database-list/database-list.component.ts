@@ -19,7 +19,7 @@ export class DatabaseListComponent implements OnInit {
     }
   }
   stipulation(item: Problem) {
-    return `${item.stipulation.completeStipulationDesc}${item.stipulation.moves}`;
+    return `${item.stipulation.completeStipulationDesc}`;
   }
   pieceCounter(item: Problem) {
     return `${item.getPieceCounter()}`;

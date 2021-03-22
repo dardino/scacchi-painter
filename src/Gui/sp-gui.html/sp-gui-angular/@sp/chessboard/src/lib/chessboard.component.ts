@@ -59,7 +59,15 @@ export class ChessboardComponent
   cellClick = new EventEmitter<SquareLocation>();
 
   currentCell: UiCell | null = null;
-  cells: UiCell[] = [];
+  private lastHash?: string;
+  private uiCells: UiCell[] = [];
+  get cells(): Readonly<UiCell[]> {
+    if (this.position?.currentHash !== this.lastHash) {
+      this.lastHash = this.position?.currentHash;
+      this.updateBoard();
+    }
+    return this.uiCells;
+  };
   fontSize: number;
 
   private settings: {
@@ -90,6 +98,9 @@ export class ChessboardComponent
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
+
+    console.log(changes);
+
     if (changes.position && !changes.position.isFirstChange()) {
       this.updateBoard();
     }
@@ -133,9 +144,9 @@ export class ChessboardComponent
   }
 
   clearCells() {
-    this.cells = [];
+    this.uiCells = [];
     for (let i = 0; i < 64; i++) {
-      this.cells.push({
+      this.uiCells.push({
         location: GetLocationFromIndex(i),
         piece: null,
       });
