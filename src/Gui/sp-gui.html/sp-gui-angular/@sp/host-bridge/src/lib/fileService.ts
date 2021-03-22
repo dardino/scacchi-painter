@@ -23,3 +23,6 @@ export interface FileSelected {
   meta: FolderItemInfo;
   source: "local" | "dropbox" | "unknown" | "onedrive";
 }
+
+export type FolderSelected = Omit<FileSelected, "file">;
+
