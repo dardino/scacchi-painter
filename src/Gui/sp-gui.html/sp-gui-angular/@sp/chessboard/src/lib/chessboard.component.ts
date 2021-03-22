@@ -199,6 +199,10 @@ export class ChessboardComponent
     );
   }
 
+  get stipulationDesc(): string {
+    return this.position?.stipulation.completeStipulationDesc ?? "";
+  }
+
   private sizeMutated = (args: any) => {
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
