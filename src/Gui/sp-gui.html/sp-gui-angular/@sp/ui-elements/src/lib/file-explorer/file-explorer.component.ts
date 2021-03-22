@@ -3,6 +3,7 @@ import {
   FileSelected,
   FileService,
   FolderItemInfo,
+  FolderSelected,
 } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
@@ -12,7 +13,9 @@ import {
 })
 export class FileExplorerComponent implements OnInit {
   @Input() service: FileService;
+  @Input() mode: "save" | "open";
   @Output() selectFile = new EventEmitter<FileSelected>();
+  @Output() folderChanged = new EventEmitter<FolderSelected>();
 
   public currentItem: FolderItemInfo = {
     fullPath: "",
@@ -40,6 +43,7 @@ export class FileExplorerComponent implements OnInit {
   private clickFolder(item: FolderItemInfo): void {
     this.currentItem = item;
     this.items = [];
+    this.folderChanged.emit({ meta: item, source: this.service.sourceName });
     this.refresh();
   }
 

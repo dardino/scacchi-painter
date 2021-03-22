@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IProblem } from "./helpers";
 import { Problem } from "./models/Problem";
-import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
+import { FileSelected, FileService, FolderSelected } from "@sp/host-bridge/src/lib/fileService";
 import { DropboxdbService } from "./dropboxdb.service";
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -19,7 +19,7 @@ interface IDbSpX {
 })
 export class DbmanagerService {
   private currentIndex = 0;
-  private currentFile: Omit<FileSelected, "file"> | null = null;
+  private currentFile: FolderSelected | null = null;
   private workInProgress: Subject<boolean> = new Subject<boolean>();
 
   public All: Problem[] = [];
@@ -42,6 +42,9 @@ export class DbmanagerService {
   }
   get Pieces() {
     return this.currentProblem?.pieces ?? [];
+  }
+  get CurrentFile(): Readonly<FolderSelected | null> {
+    return this.currentFile;
   }
 
   constructor(
@@ -91,6 +94,9 @@ export class DbmanagerService {
       duration: 2000,
     });
   }
+  SetFileMeta(meta: Omit<FileSelected, "file">) {
+    this.currentFile = { ...meta };
+  }
   //#endregion PUBLIC LOADS
 
   private async loadFromLocalStorage() {
@@ -138,24 +144,38 @@ export class DbmanagerService {
     return doc;
   }
 
+  private async createFile(): Promise<File> {
+    const type =
+      this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3";
+    const file = await this.getDbFile(type);
+    return file;
+  }
+
+  private async download(file: File): Promise<void> {
+    const fileSaver = await import("file-saver");
+    fileSaver.saveAs(file, this.FileName);
+  }
+
   public async Save() {
     this.workInProgress.next(true);
     // first of all save the current problem into local storage
     await this.saveToLocalStorage();
-    const type =
-      this.currentFile?.meta.fullPath.substr(-4) === ".sp2" ? "sp2" : "sp3";
-    const file = await this.getDbFile(type);
+    const file = await this.createFile();
     const fs = this.fileService;
     const cf = this.currentFile;
     if (fs && cf) {
       const result = await fs.saveFileContent(file, cf.meta);
       if (!(result instanceof Error)) {
         this.currentFile = { meta: result, source: fs.sourceName };
-        this.snackBar.open(`Save done in: <${this.currentFile.meta.fullPath}>`, undefined, {
-          verticalPosition: "top",
-          politeness: "assertive",
-          duration: 1500,
-        });
+        this.snackBar.open(
+          `Save done in: <${this.currentFile.meta.fullPath}>`,
+          undefined,
+          {
+            verticalPosition: "top",
+            politeness: "assertive",
+            duration: 1500,
+          }
+        );
       } else {
         this.snackBar.open("Unable to save: " + result.message, undefined, {
           verticalPosition: "top",
@@ -164,6 +184,7 @@ export class DbmanagerService {
         });
       }
     } else {
+      this.download(file);
       this.snackBar.open("Unable to save!", undefined, {
         verticalPosition: "top",
         politeness: "off",

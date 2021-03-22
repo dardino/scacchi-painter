@@ -1,1 +1,49 @@
-<p>save-file works!</p>
+<div>
+  <div>
+    <h1 class="title">Open from:</h1>
+    <ul class="open-from">
+      <li>
+        <a mat-stroked-button (click)="download()">
+          <span class="open-button">
+            <mat-icon>library_add</mat-icon>
+            <span>Save in Local</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a mat-stroked-button (click)="toDropbox()">
+          <span class="open-button">
+            <mat-icon svgIcon="dropbox_icon"></mat-icon>
+            <span>Dropbox</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a mat-stroked-button (click)="toOneDrive()">
+          <span class="open-button">
+            <mat-icon svgIcon="onedrive_icon"></mat-icon>
+            <span>OneDrive</span>
+          </span>
+        </a>
+      </li>
+      <!-- we needs a 'n-1' fillers to grant the correct ui -->
+      <li class="filler"></li>
+      <li class="filler"></li>
+      <li class="filler"></li>
+    </ul>
+  </div>
+  <div *ngIf="showFilePicker">
+    <input mat-input type="text" [(value)]="fileName" />
+    <a mat-stroked-button (click)="saveFile()">
+      <span class="open-button">
+        <mat-icon svgIcon="onedrive_icon"></mat-icon>
+        <span>OneDrive</span>
+      </span>
+    </a>
+    <lib-file-explorer
+      mode="save"
+      [service]="currentFileService"
+      (folderChanged)="expandFolder($event)"
+    ></lib-file-explorer>
+  </div>
+</div>
