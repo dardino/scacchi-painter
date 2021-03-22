@@ -93,6 +93,14 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   rotationToAdd: number | null = null;
   pieceToMove: Piece | null = null;
 
+  private actualCursor: null | {
+    figurine: string | null;
+    rotation: number | null;
+  } = {
+    figurine: null,
+    rotation: null,
+  };
+
   get boardCursor(): {
     figurine: string | null;
     rotation: number | null;
@@ -107,12 +115,19 @@ export class EditProblemComponent implements OnInit, OnDestroy {
         ? getCanvasRotation(this.pieceToMove.rotation)
         : null) ??
       null;
-    return figurine
-      ? {
-          figurine,
-          rotation,
-        }
-      : null;
+
+    if (
+      figurine &&
+      (this.actualCursor?.figurine !== figurine ||
+        this.actualCursor.rotation !== rotation)
+    ) {
+      this.actualCursor = {
+        figurine,
+        rotation,
+      };
+    }
+
+    return this.actualCursor;
   }
 
   switchBoardType() {
@@ -253,7 +268,10 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.editMode === "select") {
-      const piece = this.current.Problem?.GetPieceAt($event.column, $event.traverse);
+      const piece = this.current.Problem?.GetPieceAt(
+        $event.column,
+        $event.traverse
+      );
       if (piece != null) {
         this.editMode = "move";
         this.prepareMovePiece(piece);
