@@ -1,0 +1,38 @@
+<ul class="open-from">
+  <li *ngIf="!hideNew">
+    <a mat-stroked-button (click)="selectSource('new')">
+      <span class="open-button">
+        <mat-icon>library_add</mat-icon>
+        <span>New file</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a mat-stroked-button (click)="selectSource('local')">
+      <span class="open-button">
+        <mat-icon>folder</mat-icon>
+        <span>Local folder</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a mat-stroked-button (click)="selectSource('dropbox')">
+      <span class="open-button">
+        <mat-icon svgIcon="dropbox_icon"></mat-icon>
+        <span>Dropbox</span>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a mat-stroked-button (click)="selectSource('onedrive')">
+      <span class="open-button">
+        <mat-icon svgIcon="onedrive_icon"></mat-icon>
+        <span>OneDrive</span>
+      </span>
+    </a>
+  </li>
+  <!-- we needs a 'n-1' fillers to grant the correct ui -->
+  <li class="filler"></li>
+  <li class="filler"></li>
+  <li class="filler"></li>
+</ul>
