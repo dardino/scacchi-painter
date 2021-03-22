@@ -64,11 +64,12 @@ export class ProblemDefinitionsComponent implements OnInit {
   public set leadsTo(v: EndingTypes) {
     this.current.SetStipulationType(v);
   }
-  public get moves(): number {
-    return this.current.Problem?.stipulation.moves ?? 2;
+  public get moves(): string {
+    return (this.current.Problem?.stipulation.moves ?? 2).toString();
   }
-  public set moves(v: number) {
-    this.current.SetStipulationMoves(v);
+  public set moves(v: string) {
+    const moves = parseFloat(v.replace(",", "."));
+    this.current.SetStipulationMoves(!isNaN(moves) ? moves : this.current.Problem?.stipulation.moves ?? 2);
   }
 
   constructor(private current: CurrentProblemService) {}
