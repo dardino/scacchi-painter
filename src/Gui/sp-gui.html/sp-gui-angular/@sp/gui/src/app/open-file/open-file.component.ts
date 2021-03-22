@@ -8,10 +8,10 @@ import { OneDriveService } from "@sp/dbmanager/src/lib/one-drive.service";
 
 @Component({
   selector: "app-sp-openfile",
-  templateUrl: "./openfile.component.html",
-  styleUrls: ["./openfile.component.styl"],
+  templateUrl: "./open-file.component.html",
+  styleUrls: ["./open-file.component.styl"],
 })
-export class OpenfileComponent implements OnInit {
+export class OpenFileComponent implements OnInit {
   constructor(
     private db: DbmanagerService,
     private dropboxService: DropboxdbService,

@@ -12,7 +12,7 @@ import { ChessboardModule } from "@sp/chessboard/src/lib/chessboard.module";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
-import { OpenfileComponent } from "./openfile/openfile.component";
+import { OpenFileComponent } from "./open-file/open-file.component";
 import { DatabaseListComponent } from "./database-list/database-list.component";
 import { MenuComponent } from "./menu/menu.component";
 import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
@@ -36,11 +36,12 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { SaveFileComponent } from "./save-file/save-file.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    OpenfileComponent,
+    OpenFileComponent,
     DatabaseListComponent,
     MenuComponent,
     ConfigurationComponent,
@@ -50,6 +51,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     TwinDialogComponent,
     ConditionsDialogComponent,
     AuthRedirectComponent,
+    SaveFileComponent,
   ],
   imports: [
     CommonModule,
