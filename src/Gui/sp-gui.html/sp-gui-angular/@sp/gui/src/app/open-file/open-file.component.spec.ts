@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { OpenfileComponent } from "./openfile.component";
+import { OpenFileComponent } from "./open-file.component";
 
 describe("OpenfileComponent", () => {
-  let component: OpenfileComponent;
-  let fixture: ComponentFixture<OpenfileComponent>;
+  let component: OpenFileComponent;
+  let fixture: ComponentFixture<OpenFileComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OpenfileComponent ]
+      declarations: [ OpenFileComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OpenfileComponent);
+    fixture = TestBed.createComponent(OpenFileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
