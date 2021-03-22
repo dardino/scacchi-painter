@@ -3,7 +3,7 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Router } from "@angular/router";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
-import { FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
+import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { OneDriveService } from "@sp/dbmanager/src/lib/one-drive.service";
 
 @Component({
@@ -66,6 +66,26 @@ export class OpenFileComponent implements OnInit {
     return this.bridge.supportsClose;
   }
 
+  async sourceSelected(source: "new" | AvaliableFileServices) {
+    switch (source) {
+      case "new":
+        await this.newFile();
+        break;
+      case "local":
+        await this.localFolder();
+        break;
+      case "dropbox":
+        await this.fromDropbox();
+        break;
+      case "onedrive":
+        await this.fromOneDrive();
+        break;
+      case "unknown":
+      default:
+        break;
+    }
+  }
+
   async newFile() {
     this.createFile({
       meta: {
@@ -108,7 +128,7 @@ export class OpenFileComponent implements OnInit {
     this.showFilePicker = true;
   }
 
-  async loadFromFile(fileInfo: FileSelected | null) {
+  private async loadFromFile(fileInfo: FileSelected | null) {
     if (!fileInfo) return;
     const error = await this.db.Load(fileInfo);
     if (!error) {
@@ -116,10 +136,13 @@ export class OpenFileComponent implements OnInit {
     }
   }
 
-  async createFile($event: FileSelected) {
+  private async createFile($event: FileSelected) {
     await this.loadFromFile($event);
   }
 
+  /**
+   * called from file Explorer pick
+   */
   async openFile($event: FileSelected) {
     await this.loadFromFile($event);
   }

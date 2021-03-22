@@ -18,10 +18,11 @@ export interface FileService {
   saveFileContent(file: File, item: FolderItemInfo): Promise<FolderItemInfo | Error>;
 }
 
+
 export interface FileSelected {
   file: File;
   meta: FolderItemInfo;
-  source: "local" | "dropbox" | "unknown" | "onedrive";
+  source: AvaliableFileServices;
 }
 
 export type FolderSelected = Omit<FileSelected, "file">;
