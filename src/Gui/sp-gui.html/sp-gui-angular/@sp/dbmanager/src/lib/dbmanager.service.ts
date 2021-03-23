@@ -275,11 +275,11 @@ export class DbmanagerService {
         '<?xml version="1.0" encoding="utf-8"?>\r' +
         new XMLSerializer().serializeToString(xmlDoc.documentElement);
       const fullpath = this.currentFile?.meta.fullPath ?? "temp.sp2";
-      return new File([text], fullpath, { type: "application/xml" });
+      return new File([text], fullpath, { type: "application/octect-stream" });
     } else {
       const text = JSON.stringify(this.toJSON());
       const fullpath = this.currentFile?.meta.fullPath ?? "temp.sp3";
-      return new File([text], fullpath, { type: "application/json" });
+      return new File([text], fullpath, { type: "application/octect-stream" });
     }
   }
 }
