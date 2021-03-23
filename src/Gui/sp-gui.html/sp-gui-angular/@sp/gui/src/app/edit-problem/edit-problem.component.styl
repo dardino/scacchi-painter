@@ -1,7 +1,7 @@
 @import "../../../../mediaquery"
 
 .problem-editor
-  @media (max-width $smallScreen)
+  @media (max-width $smallScreen) and (orientation landscape)
     padding-left $boardwidthSM
 
 #chessboard
@@ -9,13 +9,16 @@
   padding 0.5rem
   flex 0 0 auto
 
-  @media (max-width $smallScreen)
+  @media (max-width $smallScreen) and (orientation landscape)
     width "calc(%s - 1rem)" % $boardwidthSM
     position fixed
     top $maintoolbarH
     left 0
     bottom 0
     overflow-y auto
+
+  @media (max-width $smallScreen) and (orientation portrait)
+    width calc(100vw - 1rem)
 
   .chessboard-workarea
     z-index 1
