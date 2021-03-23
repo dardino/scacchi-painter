@@ -1,6 +1,6 @@
 <div class="problem-editor">
   <section id="toolbar">
-    <mat-toolbar class="toolbar-row"  color="secondary">
+    <mat-toolbar class="toolbar-row" color="secondary">
       <lib-toolbar-edit
         (switchBoardType)="switchBoardType()"
         (editCommand)="editCommand($event)"
@@ -22,10 +22,12 @@
           (cellClick)="clickOnCell($event)"
           (focusOut)="boardBlur()"
         ></lib-chessboard>
-        <lib-piece-selector
-          (selectedPieceChanged)="setPieceToAdd($event)"
-          [current]="pieceToAdd"
-        ></lib-piece-selector>
+        <section id="pieceselector">
+          <lib-piece-selector
+            (selectedPieceChanged)="setPieceToAdd($event)"
+            [current]="pieceToAdd"
+          ></lib-piece-selector>
+        </section>
       </div>
     </section>
     <div
