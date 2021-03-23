@@ -1,15 +1,22 @@
 @import "../../../../mediaquery"
+
 :host
-  display: contents;
+  display contents
+
+  &:after
+    content ""
+    display block
+    width 1rem
+    height 100%
+    flex 0 0 auto
 
 .sp-toolbar-label
   display inline-flex
-  margin .3rem
+  margin 0.3rem
 
 [data-rotate="90"]
   transform rotateZ(90deg)
 
-
 .boardtype_switch
-  @media (max-width: $smallScreen)
+  @media (max-width $smallScreen)
     display none
