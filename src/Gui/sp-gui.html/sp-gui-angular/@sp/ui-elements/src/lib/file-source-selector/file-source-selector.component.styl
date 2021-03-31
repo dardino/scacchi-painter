@@ -11,17 +11,17 @@
     margin 1rem
     padding 0
     flex 0 0 9rem
+
     &.filler
       margin-top 0
       margin-bottom 0
 
-
 ul>li
-  list-style: none
-  margin-top: 1rem
+  list-style none
+  margin-top 1rem
 
   a
-    background-color: rgba(255,255,255,0.1)
+    background-color rgba(255, 255, 255, 0.1)
 
   .open-button
     box-sizing border-box
@@ -33,7 +33,12 @@ ul>li
 
     > mat-icon
       display flex
-      align-items: center
+      align-items center
       flex 1 1 1rem
+
     > span
       flex 1 1 1rem
+
+  &.current
+    pointer-events none
+    background-color rgba(255, 255, 255, 0.3)
