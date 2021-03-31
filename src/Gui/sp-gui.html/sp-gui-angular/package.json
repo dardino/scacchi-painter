@@ -5,7 +5,7 @@
     "debugger": "yarn remotedebug_ios_webkit_adapter --port 9000",
     "tunnel": "yarn lt --port 4200 --local-https true --allow-invalid-cert -o",
     "debug": "yarn concurrently --kill-others \"yarn debugger\" \"yarn tunnel\"",
-    "startinsecure": "yarn ng serve",
+    "startinsecure": "yarn ng serve --host=0.0.0.0 --disable-host-check",
     "start": "yarn ng serve --ssl true --host=0.0.0.0 --disable-host-check",
     "build": "yarn ng build --prod",
     "build:electron": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron",
