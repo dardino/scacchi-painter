@@ -16,6 +16,7 @@ export interface FileService {
   ): Promise<FolderItemInfo[]>;
   getFileContent(item: FolderItemInfo): Promise<File>;
   saveFileContent(file: File, item: FolderItemInfo): Promise<FolderItemInfo | Error>;
+  joinPath(...parts: string[]): string;
 }
 
 

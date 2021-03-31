@@ -9,6 +9,8 @@ import { AvaliableFileServices } from "@sp/host-bridge/src/lib/fileService";
 export class FileSourceSelectorComponent implements OnInit {
   @Input()
   public hideNew: boolean;
+  @Input()
+  public current: "new" | AvaliableFileServices;
   @Output()
   public sourceSelected = new EventEmitter<"new" | AvaliableFileServices>();
 
@@ -17,6 +19,6 @@ export class FileSourceSelectorComponent implements OnInit {
   ngOnInit(): void {}
 
   public selectSource(source: "new" | AvaliableFileServices) {
-    this.sourceSelected.emit(source);
+    if (this.current !== source) this.sourceSelected.emit(source);
   }
 }

@@ -15,6 +15,9 @@ export class OneDriveService implements FileService {
   get sourceName() {
     return "onedrive" as const;
   }
+  joinPath(...parts: string[]): string {
+    return parts.join("/");
+  }
   async enumContent(
     itemId: string | null,
     type: FolderItemInfo["type"],
