@@ -19,20 +19,54 @@ export class SaveFileComponent implements OnInit {
     private dropboxFS: DropboxdbService,
     private onedriveFS: OneDriveService
   ) {}
-  private currentFolder: FolderSelected | null = null;
+  private currentFolder: FolderSelected = {
+    meta: {
+      fullPath: "",
+      id: "",
+      itemName: "",
+      type: "file",
+    },
+    source: "unknown",
+  };
+  private selectedFile: FolderSelected = {
+    meta: {
+      fullPath: "",
+      id: "newFile.sp3",
+      itemName: "newFile.sp3",
+      type: "file",
+    },
+    source: "unknown",
+  };
 
-  public currentSource: AvaliableFileServices =
-    this.db.CurrentFile?.source ?? "unknown";
+  public get currentSource(): AvaliableFileServices {
+    return this.selectedFile?.source ?? "unknown";
+  }
   public get showFilePicker() {
     return this.currentSource !== "unknown" && this.currentSource !== "local";
   }
-  public fileName = "";
+  public get fileName() {
+    return this.selectedFile.meta.itemName;
+  }
+  public set fileName(v: string) {
+    this.selectedFile.meta.itemName = v;
+  }
   public currentFileService: FileService | null = null;
+
+  public get currentFolderName() {
+    if (this.currentFolder?.meta.type === "file") return this.actionName;
+    return this.currentFolder?.meta.fullPath + "/" + this.fileName;
+  }
+
+  public get actionName() {
+    if (this.currentFileService == null) {
+      return "Download";
+    } else return "Save";
+  }
 
   ngOnInit(): void {
     const urlhash = location.hash;
-    this.fileName = this.db.CurrentFile?.meta.itemName ?? "new_file.sp3";
-    this.currentFolder = this.db.CurrentFile ?? null;
+    this.selectedFile = this.db.CurrentFile ?? this.selectedFile;
+    this.currentFolder = this.db.CurrentFile ?? this.selectedFile;
     if (urlhash === "#dropbox") {
       setTimeout(() => {
         this.toDropbox();
@@ -43,12 +77,12 @@ export class SaveFileComponent implements OnInit {
         this.toOneDrive();
       }, 1);
     }
-    if (this.currentFolder?.source === "dropbox") {
+    if (this.selectedFile?.source === "dropbox") {
       setTimeout(() => {
         this.toDropbox();
       }, 1);
     }
-    if (this.currentFolder?.source === "onedrive") {
+    if (this.selectedFile?.source === "onedrive") {
       setTimeout(() => {
         this.toOneDrive();
       }, 1);
@@ -78,8 +112,8 @@ export class SaveFileComponent implements OnInit {
   public async download() {
     this.db.SetFileMeta({
       meta: {
-        fullPath: this.db.CurrentFile?.meta.fullPath ?? ".",
-        id: this.db.CurrentFile?.meta.id ?? this.fileName,
+        fullPath: this.selectedFile?.meta.fullPath ?? ".",
+        id: this.selectedFile?.meta.id ?? this.fileName,
         itemName: this.fileName,
         type: "file",
       },
@@ -91,24 +125,49 @@ export class SaveFileComponent implements OnInit {
    * open dropbox folder selector
    */
   public async toDropbox() {
-    this.currentSource = "dropbox";
+    if (this.selectedFile) this.selectedFile.source = "dropbox";
     this.currentFileService = this.dropboxFS;
   }
   /**
    * open onedrive folder selector
    */
   public async toOneDrive() {
-    this.currentSource = "onedrive";
+    if (this.selectedFile) this.selectedFile.source = "onedrive";
     this.currentFileService = this.onedriveFS;
   }
 
   public async saveFile() {
-    if (this.currentFolder == null) return this.download();
-    else await this.db.Save();
+    if (
+      this.currentFolder.source === "local" ||
+      this.currentFolder.source === "unknown"
+    ) {
+      return this.download();
+    } else {
+      this.db.SetFileMeta({
+        source: this.currentFolder.source,
+        meta: this.selectedFile.meta,
+      });
+      await this.db.Save();
+    }
     return null;
   }
 
   public expandFolder(folder: FolderSelected) {
     this.currentFolder = folder;
+    if (this.currentFileService) {
+      this.selectedFile.meta.fullPath = this.currentFileService.joinPath(
+        folder.meta.fullPath,
+        this.selectedFile.meta.itemName
+      );
+    } else {
+      this.selectedFile.meta.fullPath = [
+        folder.meta.fullPath,
+        this.selectedFile.meta.itemName,
+      ].join("/");
+    }
+  }
+
+  public selectFile(folder: FolderSelected) {
+    this.selectedFile = folder;
   }
 }

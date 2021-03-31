@@ -41,6 +41,10 @@ export class DropboxdbService implements FileService {
     return "dropbox" as const;
   }
 
+  joinPath(...parts: string[]): string {
+    return parts.join("/");
+  }
+
   async authorize(): Promise<boolean> {
     const token = await getDropboxToken();
     this.token = token;

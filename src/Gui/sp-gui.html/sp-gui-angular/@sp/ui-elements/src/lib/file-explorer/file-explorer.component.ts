@@ -17,7 +17,7 @@ export class FileExplorerComponent implements OnInit {
   @Output() selectFile = new EventEmitter<FileSelected>();
   @Output() folderChanged = new EventEmitter<FolderSelected>();
 
-  public currentItem: FolderItemInfo = {
+  public currentItem: FolderItemInfo & { parent?: FolderItemInfo } = {
     fullPath: "",
     id: "",
     itemName: "/",
@@ -40,8 +40,23 @@ export class FileExplorerComponent implements OnInit {
     if (item.type === "folder" || item.type === "drive") this.clickFolder(item);
   }
 
+  navToParent() {
+    if (this.currentItem.parent) {
+      this.currentItem = this.currentItem.parent;
+      this.folderChanged.emit({
+        meta: this.currentItem,
+        source: this.service.sourceName,
+      });
+      this.refresh();
+    }
+  }
+
+  get hasParent() {
+    return this.currentItem.parent != null;
+  }
+
   private clickFolder(item: FolderItemInfo): void {
-    this.currentItem = item;
+    this.currentItem = { ...item, parent: this.currentItem };
     this.items = [];
     this.folderChanged.emit({ meta: item, source: this.service.sourceName });
     this.refresh();
@@ -53,8 +68,12 @@ export class FileExplorerComponent implements OnInit {
   }
 
   private refresh() {
-    this.service.enumContent(this.currentItem.id, this.currentItem.type, "sp2").then((items) => {
-      this.items = items;
-    });
+    if (this.service) {
+      this.service
+        .enumContent(this.currentItem.id, this.currentItem.type, "sp2")
+        .then((items) => {
+          this.items = items;
+        });
+    }
   }
 }

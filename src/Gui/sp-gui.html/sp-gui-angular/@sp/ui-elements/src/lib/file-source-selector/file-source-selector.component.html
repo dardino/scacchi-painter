@@ -1,5 +1,5 @@
 <ul class="open-from">
-  <li *ngIf="!hideNew">
+  <li *ngIf="!hideNew" [ngClass]="{ current: current === 'new' }">
     <a mat-stroked-button (click)="selectSource('new')">
       <span class="open-button">
         <mat-icon>library_add</mat-icon>
@@ -7,7 +7,7 @@
       </span>
     </a>
   </li>
-  <li>
+  <li [ngClass]="{ current: current === 'local' }">
     <a mat-stroked-button (click)="selectSource('local')">
       <span class="open-button">
         <mat-icon>folder</mat-icon>
@@ -15,7 +15,7 @@
       </span>
     </a>
   </li>
-  <li>
+  <li [ngClass]="{ current: current === 'dropbox' }">
     <a mat-stroked-button (click)="selectSource('dropbox')">
       <span class="open-button">
         <mat-icon svgIcon="dropbox_icon"></mat-icon>
@@ -23,7 +23,7 @@
       </span>
     </a>
   </li>
-  <li>
+  <li [ngClass]="{ current: current === 'onedrive' }">
     <a mat-stroked-button (click)="selectSource('onedrive')">
       <span class="open-button">
         <mat-icon svgIcon="onedrive_icon"></mat-icon>
