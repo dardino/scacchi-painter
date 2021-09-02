@@ -4,7 +4,7 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 @Component({
   selector: "app-menu",
   templateUrl: "./menu.component.html",
-  styleUrls: ["./menu.component.styl"],
+  styleUrls: ["./menu.component.less"],
 })
 export class MenuComponent implements OnInit {
   @Output()

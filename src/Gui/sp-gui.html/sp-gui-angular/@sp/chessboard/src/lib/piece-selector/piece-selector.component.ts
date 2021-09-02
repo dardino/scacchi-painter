@@ -3,7 +3,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 @Component({
   selector: "lib-piece-selector",
   templateUrl: "./piece-selector.component.html",
-  styleUrls: ["./piece-selector.component.styl"],
+  styleUrls: ["./piece-selector.component.less"],
 })
 export class PieceSelectorComponent implements OnInit {
   @Input()

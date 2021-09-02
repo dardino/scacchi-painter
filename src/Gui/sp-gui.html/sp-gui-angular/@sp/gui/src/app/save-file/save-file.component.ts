@@ -11,7 +11,7 @@ import {
 @Component({
   selector: "app-save-file",
   templateUrl: "./save-file.component.html",
-  styleUrls: ["./save-file.component.styl"],
+  styleUrls: ["./save-file.component.less"],
 })
 export class SaveFileComponent implements OnInit {
   constructor(

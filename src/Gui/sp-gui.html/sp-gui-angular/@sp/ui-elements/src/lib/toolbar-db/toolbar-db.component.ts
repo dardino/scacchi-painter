@@ -5,7 +5,7 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 @Component({
   selector: "lib-toolbar-db",
   templateUrl: "./toolbar-db.component.html",
-  styleUrls: ["./toolbar-db.component.styl"],
+  styleUrls: ["./toolbar-db.component.less"],
 })
 export class ToolbarDbComponent implements OnInit {
   constructor(private db: DbmanagerService, private router: Router) {}

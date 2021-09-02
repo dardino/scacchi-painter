@@ -9,7 +9,7 @@ import { OneDriveService } from "@sp/dbmanager/src/lib/one-drive.service";
 @Component({
   selector: "app-sp-openfile",
   templateUrl: "./open-file.component.html",
-  styleUrls: ["./open-file.component.styl"],
+  styleUrls: ["./open-file.component.less"],
 })
 export class OpenFileComponent implements OnInit {
   constructor(

@@ -30,7 +30,7 @@ import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.c
 @Component({
   selector: "app-edit-problem",
   templateUrl: "./edit-problem.component.html",
-  styleUrls: ["./edit-problem.component.styl"],
+  styleUrls: ["./edit-problem.component.less"],
 })
 export class EditProblemComponent implements OnInit, OnDestroy {
   public get rows$() {

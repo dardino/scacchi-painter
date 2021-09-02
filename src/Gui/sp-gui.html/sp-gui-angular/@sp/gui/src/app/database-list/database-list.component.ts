@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-database-list",
   templateUrl: "./database-list.component.html",
-  styleUrls: ["./database-list.component.styl"],
+  styleUrls: ["./database-list.component.less"],
 })
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db.All);

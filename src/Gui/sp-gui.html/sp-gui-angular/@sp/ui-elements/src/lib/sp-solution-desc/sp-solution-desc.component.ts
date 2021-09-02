@@ -7,7 +7,7 @@ import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/consta
 @Component({
   selector: "lib-sp-solution-desc",
   templateUrl: "./sp-solution-desc.component.html",
-  styleUrls: ["./sp-solution-desc.component.styl"],
+  styleUrls: ["./sp-solution-desc.component.less"],
 })
 export class SpSolutionDescComponent implements OnInit {
   constructor() {}

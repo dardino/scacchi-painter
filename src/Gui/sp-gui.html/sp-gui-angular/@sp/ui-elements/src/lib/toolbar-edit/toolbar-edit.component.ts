@@ -17,7 +17,7 @@ export type EditCommand =
 @Component({
   selector: "lib-toolbar-edit",
   templateUrl: "./toolbar-edit.component.html",
-  styleUrls: ["./toolbar-edit.component.styl"],
+  styleUrls: ["./toolbar-edit.component.less"],
 })
 export class ToolbarEditComponent implements OnInit {
   constructor() {}

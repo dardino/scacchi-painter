@@ -13,7 +13,7 @@ import { RoutesList } from "./app-routing-list";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.styl"],
+  styleUrls: ["./app.component.less"],
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(

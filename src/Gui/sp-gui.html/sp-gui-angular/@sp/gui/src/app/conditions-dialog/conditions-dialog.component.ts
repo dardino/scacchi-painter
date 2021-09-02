@@ -8,7 +8,7 @@ import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanage
 @Component({
   selector: "app-conditions-dialog",
   templateUrl: "./conditions-dialog.component.html",
-  styleUrls: ["./conditions-dialog.component.styl"],
+  styleUrls: ["./conditions-dialog.component.less"],
 })
 export class ConditionsDialogComponent implements OnInit {
   myControl = new FormControl();

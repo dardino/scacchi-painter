@@ -13,7 +13,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 @Component({
   selector: "lib-problem-definitions",
   templateUrl: "./problem-definitions.component.html",
-  styleUrls: ["./problem-definitions.component.styl"],
+  styleUrls: ["./problem-definitions.component.less"],
 })
 export class ProblemDefinitionsComponent implements OnInit {
   @Output()

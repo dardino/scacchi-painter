@@ -4,7 +4,7 @@ import { MatButton } from "@angular/material/button";
 @Component({
   selector: "lib-sp-toolbar-button",
   templateUrl: "./sp-toolbar-button.component.html",
-  styleUrls: ["./sp-toolbar-button.component.styl"],
+  styleUrls: ["./sp-toolbar-button.component.less"],
 })
 export class SpToolbarButtonComponent implements OnInit {
   constructor() {}

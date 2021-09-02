@@ -9,7 +9,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 @Component({
   selector: "app-twin-dialog",
   templateUrl: "./twin-dialog.component.html",
-  styleUrls: ["./twin-dialog.component.styl"],
+  styleUrls: ["./twin-dialog.component.less"],
 })
 export class TwinDialogComponent implements OnInit {
   constructor(

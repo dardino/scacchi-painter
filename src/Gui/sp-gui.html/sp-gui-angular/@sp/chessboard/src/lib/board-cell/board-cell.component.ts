@@ -11,7 +11,7 @@ import {
 @Component({
   selector: "lib-board-cell",
   templateUrl: "./board-cell.component.html",
-  styleUrls: ["./board-cell.component.styl"],
+  styleUrls: ["./board-cell.component.less"],
 })
 export class BoardCellComponent implements OnInit {
   public get classList() {

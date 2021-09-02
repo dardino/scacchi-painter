@@ -6,7 +6,7 @@ import { MSAL_CONFIG } from "@sp/dbmanager/src/public-api";
 @Component({
   selector: "app-auth-redirect",
   templateUrl: "./auth-redirect.component.html",
-  styleUrls: ["./auth-redirect.component.styl"],
+  styleUrls: ["./auth-redirect.component.less"],
 })
 export class AuthRedirectComponent implements OnInit {
   constructor() {}

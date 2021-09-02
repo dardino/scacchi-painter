@@ -1,0 +1,78 @@
+@import "../../../mediaquery";
+
+:host {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.chessboard-image {
+
+  position: relative;
+  padding-top: 100%;
+  width: 100%;
+
+  > .chessboard, > canvas{
+    position:absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+.chessboard{
+  display:grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  background-color: #fff;
+}
+
+.clickable{
+  cursor: pointer;
+
+  .customCursor &{
+    cursor:unset;
+  }
+}
+
+.short-info{
+  display:flex;
+  background-color:rgb(88 88 88);
+  width:100%;
+  padding:0.5em;
+  box-sizing:border-box;
+  font-size:18px;
+
+  @media (max-width: @smallScreen){
+    padding:0.2em;
+    font-size:12px;
+  }
+
+  .stipulation{
+    flex:0 0 17%;
+    text-align:left;
+  }
+  .twins{
+    flex:1 1 1%;
+    text-align:center;
+  }
+
+  .piececounter{
+    flex:0 0 17%;
+    text-align:right;
+  }
+}
+.twins{
+  ol{
+    padding:0;
+    margin:0;
+    text-align: center;
+    list-style: none;
+    counter-reset: list;
+  }
+  li::before{
+    list-style: none;
+    content: counter(list, lower-alpha) ") ";
+    counter-increment: list;
+  }
+}

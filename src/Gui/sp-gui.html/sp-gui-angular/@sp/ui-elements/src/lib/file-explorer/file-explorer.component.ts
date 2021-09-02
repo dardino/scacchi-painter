@@ -9,7 +9,7 @@ import {
 @Component({
   selector: "lib-file-explorer",
   templateUrl: "./file-explorer.component.html",
-  styleUrls: ["./file-explorer.component.styl"],
+  styleUrls: ["./file-explorer.component.less"],
 })
 export class FileExplorerComponent implements OnInit {
   @Input() service: FileService;

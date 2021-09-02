@@ -1,47 +1,47 @@
-$cwc = var(--cell-white-color);
-$cbc = var(--cell-black-color);
-$pwc = var(--white-color);
-$pbc = var(--black-color);
-$pnc = var(--neutral-color);
+@cwc: var(--cell-white-color);
+@cbc: var(--cell-black-color);
+@pwc: var(--white-color);
+@pbc: var(--black-color);
+@pnc: var(--neutral-color);
 
-:host
-  display flex
-  padding-top 100%
-  position relative
+:host{
+  display:flex;
+  padding-top:100%;
+  position:relative;
+}
 
+sub{
+  position: absolute;
+  color: black;
+  bottom: 0;
+  right: 0;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 1px white, 1px -1px 1px white, -1px -1px 1px white, -1px 1px 1px white;
+  font-size: .5em;
+  margin: 0.2em;
+  padding: 0;
+  line-height: 1em;
+  opacity: .8;
+}
 
-sub
-  position absolute
-  color black
-  bottom 0
-  right 0
-  text-transform uppercase;
-  text-shadow 1px 1px 1px white, 1px -1px 1px white, -1px -1px 1px white, -1px 1px 1px white
-  font-size .5em
-  margin 0.2em
-  padding 0
-  line-height 1em
-  opacity .8
-
-
-.white
-  background: $cwc;
-
+.white{
+  background: @cwc;
+}
 
 .black {
-  background: $cbc;
+  background: @cbc;
 }
 
 .pc-w {
-  color: $pwc;
+  color: @pwc;
 }
 
 .pc-b {
-  color: $pbc;
+  color: @pbc;
 }
 
 .pc-n {
-  color: $pnc;
+  color: @pnc;
 }
 
 div {

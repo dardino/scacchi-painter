@@ -1,0 +1,32 @@
+.folderItem {
+  display: flex;
+  cursor: pointer;
+  background-color: #144e6c;
+  border: dashed 1px #c2c2c2;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.5rem;
+  margin-top: -1px;
+  font-size: 1.2rem;
+
+  &:hover {
+    background-color: alpha(#144e6c, 0.5);
+  }
+  > mat-icon {
+    margin-right: 1rem;
+  }
+  > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.folder {
+  margin: 1rem;
+  padding: 0;
+}
+.typeFolder {
+  background-color: darken(#144e6c, 10);
+}
+.typeFile {
+  background-color: #144e6c;
+}

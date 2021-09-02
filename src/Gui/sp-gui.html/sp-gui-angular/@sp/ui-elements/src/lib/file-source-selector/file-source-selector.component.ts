@@ -4,7 +4,7 @@ import { AvaliableFileServices } from "@sp/host-bridge/src/lib/fileService";
 @Component({
   selector: "lib-file-source-selector",
   templateUrl: "./file-source-selector.component.html",
-  styleUrls: ["./file-source-selector.component.styl"],
+  styleUrls: ["./file-source-selector.component.less"],
 })
 export class FileSourceSelectorComponent implements OnInit {
   @Input()

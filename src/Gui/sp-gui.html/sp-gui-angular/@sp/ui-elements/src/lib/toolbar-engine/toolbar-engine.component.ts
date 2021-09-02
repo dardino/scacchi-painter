@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 @Component({
   selector: "lib-toolbar-engine",
   templateUrl: "./toolbar-engine.component.html",
-  styleUrls: ["./toolbar-engine.component.styl"],
+  styleUrls: ["./toolbar-engine.component.less"],
 })
 export class ToolbarEngineComponent implements OnInit {
   @Input()

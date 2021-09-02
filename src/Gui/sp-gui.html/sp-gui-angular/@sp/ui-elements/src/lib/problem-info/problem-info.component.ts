@@ -4,7 +4,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 @Component({
   selector: "lib-problem-info",
   templateUrl: "./problem-info.component.html",
-  styleUrls: ["./problem-info.component.styl"],
+  styleUrls: ["./problem-info.component.less"],
 })
 export class ProblemInfoComponent implements OnInit {
   constructor() {}

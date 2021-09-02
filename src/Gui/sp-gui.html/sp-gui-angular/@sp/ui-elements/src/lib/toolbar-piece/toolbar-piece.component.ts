@@ -6,7 +6,7 @@ export type EditModes = "select" | "add" | "remove" | "move";
 @Component({
   selector: "lib-toolbar-piece",
   templateUrl: "./toolbar-piece.component.html",
-  styleUrls: ["./toolbar-piece.component.styl"],
+  styleUrls: ["./toolbar-piece.component.less"],
 })
 export class ToolbarPieceComponent implements OnInit {
   constructor() {}
