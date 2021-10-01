@@ -1,15 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* jshint esversion: 9 */
+
 const rules = require('./webpack.rules');
 const plugins = require('./webpack.plugins');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require("path");
-
-rules.push({
-  test: /\.css$/,
-  use: [
-    { loader: 'style-loader'},
-    { loader: 'css-loader' }
-  ],
-});
 
 module.exports = {
   module: {

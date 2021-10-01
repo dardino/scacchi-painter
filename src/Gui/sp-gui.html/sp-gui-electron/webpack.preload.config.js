@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* jshint esversion: 9 */
+
 module.exports = {
   /**
    * This is the preaload point for your application
