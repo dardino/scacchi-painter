@@ -6,6 +6,7 @@ import { DropboxdbService } from "./dropboxdb.service";
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OneDriveService } from "./one-drive.service";
+import { LocalDriveService } from "./local-drive.service";
 
 interface IDbSpX {
   lastIndex: number;
@@ -50,6 +51,7 @@ export class DbmanagerService {
   constructor(
     private dropboxFS: DropboxdbService,
     private oneDriveFS: OneDriveService,
+    private localDriveFS: LocalDriveService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -60,6 +62,7 @@ export class DbmanagerService {
       case "onedrive":
         return this.oneDriveFS;
       case "local":
+        return this.localDriveFS;
       case "unknown":
       default:
         return null;
