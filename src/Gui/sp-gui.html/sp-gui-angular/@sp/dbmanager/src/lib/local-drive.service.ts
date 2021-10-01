@@ -1,5 +1,6 @@
+/// <reference path="./FileSystem.d.ts" />
+
 import { Injectable } from "@angular/core";
-import "../../FileSystem";
 import {
   AvaliableFileServices,
   FileService,
@@ -17,39 +18,28 @@ export class LocalDriveService implements FileService {
     itemType: "root" | "file" | "folder" | "drive",
     ...extensions: string[]
   ): Promise<FolderItemInfo[]> {
-    if (itemID === "root_no_permission") return [];
-    const havePermission = await this.getFolderPermission();
-    if (!havePermission) {
-      return [
-        {
-          id: "root_no_permission",
-          type: "root",
-          itemName: "Pemission denied!",
-          fullPath: "no_permission"
-        },
-      ];
-    } else {
-      if (itemType === "drive") {
-        const rootHandle = await window.showDirectoryPicker();
-        const entries = await rootHandle.entries();
-        const retEntries: FolderItemInfo[] = [];
-        for await (const [key, value] of entries) {
-          retEntries.push({
-            fullPath: key,
-            itemName: key,
-            id: key,
-            type: value.kind === "file" ? "file"
-             : value.kind ==="directory" ? "folder" : "root"
-          });
-        }
-      }
-      return [
-
-      ];
-    }
+    return [];
   }
-  getFileContent(item: FolderItemInfo): Promise<File> {
-    throw new Error("Method not implemented.");
+  async getFileContent(item: FolderItemInfo): Promise<File> {
+    // if (itemID === "root_no_permission") return [];
+    const fileToOpen = await window.showOpenFilePicker({
+      types: [
+        {
+          description: "Scacchi Painter 2",
+          accept: {
+            "text/xml": [".sp2"],
+          },
+        },
+        {
+          description: "Scacchi Painter X",
+          accept: {
+            "application/json": [".sp3"],
+          },
+        },
+      ],
+    });
+    const filecontent = await fileToOpen[0].getFile();
+    return filecontent;
   }
   saveFileContent(
     file: File,
@@ -59,14 +49,5 @@ export class LocalDriveService implements FileService {
   }
   joinPath(...parts: string[]): string {
     throw new Error("Method not implemented.");
-  }
-
-
-  private async getFolderPermission() {
-    const reqFS = await window.navigator.permissions.query({ name: "persistent-storage" });
-    if (reqFS.state === "denied") return false;
-    if (reqFS.state === "granted") return true;
-    if (reqFS.state === "prompt") return "prompt";
-    return false;
   }
 }

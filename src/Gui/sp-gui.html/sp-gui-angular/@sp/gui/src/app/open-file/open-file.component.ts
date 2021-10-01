@@ -5,6 +5,7 @@ import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { OneDriveService } from "@sp/dbmanager/src/lib/one-drive.service";
+import { LocalDriveService } from "@sp/dbmanager/src/lib/local-drive.service";
 
 @Component({
   selector: "app-sp-openfile",
@@ -16,8 +17,8 @@ export class OpenFileComponent implements OnInit {
     private db: DbmanagerService,
     private dropboxService: DropboxdbService,
     private onedriveService: OneDriveService,
-    private router: Router,
-    private bridge: HostBridgeService
+    private localFolderService: LocalDriveService,
+    private router: Router
   ) {}
 
   public showFilePicker = false;
@@ -62,10 +63,6 @@ export class OpenFileComponent implements OnInit {
     }
   }
 
-  get electron() {
-    return this.bridge.supportsClose;
-  }
-
   async sourceSelected(source: "new" | AvaliableFileServices) {
     switch (source) {
       case "new":
@@ -100,20 +97,19 @@ export class OpenFileComponent implements OnInit {
   }
 
   async localFolder() {
-    if (this.bridge.supportsOpen) {
-      const file = await this.bridge.openFile();
-      if (file == null) return;
-      await this.loadFromFile({
-        file,
-        source: "local",
-        meta: {
-          fullPath: file.name,
-          itemName: file.name,
-          id: file.name,
-          type: "file",
-        },
-      });
-    } else this.fileloader.nativeElement.click();
+    this.currentFileService = this.localFolderService;
+    const file = await this.currentFileService.getFileContent({
+      fullPath: "",
+      id: "",
+      itemName:"",
+      type: "file"
+    });
+    this.openFile({ file, meta: {
+      fullPath: file.name,
+      id: file.name,
+      itemName: file.name,
+      type: "file"
+    }, source: this.currentFileService.sourceName });
   }
 
   async fromDropbox() {
