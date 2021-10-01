@@ -24,6 +24,7 @@ const createWindow = (): void => {
       nodeIntegration: true,
       enableRemoteModule: true,
       webSecurity: false,
+      contextIsolation: false,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
@@ -37,12 +38,12 @@ const createWindow = (): void => {
   // mainWindow.setMenu(mnu);
 
   // and load the index.html of the app.
-  if (!app.isPackaged) {
-    mainWindow.loadURL("http://localhost:4200");
-    mainWindow.webContents.openDevTools();
-  } else {
+  // if (!app.isPackaged) {
+  //   mainWindow.loadURL("https://localhost:4200");
+  //   mainWindow.webContents.openDevTools();
+  // } else {
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  }
+  // }
   mainWindow.maximize();
 
 };

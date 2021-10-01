@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "allowJs": true,
     "module": "commonjs",
     "skipLibCheck": true,
@@ -11,11 +12,6 @@
     "resolveJsonModule": true,
     "target": "ES6"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "src/**/*.d.ts",
-    "src/**/*.spec.ts"
-  ]
+  "include": ["backend/**/*.ts"],
+  "exclude": ["backend/**/*.d.ts", "backend/**/*.spec.ts"]
 }

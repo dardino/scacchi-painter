@@ -4,6 +4,7 @@
     "outDir": "../../out-tsc/lib",
     "declarationMap": true,
     "target": "es2015",
+    "composite": true,
     "declaration": true,
     "inlineSources": true,
     "types": [],

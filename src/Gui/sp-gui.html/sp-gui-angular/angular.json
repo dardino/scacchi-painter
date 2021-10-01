@@ -83,7 +83,7 @@
               "ngswConfigPath": "@sp/gui/ngsw-config.json"
             },
             "electron": {
-              "outputPath": "../sp-gui-electron/app",
+              "outputPath": "../sp-gui-electron/frontend",
               "fileReplacements": [
                 {
                   "replace": "@sp/gui/src/environments/environment.ts",

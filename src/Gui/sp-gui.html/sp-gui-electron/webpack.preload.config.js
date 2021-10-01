@@ -2,7 +2,7 @@ module.exports = {
   /**
    * This is the preaload point for your application
    */
-  entry: './src/bridge/preload.ts',
+  entry: './backend/preload.ts',
   // Put your normal webpack config below here
   module: {
     rules: require('./webpack.rules'),

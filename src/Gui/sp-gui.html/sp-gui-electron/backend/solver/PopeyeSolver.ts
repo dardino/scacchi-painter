@@ -121,7 +121,6 @@ export class PopeyeSolver implements ISolver {
     const p = spawn(this.cfg.problemSolvers.Popeye.executablePath, [txtName], {
       cwd: os.tmpdir(),
       detached: false,
-      serialization: "json",
       stdio: ["pipe"]
     });
     return p;

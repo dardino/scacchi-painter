@@ -1,9 +1,9 @@
 // in preload scripts, we have access to node.js and electron APIs
 // the remote web app will not have access, so this is safe
 import { ipcRenderer as ipc, remote } from "electron";
-import { Bridge } from "./Bridge";
-import { PopeyeSolver } from "../solver/PopeyeSolver";
-import { IApplicationConfig } from "../settings/IApplicationConfig";
+import { Bridge } from "./bridge/Bridge";
+import { PopeyeSolver } from "./solver/PopeyeSolver";
+import { IApplicationConfig } from "./settings/IApplicationConfig";
 import fs from "fs";
 
 init();

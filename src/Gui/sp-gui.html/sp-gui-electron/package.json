@@ -24,7 +24,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "app/favicon.ico",
+        "icon": "./frontend/favicon.ico",
         "overwrite": true,
         "out":"release"
       },
@@ -59,11 +59,11 @@
               "config": "./webpack.renderer.config.js",
               "entryPoints": [
                 {
-                  "html": "./app/index.html",
-                  "js": "./app/main.js",
+                  "html": "./frontend/index.html",
+                  "js": "./frontend/main.js",
                   "name": "main_window",
                   "preload": {
-                    "js": "./src/bridge/preload.ts"
+                    "js": "./backend/preload.ts"
                   }
                 }
               ]

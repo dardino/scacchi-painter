@@ -1,9 +1,9 @@
-import {
+import type {
   BridgeGlobal,
   EOF,
 } from "../../../sp-gui-angular/@sp/host-bridge/src/lib/bridge-global";
-import { Problem } from "../../../sp-gui-angular/@sp/dbmanager/src/lib/models";
-import { Subject, Observable, BehaviorSubject } from "rxjs";
+import type { Problem } from "../../../sp-gui-angular/@sp/dbmanager/src/lib/models/Problem";
+import { Subject, BehaviorSubject } from "rxjs";
 import { ISolver } from "../solver/Solver";
 import path from "path";
 import fs from "fs";
@@ -17,7 +17,11 @@ export class Bridge implements BridgeGlobal {
     private open: () => Promise<File | null>
   ) {}
 
-  runSolve(problem: Problem, engine: string): Observable<string | EOF> | Error {
+  supportsEngine(engine: string): boolean {
+    throw new Error("Method not implemented.");
+  }
+
+  runSolve(problem: Problem, engine: string): any {
     const solver = this.solvers.find((f) => f.key === engine);
     if (!solver) {
       return new Error(
