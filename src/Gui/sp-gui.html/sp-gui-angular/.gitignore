@@ -45,3 +45,8 @@ testem.log
 .DS_Store
 Thumbs.db
 log.txt
+
+# yarn 2
+.yarn/*
+!.yarn/releases
+!.yarn/plugin
