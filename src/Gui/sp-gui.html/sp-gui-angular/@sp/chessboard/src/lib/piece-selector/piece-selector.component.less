@@ -1,0 +1,38 @@
+@import "../../../../mediaquery";
+
+.piece-selector {
+  display:flex;
+  background-color: #fff;
+  flex-flow: row wrap;
+  font-size: 2rem;
+
+  em {
+    flex: 0 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    height: 3rem;
+  }
+
+  @media (max-width: @smallScreen){
+    font-size: ~"calc((calc(@{boardwidthSM} - 1rem) / 13))";
+  }
+
+  em {
+    flex: 0 0 calc((100% / 9));
+    min-width: calc((100% / 9));
+    height: ~"calc((calc(@{boardwidthSM} - 1rem) / 9))";
+  }
+}
+
+.piece-selector-item {
+  &:hover{
+    outline:  solid 0.1rem red;
+    cursor : pointer;
+  }
+
+  &.selected{
+    background-color: rgba(0, 255, 0, 0.45);
+  }
+}

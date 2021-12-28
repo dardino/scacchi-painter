@@ -1,0 +1,23 @@
+@import "../../../../mediaquery";
+
+.lib-toolbar {
+  display: flex;
+  padding: 0.1rem;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: @smallScreen) {
+    display: none;
+  }
+}
+
+.lib-toolbar-smallscreen {
+  @media (min-width: (@smallScreen + 1)) {
+    display: none;
+  }
+}
+
+.sp-toolbar-label {
+  display: inline-flex;
+  margin: 0.3rem;
+}

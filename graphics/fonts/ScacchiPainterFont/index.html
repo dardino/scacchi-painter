@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ScacchiPainter - Font Icons</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="ScacchiPainter.css" />
+    <style>
+      :root {
+        --cell-black: #c5c5c5;
+        --cell-white: #fff;
+        --white: #fff;
+        --black: #333;
+      }
+      ul {
+        font-family: ScacchiPainter;
+        font-size: 32px;
+      }
+      table {
+        font-size: 64px;
+        border-collapse: collapse;
+      }
+      td {
+        vertical-align: middle;
+        text-align: center;
+        border: solid 1px black;
+      }
+      tr:nth-child(even) td:nth-child(odd) {
+        background-color: var(--cell-black);
+      }
+      tr:nth-child(even) td:nth-child(even) {
+        background-color: var(--cell-white);
+      }
+      tr:nth-child(odd) td:nth-child(odd) {
+        background-color: var(--cell-white)
+      }
+      tr:nth-child(odd) td:nth-child(even) {
+        background-color: var(--cell-black);
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li>w_q White Queen</li>
+      <li>w_k White King</li>
+      <li>w_r White Rook</li>
+      <li>w_b White Bishop</li>
+      <li>w_n White Horse</li>
+      <li>w_p White Pawn</li>
+      <li>w_e White Queenhorse</li>
+      <li>w_t White Rookhorse</li>
+      <li>w_a White Bishophorse</li>
+      <li>b_q Black Queen</li>
+      <li>b_k Black King</li>
+      <li>b_r Black Rook</li>
+      <li>b_b Black Bishop</li>
+      <li>b_n Black Horse</li>
+      <li>b_p Black Pawn</li>
+      <li>b_e Black Queenhorse</li>
+      <li>b_t Black Rookhorse</li>
+      <li>b_a Black Bishophorse</li>
+      <li>n_q Neutral Queen</li>
+      <li>n_k Neutral King</li>
+      <li>n_r Neutral Rook</li>
+      <li>n_b Neutral Bishop</li>
+      <li>n_n Neutral Horse</li>
+      <li>n_p Neutral Pawn</li>
+      <li>n_e Neutral Queenhorse</li>
+      <li>n_t Neutral Rookhorse</li>
+      <li>n_a Neutral Bishophorse</li>
+      <li>__q background Queen</li>
+      <li>__k background King</li>
+      <li>__r background Rook</li>
+      <li>__b background Bishop</li>
+      <li>__n background Horse</li>
+      <li>__p background Pawn</li>
+      <li>__e background Queenhorse</li>
+      <li>__t background Rookhorse</li>
+      <li>__a background Bishophorse</li>
+    </ul>
+    <table>
+      <caption>
+        cb
+      </caption>
+      <tr>
+        <th id="null">&nbsp;</th>
+        <th id="col1">A</th>
+        <th id="col2">B</th>
+        <th id="col3">C</th>
+        <th id="col4">D</th>
+        <th id="col5">E</th>
+        <th id="col6">F</th>
+        <th id="col7">G</th>
+        <th id="col8">H</th>
+      </tr>
+      <tr>
+        <th id="row8">8</th>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="q" data-color="w"></span></td>
+      </tr>
+      <tr>
+        <th id="row7">7</th>
+        <td><span class="figurine" data-piece="q" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="k" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="r" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="b" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="n" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="e" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="t" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="a" data-color="b"></span></td>
+      </tr>
+      <tr>
+        <th id="row6">6</th>
+        <td><span class="figurine" data-piece="q" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="k" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="r" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="b" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="n" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="e" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="t" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="a" data-color="n"></span></td>
+      </tr>
+      <tr>
+        <th id="row5">5</th>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="w"></span></td>
+      </tr>
+      <tr>
+        <th id="row4">4</th>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="b"></span></td>
+      </tr>
+      <tr>
+        <th id="row3">3</th>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+        <td><span class="figurine" data-piece="p" data-color="n"></span></td>
+      </tr>
+      <tr>
+        <th id="row2">2</th>
+        <td><span class="figurine rotate-0" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine rotate-1" data-piece="q" data-color="b"></span></td>
+        <td><span class="figurine rotate-2" data-piece="q" data-color="n"></span></td>
+        <td><span class="figurine rotate-3" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine rotate-4" data-piece="q" data-color="b"></span></td>
+        <td><span class="figurine rotate-5" data-piece="q" data-color="n"></span></td>
+        <td><span class="figurine rotate-6" data-piece="q" data-color="w"></span></td>
+        <td><span class="figurine rotate-7" data-piece="q" data-color="b"></span></td>
+      </tr>
+      <tr>
+        <th id="row1">1</th>
+        <td><span class="figurine rotate-7" data-piece="n" data-color="w"></span></td>
+        <td><span class="figurine rotate-6" data-piece="n" data-color="b"></span></td>
+        <td><span class="figurine rotate-5" data-piece="n" data-color="n"></span></td>
+        <td><span class="figurine rotate-4" data-piece="n" data-color="w"></span></td>
+        <td><span class="figurine rotate-3" data-piece="n" data-color="b"></span></td>
+        <td><span class="figurine rotate-2" data-piece="n" data-color="n"></span></td>
+        <td><span class="figurine rotate-1" data-piece="n" data-color="w"></span></td>
+        <td><span class="figurine rotate-0" data-piece="n" data-color="b"></span></td>
+      </tr>
+    </table>
+  </body>
+</html>

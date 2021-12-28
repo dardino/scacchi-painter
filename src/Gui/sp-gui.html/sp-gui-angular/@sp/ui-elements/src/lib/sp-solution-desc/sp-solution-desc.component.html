@@ -1,0 +1,12 @@
+<!-- <quill-editor
+  class="quill-editor"
+  [modules]="{ toolbar: [['bold', 'italic', 'underline']] }"
+  [(ngModel)]="solution"
+  [preserveWhitespace]="true"
+  placeholder="Enter Text"
+></quill-editor> -->
+<div class="solutions">
+  <ng-template [ngForOf]="rows" ngFor let-item>
+    <div [class]="getClass(item)">{{item}}</div>
+  </ng-template>
+</div>

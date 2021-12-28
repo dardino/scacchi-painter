@@ -1,0 +1,6 @@
+<button mat-button [color]="color" [disabled]="disabled">
+  <span class="icon_text">
+    <mat-icon class="action">{{iconText}}</mat-icon>
+    <label *ngIf="hasLabel">{{iconLabel}}</label>
+  </span>
+</button>

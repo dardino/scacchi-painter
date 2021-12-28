@@ -10,7 +10,7 @@ namespace SP.Core
 	}
 
 	public static class EndTypesEx {
-		private static Dictionary<EndTypes, string> endTypesStrings = new Dictionary<EndTypes, string> {
+		private static readonly Dictionary<EndTypes, string> endTypesStrings = new Dictionary<EndTypes, string> {
 			{ EndTypes.Mate     , "\u2260" },
 			{ EndTypes.StaleMate, "\u003D" },
 			{ EndTypes.Undefined, "" }

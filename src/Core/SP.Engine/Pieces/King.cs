@@ -11,9 +11,9 @@ namespace SP.Engine.Pieces
 	[PieceName("K")]
 	public class King : EnginePiece
 	{
-		static ulong movesFromB2 = 0xE0A0E0;
-		static int b2Index = (int)BoardSquare.GetSquareIndex(Columns.ColB, Rows.Row2);
-		static Dictionary<PieceColors, CastlingIndexes[]> castlingByColor => new Dictionary<PieceColors, CastlingIndexes[]> {
+		static readonly ulong movesFromB2 = 0xE0A0E0;
+		static readonly int b2Index = (int)BoardSquare.GetSquareIndex(Columns.ColB, Rows.Row2);
+		static Dictionary<PieceColors, CastlingIndexes[]> CastlingByColor => new Dictionary<PieceColors, CastlingIndexes[]> {
 			{ PieceColors.Black, new CastlingIndexes[] { CastlingIndexes.ooo, CastlingIndexes.oo } },
 			{ PieceColors.White, new CastlingIndexes[] { CastlingIndexes.OOO, CastlingIndexes.OO } }
 		};
@@ -65,8 +65,8 @@ namespace SP.Engine.Pieces
 			if (c != 0)
 			{
 				var col = ((BoardSquare)s).Column;
-				if (c < 0) m2clone = m2clone >> (c * -1);
-				if (c > 0) m2clone = m2clone << c;
+				if (c < 0) m2clone >>= c * -1;
+				if (c > 0) m2clone <<= c;
 				if (col == Columns.ColA) m2clone &= 0xFEFEFEFEFEFEFEFE;
 				if (col == Columns.ColH) m2clone &= 0x7F7F7F7F7F7F7F7F;
 			}
@@ -82,7 +82,7 @@ namespace SP.Engine.Pieces
 			if (gameState.CastlingAllowed.Any(a => a) 
 				&& IsMyStartingSquare(fromSq)
 			) {
-				var idxs = castlingByColor[Color];
+				var idxs = CastlingByColor[Color];
 				foreach (var castling in idxs)
 				{
 					if (!gameState.CastlingAllowed[(int)castling] // non è più possibile arroccare

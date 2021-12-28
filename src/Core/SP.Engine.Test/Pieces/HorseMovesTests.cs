@@ -13,7 +13,7 @@ namespace SP.Engine.Pieces
 	[TestCategory("Engine.Pieces.Horse")]
 	public class HorseMovesTests
 	{
-		GameState g = new GameState
+        readonly GameState g = new GameState
 		{
 			BitBoardByColor = new Dictionary<PieceColors, BitBoard> {
 				// WHITE:                                    BLACK:

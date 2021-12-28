@@ -184,7 +184,12 @@ namespace SP.Core.Utils
         
 		private static string ToFEN(Board board)
 		{
-			return "";
+            if (board is null)
+            {
+                throw new ArgumentNullException(nameof(board));
+            }
+
+            return "";
 		}
 
 

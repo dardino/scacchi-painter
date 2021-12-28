@@ -1,0 +1,126 @@
+@cwc: var(--cell-white-color);
+@cbc: var(--cell-black-color);
+@pwc: var(--white-color);
+@pbc: var(--black-color);
+@pnc: var(--neutral-color);
+
+:host{
+  display:flex;
+  padding-top:100%;
+  position:relative;
+}
+
+sub{
+  position: absolute;
+  color: black;
+  bottom: 0;
+  right: 0;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 1px white, 1px -1px 1px white, -1px -1px 1px white, -1px 1px 1px white;
+  font-size: .5em;
+  margin: 0.2em;
+  padding: 0;
+  line-height: 1em;
+  opacity: .8;
+}
+
+.white{
+  background: @cwc;
+}
+
+.black {
+  background: @cbc;
+}
+
+.pc-w {
+  color: @pwc;
+}
+
+.pc-b {
+  color: @pbc;
+}
+
+.pc-n {
+  color: @pnc;
+}
+
+div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.figurine {
+  .clockwise45 & {
+    transform: rotateZ(45deg);
+  }
+
+  .clockwise90 & {
+    transform: rotateZ(90deg);
+  }
+
+  .clockwise135 & {
+    transform: rotateZ(135deg);
+  }
+
+  .upsidedown & {
+    transform: rotateZ(180deg);
+  }
+
+  .counterclockwise45 & {
+    transform: rotateZ(-45deg);
+  }
+
+  .counterclockwise90 & {
+    transform: rotateZ(-90deg);
+  }
+
+  .counterclockwise135 & {
+    transform: rotateZ(-135deg);
+  }
+}
+
+.active {
+  outline: solid .01em red;
+  z-index: 1;
+  background-color: transparentify(lime, 0.45);
+}
+.rotate-0 {
+  transform: rotate(0deg);
+}
+.rotate-1 {
+  transform: rotate(45deg);
+}
+.rotate-2 {
+  transform: rotate(90deg);
+}
+.rotate-3 {
+  transform: rotate(135deg);
+}
+.rotate-4 {
+  transform: rotate(180deg);
+}
+.rotate-5 {
+  transform: rotate(225deg);
+}
+.rotate-6 {
+  transform: rotate(270deg);
+}
+.rotate-7 {
+  transform: rotate(315deg);
+}

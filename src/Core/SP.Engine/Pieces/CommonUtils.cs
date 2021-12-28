@@ -123,8 +123,8 @@ namespace SP.Engine.Pieces
 		{
 			var sqb = s.ToSquareBits();
 			var alldiag = GetDiagonals(s) ^ sqb;
-			enemies = enemies & alldiag;
-			allied = allied & alldiag;
+			enemies &= alldiag;
+			allied &= alldiag;
 			var allpieces = (allied | enemies);
 			if (allpieces == 0) return alldiag;
 

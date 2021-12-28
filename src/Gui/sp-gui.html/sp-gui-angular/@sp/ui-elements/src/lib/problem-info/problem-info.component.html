@@ -1,0 +1,36 @@
+<mat-accordion multi [togglePosition]="">
+  <mat-expansion-panel expanded>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Definitions</mat-panel-title>
+      <mat-panel-description>
+        define stipulation, twins and fairy conditions
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <lib-problem-definitions
+      (openTwin)="openTwin.emit($event)"
+      (deleteTwin)="deleteTwin.emit($event)"
+      (addCondition)="addCondition.emit()"
+      (deleteCondition)="deleteCondition.emit($event)"
+    ></lib-problem-definitions>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel expanded>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Authors</mat-panel-title>
+      <mat-panel-description>
+        sets informations about authors
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <lib-problem-authors></lib-problem-authors>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel expanded>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Publication</mat-panel-title>
+      <mat-panel-description>
+        sets informations about publication date, magazine, prize etc...
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <lib-problem-publication></lib-problem-publication>
+  </mat-expansion-panel>
+</mat-accordion>

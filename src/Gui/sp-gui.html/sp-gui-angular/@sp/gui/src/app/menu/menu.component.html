@@ -1,0 +1,7 @@
+<mat-toolbar>Menu</mat-toolbar>
+<mat-nav-list>
+  <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/']">Home</a>
+  <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/openfile']">Open file</a>
+  <a (click)="selectElement.emit()" mat-list-item *ngIf="dbLoaded" [routerLink]="['/list']">Database</a>
+  <a (click)="selectElement.emit()" mat-list-item *ngIf="dbLoaded" [routerLink]="['/config']">Configuration</a>
+</mat-nav-list>

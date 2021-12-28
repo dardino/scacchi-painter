@@ -122,11 +122,8 @@ namespace SP.Engine
 
 		public override string ToString()
 		{
-			var t = GetType().GetCustomAttributes(false)
-						.Where(f => f.GetType() == typeof(PieceNameAttribute))
-						.FirstOrDefault() as PieceNameAttribute;
-			var n = t == null ? GetType().Name : t.PieceName;
-			if (Color == PieceColors.Neutral) n = "n" + n.ToUpper();
+            var n = !(GetType().GetCustomAttributes(false).Where(f => f.GetType() == typeof(PieceNameAttribute)).FirstOrDefault() is PieceNameAttribute t) ? GetType().Name : t.PieceName;
+            if (Color == PieceColors.Neutral) n = "n" + n.ToUpper();
 			return n;
 		}
 	}

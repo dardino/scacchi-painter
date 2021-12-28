@@ -1,0 +1,33 @@
+<div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
+  <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
+    <canvas
+      [style.display.none]="BoardType !== 'canvas'"
+      #canvas
+      (selectcell)="onSelectCell($event)"
+    ></canvas>
+    <div
+      class="chessboard"
+      [style.fontSize]="fontSize + 'px'"
+      [style.display]="BoardType !== 'HTML' ? 'none' : undefined"
+    >
+      <lib-board-cell
+        class="clickable"
+        [active]="item === currentCell"
+        *ngFor="let item of cells"
+        [piece]="item.piece"
+        [location]="item.location"
+        (click)="onCellClick(item)"
+      ></lib-board-cell>
+    </div>
+  </div>
+  <div class="short-info" *ngIf="!hideInfo">
+    <span class="stipulation">{{stipulationDesc}}</span>
+    <span class="twins">
+      <ol>
+        <li *ngIf="viewDiagram">Diagram</li>
+        <li *ngFor="let t of twins">{{ t }}</li>
+      </ol>
+    </span>
+    <span class="piececounter">{{ pieceCounter }}</span>
+  </div>
+</div>

@@ -1,0 +1,330 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "yarn",
+    "analytics": "014f9cc7-0686-40f3-9849-09116ddf25ba"
+  },
+  "newProjectRoot": "@sp",
+  "projects": {
+    "gui": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "less"
+        }
+      },
+      "root": "@sp/gui",
+      "sourceRoot": "@sp/gui/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "deleteOutputPath": true,
+            "outputPath": "dist/gui",
+            "index": "@sp/gui/src/index.html",
+            "main": "@sp/gui/src/main.ts",
+            "polyfills": "@sp/gui/src/polyfills.ts",
+            "tsConfig": "@sp/gui/tsconfig.app.json",
+            "assets": [
+              "@sp/gui/src/favicon.ico",
+              "@sp/gui/src/favicon.png",
+              "@sp/gui/src/favicon.icns",
+              "@sp/gui/src/apple-touch-icon.png",
+              "@sp/gui/src/assets",
+              "@sp/gui/src/manifest.webmanifest"
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "./node_modules/quill/dist/quill.snow.css",
+              "./custom-theme.scss",
+              "@sp/gui/src/styles.less"
+            ],
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "file-saver"
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "@sp/gui/src/environments/environment.ts",
+                  "with": "@sp/gui/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "@sp/gui/ngsw-config.json"
+            },
+            "electron": {
+              "outputPath": "../sp-gui-electron/frontend",
+              "fileReplacements": [
+                {
+                  "replace": "@sp/gui/src/environments/environment.ts",
+                  "with": "@sp/gui/src/environments/environment.electron.ts"
+                }
+              ],
+              "baseHref": "./",
+              "optimization": true,
+              "outputHashing": "none",
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "deleteOutputPath": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "15mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": ""
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "gui:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "gui:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "gui:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "@sp/gui/src/test.ts",
+            "polyfills": "@sp/gui/src/polyfills.ts",
+            "tsConfig": "@sp/gui/tsconfig.spec.json",
+            "karmaConfig": "@sp/gui/karma.conf.js",
+            "assets": [
+              "@sp/gui/src/favicon.ico",
+              "@sp/gui/src/favicon.png",
+              "@sp/gui/src/favicon.icns",
+              "@sp/gui/src/apple-touch-icon.png",
+              "@sp/gui/src/assets",
+              "@sp/gui/src/manifest.webmanifest"
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "./node_modules/quill/dist/quill.snow.css",
+              "./custom-theme.scss",
+              "@sp/gui/src/styles.less"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "@sp/gui/**/*.ts",
+              "@sp/gui/**/*.html"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "@sp/gui/e2e/protractor.conf.js",
+            "devServerTarget": "gui:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "gui:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "chessboard": {
+      "projectType": "library",
+      "root": "@sp/chessboard",
+      "sourceRoot": "@sp/chessboard/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "@sp/chessboard/tsconfig.lib.json",
+            "project": "@sp/chessboard/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "@sp/chessboard/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "@sp/chessboard/src/test.ts",
+            "tsConfig": "@sp/chessboard/tsconfig.spec.json",
+            "karmaConfig": "@sp/chessboard/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "@sp/chessboard/**/*.ts",
+              "@sp/chessboard/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "dbmanager": {
+      "projectType": "library",
+      "root": "@sp/dbmanager",
+      "sourceRoot": "@sp/dbmanager/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "@sp/dbmanager/tsconfig.lib.json",
+            "project": "@sp/dbmanager/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "@sp/dbmanager/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "@sp/dbmanager/src/test.ts",
+            "tsConfig": "@sp/dbmanager/tsconfig.spec.json",
+            "karmaConfig": "@sp/dbmanager/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "@sp/dbmanager/**/*.ts",
+              "@sp/dbmanager/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "uiElements": {
+      "projectType": "library",
+      "root": "@sp/ui-elements",
+      "sourceRoot": "@sp/ui-elements/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "@sp/ui-elements/tsconfig.lib.json",
+            "project": "@sp/ui-elements/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "@sp/ui-elements/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "@sp/ui-elements/src/test.ts",
+            "tsConfig": "@sp/ui-elements/tsconfig.spec.json",
+            "karmaConfig": "@sp/ui-elements/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "@sp/ui-elements/**/*.ts",
+              "@sp/ui-elements/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "hostBridge": {
+      "projectType": "library",
+      "root": "@sp/host-bridge",
+      "sourceRoot": "@sp/host-bridge/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "@sp/host-bridge/tsconfig.lib.json",
+            "project": "@sp/host-bridge/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "@sp/host-bridge/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "@sp/host-bridge/src/test.ts",
+            "tsConfig": "@sp/host-bridge/tsconfig.spec.json",
+            "karmaConfig": "@sp/host-bridge/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "@sp/host-bridge/**/*.ts",
+              "@sp/host-bridge/**/*.html"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "gui"
+}

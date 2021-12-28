@@ -1,13 +1,25 @@
 {
 	"folders": [
 		{
-			"path": "src/Gui/sp-web-gui"
-		},
-		{
-			"path": "/home/dardino/Dev/popeye"
-		},
-		{
 			"path": "src/Core"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/sp-gui-angular"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/sp-gui-electron"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/sp-gui-web"
+		},
+		{
+			"path": "graphics"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/popeye-js"
+		},
+		{
+			"path": ".github"
 		}
 	],
 	"settings": {
@@ -15,6 +27,24 @@
 			"pieces.h": "c",
 			"bitmask.h": "c",
 			"assert.h": "c"
-		}
+		},
+		"workbench.colorCustomizations": {
+			"activityBar.activeBackground": "#fa1b49",
+			"activityBar.activeBorder": "#155e02",
+			"activityBar.background": "#fa1b49",
+			"activityBar.foreground": "#e7e7e7",
+			"activityBar.inactiveForeground": "#e7e7e799",
+			"activityBarBadge.background": "#155e02",
+			"activityBarBadge.foreground": "#e7e7e7",
+			"statusBar.background": "#dd0531",
+			"statusBar.foreground": "#e7e7e7",
+			"statusBarItem.hoverBackground": "#fa1b49",
+			"titleBar.activeBackground": "#dd0531",
+			"titleBar.activeForeground": "#e7e7e7",
+			"titleBar.inactiveBackground": "#dd053199",
+			"titleBar.inactiveForeground": "#e7e7e799"
+		},
+		"peacock.color": "#dd0531",
+		"typescript.tsdk": "sp-gui-angular\\node_modules\\typescript\\lib"
 	}
 }

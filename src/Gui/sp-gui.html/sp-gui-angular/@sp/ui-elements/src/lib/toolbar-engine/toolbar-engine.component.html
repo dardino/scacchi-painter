@@ -1,0 +1,26 @@
+<mat-toolbar-row class="lib-toolbar">
+  <lib-sp-toolbar-button
+    (click)="start()"
+    iconText="play_circle_filled"
+    iconLabel="Start"
+    [noLabel]="hideLabels"
+    mat-toolip="Solve"
+    *ngIf="!isRunning"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="stop()"
+    iconText="stop"
+    iconLabel="Stop"
+    mat-toolip="Stop solve"
+    [noLabel]="hideLabels"
+    *ngIf="isRunning"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="tryMove()"
+    iconText="play_circle_outline"
+    iconLabel="Try"
+    mat-toolip="Try a move"
+    [noLabel]="hideLabels"
+    [disabled]="isRunning"
+  ></lib-sp-toolbar-button>
+</mat-toolbar-row>

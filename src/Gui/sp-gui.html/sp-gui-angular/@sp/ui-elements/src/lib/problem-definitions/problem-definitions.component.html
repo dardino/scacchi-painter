@@ -1,0 +1,119 @@
+<div class="tile-container">
+  <mat-card class="tile">
+    <mat-card-title>
+      <div class="tile-title">
+        <span>Stipulation</span><span matSuffix>{{ completeDesc }}</span>
+      </div>
+    </mat-card-title>
+    <mat-card-content class="stipulation-tile">
+      <p>
+        <mat-form-field color="accent" appearance="standard" class="tile-input">
+          <mat-label>Type</mat-label>
+          <mat-select [(value)]="problemType">
+            <mat-option value="-">Direct</mat-option>
+            <mat-option value="H">Help (H)</mat-option>
+            <mat-option value="S">Self (S)</mat-option>
+            <mat-option value="HS">HelpSelf (HS)</mat-option>
+            <mat-option value="R">Reflex (R)</mat-option>
+            <mat-option value="HR">HelpReflex (HR)</mat-option>
+          </mat-select>
+          <mat-hint>(ie: Mate, Stalemate)</mat-hint>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field color="accent" appearance="standard" class="tile-input">
+          <mat-label>Leads to</mat-label>
+          <mat-hint>(ie: Mate, Stalemate, etc...)</mat-hint>
+          <mat-select [(value)]="leadsTo">
+            <mat-option value="#">Mate (#) </mat-option>
+            <mat-option value="=">Stalemate (=) </mat-option>
+            <mat-option value="+">Check (+) </mat-option>
+            <mat-option value="%">Gain Piece (%) </mat-option>
+            <mat-option value="~">(~) </mat-option>
+            <mat-option value="##">Double mate (##) </mat-option>
+            <mat-option value="==">Double stalemate (==)</mat-option>
+            <mat-option value="#=">(#=) </mat-option>
+            <mat-option value="!=">(!=) </mat-option>
+            <mat-option value="!#">(!#) </mat-option>
+            <mat-option value="00">(00) </mat-option>
+            <mat-option value="ep">(ep) </mat-option>
+            <mat-option value="Zxy">(Zxy) </mat-option>
+            <mat-option value="x">(x) </mat-option>
+            <mat-option value="##!">(##!) </mat-option>
+            <mat-option value="ct">(ct) </mat-option>
+            <mat-option value="<>">(&lt;>) </mat-option>
+            <mat-option value="ctr">(ctr) </mat-option>
+            <mat-option value="<>r">(&lt;>r) </mat-option>
+            <mat-option value="c81">(c81) </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field color="accent" appearance="standard" class="tile-input">
+          <mat-label>Moves</mat-label>
+          <input matInput placeholder="2" [(ngModel)]="moves" />
+          <mat-hint>use . or , to write semi-move (ie: 2,5)</mat-hint>
+        </mat-form-field>
+      </p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="tile">
+    <mat-card-title
+      ><div class="tile-title">
+        <span>Twins</span
+        ><button mat-flat-button color="primary" (click)="openTwin.emit(null)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div></mat-card-title
+    >
+    <mat-card-content cdkDropList class="list" (cdkDropListDropped)="dropTwin($event)">
+      <div
+        class="box"
+        *ngFor="let twin of twins; let i = index"
+        cdkDrag
+        [cdkDragDisabled]="twin.TwinType === 'Diagram'"
+      >
+        <div class="placeholder" *cdkDragPlaceholder></div>
+        {{ twin.toString() }}
+        <button
+          *ngIf="i > 0"
+          mat-flat-button
+          color="secondary"
+          (click)="deleteTwin.emit(twin)"
+          class="inlist-button"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="tile">
+    <mat-card-title
+      ><div class="tile-title">
+        <span>Conditions</span
+        ><button mat-flat-button color="primary" (click)="addCondition.emit()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div></mat-card-title
+    >
+    <mat-card-content
+      *ngIf="conditions.length > 0"
+      cdkDropList
+      class="list"
+      (cdkDropListDropped)="dropCondition($event)"
+    >
+      <div class="box" *ngFor="let cond of conditions" cdkDrag>
+        <div class="placeholder" *cdkDragPlaceholder></div>
+        {{ cond.toString() }}
+        <button
+          mat-flat-button
+          color="secondary"
+          (click)="deleteCondition.emit(cond)"
+          class="inlist-button"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

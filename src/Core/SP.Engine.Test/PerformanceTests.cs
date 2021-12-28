@@ -21,7 +21,7 @@ namespace SP.Engine.Test
             var sp = Stopwatch.StartNew();
             var counter = 0;
             while(sp.ElapsedMilliseconds<100) {
-                var gsnew = GameStateStatic.GetCloneOf(gs);
+                _ = GameStateStatic.GetCloneOf(gs);
                 counter++;
             }
             sp.Stop();

@@ -14,7 +14,7 @@ namespace SP.Core.Test.Pieces
 		[Priority(1)]
 		public void TestPieceTypesCount()
 		{
-			var p = new Core.Pieces.Bishop();
+			// var p = new Core.Pieces.Bishop();
 			var types = PieceBaseUtils.piecetypes.ToArray();
 			var count = types.Length;
 			Assert.AreEqual(6, count);

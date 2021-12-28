@@ -1,0 +1,30 @@
+.instruction {
+  padding: 0;
+  margin: 0;
+  font-style: italic;
+  font-size: 0.8rem;
+}
+.log {
+  padding: 0;
+  margin: 0;
+  font-style: italic;
+  font-size: 0.6rem;
+}
+.solutions {
+  font-size: 1rem;
+  line-height: initial;
+  white-space: pre;
+  margin-bottom: 10rem;
+}
+.solution {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  font-family: monospace;
+}
+:not(.solution) + .solution {
+  margin-top: 1rem;
+}
+.solution + :not(.solution) {
+  margin-top: 1rem;
+}
