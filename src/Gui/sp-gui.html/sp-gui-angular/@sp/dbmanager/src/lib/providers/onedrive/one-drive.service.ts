@@ -35,7 +35,7 @@ export class OneDriveService implements FileService {
     if (type === "root") {
       const aw: { value?: Drive[] } = await client.api("/drives").get();
       return (aw.value ?? []).map<FolderItemInfo>((dir) => ({
-        fullPath: `${dir.parentReference?.path}/${
+        fullPath: `${dir.parentReference?.path ?? "/drives/root:"}/${
           dir.description ?? dir.driveType ?? dir.id ?? "Personal"
         }`,
         id: dir.id ?? "",
@@ -49,7 +49,7 @@ export class OneDriveService implements FileService {
         .api("/drives/" + itemId + "/root/children")
         .get();
       return (aw.value ?? []).map<FolderItemInfo>((dir) => ({
-        fullPath: `${dir.parentReference?.path}/${dir.name ?? dir.id}`,
+        fullPath: `${dir.parentReference?.path ?? "/drives/root:"}/${dir.name ?? dir.id}`,
         id: dir.id ?? "",
         itemName: dir.name ?? dir.id ?? "????",
         type: "folder",
@@ -99,7 +99,7 @@ export class OneDriveService implements FileService {
       },
     });
     try {
-      const save: DriveItem = await client.api(`drive/items/${item.id}/content`).putStream(await file.text());
+      const save: DriveItem = await client.api(`${item.fullPath}:/content`).putStream(await file.text());
       console.log(save);
       item.itemName = save.name ?? item.itemName;
       item.fullPath = `${save.parentReference?.path ?? ""}/${save.name ?? save.id}`;
@@ -109,6 +109,7 @@ export class OneDriveService implements FileService {
       return err;
     }
   }
+
   async authorize() {
     const token = await getOneDriveToken();
     return token;
