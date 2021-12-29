@@ -3,8 +3,8 @@ import {
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
-import { getDropboxToken } from "./oauth_providers/dropboxcli";
-import { TokenResponse } from "./oauth_funcs/pkce";
+import { getDropboxToken } from "../../oauth_providers/dropboxcli";
+import { TokenResponse } from "../../oauth_funcs/pkce";
 
 interface DropboxFileInfo {
   ".tag": "folder" | "file";

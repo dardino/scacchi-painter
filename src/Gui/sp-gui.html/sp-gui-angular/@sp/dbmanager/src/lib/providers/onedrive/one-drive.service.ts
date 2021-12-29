@@ -3,7 +3,7 @@ import {
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
-import { getOneDriveToken } from "./oauth_providers/onedrivecli";
+import { getOneDriveToken } from "../../oauth_providers/onedrivecli";
 import { Client } from "@microsoft/microsoft-graph-client";
 import type { Drive, DriveItem } from "@microsoft/microsoft-graph-types";
 

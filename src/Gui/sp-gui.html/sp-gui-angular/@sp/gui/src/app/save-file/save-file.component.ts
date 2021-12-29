@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
-import { OneDriveService } from "@sp/dbmanager/src/lib/one-drive.service";
+import { DropboxdbService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import {
   AvaliableFileServices,

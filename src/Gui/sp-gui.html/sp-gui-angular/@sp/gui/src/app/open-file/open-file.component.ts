@@ -2,10 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Router } from "@angular/router";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { DropboxdbService } from "@sp/dbmanager/src/lib/dropboxdb.service";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
-import { OneDriveService } from "@sp/dbmanager/src/lib/one-drive.service";
-import { LocalDriveService } from "@sp/dbmanager/src/lib/local-drive.service";
+import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 
 @Component({
   selector: "app-sp-openfile",
