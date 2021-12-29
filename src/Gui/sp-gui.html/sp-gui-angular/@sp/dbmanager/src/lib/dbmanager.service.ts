@@ -2,11 +2,9 @@ import { Injectable } from "@angular/core";
 import { IProblem } from "./helpers";
 import { Problem } from "./models/Problem";
 import { FileSelected, FileService, FolderSelected } from "@sp/host-bridge/src/lib/fileService";
-import { DropboxdbService } from "./dropboxdb.service";
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { OneDriveService } from "./one-drive.service";
-import { LocalDriveService } from "./local-drive.service";
+import { DropboxdbService, OneDriveService, LocalDriveService } from "./providers";
 
 interface IDbSpX {
   lastIndex: number;
