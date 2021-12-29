@@ -49,4 +49,4 @@ log.txt
 # yarn 2
 .yarn/*
 !.yarn/releases
-!.yarn/plugin
+!.yarn/plugins
