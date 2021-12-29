@@ -32,6 +32,7 @@ speed-measure-plugin*.json
 .history/*
 
 # misc
+/.angular/cache
 /.sass-cache
 /connect.lock
 /coverage
@@ -49,4 +50,4 @@ log.txt
 # yarn 2
 .yarn/*
 !.yarn/releases
-!.yarn/plugin
+!.yarn/plugins
