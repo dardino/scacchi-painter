@@ -8,4 +8,5 @@
     url("./ScacchiPainter.svg#ScacchiPainter") format("svg");
   font-weight: bold;
   font-style: normal;
+  font-variant-ligatures: additional-ligatures;
 }
