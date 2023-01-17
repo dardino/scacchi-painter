@@ -106,7 +106,7 @@ export class OneDriveService implements FileService {
       item.id = save.id ?? item.id;
       return item;
     } catch(err) {
-      return err;
+      return err as Error;
     }
   }
 

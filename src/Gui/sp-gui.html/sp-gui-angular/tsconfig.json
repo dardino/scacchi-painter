@@ -11,16 +11,22 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "module": "es2020",
     "moduleResolution": "node",
     "importHelpers": true,
+    "strictPropertyInitialization": false,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "target": "es2015",
+    "strict": true,
     "lib": [
-      "ES2021",
-      "DOM"
+      "DOM",
+      "ESNext"
+    ],
+    "types": [
+      "wicg-file-system-access"
     ],
     "paths": {
       "chessboard": [

@@ -7,7 +7,9 @@
     "composite": true,
     "declaration": true,
     "inlineSources": true,
-    "types": [],
+    "types": [
+      "wicg-file-system-access"
+    ],
     "lib": [
       "dom",
       "es2018"

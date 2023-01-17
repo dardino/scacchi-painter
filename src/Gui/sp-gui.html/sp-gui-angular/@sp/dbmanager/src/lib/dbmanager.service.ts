@@ -203,7 +203,7 @@ export class DbmanagerService {
       this.currentIndex = obj.lastIndex ?? 0;
       return null;
     } catch (err) {
-      return err;
+      return err as Error;
     }
   }
   private async loadFromXML(xmlText: string) {

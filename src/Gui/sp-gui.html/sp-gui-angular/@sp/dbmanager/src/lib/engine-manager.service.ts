@@ -7,15 +7,15 @@ import { Problem } from "./models";
   providedIn: "root",
 })
 export class EngineManagerService {
-  solution$: BehaviorSubject<string> = new BehaviorSubject("");
-  isSolving$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  solution$ = new BehaviorSubject("");
+  isSolving$ = new BehaviorSubject(false);
   supportsSolve = true;
 
   constructor(private bridge: HostBridgeService) {
-    this.bridge.Solver$.subscribe(msg => {
+    this.bridge.Solver$.subscribe((msg) => {
       this.solution$.next(msg);
     });
-    this.bridge.solveInProgress$.subscribe(v => this.isSolving$.next(v));
+    this.bridge.solveInProgress$.subscribe((v) => this.isSolving$.next(v));
   }
 
   public startSolving(problem: Problem): void {
@@ -36,5 +36,4 @@ export class EngineManagerService {
     } finally {
     }
   }
-
 }
