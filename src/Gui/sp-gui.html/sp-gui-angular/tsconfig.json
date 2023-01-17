@@ -19,7 +19,7 @@
     "strictPropertyInitialization": false,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "target": "es2015",
+    "target": "es2020",
     "strict": true,
     "lib": [
       "DOM",
