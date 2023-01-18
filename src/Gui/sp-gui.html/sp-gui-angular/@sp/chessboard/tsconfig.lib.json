@@ -5,6 +5,7 @@
     "declarationMap": true,
     "declaration": true,
     "inlineSources": true,
+    "composite": true,
     "types": [
       "wicg-file-system-access"
     ],

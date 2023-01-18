@@ -76,6 +76,7 @@
         <div class="placeholder" *cdkDragPlaceholder></div>
         {{ twin.toString() }}
         <button
+          type="button"
           *ngIf="i > 0"
           mat-flat-button
           color="secondary"
@@ -91,7 +92,7 @@
     <mat-card-title
       ><div class="tile-title">
         <span>Conditions</span
-        ><button mat-flat-button color="primary" (click)="addCondition.emit()">
+        ><button type="button" mat-flat-button color="primary" (click)="addCondition.emit()">
           <mat-icon>add</mat-icon>
         </button>
       </div></mat-card-title
