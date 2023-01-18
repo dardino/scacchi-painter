@@ -3,7 +3,7 @@ import { IProblem } from "./helpers";
 import { Problem } from "./models/Problem";
 import { FileSelected, FileService, FolderSelected } from "@sp/host-bridge/src/lib/fileService";
 import { Subject } from "rxjs";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { DropboxdbService, OneDriveService, LocalDriveService } from "./providers";
 
 interface IDbSpX {

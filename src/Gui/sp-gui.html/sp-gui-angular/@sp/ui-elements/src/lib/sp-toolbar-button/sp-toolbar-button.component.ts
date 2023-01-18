@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostBinding } from "@angular/core";
-import { MatLegacyButton as MatButton } from "@angular/material/legacy-button";
+import { MatButton } from "@angular/material/button";
 
 @Component({
   selector: "lib-sp-toolbar-button",

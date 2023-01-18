@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
-import { UntypedFormControl } from "@angular/forms";
+import { MatDialogRef } from "@angular/material/dialog";
+import { FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanager/src/lib/models/fairesDB";
@@ -11,7 +11,7 @@ import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanage
   styleUrls: ["./conditions-dialog.component.less"],
 })
 export class ConditionsDialogComponent implements OnInit {
-  myControl = new UntypedFormControl();
+  myControl = new FormControl();
   newCondition = "";
   filteredOptions: Observable<string[]>;
 

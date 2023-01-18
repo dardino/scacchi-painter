@@ -15,10 +15,10 @@ import {
 } from "@sp/dbmanager/src/public-api";
 import { Subscription, BehaviorSubject } from "rxjs";
 import { Location } from "@angular/common";
-import { MatLegacyMenuTrigger as MatMenuTrigger } from "@angular/material/legacy-menu";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { Piece } from "@sp/dbmanager/src/lib/models";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
