@@ -3,7 +3,7 @@
   font-family: "ScacchiPainter";
   src: url("./ScacchiPainter.eot");
   src: url("./ScacchiPainter.eot?#iefix") format("embedded-opentype"),
-    url("./ScacchiPainter.woff") format("woff"),
+    url("./ScacchiPainter.woff?hh") format("woff"),
     url("./ScacchiPainter.ttf") format("truetype"),
     url("./ScacchiPainter.svg#ScacchiPainter") format("svg");
   font-weight: bold;
