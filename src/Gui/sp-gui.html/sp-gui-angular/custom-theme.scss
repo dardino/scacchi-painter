@@ -15,27 +15,16 @@
 @import "@sp/gui/src/assets/ScacchiPainter.css";
 
 // Foreground Elements
-
-// Specific component overrides, pieces that are not in line with the general theming
-
-// Handle buttons appropriately, with respect to line-height
-.mat-raised-button, .mat-stroked-button, .mat-flat-button {
-  padding: 0 1.15em;
-  margin: 0 .65em;
-  min-width: 3em;
-  line-height: 36.4px
-}
-
 .mat-standard-chip {
-  padding: .5em .85em;
+  padding: 0.5em 0.85em;
   min-height: 2.5em;
 }
 
 .material-icons {
   font-size: 24px;
-  font-family: 'Material Icons', 'Material Icons';
+  font-family: 'Material Icons', sans-serif;
   .mat-badge-content {
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
   }
 }
 
@@ -51,41 +40,10 @@
   line-height: 36.4px;
 }
 
-.mat-standard-chip {
-  padding: 0.5em 0.85em;
-  min-height: 2.5em;
-}
-
-.material-icons {
-  .mat-badge-content {
-    font-family: "Roboto";
-  }
-}
-
 .mat-toolbar{
   .mat-button {
     min-width: 1em;
   }
 }
 
-quill-editor {
-  background-color: #fff;
-  color: #000;
-  display: flex;
-  min-height: 100%;
-  flex-direction: column;
-  flex: 1 1 100%;
-  width: 100%;
-}
-
-.ql-container {
-  height: auto;
-  flex: 1 1 auto;
-  display: flex;
-
-  > .ql-editor {
-    height: auto;
-    flex: 1 1 auto;
-    min-height: 100%;
-  }
-}
+@import "./quill.scss";

@@ -1,0 +1,22 @@
+
+quill-editor {
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+.ql-container {
+  height: auto;
+  flex: 1 1 auto;
+  display: flex;
+
+  > .ql-editor {
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 100%;
+  }
+}
