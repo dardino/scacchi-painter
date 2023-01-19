@@ -7,9 +7,6 @@
 			"path": "src/Gui/sp-gui.html/sp-gui-electron"
 		},
 		{
-			"path": "src/Gui/sp-gui.html/sp-gui-web"
-		},
-		{
 			"path": "graphics"
 		},
 		{
