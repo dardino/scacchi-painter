@@ -1,9 +1,6 @@
 {
 	"folders": [
 		{
-			"path": "src/Core"
-		},
-		{
 			"path": "src/Gui/sp-gui.html/sp-gui-angular"
 		},
 		{
