@@ -16,5 +16,6 @@
     "concat": "concat -o ./out/popeye_ww.js ./out/popeye_ww.min.tmp ./src/py.js",
     "clear": "del /Q out\\*.tmp",
     "build": "yarn compile && yarn minify && yarn concat && yarn clear"
-  }
+  },
+  "packageManager": "yarn@3.3.1"
 }
