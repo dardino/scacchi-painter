@@ -106,9 +106,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     rotation: number | null;
   } | null {
     const figurine =
-      this.pieceToAdd ??
-      this.pieceToMove?.cursor() ??
-      (this.editMode === "remove" ? "X" : null);
+      this.editMode === "select"
+        ? null
+        : this.pieceToAdd ??
+          this.pieceToMove?.cursor() ??
+          (this.editMode === "remove" ? "X" : null);
     const rotation =
       this.rotationToAdd ??
       (this.pieceToMove?.rotation
@@ -280,14 +282,12 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     }
   }
   editModeChanged($event: EditModes) {
-    if ($event !== "add") this.pieceToAdd = null;
+    this.resetActions();
     this.editMode = $event;
-    this.pieceToMove = null;
   }
 
   boardBlur() {
-    // this.editMode = "select";
-    // this.resetActions();
+    // no op
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {
@@ -313,10 +313,14 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     const from = this.pieceToMove.GetLocation();
     this.current.MovePiece(from, loc, "replace");
     this.editMode = "select";
-    this.pieceToMove = null;
+    this.resetActions();
   }
 
   private resetActions() {
+    this.actualCursor = {
+      figurine: null,
+      rotation: null,
+    };
     this.pieceToAdd = null;
     this.pieceToMove = null;
   }

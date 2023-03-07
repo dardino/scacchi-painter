@@ -219,6 +219,7 @@ export class ChessboardComponent
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
   };
+
 }
 const notNull = <T>(v: T | null): v is T => v != null;
 

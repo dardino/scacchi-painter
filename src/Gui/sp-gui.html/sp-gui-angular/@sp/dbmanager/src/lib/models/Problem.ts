@@ -77,7 +77,7 @@ export class Problem implements IProblem {
 
     p.fairyCells = [];
     p.snapshots = {};
-    p.saveSnapshot(main_snapshot);
+    p.saveAsMainSnapshot();
 
     return p;
   }
@@ -86,7 +86,12 @@ export class Problem implements IProblem {
     const p = new Problem();
     Problem.applyJson(jsonObj, p);
     p.snapshots = { ...jsonObj.snapshots };
-    if (Object.keys(p.snapshots).length === 0) p.saveSnapshot(main_snapshot);
+    if (Object.keys(p.snapshots).length === 0) {
+      p.saveAsMainSnapshot();
+    } else {
+      p.saveSnapshot(p.currentSnapshotId ?? main_snapshot);
+    }
+
     return p;
   }
 
@@ -186,6 +191,7 @@ export class Problem implements IProblem {
   }
 
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
+    debugger;
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
@@ -227,6 +233,7 @@ export class Problem implements IProblem {
     id?: keyof IProblem["snapshots"],
     ignoreChanges: boolean = false
   ) {
+    debugger;
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
     const prob = JSON.parse(
