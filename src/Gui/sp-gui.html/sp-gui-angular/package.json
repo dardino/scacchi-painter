@@ -15,7 +15,7 @@
     "e2e": "yarn ng e2e",
     "build:stats": "yarn build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/gui/stats.json",
-    "build:Azure": "yarn tsc --version && yarn ng --version && yarn build"
+    "build:Azure": "yarn tsc --version && yarn ng version && yarn build"
   },
   "private": true,
   "dependencies": {
