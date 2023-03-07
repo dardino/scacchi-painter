@@ -2,7 +2,7 @@
   <div>
     <h1 class="title">Save to:</h1>
     <lib-file-source-selector
-      hideNew="true"
+      [hideNew]="true"
       [current]="currentSource"
       (sourceSelected)="sourceSelected($event)"
     ></lib-file-source-selector>
@@ -12,7 +12,7 @@
   </mat-toolbar>
   <div class="saveinput">
     <mat-form-field class="save-field">
-      <input matInput type="text" [(ngModel)]="fileName" />
+      <input aria-label="File Name" matInput type="text" [(ngModel)]="fileName" />
       <button
         mat-button
         *ngIf="fileName"

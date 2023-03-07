@@ -88,7 +88,7 @@ export class SaveFileComponent implements OnInit {
     }
   }
 
-  async sourceSelected(source: AvaliableFileServices) {
+  async sourceSelected(source: AvaliableFileServices | "new") {
     switch (source) {
       case "local":
         await this.download();
