@@ -7,7 +7,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 })
 export class PieceSelectorComponent implements OnInit {
   @Input()
-  current = "";
+  current: string | null = "";
 
   @Output()
   selectedPieceChanged = new EventEmitter<string | null>();

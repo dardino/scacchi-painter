@@ -141,6 +141,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.menuX = event.x - 20;
     this.menuY = event.y - 40;
     this.menu.openMenu();
+    this.editMode = "select";
     this.resetActions();
   }
 
@@ -245,7 +246,18 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   currentCellChange($event: SquareLocation | null) {
     if ($event == null) this.resetActions();
   }
-  clickOnCell($event: SquareLocation) {
+  clickOnCell($event: SquareLocation, button: "left" | "middle") {
+    if (button === "middle" && this.editMode === "select") {
+      this.current.RemovePieceAt($event);
+      this.editMode = "select";
+      this.resetActions();
+      return;
+    }
+    if (button === "middle" && this.editMode !== "select") {
+      this.editMode = "select";
+      this.resetActions();
+      return;
+    }
     if ($event == null || this.sameCell($event, this.pieceToMove)) {
       this.editMode = "select";
       this.resetActions();
@@ -253,6 +265,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     }
     if (this.editMode === "remove") {
       this.current.RemovePieceAt($event);
+      this.resetActions();
       return;
     }
     if (this.editMode === "add" && this.pieceToAdd != null) {

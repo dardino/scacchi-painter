@@ -191,7 +191,6 @@ export class Problem implements IProblem {
   }
 
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
-    debugger;
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
@@ -233,7 +232,6 @@ export class Problem implements IProblem {
     id?: keyof IProblem["snapshots"],
     ignoreChanges: boolean = false
   ) {
-    debugger;
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
     const prob = JSON.parse(

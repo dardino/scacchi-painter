@@ -17,6 +17,8 @@
         [piece]="item.piece"
         [location]="item.location"
         (click)="onCellClick(item)"
+        (mouseup)="onMouseUp(item, $event)"
+        (mousedown)="onMouseDown(item, $event)"
       ></lib-board-cell>
     </div>
   </div>
