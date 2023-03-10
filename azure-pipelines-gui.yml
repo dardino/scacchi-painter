@@ -11,9 +11,6 @@ trigger:
     include:
       - src/Gui
 
-pool:
-  vmImage: 'windows-latest'
-
 variables:
   solution: '**/Gui.sln'
   buildPlatform: 'Any CPU'
