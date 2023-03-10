@@ -29,22 +29,37 @@ export class DatabaseListComponent implements OnInit {
   }
 }
 
-export class MyDataSource extends DataSource<Problem | undefined> {
+
+interface ProblemRef {
+  problem: Problem;
+  dbIndex: number;
+}
+
+export class MyDataSource extends DataSource<ProblemRef | undefined> {
+  private readonly originalDataSource: ProblemRef[];
+  private readonly filteredDataSource: ProblemRef[];
   private get items$() {
     return this.itemsSubject.asObservable();
   }
-  private itemsSubject = new BehaviorSubject<Problem[]>([]);
+  private itemsSubject = new BehaviorSubject<ProblemRef[]>([]);
   constructor(items: Problem[]) {
     super();
-    this.itemsSubject.next(items.slice().reverse());
+    this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex, problem }));
+    this.filteredDataSource = this.originalDataSource.slice();
+    this.sortDescByDate();
   }
   connect(
     collectionViewer: CollectionViewer
-  ): Observable<Array<Problem | undefined>> {
+  ): Observable<Array<ProblemRef | undefined>> {
     return this.items$;
   }
   disconnect(collectionViewer: CollectionViewer): void {}
   realIndex(index: number) {
     return this.itemsSubject.getValue().length - index;
+  }
+
+  private sortDescByDate() {
+    this.filteredDataSource.reverse();
+    this.itemsSubject.next(this.filteredDataSource);
   }
 }

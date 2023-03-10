@@ -9,16 +9,16 @@
         [hideInfo]="true"
         boardType="HTML"
         class="miniboard"
-        [position]="item"
+        [position]="item.problem"
       ></lib-chessboard>
       <div class="description"></div>
-      <a mat-icon-button color="accent" [routerLink]="['/edit/' + realIndex(index)]">
+      <a mat-icon-button color="accent" [routerLink]="['/edit/' + item.dbIndex]">
         <mat-icon class="action">forward</mat-icon>
       </a>
     </div>
     <div class="dbitem-status">
-      <span class="status-index">{{ realIndex(index) }}</span>
-      <span class="status-stipulation"><span>{{ stipulation(item) }}</span><span>{{ pieceCounter(item) }}</span></span>
+      <span class="status-index">{{ item.dbIndex + 1 }}</span>
+      <span class="status-stipulation"><span>{{ stipulation(item.problem) }}</span><span>{{ pieceCounter(item.problem) }}</span></span>
     </div>
   </div>
 </cdk-virtual-scroll-viewport>
