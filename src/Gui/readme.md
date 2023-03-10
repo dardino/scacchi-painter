@@ -1,1 +1,0 @@
-Folder che contiene i progetti di interfaccia
