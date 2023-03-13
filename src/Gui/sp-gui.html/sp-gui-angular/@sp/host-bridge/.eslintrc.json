@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "@sp/host-bridge/tsconfig.lib.json",
-          "@sp/host-bridge/tsconfig.spec.json"
+          "../../@sp/host-bridge/tsconfig.lib.json",
+          "../../@sp/host-bridge/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },

@@ -149,7 +149,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.rows = [];
     this.rows$ubject.next(this.rows);
     if (this.current.Problem) {
-      this.current.Problem.htmlSolution = "";
+      this.current.Problem.htmlElements = [];
       this.current.Problem.textSolution = "";
       this.engine.startSolving(this.current.Problem);
     }
@@ -171,7 +171,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       this.rows.push(...msg.replace(/\r/g, "").split("\n"));
       this.rows$ubject.next(this.rows);
       if (this.current.Problem) {
-        this.current.Problem.htmlSolution = this.toHtml(this.rows);
+        this.current.Problem.htmlElements = this.toHtml(this.rows);
         this.current.Problem.textSolution = this.rows.join(`\n`);
       }
     });
@@ -343,10 +343,11 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       .map((f) => {
         const t = tag(f);
         if (t == null) return null;
-        return `<div><${t}>${f}</${t}></div>`;
+        const div = document.createElement("div");
+        div.innerHTML = `<${t}>${f}</${t}>`;
+        return div;
       })
-      .filter(notNull)
-      .join("");
+      .filter(notNull);
   }
 
   private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {

@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "@sp/ui-elements/tsconfig.lib.json",
-          "@sp/ui-elements/tsconfig.spec.json"
+          "../../@sp/ui-elements/tsconfig.lib.json",
+          "../../@sp/ui-elements/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },
