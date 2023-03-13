@@ -204,7 +204,9 @@ export type PieceColors = typeof PieceColors[number];
 
 export type SquareColors = "black" | "white";
 
-export const GetSquareColor = (...args: [loc: SquareLocation] | [col: Columns, row: Traverse]): SquareColors => {
+export const GetSquareColor = (
+  ...args: [loc: SquareLocation] | [col: Columns, row: Traverse]
+): SquareColors => {
   let col = args[0];
   let row = args[1];
   if (col == null) {
@@ -226,7 +228,9 @@ export interface SquareLocation {
   traverse: Traverse;
 }
 
-export const GetSquareIndex = (...args: [loc: SquareLocation] | [col: Columns, row: Traverse]): number => {
+export const GetSquareIndex = (
+  ...args: [loc: SquareLocation] | [col: Columns, row: Traverse]
+): number => {
   let col = args[0];
   let row = args[1];
   if (col == null) {
@@ -395,7 +399,8 @@ const RotationsCodeMap: {
   "-\\": "Counterclockwise45",
 };
 
-export const getRotationSymbol = (rotation: IPiece["rotation"]): string => mapRotations[rotation];
+export const getRotationSymbol = (rotation: IPiece["rotation"]): string =>
+  mapRotations[rotation];
 
 /*
 <SP_Item
@@ -501,7 +506,7 @@ export const GetSolutionFromElement = async (el: Element) => {
         });
     }
   }
-  return { plain: solDec, html: solText, rtf: solRft?.innerHTML };
+  return { plain: solDec, html: solText };
 };
 
 export const GetTwins = (el: Element): Element[] => {
@@ -584,7 +589,8 @@ export const fenToChessBoard = (original: string) => {
   return cells;
 };
 
-export const notNull = <T>(v: T): v is Exclude<T, null | undefined> => v != null;
+export const notNull = <T>(v: T): v is Exclude<T, null | undefined> =>
+  v != null;
 
 const stringToArrayBuffer = (stringText: string) => {
   const buffer = new ArrayBuffer(stringText.length);
@@ -646,7 +652,7 @@ export const convertToRtf = async (html: string): Promise<string | null> => {
   const tmpRichText = richText;
   richText = richText.replace(
     /<a(?:\s+[^>]*)?(?:\s+href=(["'])(.+)\1)(?:\s+[^>]*)?>/gi,
-    "{\\field{\\*\\fldinst{HYPERLINK\n \"$2\"\n}}{\\fldrslt{\\ul\\cf1\n"
+    '{\\field{\\*\\fldinst{HYPERLINK\n "$2"\n}}{\\fldrslt{\\ul\\cf1\n'
   );
   const hasHyperlinks = richText !== tmpRichText;
   richText = richText.replace(/<a(?:\s+[^>]*)?>/gi, "{{{\n");
@@ -692,7 +698,8 @@ export const convertToRtf = async (html: string): Promise<string | null> => {
   return richText;
 };
 
-export const notEmpty = <T>(v: T | null | undefined | ""): v is T => v != null && v !== "";
+export const notEmpty = <T>(v: T | null | undefined | ""): v is T =>
+  v != null && v !== "";
 
 export const newTextElement = (elName: string, content: string): Element => {
   const el = createXmlElement(elName);
@@ -707,4 +714,36 @@ export const createXmlElement = (elName: string): Element => {
     "application/xml"
   );
   return dom.querySelector(elName) as Element;
+};
+
+export const prettifyXml = (sourceXml: string | Document) => {
+  const xmlDoc = typeof sourceXml === "string" ? new DOMParser().parseFromString(sourceXml, "application/xml") : sourceXml;
+  const xsltDoc = new DOMParser().parseFromString(
+    [
+      // describes how we want to modify the XML - indent everything
+      '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">',
+      '  <xsl:strip-space elements="*"/>',
+      '  <xsl:template match="para[content-style][not(text())]">', // change to just text() to strip space in text nodes
+      '    <xsl:value-of select="normalize-space(.)"/>',
+      "  </xsl:template>",
+      '  <xsl:template match="node()|@*">',
+      '    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>',
+      "  </xsl:template>",
+      '  <xsl:output indent="yes"/>',
+      "</xsl:stylesheet>",
+    ].join("\n"),
+    "application/xml"
+  );
+  const xsltProcessor = new XSLTProcessor();
+  xsltProcessor.importStylesheet(xsltDoc);
+  const resultDoc = xsltProcessor.transformToDocument(xmlDoc);
+  const resultXml = new XMLSerializer().serializeToString(resultDoc);
+  return resultXml;
+};
+
+export const parseHTMLSolution = (htmlString: string): HTMLElement[] => {
+  const frag = document.createElement("div");
+  frag.innerHTML = htmlString;
+  const children = Array.from(frag.children).map(el => el instanceof HTMLElement ? el : undefined).filter(notNull);
+  return children;
 };

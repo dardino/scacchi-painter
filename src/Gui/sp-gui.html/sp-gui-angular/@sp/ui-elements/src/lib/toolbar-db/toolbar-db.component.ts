@@ -54,4 +54,9 @@ export class ToolbarDbComponent implements OnInit {
       if (!success) this.router.navigate(["/savefile"]);
     });
   }
+
+  async addNewPosition() {
+    const createdIndex = await this.db.addBlankPosition();
+    this.router.navigate(["edit", createdIndex]);
+  }
 }

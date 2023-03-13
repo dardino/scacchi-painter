@@ -12,6 +12,7 @@ import {
   convertToRtf,
   createXmlElement,
   notEmpty,
+  parseHTMLSolution,
 } from "../helpers";
 import { Twins } from "./twins";
 import { Stipulation } from "./stipulation";
@@ -22,10 +23,9 @@ import { Base64 } from "../base64";
 // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
 const main_snapshot = "$_MAIN_$";
 
-export class Problem implements IProblem {
+export class Problem implements Omit<IProblem, "htmlSolution"> {
   private constructor() {}
 
-  public rtfSolution = "";
   public textSolution = "";
   public date = new Date().toLocaleString();
   public stipulation = Stipulation.fromJson({});
@@ -37,7 +37,6 @@ export class Problem implements IProblem {
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
-  public htmlSolution = "";
   public htmlElements: HTMLElement[] = [];
   public conditions: string[] = [];
   public fairyCells: string[] = [];
@@ -60,13 +59,12 @@ export class Problem implements IProblem {
     p.twins = Twins.fromElement(source.querySelector("Twins") ?? null);
     const sol = await GetSolutionFromElement(source);
     p.textSolution = sol.plain ?? "";
-    p.rtfSolution = sol.rtf ?? "";
     p.htmlElements = sol.html;
-    p.htmlSolution = p.htmlElements.map((f) => f.outerHTML).join("");
     p.date = source.getAttribute("Date") ?? "";
     p.prizeRank = parseInt(source.getAttribute("PrizeRank") ?? "0", 10);
     p.personalID = source.getAttribute("PersonalID") ?? "";
     p.prizeDescription = source.getAttribute("PrizeDescription") ?? "";
+    p.source = source.getAttribute("Source") ?? "";
     p.source = source.getAttribute("Source") ?? "";
     p.authors = Array.from(source.querySelectorAll("Author")).map((a) =>
       Author.fromElement(a)
@@ -107,11 +105,11 @@ export class Problem implements IProblem {
 
   static applyJson(a: Partial<IProblem>, b: Problem) {
     b.authors =
-      a.authors?.length ?? 0
-        ? (b.authors ?? []).map((p) => Author.fromJson(p))
+      (a.authors?.length ?? 0)
+        ? (a.authors ?? []).map((p) => Author.fromJson(p))
         : [];
     b.pieces =
-      a.pieces?.length ?? 0
+      (a.pieces?.length ?? 0)
         ? (a.pieces ?? []).map((p) => Piece.fromJson(p))
         : [];
     b.stipulation =
@@ -119,7 +117,7 @@ export class Problem implements IProblem {
         ? Stipulation.fromJson(a.stipulation ?? {})
         : Stipulation.fromJson({});
     b.twins = a.twins ? Twins.fromJson(a.twins) : Twins.fromJson({});
-    b.htmlSolution = a.htmlSolution ? a.htmlSolution : "";
+    b.htmlElements = a.htmlSolution ? parseHTMLSolution(a.htmlSolution) : [];
     b.date = a.date ? a.date : new Date().toISOString();
     b.personalID = a.personalID ? a.personalID : "";
     b.prizeRank = a.prizeRank ?? 0;
@@ -138,7 +136,7 @@ export class Problem implements IProblem {
     }
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
-    if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
+    if (this.htmlElements) json.htmlSolution = this.getHtmlString();
     if (this.date) json.date = this.date;
     if (this.personalID) json.personalID = this.personalID;
     if (this.prizeRank) json.prizeRank = this.prizeRank;
@@ -185,8 +183,8 @@ export class Problem implements IProblem {
     SP2.setTwins(item, this.twins.toSP2Xml());
     SP2.setConditions(item, this.conditions);
     SP2.setSolution(item, this.textSolution);
-    // SP2.setHtmlSolution(item, this.htmlSolution);
-    SP2.setRtfSolution(item, (await convertToRtf(this.htmlSolution)) ?? "");
+    const rtfSol = (await convertToRtf(this.getHtmlString())) ?? this.textSolution;
+    SP2.setRtfSolution(item, rtfSol);
     return item;
   }
 
@@ -281,6 +279,10 @@ export class Problem implements IProblem {
       rows.push(row);
     }
     return rows.join("/") + this.getFairiesFen();
+  }
+
+  private getHtmlString() {
+    return this.htmlElements.map(el => el.outerHTML).join("");
   }
 
   private getFairiesFen(): string {

@@ -57,8 +57,6 @@ export class CurrentProblemService {
     if (typeof cond === "string" && cond.length > 0 && this.Problem) {
       const index = this.Problem.conditions.indexOf(cond) ?? -1;
       if (index > -1) this.Problem.conditions.splice(index, 1);
-      // clone
-      // this.dbManager.setCurrentProblem(this.Problem.clone());
     }
   }
   RemoveTwin($event: Twin) {
@@ -73,21 +71,16 @@ export class CurrentProblemService {
     if (original) {
       const ix = this.Problem.twins.TwinList.indexOf(original);
       this.Problem.twins.TwinList.splice(ix, 1);
-      // clone
-      // this.dbManager.setCurrentProblem(this.Problem.clone());
     }
   }
   AddPieceAt(location: SquareLocation, piece: Piece) {
     const problem = this.Problem;
     if (!problem || !piece) return;
     this.addPieceAt(location, piece);
-    // clone
-    // this.dbManager.setCurrentProblem(problem.clone());
   }
   RemovePieceAt(location: SquareLocation) {
     if (!this.Problem) return;
     this.removePieceAt(location);
-    // this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   MovePiece(
     from: SquareLocation,
@@ -98,21 +91,18 @@ export class CurrentProblemService {
     if (from.column === to.column && from.traverse === to.traverse) return;
     if (mode === "swap") this.swapPieces(from, to);
     if (mode === "replace") this.movePiece(from, to);
-    // this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   RotatePiece(location: SquareLocation, angle: PieceRotation) {
     if (!this.Problem) return;
 
     const p = this.Problem.GetPieceAt(location.column, location.traverse);
     if (p) p.rotation = angle;
-    // this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   SetPieceFairyAttribute(location: SquareLocation, attribute: string) {
     if (!this.Problem) return;
 
     const p = this.Problem.GetPieceAt(location.column, location.traverse);
     if (p) p.fairyAttribute = attribute;
-    // this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   SetCellFairyAttribute(location: SquareLocation, attribute: string) {
     const problem = this.Problem;
@@ -145,7 +135,6 @@ export class CurrentProblemService {
           ],
       });
     });
-    // this.dbManager.setCurrentProblem(problem.clone());
   }
   FlipBoard(axis: "x" | "y") {
     const problem = this.Problem;
@@ -160,7 +149,6 @@ export class CurrentProblemService {
             : Traverse[7 - Traverse.indexOf(p.traverse)],
       });
     });
-    // this.dbManager.setCurrentProblem(problem.clone());
   }
   ShiftBoard(axis: "x" | "y" | "-x" | "-y") {
     const problem = this.Problem;
@@ -177,19 +165,16 @@ export class CurrentProblemService {
       if (!newCol || !newRow) return this.removePiece(p);
       this.setPieceLocation(p, { traverse: newRow, column: newCol });
     });
-    // this.dbManager.setCurrentProblem(problem.clone());
   }
   ClearBoard() {
     if (!this.Problem) return;
 
     this.Problem.pieces.length = 0;
-    // this.dbManager.setCurrentProblem(this.Problem.clone());
   }
 
   Reload(snapshotID?: keyof IProblem["snapshots"]) {
     if (!this.Problem) return;
     this.Problem.loadSnapshot(snapshotID, true);
-    // this.dbManager.setCurrentProblem(this.Problem.clone());
   }
   Snapshot() {
     if (!this.Problem) return;

@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "@sp/chessboard/tsconfig.lib.json",
-          "@sp/chessboard/tsconfig.spec.json"
+          "../../@sp/chessboard/tsconfig.lib.json",
+          "../../@sp/chessboard/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },

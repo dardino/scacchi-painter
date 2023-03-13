@@ -42,4 +42,10 @@
     [disabled]="!canGoNext()"
     [noLabel]="hideLabels"
   ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="addNewPosition()"
+    iconText="library_add"
+    iconLabel="New Position"
+    [noLabel]="hideLabels"
+  ></lib-sp-toolbar-button>
 </mat-toolbar-row>

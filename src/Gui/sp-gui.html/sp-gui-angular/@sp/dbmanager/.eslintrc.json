@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "@sp/dbmanager/tsconfig.lib.json",
-          "@sp/dbmanager/tsconfig.spec.json"
+          "../../@sp/dbmanager/tsconfig.lib.json",
+          "../../@sp/dbmanager/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },

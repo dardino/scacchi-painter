@@ -1,5 +1,10 @@
 {
   "root": true,
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "ignorePatterns": [
     "projects/**/*"
   ],
@@ -21,6 +26,7 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "import/no-deprecated": ["off"],
         "@typescript-eslint/array-type": [
           "error",
           {
