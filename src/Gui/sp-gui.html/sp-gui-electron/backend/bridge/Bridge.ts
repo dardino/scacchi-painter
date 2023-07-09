@@ -2,7 +2,7 @@ import type {
   BridgeGlobal,
   EOF,
 } from "../../../sp-gui-angular/@sp/host-bridge/src/lib/bridge-global";
-import type { Problem } from "../../../sp-gui-angular/@sp/dbmanager/src/lib/models/Problem";
+import type { Problem } from "../../../sp-gui-angular/@sp/dbmanager/src/lib/models/problem";
 import { Subject, BehaviorSubject } from "rxjs";
 import { ISolver } from "../solver/Solver";
 import path from "path";

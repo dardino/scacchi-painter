@@ -1,16 +1,18 @@
 import { Piece as BP } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
 import {
-  IPiece,
-  getFigurine,
+  Columns,
+  createXmlElement,
+  getCanvasColor,
   getCanvasLocation,
   getCanvasRotation,
-  SquareLocation,
-  Columns,
-  Traverse,
+  getFigurine,
   getRotationSymbol,
-  getCanvasColor,
-  createXmlElement,
+  IPiece,
+  notationCasingByColor,
+  PieceColors,
+  SquareLocation,
+  Traverse,
 } from "../helpers";
 import { SP2 } from "../SP2";
 
@@ -100,13 +102,7 @@ export class Piece implements IPiece {
 
   ToNotation() {
     const parts = [];
-    parts.push(
-      this.color === "White"
-        ? this.appearance.toUpperCase()
-        : this.color === "Black"
-        ? this.appearance.toLowerCase()
-        : "*" + this.appearance.toUpperCase()
-    );
+    parts.push(notationCasingByColor[this.color](this.appearance));
     if (this.rotation !== "NoRotation") {
       parts.push(getRotationSymbol(this.rotation));
     }
@@ -116,14 +112,14 @@ export class Piece implements IPiece {
   ToFairyNotation(): string {
     if (!this.isFairy()) return "";
     return `${this.fairyCode
-      .map((c) => c.code)
+      .map((c) => c.code.toUpperCase())
       .join("/")}${this.column[3].toLowerCase()}${this.traverse[3]}`;
   }
 
   isFairy() {
     return (
       (this.fairyCode ?? []).length > 0 ||
-      (this.fairyAttribute ?? "None") !== "None"
+      (this.fairyAttribute || "None") !== "None"
     );
   }
 
@@ -140,9 +136,12 @@ export class Piece implements IPiece {
   }
 
   cursor() {
-    return `${
-      this.color === "White" ? "w" : this.color === "Black" ? "b" : "n"
-    }_${this.appearance}`;
+    const cursorColorByPieceColor: Record<PieceColors, string> = {
+      Black: "b",
+      Neutral: "n",
+      White: "w"
+    };
+    return `${cursorColorByPieceColor[this.color]}_${this.appearance}`;
   }
   private constructor() {
     this.appearance = "";

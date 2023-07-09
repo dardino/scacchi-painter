@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { DbmanagerService } from "./dbmanager.service";
 import {
-  PieceRotation,
-  SquareLocation,
   Columns,
-  Traverse,
+  EndingTypes,
   IProblem,
+  PieceRotation,
   ProblemTypes,
-  EndingTypes
+  SquareLocation,
+  Traverse
 } from "./helpers";
 import { Author, Piece } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
@@ -154,14 +154,9 @@ export class CurrentProblemService {
     const problem = this.Problem;
     if (!problem) return;
     problem.pieces.slice().forEach((p) => {
-      const newCol =
-        axis === "x" || axis === "-x"
-          ? addToColumn(p.column, axis === "x" ? 1 : -1)
-          : p.column;
-      const newRow =
-        axis === "y" || axis === "-y"
-          ? addToTraverse(p.traverse, axis === "y" ? -1 : 1)
-          : p.traverse;
+      const delta = axis.includes("-") ? -1 : 1;
+      const newCol = axis.includes("x") ? getNewColumn(p.column, delta) : p.column;
+      const newRow = axis.includes("y") ? getNewTraverse(p.traverse, delta) : p.traverse;
       if (!newCol || !newRow) return this.removePiece(p);
       this.setPieceLocation(p, { traverse: newRow, column: newCol });
     });
@@ -234,13 +229,13 @@ export class CurrentProblemService {
   }
 }
 
-const addToColumn = (col: Columns, offest: 1 | -1): Columns | undefined => {
+const getNewColumn = (col: Columns, offest: 1 | -1): Columns | undefined => {
   const ix = Columns.indexOf(col) + offest;
   if (ix < 0 || ix > 7) return undefined;
   return Columns[ix];
 };
 
-const addToTraverse = (tra: Traverse, offest: 1 | -1): Traverse | undefined => {
+const getNewTraverse = (tra: Traverse, offest: 1 | -1): Traverse | undefined => {
   const ix = Traverse.indexOf(tra) + offest;
   if (ix < 0 || ix > 7) return undefined;
   return Traverse[ix];
