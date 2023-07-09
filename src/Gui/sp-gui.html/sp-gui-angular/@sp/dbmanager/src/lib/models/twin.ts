@@ -26,6 +26,12 @@ export class Twin implements ITwin {
     t.ValueC = el.getAttribute("ValueC") ?? "";
     return t;
   }
+
+  public static get DIAGRAM() {
+    const t = new Twin();
+    t.TwinType = TwinTypes.Diagram;
+    return t;
+  }
   static fromJson(fromJson: Partial<ITwin>): Twin {
     const t = new Twin();
     t.TwinType = fromJson.TwinType ?? TwinTypes.Diagram;

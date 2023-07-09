@@ -1,6 +1,5 @@
-/// <reference path="./FileSystem.d.ts" />
-
 import { Injectable } from "@angular/core";
+
 import {
   AvaliableFileServices,
   FileService,
@@ -41,11 +40,15 @@ export class LocalDriveService implements FileService {
     const filecontent = await fileToOpen[0].getFile();
     return filecontent;
   }
-  saveFileContent(
+  async saveFileContent(
     file: File,
     item: FolderItemInfo
   ): Promise<FolderItemInfo | Error> {
-    throw new Error("Method not implemented.");
+    const fileHandle = await window.showSaveFilePicker({ suggestedName: item.itemName });
+    const fileStream = await fileHandle.createWritable();
+    await fileStream.write(file);
+    await fileStream.close();
+    return item;
   }
   joinPath(...parts: string[]): string {
     throw new Error("Method not implemented.");

@@ -11,16 +11,23 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "module": "es2020",
     "moduleResolution": "node",
     "importHelpers": true,
+    "strictPropertyInitialization": false,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "target": "es2015",
+    "target": "ES2022",
+    "strict": true,
     "lib": [
-      "ES2021",
-      "DOM"
+      "DOM",
+      "ESNext"
+    ],
+    "types": [
+      "wicg-file-system-access",
+      "jasmine"
     ],
     "paths": {
       "chessboard": [
@@ -43,10 +50,12 @@
         "dist/rft-parser/rft-parser",
         "dist/rft-parser"
       ]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
+    "strictTemplates": true,
     "strictInjectionParameters": true
   }
 }

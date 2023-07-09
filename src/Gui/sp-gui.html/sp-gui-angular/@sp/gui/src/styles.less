@@ -28,7 +28,8 @@ div[fullscreen]{
 
 .figurine{
   color: var(--black-color);
-  font-family: "ScacchiPainter";
+  font-family: "ScacchiPainter", sans-serif;
+  letter-spacing: normal;
   font-style: normal;
   font-weight: normal;
   height: 1.42em;
@@ -70,4 +71,10 @@ div[fullscreen]{
 }
 :focus {
   outline: none;
+}
+.mat-mdc-tab-body.mat-mdc-tab-body-active{
+  overflow: initial !important;
+}
+.mat-mdc-tab-body-content{
+  overflow: initial !important;
 }

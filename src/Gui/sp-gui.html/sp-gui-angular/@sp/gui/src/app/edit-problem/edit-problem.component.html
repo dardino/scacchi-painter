@@ -17,9 +17,10 @@
           [position]="problem"
           [boardType]="boardType"
           [cursor]="boardCursor"
+          (cellMiddleClick)="clickOnCell($event, 'middle')"
           (contextmenu)="onTriggerContextMenu($event)"
           (currentCellChanged)="currentCellChange($event)"
-          (cellClick)="clickOnCell($event)"
+          (cellClick)="clickOnCell($event, 'left')"
           (focusOut)="boardBlur()"
         ></lib-chessboard>
         <section id="pieceselector">

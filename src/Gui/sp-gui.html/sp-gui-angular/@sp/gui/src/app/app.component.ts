@@ -88,6 +88,18 @@ export class AppComponent implements OnInit, OnDestroy {
         `${environment.assetFolder}/toolbar/onedrive_icon.svg`
       )
     );
+    this.matIconRegistry.addSvgIcon(
+      `my_flip_h`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        `${environment.assetFolder}/toolbar/fliph.svg`
+      )
+    );
+    this.matIconRegistry.addSvgIcon(
+      `my_flip_v`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        `${environment.assetFolder}/toolbar/flipv.svg`
+      )
+    );
     this.db.Reload();
   }
   async closeMe() {

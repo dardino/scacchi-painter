@@ -1,11 +1,11 @@
 <div>
   <div>
     <h1 class="title">Open from:</h1>
-    <lib-file-source-selector [current]="currentFileService?.sourceName" (sourceSelected)="sourceSelected($event)"></lib-file-source-selector>
+    <lib-file-source-selector [current]="currentFileService?.sourceName ?? 'unknown'" (sourceSelected)="sourceSelected($event)"></lib-file-source-selector>
     <input
       type="file"
       accept="sp2"
-      (change)="selectLocalFile(fileloader.files)"
+      (change)="selectLocalFile(fileloader.files!)"
       #fileloader
       style="display: none"
     />

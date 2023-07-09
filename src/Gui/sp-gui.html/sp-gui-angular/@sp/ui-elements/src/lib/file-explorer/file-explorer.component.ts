@@ -12,7 +12,7 @@ import {
   styleUrls: ["./file-explorer.component.less"],
 })
 export class FileExplorerComponent implements OnInit {
-  @Input() service: FileService;
+  @Input() service: FileService | null;
   @Input() mode: "save" | "open";
   @Output() selectFile = new EventEmitter<FileSelected>();
   @Output() folderChanged = new EventEmitter<FolderSelected>();
@@ -45,7 +45,7 @@ export class FileExplorerComponent implements OnInit {
       this.currentItem = this.currentItem.parent;
       this.folderChanged.emit({
         meta: this.currentItem,
-        source: this.service.sourceName,
+        source: this.service?.sourceName ?? "unknown",
       });
       this.refresh();
     }
@@ -58,11 +58,12 @@ export class FileExplorerComponent implements OnInit {
   private clickFolder(item: FolderItemInfo): void {
     this.currentItem = { ...item, parent: this.currentItem };
     this.items = [];
-    this.folderChanged.emit({ meta: item, source: this.service.sourceName });
+    this.folderChanged.emit({ meta: item, source: this.service?.sourceName ?? "unknown" });
     this.refresh();
   }
 
   private async clickFile(item: FolderItemInfo): Promise<void> {
+    if (!this.service) return;
     const file = await this.service.getFileContent(item);
     this.selectFile.emit({ file, meta: item, source: this.service.sourceName });
   }

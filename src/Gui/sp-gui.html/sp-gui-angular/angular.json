@@ -43,7 +43,9 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "file-saver"
+              "file-saver",
+              "canvas-chessboard",
+              "quill"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -326,5 +328,12 @@
       }
     }
   },
-  "defaultProject": "gui"
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
+  }
 }

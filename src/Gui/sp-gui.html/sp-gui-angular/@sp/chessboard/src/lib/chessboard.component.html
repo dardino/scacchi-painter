@@ -1,7 +1,7 @@
 <div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
   <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
     <canvas
-      [style.display.none]="BoardType !== 'canvas'"
+      [style.display]="BoardType !== 'canvas' ? 'none' : undefined"
       #canvas
       (selectcell)="onSelectCell($event)"
     ></canvas>
@@ -17,6 +17,8 @@
         [piece]="item.piece"
         [location]="item.location"
         (click)="onCellClick(item)"
+        (mouseup)="onMouseUp(item, $event)"
+        (mousedown)="onMouseDown(item, $event)"
       ></lib-board-cell>
     </div>
   </div>

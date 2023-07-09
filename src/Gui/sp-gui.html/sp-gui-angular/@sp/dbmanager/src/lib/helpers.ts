@@ -1,9 +1,9 @@
 import {
-  Rotations,
-  Colors,
-  BoardRank,
   BoardFile,
+  BoardRank,
+  Colors,
   Figurine,
+  Rotations,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
 import { Base64 } from "./base64";
@@ -204,7 +204,9 @@ export type PieceColors = typeof PieceColors[number];
 
 export type SquareColors = "black" | "white";
 
-export const GetSquareColor = (...args: [loc: SquareLocation] | [col: Columns, row: Traverse]): SquareColors => {
+export const GetSquareColor = (
+  ...args: [loc: SquareLocation] | [col: Columns, row: Traverse]
+): SquareColors => {
   let col = args[0];
   let row = args[1];
   if (col == null) {
@@ -226,7 +228,9 @@ export interface SquareLocation {
   traverse: Traverse;
 }
 
-export const GetSquareIndex = (...args: [loc: SquareLocation] | [col: Columns, row: Traverse]): number => {
+export const GetSquareIndex = (
+  ...args: [loc: SquareLocation] | [col: Columns, row: Traverse]
+): number => {
   let col = args[0];
   let row = args[1];
   if (col == null) {
@@ -395,7 +399,8 @@ const RotationsCodeMap: {
   "-\\": "Counterclockwise45",
 };
 
-export const getRotationSymbol = (rotation: IPiece["rotation"]): string => mapRotations[rotation];
+export const getRotationSymbol = (rotation: IPiece["rotation"]): string =>
+  mapRotations[rotation];
 
 /*
 <SP_Item
@@ -501,7 +506,7 @@ export const GetSolutionFromElement = async (el: Element) => {
         });
     }
   }
-  return { plain: solDec, html: solText, rtf: solRft?.innerHTML };
+  return { plain: solDec, html: solText };
 };
 
 export const GetTwins = (el: Element): Element[] => {
@@ -509,10 +514,9 @@ export const GetTwins = (el: Element): Element[] => {
   return Array.from(twins);
 };
 
-export const rowToPieces = (row: string): Array<Partial<IPiece> | null> => {
-  const fairies = row.match(/\{[a-z]*\}/);
+export const getPiecesString = (row: string): string[] => {
   row = row.replace(/\{[a-z]*\}/g, "!");
-  row = row.replace(/([QKRTBNPAETqkrtbnpaet]|^1)/g, "|$1");
+  row = row.replace(/([QKRBNPAETqkrbnpaet]|^1)/g, "|$1");
   row = row.replace(/([^:|])1/g, "$1|1");
   row = row.replace(/\*\|(.)/g, "|*$1");
   row = row.replace(/:0/g, RotationsCodes[0]);
@@ -523,16 +527,23 @@ export const rowToPieces = (row: string): Array<Partial<IPiece> | null> => {
   row = row.replace(/:5/g, RotationsCodes[5]);
   row = row.replace(/:6/g, RotationsCodes[6]);
   row = row.replace(/:7/g, RotationsCodes[7]);
-  row = row.replace(/[8]/g, Array(9).join("|#"));
-  row = row.replace(/[7]/g, Array(8).join("|#"));
-  row = row.replace(/[6]/g, Array(7).join("|#"));
-  row = row.replace(/[5]/g, Array(6).join("|#"));
-  row = row.replace(/[4]/g, Array(5).join("|#"));
-  row = row.replace(/[3]/g, Array(4).join("|#"));
-  row = row.replace(/[2]/g, Array(3).join("|#"));
-  row = row.replace(/[1]/g, "#");
-  row = row.trim().substr(1);
+  row = row.replace(/8/g, Array(9).join("|#"));
+  row = row.replace(/7/g, Array(8).join("|#"));
+  row = row.replace(/6/g, Array(7).join("|#"));
+  row = row.replace(/5/g, Array(6).join("|#"));
+  row = row.replace(/4/g, Array(5).join("|#"));
+  row = row.replace(/3/g, Array(4).join("|#"));
+  row = row.replace(/2/g, Array(3).join("|#"));
+  row = row.replace(/1/g, "#");
+  row = row.trim().substring(1);
   const piecesStrings = row.split("|");
+  return piecesStrings;
+};
+
+export const rowToPieces = (row1: string): Array<Partial<IPiece> | null> => {
+  const fairies = /\{[a-z]*\}/.exec(row1);
+  const piecesStrings = getPiecesString(row1);
+
   const pieces: Array<Partial<IPiece> | null> = [];
   let f = 0;
   for (const c of piecesStrings) {
@@ -541,11 +552,11 @@ export const rowToPieces = (row: string): Array<Partial<IPiece> | null> => {
       pieces.push(null);
       continue;
     }
-    const isNeutral = c[0] === "*";
-    const pieceName = (isNeutral ? c.substr(1, 1) : c.substr(0, 1)) as Figurine;
-    const pieceRotation = c.substr(1, 2) as RotationsCodes;
+    const isNeutral = c.startsWith("*");
+    const pieceName = (isNeutral ? c.substring(1, 2) : c.substring(0, 1)) as Figurine;
+    const pieceRotation = c.substring(1, 3) as RotationsCodes;
     let rotation: PieceRotation = "NoRotation";
-    let fairy = "";
+    let fairy: string | null = null;
     if (c.length >= 3) {
       rotation = RotationsCodeMap[pieceRotation];
       if (c.indexOf("!") > -1) {
@@ -554,19 +565,16 @@ export const rowToPieces = (row: string): Array<Partial<IPiece> | null> => {
       }
     }
 
+    // TODO: in fen we haven't params for fairies?
+    const fairyCode = fairy?.replace(/[{}]/g, "").split("+").map((fp) => ({ code: fp, params: [] }));
+    const nonNeutralColor = pieceName.toLowerCase() !== pieceName ? "White" : "Black";
+    const color = isNeutral ? "Neutral" : nonNeutralColor;
+
     pieces.push({
       appearance: pieceName,
       rotation,
-      // TODO: in fen we haven't params for fairies?
-      fairyCode: fairy
-        .replace(/[\{\}]/g, "")
-        .split("+")
-        .map((fp) => ({ code: fp, params: [] })),
-      color: isNeutral
-        ? "Neutral"
-        : pieceName.toLowerCase() !== pieceName
-        ? "White"
-        : "Black",
+      fairyCode,
+      color,
     });
   }
 
@@ -574,7 +582,7 @@ export const rowToPieces = (row: string): Array<Partial<IPiece> | null> => {
 };
 
 export const fenToChessBoard = (original: string) => {
-  const [fen, fairies] = original.split(" ");
+  const [fen] = original.split(" ");
   const fenrows = fen.split("/");
   const pieces = fenrows.map((f) => rowToPieces(f));
   const cells = pieces.reduce<Array<Partial<IPiece> | null>>(
@@ -584,7 +592,8 @@ export const fenToChessBoard = (original: string) => {
   return cells;
 };
 
-export const notNull = <T>(v: T): v is Exclude<T, null | undefined> => v != null;
+export const notNull = <T>(v: T): v is Exclude<T, null | undefined> =>
+  v != null;
 
 const stringToArrayBuffer = (stringText: string) => {
   const buffer = new ArrayBuffer(stringText.length);
@@ -623,17 +632,17 @@ export const convertToRtf = async (html: string): Promise<string | null> => {
 
   // Singleton tags
   richText = richText.replace(
-    /<(?:hr)(?:\s+[^>]*)?\s*[\/]?>/gi,
+    /<(?:hr)(?:\s+[^>]*)?\s*\/?>/gi,
     "{\\pard \\brdrb \\brdrs \\brdrw10 \\brsp20 \\par}\n{\\pard\\par}\n"
   );
   richText = richText.replace(
-    /<(?:br)(?:\s+[^>]*)?\s*[\/]?>/gi,
+    /<(?:br)(?:\s+[^>]*)?\s*\/?>/gi,
     "{\\pard\\par}\n"
   );
 
   // Empty tags
   richText = richText.replace(
-    /<(?:p|div|section|article)(?:\s+[^>]*)?\s*[\/]>/gi,
+    /<(?:p|div|section|article)(?:\s+[^>]*)?\s*\/>/gi,
     "{\\pard\\par}\n"
   );
   richText = richText.replace(/<(?:[^>]+)\/>/g, "");
@@ -646,7 +655,7 @@ export const convertToRtf = async (html: string): Promise<string | null> => {
   const tmpRichText = richText;
   richText = richText.replace(
     /<a(?:\s+[^>]*)?(?:\s+href=(["'])(.+)\1)(?:\s+[^>]*)?>/gi,
-    "{\\field{\\*\\fldinst{HYPERLINK\n \"$2\"\n}}{\\fldrslt{\\ul\\cf1\n"
+    '{\\field{\\*\\fldinst{HYPERLINK\n "$2"\n}}{\\fldrslt{\\ul\\cf1\n'
   );
   const hasHyperlinks = richText !== tmpRichText;
   richText = richText.replace(/<a(?:\s+[^>]*)?>/gi, "{{{\n");
@@ -692,7 +701,8 @@ export const convertToRtf = async (html: string): Promise<string | null> => {
   return richText;
 };
 
-export const notEmpty = <T>(v: T | null | undefined | ""): v is T => v != null && v !== "";
+export const notEmpty = <T>(v: T | null | undefined | ""): v is T =>
+  v != null && v !== "";
 
 export const newTextElement = (elName: string, content: string): Element => {
   const el = createXmlElement(elName);
@@ -707,4 +717,42 @@ export const createXmlElement = (elName: string): Element => {
     "application/xml"
   );
   return dom.querySelector(elName) as Element;
+};
+
+export const prettifyXml = (sourceXml: string | Document) => {
+  const xmlDoc = typeof sourceXml === "string" ? new DOMParser().parseFromString(sourceXml, "application/xml") : sourceXml;
+  const xsltDoc = new DOMParser().parseFromString(
+    [
+      // describes how we want to modify the XML - indent everything
+      '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">',
+      '  <xsl:strip-space elements="*"/>',
+      '  <xsl:template match="para[content-style][not(text())]">', // change to just text() to strip space in text nodes
+      '    <xsl:value-of select="normalize-space(.)"/>',
+      "  </xsl:template>",
+      '  <xsl:template match="node()|@*">',
+      '    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>',
+      "  </xsl:template>",
+      '  <xsl:output indent="yes"/>',
+      "</xsl:stylesheet>",
+    ].join("\n"),
+    "application/xml"
+  );
+  const xsltProcessor = new XSLTProcessor();
+  xsltProcessor.importStylesheet(xsltDoc);
+  const resultDoc = xsltProcessor.transformToDocument(xmlDoc);
+  const resultXml = new XMLSerializer().serializeToString(resultDoc);
+  return resultXml;
+};
+
+export const parseHTMLSolution = (htmlString: string): HTMLElement[] => {
+  const frag = document.createElement("div");
+  frag.innerHTML = htmlString;
+  const children = Array.from(frag.children).map(el => el instanceof HTMLElement ? el : undefined).filter(notNull);
+  return children;
+};
+
+export const notationCasingByColor: Record<PieceColors, (piecename: string) => string> = {
+  White: (txt: string) =>  txt.toUpperCase(),
+  Black: (txt: string) =>  txt.toLowerCase(),
+  Neutral: (txt: string) =>  `*${txt.toUpperCase()}`,
 };

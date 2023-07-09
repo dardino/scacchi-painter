@@ -47,15 +47,16 @@
 ></lib-sp-toolbar-button>
 <lib-sp-toolbar-button
   (click)="flipHorizontal()"
-  iconText="flip"
+  iconText="my_flip_h"
   iconLabel="Flip horizontal"
+  [svg]="true"
   [noLabel]="true"
 ></lib-sp-toolbar-button>
 <lib-sp-toolbar-button
   (click)="flipVertical()"
-  iconText="flip"
+  iconText="my_flip_v"
   iconLabel="Flip vertical"
-  data-rotate="90"
+  [svg]="true"
   [noLabel]="true"
 ></lib-sp-toolbar-button>
 <lib-sp-toolbar-button

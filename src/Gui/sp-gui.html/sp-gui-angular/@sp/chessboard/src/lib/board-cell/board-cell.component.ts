@@ -28,7 +28,7 @@ export class BoardCellComponent implements OnInit {
   }
 
   @Input()
-  public piece?: IPiece;
+  public piece?: IPiece | null;
 
   @Input()
   public active?: boolean;

@@ -35,7 +35,7 @@ export class ChessboardComponent
   @Output() focusOut = new EventEmitter<void>();
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
-  @Input() cursor: { figurine: string; rotation: number | null } | null;
+  @Input() cursor: { figurine: string | null; rotation: number | null } | null;
 
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
@@ -51,12 +51,14 @@ export class ChessboardComponent
   cbImage: ElementRef;
 
   @Input()
-  position?: Problem;
+  position?: Problem | null;
 
   @Output()
   currentCellChanged = new EventEmitter<SquareLocation | null>();
   @Output()
   cellClick = new EventEmitter<SquareLocation>();
+  @Output()
+  cellMiddleClick = new EventEmitter<SquareLocation>();
 
   currentCell: UiCell | null = null;
   private lastHash?: string;
@@ -98,9 +100,6 @@ export class ChessboardComponent
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-
-    console.log(changes);
-
     if (changes.position && !changes.position.isFirstChange()) {
       this.updateBoard();
     }
@@ -175,7 +174,23 @@ export class ChessboardComponent
       this.canvasBoard.Redraw();
     }
   }
-
+  onMouseUp(cell: UiCell, $event: MouseEvent) {
+    const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
+    if ($event.button === 1 && !haskeymod) {
+      $event.preventDefault();
+      $event.stopImmediatePropagation();
+      $event.stopPropagation();
+      this.cellMiddleClick.emit({ ...cell.location });
+    }
+  }
+  onMouseDown(cell: UiCell, $event: MouseEvent) {
+    const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
+    if ($event.button === 1 && !haskeymod) {
+      $event.preventDefault();
+      $event.stopImmediatePropagation();
+      $event.stopPropagation();
+    }
+  }
   onCellClick(cell: UiCell) {
     this.cellClick.emit({ ...cell.location });
     if (cell !== this.currentCell) this.currentCell = cell;
@@ -219,6 +234,7 @@ export class ChessboardComponent
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
   };
+
 }
 const notNull = <T>(v: T | null): v is T => v != null;
 

@@ -48,6 +48,8 @@
   flex: 1 1 auto;
   position: relative;
   width: 0px;
+  overflow: hidden;
+  display: block;
 
   @media (max-width: @smallScreen){
     width: auto;
@@ -84,8 +86,12 @@
     display: none;
   }
 }
-.tab-group{
+.tab-group {
   min-height: 100%;
+
+  > * {
+    flex: 1 1 auto;
+  }
 }
 .tab-content{
   height: 100%;

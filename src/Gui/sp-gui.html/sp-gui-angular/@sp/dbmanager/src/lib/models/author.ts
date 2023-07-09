@@ -12,14 +12,14 @@ export class Author implements IAuthor {
 
   public static fromElement(el: Element): Author {
     const a = new Author();
-    a.nameAndSurname = el.getAttribute("NameAndSurname") ?? "";
-    a.address = el.getAttribute("Address") ?? "";
-    a.city = el.getAttribute("City") ?? "";
-    a.phone = el.getAttribute("Phone") ?? "";
-    a.zipCode = el.getAttribute("ZipCode") ?? "";
-    a.stateOrProvince = el.getAttribute("StateOrProvince") ?? "";
-    a.country = el.getAttribute("Country") ?? "";
-    a.language = el.getAttribute("Language") ?? "";
+    a.nameAndSurname = el.querySelector("NameAndSurname")?.innerHTML ?? "";
+    a.address =  el.querySelector("Address")?.innerHTML ?? "";
+    a.city =  el.querySelector("City")?.innerHTML ?? "";
+    a.phone =  el.querySelector("Phone")?.innerHTML ?? "";
+    a.zipCode =  el.querySelector("ZipCode")?.innerHTML ?? "";
+    a.stateOrProvince =  el.querySelector("StateOrProvince")?.innerHTML ?? "";
+    a.country =  el.querySelector("Country")?.innerHTML ?? "";
+    a.language =  el.querySelector("Language")?.innerHTML ?? "";
     return a;
   }
   static fromJson(el: Partial<IAuthor>): Author {

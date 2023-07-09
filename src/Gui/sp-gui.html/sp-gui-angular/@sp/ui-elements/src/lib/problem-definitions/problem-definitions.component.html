@@ -7,7 +7,7 @@
     </mat-card-title>
     <mat-card-content class="stipulation-tile">
       <p>
-        <mat-form-field color="accent" appearance="standard" class="tile-input">
+        <mat-form-field color="accent" appearance="fill" class="tile-input">
           <mat-label>Type</mat-label>
           <mat-select [(value)]="problemType">
             <mat-option value="-">Direct</mat-option>
@@ -21,7 +21,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field color="accent" appearance="standard" class="tile-input">
+        <mat-form-field color="accent" appearance="fill" class="tile-input">
           <mat-label>Leads to</mat-label>
           <mat-hint>(ie: Mate, Stalemate, etc...)</mat-hint>
           <mat-select [(value)]="leadsTo">
@@ -49,7 +49,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field color="accent" appearance="standard" class="tile-input">
+        <mat-form-field color="accent" appearance="fill" class="tile-input">
           <mat-label>Moves</mat-label>
           <input matInput placeholder="2" [(ngModel)]="moves" />
           <mat-hint>use . or , to write semi-move (ie: 2,5)</mat-hint>
@@ -76,6 +76,7 @@
         <div class="placeholder" *cdkDragPlaceholder></div>
         {{ twin.toString() }}
         <button
+          type="button"
           *ngIf="i > 0"
           mat-flat-button
           color="secondary"
@@ -91,7 +92,7 @@
     <mat-card-title
       ><div class="tile-title">
         <span>Conditions</span
-        ><button mat-flat-button color="primary" (click)="addCondition.emit()">
+        ><button type="button" mat-flat-button color="primary" (click)="addCondition.emit()">
           <mat-icon>add</mat-icon>
         </button>
       </div></mat-card-title

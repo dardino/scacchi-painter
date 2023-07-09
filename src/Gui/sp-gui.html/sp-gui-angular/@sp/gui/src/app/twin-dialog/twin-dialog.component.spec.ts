@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { TwinDialogComponent } from "./twin-dialog.component";
 
 describe("TwinDialogComponent", () => {
@@ -8,7 +10,12 @@ describe("TwinDialogComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [MatSnackBarModule, MatDialogModule],
       declarations: [TwinDialogComponent],
+      providers: [
+        {provide: MatDialogRef, useValue: {}},
+        {provide: MAT_DIALOG_DATA, useValue: []},
+      ]
     }).compileComponents();
   }));
 
