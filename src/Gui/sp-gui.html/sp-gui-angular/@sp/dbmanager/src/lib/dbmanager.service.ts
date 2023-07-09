@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { IProblem, prettifyXml } from "./helpers";
-import { Problem } from "./models/Problem";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileSelected, FileService, FolderSelected } from "@sp/host-bridge/src/lib/fileService";
 import { Subject } from "rxjs";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { DropboxdbService, OneDriveService, LocalDriveService } from "./providers";
+import { IProblem, prettifyXml } from "./helpers";
+import { Problem } from "./models/problem";
+import { DropboxdbService, LocalDriveService, OneDriveService } from "./providers";
 
 interface IDbSpX {
   lastIndex: number;
@@ -54,6 +54,28 @@ export class DbmanagerService {
     await this.loadProblem();
     await this.saveToLocalStorage();
     return createdIndex;
+  }
+
+  async deleteProblem(problem: Problem) {
+    const pIndex = this.All.indexOf(problem);
+    await this.deleteProblemAtPosition(pIndex);
+  }
+
+  async deleteCurrentProblem() {
+    await this.deleteProblemAtPosition(this.currentIndex);
+  }
+
+  private async deleteProblemAtPosition(pIndex: number) {
+    if (pIndex < this.All.length && pIndex > -1) this.All.splice(pIndex, 1);
+    if (this.All.length === 0) {
+      //if deleted problem is the lastone in database then create a blank problem
+      await this.addBlankPosition();
+    } else {
+      // if problem index is the same as current then move current problem to the previous if present
+      if (pIndex === this.currentIndex) {
+        this.currentIndex = Math.max(0, pIndex - 1);
+      }
+    }
   }
 
   constructor(
@@ -247,7 +269,7 @@ export class DbmanagerService {
         await this.loadFromJson(content);
         break;
       default:
-        return null;
+        break;
     }
     await this.saveToLocalStorage();
     return null;

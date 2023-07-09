@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OpenFileComponent } from "./open-file.component";
 
 describe("OpenfileComponent", () => {
@@ -8,7 +9,8 @@ describe("OpenfileComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OpenFileComponent ]
+      declarations: [ OpenFileComponent ],
+      imports: [MatSnackBarModule]
     })
     .compileComponents();
   }));

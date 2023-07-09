@@ -1,4 +1,5 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AppComponent } from "./app.component";
 
@@ -6,7 +7,8 @@ describe("AppComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        MatSnackBarModule
       ],
       declarations: [
         AppComponent
@@ -20,16 +22,10 @@ describe("AppComponent", () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'gui'`, () => {
+  it(`should have as title 'Scacchi Painter'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual("gui");
+    expect(app.title).toEqual("Scacchi Painter");
   });
 
-  it("should render title", () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector(".content span").textContent).toContain("gui app is running!");
-  });
 });

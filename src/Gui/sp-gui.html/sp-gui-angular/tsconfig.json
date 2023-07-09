@@ -26,7 +26,8 @@
       "ESNext"
     ],
     "types": [
-      "wicg-file-system-access"
+      "wicg-file-system-access",
+      "jasmine"
     ],
     "paths": {
       "chessboard": [

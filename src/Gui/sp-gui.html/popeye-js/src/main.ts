@@ -1,5 +1,5 @@
 var popeyeInputFile = "/test.inp";
-var popeyeMaxMem = "512M";
+var popeyeMaxMem = "128M";
 var args = ["py", "-maxmem", popeyeMaxMem, popeyeInputFile];
 declare const FS: any;
 declare const allocate: any;

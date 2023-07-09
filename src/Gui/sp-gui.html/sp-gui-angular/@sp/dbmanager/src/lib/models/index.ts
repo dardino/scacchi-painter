@@ -1,4 +1,4 @@
-export { Piece } from "./Piece";
-export { Problem } from "./Problem";
+export { Piece } from "./piece";
+export { Problem } from "./problem";
 export { Author } from "./author";
 export { FairyPiecesDB as FairiesDB } from "./fairesDB";

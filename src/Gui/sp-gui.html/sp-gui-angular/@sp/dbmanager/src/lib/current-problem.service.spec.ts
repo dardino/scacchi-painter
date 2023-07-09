@@ -89,6 +89,8 @@ const BlackRook: Partial<IPiece> = {
   color: "Black",
   appearance: "r",
 };
+
+
 describe("CurrentProblemService", () => {
   let service: CurrentProblemService;
   const dbmanager: MockDbmanagerService = new MockDbmanagerService();
