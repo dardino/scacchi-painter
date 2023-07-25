@@ -1,26 +1,36 @@
+@baseFontSize: 1rem;
+
+@instructionFontSize: 0.8em;
+@logFontSize: 0.6em;
+@solutionFontSize: 1em;
+
 .instruction {
   padding: 0;
   margin: 0;
   font-style: italic;
-  font-size: 0.8rem;
+  font-size: @instructionFontSize;
 }
 .log {
   padding: 0;
   margin: 0;
   font-style: italic;
-  font-size: 0.6rem;
+  font-size: @logFontSize;
 }
 .solutions {
-  font-size: 1rem;
+  font-size: @baseFontSize;
   line-height: initial;
   white-space: pre;
-  margin-bottom: 10rem;
+  padding: 1em 1em 10rem 1em;
+  background-color: black;
+  width: 100%;
 }
 .solution {
   margin: 0;
   padding: 0;
-  white-space: pre;
+  white-space: pre-wrap;
   font-family: monospace;
+  word-wrap: break-word;
+  font-size: @solutionFontSize;
 }
 :not(.solution) + .solution {
   margin-top: 1rem;

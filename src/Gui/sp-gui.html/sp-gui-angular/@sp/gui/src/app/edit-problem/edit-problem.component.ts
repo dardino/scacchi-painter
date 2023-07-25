@@ -199,7 +199,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngAfterViewChecked() {
-    this.applyPreferences();
+    setTimeout(() => {
+      this.applyPreferences();
+    });
   }
 
   resize($event: MouseEvent) {

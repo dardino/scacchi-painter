@@ -9,15 +9,19 @@ const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}
   return retVal;
 };
 
-const BindToLocalStorage = (type: "number" | "string") => (target: any, key: any) => {
+const BindToLocalStorage = <T extends "number" | "string">(
+  type: T,
+  defaultValue?: T extends "number" ? number : string
+) => (target: any, key: any) => {
   Object.defineProperty(target, key, {
     get: () => {
+      const fromLS = localStorage.getItem(lsPropNameGetter(key)) ?? defaultValue ?? "";
       switch (type) {
         case "number":
-          return parseFloat(`0` + (localStorage.getItem(lsPropNameGetter(key)) ?? ""));
+          return parseFloat(`0` + fromLS);
         case "string":
         default:
-          return localStorage.getItem(lsPropNameGetter(key)) ?? "";
+          return fromLS;
       }
     },
     set: (newValue) => {
@@ -38,4 +42,6 @@ export class PreferencesService implements PreferencesTable {
   @BindToLocalStorage("number")
   public editWindowWidth: number;
 
+  @BindToLocalStorage("number", 1)
+  public solutionFontSize: number;
 }
