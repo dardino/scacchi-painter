@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 
 @Component({
   selector: "lib-toolbar-engine",
@@ -18,7 +19,23 @@ export class ToolbarEngineComponent implements OnInit {
   @Input()
   isRunning: boolean;
 
-  constructor() {}
+  public get isMaxFont() {
+    return this.fontSize >= 2;
+  };
+  public get isMinFont() {
+    return this.fontSize <= 1;
+  };
+
+  public get fontSize() {
+    return this.preferences.solutionFontSize;
+  }
+  public set fontSize(newVal: number) {
+    this.preferences.solutionFontSize = Math.min(Math.max(newVal, 1), 2);
+  }
+
+  constructor(private preferences: PreferencesService) {
+
+  }
 
   start() {
     console.log("[LOG] -> try to start process...");
@@ -31,6 +48,12 @@ export class ToolbarEngineComponent implements OnInit {
   tryMove() {
     console.log("[LOG] -> start engine in try mode...");
     this.stopSolve.emit("try");
+  }
+  increaseFontSize() {
+    this.fontSize += .1;
+  }
+  decreaseFontSize() {
+    this.fontSize -= .1;
   }
 
   ngOnInit(): void {}

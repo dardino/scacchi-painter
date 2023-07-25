@@ -23,4 +23,18 @@
     [noLabel]="hideLabels"
     [disabled]="isRunning"
   ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="increaseFontSize()"
+    iconText="text_increase"
+    mat-toolip="Increase text size">
+    [noLabel]="hideLabels"
+    [disabled]="isMaxFont"
+  </lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="decreaseFontSize()"
+    iconText="text_decrease"
+    mat-toolip="Decrease text size">
+    [noLabel]="hideLabels"
+    [disabled]="isMinFont"
+  </lib-sp-toolbar-button>
 </mat-toolbar-row>

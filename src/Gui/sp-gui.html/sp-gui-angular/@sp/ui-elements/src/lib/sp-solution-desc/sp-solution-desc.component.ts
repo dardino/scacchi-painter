@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
+import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 
 /*https://stackblitz.com/edit/ngx-quill-example-btmh9i?file=src%2Fapp%2Fapp.component.ts*/
 
@@ -10,12 +11,16 @@ import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/consta
   styleUrls: ["./sp-solution-desc.component.less"],
 })
 export class SpSolutionDescComponent implements OnInit {
-  constructor() {}
+  constructor(private preferences: PreferencesService) {}
 
   @Input()
   public problem: Problem | null;
 
-  ngOnInit(): void {}
+  ngOnInit(): void { /* */ }
+
+  public get solutionFontSize() {
+    return `${Math.max(this.preferences.solutionFontSize, 1)}rem`;
+  }
 
   get solution() {
     return this.problem?.textSolution ?? "";
@@ -35,4 +40,3 @@ export class SpSolutionDescComponent implements OnInit {
     else return "solution";
   }
 }
-

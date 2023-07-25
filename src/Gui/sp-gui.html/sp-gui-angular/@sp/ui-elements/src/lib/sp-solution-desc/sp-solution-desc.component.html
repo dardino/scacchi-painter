@@ -5,7 +5,7 @@
   [preserveWhitespace]="true"
   placeholder="Enter Text"
 ></quill-editor> -->
-<div class="solutions">
+<div class="solutions" [style.fontSize]="solutionFontSize">
   <ng-template [ngForOf]="rows" ngFor let-item>
     <div [class]="getClass(item)">{{item}}</div>
   </ng-template>
