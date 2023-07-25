@@ -1,0 +1,121 @@
+@import "../../../../mediaquery.less";
+
+.dbitem-status {
+  flex: 0 0 auto;
+  display: flex;
+  width: 100%;
+
+  .status-index {
+    align-self: flex-end;
+    margin: 0;
+    display: block;
+    width: 4em;
+    background-color: rgba(255,255,255,.2);
+    text-align: right;
+    padding: 0 0.5rem;
+    flex: 0 0 auto;
+    @media (max-width: @smallScreen){
+      flex: 1 1 auto;
+    }
+  }
+
+  .status-twins {
+    background-color: rgba(197, 69, 69, 0.2);
+    flex: 1 1 0%;
+    padding: 0 1rem;
+    @media (max-width: @smallScreen){
+      display: none;
+    }
+    .twin {
+      margin-right: 1em;
+    }
+  }
+
+  .status-stipulation {
+    background-color: rgba(80, 255, 0, 0.36);
+    width: 14.6rem;
+    flex: 0 0 auto;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.3em;
+    box-sizing: border-box;
+    align-items: center;
+
+  }
+}
+.dbitem-infos {
+  flex: 1 1 0;
+  display: block;
+  @media (max-width: @smallScreen){
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+}
+.dbitem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.description {
+  align-self: flex-start;
+  min-width: 14.6rem;
+  flex: 1 1 auto;
+
+  .twins {
+    @media (min-width: @smallScreen){
+      display: none;
+    }
+  }
+
+  dl {
+    margin: 0;
+    padding: 1rem;
+    @media (max-width: @smallScreen){
+      padding: .5rem;
+    }
+  }
+  dd {
+    margin: 0;
+    padding: 0;
+
+  }
+  dt {
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary);
+  }
+  .twins,
+  .authors {
+    display: flex;
+    flex-flow: row wrap;
+  }
+  .twin,
+  .author {
+    white-space: nowrap;
+    margin-right: 1rem;
+  }
+}
+
+.dblist {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.miniboard {
+  width: 14.6rem;
+  height: 14.6rem;
+  flex: 0 0 auto;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: @smallScreen) {
+    flex-direction: column-reverse;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}

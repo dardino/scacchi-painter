@@ -60,12 +60,16 @@ export class DbmanagerService {
     const pIndex = this.All.indexOf(problem);
     await this.deleteProblemAtPosition(pIndex);
   }
+  async deleteProblemByIndex(dbIndex: number) {
+    await this.deleteProblemAtPosition(dbIndex);
+  }
 
   async deleteCurrentProblem() {
     await this.deleteProblemAtPosition(this.currentIndex);
   }
 
   private async deleteProblemAtPosition(pIndex: number) {
+    this.workInProgress.next(true);
     if (pIndex < this.All.length && pIndex > -1) this.All.splice(pIndex, 1);
     if (this.All.length === 0) {
       //if deleted problem is the lastone in database then create a blank problem
@@ -76,6 +80,14 @@ export class DbmanagerService {
         this.currentIndex = Math.max(0, pIndex - 1);
       }
     }
+    await this.loadProblem();
+    await this.saveToLocalStorage();
+    this.workInProgress.next(false);
+    this.snackBar.open("Problem deleted!", undefined, {
+      verticalPosition: "top",
+      politeness: "assertive",
+      duration: 2000,
+    });
   }
 
   constructor(

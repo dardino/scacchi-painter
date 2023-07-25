@@ -1,38 +1,40 @@
+import { Location } from "@angular/common";
 import {
+  AfterViewChecked,
   Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
   ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
 } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatMenuTrigger } from "@angular/material/menu";
+import { ActivatedRoute } from "@angular/router";
+import { Piece } from "@sp/dbmanager/src/lib/models";
+import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
   CurrentProblemService,
-  SquareLocation,
+  DbmanagerService,
+  EngineManagerService,
   IPiece,
+  SquareLocation,
   getCanvasRotation,
   notNull,
-  DbmanagerService,
 } from "@sp/dbmanager/src/public-api";
-import { Subscription, BehaviorSubject } from "rxjs";
-import { Location } from "@angular/common";
-import { MatMenuTrigger } from "@angular/material/menu";
 import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
-import { Piece } from "@sp/dbmanager/src/lib/models";
-import { MatDialog } from "@angular/material/dialog";
-import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
-import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
-import { ActivatedRoute } from "@angular/router";
-import { EngineManagerService } from "@sp/dbmanager/src/public-api";
-import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
+import { BehaviorSubject, Subscription } from "rxjs";
+import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
+import { istructionRegExp, outlogRegExp } from "../constants/constants";
+import { PreferencesService } from "../services/preferences.service";
+import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 
 @Component({
   selector: "app-edit-problem",
   templateUrl: "./edit-problem.component.html",
   styleUrls: ["./edit-problem.component.less"],
 })
-export class EditProblemComponent implements OnInit, OnDestroy {
+export class EditProblemComponent implements OnInit, OnDestroy, AfterViewChecked {
   public get rows$() {
     return this.rows$ubject.asObservable();
   }
@@ -42,7 +44,7 @@ export class EditProblemComponent implements OnInit, OnDestroy {
   }
 
   public get engineEnabled() {
-    return this.engine && this.engine.supportsSolve;
+    return this.engine?.supportsSolve === true;
   }
 
   solveInProgress: boolean;
@@ -53,11 +55,13 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private engine: EngineManagerService,
     private dialog: MatDialog,
-    private dbManager: DbmanagerService
+    private dbManager: DbmanagerService,
+    private preferences: PreferencesService,
   ) {
     this.engine.isSolving$.subscribe((state) => {
       this.solveInProgress = state;
     });
+
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
@@ -105,12 +109,12 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     figurine: string | null;
     rotation: number | null;
   } | null {
+    const editModeCursor = (this.editMode === "remove" ? "X" : null);
     const figurine =
-      this.editMode === "select"
-        ? null
+      this.editMode === "select" ? null
         : this.pieceToAdd ??
-          this.pieceToMove?.cursor() ??
-          (this.editMode === "remove" ? "X" : null);
+          this.pieceToMove?.cursor() ?? editModeCursor;
+
     const rotation =
       this.rotationToAdd ??
       (this.pieceToMove?.rotation
@@ -194,12 +198,26 @@ export class EditProblemComponent implements OnInit, OnDestroy {
     this.subscribe.unsubscribe();
   }
 
+  ngAfterViewChecked() {
+    this.applyPreferences();
+  }
+
   resize($event: MouseEvent) {
     if (isNaN(this.resizing.x)) return;
+    if ($event.buttons !== 1) {
+      console.log($event.buttons);
+      this.endResize();
+      return;
+    }
     const delta = $event.x - this.resizing.x;
-    (this.panelleft.nativeElement as HTMLDivElement).style.width = `${
-      this.resizing.initialW + delta
-    }px`;
+    const editWindowWidth = this.resizing.initialW + delta;
+    this.preferences.editWindowWidth = editWindowWidth;
+    this.applyPreferences();
+  }
+
+  private applyPreferences() {
+    (this.panelleft.nativeElement as HTMLDivElement)
+      .style.flex = `0 0 min(max(330px, ${this.preferences.editWindowWidth}px), calc(100vw - 330px))`;
     window.dispatchEvent(new Event("resize"));
   }
 
@@ -209,7 +227,6 @@ export class EditProblemComponent implements OnInit, OnDestroy {
       getComputedStyle(this.panelleft.nativeElement as HTMLDivElement).width
     );
     this.resizing = { x: $event.x, initialW: width };
-    console.log(`Initial W: ${width}`);
   }
 
   endResize() {

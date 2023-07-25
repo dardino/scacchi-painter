@@ -37,6 +37,7 @@ import { environment } from "../environments/environment";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { SaveFileComponent } from "./save-file/save-file.component";
+import { DatabaseListItemComponent } from './database-list-item/database-list-item.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { SaveFileComponent } from "./save-file/save-file.component";
     ConditionsDialogComponent,
     AuthRedirectComponent,
     SaveFileComponent,
+    DatabaseListItemComponent,
   ],
   imports: [
     CommonModule,

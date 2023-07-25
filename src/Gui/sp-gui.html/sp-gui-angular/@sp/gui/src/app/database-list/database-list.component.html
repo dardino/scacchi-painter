@@ -1,54 +1,31 @@
-<mat-toolbar-row>
-  <mat-label>List of problems</mat-label>
-  <button mat-button (click)="createNewPosition()">
-    <mat-icon>library_add</mat-icon>
-  </button>
-</mat-toolbar-row>
+
+<section id="toolbar">
+  <mat-toolbar class="toolbar-row" color="secondary">
+    <mat-toolbar-row>
+      <mat-label>List of problems</mat-label>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</section>
+
+<section id="sidebar">
+  <mat-form-field>
+    <mat-label>Search for problem</mat-label>
+    <input matInput [value]="searchValue">
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-hint>Example: Hm#3 or d2-d3</mat-hint>
+  </mat-form-field>
+</section>
+
 <cdk-virtual-scroll-viewport itemSize="256" class="dblist">
   <div
     class="dbitem-container"
     *cdkVirtualFor="let item of itemSource; let index = index"
   >
-    <div class="dbitem-infos">
-      <div class="dbitem">
-        <lib-chessboard
-          [hideInfo]="true"
-          boardType="HTML"
-          class="miniboard"
-          [position]="item.problem"
-        ></lib-chessboard>
-        <div class="description">
-          <dl>
-            <dt class="authors">Authors:</dt>
-            <dd class="authors">
-              <span class="author" *ngFor="let author of item.problem.authors">{{ author.nameAndSurname }}</span>
-            </dd>
-
-            <dt class="twins" *ngIf="hasTwins(item.problem)">Twins:</dt>
-            <dd class="twins" *ngIf="hasTwins(item.problem)">
-              <span class="twin" *ngFor="let twin of twins(item.problem)">{{ twin }}</span>
-            </dd>
-          </dl>
-        </div>
-        <a
-          class="action-button"
-          mat-icon-button
-          color="accent"
-          [routerLink]="['/edit/' + item.dbIndex]"
-        >
-          <mat-icon class="action">forward</mat-icon>
-        </a>
-      </div>
-    </div>
-    <div class="dbitem-status">
-      <span class="status-stipulation"
-        ><span>{{ stipulation(item.problem) }}</span
-        ><span>{{ pieceCounter(item.problem) }}</span></span
-      >
-      <span class="status-twins">
-        <span class="twin" *ngFor="let twin of twins(item.problem)">{{twin}}</span>
-      </span>
-      <span class="status-index">{{ item.dbIndex + 1 }}</span>
-    </div>
+    <div *ngIf="item.problem === null" class="add-item"><button
+      class="add-item-button" mat-button (click)="createNewPosition()">
+      <mat-icon>library_add</mat-icon>
+      add new problem
+    </button></div>
+    <app-database-list-item (delete)="deleteItem($event)" *ngIf="item.problem !== null" [problem]="item.problem" [dbIndex]="item.dbIndex"></app-database-list-item>
   </div>
 </cdk-virtual-scroll-viewport>
