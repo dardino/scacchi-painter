@@ -1,49 +1,47 @@
-@import "../../../../mediaquery";
+@import "../../../../mediaquery.less";
+@import "../../../../toolbarcommon.less";
 
-.problem-editor{
-  @media (max-width: @smallScreen) and (orientation: landscape){
-    padding-left: @boardwidthSM;
-  }
-}
-#chessboard{
-  width: ~"min(calc(@{boardwidthSM} - 1rem), 27rem)";
+#chessboard {
+  width:~"min(calc(@{boardwidthSM} - 1rem), 27rem)";
   padding: 0.5rem;
   flex: 0 0 auto;
 
-  @media (max-width: @smallScreen) and (orientation: landscape){
-    position:fixed;
+  @media (max-width: @smallScreen) and (orientation: landscape) {
+    position: fixed;
     top: @maintoolbarH;
     left: 0;
     bottom: 0;
     overflow-y: auto;
     overflow-x: hidden;
   }
+
   @media (max-width: @smallScreen) and (orientation: portrait) {
     width: calc(100vw - 1rem);
   }
+
   .chessboard-workarea {
     z-index: 1;
 
-    @media (min-width: (@smallScreen + 1)){
+    @media (min-width: (@smallScreen + 1)) {
       position: sticky;
       top: 0.5em;
     }
   }
 }
-#toolbar{
-  flex: 0 0 auto;
-  max-width: 100%;
-}
-.toolbar-row{
-  overflow-x: overlay;
-  overflow-y: hidden;
 
-  @media (min-width: (@smallScreen + 1)){
-    flex-wrap: wrap;
-    height: auto;
+.toolbar();
+
+.problem-editor {
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: @smallScreen) and (orientation: landscape) {
+    padding-left: @boardwidthSM;
   }
 }
-#info{
+
+#info {
   padding: 0.5rem;
   flex: 1 1 auto;
   position: relative;
@@ -51,32 +49,31 @@
   overflow: hidden;
   display: block;
 
-  @media (max-width: @smallScreen){
+  @media (max-width: @smallScreen) {
     width: auto;
   }
 }
-.workboard{
+
+.workboard {
   display: flex;
   flex: 1 1 auto;
 
-  @media (max-width: @smallScreen){
+  @media (max-width: @smallScreen) {
     flex-direction: column;
   }
 }
-.editbtn{
+
+.editbtn {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
 }
-.solution-row{
+
+.solution-row {
   list-style: none;
 }
-.problem-editor{
-  min-height: calc(100vh - 4rem);
-  display: flex;
-  flex-direction: column;
-}
-.vertical-splitter{
+
+.vertical-splitter {
   flex: 0 0 auto;
   width: 10px;
   background: #393939;
@@ -86,19 +83,22 @@
     display: none;
   }
 }
+
 .tab-group {
   min-height: 100%;
 
-  > * {
+  >* {
     flex: 1 1 auto;
   }
 }
-.tab-content{
+
+.tab-content {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-lib-sp-solution-desc{
+
+lib-sp-solution-desc {
   display: flex;
   min-height: 100%;
   flex: 1 1 auto;

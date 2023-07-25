@@ -1,0 +1,17 @@
+@import "./mediaquery";
+
+.toolbar() {
+  #toolbar{
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+  .toolbar-row{
+    overflow-x: overlay;
+    overflow-y: hidden;
+
+    @media (min-width: (@smallScreen + 1)){
+      flex-wrap: wrap;
+      height: auto;
+    }
+  }
+}

@@ -9,9 +9,10 @@
       ></lib-toolbar-edit>
     </mat-toolbar>
   </section>
-  <div class="workboard" (mousemove)="resize($event)">
-    <section id="chessboard">
-      <div class="chessboard-workarea" #panelleft>
+  <div class="workboard"
+  (mousemove)="resize($event)">
+    <section id="chessboard" #panelleft>
+      <div class="chessboard-workarea">
         <lib-chessboard
           class="lib-chessboard"
           [position]="problem"
@@ -33,10 +34,7 @@
     </section>
     <div
       #verticalSplitter
-      (mouseleave)="leaveResize()"
-      (mouseenter)="clearResizeLeave()"
       (mousedown)="startResize($event)"
-      (mouseup)="endResize()"
       class="vertical-splitter"
     ></div>
     <section id="info">

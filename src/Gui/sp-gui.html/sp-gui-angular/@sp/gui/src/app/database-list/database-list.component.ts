@@ -1,10 +1,14 @@
+import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { Component, OnInit } from "@angular/core";
-import { DbmanagerService, TwinTypes } from "@sp/dbmanager/src/public-api";
-import { Problem } from "@sp/dbmanager/src/lib/models";
-import { DataSource, CollectionViewer } from "@angular/cdk/collections";
-import { Observable, BehaviorSubject } from "rxjs";
 import { Router } from "@angular/router";
-import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { Problem } from "@sp/dbmanager/src/lib/models";
+import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
+import { BehaviorSubject, Observable } from "rxjs";
+export interface ProblemRef {
+  problem: Problem | null;
+  dbIndex: number;
+}
 
 @Component({
   selector: "app-database-list",
@@ -12,58 +16,57 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
   styleUrls: ["./database-list.component.less"],
 })
 export class DatabaseListComponent implements OnInit {
-  itemSource = new MyDataSource(this.db.All);
-  constructor(private db: DbmanagerService, private route: Router) {}
+  itemSource = new MyDataSource(this.db);
+  constructor(private db: DbmanagerService, private modal: DialogService, private route: Router) {}
   ngOnInit(): void {
     if (this.db.All.length < 1) {
       this.route.navigate(["/openfile"]);
     }
   }
-  stipulation(item: Problem) {
-    return `${item.stipulation.completeStipulationDesc}`;
-  }
-  pieceCounter(item: Problem) {
-    return `${item.getPieceCounter()}`;
-  }
   realIndex(index: number) {
     return this.itemSource.realIndex(index);
   }
-  hasTwins(item: Problem): boolean {
-    const twinsNoDiagram = item.twins?.TwinList.filter(twin => twin.TwinType !== TwinTypes.Diagram) ?? [];
-    return !!twinsNoDiagram.length;
-  }
-  twins(item: Problem) {
-    const twinsNoDiagram = item.twins?.TwinList.filter(twin => twin.TwinType !== TwinTypes.Diagram) ?? [];
-    if (!twinsNoDiagram.length) return [];
-    return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index+1}) ${twin.toString()}`);
-  }
-  authors(item: Problem) {
-    return item.authors.map((author) => author.nameAndSurname).join(", ");
-  }
+
+  public searchValue = "";
+
+  public valueChange($event: Event) {
+    this.searchValue = ($event.target as HTMLInputElement).value;
+  };
+
   async createNewPosition() {
     const createdIndex = await this.db.addBlankPosition();
     this.route.navigate(["edit", createdIndex]);
   }
+  async askForDeletePositions() {
+    alert("");
+  }
+
+  async deleteItem(dbIndex: number) {
+    const modal = this.modal.confirmDialog({
+      title: "Delete confirmation",
+      message: "Do you want to remove this problem from the database? This action can NOT be restored!",
+      cancelText: "No",
+      confirmText: "Yes"
+    }).subscribe(res => {
+      if (res === true) {
+        this.itemSource.deleteProblemByDbIndex(dbIndex);
+      }
+      modal.unsubscribe();
+    });
+  }
 }
 
-
-interface ProblemRef {
-  problem: Problem;
-  dbIndex: number;
-}
 
 export class MyDataSource extends DataSource<ProblemRef | undefined> {
-  private readonly originalDataSource: ProblemRef[];
-  private readonly filteredDataSource: ProblemRef[];
+  private originalDataSource: ProblemRef[];
+  private filteredDataSource: ProblemRef[];
   private get items$() {
     return this.itemsSubject.asObservable();
   }
   private itemsSubject = new BehaviorSubject<ProblemRef[]>([]);
-  constructor(items: Problem[]) {
+  constructor(private db: DbmanagerService) {
     super();
-    this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex, problem }));
-    this.filteredDataSource = this.originalDataSource.slice();
-    this.sortDescByDate();
+    this.reload();
   }
   connect(
     collectionViewer: CollectionViewer
@@ -76,7 +79,21 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   realIndex(index: number) {
     return this.itemsSubject.getValue().length - index;
   }
-  private sortDescByDate() {
+  public async deleteProblemByDbIndex(dbIndex: number) {
+    await this.db.deleteProblemByIndex(dbIndex);
+    await this.reload();
+  }
+  private async reload() {
+    const items = this.db.All;
+    this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex, problem }));
+    this.filter();
+  }
+  private async filter() {
+    this.filteredDataSource = this.originalDataSource.slice();
+    this.filteredDataSource.unshift({ dbIndex: -1, problem: null });
+    this.sortDescByDate();
+  }
+  private async sortDescByDate() {
     this.filteredDataSource.reverse();
     this.itemsSubject.next(this.filteredDataSource);
   }
