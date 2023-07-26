@@ -2,7 +2,8 @@
 
 ## Next
 
-- [ ] Showing saved solution when Opening specific position
+- [x] [#39 Twin editor](https://github.com/dardino/scacchi-painter/issues/39)
+- [x] Showing saved solution when Opening specific position
 - [x] Preferences:
   - [x] Size of the sidebar memoized
   - [x] Size of the font for the solution panel

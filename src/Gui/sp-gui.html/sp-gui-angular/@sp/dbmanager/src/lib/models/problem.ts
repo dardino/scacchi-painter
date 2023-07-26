@@ -1,24 +1,24 @@
-import { Piece } from "./piece";
-import {
-  Columns,
-  Traverse,
-  GetSolutionFromElement,
-  IProblem,
-  fenToChessBoard,
-  GetLocationFromIndex,
-  notNull,
-  SquareLocation,
-  GetSquareIndex,
-  convertToRtf,
-  createXmlElement,
-  notEmpty,
-  parseHTMLSolution,
-} from "../helpers";
-import { Twins } from "./twins";
-import { Stipulation } from "./stipulation";
-import { Author } from "./author";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
+import {
+  Columns,
+  GetLocationFromIndex,
+  GetSolutionFromElement,
+  GetSquareIndex,
+  IProblem,
+  SquareLocation,
+  Traverse,
+  convertToRtf,
+  createXmlElement,
+  fenToChessBoard,
+  notEmpty,
+  notNull,
+  parseHTMLSolution,
+} from "../helpers";
+import { Author } from "./author";
+import { Piece } from "./piece";
+import { Stipulation } from "./stipulation";
+import { Twins } from "./twins";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
 const main_snapshot = "$_MAIN_$";

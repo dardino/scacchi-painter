@@ -58,63 +58,30 @@
     </mat-card-content>
   </mat-card>
   <mat-card class="tile">
-    <mat-card-title
-      ><div class="tile-title">
-        <span>Twins</span
-        ><button mat-flat-button color="primary" (click)="openTwin.emit(null)">
+    <mat-card-title>
+      <div class="tile-title">
+        <span>Twins</span><button mat-mini-fab color="primary" (click)="openTwin.emit(null)">
           <mat-icon>add</mat-icon>
         </button>
-      </div></mat-card-title
-    >
-    <mat-card-content cdkDropList class="list" (cdkDropListDropped)="dropTwin($event)">
-      <div
-        class="box"
-        *ngFor="let twin of twins; let i = index"
-        cdkDrag
-        [cdkDragDisabled]="twin.TwinType === 'Diagram'"
-      >
-        <div class="placeholder" *cdkDragPlaceholder></div>
-        {{ twin.toString() }}
-        <button
-          type="button"
-          *ngIf="i > 0"
-          mat-flat-button
-          color="secondary"
-          (click)="deleteTwin.emit(twin)"
-          class="inlist-button"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
       </div>
+    </mat-card-title>
+    <mat-card-content cdkDropList class="list" (cdkDropListDropped)="dropTwin($event)">
+      <lib-sortable-list [elements]="twins" [isDragDisabledForItem]="isDragDisabledForTwin"
+        (deleteItem)="deleteTwin.emit($event)" [canBeDeleted]="twinCanBeDeleted"></lib-sortable-list>
     </mat-card-content>
   </mat-card>
   <mat-card class="tile">
-    <mat-card-title
-      ><div class="tile-title">
-        <span>Conditions</span
-        ><button type="button" mat-flat-button color="primary" (click)="addCondition.emit()">
+    <mat-card-title>
+      <div class="tile-title">
+        <span>Conditions</span><button type="button" mat-mini-fab color="primary" (click)="addCondition.emit()">
           <mat-icon>add</mat-icon>
         </button>
-      </div></mat-card-title
-    >
-    <mat-card-content
-      *ngIf="conditions.length > 0"
-      cdkDropList
-      class="list"
-      (cdkDropListDropped)="dropCondition($event)"
-    >
-      <div class="box" *ngFor="let cond of conditions" cdkDrag>
-        <div class="placeholder" *cdkDragPlaceholder></div>
-        {{ cond.toString() }}
-        <button
-          mat-flat-button
-          color="secondary"
-          (click)="deleteCondition.emit(cond)"
-          class="inlist-button"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
       </div>
+    </mat-card-title>
+    <mat-card-content *ngIf="conditions.length > 0" cdkDropList class="list"
+      (cdkDropListDropped)="dropCondition($event)">
+      <lib-sortable-list [elements]="conditions"
+        (deleteItem)="deleteCondition.emit($event)"></lib-sortable-list>
     </mat-card-content>
   </mat-card>
 </div>

@@ -375,17 +375,19 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openTwinDialog($event: Twin | null): void {
-    const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin>(
+    const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin | null>(
       TwinDialogComponent,
       {
-        width: "25rem",
+        minWidth: "25rem",
         maxWidth: "95%",
         data: Twin.fromJson($event?.toJson() ?? {}),
       }
     );
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("The dialog was closed");
+      if (result == null) return;
+      this.current.AddTwin(result);
+      console.log("The dialog was closed", result);
     });
   }
 

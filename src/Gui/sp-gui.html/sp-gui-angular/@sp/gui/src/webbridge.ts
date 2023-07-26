@@ -1,4 +1,4 @@
-import { TwinModes, TwinTypes } from "@sp/dbmanager/src/lib/helpers";
+import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/helpers";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { BridgeGlobal, EOF } from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -114,9 +114,9 @@ class WebBridge implements BridgeGlobal {
 
     // Twins
     problem.twins.TwinList.forEach((t) => {
-      if (t.TwinType === TwinTypes.Diagram) return;
+      if (t.TwinType === "Diagram") return;
       rows.push(
-        `Twin ${t.TwinModes === TwinModes.Combined ? "Cont " : ""}${twinmapper[
+        `Twin ${t.TwinModes === TwinModes.Combined ? "Cont " : ""}${popeyeTwinMapper[
           t.TwinType
         ](t.ValueA, t.ValueB, t.ValueC)}`
       );
@@ -148,30 +148,32 @@ const toPopeyePiece = (a: Piece): string =>
     a.traverse[3],
   ].join("");
 
-const twinmapper = {
-  [TwinTypes.Custom]: (...args: string[]) => args.join(" ").trim(),
-  [TwinTypes.Diagram]: () => `Diagram`,
-  [TwinTypes.MovePiece]: (...args: string[]) => `Move ${args.join(" ")}`.trim(),
-  [TwinTypes.RemovePiece]: (...args: string[]) => `Remove ${args[0]}`.trim(),
-  [TwinTypes.AddPiece]: (...args: string[]) => `Add ${args.join(" ")}`.trim(),
-  [TwinTypes.Substitute]: (...args: string[]) =>
+export const popeyeTwinMapper: { [key in TwinTypesKeys]: (...args: string[]) => string } = {
+  Custom: (...args: string[]) => args.join(" ").trim(),
+  Diagram: () => `Diagram`,
+  MovePiece: (...args: string[]) => `Move ${args.join(" ")}`.trim(),
+  RemovePiece: (...args: string[]) => `Remove ${args[0]}`.trim(),
+  AddPiece: (...args: string[]) => `Add ${args.join(" ")}`.trim(),
+  Substitute: (...args: string[]) =>
     `Substitute ${args[0]} ==> ${args[1]}`.trim(),
-  [TwinTypes.SwapPieces]: (...args: string[]) =>
+  SwapPieces: (...args: string[]) =>
     `Exchange ${args[0]} <-> ${args[1]}`.trim(),
-  [TwinTypes.Rotation90]: () => `Rotate 90`,
-  [TwinTypes.Rotation180]: () => `Rotate 180`,
-  [TwinTypes.Rotation270]: () => `Rotate 270`,
-  [TwinTypes.TraslateNormal]: (...args: string[]) =>
+  Rotation90: () => `Rotate 90`,
+  Rotation180: () => `Rotate 180`,
+  Rotation270: () => `Rotate 270`,
+  TraslateNormal: (...args: string[]) =>
     `Shift: ${args[0]} -> ${args[1]}`.trim(),
-  [TwinTypes.TraslateToroidal]: (...args: string[]) =>
+  TraslateToroidal: (...args: string[]) =>
     `Shift: ${args[0]} -> ${args[1]}`.trim(),
-  [TwinTypes.MirrorHorizontal]: () => `Mirror a1<-->a8`,
-  [TwinTypes.MirrorVertical]: () => `Mirror a1<-->h1`,
-  [TwinTypes.Stipulation]: (...args: string[]) =>
+  MirrorHorizontal: () => `Mirror a1<-->a8`,
+  MirrorVertical: () => `Mirror a1<-->h1`,
+  Stipulation: (...args: string[]) =>
     `Stipulation > ${args.join(" ")}`.trim(),
-  [TwinTypes.ChangeProblemType]: (...args: string[]) =>
+  ChangeProblemType: (...args: string[]) =>
     `Stipulation > ${args.join(" ")}`.trim(),
-  [TwinTypes.Duplex]: () => `Duplex`,
-  [TwinTypes.AfterKey]: () => `After Key`,
-  [TwinTypes.SwapColors]: () => `PolishType`,
-} as const;
+  Duplex: () => `Duplex`,
+  AfterKey: () => `After Key`,
+  SwapColors: () => `PolishType`,
+  Condition: (...args: string[]) => `Condition ${args.join(" ")}`.trim(),
+  Mirror: (...args: string[]) => `Mirror ${args.join(" ")}`.trim()
+};

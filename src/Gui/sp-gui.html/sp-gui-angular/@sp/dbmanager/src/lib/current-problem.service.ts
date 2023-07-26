@@ -7,11 +7,14 @@ import {
   PieceRotation,
   ProblemTypes,
   SquareLocation,
-  Traverse
+  Traverse,
+  TwinModes,
+  TwinTypesKeys
 } from "./helpers";
 import { Author, Piece } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
 import { Twin } from "./models/twin";
+import { TwinTypesConfigs } from "./twinTypes";
 
 @Injectable({
   providedIn: "root",
@@ -26,6 +29,23 @@ export class CurrentProblemService {
     if (this.Problem) {
       this.Problem.stipulation.moves = v;
       this.recalcStipulationDesc();
+    }
+  }
+  AddTwin(twindesc: string | Twin) {
+    if (this.Problem) {
+      if (typeof twindesc === "string") {
+        const [twintype, ...twinargs] = twindesc.split(" ");
+        if (TwinTypesConfigs[twintype as TwinTypesKeys] == null) return;
+        twindesc = Twin.fromJson({
+          TwinType: twintype as TwinTypesKeys,
+          TwinModes: TwinModes.Normal,
+          ValueA: twinargs[0],
+          ValueB: twinargs[1],
+          ValueC: twinargs[2]
+        });
+      }
+      if (this.Problem.twins.HasDiagram && twindesc.TwinType === "Diagram") return; // only ONE Diagram can be accepted
+      this.Problem.twins.TwinList.push(twindesc);
     }
   }
   SetStipulationType(v: EndingTypes) {

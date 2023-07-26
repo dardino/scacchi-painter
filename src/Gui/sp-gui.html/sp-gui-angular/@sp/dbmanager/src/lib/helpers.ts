@@ -105,29 +105,31 @@ export interface IProblem {
 export enum SequnceTypes {
   Normal = "Normal",
 }
-export enum TwinTypes {
-  Custom = "Custom",
-  Diagram = "Diagram", // no values
-  MovePiece = "MovePiece", // 2 values
-  RemovePiece = "RemovePiece", // 1 value
-  AddPiece = "AddPiece", // 2 values
-  Substitute = "Substitute", // 3 values
-  SwapPieces = "SwapPieces", // 2 values
-  Rotation90 = "Rotation90", // no value
-  Rotation180 = "Rotation180", // no value
-  Rotation270 = "Rotation270", // no value
-  TraslateNormal = "TraslateNormal", // 2 value
-  TraslateToroidal = "TraslateToroidal", // 2 value
-  MirrorHorizontal = "MirrorHorizontal", // no value
-  MirrorVertical = "MirrorVertical", // no value
-  ChangeProblemType = "ChangeProblemType", // 2 value
-  Duplex = "Duplex", // no value
-  AfterKey = "AfterKey", // no value
-  SwapColors = "SwapColors", // no value
-  Stipulation = "Stipulation", // 1 value
-}
+export const TwinTypes = [
+  "Custom",
+  "Diagram", // no values
+  "MovePiece", // 2 values
+  "RemovePiece", // 1 value
+  "AddPiece", // 2 values
+  "Substitute", // 3 values
+  "SwapPieces", // 2 values
+  "Rotation90", // no value
+  "Rotation180", // no value
+  "Rotation270", // no value
+  "TraslateNormal", // 2 value
+  "TraslateToroidal", // 2 value
+  "Mirror", // 1 value
+  "MirrorHorizontal",
+  "MirrorVertical",
+  "ChangeProblemType", // 2 value
+  "Duplex", // no value
+  "AfterKey", // no value
+  "SwapColors", // no value
+  "Stipulation", // 1 value
+  "Condition", // no value
+] as const;
 
-export type TwinTypesKeys = keyof typeof TwinTypes;
+export type TwinTypesKeys = typeof TwinTypes[number];
 export enum TwinModes {
   Normal = "Normal",
   Combined = "Combined",
@@ -140,7 +142,7 @@ export interface ITwins {
 }
 
 export interface ITwin {
-  TwinType: TwinTypes;
+  TwinType: TwinTypesKeys;
   TwinModes: TwinModes;
   ValueA: string;
   ValueB: string;

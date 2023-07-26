@@ -1,0 +1,25 @@
+<mat-list role="list">
+  <mat-list-item role="listitem"
+    class="box"
+    [class.dragable]="!isDragDisabledForItem?.(item)"
+    *ngFor="let item of elements;"
+    cdkDrag
+    [cdkDragDisabled]="isDragDisabledForItem?.(item) ?? false"
+  >
+    <span matListItemLine>
+      <span class="placeholder" *cdkDragPlaceholder></span>
+      {{ item.toString() }}
+    </span>
+    <span matListItemMeta>
+      <button
+        type="button"
+        *ngIf="canBeDeleted?.(item) ?? true"
+        mat-icon-button
+        color="secondary"
+        (click)="deleteItem.emit(item)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </span>
+  </mat-list-item>
+</mat-list>
