@@ -29,6 +29,7 @@ import { ToolbarDbComponent } from "./toolbar-db/toolbar-db.component";
 import { ToolbarEditComponent } from "./toolbar-edit/toolbar-edit.component";
 import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
 import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
+import { SpSolutionRowComponent } from './sp-solution-row/sp-solution-row.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     FileExplorerComponent,
     FileSourceSelectorComponent,
     ConfirmDialogComponent,
+    SpSolutionRowComponent,
   ],
   imports: [
     CommonModule,

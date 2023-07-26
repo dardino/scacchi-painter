@@ -14,7 +14,9 @@ export class SpSolutionDescComponent implements OnInit {
   constructor(
     private preferences: PreferencesService,
     private problem: CurrentProblemService
-  ) {}
+  ) {
+    // noop
+  }
 
   ngOnInit(): void { /* */ }
 
@@ -29,11 +31,14 @@ export class SpSolutionDescComponent implements OnInit {
     this.problem.SetTextSolution(txt);
   }
 
-  get rows() {
-    return this.problem.textSolution.split("\n") ?? [];
+  get rows(): Array<{ row: string; className: "instruction" | "log" | "solution" }> {
+    return this.problem.textSolution.split("\n").map(row => ({
+      row,
+      className: this.getClass(row)
+    })) ?? [];
   }
 
-  getClass(item: string): string {
+  getClass(item: string) {
     item = item.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
     if (istructionRegExp.test(item)) return "instruction";
     else if (outlogRegExp.test(item)) return "log";

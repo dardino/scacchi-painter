@@ -486,7 +486,6 @@ export const GetSolutionFromElement = async (el: Element) => {
   let solText: HTMLElement[];
 
   const sol = el.querySelector("Solution")?.innerHTML;
-  console.log("🚀 ~ file: helpers.ts:489 ~ GetSolutionFromElement ~ sol:", sol);
   const solRft = el.querySelector("SolutionRtf");
   let solDec = sol ? Base64.decode(sol) : "";
 

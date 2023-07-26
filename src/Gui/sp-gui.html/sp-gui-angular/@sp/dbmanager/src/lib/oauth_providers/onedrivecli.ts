@@ -1,14 +1,14 @@
 import {
-  PublicClientApplication,
-  SilentRequest,
+  AccountInfo,
   AuthenticationResult,
   Configuration,
-  LogLevel,
-  AccountInfo,
-  InteractionRequiredAuthError,
-  RedirectRequest,
-  PopupRequest,
   EndSessionRequest,
+  InteractionRequiredAuthError,
+  LogLevel,
+  PopupRequest,
+  PublicClientApplication,
+  RedirectRequest,
+  SilentRequest,
   SsoSilentRequest,
 } from "@azure/msal-browser";
 

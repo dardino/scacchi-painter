@@ -7,6 +7,7 @@
 ></quill-editor> -->
 <div class="solutions" [style.fontSize]="solutionFontSize">
   <ng-template [ngForOf]="rows" ngFor let-item>
-    <div [class]="getClass(item)">{{item}}</div>
+    <div *ngIf="item.className !== 'solution'" [class]="item.className">{{item.row}}</div>
+    <lib-sp-solution-row *ngIf="item.className === 'solution'" [value]="item.row" [class]="item.className"></lib-sp-solution-row>
   </ng-template>
 </div>
