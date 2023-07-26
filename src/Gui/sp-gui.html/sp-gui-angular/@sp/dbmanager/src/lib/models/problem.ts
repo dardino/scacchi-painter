@@ -69,8 +69,8 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     p.authors = Array.from(source.querySelectorAll("Author")).map((a) =>
       Author.fromElement(a)
     );
-    p.conditions = Array.from(source.querySelectorAll("Conditions") ?? [])
-      .map((el) => el.nodeValue ?? "")
+    p.conditions = Array.from(source.querySelectorAll("Condition") ?? [])
+      .map((el) => el.getAttribute("Value") ?? "")
       .filter(notEmpty);
 
     p.fairyCells = [];

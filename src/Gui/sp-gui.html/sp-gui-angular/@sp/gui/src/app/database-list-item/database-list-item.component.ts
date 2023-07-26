@@ -22,6 +22,15 @@ export class DatabaseListItemComponent {
     if (!twinsNoDiagram.length) return [];
     return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index+1}) ${twin.toString()}`);
   }
+
+  get hasCondition() {
+    return (this.problem?.conditions?.length ?? 0) > 0;
+  }
+
+  get conditions() {
+    return this.problem?.conditions ?? [];
+  }
+
   get authors() {
     return this.problem?.authors.map((author) => author.nameAndSurname).join(", ");
   }
