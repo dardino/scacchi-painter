@@ -9,8 +9,7 @@
       ></lib-toolbar-edit>
     </mat-toolbar>
   </section>
-  <div class="workboard"
-  (mousemove)="resize($event)">
+  <div class="workboard" #workboard>
     <section id="chessboard" #panelleft>
       <div class="chessboard-workarea">
         <lib-chessboard

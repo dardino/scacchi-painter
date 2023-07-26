@@ -65,7 +65,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
-  @ViewChild("panelleft") panelleft: ElementRef;
+  @ViewChild("panelleft") panelleft: ElementRef<HTMLDivElement>;
+  @ViewChild("workboard") workboard: ElementRef<HTMLDivElement>;
 
   private subscribe: Subscription;
 
@@ -192,6 +193,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.endResize();
     this.resetActions();
     this.rows$ubject.complete();
     this.rows$ubject.unsubscribe();
@@ -204,7 +206,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  resize($event: MouseEvent) {
+  resize = ($event: MouseEvent) => {
     if (isNaN(this.resizing.x)) return;
     if ($event.buttons !== 1) {
       this.endResize();
@@ -216,11 +218,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.preferences.editWindowWidth = editWindowWidth;
       this.applyPreferences();
     }
-  }
+  };
 
   private applyPreferences() {
-    (this.panelleft.nativeElement as HTMLDivElement)
-      .style.flex = `0 0 min(max(330px, ${this.preferences.editWindowWidth}px), calc(100vw - 330px))`;
+    this.panelleft.nativeElement.style.flex = `0 0 min(max(330px, ${this.preferences.editWindowWidth}px), calc(100vw - 330px))`;
     window.dispatchEvent(new Event("resize"));
   }
 
@@ -230,10 +231,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       getComputedStyle(this.panelleft.nativeElement as HTMLDivElement).width
     );
     this.resizing = { x: $event.x, initialW: width };
+    this.workboard.nativeElement.addEventListener("mousemove", this.resize);
   }
 
   endResize() {
     this.resizing = { x: NaN, initialW: NaN };
+    this.workboard.nativeElement.removeEventListener("mousemove", this.resize);
   }
 
   leaveResize() {
