@@ -1,11 +1,6 @@
 <div class="dbitem-infos">
   <div class="dbitem">
-    <lib-chessboard
-      [hideInfo]="true"
-      boardType="HTML"
-      class="miniboard"
-      [position]="problem"
-    ></lib-chessboard>
+    <lib-chessboard [hideInfo]="true" boardType="HTML" class="miniboard" [position]="problem"></lib-chessboard>
     <div class="description">
       <dl>
         <dt class="authors">Authors:</dt>
@@ -17,34 +12,25 @@
         <dd class="twins" *ngIf="hasTwins">
           <span class="twin" *ngFor="let twin of twins">{{ twin }}</span>
         </dd>
+
+        <dt class="twins" *ngIf="hasCondition">Conditions:</dt>
+        <dd class="twins" *ngIf="hasCondition">
+          <span class="twin" *ngFor="let condition of conditions">{{ condition }}</span>
+        </dd>
       </dl>
     </div>
     <div class="actions">
-      <button
-        type="button"
-        class="action-button"
-        mat-icon-button
-        color="accent"
-        (click)="removeItem()"
-      >
+      <button type="button" class="action-button" mat-icon-button color="accent" (click)="removeItem()">
         <mat-icon class="action">delete_permanent</mat-icon>
       </button>
-      <a
-        class="action-button"
-        mat-icon-button
-        color="accent"
-        [routerLink]="['/edit/' + dbIndex]"
-      >
+      <a class="action-button" mat-icon-button color="accent" [routerLink]="['/edit/' + dbIndex]">
         <mat-icon class="action">forward</mat-icon>
       </a>
     </div>
   </div>
 </div>
 <div class="dbitem-status">
-  <span class="status-stipulation"
-    ><span>{{ stipulation }}</span
-    ><span>{{ pieceCounter }}</span></span
-  >
+  <span class="status-stipulation"><span>{{ stipulation }}</span><span>{{ pieceCounter }}</span></span>
   <span class="status-twins">
     <span class="twin" *ngFor="let twin of twins">{{twin}}</span>
   </span>

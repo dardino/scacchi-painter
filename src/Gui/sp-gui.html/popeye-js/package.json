@@ -5,8 +5,10 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@types/eslint": "^8",
     "concat": "^1.0.3",
-    "google-closure-compiler": "^20210202.0.0",
+    "eslint": "^8.45.0",
+    "google-closure-compiler": "^20230502.0.0",
     "serve": "^11.3.2",
     "typescript": "^4.2.2"
   },
@@ -14,7 +16,7 @@
     "compile": "yarn tsc -p ./src/tsconfig.json",
     "minify": "google-closure-compiler out/popeye_ww.tmp --js_output_file out/popeye_ww.min.tmp",
     "concat": "concat -o ./out/popeye_ww.js ./out/popeye_ww.min.tmp ./src/py.js",
-    "clear": "del /Q out\\*.tmp",
+    "clear": "rm -rf out/*.tmp",
     "build": "yarn compile && yarn minify && yarn concat && yarn clear"
   },
   "packageManager": "yarn@3.3.1"

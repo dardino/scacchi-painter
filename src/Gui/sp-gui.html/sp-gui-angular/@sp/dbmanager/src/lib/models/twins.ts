@@ -21,6 +21,10 @@ export class Twins implements ITwins {
           "Normal"
       ];
     t.TwinList = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
+    // cleanup if there are too many "Diagram"
+    if (t.TwinList.filter(tw => tw.TwinType === "Diagram").length > 1) {
+      t.TwinList = t.TwinList.filter(tw => tw.TwinType !== "Diagram");
+    }
     if (t.TwinList.length <= 1 || !t.HasDiagram) {
       t.TwinList.unshift(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" }));
     }
@@ -33,6 +37,10 @@ export class Twins implements ITwins {
       p.TwinSequenceTypes = twins.TwinSequenceTypes;
     }
     p.TwinList = (twins.TwinList ?? []).map(Twin.fromJson);
+    // cleanup if there are too many "Diagram"
+    if (p.TwinList.filter(tw => tw.TwinType === "Diagram").length > 1) {
+      p.TwinList = p.TwinList.filter(tw => tw.TwinType !== "Diagram");
+    }
     if (p.TwinList.length <= 1 || !p.HasDiagram) {
       p.TwinList.unshift(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" }));
     }

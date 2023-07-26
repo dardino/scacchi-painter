@@ -40,6 +40,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
   public htmlElements: HTMLElement[] = [];
   public conditions: string[] = [];
   public fairyCells: string[] = [];
+  public tags: string[] = [];
 
   public snapshots: IProblem["snapshots"] = {};
   public currentSnapshotId: keyof IProblem["snapshots"] = main_snapshot;
@@ -69,8 +70,11 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     p.authors = Array.from(source.querySelectorAll("Author")).map((a) =>
       Author.fromElement(a)
     );
-    p.conditions = Array.from(source.querySelectorAll("Conditions") ?? [])
-      .map((el) => el.nodeValue ?? "")
+    p.conditions = Array.from(source.querySelectorAll("Condition") ?? [])
+      .map((el) => el.getAttribute("Value") ?? "")
+      .filter(notEmpty);
+    p.tags = Array.from(source.querySelectorAll("Tag") ?? [])
+      .map((el) => el.getAttribute("Value") ?? "")
       .filter(notEmpty);
 
     p.fairyCells = [];
@@ -89,7 +93,6 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     } else {
       p.saveSnapshot(p.currentSnapshotId ?? main_snapshot);
     }
-
     return p;
   }
 
@@ -124,6 +127,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     b.prizeDescription = a.prizeDescription ? a.prizeDescription : "";
     b.source = a.source ? a.source : "";
     b.conditions = (a.conditions ? [...a.conditions] : []).filter(notEmpty);
+    b.tags = (a.tags ? [...a.tags] : []).filter(notEmpty);
   }
 
   toJson(): Partial<IProblem> {
@@ -143,6 +147,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     if (this.prizeDescription) json.prizeDescription = this.prizeDescription;
     if (this.source) json.source = this.source;
     if (this.conditions) json.conditions = this.conditions;
+    if (this.tags) json.tags = this.tags;
     if (this.snap_keys.length > 0) {
       json.snapshots = this.snap_keys.reduce(
         (a, k) => ({ ...a, [k]: this.snapshots[k] }),
@@ -182,6 +187,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     );
     SP2.setTwins(item, this.twins.toSP2Xml());
     SP2.setConditions(item, this.conditions);
+    SP2.setTags(item, this.tags);
     SP2.setSolution(item, this.textSolution);
     const rtfSol = (await convertToRtf(this.getHtmlString())) ?? this.textSolution;
     SP2.setRtfSolution(item, rtfSol);

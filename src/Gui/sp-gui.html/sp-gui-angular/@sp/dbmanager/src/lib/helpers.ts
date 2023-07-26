@@ -99,6 +99,7 @@ export interface IProblem {
   pieces: Array<Partial<IPiece>> | null;
   twins: Partial<ITwins> | null;
   conditions: string[];
+  tags: string[];
   snapshots: { [key in string | number]: string };
 }
 
