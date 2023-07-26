@@ -1,19 +1,17 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { Author } from "@sp/dbmanager/src/lib/models";
+import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
   CurrentProblemService,
-  ProblemTypes,
   EndingTypes,
-  TwinModes,
-  TwinTypes,
+  ProblemTypes
 } from "@sp/dbmanager/src/public-api";
-import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
 @Component({
   selector: "lib-problem-definitions",
   templateUrl: "./problem-definitions.component.html",
-  styleUrls: ["./problem-definitions.component.less"],
+  styleUrls: ["./problem-definitions.component.less"]
 })
 export class ProblemDefinitionsComponent implements OnInit {
   @Output()
@@ -39,7 +37,7 @@ export class ProblemDefinitionsComponent implements OnInit {
   }
 
   public get twins(): Twin[] {
-    return this.current.Problem?.twins.TwinList ?? [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram })];
+    return this.current.Problem?.twins.TwinList ?? [];
   }
   public set twins(v: Twin[]) {
     this.current.SetTwins(v);
@@ -71,6 +69,18 @@ export class ProblemDefinitionsComponent implements OnInit {
     const moves = parseFloat(v.replace(",", "."));
     this.current.SetStipulationMoves(!isNaN(moves) ? moves : this.current.Problem?.stipulation.moves ?? 2);
   }
+
+  public twinCanBeDeleted(twin: Twin) {
+    return (this.twins?.length > 2) || twin.TwinType !== "Diagram";
+  }
+  public isDragDisabledForTwin = (twin: Twin): boolean => {
+    const length = this.twins?.length ?? 0;
+    const hasDiagram = this.current?.Problem?.twins?.HasDiagram === true;
+    const tooFewElements = length < 2;
+    const tooFewElementsWDiagram = (hasDiagram && length <= 2);
+    const isDiagram = twin.TwinType === "Diagram";
+    return (tooFewElements || tooFewElementsWDiagram || isDiagram);
+  };
 
   constructor(private current: CurrentProblemService) {}
 

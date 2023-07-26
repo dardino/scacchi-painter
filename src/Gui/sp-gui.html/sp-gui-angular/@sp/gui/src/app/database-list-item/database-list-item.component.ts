@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { TwinTypes } from "@sp/dbmanager/src/public-api";
 
 @Component({
   selector: "app-database-list-item",
@@ -15,11 +14,11 @@ export class DatabaseListItemComponent {
   @Output() delete = new EventEmitter<number>(true);
 
   get hasTwins() {
-    const twinsNoDiagram = this.problem?.twins?.TwinList.filter(twin => twin.TwinType !== TwinTypes.Diagram) ?? [];
+    const twinsNoDiagram = this.problem?.twins?.TwinList.filter(twin => twin.TwinType !== "Diagram") ?? [];
     return !!twinsNoDiagram.length;
   }
   get twins() {
-    const twinsNoDiagram = this.problem?.twins?.TwinList.filter(twin => twin.TwinType !== TwinTypes.Diagram) ?? [];
+    const twinsNoDiagram = this.problem?.twins?.TwinList.filter(twin => twin.TwinType !== "Diagram") ?? [];
     if (!twinsNoDiagram.length) return [];
     return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index+1}) ${twin.toString()}`);
   }

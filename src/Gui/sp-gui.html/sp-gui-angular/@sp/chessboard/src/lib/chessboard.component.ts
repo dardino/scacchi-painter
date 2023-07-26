@@ -1,28 +1,27 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
+  AfterViewInit,
   Component,
-  OnInit,
+  ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
   OnDestroy,
+  OnInit,
   Output,
-  EventEmitter,
+  ViewChild,
 } from "@angular/core";
+import { FenService } from "@sp/dbmanager/src/lib/fen.service";
+import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
-  SquareLocation,
   GetLocationFromIndex,
   GetSquareIndex,
-  TwinTypes,
+  SquareLocation
 } from "@sp/dbmanager/src/public-api";
-import { FenService } from "@sp/dbmanager/src/lib/fen.service";
 import {
-  CanvasChessBoard,
   Piece as BP,
+  CanvasChessBoard,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
-import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
@@ -220,7 +219,7 @@ export class ChessboardComponent
     return (
       (this.position?.twins.TwinList.length ?? 0) &&
       this.position?.twins.TwinList.every(
-        (t) => t.TwinType !== TwinTypes.Diagram
+        (t) => t.TwinType !== "Diagram"
       )
     );
   }

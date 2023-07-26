@@ -1,22 +1,29 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ITwins, SequnceTypes, createXmlElement, notEmpty, TwinModes, TwinTypes } from "../helpers";
+import { ITwins, SequnceTypes, TwinModes, createXmlElement } from "../helpers";
 import { Twin } from "./twin";
 
 export class Twins implements ITwins {
-  TwinList: Twin[] = [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram })];
+  TwinList: Twin[] = [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" })];
   TwinSequenceTypes: SequnceTypes = SequnceTypes.Normal;
+  get HasDiagram(): boolean {
+    return (this.TwinList ?? []).find(tw => tw.TwinType === "Diagram") != null;
+  }
+  get ZeroPosition(): boolean {
+    return !this.HasDiagram && this.TwinList.length > 1;
+  }
   private constructor() {}
   public static fromElement(el: Element | null): Twins {
     const t = new Twins();
     if (el == null) return t;
-
     t.TwinSequenceTypes =
       SequnceTypes[
         (el.getAttribute("TwinSequenceTypes") as keyof typeof SequnceTypes) ||
           "Normal"
       ];
     t.TwinList = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
-    if (t.TwinList.length === 0) t.TwinList.push(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram }));
+    if (t.TwinList.length <= 1 || !t.HasDiagram) {
+      t.TwinList.unshift(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" }));
+    }
     return t;
   }
   static fromJson(twins: ITwins | null | undefined): Twins {
@@ -25,8 +32,10 @@ export class Twins implements ITwins {
     if (twins.TwinSequenceTypes != null) {
       p.TwinSequenceTypes = twins.TwinSequenceTypes;
     }
-    p.TwinList = (twins.TwinList || []).map(Twin.fromJson);
-    if (p.TwinList.length === 0) p.TwinList.push(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: TwinTypes.Diagram }));
+    p.TwinList = (twins.TwinList ?? []).map(Twin.fromJson);
+    if (p.TwinList.length <= 1 || !p.HasDiagram) {
+      p.TwinList.unshift(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" }));
+    }
     return p;
   }
   toJson(): Partial<ITwins> {

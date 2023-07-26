@@ -1,1 +1,46 @@
-<p>twin-dialog works!</p>
+<h1 mat-dialog-title>Add Twin to problem</h1>
+<div mat-dialog-content>
+  <h3>Choose the twin type then add the twin parameters</h3>
+  <mat-form-field color="accent" appearance="outline" class="input-condition">
+    <mat-label>Pick one</mat-label>
+    <input type="text"
+      placeholder="Pick one"
+      matInput
+      (ngModelChange)="pickTwinType($event)"
+      [formControl]="myControl"
+      [matAutocomplete]="auto"
+      [value]="newTwinType"
+    />
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredTwinTypes | async" [value]="option.keyword">
+        {{option.keyword}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <p>{{twinModelDesc?.title}}</p>
+  <div class="arguments" *ngIf="newTwinType !== '' && twinModelDesc">
+    <div class="argument" *ngFor="let arg of twinModelDesc.parameters; index as $index;">
+      <mat-form-field>
+        <mat-label>{{arg.description}}</mat-label>
+        <input type="text" matInput
+        [placeholder]="arg.description"
+        [matAutocomplete]="auto"
+        [(ngModel)]="argValues[$index]" >
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option *ngFor="let option of arg.values" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+          </mat-form-field>
+    </div>
+  </div>
+  <code>{{commandText}}</code>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="null">
+    Cancel
+  </button>
+  <button mat-button [mat-dialog-close]="twin" cdkFocusInitial>
+    Add
+  </button>
+</div>

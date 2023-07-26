@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
 import { FormControl } from "@angular/forms";
-import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
+import { MatDialogRef } from "@angular/material/dialog";
 import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanager/src/lib/models/fairesDB";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
 
 @Component({
   selector: "app-conditions-dialog",

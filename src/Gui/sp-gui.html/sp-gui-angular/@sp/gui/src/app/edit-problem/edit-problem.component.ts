@@ -1,11 +1,11 @@
 import { Location } from "@angular/common";
 import {
-  AfterViewChecked,
+  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -34,7 +34,7 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
   templateUrl: "./edit-problem.component.html",
   styleUrls: ["./edit-problem.component.less"],
 })
-export class EditProblemComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public get rows$() {
     return this.rows$ubject.asObservable();
   }
@@ -198,7 +198,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewChecked
     this.subscribe.unsubscribe();
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewInit(): void {
     setTimeout(() => {
       this.applyPreferences();
     });
@@ -207,14 +207,15 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewChecked
   resize($event: MouseEvent) {
     if (isNaN(this.resizing.x)) return;
     if ($event.buttons !== 1) {
-      console.log($event.buttons);
       this.endResize();
       return;
     }
     const delta = $event.x - this.resizing.x;
     const editWindowWidth = this.resizing.initialW + delta;
-    this.preferences.editWindowWidth = editWindowWidth;
-    this.applyPreferences();
+    if (this.preferences.editWindowWidth !== editWindowWidth) {
+      this.preferences.editWindowWidth = editWindowWidth;
+      this.applyPreferences();
+    }
   }
 
   private applyPreferences() {
@@ -374,17 +375,19 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   openTwinDialog($event: Twin | null): void {
-    const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin>(
+    const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin | null>(
       TwinDialogComponent,
       {
-        width: "25rem",
+        minWidth: "25rem",
         maxWidth: "95%",
         data: Twin.fromJson($event?.toJson() ?? {}),
       }
     );
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("The dialog was closed");
+      if (result == null) return;
+      this.current.AddTwin(result);
+      console.log("The dialog was closed", result);
     });
   }
 
@@ -403,7 +406,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   deleteCondition($event: string) {
-    console.log("remove condition", $event);
     this.current.RemoveCondition($event);
   }
 
