@@ -2,6 +2,7 @@
 
 ## Next
 
+- [ ] Showing saved solution when Opening specific position
 - [x] Preferences:
   - [x] Size of the sidebar memoized
   - [x] Size of the font for the solution panel

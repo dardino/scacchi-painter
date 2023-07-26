@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { Problem } from "@sp/dbmanager/src/lib/models";
+import { Component, OnInit } from "@angular/core";
+import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 
@@ -11,10 +11,10 @@ import { PreferencesService } from "@sp/gui/src/app/services/preferences.service
   styleUrls: ["./sp-solution-desc.component.less"],
 })
 export class SpSolutionDescComponent implements OnInit {
-  constructor(private preferences: PreferencesService) {}
-
-  @Input()
-  public problem: Problem | null;
+  constructor(
+    private preferences: PreferencesService,
+    private problem: CurrentProblemService
+  ) {}
 
   ngOnInit(): void { /* */ }
 
@@ -23,14 +23,14 @@ export class SpSolutionDescComponent implements OnInit {
   }
 
   get solution() {
-    return this.problem?.textSolution ?? "";
+    return this.problem.textSolution ?? "";
   }
   set solution(txt: string) {
-    if (this.problem) this.problem.textSolution = txt;
+    this.problem.SetTextSolution(txt);
   }
 
   get rows() {
-    return this.problem?.textSolution.split("\n") ?? [];
+    return this.problem.textSolution.split("\n") ?? [];
   }
 
   getClass(item: string): string {

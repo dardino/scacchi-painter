@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 
@@ -19,10 +19,6 @@ export class ToolbarDbComponent implements OnInit {
   get totalCount() {
     return this.db.Count;
   }
-  get currentProblem() {
-    return this.db.CurrentProblem;
-  }
-
   ngOnInit() {
   }
 
