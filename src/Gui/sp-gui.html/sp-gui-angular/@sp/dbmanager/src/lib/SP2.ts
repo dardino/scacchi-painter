@@ -2,19 +2,19 @@
 import {
   Figurine,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
+import { Base64 } from "./base64";
 import {
-  notNull,
-  Traverse,
   Columns,
-  SP2PieceName,
   PieceColors,
   PieceRotation,
-  createXmlElement,
-  notEmpty,
+  SP2PieceName,
+  Traverse,
   XMLProblemTypesKeys,
   XMLStipulationTypes,
+  createXmlElement,
+  notEmpty,
+  notNull,
 } from "./helpers";
-import { Base64 } from "./base64";
 
 const invertMap = <K extends string, V extends string>(
   o: { [key in K]: V }
@@ -70,6 +70,15 @@ export class SP2 {
     const list = createXmlElement("Conditions");
     conditions.filter(notEmpty).forEach((c) => {
       const cx = createXmlElement("Condition");
+      cx.setAttribute("Value", c);
+      list.appendChild(cx);
+    });
+    item.appendChild(list);
+  }
+  static setTags(item: Element, tags: string[]) {
+    const list = createXmlElement("Tags");
+    tags.filter(notEmpty).forEach((c) => {
+      const cx = createXmlElement("Tag");
       cx.setAttribute("Value", c);
       list.appendChild(cx);
     });
