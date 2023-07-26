@@ -486,13 +486,15 @@ export const GetSolutionFromElement = async (el: Element) => {
   let solText: HTMLElement[];
 
   const sol = el.querySelector("Solution")?.innerHTML;
+  console.log("🚀 ~ file: helpers.ts:489 ~ GetSolutionFromElement ~ sol:", sol);
   const solRft = el.querySelector("SolutionRtf");
-  const solDec = sol ? Base64.decode(sol) : "";
+  let solDec = sol ? Base64.decode(sol) : "";
 
   if (solRft != null && solRft.innerHTML.length > 0) {
     solText = await convertFromRtf(
       Base64.decode(solRft.innerHTML).replace(/\r/g, "")
     );
+    if (solDec === "") solDec = solText.map(row => row.innerText).join("\r\n");
   } else {
     if (!sol) solText = [];
     else {

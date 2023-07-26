@@ -5,6 +5,7 @@
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
+  "id": "scacchipainterx",
   "start_url": "./",
   "icons": [
     {

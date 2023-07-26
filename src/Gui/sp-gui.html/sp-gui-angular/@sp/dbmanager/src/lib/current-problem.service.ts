@@ -17,6 +17,11 @@ import { Twin } from "./models/twin";
   providedIn: "root",
 })
 export class CurrentProblemService {
+
+  get textSolution(): string {
+    return this.Problem?.textSolution ?? "";
+  }
+
   SetStipulationMoves(v: number) {
     if (this.Problem) {
       this.Problem.stipulation.moves = v;
@@ -174,6 +179,11 @@ export class CurrentProblemService {
   Snapshot() {
     if (!this.Problem) return;
     this.Problem.saveSnapshot();
+  }
+
+  SetTextSolution(sol: string) {
+    if (!this.Problem) return;
+    this.Problem.textSolution = sol;
   }
 
   private swapPieces(from: SquareLocation, to: SquareLocation) {
