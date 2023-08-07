@@ -5,6 +5,8 @@ import { Problem } from "@sp/dbmanager/src/lib/models";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { BehaviorSubject, Observable } from "rxjs";
+import { intersect } from "../tools/array";
+import { includes } from "../tools/string";
 export interface ProblemRef {
   problem: Problem | null;
   dbIndex: number;
@@ -17,7 +19,7 @@ export interface ProblemRef {
 })
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db);
-  constructor(private db: DbmanagerService, private modal: DialogService, private route: Router) {}
+  constructor(private db: DbmanagerService, private modal: DialogService, private route: Router) { }
   ngOnInit(): void {
     if (this.db.All.length < 1) {
       this.route.navigate(["/openfile"]);
@@ -31,6 +33,8 @@ export class DatabaseListComponent implements OnInit {
 
   public valueChange($event: Event) {
     this.searchValue = ($event.target as HTMLInputElement).value;
+    console.log(this.searchValue );
+    this.itemSource.filter(this.searchValue);
   };
 
   async createNewPosition() {
@@ -86,15 +90,34 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   private async reload() {
     const items = this.db.All;
     this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex, problem }));
-    this.filter();
+    this.filter("");
   }
-  private async filter() {
+  public async filter(text: string) {
     this.filteredDataSource = this.originalDataSource.slice();
+    if (text.trim() !== "") {
+      this.filteredDataSource = this.filteredDataSource.filter(filterByText(text));
+    }
     this.filteredDataSource.unshift({ dbIndex: -1, problem: null });
     this.sortDescByDate();
+    this.itemsSubject.next(this.filteredDataSource);
   }
   private async sortDescByDate() {
     this.filteredDataSource.reverse();
-    this.itemsSubject.next(this.filteredDataSource);
   }
 }
+
+const filterByText = (text: string, cfg = { stipulation: true, names: true, source: true }) => {
+  const textTokens = text.toLowerCase().split(" ");
+  return (e: ProblemRef, i: number, a: ProblemRef[]) => {
+    if (!e.problem) return false;
+    const stip = e.problem.stipulation.completeStipulationDesc.toLowerCase();
+    const names = e.problem.authors.map(aut => aut.nameAndSurname.toLowerCase());
+    const magazine = e.problem.source.toLowerCase();
+
+    const isMatch = (cfg.stipulation && textTokens.filter(tok => stip.includes(tok)).length > 0)
+        || (cfg.names && intersect(names, textTokens, includes).length > 0)
+        || (cfg.source && textTokens.filter(tok =>  magazine.includes(tok)).length > 0);
+
+    return isMatch;
+  };
+};

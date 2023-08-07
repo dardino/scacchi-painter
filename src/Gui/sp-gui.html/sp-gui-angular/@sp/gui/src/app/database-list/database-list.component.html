@@ -10,7 +10,7 @@
 <section id="sidebar">
   <mat-form-field>
     <mat-label>Search for problem</mat-label>
-    <input matInput [value]="searchValue">
+    <input matInput [value]="searchValue" (change)="valueChange($event)">
     <mat-icon matSuffix>search</mat-icon>
     <mat-hint>Example: Hm#3 or d2-d3</mat-hint>
   </mat-form-field>
