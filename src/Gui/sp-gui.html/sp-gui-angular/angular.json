@@ -6,6 +6,7 @@
     "analytics": "014f9cc7-0686-40f3-9849-09116ddf25ba"
   },
   "newProjectRoot": "@sp",
+
   "projects": {
     "gui": {
       "projectType": "application",
@@ -118,18 +119,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "gui:build"
+            "buildTarget": "gui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "gui:build:production"
+              "buildTarget": "gui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gui:build"
+            "buildTarget": "gui:build"
           }
         },
         "test": {

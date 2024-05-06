@@ -11,10 +11,13 @@ export class ToolbarEngineComponent implements OnInit {
   public hideLabels: boolean;
 
   @Output()
-  public startSolve = new EventEmitter();
+  public startSolve = new EventEmitter<"start" | "try">();
 
   @Output()
-  public stopSolve = new EventEmitter();
+  public stopSolve = new EventEmitter<"stop">();
+
+  @Output()
+  public toggleLog = new EventEmitter<void>();
 
   @Input()
   isRunning: boolean;
@@ -47,13 +50,16 @@ export class ToolbarEngineComponent implements OnInit {
   }
   tryMove() {
     console.log("[LOG] -> start engine in try mode...");
-    this.stopSolve.emit("try");
+    this.startSolve.emit("try");
   }
   increaseFontSize() {
     this.fontSize += .1;
   }
   decreaseFontSize() {
     this.fontSize -= .1;
+  }
+  toggleEngineLog() {
+    this.toggleLog.emit();
   }
 
   ngOnInit(): void {}

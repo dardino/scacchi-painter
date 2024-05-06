@@ -196,6 +196,12 @@ export class CurrentProblemService {
     if (!this.Problem) return;
     this.Problem.loadSnapshot(snapshotID, true);
   }
+  UpdateSnapshot() {
+    if (!this.Problem) return;
+
+    this.Problem.saveSnapshot(this.Problem.currentSnapshotId);
+    this.dbManager.SaveTemporary();
+  }
   Snapshot() {
     if (!this.Problem) return;
     this.Problem.saveSnapshot();

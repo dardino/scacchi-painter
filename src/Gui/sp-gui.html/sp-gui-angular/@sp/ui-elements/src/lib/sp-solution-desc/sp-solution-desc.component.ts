@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
@@ -17,6 +17,9 @@ export class SpSolutionDescComponent implements OnInit {
   ) {
     // noop
   }
+
+  @Input()
+  showLog: boolean = false;
 
   ngOnInit(): void { /* */ }
 
