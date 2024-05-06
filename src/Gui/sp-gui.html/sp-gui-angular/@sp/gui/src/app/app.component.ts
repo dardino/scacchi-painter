@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
-import { Observable, Subscription } from "rxjs";
-import { map } from "rxjs/operators";
-import { HostBridgeService } from "@sp/host-bridge/src/public-api";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
+import { ActivatedRoute } from "@angular/router";
+import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { HostBridgeService } from "@sp/host-bridge/src/public-api";
+import { Observable, Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 import { environment } from "../environments/environment";
-import { Router, ActivatedRoute } from "@angular/router";
 import { RoutesList } from "./app-routing-list";
 
 @Component({
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private bridge: HostBridgeService,
     private domSanitizer: DomSanitizer,
     private route: ActivatedRoute
-  ) {}
+  ) { }
   get hasCloseButton() {
     return this.bridge.supportsClose;
   }
@@ -100,6 +100,8 @@ export class AppComponent implements OnInit, OnDestroy {
         `${environment.assetFolder}/toolbar/flipv.svg`
       )
     );
+
+
     this.db.Reload();
   }
   async closeMe() {

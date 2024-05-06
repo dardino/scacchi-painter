@@ -6,6 +6,7 @@
     "analytics": "014f9cc7-0686-40f3-9849-09116ddf25ba"
   },
   "newProjectRoot": "@sp",
+
   "projects": {
     "gui": {
       "projectType": "application",
