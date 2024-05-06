@@ -55,14 +55,15 @@
             <mat-toolbar>
               <lib-toolbar-engine
                 *ngIf="engineEnabled"
-                (startSolve)="startSolve()"
+                (startSolve)="startSolve($event)"
                 (stopSolve)="stopSolve()"
+                (toggleLog)="toggleLog()"
                 [isRunning]="solveInProgress"
                 [hideLabels]="true"
               ></lib-toolbar-engine>
             </mat-toolbar>
             <div class="tab-content">
-              <lib-sp-solution-desc></lib-sp-solution-desc>
+              <lib-sp-solution-desc [showLog]="showLog"></lib-sp-solution-desc>
             </div>
           </ng-template>
         </mat-tab>

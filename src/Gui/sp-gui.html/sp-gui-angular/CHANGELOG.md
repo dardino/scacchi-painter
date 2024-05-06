@@ -2,6 +2,7 @@
 
 ## Next
 
+- [x] "Try Move" function
 - [x] [#105 List of problems](https://github.com/dardino/scacchi-painter/issues/105)
 - [x] [#39 Twin editor](https://github.com/dardino/scacchi-painter/issues/39)
 - [x] Showing saved solution when Opening specific position

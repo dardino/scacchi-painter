@@ -1,6 +1,6 @@
 import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/helpers";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
-import { BridgeGlobal, EOF } from "@sp/host-bridge/src/lib/bridge-global";
+import { BridgeGlobal, EOF, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
 
 class WebBridge implements BridgeGlobal {
@@ -60,7 +60,8 @@ class WebBridge implements BridgeGlobal {
   }
   runSolve(
     CurrentProblem: Problem,
-    engine: string
+    engine: string,
+    mode: SolveModes
   ): Observable<string | EOF> | Error {
     if (engine !== "Popeye") {
       return new Error("Engine not found.");
@@ -69,13 +70,13 @@ class WebBridge implements BridgeGlobal {
       `starting engine <${engine}>`
     );
 
-    const problem = this.problemToPopeye(CurrentProblem).join("\n");
+    const problem = this.problemToPopeye(CurrentProblem, mode).join("\n");
     this.startSolve(problem);
     this.ww.postMessage({ problem });
 
     return this.solver$.asObservable();
   }
-  public problemToPopeye(problem: Problem): string[] {
+  public problemToPopeye(problem: Problem, mode: SolveModes): string[] {
     const rows: string[] = [];
 
     const extraOptions: string[] = [];
@@ -97,13 +98,13 @@ class WebBridge implements BridgeGlobal {
         if (withAttr.length > 0) rows.push(`${color} ${withAttr.join(" ")}`);
       }
     );
-
     // Stipulation
     let dmoves = Math.floor(problem.stipulation.moves);
     if (dmoves !== problem.stipulation.moves) {
       extraOptions.push("WhiteToPlay");
       dmoves++;
     }
+    if (mode === "try") extraOptions.push("PostKeyPlay");
     rows.push(
       `Stipulation ${problem.stipulation.simpleStipulationDesc}${dmoves}`
     );

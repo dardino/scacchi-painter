@@ -8,7 +8,8 @@ export interface BridgeGlobal {
   stopSolve(): void;
   runSolve(
     CurrentProblem: Problem,
-    engine: string
+    engine: string,
+    mode: SolveModes
   ): Observable<string | EOF> | Error;
   supportsEngine(engine: string): boolean;
 }
@@ -17,3 +18,5 @@ export interface EOF {
   exitCode: number;
   message: string;
 }
+
+export type SolveModes = "start" | "try";

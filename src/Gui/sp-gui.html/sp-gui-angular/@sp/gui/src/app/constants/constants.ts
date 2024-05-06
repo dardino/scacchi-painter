@@ -1,6 +1,6 @@
 export const istructionRegExp = new RegExp(
   // eslint-disable-next-line max-len
-  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye).*$`
+  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye|try play).*$`
 );
 export const outlogRegExp = new RegExp(
   `^(ERR:|Execute|Popeye|starting engine|Engine process|program exited).*$`

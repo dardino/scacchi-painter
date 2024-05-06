@@ -196,7 +196,9 @@ export class DbmanagerService {
     const fileSaver = await import("file-saver");
     fileSaver.saveAs(file, this.FileName);
   }
-
+  public async SaveTemporary() {
+    await this.saveToLocalStorage();
+  }
   public async Save() {
     this.workInProgress.next(true);
     // first of all save the current problem into local storage

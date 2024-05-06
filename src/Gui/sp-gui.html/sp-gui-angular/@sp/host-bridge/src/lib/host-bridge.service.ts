@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Subject, Subscription } from "rxjs";
-import { BridgeGlobal } from "./bridge-global";
+import { BridgeGlobal, SolveModes } from "./bridge-global";
 
 declare global {
   interface HandledFile {
@@ -50,12 +50,12 @@ export class HostBridgeService {
     return window.Bridge?.supportsEngine(engine);
   }
 
-  startSolve(CurrentProblem: Problem): Error | undefined {
+  startSolve(CurrentProblem: Problem, mode: SolveModes): Error | undefined {
     if (this.subscription != null) {
       console.warn("[WARN] -> Solver already started!");
       return new Error("Solver already started!");
     }
-    const obs = window.Bridge?.runSolve(CurrentProblem, "Popeye");
+    const obs = window.Bridge?.runSolve(CurrentProblem, "Popeye", mode);
     if (!obs) return new Error("Engine not found!");
     if (obs instanceof Error) return obs;
 

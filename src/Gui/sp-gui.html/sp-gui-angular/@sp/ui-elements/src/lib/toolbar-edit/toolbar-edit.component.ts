@@ -1,5 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { MatButtonToggleChange } from "@angular/material/button-toggle";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { EditModes } from "../toolbar-piece/toolbar-piece.component";
 
 export type EditCommand =
@@ -12,6 +11,7 @@ export type EditCommand =
   | "moveL"
   | "moveR"
   | "resetPosition"
+  | "updatePosition"
   | "clearBoard";
 
 @Component({
@@ -66,6 +66,9 @@ export class ToolbarEditComponent implements OnInit {
   }
   resetPosition() {
     this.editCommand.emit("resetPosition");
+  }
+  updatePosition() {
+    this.editCommand.emit("updatePosition");
   }
   clearBoard() {
     this.editCommand.emit("clearBoard");
