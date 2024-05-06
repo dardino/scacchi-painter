@@ -7,6 +7,20 @@
   "scope": "./",
   "id": "scacchipainterx",
   "start_url": "./",
+  "display_override": [
+    "window-controls-overlay"
+  ],
+  "file_handlers": [
+    {
+      "action": "/openfile",
+      "accept": {
+        "text/*": [
+          ".sp3",
+          ".sp2"
+        ]
+      }
+    }
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",

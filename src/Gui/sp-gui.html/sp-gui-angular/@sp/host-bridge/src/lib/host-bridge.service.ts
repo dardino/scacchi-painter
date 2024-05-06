@@ -1,11 +1,21 @@
 import { Injectable, NgZone } from "@angular/core";
-import { BridgeGlobal } from "./bridge-global";
-import { Subject, Subscription } from "rxjs";
 import { Problem } from "@sp/dbmanager/src/lib/models";
+import { Subject, Subscription } from "rxjs";
+import { BridgeGlobal } from "./bridge-global";
 
 declare global {
+  interface HandledFile {
+    getFile(): Promise<Blob>;
+    name: string;
+  }
+  interface FileHandlerAPIParams {
+    files: HandledFile[];
+  }
   interface Window {
     Bridge?: BridgeGlobal;
+    launchQueue?: {
+      setConsumer(callback: (params: FileHandlerAPIParams) => void): void;
+    };
   }
 }
 

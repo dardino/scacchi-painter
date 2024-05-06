@@ -1,6 +1,6 @@
 {
   "name": "sp-gui-angular",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "debugger": "yarn remotedebug_ios_webkit_adapter --port 9000",
     "tunnel": "yarn lt --port 4200 --local-https true --allow-invalid-cert -o",
@@ -84,5 +84,5 @@
     "typescript": "^5.1.6",
     "webpack-bundle-analyzer": "^4.9.0"
   },
-  "packageManager": "yarn@3.6.1"
+  "packageManager": "yarn@4.2.1"
 }

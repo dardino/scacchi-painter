@@ -128,7 +128,26 @@ class WebBridge implements BridgeGlobal {
   }
 }
 
+const handleFiles = async (files: HandledFile[]) => {
+    for (const file of files) {
+        const blob = await file.getFile();
+        // blob.handle = file;
+        const text = await blob.text();
+        // TODO: open the file
+        console.log(`${file.name} handled, content: ${text}`);
+    }
+};
+
 export const polyfillBridge = () => {
+  if ("launchQueue" in window) {
+    console.log("File Handling API is supported!");
+    window.launchQueue?.setConsumer((launchParams) => {
+      handleFiles(launchParams.files);
+    });
+  } else {
+    console.error("File Handling API is not supported!");
+  }
+
   if (!window.Bridge) {
     window.Bridge = new WebBridge();
   }
