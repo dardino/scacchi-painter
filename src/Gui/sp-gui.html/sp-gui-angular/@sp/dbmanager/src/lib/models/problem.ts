@@ -37,7 +37,10 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
-  public htmlElements: HTMLElement[] = [];
+  #htmlEls: HTMLElement[] = [];
+
+  public get htmlElements(): HTMLElement[] { return this.#htmlEls; }
+  public set htmlElements(value: HTMLElement[]) { this.#htmlEls = value; }
   public conditions: string[] = [];
   public fairyCells: string[] = [];
   public tags: string[] = [];
@@ -141,6 +144,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
     if (this.htmlElements) json.htmlSolution = this.getHtmlString();
+    if (this.textSolution) json.textSolution = this.textSolution;
     if (this.date) json.date = this.date;
     if (this.personalID) json.personalID = this.personalID;
     if (this.prizeRank) json.prizeRank = this.prizeRank;

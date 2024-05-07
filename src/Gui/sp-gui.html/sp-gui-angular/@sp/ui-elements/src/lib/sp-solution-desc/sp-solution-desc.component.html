@@ -1,4 +1,6 @@
-<quill-editor class="quill-editor" [modules]="{ toolbar: [['bold', 'italic', 'underline']] }" format="html"
+<quill-editor class="quill-editor"
+  preserveWhitespace
+  [modules]="{ toolbar: [['bold', 'italic', 'underline']] }" format="html"
   *ngIf="viewMode === 'both' || viewMode === 'html'" [(ngModel)]="solutionHtml"
   placeholder="Run solution engine with the 'play' button"></quill-editor>
 <div *ngIf="viewMode === 'both' || viewMode === 'txt'" class="solutions" [style.fontSize]="solutionFontSize">

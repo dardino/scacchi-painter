@@ -171,7 +171,8 @@ export class DbmanagerService {
 
   private async saveToLocalStorage() {
     if (!this.currentFile) return;
-    const text = JSON.stringify(this.toJSON());
+    const jsonObj = this.toJSON();
+    const text = JSON.stringify(jsonObj);
     localStorage.setItem("spdb", text);
     localStorage.setItem("spdb_info", JSON.stringify(this.currentFile));
   }

@@ -24,7 +24,7 @@ import {
 import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, skip } from "rxjs";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
@@ -106,9 +106,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     figurine: string | null;
     rotation: number | null;
   } = {
-    figurine: null,
-    rotation: null,
-  };
+      figurine: null,
+      rotation: null,
+    };
 
   get boardCursor(): {
     figurine: string | null;
@@ -116,23 +116,23 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   } | null {
     const editModeCursor = (this.editMode === "remove" ? "X" : null);
     const figurine =
-    this.editMode === "select" ? null
-    : this.pieceToAdd ??
-    this.pieceToMove?.cursor() ?? editModeCursor;
+      this.editMode === "select" ? null
+        : this.pieceToAdd ??
+        this.pieceToMove?.cursor() ?? editModeCursor;
 
     const rotation =
-    this.rotationToAdd ??
-    (this.pieceToMove?.rotation
-      ? getCanvasRotation(this.pieceToMove.rotation)
-      : null) ??
+      this.rotationToAdd ??
+      (this.pieceToMove?.rotation
+        ? getCanvasRotation(this.pieceToMove.rotation)
+        : null) ??
       null;
 
-      if (
+    if (
       figurine &&
       (this.actualCursor?.figurine !== figurine ||
         this.actualCursor.rotation !== rotation)
-      ) {
-        this.actualCursor = {
+    ) {
+      this.actualCursor = {
         figurine,
         rotation,
       };
@@ -180,8 +180,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resetActions();
   }
 
+  //#region NG Component life cycle
   ngOnInit(): void {
-    this.subscribe = this.engine.solution$.subscribe((msg) => {
+    this.subscribe = this.engine.solution$.pipe(
+      skip(1) // skip first execution to avoid the reset of text at load
+    ).subscribe((msg) => {
       this.rows.push(...msg.replace(/\r/g, "").split("\n"));
       this.rows$ubject.next(this.rows);
       if (this.current.Problem) {
@@ -214,6 +217,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.applyPreferences();
     });
   }
+  //#endregion NG Component life cycle
 
   resize = ($event: MouseEvent) => {
     if (isNaN(this.resizing.x)) return;
@@ -340,8 +344,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         figurine[0] === "w"
           ? "White"
           : figurine[0] === "b"
-          ? "Black"
-          : "Neutral",
+            ? "Black"
+            : "Neutral",
     }) as Piece;
     this.current.AddPieceAt(loc, p);
   }
@@ -366,18 +370,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     this.pieceToAdd = null;
     this.pieceToMove = null;
-  }
-
-  private toHtml(rows: string[]) {
-    return rows
-      .map((f) => {
-        const t = tag(f);
-        if (t == null) return null;
-        const div = document.createElement("div");
-        div.innerHTML = `<${t}>${f}</${t}>`;
-        return div;
-      })
-      .filter(notNull);
   }
 
   private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {
@@ -422,11 +414,28 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   deleteTwin($event: Twin) {
     this.current.RemoveTwin($event);
   }
+
+
+  private toHtml(rows: string[]) {
+    return rows
+      .map((line) => {
+        const {t, css} = tagAndStyle(line);
+        if (t == null) return null;
+        const tag = document.createElement("div");
+        const subTag = document.createElement(t);
+        subTag.setAttribute("style", css);
+        subTag.innerHTML = line;
+        tag.appendChild(subTag);
+        return tag;
+      })
+      .filter(notNull);
+  }
+
 }
 
-const tag = (text: string) => {
+const tagAndStyle = (text: string): { t:string, css: string } => {
   text = text.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  if (istructionRegExp.test(text)) return "em";
-  else if (outlogRegExp.test(text)) return null;
-  else return "span";
+  if (outlogRegExp.test(text)) return { t: "em", css: "font-size: smaller;" };
+  else if (istructionRegExp.test(text)) return { t: "em", css: "" };
+  else return { t: "span", css: "white-space: pre;" };
 };

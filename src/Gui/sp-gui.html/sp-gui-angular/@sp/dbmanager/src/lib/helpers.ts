@@ -90,6 +90,7 @@ export interface IStipulation {
 export interface IProblem {
   stipulation: Partial<IStipulation>;
   htmlSolution: string;
+  textSolution: string;
   date: string;
   prizeRank: number;
   personalID: string;
