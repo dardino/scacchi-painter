@@ -1,5 +1,6 @@
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
-import { Component, OnInit } from "@angular/core";
+import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
@@ -19,14 +20,24 @@ export interface ProblemRef {
 })
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db);
-  constructor(private db: DbmanagerService, private modal: DialogService, private route: Router) { }
+  @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
+  constructor(private db: DbmanagerService, private modal: DialogService, private router: Router) {
+  }
   ngOnInit(): void {
     if (this.db.All.length < 1) {
-      this.route.navigate(["/openfile"]);
+      this.router.navigate(["/openfile"]);
     }
+    setTimeout(() => this.scrollToIndex(), 100);
   }
-  realIndex(index: number) {
-    return this.itemSource.realIndex(index);
+
+  scrollToIndex() {
+    const tree = this.router.parseUrl(this.router.url);
+    if (tree.fragment) {
+      const index = parseInt(tree.fragment);
+      if (!isNaN(index)) {
+        this.viewPort.scrollToIndex(this.itemSource.getPositionalIndexFromId(index));
+      }
+    }
   }
 
   public searchValue = "";
@@ -39,10 +50,7 @@ export class DatabaseListComponent implements OnInit {
 
   async createNewPosition() {
     const createdIndex = await this.db.addBlankPosition();
-    this.route.navigate(["edit", createdIndex]);
-  }
-  async askForDeletePositions() {
-    alert("");
+    this.router.navigate(["edit", createdIndex]);
   }
 
   async deleteItem(dbIndex: number) {
@@ -80,8 +88,8 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   disconnect(collectionViewer: CollectionViewer): void {
     // no op
   }
-  realIndex(index: number) {
-    return this.itemsSubject.getValue().length - index;
+  getPositionalIndexFromId(index: number): number {
+    return this.itemsSubject.getValue().findIndex(pr => pr.dbIndex === index);
   }
   public async deleteProblemByDbIndex(dbIndex: number) {
     await this.db.deleteProblemByIndex(dbIndex);
@@ -89,7 +97,7 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   }
   private async reload() {
     const items = this.db.All;
-    this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex, problem }));
+    this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex: dbIndex + 1, problem }));
     this.filter("");
   }
   public async filter(text: string) {

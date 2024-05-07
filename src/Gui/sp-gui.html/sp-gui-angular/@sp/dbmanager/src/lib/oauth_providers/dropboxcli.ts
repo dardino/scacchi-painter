@@ -3,19 +3,23 @@ import {
   getImplicitAuthorizationUrl,
   TokenResponse,
 } from "../oauth_funcs/pkce";
+import { getLocalAuthInfo, setLocalAuthInfo } from "./const";
 
 export const getDropboxToken = async (): Promise<TokenResponse | null> => {
-  const localToken = JSON.parse(
-    localStorage.getItem("dropbox_token") ?? "null"
-  ) as TokenResponse | null;
+
+  const dropbox_token = getLocalAuthInfo().dropbox_token ?? "null";
+
+  const localToken = JSON.parse(dropbox_token) as TokenResponse | null;
   if (localToken != null) {
     return localToken;
   }
 
   // : generate state string:
   const stateString = generateStateString();
-  localStorage.setItem("state", stateString);
-  localStorage.setItem("redirect", location.href + "#dropbox");
+  setLocalAuthInfo({
+    redirect: "dropbox",
+    state: stateString,
+  })
   // : generate authorization url
   const authUrl = getImplicitAuthorizationUrl({
     authEp: "https://www.dropbox.com/oauth2/authorize",

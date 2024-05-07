@@ -1,6 +1,7 @@
 import { ApplicationRef, Component, OnInit } from "@angular/core";
 import { SwUpdate } from "@angular/service-worker";
 import { concat, first, interval } from "rxjs";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-configuration",
@@ -51,6 +52,6 @@ export class ConfigurationComponent implements OnInit {
   version: string;
 
   ngOnInit(): void {
-
+    this.version = environment.version;
   }
 }

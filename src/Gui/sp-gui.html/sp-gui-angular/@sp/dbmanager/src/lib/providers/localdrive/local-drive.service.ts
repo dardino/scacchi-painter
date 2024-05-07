@@ -21,6 +21,11 @@ export class LocalDriveService implements FileService {
   }
   async getFileContent(item: FolderItemInfo): Promise<File> {
     // if (itemID === "root_no_permission") return [];
+    if (!window.showOpenFilePicker){
+      alert("Your current device does not support the File System API. Try again on desktop Chrome!");
+      throw new Error("Your current device does not support the File System API. Try again on desktop Chrome!");
+    }
+
     const fileToOpen = await window.showOpenFilePicker({
       types: [
         {

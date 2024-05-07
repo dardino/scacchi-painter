@@ -16,7 +16,7 @@
   </mat-form-field>
 </section>
 
-<cdk-virtual-scroll-viewport itemSize="256" class="dblist">
+<cdk-virtual-scroll-viewport id="dbScrollViewport" itemSize="256" class="dblist">
   <div
     class="dbitem-container"
     *cdkVirtualFor="let item of itemSource; let index = index"

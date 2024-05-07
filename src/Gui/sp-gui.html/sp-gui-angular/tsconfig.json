@@ -10,6 +10,8 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "declaration": false,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,

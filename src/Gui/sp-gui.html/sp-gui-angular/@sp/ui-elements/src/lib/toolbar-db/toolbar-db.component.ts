@@ -8,13 +8,14 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
   styleUrls: ["./toolbar-db.component.less"],
 })
 export class ToolbarDbComponent implements OnInit {
-  constructor(private db: DbmanagerService, private router: Router) {}
+  constructor(private db: DbmanagerService, private router: Router) {
+  }
 
   @Input() boardType: "canvas" | "HTML";
   @Input() hideLabels?: boolean;
 
   get currentIndex() {
-    return this.db.CurrentIndex + 1;
+    return this.db.CurrentIndex;
   }
   get totalCount() {
     return this.db.Count;
@@ -28,7 +29,9 @@ export class ToolbarDbComponent implements OnInit {
   public canGoNext() {
     return this.currentIndex < this.totalCount;
   }
-
+  goToDB() {
+    this.router.navigate([`/list`], { fragment: `${this.db.CurrentIndex}` });
+  }
   goToPrev() {
     if (this.canGoPrev()) {
       this.router.navigate(["/edit", this.db.CurrentIndex - 1]);
@@ -40,10 +43,10 @@ export class ToolbarDbComponent implements OnInit {
     }
   }
   goToFirst() {
-    this.router.navigate(["/edit", 0]);
+    this.router.navigate(["/edit", 1]);
   }
   goToLast() {
-    this.router.navigate(["/edit", this.db.Count - 1]);
+    this.router.navigate(["/edit", this.db.Count]);
   }
   save(){
     this.db.Save().then(success => {
