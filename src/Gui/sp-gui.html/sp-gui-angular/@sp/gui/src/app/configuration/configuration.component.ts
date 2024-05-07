@@ -54,4 +54,9 @@ export class ConfigurationComponent implements OnInit {
   ngOnInit(): void {
     this.version = environment.version;
   }
+
+  reload() {
+    location.href = "/?"+Math.random();
+    location.href = "/";
+  }
 }
