@@ -64,8 +64,12 @@ export class FileExplorerComponent implements OnInit {
 
   private async clickFile(item: FolderItemInfo): Promise<void> {
     if (!this.service) return;
-    const file = await this.service.getFileContent(item);
-    this.selectFile.emit({ file, meta: item, source: this.service.sourceName });
+    try {
+      const file = await this.service.getFileContent(item);
+      this.selectFile.emit({ file, meta: item, source: this.service.sourceName });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   private refresh() {

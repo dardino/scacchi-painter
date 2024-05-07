@@ -27,7 +27,7 @@
     [disabled]="!canGoPrev()"
     [noLabel]="hideLabels"
   ></lib-sp-toolbar-button>
-  <span class="sp-toolbar-label">problem {{ currentIndex }} of {{ totalCount }}</span>
+  <button mat-button (click)="goToDB()">problem {{ currentIndex }} of {{ totalCount }}</button>
   <lib-sp-toolbar-button
     (click)="goToNext()"
     iconText="navigate_next"

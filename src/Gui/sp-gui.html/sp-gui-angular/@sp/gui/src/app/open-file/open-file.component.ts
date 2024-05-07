@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
+import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
   selector: "app-sp-openfile",
@@ -96,18 +95,22 @@ export class OpenFileComponent implements OnInit {
 
   async localFolder() {
     this.currentFileService = this.localFolderService;
-    const file = await this.currentFileService.getFileContent({
-      fullPath: "",
-      id: "",
-      itemName:"",
-      type: "file"
-    });
-    this.openFile({ file, meta: {
-      fullPath: file.name,
-      id: file.name,
-      itemName: file.name,
-      type: "file"
-    }, source: this.currentFileService.sourceName });
+    try {
+      const file = await this.currentFileService.getFileContent({
+        fullPath: "",
+        id: "",
+        itemName:"",
+        type: "file"
+      });
+      this.openFile({ file, meta: {
+        fullPath: file.name,
+        id: file.name,
+        itemName: file.name,
+        type: "file"
+      }, source: this.currentFileService.sourceName });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async fromDropbox() {

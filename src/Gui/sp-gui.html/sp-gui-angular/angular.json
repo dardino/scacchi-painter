@@ -46,6 +46,7 @@
             "allowedCommonJsDependencies": [
               "file-saver",
               "canvas-chessboard",
+              "quill-delta",
               "quill"
             ],
             "vendorChunk": true,

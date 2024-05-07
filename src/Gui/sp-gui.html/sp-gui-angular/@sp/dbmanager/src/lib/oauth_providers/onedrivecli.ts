@@ -11,6 +11,7 @@ import {
   SilentRequest,
   SsoSilentRequest,
 } from "@azure/msal-browser";
+import { getLocalAuthInfo, setLocalAuthInfo } from "./const";
 
 /**
  * Configuration class for @azure/msal-browser:
@@ -342,9 +343,8 @@ export class AuthModule {
 }
 
 export const getOneDriveToken = async () => {
-  const localToken = JSON.parse(
-    localStorage.getItem("onedrive_token") ?? "null"
-  ) as AuthenticationResult | null;
+  const { onedrive_token } = getLocalAuthInfo();
+  const localToken = JSON.parse(onedrive_token) as AuthenticationResult | null;
 
   if (localToken != null) {
     localToken.expiresOn = new Date((localToken.expiresOn as any) as string);
@@ -352,8 +352,7 @@ export const getOneDriveToken = async () => {
       return localToken;
     }
   }
-
-  localStorage.setItem("redirect", location.href + "#onedrive");
+  setLocalAuthInfo({ redirect: "onedrive" });
   const ms = new AuthModule();
   ms.login("loginRedirect");
   return null;

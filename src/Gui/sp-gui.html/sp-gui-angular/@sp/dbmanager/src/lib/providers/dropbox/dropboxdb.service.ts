@@ -3,8 +3,9 @@ import {
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
-import { getDropboxToken } from "../../oauth_providers/dropboxcli";
 import { TokenResponse } from "../../oauth_funcs/pkce";
+import { setLocalAuthInfo } from "../../oauth_providers/const";
+import { getDropboxToken } from "../../oauth_providers/dropboxcli";
 
 interface DropboxFileInfo {
   ".tag": "folder" | "file";
@@ -152,7 +153,7 @@ export class DropboxdbService implements FileService {
       }));
     } else {
       if (result.status === 400 || result.status === 401) {
-        localStorage.removeItem("dropbox_token");
+        setLocalAuthInfo({ dropbox_token: "null" });
         this.authorize();
       }
       return [];
