@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
   selector: "app-recents",
@@ -6,10 +7,16 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./recents.component.less"],
 })
 export class RecentsComponent implements OnInit {
-  recents: string[] = [];
-  constructor() {}
+  recents: RecentFileInfo[] = [];
+  constructor() {
+    this.recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
+    console.log("🚀 ~ RecentsComponent ~ constructor ~ this.recents:", this.recents);
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
-  clickOnRecent(path: string) {}
+  clickOnRecent(fInfo: RecentFileInfo) {
+    console.log("🚀 ~ RecentsComponent ~ clickOnRecent ~ fInfo:", fInfo);
+  }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { TokenResponse } from "@sp/dbmanager/src/lib/oauth_funcs/pkce";
-import { LocalAuthInfo, getLocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager/src/lib/oauth_providers/const";
+import { LocalAuthInfo, getLocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager/src/lib/oauth_providers/helpers";
 import { MSAL_CONFIG } from "@sp/dbmanager/src/public-api";
 
 @Component({
@@ -30,6 +30,7 @@ export class AuthRedirectComponent implements OnInit {
         response = await this.redirectMsal(authInfo);
         break;
       case "null":
+        response = false;
         break;
     }
     setTimeout(() => {

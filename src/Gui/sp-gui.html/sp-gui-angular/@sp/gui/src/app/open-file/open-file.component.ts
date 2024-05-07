@@ -19,7 +19,7 @@ export class OpenFileComponent implements OnInit {
   ) {}
 
   public showFilePicker = false;
-  @ViewChild("fileloader") fileloader: ElementRef;
+  @ViewChild("fileloader") fileloader: ElementRef<HTMLInputElement>;
 
   public currentFileService: FileService | null = null;
 
@@ -109,7 +109,7 @@ export class OpenFileComponent implements OnInit {
         type: "file"
       }, source: this.currentFileService.sourceName });
     } catch (err) {
-      console.error(err);
+      this.fileloader.nativeElement.click();
     }
   }
 

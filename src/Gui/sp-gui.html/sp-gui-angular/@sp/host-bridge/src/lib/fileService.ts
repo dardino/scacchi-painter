@@ -28,3 +28,7 @@ export interface FileSelected {
 
 export type FolderSelected = Omit<FileSelected, "file">;
 
+export interface RecentFileInfo {
+  source: AvaliableFileServices,
+  meta: FolderItemInfo,
+}

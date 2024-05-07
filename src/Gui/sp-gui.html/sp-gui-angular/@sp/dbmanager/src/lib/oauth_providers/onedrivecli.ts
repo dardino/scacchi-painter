@@ -11,7 +11,7 @@ import {
   SilentRequest,
   SsoSilentRequest,
 } from "@azure/msal-browser";
-import { getLocalAuthInfo, setLocalAuthInfo } from "./const";
+import { getLocalAuthInfo, setLocalAuthInfo } from "./helpers";
 
 /**
  * Configuration class for @azure/msal-browser:

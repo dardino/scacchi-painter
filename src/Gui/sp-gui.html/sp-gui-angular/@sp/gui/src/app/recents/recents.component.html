@@ -1,4 +1,7 @@
 <h1>Recent files</h1>
 <ul>
-  <li *ngFor="let recent of recents" (click)="clickOnRecent(recent)">{{recent}}</li>
+  <li *ngFor="let recent of recents" (click)="clickOnRecent(recent)">
+    <span [ngClass]="recent.source">{{recent.source === "unknown" ? 'temporary' : recent.source}}</span>
+    <span>{{recent.meta.itemName}}</span>
+  </li>
 </ul>
