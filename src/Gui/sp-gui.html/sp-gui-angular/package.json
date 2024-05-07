@@ -1,6 +1,9 @@
 {
   "name": "sp-gui-angular",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "debugger": "yarn remotedebug_ios_webkit_adapter --port 9000",
     "tunnel": "yarn lt --port 4200 --local-https true --allow-invalid-cert -o",
