@@ -4,7 +4,7 @@ export const HASHES = [
   "null"
 ] as const;
 
-type HASHES = typeof HASHES[number];
+export type HASHES = typeof HASHES[number];
 
 export interface LocalAuthInfo {
   redirect?: HASHES;

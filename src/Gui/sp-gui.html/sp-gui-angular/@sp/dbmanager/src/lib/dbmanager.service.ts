@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { FileSelected, FileService, FolderSelected } from "@sp/host-bridge/src/lib/fileService";
+import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { Subject } from "rxjs";
 import { IProblem, prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
@@ -119,6 +119,7 @@ export class DbmanagerService {
     const content = await file.text();
     const result = await this.loadFromContent(content);
     this.workInProgress.next(false);
+    saveToRecentFiles(meta, source);
     this.snackBar.open("Load db completed!", undefined, {
       verticalPosition: "top",
       politeness: "assertive",
@@ -133,7 +134,7 @@ export class DbmanagerService {
     this.currentIndex = id ?? this.currentIndex;
     await this.loadProblem();
     this.workInProgress.next(false);
-    this.snackBar.open("Load db completed!", undefined, {
+    this.snackBar.open("Reload db completed!", undefined, {
       verticalPosition: "top",
       politeness: "assertive",
       duration: 2000,
@@ -324,4 +325,14 @@ export class DbmanagerService {
       return new File([text], fullpath, { type: "application/octect-stream" });
     }
   }
+}
+
+function saveToRecentFiles(meta: FolderItemInfo, source: AvaliableFileServices) {
+  const recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
+  const oldIndex = recents.findIndex(rec => rec.source === source && rec.meta.fullPath === meta.fullPath);
+  if (oldIndex > -1) {
+    recents.splice(oldIndex, 1)
+  }
+  recents.unshift({ meta, source });
+  localStorage.setItem("spx.recents", JSON.stringify(recents.slice(0, 10)));
 }

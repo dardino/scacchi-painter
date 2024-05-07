@@ -3,7 +3,7 @@ import {
   getImplicitAuthorizationUrl,
   TokenResponse,
 } from "../oauth_funcs/pkce";
-import { getLocalAuthInfo, setLocalAuthInfo } from "./const";
+import { getLocalAuthInfo, setLocalAuthInfo } from "./helpers";
 
 export const getDropboxToken = async (): Promise<TokenResponse | null> => {
 

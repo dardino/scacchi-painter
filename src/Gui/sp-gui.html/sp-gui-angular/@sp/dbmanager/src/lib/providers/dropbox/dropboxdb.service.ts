@@ -4,8 +4,8 @@ import {
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
 import { TokenResponse } from "../../oauth_funcs/pkce";
-import { setLocalAuthInfo } from "../../oauth_providers/const";
 import { getDropboxToken } from "../../oauth_providers/dropboxcli";
+import { setLocalAuthInfo } from "../../oauth_providers/helpers";
 
 interface DropboxFileInfo {
   ".tag": "folder" | "file";

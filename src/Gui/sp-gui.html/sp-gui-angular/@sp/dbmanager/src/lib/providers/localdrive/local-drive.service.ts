@@ -10,7 +10,7 @@ import {
   providedIn: "root",
 })
 export class LocalDriveService implements FileService {
-  constructor() {}
+  constructor() { }
   sourceName: AvaliableFileServices = "local";
   async enumContent(
     itemID: string,
@@ -19,30 +19,37 @@ export class LocalDriveService implements FileService {
   ): Promise<FolderItemInfo[]> {
     return [];
   }
+
   async getFileContent(item: FolderItemInfo): Promise<File> {
+
     // if (itemID === "root_no_permission") return [];
-    if (!window.showOpenFilePicker){
+    if (!window.showOpenFilePicker) {
       alert("Your current device does not support the File System API. Try again on desktop Chrome!");
       throw new Error("Your current device does not support the File System API. Try again on desktop Chrome!");
     }
 
-    const fileToOpen = await window.showOpenFilePicker({
+
+    const [fileHandle] = await window.showOpenFilePicker({
       types: [
-        {
-          description: "Scacchi Painter 2",
-          accept: {
-            "text/xml": [".sp2"],
-          },
-        },
         {
           description: "Scacchi Painter X",
           accept: {
             "application/json": [".sp3"],
           },
         },
+        {
+          description: "Scacchi Painter 2",
+          accept: {
+            "text/xml": [".sp2"],
+          },
+        },
       ],
     });
-    const filecontent = await fileToOpen[0].getFile();
+
+    const allOk = await this.verifyPermission(fileHandle, true);
+    if (!allOk) throw new Error("Cannot open a file!");
+
+    const filecontent = await fileHandle.getFile();
     return filecontent;
   }
   async saveFileContent(
@@ -57,5 +64,28 @@ export class LocalDriveService implements FileService {
   }
   joinPath(...parts: string[]): string {
     throw new Error("Method not implemented.");
+  }
+
+  // fileHandle is a FileSystemFileHandle
+// withWrite is a boolean set to true if write
+
+  async verifyPermission(fileHandle: FileSystemHandle, withWrite: boolean) {
+    const opts = {} as any;
+    if (withWrite) {
+      opts.mode = "readwrite";
+    }
+
+    // Check if we already have permission, if so, return true.
+    if ((await fileHandle.queryPermission(opts)) === "granted") {
+      return true;
+    }
+
+    // Request permission to the file, if the user grants permission, return true.
+    if ((await fileHandle.requestPermission(opts)) === "granted") {
+      return true;
+    }
+
+    // The user did not grant permission, return false.
+    return false;
   }
 }
