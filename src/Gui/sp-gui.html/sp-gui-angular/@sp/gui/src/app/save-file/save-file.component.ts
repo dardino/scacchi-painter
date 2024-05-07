@@ -118,7 +118,15 @@ export class SaveFileComponent implements OnInit {
       },
       source: "local",
     });
-    await this.db.Save();
+    const file = await this.db.GetFileContent();
+    let objectUrl = URL.createObjectURL(file);
+    let anchor = document.createElement("a");
+    document.body.appendChild(anchor);
+    anchor.href = objectUrl;
+    anchor.download = this.selectedFile.meta.itemName;
+    anchor.click();
+    URL.revokeObjectURL(objectUrl);
+    document.body.removeChild(anchor);
   }
   /**
    * open dropbox folder selector
@@ -146,7 +154,8 @@ export class SaveFileComponent implements OnInit {
         source: this.currentFolder.source,
         meta: this.selectedFile.meta,
       });
-      await this.db.Save();
+      const file = await this.db.GetFileContent();
+      await this.currentFileService?.saveFileContent(file, this.selectedFile.meta);
     }
     return null;
   }

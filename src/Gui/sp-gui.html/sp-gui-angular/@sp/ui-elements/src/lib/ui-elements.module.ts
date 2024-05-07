@@ -17,6 +17,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { QuillModule } from "ngx-quill";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
+import { DbsourceComponent } from "./dbsource/dbsource.component";
 import { FileExplorerComponent } from "./file-explorer/file-explorer.component";
 import { FileSourceSelectorComponent } from "./file-source-selector/file-source-selector.component";
 import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.component";
@@ -24,6 +25,7 @@ import { ProblemDefinitionsComponent } from "./problem-definitions/problem-defin
 import { ProblemInfoComponent } from "./problem-info/problem-info.component";
 import { ProblemPublicationComponent } from "./problem-publication/problem-publication.component";
 import { QuillInitializeService } from "./services/quillInitialize.service";
+import { SortableListComponent } from './sortable-list/sortable-list.component';
 import { SpSolutionDescComponent } from "./sp-solution-desc/sp-solution-desc.component";
 import { SpSolutionRowComponent } from "./sp-solution-row/sp-solution-row.component";
 import { SpToolbarButtonComponent } from "./sp-toolbar-button/sp-toolbar-button.component";
@@ -31,7 +33,6 @@ import { ToolbarDbComponent } from "./toolbar-db/toolbar-db.component";
 import { ToolbarEditComponent } from "./toolbar-edit/toolbar-edit.component";
 import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
 import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
-import { SortableListComponent } from './sortable-list/sortable-list.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { SortableListComponent } from './sortable-list/sortable-list.component';
     ConfirmDialogComponent,
     SpSolutionRowComponent,
     SortableListComponent,
+    DbsourceComponent,
   ],
   imports: [
     CommonModule,
@@ -79,7 +81,8 @@ import { SortableListComponent } from './sortable-list/sortable-list.component';
     ToolbarEngineComponent,
     ToolbarPieceComponent,
     FileExplorerComponent,
-    FileSourceSelectorComponent
+    FileSourceSelectorComponent,
+    DbsourceComponent,
   ],
   providers: [QuillInitializeService],
 })
