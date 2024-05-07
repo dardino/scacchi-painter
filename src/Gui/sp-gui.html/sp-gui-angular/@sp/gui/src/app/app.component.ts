@@ -37,6 +37,9 @@ export class AppComponent implements OnInit, OnDestroy {
   get fileName() {
     return this.db.FileName;
   }
+  get fileSource() {
+    return this.db.CurrentFile?.source ?? "unknown";
+  }
   title = "Scacchi Painter";
   chessBoardMode: "edit" | "view" = "view";
   fsWip = false;

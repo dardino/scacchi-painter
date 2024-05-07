@@ -1,4 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
@@ -8,7 +10,7 @@ import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 })
 export class RecentsComponent implements OnInit {
   recents: RecentFileInfo[] = [];
-  constructor() {
+  constructor(private db: DbmanagerService, private router: Router) {
     this.recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
     console.log("🚀 ~ RecentsComponent ~ constructor ~ this.recents:", this.recents);
   }
@@ -16,7 +18,10 @@ export class RecentsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  clickOnRecent(fInfo: RecentFileInfo) {
-    console.log("🚀 ~ RecentsComponent ~ clickOnRecent ~ fInfo:", fInfo);
+  async clickOnRecent(fInfo: RecentFileInfo) {
+    const result = await this.db.LoadFromService(fInfo);
+    if (!(result instanceof Error)) {
+      this.router.navigate(["/list"]);
+    }
   }
 }

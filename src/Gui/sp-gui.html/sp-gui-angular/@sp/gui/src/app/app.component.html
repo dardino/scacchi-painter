@@ -27,7 +27,7 @@
         ></lib-sp-toolbar-button>
         <div class="app-title">
           <span>Scacchi Painter</span>
-          <sub>{{ fileName }}</sub>
+          <sub><lib-dbsource [source]="fileSource" ></lib-dbsource> {{ fileName }}</sub>
         </div>
         <lib-toolbar-db *ngIf="dbLoaded && pathIsEdit" [hideLabels]="true"></lib-toolbar-db>
         <lib-sp-toolbar-button

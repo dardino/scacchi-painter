@@ -17,7 +17,7 @@ interface IDbSpX {
   providedIn: "root",
 })
 export class DbmanagerService {
-  private currentIndex = 0;
+  private currentIndex = 1;
   private currentFile: FolderSelected | null = null;
   private workInProgress: Subject<boolean> = new Subject<boolean>();
 
@@ -49,11 +49,10 @@ export class DbmanagerService {
 
   async addBlankPosition() {
     this.All.push(Problem.fromJson({}));
-    const createdIndex = this.All.length - 1;
-    this.currentIndex = createdIndex;
+    this.currentIndex = this.All.length;
     await this.loadProblem();
     await this.saveToLocalStorage();
-    return createdIndex;
+    return this.currentIndex;
   }
 
   async deleteProblem(problem: Problem) {
@@ -70,7 +69,7 @@ export class DbmanagerService {
 
   private async deleteProblemAtPosition(pIndex: number) {
     this.workInProgress.next(true);
-    if (pIndex < this.All.length && pIndex > -1) this.All.splice(pIndex, 1);
+    if (pIndex < this.All.length && pIndex > -1) this.All.splice(pIndex - 1, 1);
     if (this.All.length === 0) {
       //if deleted problem is the lastone in database then create a blank problem
       await this.addBlankPosition();
@@ -127,6 +126,21 @@ export class DbmanagerService {
     });
     return result;
   }
+  public async LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
+    this.workInProgress.next(true);
+    this.currentFile = { meta, source };
+    const file = await this.fileService?.getFileContent(meta);
+    if (!file) {
+      this.workInProgress.next(false);
+      return new Error("Unable to load file content from service!");
+    }
+    try {
+      return this.Load({ file, meta, source });
+    } catch (err) {
+      return err as Error;
+    }
+  }
+
   async Reload(id?: number) {
     this.workInProgress.next(true);
     this.reset();
@@ -181,7 +195,7 @@ export class DbmanagerService {
     const root = doc.querySelector("ScacchiPainterDatabase") as Element;
     root.setAttribute("version", "0.1.0.2");
     root.setAttribute("name", "Scacchi Painter 2 Database");
-    root.setAttribute("lastIndex", this.CurrentIndex.toFixed(0));
+    root.setAttribute("lastIndex", this.CurrentIndex.toFixed(1));
     problems.forEach((p) => root.appendChild(p));
     return doc;
   }
@@ -200,11 +214,14 @@ export class DbmanagerService {
   public async SaveTemporary() {
     await this.saveToLocalStorage();
   }
-  public async Save() {
-    this.workInProgress.next(true);
+  public async GetFileContent(): Promise<File> {
     // first of all save the current problem into local storage
     await this.saveToLocalStorage();
     const file = await this.createFile();
+    return file;
+  }
+  public async Save() {
+    const file = await this.GetFileContent();
     const fs = this.fileService;
     const cf = this.currentFile;
     if (fs && cf) {
@@ -243,7 +260,7 @@ export class DbmanagerService {
     try {
       const obj = JSON.parse(jsonString) as IDbSpX;
       this.All = obj.problems.map((p) => Problem.fromJson(p));
-      this.currentIndex = obj.lastIndex ?? 0;
+      this.currentIndex = obj.lastIndex ?? 1;
       return null;
     } catch (err) {
       return err as Error;
@@ -259,7 +276,7 @@ export class DbmanagerService {
         )
       );
       this.currentIndex = parseInt(
-        xmlDoc.documentElement.getAttribute("lastIndex") ?? "0",
+        xmlDoc.documentElement.getAttribute("lastIndex") ?? "1",
         10
       );
       return null;
@@ -291,7 +308,7 @@ export class DbmanagerService {
   }
 
   async GotoIndex(arg0: number) {
-    if (arg0 >= this.All.length || arg0 < 0) {
+    if (arg0 > this.All.length || arg0 < 0) {
       return;
     }
     this.reset();
@@ -301,14 +318,14 @@ export class DbmanagerService {
   }
 
   private async loadProblem() {
-    this.currentProblem = this.All[this.currentIndex];
+    this.currentProblem = this.All[this.currentIndex - 1];
     if (this.currentProblem == null) {
       return this.reset();
     }
   }
 
   private reset() {
-    this.currentIndex = 0;
+    this.currentIndex = 1;
     this.currentProblem = null;
   }
 
@@ -327,12 +344,21 @@ export class DbmanagerService {
   }
 }
 
+/**
+ * Saves the given file metadata and source to the recent files list.
+ * @param meta - The metadata of the file.
+ * @param source - The source of the file.
+ */
 function saveToRecentFiles(meta: FolderItemInfo, source: AvaliableFileServices) {
   const recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
+  // remove old matching file
   const oldIndex = recents.findIndex(rec => rec.source === source && rec.meta.fullPath === meta.fullPath);
-  if (oldIndex > -1) {
-    recents.splice(oldIndex, 1)
-  }
+  if (oldIndex > -1) recents.splice(oldIndex, 1);
+  // remove all unknown in the recent because 'unknown' is for "in memory" database
+  const unknown = recents.findIndex(rec => rec.source === "unknown");
+  if (unknown > -1) recents.splice(unknown, 1);
+  // add current file to first
   recents.unshift({ meta, source });
+  // save to recent
   localStorage.setItem("spx.recents", JSON.stringify(recents.slice(0, 10)));
 }
