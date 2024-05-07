@@ -1,13 +1,10 @@
-<!-- <quill-editor
-  class="quill-editor"
-  [modules]="{ toolbar: [['bold', 'italic', 'underline']] }"
-  [(ngModel)]="solution"
-  [preserveWhitespace]="true"
-  placeholder="Enter Text"
-></quill-editor> -->
-<div class="solutions" [style.fontSize]="solutionFontSize">
+<quill-editor class="quill-editor" [modules]="{ toolbar: [['bold', 'italic', 'underline']] }" format="html"
+  *ngIf="viewMode === 'both' || viewMode === 'html'" [(ngModel)]="solutionHtml"
+  placeholder="Run solution engine with the 'play' button"></quill-editor>
+<div *ngIf="viewMode === 'both' || viewMode === 'txt'" class="solutions" [style.fontSize]="solutionFontSize">
   <ng-template [ngForOf]="rows" ngFor let-item>
     <div *ngIf="item.className !== 'solution' && showLog" [class]="item.className">{{item.row}}</div>
-    <lib-sp-solution-row *ngIf="item.className === 'solution'" [value]="item.row" [class]="item.className"></lib-sp-solution-row>
+    <lib-sp-solution-row *ngIf="item.className === 'solution'" [value]="item.row"
+      [class]="item.className"></lib-sp-solution-row>
   </ng-template>
 </div>

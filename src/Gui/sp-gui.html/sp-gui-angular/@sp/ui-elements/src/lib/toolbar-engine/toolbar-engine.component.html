@@ -39,8 +39,14 @@
   </lib-sp-toolbar-button>
   <lib-sp-toolbar-button
     (click)="toggleEngineLog()"
-    iconText="spellcheck"
+    [iconText]="logIcon"
     iconLabel="Update position"
+    [noLabel]="true"
+  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button
+    (click)="toggleEditorview()"
+    [iconText]="viewModeIcon"
+    iconLabel="Toggle editor"
     [noLabel]="true"
   ></lib-sp-toolbar-button>
 </mat-toolbar-row>

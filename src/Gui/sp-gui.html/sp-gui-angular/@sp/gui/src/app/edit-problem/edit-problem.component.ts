@@ -22,6 +22,7 @@ import {
   notNull,
 } from "@sp/dbmanager/src/public-api";
 import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
+import { ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
@@ -49,6 +50,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   solveInProgress: boolean;
   showLog: boolean;
+  viewMode: ViewModes;
 
   constructor(
     private current: CurrentProblemService,
@@ -62,7 +64,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.engine.isSolving$.subscribe((state) => {
       this.solveInProgress = state;
     });
-
+    this.viewMode = "html";
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
@@ -140,6 +142,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleLog = () => this.showLog = !this.showLog;
+  changeViewMode($event: ViewModes) {
+    this.viewMode = $event;
+  }
   switchBoardType() {
     this.boardType = this.boardType === "HTML" ? "canvas" : "HTML";
     this.resetActions();
