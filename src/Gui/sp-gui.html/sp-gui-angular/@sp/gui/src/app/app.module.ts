@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { NgModule } from "@angular/core";
-import { MatIconRegistry } from "@angular/material/icon";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AuthRedirectComponent } from "./auth-redirect/auth-redirect.component";
@@ -38,7 +37,7 @@ import { TwinDialogComponent } from "./twin-dialog/twin-dialog.component";
     ...ThirdPartyModules,
     AppRoutingModule,
   ],
-  providers: [HttpClient, { provide: MatIconRegistry, useFactory: AllMatIconRegistry }],
+  providers: [HttpClient, AllMatIconRegistry],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

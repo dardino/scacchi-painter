@@ -11,15 +11,14 @@ import { AllMatIconRegistry } from "./registerIcons";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.less"],
-  providers: [AllMatIconRegistry]
+  styleUrls: ["./app.component.less"]
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private db: DbmanagerService,
     private breakpointObserver: BreakpointObserver,
     private bridge: HostBridgeService,
-    private allIcons: AllMatIconRegistry,
+    _allIcons: AllMatIconRegistry,
     private route: ActivatedRoute
   ) { }
   get hasCloseButton() {
