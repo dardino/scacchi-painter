@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { AppRoutingModule } from "../app-routing.module";
+import { ThirdPartyModules } from "../modules";
 import { MenuComponent } from "./menu.component";
 
 describe("MenuComponent", () => {
@@ -9,7 +10,7 @@ describe("MenuComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [MatSnackBarModule],
+      imports: [...ThirdPartyModules, AppRoutingModule],
       declarations: [ MenuComponent ]
     })
     .compileComponents();

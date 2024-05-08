@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
 import { PieceSelectorComponent } from "./piece-selector.component";
 
 describe("PieceSelectorComponent", () => {
@@ -8,6 +10,7 @@ describe("PieceSelectorComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [CommonModule, DragDropModule],
       declarations: [PieceSelectorComponent],
     }).compileComponents();
   }));

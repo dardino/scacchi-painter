@@ -1,4 +1,6 @@
+import { IProblem, TwinModes } from "../helpers";
 import { Problem } from "./problem";
+import { Twin } from "./twin";
 
 describe("Snapshots", () => {
   const problem = Problem.fromFen("8/Rr6/8/4k3/5K2/8/2Q5/8");
@@ -50,4 +52,40 @@ describe("Snapshots", () => {
     fen = problem.getCurrentFen();
     expect(fen).toBe("R7/1r6/8/4k3/5K2/8/2Q5/8");
   });
+});
+
+describe("applyJson", () => {
+  let problem: Problem;
+
+  beforeEach(() => {
+    problem = Problem.fromJson({});
+  });
+
+  it("should apply JSON properties to the problem instance", () => {
+    const json: Partial<IProblem> = {
+      authors: [
+        { nameAndSurname: "Author 1", country: "Country 1" },
+        { nameAndSurname: "Author 2", country: "Country 2" },
+      ],
+      pieces: [
+        { appearance: "k", color: "White", column: "ColA", traverse: "Row1" },
+        { appearance: "k", color: "Black", column: "ColH", traverse: "Row2" },
+      ],
+      stipulation: { stipulationType: "#", completeStipulationDesc: "#2", problemType: "-", moves: 2 },
+      twins: { TwinList: [Twin.fromJson({ TwinType: "Diagram", TwinModes: TwinModes.Normal})] },
+      htmlSolution: "<p>Solution</p>",
+      textSolution: "Solution",
+      date: "2022-01-01",
+      personalID: "123",
+      prizeRank: 1,
+      prizeDescription: "First prize",
+      source: "Source",
+      conditions: ["Condition 1", "Condition 2"],
+      tags: ["Tag 1", "Tag 2"],
+    };
+
+    Problem.applyJson(json, problem);
+    expect(problem.twins.TwinList.length).toBe(1);
+  });
+
 });

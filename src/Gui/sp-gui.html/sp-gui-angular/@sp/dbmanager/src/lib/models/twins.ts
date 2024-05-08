@@ -6,7 +6,7 @@ export class Twins implements ITwins {
   TwinList: Twin[] = [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" })];
   TwinSequenceTypes: SequnceTypes = SequnceTypes.Normal;
   get HasDiagram(): boolean {
-    return (this.TwinList ?? []).find(tw => tw.TwinType === "Diagram") != null;
+    return (this.TwinList ?? []).some(tw => tw.TwinType === "Diagram");
   }
   get ZeroPosition(): boolean {
     return !this.HasDiagram && this.TwinList.length > 1;

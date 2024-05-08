@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
 import { ChessboardComponent } from "./chessboard.component";
 
 describe("ChessboardComponent", () => {
@@ -9,6 +11,7 @@ describe("ChessboardComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ChessboardComponent],
+      imports: [CommonModule, DragDropModule],
     }).compileComponents();
   }));
 

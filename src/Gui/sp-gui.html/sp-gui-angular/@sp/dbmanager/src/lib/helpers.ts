@@ -494,16 +494,21 @@ export const GetSolutionFromElement = async (el: Element) => {
   let solDec = sol ? Base64.decode(sol) : "";
 
   if (solRft != null && solRft.innerHTML.length > 0) {
-    solText = await convertFromRtf(
-      Base64.decode(solRft.innerHTML).replace(/\r/g, "")
-    );
-    if (solDec === "") solDec = solText.map(row => row.innerText).join("\r\n");
+    try {
+      solText = await convertFromRtf(
+        Base64.decode(solRft.innerHTML).replace(/\r/g, "")
+      );
+    } catch (err) {
+      console.error(err);
+      solText = [];
+    }
+    if (solDec === "") solDec = solText.map(row => row.innerText).join("\n");
   } else {
     if (!sol) solText = [];
     else {
       solText = solDec
-        .replace(/\r\n/g, "\r")
-        .split("\r")
+        .replace(/\r\n/g, "\n")
+        .split("\n")
         .map((txt) => {
           const div = document.createElement("div");
           div.innerText = txt;

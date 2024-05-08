@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { RouterTestingModule } from "@angular/router/testing";
+import { RouterModule } from "@angular/router";
+import { ThirdPartyModules } from "../modules";
 import { EditProblemComponent } from "./edit-problem.component";
 
 describe("EditProblemComponent", () => {
@@ -12,8 +10,9 @@ describe("EditProblemComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [MatSnackBarModule, RouterTestingModule, MatDialogModule, NoopAnimationsModule],
-      declarations: [ EditProblemComponent ]
+      imports: [...ThirdPartyModules, RouterModule.forRoot([])],
+      declarations: [ EditProblemComponent ],
+      providers: []
     })
     .compileComponents();
   }));
