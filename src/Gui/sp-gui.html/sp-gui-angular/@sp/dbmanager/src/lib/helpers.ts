@@ -511,7 +511,7 @@ export const GetSolutionFromElement = async (el: Element) => {
         });
     }
   }
-  return { plain: solDec, html: solText };
+  return { plain: solDec, html: solText.map(item => item.outerHTML).join("") };
 };
 
 export const GetTwins = (el: Element): Element[] => {
@@ -747,13 +747,6 @@ export const prettifyXml = (sourceXml: string | Document) => {
   const resultDoc = xsltProcessor.transformToDocument(xmlDoc);
   const resultXml = new XMLSerializer().serializeToString(resultDoc);
   return resultXml;
-};
-
-export const parseHTMLSolution = (htmlString: string): HTMLElement[] => {
-  const frag = document.createElement("div");
-  frag.innerHTML = htmlString;
-  const children = Array.from(frag.children).map(el => el instanceof HTMLElement ? el : undefined).filter(notNull);
-  return children;
 };
 
 export const notationCasingByColor: Record<PieceColors, (piecename: string) => string> = {

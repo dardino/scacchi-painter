@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { NgModel } from "@angular/forms";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
+import { QuillConfig } from "ngx-quill";
 import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
 
 /*https://stackblitz.com/edit/ngx-quill-example-btmh9i?file=src%2Fapp%2Fapp.component.ts*/
@@ -39,7 +41,7 @@ export class SpSolutionDescComponent implements OnInit {
   }
 
   get solutionHtml() {
-    return this.problem.htmlSolution.map(gt => gt.outerHTML).join("") ?? "";
+    return this.problem.htmlSolution.replace(/ /g, "&nbsp;") ?? "";
   }
   set solutionHtml(text: string) {
     this.problem.SetHTMLSolution(text);
@@ -58,4 +60,18 @@ export class SpSolutionDescComponent implements OnInit {
     else if (outlogRegExp.test(item)) return "log";
     else return "solution";
   }
+
+  ngModelOptions: NgModel["options"] = {
+    updateOn: "blur"
+  };
+
+  quillModules: Required<QuillConfig>["modules"] = {
+    toolbar: [
+      ['bold', 'italic', 'underline']
+    ]
+  };
+
+  quillFormats: Required<QuillConfig>["formats"] = [
+    "italic", "bold", "underline"
+  ];
 }

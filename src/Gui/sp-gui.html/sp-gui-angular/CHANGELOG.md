@@ -2,7 +2,7 @@
 
 ## Next
 
-- [x] Adds Qill Editor for solutions
+- [x] [#149](https://github.com/dardino/scacchi-painter/issues/149) Added Quill editor to edit as HTML
 - [x] "Try Move" function
 - [x] [#105 List of problems](https://github.com/dardino/scacchi-painter/issues/105)
 - [x] [#39 Twin editor](https://github.com/dardino/scacchi-painter/issues/39)

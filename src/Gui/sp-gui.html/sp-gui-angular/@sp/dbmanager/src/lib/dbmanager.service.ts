@@ -129,6 +129,10 @@ export class DbmanagerService {
   public async LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
     this.workInProgress.next(true);
     this.currentFile = { meta, source };
+    if (source == "unknown") {
+      this.workInProgress.next(false);
+      return null;
+    }
     const file = await this.fileService?.getFileContent(meta);
     if (!file) {
       this.workInProgress.next(false);

@@ -10,9 +10,11 @@ quill-editor {
 }
 
 .ql-container {
+  font-family: unset !important;
   height: auto;
   flex: 1 1 auto;
   display: flex;
+  min-height: 100%;
 
   > .ql-editor {
     height: auto;

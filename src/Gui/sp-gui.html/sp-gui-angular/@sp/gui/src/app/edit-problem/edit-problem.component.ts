@@ -163,7 +163,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.rows = [];
     this.rows$ubject.next(this.rows);
     if (this.current.Problem) {
-      this.current.Problem.htmlElements = [];
+      this.current.Problem.htmlSolution = "";
       this.current.Problem.textSolution = "";
       this.engine.startSolving(this.current.Problem, mode);
     }
@@ -188,7 +188,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.rows.push(...msg.replace(/\r/g, "").split("\n"));
       this.rows$ubject.next(this.rows);
       if (this.current.Problem) {
-        this.current.Problem.htmlElements = this.toHtml(this.rows);
+        this.current.Problem.htmlSolution = this.toHtml(this.rows);
         this.current.Problem.textSolution = this.rows.join(`\n`);
       }
     });
@@ -417,25 +417,25 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   private toHtml(rows: string[]) {
-    return rows
+    const content = rows
       .map((line) => {
-        const {t, css} = tagAndStyle(line);
+        const { t } = tagAndStyle(line);
         if (t == null) return null;
-        const tag = document.createElement("div");
+        const tag = document.createElement("p");
         const subTag = document.createElement(t);
-        subTag.setAttribute("style", css);
         subTag.innerHTML = line;
         tag.appendChild(subTag);
-        return tag;
+        return tag.outerHTML;
       })
-      .filter(notNull);
+      .filter(notNull).join("");
+    return content;
   }
 
 }
 
-const tagAndStyle = (text: string): { t:string, css: string } => {
+const tagAndStyle = (text: string): { t: string, css?: string } => {
   text = text.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  if (outlogRegExp.test(text)) return { t: "em", css: "font-size: smaller;" };
-  else if (istructionRegExp.test(text)) return { t: "em", css: "" };
-  else return { t: "span", css: "white-space: pre;" };
+  if (outlogRegExp.test(text)) return { t: "em" };
+  else if (istructionRegExp.test(text)) return { t: "em" };
+  else return { t: "strong" };
 };
