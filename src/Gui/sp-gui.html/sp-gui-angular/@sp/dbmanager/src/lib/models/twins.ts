@@ -41,7 +41,7 @@ export class Twins implements ITwins {
     if (p.TwinList.filter(tw => tw.TwinType === "Diagram").length > 1) {
       p.TwinList = p.TwinList.filter(tw => tw.TwinType !== "Diagram");
     }
-    if (p.TwinList.length <= 1 || !p.HasDiagram) {
+    if (!p.HasDiagram) {
       p.TwinList.unshift(Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" }));
     }
     return p;

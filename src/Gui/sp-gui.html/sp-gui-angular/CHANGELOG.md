@@ -2,6 +2,12 @@
 
 ## Next
 
+## 0.0.6
+
+- [x] [#151](https://github.com/dardino/scacchi-painter/issues/151) Fix twins
+
+## 0.0.5
+
 - [x] [#149](https://github.com/dardino/scacchi-painter/issues/149) Added Quill editor to edit as HTML
 - [x] "Try Move" function
 - [x] [#105 List of problems](https://github.com/dardino/scacchi-painter/issues/105)
