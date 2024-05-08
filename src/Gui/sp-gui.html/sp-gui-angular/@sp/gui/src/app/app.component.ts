@@ -1,27 +1,25 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { MatIconRegistry } from "@angular/material/icon";
-import { DomSanitizer } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
-import { environment } from "../environments/environment";
 import { RoutesList } from "./app-routing-list";
+import { AllMatIconRegistry } from "./registerIcons";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.less"],
+  providers: [AllMatIconRegistry]
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private db: DbmanagerService,
     private breakpointObserver: BreakpointObserver,
-    private matIconRegistry: MatIconRegistry,
     private bridge: HostBridgeService,
-    private domSanitizer: DomSanitizer,
+    private allIcons: AllMatIconRegistry,
     private route: ActivatedRoute
   ) { }
   get hasCloseButton() {
@@ -55,55 +53,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription = this.db.wip$.subscribe((v) => {
       this.fsWip = v;
     });
-    this.matIconRegistry.addSvgIcon(
-      `select_piece`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/select_piece.svg`
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `add_piece`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/add_piece.svg`
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `remove_piece`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/remove_piece.svg`
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `move_piece`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/move_piece.svg`
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `dropbox_icon`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/dropbox_icon.svg`
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `onedrive_icon`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/onedrive_icon.svg`
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `my_flip_h`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/fliph.svg`
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `my_flip_v`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${environment.assetFolder}/toolbar/flipv.svg`
-      )
-    );
-
 
     this.db.Reload();
   }

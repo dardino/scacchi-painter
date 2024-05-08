@@ -85,8 +85,10 @@ export class Problem implements IProblem {
 
   static fromJson(jsonObj: Partial<IProblem>): Problem {
     const p = new Problem();
+    console.log("🚀 ~ Problem ~ fromJson ~ p:", p.twins.TwinList)
     Problem.applyJson(jsonObj, p);
     p.snapshots = { ...jsonObj.snapshots };
+    console.log("🚀 ~ Problem ~ fromJson ~ p:", jsonObj.twins?.TwinList)
     if (Object.keys(p.snapshots).length === 0) {
       p.saveAsMainSnapshot();
     } else {

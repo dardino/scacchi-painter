@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { RouterModule } from "@angular/router";
+import { ThirdPartyModules } from "../modules";
 import { DatabaseListItemComponent } from "./database-list-item.component";
 
 describe("DatabaseListItemComponent", () => {
@@ -8,6 +10,7 @@ describe("DatabaseListItemComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [...ThirdPartyModules, RouterModule.forRoot([])],
       declarations: [DatabaseListItemComponent]
     });
     fixture = TestBed.createComponent(DatabaseListItemComponent);

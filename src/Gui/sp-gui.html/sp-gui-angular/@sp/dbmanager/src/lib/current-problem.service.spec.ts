@@ -1,12 +1,12 @@
 import { TestBed } from "@angular/core/testing";
 
-import { CurrentProblemService } from "./current-problem.service";
-import { Piece, Problem } from "./models";
-import { DbmanagerService } from "./dbmanager.service";
+import { Injectable } from "@angular/core";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { Observable, Subject, Subscription } from "rxjs";
-import { Injectable, NgZone } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { CurrentProblemService } from "./current-problem.service";
+import { DbmanagerService } from "./dbmanager.service";
 import { IPiece } from "./helpers";
+import { Piece, Problem } from "./models";
 import { SquareLocations } from "./models/locations";
 
 @Injectable({
@@ -333,12 +333,12 @@ describe("CurrentProblemService", () => {
     it("Y", () => {
       service.ShiftBoard("y");
       const fen = dbmanager.CurrentProblem?.getCurrentFen();
-      expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8");
+      expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6");
     });
     it("-Y", () => {
       service.ShiftBoard("-y");
       const fen = dbmanager.CurrentProblem?.getCurrentFen();
-      expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6");
+      expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8");
     });
   });
 

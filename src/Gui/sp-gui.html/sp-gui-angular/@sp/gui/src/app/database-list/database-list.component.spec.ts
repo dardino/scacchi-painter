@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { RouterTestingModule } from "@angular/router/testing";
+import { RouterModule } from "@angular/router";
+import { ThirdPartyModules } from "../modules";
 import { OpenFileComponent } from "../open-file/open-file.component";
 import { DatabaseListComponent } from "./database-list.component";
 
@@ -13,10 +13,10 @@ describe("DatabaseListComponent", () => {
     TestBed.configureTestingModule({
       declarations: [DatabaseListComponent, OpenFileComponent],
       imports: [
-        MatSnackBarModule,
-        RouterTestingModule.withRoutes([
-          { path: "openfile", component: OpenFileComponent },
-        ]),
+        ...ThirdPartyModules,
+        RouterModule.forRoot(
+          [{ path: 'openfile', component: OpenFileComponent }]
+        )
       ],
     }).compileComponents();
   }));

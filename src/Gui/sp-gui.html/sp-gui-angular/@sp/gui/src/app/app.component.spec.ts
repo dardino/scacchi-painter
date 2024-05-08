@@ -1,18 +1,20 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { RouterTestingModule } from "@angular/router/testing";
+import { RouterModule } from "@angular/router";
 import { AppComponent } from "./app.component";
+import { ThirdPartyModules } from "./modules";
+import { AllMatIconRegistry } from "./registerIcons";
 
 describe("AppComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        MatSnackBarModule
+        ...ThirdPartyModules,
+        RouterModule.forRoot([])
       ],
       declarations: [
         AppComponent
       ],
+      providers: [AllMatIconRegistry]
     }).compileComponents();
   }));
 

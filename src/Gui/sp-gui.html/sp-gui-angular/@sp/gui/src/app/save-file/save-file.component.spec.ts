@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AllMatIconRegistry } from '../registerIcons';
 import { SaveFileComponent } from './save-file.component';
 
 describe('SaveFileComponent', () => {
@@ -9,8 +9,8 @@ describe('SaveFileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatSnackBarModule],
-      declarations: [ SaveFileComponent ]
+      declarations: [ SaveFileComponent ],
+      providers: [AllMatIconRegistry]
     })
     .compileComponents();
   });
