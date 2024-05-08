@@ -12,8 +12,7 @@ import {
   createXmlElement,
   fenToChessBoard,
   notEmpty,
-  notNull,
-  parseHTMLSolution,
+  notNull
 } from "../helpers";
 import { Author } from "./author";
 import { Piece } from "./piece";
@@ -23,7 +22,7 @@ import { Twins } from "./twins";
 // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
 const main_snapshot = "$_MAIN_$";
 
-export class Problem implements Omit<IProblem, "htmlSolution"> {
+export class Problem implements IProblem {
   private constructor() {}
 
   public textSolution = "";
@@ -37,10 +36,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
-  #htmlEls: HTMLElement[] = [];
-
-  public get htmlElements(): HTMLElement[] { return this.#htmlEls; }
-  public set htmlElements(value: HTMLElement[]) { this.#htmlEls = value; }
+  public htmlSolution: string = "";
   public conditions: string[] = [];
   public fairyCells: string[] = [];
   public tags: string[] = [];
@@ -63,7 +59,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     p.twins = Twins.fromElement(source.querySelector("Twins") ?? null);
     const sol = await GetSolutionFromElement(source);
     p.textSolution = sol.plain ?? "";
-    p.htmlElements = sol.html;
+    p.htmlSolution = sol.html;
     p.date = source.getAttribute("Date") ?? "";
     p.prizeRank = parseInt(source.getAttribute("PrizeRank") ?? "0", 10);
     p.personalID = source.getAttribute("PersonalID") ?? "";
@@ -123,7 +119,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
         ? Stipulation.fromJson(a.stipulation ?? {})
         : Stipulation.fromJson({});
     b.twins = a.twins ? Twins.fromJson(a.twins) : Twins.fromJson({});
-    b.htmlElements = a.htmlSolution ? parseHTMLSolution(a.htmlSolution) : [];
+    b.htmlSolution = a.htmlSolution ?? "";
     b.date = a.date ? a.date : new Date().toISOString();
     b.personalID = a.personalID ? a.personalID : "";
     b.prizeRank = a.prizeRank ?? 0;
@@ -143,7 +139,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     }
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
-    if (this.htmlElements) json.htmlSolution = this.getHtmlString();
+    if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
     if (this.textSolution) json.textSolution = this.textSolution;
     if (this.date) json.date = this.date;
     if (this.personalID) json.personalID = this.personalID;
@@ -193,7 +189,7 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
     SP2.setConditions(item, this.conditions);
     SP2.setTags(item, this.tags);
     SP2.setSolution(item, this.textSolution);
-    const rtfSol = (await convertToRtf(this.getHtmlString())) ?? this.textSolution;
+    const rtfSol = (await convertToRtf(this.htmlSolution)) ?? this.textSolution;
     SP2.setRtfSolution(item, rtfSol);
     return item;
   }
@@ -289,10 +285,6 @@ export class Problem implements Omit<IProblem, "htmlSolution"> {
       rows.push(row);
     }
     return rows.join("/") + this.getFairiesFen();
-  }
-
-  private getHtmlString() {
-    return this.htmlElements.map(el => el.outerHTML).join("");
   }
 
   private getFairiesFen(): string {

@@ -12,7 +12,6 @@ export class RecentsComponent implements OnInit {
   recents: RecentFileInfo[] = [];
   constructor(private db: DbmanagerService, private router: Router) {
     this.recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
-    console.log("🚀 ~ RecentsComponent ~ constructor ~ this.recents:", this.recents);
   }
 
   ngOnInit(): void {

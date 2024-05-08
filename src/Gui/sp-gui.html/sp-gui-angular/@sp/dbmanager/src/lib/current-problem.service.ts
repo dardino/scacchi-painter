@@ -9,8 +9,7 @@ import {
   SquareLocation,
   Traverse,
   TwinModes,
-  TwinTypesKeys,
-  parseHTMLSolution
+  TwinTypesKeys
 } from "./helpers";
 import { Author, Piece } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
@@ -27,7 +26,7 @@ export class CurrentProblemService {
   }
 
   get htmlSolution() {
-    return this.Problem?.htmlElements ?? [];
+    return this.Problem?.htmlSolution ?? "";
   }
 
   SetStipulationMoves(v: number) {
@@ -219,7 +218,7 @@ export class CurrentProblemService {
 
   SetHTMLSolution(html: string) {
     if (!this.Problem) return;
-    this.Problem.htmlElements = parseHTMLSolution(html);
+    this.Problem.htmlSolution = html;
   }
 
   private swapPieces(from: SquareLocation, to: SquareLocation) {
