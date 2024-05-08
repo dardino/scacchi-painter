@@ -1,4 +1,4 @@
-import { Author as IAuthor, newTextElement, createXmlElement } from "../helpers";
+import { Author as IAuthor, createXmlElement, newTextElement } from "../helpers";
 
 export class Author implements IAuthor {
   nameAndSurname: string;
@@ -9,8 +9,9 @@ export class Author implements IAuthor {
   stateOrProvince: string;
   country: string;
   language: string;
+  AuthorID: number;
 
-  public static fromElement(el: Element): Author {
+  public static fromElement(el: Element, id: number): Author {
     const a = new Author();
     a.nameAndSurname = el.querySelector("NameAndSurname")?.innerHTML ?? "";
     a.address =  el.querySelector("Address")?.innerHTML ?? "";
@@ -20,19 +21,25 @@ export class Author implements IAuthor {
     a.stateOrProvince =  el.querySelector("StateOrProvince")?.innerHTML ?? "";
     a.country =  el.querySelector("Country")?.innerHTML ?? "";
     a.language =  el.querySelector("Language")?.innerHTML ?? "";
+    a.AuthorID = id;
     return a;
   }
-  static fromJson(el: Partial<IAuthor>): Author {
+  static fromJson(el: Partial<IAuthor>, id: number): Author {
     const a = new Author();
-    a.nameAndSurname = el.nameAndSurname ?? "";
-    a.address = el.address ?? "";
-    a.city = el.city ?? "";
-    a.phone = el.phone ?? "";
-    a.zipCode = el.zipCode ?? "";
-    a.stateOrProvince = el.stateOrProvince ?? "";
-    a.country = el.country ?? "";
-    a.language = el.language ?? "";
-    return a;
+    a.AuthorID = id;
+    return a.updateFrom(el);
+  }
+
+  updateFrom(result: Partial<IAuthor>) {
+    this.nameAndSurname = result.nameAndSurname ?? "";
+    this.address = result.address ?? "";
+    this.city = result.city ?? "";
+    this.phone = result.phone ?? "";
+    this.zipCode = result.zipCode ?? "";
+    this.stateOrProvince = result.stateOrProvince ?? "";
+    this.country = result.country ?? "";
+    this.language = result.language ?? "";
+    return this;
   }
 
   toJson(): Partial<IAuthor> {
@@ -70,5 +77,6 @@ export class Author implements IAuthor {
     this.stateOrProvince = "";
     this.country = "";
     this.language = "";
+    this.AuthorID = -1;
   }
 }

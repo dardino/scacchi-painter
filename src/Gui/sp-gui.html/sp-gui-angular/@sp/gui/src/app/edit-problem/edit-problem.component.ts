@@ -10,7 +10,7 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ActivatedRoute } from "@angular/router";
-import { Piece } from "@sp/dbmanager/src/lib/models";
+import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
   CurrentProblemService,
@@ -21,10 +21,12 @@ import {
   getCanvasRotation,
   notNull,
 } from "@sp/dbmanager/src/public-api";
+import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 import { BehaviorSubject, Subscription, skip } from "rxjs";
+import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
@@ -58,6 +60,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private engine: EngineManagerService,
     private dialog: MatDialog,
+    private confirm: DialogService,
     private dbManager: DbmanagerService,
     private preferences: PreferencesService,
   ) {
@@ -407,6 +410,22 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  openAuthorDialog($event: Author | null): void {
+    const dialogRef = this.dialog.open<AuthorDialogComponent, Author | null, Author | null>(
+      AuthorDialogComponent,
+      {
+        width: "25rem",
+        maxWidth: "95%",
+        data: $event
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.current.AddOrUpdateAuthor(result);
+    });
+  }
+
   deleteCondition($event: string) {
     this.current.RemoveCondition($event);
   }
@@ -415,6 +434,19 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.current.RemoveTwin($event);
   }
 
+  deleteAuthor($event: Author) {
+    const modal = this.confirm.confirmDialog({
+      cancelText: "No!",
+      confirmText: "Yes! Remove Author!",
+      message: `Are you sure you want to remove the author ${$event.nameAndSurname} (${$event.AuthorID})? This operation cannot be undone!`,
+      title: "Remove Author Confirm"
+    }).subscribe(res => {
+      if (res === true) {
+        this.current.RemoveAuthor($event);
+      }
+      modal.unsubscribe();
+    });
+  }
 
   private toHtml(rows: string[]) {
     const content = rows

@@ -21,7 +21,7 @@
         sets informations about authors
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <lib-problem-authors></lib-problem-authors>
+    <lib-problem-authors (callAction)="callAuthorAction($event)"></lib-problem-authors>
   </mat-expansion-panel>
 
   <mat-expansion-panel expanded>

@@ -1,4 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Author } from "@sp/dbmanager/src/lib/models";
+import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
+import { AuthorCardActions } from "../author-card/author-card.component";
 
 @Component({
   selector: "lib-problem-authors",
@@ -6,7 +9,19 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./problem-authors.component.less"],
 })
 export class ProblemAuthorsComponent implements OnInit {
-  constructor() {}
 
+  get currentProblem() { return this.current.Problem; }
+  @Output()
+  public callAction = new EventEmitter<{ author: Author | null, action: AuthorCardActions }>();
+
+  constructor(private current: CurrentProblemService) {}
   ngOnInit(): void {}
+
+  action($event: AuthorCardActions, author: Author | null) {
+    this.callAction.emit({ action: $event, author });
+  }
+
+  openAuthor(author: Author | null) {
+    this.callAction.emit({ action: "edit", author });
+  }
 }

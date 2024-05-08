@@ -2,6 +2,10 @@
 
 ## Next
 
+## 0.0.7
+
+- [x] Mini Author management
+
 ## 0.0.6
 
 - [x] [#151](https://github.com/dardino/scacchi-painter/issues/151) Fix twins

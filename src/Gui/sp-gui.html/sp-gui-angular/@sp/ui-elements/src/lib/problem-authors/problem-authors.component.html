@@ -1,1 +1,4 @@
-<p>problem-authors works!</p>
+<div class="problem-authors">
+  <lib-author-card (action)="action($event, author)" *ngFor="let author of currentProblem?.authors" [author]="author"></lib-author-card>
+  <lib-author-card class="addButton" (click)="openAuthor(null)"></lib-author-card>
+</div>

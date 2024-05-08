@@ -8,7 +8,7 @@ import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.compone
 export class DialogService {
   constructor(private dialog: MatDialog) {}
   confirmDialog(data: ConfirmDialogData) {
-    return this.dialog.open(ConfirmDialogComponent, {
+    return this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
       data,
     }).afterClosed();
   }

@@ -16,6 +16,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { QuillModule } from "ngx-quill";
+import { AuthorCardComponent } from "./author-card/author-card.component";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
 import { DbsourceComponent } from "./dbsource/dbsource.component";
 import { FileExplorerComponent } from "./file-explorer/file-explorer.component";
@@ -52,6 +53,7 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     SpSolutionRowComponent,
     SortableListComponent,
     DbsourceComponent,
+    AuthorCardComponent,
   ],
   imports: [
     CommonModule,
@@ -83,7 +85,8 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     FileExplorerComponent,
     FileSourceSelectorComponent,
     DbsourceComponent,
+    AuthorCardComponent,
   ],
   providers: [QuillInitializeService],
 })
-export class UiElementsModule {}
+export class UiElementsModule { }

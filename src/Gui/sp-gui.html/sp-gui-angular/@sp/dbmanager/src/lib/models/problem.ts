@@ -66,9 +66,7 @@ export class Problem implements IProblem {
     p.prizeDescription = source.getAttribute("PrizeDescription") ?? "";
     p.source = source.getAttribute("Source") ?? "";
     p.source = source.getAttribute("Source") ?? "";
-    p.authors = Array.from(source.querySelectorAll("Author")).map((a) =>
-      Author.fromElement(a)
-    );
+    p.authors = Array.from(source.querySelectorAll("Author")).map(Author.fromElement);
     p.conditions = Array.from(source.querySelectorAll("Condition") ?? [])
       .map((el) => el.getAttribute("Value") ?? "")
       .filter(notEmpty);
@@ -85,10 +83,8 @@ export class Problem implements IProblem {
 
   static fromJson(jsonObj: Partial<IProblem>): Problem {
     const p = new Problem();
-    console.log("🚀 ~ Problem ~ fromJson ~ p:", p.twins.TwinList)
     Problem.applyJson(jsonObj, p);
     p.snapshots = { ...jsonObj.snapshots };
-    console.log("🚀 ~ Problem ~ fromJson ~ p:", jsonObj.twins?.TwinList)
     if (Object.keys(p.snapshots).length === 0) {
       p.saveAsMainSnapshot();
     } else {
@@ -110,7 +106,7 @@ export class Problem implements IProblem {
   static applyJson(a: Partial<IProblem>, b: Problem) {
     b.authors =
       (a.authors?.length ?? 0)
-        ? (a.authors ?? []).map((p) => Author.fromJson(p))
+        ? (a.authors ?? []).map(Author.fromJson)
         : [];
     b.pieces =
       (a.pieces?.length ?? 0)

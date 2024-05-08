@@ -221,6 +221,26 @@ export class CurrentProblemService {
     this.Problem.htmlSolution = html;
   }
 
+  AddOrUpdateAuthor(result: Author) {
+    if (!this.Problem) return;
+    if (result.AuthorID < 0) {
+      result.AuthorID = Math.max(...this.Problem.authors.map(au => au.AuthorID)) + 1;
+      this.Problem.authors.push(result);
+    } else {
+      const real = this.Problem.authors.find(au => au.AuthorID === result.AuthorID);
+      if (!real) {
+        this.Problem.authors.push(result);
+      } else {
+        real.updateFrom(result);
+      }
+    }
+  }
+  RemoveAuthor($event: Author) {
+    if (!this.Problem) return;
+    const real = this.Problem.authors.findIndex(au => au.AuthorID === $event.AuthorID);
+    if (real >= 0) this.Problem.authors.splice(real, 1);
+  }
+
   private swapPieces(from: SquareLocation, to: SquareLocation) {
     const p1 = this.Problem?.GetPieceAt(from.column, from.traverse);
     const p2 = this.Problem?.GetPieceAt(to.column, to.traverse);

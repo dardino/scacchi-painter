@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{Id > 0 ? "Edit" : "Add"}} an Author</h1>
+<div mat-dialog-content>
+  <mat-form-field color="accent" appearance="outline" class="input-condition">
+    <mat-label>Name and Surname</mat-label>
+    <input id="nameAndSurname" type="text" placeholder="Name and Surname" matInput [ngModel]="author.nameAndSurname" (ngModelChange)="setNameAndSurname($event)" />
+  </mat-form-field>
+  <mat-form-field color="accent" appearance="outline" class="input-condition">
+    <mat-label>Country</mat-label>
+    <input id="country" type="text" placeholder="Country" matInput [ngModel]="author.country" (ngModelChange)="setCountry($event)" />
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="clickCancel()">Cancel</button>
+  <button mat-button (click)="clickSave()" cdkFocusInitial>Save</button>
+</div>
