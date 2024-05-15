@@ -4,6 +4,7 @@
 
 ## 0.0.7
 
+- [x] FEN in editor
 - [x] Mini Author management
 
 ## 0.0.6

@@ -152,10 +152,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.boardType = this.boardType === "HTML" ? "canvas" : "HTML";
     this.resetActions();
   }
-  onTriggerContextMenu(event: MouseEvent) {
-    event.preventDefault();
-    this.menuX = event.x - 20;
-    this.menuY = event.y - 40;
+  onTriggerContextMenu(data: { event: MouseEvent, location: SquareLocation }) {
+    data.event.preventDefault();
+    this.menuX = data.event.x - 20;
+    this.menuY = data.event.y - 40;
     this.menu.openMenu();
     this.editMode = "select";
     this.resetActions();
