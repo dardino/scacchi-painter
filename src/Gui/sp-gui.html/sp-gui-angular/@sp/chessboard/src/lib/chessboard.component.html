@@ -32,4 +32,8 @@
     </span>
     <span class="piececounter">{{ pieceCounter }}</span>
   </div>
+  <div class="fen" *ngIf="!hideInfo">
+    <span>FEN:</span>
+    <span>{{ fen }}</span>
+  </div>
 </div>

@@ -58,6 +58,8 @@ export class ChessboardComponent
   cellClick = new EventEmitter<SquareLocation>();
   @Output()
   cellMiddleClick = new EventEmitter<SquareLocation>();
+  @Output()
+  contextOnCell = new EventEmitter<{ event: MouseEvent, location: SquareLocation }>();
 
   currentCell: UiCell | null = null;
   private lastHash?: string;
@@ -82,6 +84,9 @@ export class ChessboardComponent
   };
   private canvasBoard: CanvasChessBoard | null;
   private cellSize = 32;
+  public get fen() {
+    return this.position?.getCurrentFen();
+  }
 
   constructor(private fensvc: FenService) {}
 
