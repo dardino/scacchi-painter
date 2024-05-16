@@ -1,10 +1,23 @@
 # Release Notes
 
+## 0.0.8
+
+- Added this relase-note page
+
+## 0.0.7
+
+- Added a FEN label under the chessboard in the editor page
+- Added a "mini" Author management with minimal functionality
+
+## 0.0.6
+
+- Fixed twins [#151](https://github.com/dardino/scacchi-painter/issues/151)
+
 ## Version 0.0.5
 
 - Added a WYSIWYG editor to edit as HTML ([#149](https://github.com/username/repo/issues/149))
 - Implemented "Try this move" function
-- Added database list of problems ([#105](https://github.com/username/repo/issues/105))
+- Added a new menu command: **list of problems** ([#105](https://github.com/username/repo/issues/105))
 - Implemented twin editor ([#39](https://github.com/username/repo/issues/39))
 - Implemented a functionality to memoize these user prefereces in localStorage:
   - Memoized size of the sidebar

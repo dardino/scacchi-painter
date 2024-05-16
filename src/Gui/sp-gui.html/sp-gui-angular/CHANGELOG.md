@@ -2,6 +2,10 @@
 
 ## Next
 
+## 0.0.8
+
+- [ ] Release Note
+
 ## 0.0.7
 
 - [x] FEN in editor
