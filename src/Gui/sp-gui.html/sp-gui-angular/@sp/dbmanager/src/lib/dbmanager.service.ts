@@ -207,9 +207,13 @@ export class DbmanagerService {
 
   private async createFile(): Promise<File> {
     const type = this.currentFile?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3";
-    const filesp2 = await this.getDbFile("sp2");
-    const filesp3 = await this.getDbFile("sp3");
-    return type === "sp2" ? filesp2 : filesp3;
+    if (type === "sp2") {
+      const filesp2 = await this.getDbFile("sp2");
+      return filesp2;
+    } else {
+      const filesp3 = await this.getDbFile("sp3");
+      return filesp3;
+    }
   }
 
   private async download(file: File): Promise<void> {

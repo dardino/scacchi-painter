@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { DropboxdbService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
+import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import {
   AvaliableFileServices,
@@ -16,8 +16,10 @@ export class SaveFileComponent implements OnInit {
   constructor(
     private db: DbmanagerService,
     private dropboxFS: DropboxdbService,
-    private onedriveFS: OneDriveService
-  ) {}
+    private onedriveFS: OneDriveService,
+    private localFS: LocalDriveService,
+  ) { }
+
   private currentFolder: FolderSelected = {
     meta: {
       fullPath: "",
@@ -49,7 +51,19 @@ export class SaveFileComponent implements OnInit {
   public set fileName(v: string) {
     this.selectedFile.meta.itemName = v;
   }
-  public currentFileService: FileService | null = null;
+  public get currentFileService(): FileService | null {
+    switch (this.currentSource) {
+      case "local":
+        return this.localFS;
+      case "dropbox":
+        return this.dropboxFS;
+      case "onedrive":
+        return this.onedriveFS;
+      case "unknown":
+      default:
+        return null;
+    }
+  };
 
   public get currentFolderName() {
     if (this.currentFolder?.meta.type === "file") return this.actionName;
@@ -58,8 +72,8 @@ export class SaveFileComponent implements OnInit {
 
   public get actionName() {
     if (this.currentFileService == null) {
-      return "Download";
-    } else return "Save";
+      return "Download file";
+    } else return "Save file as";
   }
 
   ngOnInit(): void {
@@ -70,28 +84,29 @@ export class SaveFileComponent implements OnInit {
       setTimeout(() => {
         this.toDropbox();
       }, 1);
-    }
-    if (urlhash === "#onedrive") {
+    } else if (urlhash === "#onedrive") {
       setTimeout(() => {
         this.toOneDrive();
       }, 1);
-    }
-    if (this.selectedFile?.source === "dropbox") {
+    } else if (this.selectedFile?.source === "dropbox") {
       setTimeout(() => {
         this.toDropbox();
       }, 1);
-    }
-    if (this.selectedFile?.source === "onedrive") {
+    } else if (this.selectedFile?.source === "onedrive") {
       setTimeout(() => {
         this.toOneDrive();
+      }, 1);
+    } else {
+      setTimeout(() => {
+        this.toLocal();
       }, 1);
     }
   }
 
-  async sourceSelected(source: AvaliableFileServices | "new") {
+  async setCurrentSource(source: AvaliableFileServices | "new") {
     switch (source) {
       case "local":
-        await this.download();
+        await this.toLocal();
         break;
       case "dropbox":
         await this.toDropbox();
@@ -133,29 +148,37 @@ export class SaveFileComponent implements OnInit {
    */
   public async toDropbox() {
     if (this.selectedFile) this.selectedFile.source = "dropbox";
-    this.currentFileService = this.dropboxFS;
   }
   /**
    * open onedrive folder selector
    */
   public async toOneDrive() {
     if (this.selectedFile) this.selectedFile.source = "onedrive";
-    this.currentFileService = this.onedriveFS;
+  }
+  /**
+   * set as local folder
+   */
+  public async toLocal() {
+    this.currentFolder.meta.fullPath = "";
+    if (this.selectedFile) {
+      this.selectedFile.source = "local";
+    }
   }
 
   public async saveFile() {
-    if (
-      this.currentFolder.source === "local" ||
-      this.currentFolder.source === "unknown"
-    ) {
-      return this.download();
-    } else {
-      this.db.SetFileMeta({
-        source: this.currentFolder.source,
-        meta: this.selectedFile.meta,
-      });
-      const file = await this.db.GetFileContent();
-      await this.currentFileService?.saveFileContent(file, this.selectedFile.meta);
+    this.db.SetFileMeta({
+      source: this.currentFolder.source,
+      meta: this.selectedFile.meta,
+    });
+    const file = await this.db.GetFileContent();
+    const response = await this.currentFileService?.saveFileContent(file, this.selectedFile.meta);
+    if (response instanceof Error) {
+      if (
+        this.currentFolder.source === "local" ||
+        this.currentFolder.source === "unknown"
+      ) {
+        return this.download();
+      }
     }
     return null;
   }

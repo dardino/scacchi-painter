@@ -4,5 +4,5 @@
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/openfile']">Open database</a>
   <a (click)="selectElement.emit()" mat-list-item *ngIf="dbLoaded" [routerLink]="['/savefile']">Save database as...</a>
   <a (click)="selectElement.emit()" mat-list-item *ngIf="dbLoaded" [routerLink]="['/list']">List problems in database</a>
-  <a (click)="selectElement.emit()" mat-list-item *ngIf="dbLoaded" [routerLink]="['/config']">Configuration</a>
+  <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/config']">Configuration</a>
 </mat-nav-list>

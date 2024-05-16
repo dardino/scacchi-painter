@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
+import { AbortError } from "@sp/dbmanager/src/lib/providers/AbortError";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 
@@ -109,7 +110,9 @@ export class OpenFileComponent implements OnInit {
         type: "file"
       }, source: this.currentFileService.sourceName });
     } catch (err) {
-      this.fileloader.nativeElement.click();
+      if (!(err instanceof AbortError))
+        // if something was wrong use native element;
+        this.fileloader.nativeElement.click();
     }
   }
 
