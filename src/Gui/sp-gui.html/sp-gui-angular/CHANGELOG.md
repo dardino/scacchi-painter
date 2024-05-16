@@ -2,9 +2,14 @@
 
 ## Next
 
+- [x] BugFix: [#129](https://github.com/dardino/scacchi-painter/issues/129) Save to local file
+- [x] Some other smells:
+  - [ ] Menu item `Configuration` now is always visible
+  - [ ] The button `Save` in `save-as` page is now aligned to the field
+
 ## 0.0.8
 
-- [ ] Release Note
+- [x] Release Note
 
 ## 0.0.7
 

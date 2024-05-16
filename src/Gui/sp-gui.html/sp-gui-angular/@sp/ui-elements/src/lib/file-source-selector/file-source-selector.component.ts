@@ -19,6 +19,6 @@ export class FileSourceSelectorComponent implements OnInit {
   ngOnInit(): void {}
 
   public selectSource(source: "new" | AvaliableFileServices) {
-    if (this.current !== source) this.sourceSelected.emit(source);
+    this.sourceSelected.emit(source);
   }
 }

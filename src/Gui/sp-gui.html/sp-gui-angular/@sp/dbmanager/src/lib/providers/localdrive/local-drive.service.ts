@@ -5,6 +5,7 @@ import {
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
+import { AbortError } from "../AbortError";
 
 @Injectable({
   providedIn: "root",
@@ -24,33 +25,35 @@ export class LocalDriveService implements FileService {
 
     // if (itemID === "root_no_permission") return [];
     if (!window.showOpenFilePicker) {
-      alert("Your current device does not support the File System API. Try again on desktop Chrome!");
       throw new Error("Your current device does not support the File System API. Try again on desktop Chrome!");
     }
 
-
-    const [fileHandle] = await window.showOpenFilePicker({
-      types: [
-        {
-          description: "Scacchi Painter X",
-          accept: {
-            "application/json": [".sp3"],
+    try {
+      const [fileHandle] = await window.showOpenFilePicker({
+        types: [
+          {
+            description: "Scacchi Painter X",
+            accept: {
+              "application/json": [".sp3"],
+            },
           },
-        },
-        {
-          description: "Scacchi Painter 2",
-          accept: {
-            "text/xml": [".sp2"],
+          {
+            description: "Scacchi Painter 2",
+            accept: {
+              "text/xml": [".sp2"],
+            },
           },
-        },
-      ],
-    });
+        ],
+      });
+      const allOk = await this.verifyPermission(fileHandle, true);
+      if (!allOk) throw new Error("Cannot open a file!");
 
-    const allOk = await this.verifyPermission(fileHandle, true);
-    if (!allOk) throw new Error("Cannot open a file!");
-
-    const filecontent = await fileHandle.getFile();
-    return filecontent;
+      const filecontent = await fileHandle.getFile();
+      return filecontent;
+    } catch(err) {
+      console.log("🚀 ~ LocalDriveService ~ getFileContent ~ err:", err);
+      throw new AbortError((err as Error).message);
+    }
   }
   async saveFileContent(
     file: File,
@@ -67,7 +70,7 @@ export class LocalDriveService implements FileService {
   }
 
   // fileHandle is a FileSystemFileHandle
-// withWrite is a boolean set to true if write
+  // withWrite is a boolean set to true if write
 
   async verifyPermission(fileHandle: FileSystemHandle, withWrite: boolean) {
     const opts = {} as any;
