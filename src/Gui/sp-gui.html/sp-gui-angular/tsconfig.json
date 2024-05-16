@@ -21,7 +21,7 @@
     "strictPropertyInitialization": false,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "target": "ES2022",
+    "target": "ES6",
     "strict": true,
     "lib": [
       "DOM",
@@ -52,8 +52,7 @@
         "dist/rft-parser/rft-parser",
         "dist/rft-parser"
       ]
-    },
-    "useDefineForClassFields": false
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
