@@ -392,7 +392,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result == null) return;
       this.current.AddTwin(result);
-      console.log("The dialog was closed", result);
     });
   }
 

@@ -6,6 +6,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+to enable an external phone to access to WSL2 web server:
+
+`netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=4200 connectaddress=172.26.125.244 connectport=4200`
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.

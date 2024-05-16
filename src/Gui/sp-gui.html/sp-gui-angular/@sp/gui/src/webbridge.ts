@@ -124,7 +124,6 @@ class WebBridge implements BridgeGlobal {
     });
 
     rows.push(`EndProblem`);
-    console.log(rows);
     return rows;
   }
 }

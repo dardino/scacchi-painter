@@ -44,7 +44,6 @@ export class DatabaseListComponent implements OnInit {
 
   public valueChange($event: Event) {
     this.searchValue = ($event.target as HTMLInputElement).value;
-    console.log(this.searchValue );
     this.itemSource.filter(this.searchValue);
   };
 

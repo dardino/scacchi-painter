@@ -10258,6 +10258,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"marked@npm:^12.0.2":
+  version: 12.0.2
+  resolution: "marked@npm:12.0.2"
+  bin:
+    marked: bin/marked.js
+  checksum: 10/24d4fc58d37c1779197fa7f93c504d8c71d4df54eb69cbbc14a55ba2a8e2ad83d723801fc25452c21ce74b38a483c5863c53449f130253a597be9e9c1d3e7e2b
+  languageName: node
+  linkType: hard
+
 "media-typer@npm:0.3.0":
   version: 0.3.0
   resolution: "media-typer@npm:0.3.0"
@@ -13034,6 +13043,7 @@ __metadata:
     karma-jasmine: "npm:^5.1.0"
     karma-jasmine-html-reporter: "npm:^2.1.0"
     localtunnel: "npm:^2.0.2"
+    marked: "npm:^12.0.2"
     ng-packagr: "npm:^17.3.0"
     ngx-quill: "npm:^25.3.2"
     prosemirror-model: "npm:^1.19.2"
