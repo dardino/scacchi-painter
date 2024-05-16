@@ -176,10 +176,6 @@ export class AuthModule {
     } else {
       this.account = this.getAccount();
     }
-
-    if (this.account) {
-      console.log(this.account);
-    }
   }
 
   /**
@@ -192,9 +188,7 @@ export class AuthModule {
       .ssoSilent(this.silentLoginRequest)
       .then(() => {
         this.account = this.getAccount();
-        if (this.account) {
-          console.log(this.account);
-        } else {
+        if (!this.account) {
           console.log("No account!");
         }
       })

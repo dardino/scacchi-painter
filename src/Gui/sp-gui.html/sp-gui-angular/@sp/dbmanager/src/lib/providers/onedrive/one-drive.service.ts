@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
+import { Client } from "@microsoft/microsoft-graph-client";
+import type { Drive, DriveItem } from "@microsoft/microsoft-graph-types";
 import {
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
 import { getOneDriveToken } from "../../oauth_providers/onedrivecli";
-import { Client } from "@microsoft/microsoft-graph-client";
-import type { Drive, DriveItem } from "@microsoft/microsoft-graph-types";
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +23,6 @@ export class OneDriveService implements FileService {
     type: FolderItemInfo["type"],
     ...extensions: string[]
   ): Promise<FolderItemInfo[]> {
-    console.log(itemId, type);
     const tokenReponse = await this.authorize();
     if (tokenReponse == null) return [];
     const client = Client.initWithMiddleware({
@@ -100,7 +99,6 @@ export class OneDriveService implements FileService {
     });
     try {
       const save: DriveItem = await client.api(`${item.fullPath}:/content`).putStream(await file.text());
-      console.log(save);
       item.itemName = save.name ?? item.itemName;
       item.fullPath = `${save.parentReference?.path ?? ""}/${save.name ?? save.id}`;
       item.id = save.id ?? item.id;

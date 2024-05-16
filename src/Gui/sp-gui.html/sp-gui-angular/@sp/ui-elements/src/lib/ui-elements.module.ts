@@ -21,6 +21,7 @@ import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.componen
 import { DbsourceComponent } from "./dbsource/dbsource.component";
 import { FileExplorerComponent } from "./file-explorer/file-explorer.component";
 import { FileSourceSelectorComponent } from "./file-source-selector/file-source-selector.component";
+import { MarkdownPipe } from "./markdown.pipe";
 import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.component";
 import { ProblemDefinitionsComponent } from "./problem-definitions/problem-definitions.component";
 import { ProblemInfoComponent } from "./problem-info/problem-info.component";
@@ -54,6 +55,7 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     SortableListComponent,
     DbsourceComponent,
     AuthorCardComponent,
+    MarkdownPipe,
   ],
   imports: [
     CommonModule,
@@ -86,6 +88,7 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     FileSourceSelectorComponent,
     DbsourceComponent,
     AuthorCardComponent,
+    MarkdownPipe,
   ],
   providers: [QuillInitializeService],
 })
