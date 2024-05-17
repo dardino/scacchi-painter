@@ -10,7 +10,7 @@
 - "Recent files" section is now as tall as its container
 - Clicking in one of the recent files now does not crash if any error occurs
 - Engine toolbar now scrolls in small devices
-- Added the ability to open an sp2 file and save it, However, since not all possible cases have been tested, it is a good idea to make a copy of the file before opening it ([#37](https://github.com/dardino/scacchi-painter/issues/37))
+Added the ability to open a sp2 file and save it, However, since not all possible cases have been tested, it is a good idea to make a copy of the file before opening it ([#37](https://github.com/dardino/scacchi-painter/issues/37))
 
 ## 0.0.8
 
