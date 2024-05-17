@@ -1,29 +1,24 @@
 @import "../../../mediaquery";
 
-#app-main {
-  background-image: url("../assets/bg.jpg");
-  background-size: 10rem;
-  background-position: center;
-  background-attachment: scroll;
-  background-blend-mode: normal;
+.sidenav-container {
+  display: contents;
 }
 
-.sidenav-content{
-  display: flex;
-  flex-direction: column;
+.sidenav-content {
+  display: contents;
 }
-.main-app-toolbar{
-  flex: 0 0 auto;
+.main-app-toolbar {
+  position: sticky;
+  z-index: 2;
+  top: -1px;
 }
 
-.container{
-  flex: 1 1 auto;
-  overflow: auto;
-  position: relative;
+.container {
+  display: block;
 }
 
 .app-title{
-  flex: 1 1 auto;
+  user-select: none;
   -webkit-user-select: none;
   -webkit-app-region: drag;
   display: flex;
@@ -32,6 +27,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  position: sticky;
+  top: 0px;
 
   span, sub{
     display: block;

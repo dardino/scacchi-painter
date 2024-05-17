@@ -496,7 +496,7 @@ export const GetSolutionFromElement = async (el: Element) => {
   if (solRft != null && solRft.innerHTML.length > 0) {
     try {
       solText = await convertFromRtf(
-        Base64.decode(solRft.innerHTML).replace(/\r/g, "")
+        Base64.decode(solRft.innerHTML).replace(/[\r\n]+/g, "\n")
       );
     } catch (err) {
       console.error(err);
@@ -507,7 +507,7 @@ export const GetSolutionFromElement = async (el: Element) => {
     if (!sol) solText = [];
     else {
       solText = solDec
-        .replace(/\r\n/g, "\n")
+        .replace(/[\r\n]+/g, "\n")
         .split("\n")
         .map((txt) => {
           const div = document.createElement("div");

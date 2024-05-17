@@ -8,22 +8,23 @@
 }
 
 html{
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
 body{
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0;
-}
-
-div[fullscreen]{
-  position :absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
+  position: relative;
+  background-image: url("./assets/bg.jpg");
+  background-size: 10rem;
+  background-position: center;
+  background-attachment: scroll;
+  background-blend-mode: normal;
 }
 
 .figurine{
@@ -85,4 +86,8 @@ div[fullscreen]{
 .ql-snow .ql-editor .ql-code-block-container {
   background-color: transparent;
   color: #333;
+}
+
+app-root {
+  display: contents;
 }

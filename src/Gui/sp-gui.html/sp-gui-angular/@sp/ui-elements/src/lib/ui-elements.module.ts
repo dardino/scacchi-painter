@@ -59,8 +59,8 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
   ],
   imports: [
     CommonModule,
-    MatIconModule,
     MatButtonModule,
+    MatIconModule,
     MatToolbarModule,
     MatTooltipModule,
     MatButtonToggleModule,

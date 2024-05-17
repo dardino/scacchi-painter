@@ -6,6 +6,7 @@
 - [x] Some other smells:
   - [ ] Menu item `Configuration` now is always visible
   - [ ] The button `Save` in `save-as` page is now aligned to the field
+- [x] Main toolbar as stiky
 
 ## 0.0.8
 

@@ -92,7 +92,7 @@ export class Base64 {
   // private method for UTF-8 encoding
   private static _utf8_encode(textString: string) {
     let utftext = "";
-    textString = textString.replace(/\r\n/g, "\n");
+    textString = textString.replace(/[\r\n]+/g, "\n");
 
     for (let n = 0; n < textString.length; n++) {
       const c = textString.charCodeAt(n);

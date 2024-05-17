@@ -24,7 +24,7 @@
 
     @media (min-width: (@smallScreen + 1)) {
       position: sticky;
-      top: 0.5em;
+      top: calc(@maintoolbarH + 0.5rem);
     }
   }
 }
@@ -32,7 +32,7 @@
 .toolbar();
 
 .problem-editor {
-  min-height: calc(100vh - 4rem);
+  min-height: calc(100vh - @maintoolbarH);
   display: flex;
   flex-direction: column;
 

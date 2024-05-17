@@ -26,9 +26,9 @@ import { environment } from "../environments/environment";
 
 export const ThirdPartyModules = [
   CommonModule,
+  MatButtonModule,
   MatIconModule,
   MatTooltipModule,
-  MatButtonModule,
   BrowserModule,
   BrowserAnimationsModule,
   MatToolbarModule,
