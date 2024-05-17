@@ -188,7 +188,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribe = this.engine.solution$.pipe(
       skip(1) // skip first execution to avoid the reset of text at load
     ).subscribe((msg) => {
-      this.rows.push(...msg.replace(/\r/g, "").split("\n"));
+      this.rows.push(...msg.replace(/[\r\n]+/g, "\n").split("\n"));
       this.rows$ubject.next(this.rows);
       if (this.current.Problem) {
         this.current.Problem.htmlSolution = this.toHtml(this.rows);

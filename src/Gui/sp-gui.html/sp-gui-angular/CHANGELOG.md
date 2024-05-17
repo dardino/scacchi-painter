@@ -2,11 +2,17 @@
 
 ## Next
 
+## 0.0.9
+
 - [x] BugFix: [#129](https://github.com/dardino/scacchi-painter/issues/129) Save to local file
 - [x] Some other smells:
-  - [ ] Menu item `Configuration` now is always visible
-  - [ ] The button `Save` in `save-as` page is now aligned to the field
+  - [x] Menu item `Configuration` now is always visible
+  - [x] The button `Save` in `save-as` page is now aligned to the field
 - [x] Main toolbar as stiky
+- [x] Better layout management
+- [x] "Recent files" section is now as tall as its container
+- [x] Clicking in one of the recent files now does not crash if any error occurs
+- [x] Fix [#37](https://github.com/dardino/scacchi-painter/issues/37) Write SP2 files
 
 ## 0.0.8
 

@@ -94,7 +94,7 @@ export class DbmanagerService {
     private oneDriveFS: OneDriveService,
     private localDriveFS: LocalDriveService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   private get fileService(): FileService | null {
     switch (this.currentFile?.source) {
@@ -127,21 +127,22 @@ export class DbmanagerService {
     return result;
   }
   public async LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
-    this.workInProgress.next(true);
-    this.currentFile = { meta, source };
-    if (source == "unknown") {
-      this.workInProgress.next(false);
-      return null;
-    }
-    const file = await this.fileService?.getFileContent(meta);
-    if (!file) {
-      this.workInProgress.next(false);
-      return new Error("Unable to load file content from service!");
-    }
     try {
+      this.workInProgress.next(true);
+      this.currentFile = { meta, source };
+      if (source == "unknown") {
+        this.workInProgress.next(false);
+        return null;
+      }
+      const file = await this.fileService?.getFileContent(meta);
+      if (!file) {
+        return new Error("Unable to load file content from service!");
+      }
       return this.Load({ file, meta, source });
     } catch (err) {
       return err as Error;
+    } finally {
+      this.workInProgress.next(false);
     }
   }
 
@@ -200,7 +201,7 @@ export class DbmanagerService {
     const root = doc.querySelector("ScacchiPainterDatabase") as Element;
     root.setAttribute("version", "0.1.0.2");
     root.setAttribute("name", "Scacchi Painter 2 Database");
-    root.setAttribute("lastIndex", this.CurrentIndex.toFixed(1));
+    root.setAttribute("lastIndex", this.CurrentIndex.toFixed(0));
     problems.forEach((p) => root.appendChild(p));
     return doc;
   }

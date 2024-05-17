@@ -1,5 +1,17 @@
 # Release Notes
 
+## 0.0.9
+
+- Fixed Save to local file: [#129](https://github.com/dardino/scacchi-painter/issues/129) 
+- Menu item `Configuration` now is always visible
+- The button `Save` in `save-as` page is now aligned to the field
+- Main toolbar is positioned as stiky
+- Better layout management for landing page
+- "Recent files" section is now as tall as its container
+- Clicking in one of the recent files now does not crash if any error occurs
+- Engine toolbar now scrolls in small devices
+- Added the ability to open an sp2 file and save it, However, since not all possible cases have been tested, it is a good idea to make a copy of the file before opening it
+
 ## 0.0.8
 
 - Added this relase-note page

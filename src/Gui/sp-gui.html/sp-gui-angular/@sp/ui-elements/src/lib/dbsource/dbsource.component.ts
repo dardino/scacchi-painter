@@ -4,7 +4,7 @@ import { AvaliableFileServices } from '@sp/host-bridge/src/lib/fileService';
 @Component({
   selector: 'lib-dbsource',
   templateUrl: './dbsource.component.html',
-  styleUrl: './dbsource.component.css'
+  styleUrl: './dbsource.component.less'
 })
 export class DbsourceComponent {
 
