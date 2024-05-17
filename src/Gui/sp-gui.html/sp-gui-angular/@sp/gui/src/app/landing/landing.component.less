@@ -1,6 +1,13 @@
+@import "../../../../mediaquery.less";
+
 .landing{
   display: flex;
   flex-direction: row;
+  .containerMinHeight();
+
+  @media (max-width: (@smallScreen)){
+    flex-direction: column;
+  }
 
   .recents{
     padding: 1rem;
@@ -8,7 +15,7 @@
     width: 30rem;
     border-right: solid 1px rgba(255,255,255,.2);
   }
-  .news{
+  .news {
     padding: 1rem;
     flex: 1 1 auto;
   }

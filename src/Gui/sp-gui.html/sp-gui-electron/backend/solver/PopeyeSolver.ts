@@ -1,18 +1,18 @@
-import { ISolver } from "./Solver";
-import { IApplicationConfig } from "../settings/IApplicationConfig";
-import {
-  Problem,
-  Piece,
-} from "../../../sp-gui-angular/@sp/dbmanager/src/lib/models";
-import { EOF } from "../../../sp-gui-angular/@sp/host-bridge/src/lib/bridge-global";
-import {
-  TwinTypes,
-  TwinModes,
-} from "../../../sp-gui-angular/@sp/dbmanager/src/lib/helpers";
 import child, { spawn } from "child_process";
 import fs from "fs";
-import path from "path";
 import os from "os";
+import path from "path";
+import {
+  TwinModes,
+  TwinTypes,
+} from "../../../sp-gui-angular/@sp/dbmanager/src/lib/helpers";
+import {
+  Piece,
+  Problem,
+} from "../../../sp-gui-angular/@sp/dbmanager/src/lib/models";
+import { EOF } from "../../../sp-gui-angular/@sp/host-bridge/src/lib/bridge-global";
+import { IApplicationConfig } from "../settings/IApplicationConfig";
+import { ISolver } from "./Solver";
 
 const txtName = `problem.txt`;
 
@@ -53,7 +53,7 @@ export class PopeyeSolver implements ISolver {
 
     this.writeTempFile(problem)
       .then(async (textContent) => {
-        cbOut(textContent.join("\r"));
+        cbOut(textContent.join("\n"));
         this.childProcess = await this.runProcess();
 
         if (!this.childProcess) {

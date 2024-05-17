@@ -2,6 +2,6 @@
 <ul>
   <li *ngFor="let recent of recents" (click)="clickOnRecent(recent)">
     <lib-dbsource [source]="recent.source"></lib-dbsource>
-    <span>{{recent.meta.itemName}}</span>
+    <span class="filename">{{fullpath(recent)}}</span>
   </li>
 </ul>

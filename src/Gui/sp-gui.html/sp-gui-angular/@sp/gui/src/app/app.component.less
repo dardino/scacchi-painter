@@ -1,4 +1,4 @@
-@import "../../../mediaquery";
+@import "../../../mediaquery.less";
 
 .sidenav-container {
   display: contents;
@@ -15,9 +15,11 @@
 
 .container {
   display: block;
+  .containerMinHeight();
 }
 
 .app-title{
+  flex: 1 1 0px;
   user-select: none;
   -webkit-user-select: none;
   -webkit-app-region: drag;
