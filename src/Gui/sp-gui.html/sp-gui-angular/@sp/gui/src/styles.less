@@ -30,7 +30,8 @@ body{
 .figurine{
   color: var(--black-color);
   font-family: "ScacchiPainter", sans-serif;
-  letter-spacing: normal;
+  text-rendering: optimizeLegibility !important;
+  letter-spacing: normal !important;
   font-style: normal;
   font-weight: normal;
   height: 1.42em;
@@ -38,8 +39,6 @@ body{
   position: relative;
   display: block;
   line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 .figurine:after,
 .figurine:before {
