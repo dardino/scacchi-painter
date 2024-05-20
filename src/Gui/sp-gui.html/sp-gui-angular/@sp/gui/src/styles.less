@@ -39,6 +39,8 @@ body{
   position: relative;
   display: block;
   line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .figurine:after,
 .figurine:before {
@@ -55,10 +57,10 @@ body{
 
 .figurine:before {
   color: var(--white-color);
-  content: "__" attr(data-piece);
+  content: attr(data-bg-piece);
 }
 .figurine:after {
-  content: attr(data-color) "_" attr(data-piece);
+  content: attr(data-colored-piece);
 }
 
 

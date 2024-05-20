@@ -1,6 +1,10 @@
 # Release Notes
 
-## 0.0.9
+## Version 0.0.10
+
+- Fix figurine in iOS
+
+## Version 0.0.9
 
 - Fixed Save to local file: ([#129](https://github.com/dardino/scacchi-painter/issues/129))
 - Menu item `Configuration` now is always visible
@@ -12,16 +16,16 @@
 - Engine toolbar now scrolls in small devices
 Added the ability to open a sp2 file and save it, However, since not all possible cases have been tested, it is a good idea to make a copy of the file before opening it ([#37](https://github.com/dardino/scacchi-painter/issues/37))
 
-## 0.0.8
+## Version 0.0.8
 
 - Added this relase-note page
 
-## 0.0.7
+## Version 0.0.7
 
 - Added a FEN label under the chessboard in the editor page
 - Added a "mini" Author management with minimal functionality
 
-## 0.0.6
+## Version 0.0.6
 
 - Fixed twins [#151](https://github.com/dardino/scacchi-painter/issues/151)
 

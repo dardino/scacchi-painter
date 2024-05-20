@@ -2,6 +2,10 @@
 
 ## Next
 
+## 0.0.10
+
+- Fix figurine in iOS
+
 ## 0.0.9
 
 - [x] BugFix: [#129](https://github.com/dardino/scacchi-painter/issues/129) Save to local file
