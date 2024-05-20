@@ -1,8 +1,8 @@
 <div class="richeditor" *ngIf="viewMode === 'both' || viewMode === 'html'">
   <ngx-editor-menu [editor]="editor" [toolbar]="toolbar" [colorPresets]="colorPresets">
   </ngx-editor-menu>
-  <ngx-editor [editor]="editor"   [style.fontSize]="solutionFontSize"
-    outputFormat="html" placeholder="Run solution engine with the 'play' button" [(ngModel)]="solutionHtml">
+  <ngx-editor [editor]="editor" [style.fontSize]="solutionFontSize" outputFormat="html"
+    placeholder="Run solution engine with the 'play' button" [(ngModel)]="solutionHtml">
   </ngx-editor>
 </div>
 <div *ngIf="viewMode === 'both' || viewMode === 'txt'" class="solutions" [style.fontSize]="solutionFontSize">

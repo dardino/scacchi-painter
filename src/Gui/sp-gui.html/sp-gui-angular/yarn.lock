@@ -11827,21 +11827,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-model@npm:^1.0.0, prosemirror-model@npm:^1.20.0, prosemirror-model@npm:^1.21.0":
+"prosemirror-model@npm:1.21.0":
   version: 1.21.0
   resolution: "prosemirror-model@npm:1.21.0"
   dependencies:
     orderedmap: "npm:^2.0.0"
   checksum: 10/2bf432e79bec08bc5e62dd50e80b10ed25e281f688e5f083342029ae1e7c469dbb4260bbcf11f23746d32a74ba7ea30daf75fbff35b94e6655bcc7575c2f424e
-  languageName: node
-  linkType: hard
-
-"prosemirror-model@npm:^1.19.2":
-  version: 1.20.0
-  resolution: "prosemirror-model@npm:1.20.0"
-  dependencies:
-    orderedmap: "npm:^2.0.0"
-  checksum: 10/4daa92afb0ba9613712628ed229504dbec2c194c6bb454835ce4dd65b25076ef107a8d052f14ca65d276aac48e90df52de27c71c615c9db83c3f68bbb90dbf21
   languageName: node
   linkType: hard
 
@@ -13128,7 +13119,7 @@ __metadata:
     marked: "npm:^12.0.2"
     ng-packagr: "npm:^17.3.0"
     ngx-editor: "npm:^17.5.4"
-    prosemirror-model: "npm:^1.19.2"
+    prosemirror-model: "npm:^1.21.0"
     protractor: "npm:^7.0.0"
     remotedebug-ios-webkit-adapter: "npm:^0.4.2"
     rtf.js: "npm:^3.0.9"
