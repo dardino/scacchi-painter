@@ -1,12 +1,12 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+import { Component, Input, OnInit } from "@angular/core";
 import {
+  GetSquareColor,
   IPiece,
   SquareLocation,
-  GetSquareColor,
   getCanvasColor,
   getFigurine,
 } from "@sp/dbmanager/src/public-api";
+import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
   selector: "lib-board-cell",
@@ -50,6 +50,12 @@ export class BoardCellComponent implements OnInit {
   }
   get color(): string {
     return this.piece?.color[0].toLowerCase() ?? "";
+  }
+  get colored() {
+    return `${this.color}_${this.figurine}`;
+  }
+  get bg() {
+    return `__${this.figurine}`;
   }
   get fairy(): string {
     return (this.piece?.fairyCode ?? []).map(p => p.code).join("+");
