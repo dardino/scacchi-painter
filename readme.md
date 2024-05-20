@@ -5,6 +5,6 @@
 
 A new cross-platform engine and gui for chess problem composers
 
-A running and usable online preview is available [Here](https://orange-sea-080bc3503.azurestaticapps.net/)
+A running and usable online preview is available [Here](https://orange-sea-080bc3503-release.westeurope.azurestaticapps.net/)
 
 Go to [Roadmap](https://github.com/dardino/scacchi-painter/wiki/RoadMap) to look at the future
