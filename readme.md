@@ -10,6 +10,6 @@ A running and usable online preview is available
 
 or
 
-[Here (lts)](https://orange-sea-080bc3503.westeurope.azurestaticapps.net/)
+[Here (lts)](https://orange-sea-080bc3503.azurestaticapps.net/)
 
 Go to [Roadmap](https://github.com/dardino/scacchi-painter/wiki/RoadMap) to look at the future
