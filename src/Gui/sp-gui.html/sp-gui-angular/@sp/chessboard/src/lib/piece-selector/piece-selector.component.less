@@ -1,32 +1,39 @@
 @import "../../../../mediaquery";
 
+
+:host {
+  display: block;
+  padding-bottom: 33.3%;
+  position: relative;
+}
+
 .piece-selector {
   display:flex;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
   background-color: #fff;
   flex-flow: row wrap;
-  font-size: 2rem;
+  font-size: ~"calc(@{boardwidthSM} / 9)";
 
   em {
     flex: 0 0 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 3rem;
-    height: 3rem;
+    flex: 0 0 calc(100% / 9);
+    font-size: 0.6em;
+    height: 33.3%;
   }
 
   @media (max-width: @smallScreen){
-    font-size: ~"calc((calc(@{boardwidthSM} - 1rem) / 13))";
+    font-size: calc(100vw / 9);
   }
   @media (max-height: @smallScreen){
-    font-size: ~"calc((calc(@{boardwidthSM} - 1rem) / 13))";
+    font-size: ~"calc(@{boardwidthSM} / 9)";
   }
 
-  em {
-    flex: 0 0 calc((100% / 9));
-    min-width: calc((100% / 9));
-    height: ~"calc((calc(@{boardwidthSM} - 1rem) / 9))";
-  }
 }
 
 .piece-selector-item {

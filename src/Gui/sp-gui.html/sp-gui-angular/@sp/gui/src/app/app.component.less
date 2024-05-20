@@ -9,8 +9,11 @@
 }
 .main-app-toolbar {
   position: sticky;
-  z-index: 2;
   top: -1px;
+  z-index: 2;
+  @media (max-height: @smallScreen){
+    position: static;
+  }
 }
 
 .container {
@@ -29,8 +32,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  position: sticky;
-  top: 0px;
 
   span, sub{
     display: block;

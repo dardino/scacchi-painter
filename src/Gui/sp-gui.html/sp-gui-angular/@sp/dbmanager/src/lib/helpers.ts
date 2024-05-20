@@ -614,6 +614,16 @@ const stringToArrayBuffer = (stringText: string) => {
   return buffer;
 };
 
+export function prepare(element: HTMLElement): HTMLElement {
+  if (element.tagName.toLocaleLowerCase() == "div") {
+    const newEl = document.createElement("p");
+    newEl.innerHTML = element.innerHTML;
+    return newEl;
+  } else {
+    return element;
+  }
+}
+
 export const convertFromRtf = async (rtf: string) => {
   const { EMFJS, RTFJS, WMFJS } = await import("rtf.js");
   RTFJS.loggingEnabled(false);
@@ -622,11 +632,11 @@ export const convertFromRtf = async (rtf: string) => {
   try {
     const doc = new RTFJS.Document(stringToArrayBuffer(rtf), {});
     const htmlElements = await doc.render();
-    return htmlElements;
+    return htmlElements.map(prepare);
   } catch (err) {
     console.warn(err, rtf);
-    return rtf.split("\n").map((d) => {
-      const div = document.createElement("div");
+    return rtf.split(/[\r\n]+/g).map((d) => {
+      const div = document.createElement("p");
       div.innerText = d;
       return div;
     });
