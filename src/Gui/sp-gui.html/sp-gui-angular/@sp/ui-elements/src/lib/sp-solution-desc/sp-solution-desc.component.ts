@@ -36,6 +36,9 @@ export class SpSolutionDescComponent implements OnInit {
     // noop
     this.editor = new Editor({
       history: true,
+      parseOptions: {
+        preserveWhitespace: true,
+      }
     });
   }
 

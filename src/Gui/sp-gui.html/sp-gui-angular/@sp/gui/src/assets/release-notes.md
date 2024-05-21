@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 0.0.11
+
+- New Grid Layout to place elements in page
+- Fixing imports from SP2: line-break
+
 ## Version 0.0.10
 
 - Fix figurine in iOS
