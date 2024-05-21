@@ -1,6 +1,10 @@
 @import "../../../../mediaquery.less";
 @import "../../../../toolbarcommon.less";
 
+:host {
+  display: contents;
+}
+
 #chessboard {
   width:~"min(calc(@{boardwidthSM} - 1rem), 27rem)";
   padding: 0.5rem;
@@ -31,16 +35,6 @@
 }
 
 .toolbar();
-
-.problem-editor {
-  .containerMinHeight();
-  display: flex;
-  flex-direction: column;
-
-  @media (max-width: @smallScreen) and (orientation: landscape) {
-    padding-left: @boardwidthSM;
-  }
-}
 
 #info {
   padding: 0.5rem;

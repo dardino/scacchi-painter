@@ -15,23 +15,24 @@
   top: 0;
   background-color: #fff;
   flex-flow: row wrap;
-  font-size: ~"calc(@{boardwidthSM} / 9)";
+  font-size: 3rem;
 
   em {
     flex: 0 0 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 calc(100% / 9);
+    flex: 0 0 11.1%;
     font-size: 0.6em;
     height: 33.3%;
   }
 
-  @media (max-width: @smallScreen){
+  @media (orientation: portrait) and (max-width: @smallScreen) {
     font-size: calc(100vw / 9);
   }
-  @media (max-height: @smallScreen){
-    font-size: ~"calc(@{boardwidthSM} / 9)";
+
+  @media (orientation: landscape) and (max-height: @smallScreen){
+    font-size: 2rem;
   }
 
 }

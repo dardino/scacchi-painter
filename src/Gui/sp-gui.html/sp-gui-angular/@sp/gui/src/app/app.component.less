@@ -7,7 +7,10 @@
 .sidenav-content {
   display: contents;
 }
+
 .main-app-toolbar {
+  grid-row: 1;
+  grid-column: span 2;
   position: sticky;
   top: -1px;
   z-index: 2;
@@ -16,12 +19,7 @@
   }
 }
 
-.container {
-  display: block;
-  .containerMinHeight();
-}
-
-.app-title{
+.app-title {
   flex: 1 1 0px;
   user-select: none;
   -webkit-user-select: none;
@@ -49,7 +47,7 @@
   }
 }
 
-.spinner-container{
+.spinner-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -60,4 +58,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+router-outlet {
+  display: contents;
 }
