@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import {
@@ -18,6 +19,7 @@ export class SaveFileComponent implements OnInit {
     private dropboxFS: DropboxdbService,
     private onedriveFS: OneDriveService,
     private localFS: LocalDriveService,
+    private router: Router,
   ) { }
 
   private currentFolder: FolderSelected = {
@@ -170,15 +172,13 @@ export class SaveFileComponent implements OnInit {
       source: this.currentFolder.source,
       meta: this.selectedFile.meta,
     });
-    const file = await this.db.GetFileContent();
-    const response = await this.currentFileService?.saveFileContent(file, this.selectedFile.meta);
-    if (response instanceof Error) {
-      if (
-        this.currentFolder.source === "local" ||
-        this.currentFolder.source === "unknown"
-      ) {
-        return this.download();
+    try {
+      const file = await this.db.Save();
+      if (file) {
+        this.router.navigateByUrl("/list");
       }
+    } catch (err) {
+      await this.download();
     }
     return null;
   }
@@ -204,8 +204,8 @@ export class SaveFileComponent implements OnInit {
 }
 
 function adjustPathDescription(fullPath: string, currentSource: AvaliableFileServices) {
-    if (currentSource === "onedrive") {
-      return fullPath.replace(/^\/drives\/root:\//, "One Drive - ");
-    }
-    return fullPath;
+  if (currentSource === "onedrive") {
+    return fullPath.replace(/^\/drives\/root:\//, "One Drive - ");
+  }
+  return fullPath;
 }
