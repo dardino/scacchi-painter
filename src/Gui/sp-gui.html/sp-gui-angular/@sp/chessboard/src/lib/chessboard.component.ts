@@ -11,7 +11,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { FenService } from "@sp/dbmanager/src/lib/fen.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
   GetLocationFromIndex,
@@ -88,7 +88,7 @@ export class ChessboardComponent
     return this.position?.getCurrentFen();
   }
 
-  constructor(private fensvc: FenService) {}
+  constructor(private snackBar: MatSnackBar) {}
 
   onSelectCell($event: Event) {
     console.log($event);
@@ -203,6 +203,16 @@ export class ChessboardComponent
       this.currentCell ? { ...this.currentCell?.location } : null
     );
   }
+  copyFen() {
+    if (!this.fen) return;
+    navigator.clipboard.writeText(this.fen);
+    this.snackBar.open("Fen copied to clipboard!", undefined, {
+      verticalPosition: "top",
+      politeness: "assertive",
+      duration: 1000,
+    });
+  }
+
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function

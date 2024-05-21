@@ -32,7 +32,7 @@
     </span>
     <span class="piececounter">{{ pieceCounter }}</span>
   </div>
-  <div class="fen" *ngIf="!hideInfo">
+  <div class="fen" *ngIf="!hideInfo" (click)="copyFen()">
     <span>FEN:</span>
     <span>{{ fen }}</span>
   </div>

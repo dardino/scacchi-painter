@@ -237,7 +237,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   private applyPreferences() {
-    this.panelleft.nativeElement.style.flex = `0 0 min(max(330px, ${this.preferences.editWindowWidth}px), calc(100vw - 330px))`;
+    this.panelleft.nativeElement.style.width = `min(max(20rem, ${this.preferences.editWindowWidth}px), calc(100vw - 20rem))`;
     window.dispatchEvent(new Event("resize"));
   }
 

@@ -64,7 +64,6 @@ export class SpSolutionDescComponent implements OnInit {
     return changedText;
   }
   set solutionHtml(text: string) {
-    console.log("🚀 ~ SpSolutionDescComponent ~ setsolutionHtml ~ text:", text)
     this.problem.SetHTMLSolution(text);
   }
 
