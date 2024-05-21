@@ -1,25 +1,14 @@
+<h1 class="title">Save to:</h1>
 <div>
-  <div>
-    <h1 class="title">Save to:</h1>
-    <lib-file-source-selector
-      [hideNew]="true"
-      [current]="currentSource"
-      (sourceSelected)="setCurrentSource($event)"
-    ></lib-file-source-selector>
-  </div>
-  <mat-toolbar class="fileSaveToolbar">
-    <span>{{ currentFolderName }}</span>
-  </mat-toolbar>
+  <lib-file-source-selector [hideNew]="true" [current]="currentSource"
+    (sourceSelected)="setCurrentSource($event)"></lib-file-source-selector>
+</div>
+<mat-toolbar class="fileSaveToolbar">
+  <span>{{ currentFolderName }}</span>
   <div class="saveinput">
     <mat-form-field class="save-field" subscriptSizing="dynamic">
       <input aria-label="File Name" matInput type="text" [(ngModel)]="fileName" />
-      <button
-        *ngIf="fileName"
-        matSuffix
-        mat-icon-button
-        aria-label="Clear"
-        (click)="fileName = ''"
-      >
+      <button *ngIf="fileName" matSuffix mat-icon-button aria-label="Clear" (click)="fileName = ''">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
@@ -27,12 +16,8 @@
       <mat-icon>save</mat-icon>
     </button>
   </div>
-  <div *ngIf="showFilePicker">
-    <lib-file-explorer
-      mode="save"
-      [service]="currentFileService"
-      (folderChanged)="expandFolder($event)"
-      (selectFile)="selectFile($event)"
-    ></lib-file-explorer>
-  </div>
+</mat-toolbar>
+<div *ngIf="showFilePicker">
+  <lib-file-explorer mode="save" [service]="currentFileService" (folderChanged)="expandFolder($event)"
+    (selectFile)="selectFile($event)"></lib-file-explorer>
 </div>

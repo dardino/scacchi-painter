@@ -67,7 +67,7 @@ export class SaveFileComponent implements OnInit {
 
   public get currentFolderName() {
     if (this.currentFolder?.meta.type === "file") return this.actionName;
-    return this.currentFolder?.meta.fullPath + "/" + this.fileName;
+    return adjustPathDescription(this.currentFolder?.meta.fullPath + "/", this.currentSource);
   }
 
   public get actionName() {
@@ -201,4 +201,11 @@ export class SaveFileComponent implements OnInit {
   public selectFile(folder: FolderSelected) {
     this.selectedFile = folder;
   }
+}
+
+function adjustPathDescription(fullPath: string, currentSource: AvaliableFileServices) {
+    if (currentSource === "onedrive") {
+      return fullPath.replace(/^\/drives\/root:\//, "One Drive - ");
+    }
+    return fullPath;
 }
