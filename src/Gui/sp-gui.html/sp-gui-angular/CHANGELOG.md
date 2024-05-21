@@ -2,6 +2,10 @@
 
 ## Next
 
+- New Grid Layout to place elements in page
+- Fixing imports from SP2: line-break
+- Position and size of board in mobile
+
 ## 0.0.10
 
 - Fix figurine in iOS

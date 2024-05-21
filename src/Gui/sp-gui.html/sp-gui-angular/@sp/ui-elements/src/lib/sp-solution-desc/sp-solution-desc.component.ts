@@ -3,10 +3,8 @@ import { NgModel } from "@angular/forms";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
-import { QuillConfig } from "ngx-quill";
+import { Editor, Toolbar } from 'ngx-editor';
 import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
-
-/*https://stackblitz.com/edit/ngx-quill-example-btmh9i?file=src%2Fapp%2Fapp.component.ts*/
 
 @Component({
   selector: "lib-sp-solution-desc",
@@ -14,11 +12,34 @@ import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
   styleUrls: ["./sp-solution-desc.component.less"],
 })
 export class SpSolutionDescComponent implements OnInit {
+  editor: Editor;
+  toolbar: Toolbar = [
+    // default value
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'link'],
+    // ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    // or, set options for link:
+    //[{ link: { showOpenInNewTab: false } }, 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+    [/*'horizontal_rule', */'format_clear', 'indent', 'outdent'],
+    // ['superscript', 'subscript'],
+    ['undo', 'redo'],
+  ];
+  colorPresets = ['red', '#FF0000', 'rgb(255, 0, 0)'];
   constructor(
     private preferences: PreferencesService,
     private problem: CurrentProblemService
   ) {
     // noop
+    this.editor = new Editor({
+      history: true,
+      parseOptions: {
+        preserveWhitespace: true,
+      }
+    });
   }
 
   @Input()
@@ -34,6 +55,7 @@ export class SpSolutionDescComponent implements OnInit {
   }
 
   get solution() {
+
     return this.problem.textSolution ?? "";
   }
   set solution(txt: string) {
@@ -41,7 +63,8 @@ export class SpSolutionDescComponent implements OnInit {
   }
 
   get solutionHtml() {
-    return this.problem.htmlSolution.replace(/ /g, "&nbsp;") ?? "";
+    const changedText = this.problem.htmlSolution ?? "";
+    return changedText;
   }
   set solutionHtml(text: string) {
     this.problem.SetHTMLSolution(text);
@@ -65,13 +88,4 @@ export class SpSolutionDescComponent implements OnInit {
     updateOn: "blur"
   };
 
-  quillModules: Required<QuillConfig>["modules"] = {
-    toolbar: [
-      ['bold', 'italic', 'underline']
-    ]
-  };
-
-  quillFormats: Required<QuillConfig>["formats"] = [
-    "italic", "bold", "underline"
-  ];
 }

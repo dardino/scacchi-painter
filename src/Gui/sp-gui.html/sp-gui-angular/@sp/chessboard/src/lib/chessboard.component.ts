@@ -11,7 +11,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { FenService } from "@sp/dbmanager/src/lib/fen.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
   GetLocationFromIndex,
@@ -78,17 +78,17 @@ export class ChessboardComponent
     PIECECOLORS: [string, string];
     BORDER_SIZE: number;
   } = {
-    BORDER_SIZE: 1,
-    CELLCOLORS: ["#fff", "#ddd"],
-    PIECECOLORS: ["#fff", "#333"],
-  };
+      BORDER_SIZE: 1,
+      CELLCOLORS: ["#fff", "#ddd"],
+      PIECECOLORS: ["#fff", "#333"],
+    };
   private canvasBoard: CanvasChessBoard | null;
   private cellSize = 32;
   public get fen() {
     return this.position?.getCurrentFen();
   }
 
-  constructor(private fensvc: FenService) {}
+  constructor(private snackBar: MatSnackBar) { }
 
   onSelectCell($event: Event) {
     console.log($event);
@@ -116,8 +116,8 @@ export class ChessboardComponent
         );
         (this.cbImage
           .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
-          this.cellSize / 2
-        )} ${Math.floor(this.cellSize / 2)}, auto`;
+            this.cellSize / 2
+          )} ${Math.floor(this.cellSize / 2)}, auto`;
       } else {
         (this.cbImage.nativeElement as HTMLDivElement).style.cursor = "unset";
       }
@@ -203,6 +203,23 @@ export class ChessboardComponent
       this.currentCell ? { ...this.currentCell?.location } : null
     );
   }
+  copyFen() {
+    if (!this.fen) {
+      this.snackBar.open("No FEN to copy!", undefined, {
+        verticalPosition: "top",
+        politeness: "assertive",
+        duration: 1000,
+      });
+      return
+    }
+    navigator.clipboard.writeText(this.fen);
+    this.snackBar.open("Fen copied to clipboard!", undefined, {
+      verticalPosition: "top",
+      politeness: "assertive",
+      duration: 1000,
+    });
+  }
+
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function
@@ -270,9 +287,8 @@ const getPieceIcon = (
   }
   const fsize = Math.floor(cellSize / 1.44);
   const margin = Math.floor((cellSize - fsize) / 2);
-  ctx.font = `${fsize}px ${
-    figurine === "X" ? "Arial, sans" : "ScacchiPainter"
-  }`;
+  ctx.font = `${fsize}px ${figurine === "X" ? "Arial, sans" : "ScacchiPainter"
+    }`;
   ctx.lineWidth = 2;
 
   if (rot != null) {

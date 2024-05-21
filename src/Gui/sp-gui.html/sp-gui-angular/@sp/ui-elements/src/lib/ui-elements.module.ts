@@ -15,7 +15,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatSelectModule } from "@angular/material/select";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { QuillModule } from "ngx-quill";
+import { NgxEditorModule } from 'ngx-editor';
 import { AuthorCardComponent } from "./author-card/author-card.component";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
 import { DbsourceComponent } from "./dbsource/dbsource.component";
@@ -26,7 +26,6 @@ import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.compo
 import { ProblemDefinitionsComponent } from "./problem-definitions/problem-definitions.component";
 import { ProblemInfoComponent } from "./problem-info/problem-info.component";
 import { ProblemPublicationComponent } from "./problem-publication/problem-publication.component";
-import { QuillInitializeService } from "./services/quillInitialize.service";
 import { SortableListComponent } from './sortable-list/sortable-list.component';
 import { SpSolutionDescComponent } from "./sp-solution-desc/sp-solution-desc.component";
 import { SpSolutionRowComponent } from "./sp-solution-row/sp-solution-row.component";
@@ -64,7 +63,7 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     MatToolbarModule,
     MatTooltipModule,
     MatButtonToggleModule,
-    QuillModule.forRoot(),
+    NgxEditorModule,
     FormsModule,
     MatCardModule,
     MatGridListModule,
@@ -90,6 +89,5 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     AuthorCardComponent,
     MarkdownPipe,
   ],
-  providers: [QuillInitializeService],
 })
 export class UiElementsModule { }

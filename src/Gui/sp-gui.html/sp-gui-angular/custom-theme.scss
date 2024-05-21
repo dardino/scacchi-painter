@@ -46,4 +46,13 @@
   }
 }
 
-@import "./quill.scss";
+.mat-mdc-tab-body {
+  max-width: 100%;
+}
+
+.NgxEditor__MenuBar {
+  color: rgba(0, 0, 0, 1);
+}
+.NgxEditor {
+  min-height: 100%;
+}

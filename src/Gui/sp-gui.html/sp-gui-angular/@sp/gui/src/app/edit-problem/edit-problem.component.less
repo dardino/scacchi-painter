@@ -1,22 +1,52 @@
 @import "../../../../mediaquery.less";
 @import "../../../../toolbarcommon.less";
 
-#chessboard {
-  width:~"min(calc(@{boardwidthSM} - 1rem), 27rem)";
-  padding: 0.5rem;
-  flex: 0 0 auto;
+:host {
+  display: contents;
+}
 
-  @media (max-width: @smallScreen) and (orientation: landscape) {
-    position: fixed;
+#toolbar {
+  display: block;
+  grid-column: span 2;
+  @media (min-width: (@smallScreen + 1)) and (orientation: landscape) {
+    position: sticky;
     top: @maintoolbarH;
-    left: 0;
-    bottom: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
+    z-index: 2;
   }
+}
+
+.workboard {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: 2 / -1;
+  grid-template-rows: subgrid;
+  grid-template-columns: subgrid;
+}
+
+#info {
+  margin: 0;
+  position: relative;
+  grid-row: 2 / -1;
+  grid-column: 2;
+  display: flex;
+
+  > section {
+    flex: 1 1 auto;
+    margin: 0.5rem;
+  }
+}
+
+
+#chessboard {
+  width: 20rem;
+  margin: 0.5rem;
+  grid-row: 2 / -1;
 
   @media (max-width: @smallScreen) and (orientation: portrait) {
-    width: calc(100vw - 1rem);
+    width: calc(100vw - 1rem) !important;
+  }
+  @media (max-width: @smallScreen) and (orientation: landscape) {
+    width: @boardwidthSM !important;
   }
 
   .chessboard-workarea {
@@ -24,44 +54,31 @@
 
     @media (min-width: (@smallScreen + 1)) {
       position: sticky;
-      top: calc(@maintoolbarH + 0.5rem);
+      top: calc(@maintoolbarH + 3.8rem);
+    }
+    @media (max-width: @smallScreen) and (orientation: landscape) {
+      position: sticky;
+      top: 0.5rem;
     }
   }
 }
 
+@media (max-width: @smallScreen) and (orientation: portrait) {
+  #toolbar {
+    grid-row: 1;
+    grid-column: 1 / -1;
+  }
+  #chessboard {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+  #info {
+    grid-row: 3;
+    grid-column: 1 / -1;
+  }
+}
+
 .toolbar();
-
-.problem-editor {
-  .containerMinHeight();
-  display: flex;
-  flex-direction: column;
-
-  @media (max-width: @smallScreen) and (orientation: landscape) {
-    padding-left: @boardwidthSM;
-  }
-}
-
-#info {
-  padding: 0.5rem;
-  flex: 1 1 auto;
-  position: relative;
-  width: 0px;
-  overflow: hidden;
-  display: block;
-
-  @media (max-width: @smallScreen) {
-    width: auto;
-  }
-}
-
-.workboard {
-  display: flex;
-  flex: 1 1 auto;
-
-  @media (max-width: @smallScreen) {
-    flex-direction: column;
-  }
-}
 
 .editbtn {
   position: fixed;

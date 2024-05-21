@@ -1,6 +1,6 @@
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from "@angular/core";
 import { Router } from "@angular/router";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
@@ -21,6 +21,11 @@ export interface ProblemRef {
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db);
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
+  @ViewChildren('dbItemContainer') dbItemContainer: ElementRef[];
+
+  get itemSize() {
+    return Math.round(this.dbItemContainer?.[0]?.nativeElement?.getBoundingClientRect().height ?? 256);
+  }
   constructor(private db: DbmanagerService, private modal: DialogService, private router: Router) {
   }
   ngOnInit(): void {

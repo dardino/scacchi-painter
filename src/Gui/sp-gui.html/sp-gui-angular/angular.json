@@ -38,7 +38,6 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-              "./node_modules/quill/dist/quill.snow.css",
               "./custom-theme.scss",
               "@sp/gui/src/styles.less"
             ],
@@ -151,7 +150,6 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-              "./node_modules/quill/dist/quill.snow.css",
               "./custom-theme.scss",
               "@sp/gui/src/styles.less"
             ],
