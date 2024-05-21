@@ -18,7 +18,7 @@
 
 <cdk-virtual-scroll-viewport id="dbScrollViewport" [itemSize]="itemSize" class="dblist">
   <div
-    class="dbitem-container"
+    class="dbitem-container" #dbItemContainer
     *cdkVirtualFor="let item of itemSource; let index = index"
   >
     <div *ngIf="item.problem === null" class="add-item"><button

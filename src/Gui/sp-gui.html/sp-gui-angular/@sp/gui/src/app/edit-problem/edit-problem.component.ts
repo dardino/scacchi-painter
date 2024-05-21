@@ -145,7 +145,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleLog = () => this.showLog = !this.showLog;
-  changeViewMode($event: ViewModes) {
+  toggleEditor($event: ViewModes) {
     this.viewMode = $event;
   }
   switchBoardType() {

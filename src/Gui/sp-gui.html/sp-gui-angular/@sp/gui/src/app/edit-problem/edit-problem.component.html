@@ -34,7 +34,7 @@
             <mat-toolbar class="toolbar-row" color="secondary">
               <lib-toolbar-engine *ngIf="engineEnabled" [fullLog]="showLog" [viewMode]="viewMode"
                 (startSolve)="startSolve($event)" (stopSolve)="stopSolve()" (toggleLog)="toggleLog()"
-                (toggleEditor)="changeViewMode($event)" [isRunning]="solveInProgress"
+                (toggleEditor)="toggleEditor($event)" [isRunning]="solveInProgress"
                 [hideLabels]="true"></lib-toolbar-engine>
             </mat-toolbar>
             <div class="tab-content">
