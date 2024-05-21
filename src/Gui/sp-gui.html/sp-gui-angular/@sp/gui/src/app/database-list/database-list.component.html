@@ -7,7 +7,7 @@
   </mat-toolbar>
 </section>
 
-<section id="sidebar">
+<section id="searchbar">
   <mat-form-field>
     <mat-label>Search for problem</mat-label>
     <input matInput [value]="searchValue" (change)="valueChange($event)">
@@ -16,7 +16,7 @@
   </mat-form-field>
 </section>
 
-<cdk-virtual-scroll-viewport id="dbScrollViewport" itemSize="256" class="dblist">
+<cdk-virtual-scroll-viewport id="dbScrollViewport" [itemSize]="itemSize" class="dblist">
   <div
     class="dbitem-container"
     *cdkVirtualFor="let item of itemSource; let index = index"

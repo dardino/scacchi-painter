@@ -21,6 +21,7 @@ export interface ProblemRef {
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db);
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
+  get itemSize() { return Math.round(document.querySelector(".dbitem-container")?.getBoundingClientRect().height ?? 256); };
   constructor(private db: DbmanagerService, private modal: DialogService, private router: Router) {
   }
   ngOnInit(): void {
