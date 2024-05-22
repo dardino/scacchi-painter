@@ -1,5 +1,13 @@
 # Release Notes
 
+## Version 0.0.13
+
+- Added functionality to copy and paste position in the editor page:
+  - se il cursore è posizionato in un elemento editabile (input o text editor) il comportamento è standard
+  - se il cursore non è posizionato in alcun elemento allora gli eventi di copia e incolla agiscono sulla posizione corrente
+  - aggiunti due pulsanti alla toolbar di modifica per copia posizione e incolla:
+    ![New buttons in toolbar for copy and paste](./release-notes-images/0.0.13/toolbar_copy_paste.png)
+  
 ## Version 0.0.12
 
 - Added controls to store information about Publications, Awards, Tags and so more:
