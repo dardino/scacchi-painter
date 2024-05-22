@@ -1,5 +1,9 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.0.13
+
+- Copy and Paste
+
 ## 0.0.12
 
 - Publications info: [#168](https://github.com/dardino/scacchi-painter/issues/168)

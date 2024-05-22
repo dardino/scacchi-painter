@@ -58,4 +58,5 @@ export class ToolbarDbComponent implements OnInit {
     const createdIndex = await this.db.addBlankPosition();
     this.router.navigate(["edit", createdIndex]);
   }
+
 }

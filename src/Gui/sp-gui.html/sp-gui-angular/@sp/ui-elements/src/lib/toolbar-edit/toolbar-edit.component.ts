@@ -12,7 +12,9 @@ export type EditCommand =
   | "moveR"
   | "resetPosition"
   | "updatePosition"
-  | "clearBoard";
+  | "clearBoard"
+  | "copyToClipboard"
+  | "pasteFromClipboard";
 
 @Component({
   selector: "lib-toolbar-edit",
@@ -73,4 +75,11 @@ export class ToolbarEditComponent implements OnInit {
   clearBoard() {
     this.editCommand.emit("clearBoard");
   }
+  copyPosition() {
+    this.editCommand.emit("copyToClipboard");
+  }
+  pastePosition() {
+    this.editCommand.emit("pasteFromClipboard");
+  }
+
 }
