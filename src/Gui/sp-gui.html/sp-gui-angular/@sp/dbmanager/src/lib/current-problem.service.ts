@@ -11,7 +11,7 @@ import {
   TwinModes,
   TwinTypesKeys
 } from "./helpers";
-import { Author, Piece } from "./models";
+import { Author, Piece, Problem } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
 import { Twin } from "./models/twin";
 import { TwinTypesConfigs } from "./twinTypes";
@@ -20,6 +20,10 @@ import { TwinTypesConfigs } from "./twinTypes";
   providedIn: "root",
 })
 export class CurrentProblemService {
+  SetPublicationDate(val: Date) {
+    if (!this.Problem) return;
+    this.Problem.date = val.toISOString();
+  }
 
   get textSolution(): string {
     return this.Problem?.textSolution ?? "";
@@ -73,10 +77,20 @@ export class CurrentProblemService {
   SetAuthors(v: Author[]) {
     if (this.Problem) this.Problem.authors = v;
   }
+  private _currentProblem: Problem | null;
   public get Problem() {
-    return this.dbManager.CurrentProblem;
+    return this._currentProblem;
   }
-  constructor(private dbManager: DbmanagerService) {}
+  constructor(private dbManager: DbmanagerService) {
+    this.init();
+  }
+
+  init() {
+    this.dbManager.CurrentProblem$.subscribe(newValue => {
+      this._currentProblem = newValue;
+    });
+  }
+
   AddCondition(result: string | undefined) {
     if (typeof result === "string" && result.length > 0 && this.Problem) {
       this.Problem.conditions.push(result);
@@ -258,6 +272,7 @@ export class CurrentProblemService {
         traverse: location.traverse,
       })
     );
+
   }
   private removePiece(p: Piece): void {
     const ix = this.Problem?.pieces.indexOf(p) ?? null;

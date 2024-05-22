@@ -12,28 +12,32 @@
       [value]="newTwinType"
     />
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option *ngFor="let option of filteredTwinTypes | async" [value]="option.keyword">
-        {{option.keyword}}
-      </mat-option>
+      @for (option of filteredTwinTypes | async; track $index) {
+        <mat-option [value]="option.keyword">{{option.keyword}}</mat-option>
+      }
     </mat-autocomplete>
   </mat-form-field>
   <p>{{twinModelDesc?.title}}</p>
-  <div class="arguments" *ngIf="newTwinType !== '' && twinModelDesc">
-    <div class="argument" *ngFor="let arg of twinModelDesc.parameters; index as $index;">
-      <mat-form-field>
-        <mat-label>{{arg.description}}</mat-label>
-        <input type="text" matInput
-        [placeholder]="arg.description"
-        [matAutocomplete]="auto"
-        [(ngModel)]="argValues[$index]" >
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-          <mat-option *ngFor="let option of arg.values" [value]="option">
-            {{option}}
-          </mat-option>
-        </mat-autocomplete>
-          </mat-form-field>
+  @if (newTwinType !== '' && twinModelDesc) {
+    <div class="arguments">
+      @for (arg of twinModelDesc.parameters; track $index) {
+        <div class="argument">
+          <mat-form-field>
+            <mat-label>{{arg.description}}</mat-label>
+            <input type="text" matInput
+            [placeholder]="arg.description"
+            [matAutocomplete]="auto"
+            [(ngModel)]="argValues[$index]" >
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              @for (option of arg.values; track $index) {
+                <mat-option [value]="option">{{option}}</mat-option>
+              }
+            </mat-autocomplete>
+              </mat-form-field>
+        </div>
+      }
     </div>
-  </div>
+  }
   <code>{{commandText}}</code>
 </div>
 <div mat-dialog-actions>

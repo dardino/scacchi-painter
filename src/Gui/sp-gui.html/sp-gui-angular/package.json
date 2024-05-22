@@ -1,6 +1,6 @@
 {
   "name": "sp-gui-angular",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "engines": {
     "node": ">=20"
   },
@@ -39,6 +39,7 @@
     "canvas-chessboard": "^0.0.17",
     "file-saver": "^2.0.5",
     "marked": "^12.0.2",
+    "marked-base-url": "^1.1.3",
     "ngx-editor": "^17.5.4",
     "prosemirror-model": "^1.21.0",
     "rtf.js": "^3.0.9",

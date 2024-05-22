@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 0.0.12
+
+- Added controls to store information about Publications, Awards, Tags and so more:
+  ![Publication feature](./release-notes-images/0.0.12/publications.png)
+
 ## Version 0.0.11
 
 - New Grid Layout to place elements in page

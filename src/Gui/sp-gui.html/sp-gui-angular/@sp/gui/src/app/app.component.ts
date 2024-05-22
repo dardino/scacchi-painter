@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
@@ -19,13 +19,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private bridge: HostBridgeService,
     _allIcons: AllMatIconRegistry,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private currentProblemSvc: CurrentProblemService,
   ) { }
   get hasCloseButton() {
     return this.bridge.supportsClose;
   }
   get dbLoaded() {
-    return this.db.CurrentProblem != null;
+    return this.currentProblemSvc.Problem != null;
   }
   get pathIsEdit() {
     const path = RoutesList.edit.path;

@@ -10256,6 +10256,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"marked-base-url@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "marked-base-url@npm:1.1.3"
+  peerDependencies:
+    marked: ">= 4 < 13"
+  checksum: 10/1081cb78f0c89a2c76afd11be8ddce4debd3d603dace5717b27a1bee3a914268ff019555f980a46880a65c48040895bb1d9077ea8c87e529cb36ef4bf7475c6a
+  languageName: node
+  linkType: hard
+
 "marked@npm:^12.0.2":
   version: 12.0.2
   resolution: "marked@npm:12.0.2"
@@ -13117,6 +13126,7 @@ __metadata:
     karma-jasmine-html-reporter: "npm:^2.1.0"
     localtunnel: "npm:^2.0.2"
     marked: "npm:^12.0.2"
+    marked-base-url: "npm:^1.1.3"
     ng-packagr: "npm:^17.3.0"
     ngx-editor: "npm:^17.5.4"
     prosemirror-model: "npm:^1.21.0"

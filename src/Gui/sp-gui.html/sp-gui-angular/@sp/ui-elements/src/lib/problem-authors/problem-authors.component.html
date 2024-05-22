@@ -1,4 +1,6 @@
 <div class="problem-authors">
-  <lib-author-card (action)="action($event, author)" *ngFor="let author of currentProblem?.authors" [author]="author"></lib-author-card>
+  @for (author of currentProblem?.authors; track $index) {
+    <lib-author-card (action)="action($event, author)" [author]="author"></lib-author-card>
+  }
   <lib-author-card class="addButton" (click)="openAuthor(null)"></lib-author-card>
 </div>
