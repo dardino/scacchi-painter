@@ -23,7 +23,13 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
 
   private _date: Date | null = new Date();
   get date() { return this._date }
-  set date(val) { this._date = val; if (val) this.curProbSvc.SetPublicationDate(val); }
+  set date(val: Date | null) {
+    this._date = val;
+    if (val) {
+      this.curProbSvc.SetPublicationDate(val);
+      this.dateInputControl.setValue(val, { emitEvent: false });
+    }
+  }
 
   get rank(): string { return this._currentProblem?.prizeRank?.toFixed(0) ?? ""; }
   set rank(v: string) { if (this._currentProblem) this._currentProblem.prizeRank = parseInt(v); }
@@ -53,6 +59,7 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
 
   tagInputControl = new FormControl("");
   magazineInputControl = new FormControl("");
+  dateInputControl = new FormControl<Date | null>(this._date);
   filteredTags: Observable<string[]>;
   magazineFiltered: Observable<string[]>;
 
@@ -67,16 +74,9 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
 
   private _currentProblem: Problem | null;
 
-  constructor(private db: DbmanagerService, private curProbSvc: CurrentProblemService) {
-  }
-
-  private _subscr: Subscription;
-  ngOnDestroy(): void {
-    this._subscr.unsubscribe();
-  }
+  constructor(private db: DbmanagerService, private curProbSvc: CurrentProblemService) { }
 
   ngOnInit(): void {
-    this._currentProblem = this.db.CurrentProblem;
     this._subscr = this.db.CurrentProblem$.subscribe(value => {
       this._currentProblem = value;
       if (value) {
@@ -87,6 +87,7 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
         this.tags = [];
       }
     })
+    this._currentProblem = this.db.CurrentProblem;
     this.filteredTags = this.tagInputControl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => (tag ? this._filterTags(tag) : this.allPreviousTags.slice())),
@@ -97,17 +98,21 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
     );
   }
 
+  private _subscr: Subscription | undefined;
+
+  ngOnDestroy(): void {
+    if (this._subscr) this._subscr.unsubscribe();
+  }
+
   addtag(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    // Add our fruit
-    if (value && this.tags.indexOf(value) === -1) {
+    // Add our tag
+    const arleadyExists = this.tags.indexOf(value) > -1;
+    if (value && !arleadyExists) {
       this.tags.push(value);
     }
-
-    // Clear the input value
     this.tagInput.nativeElement.value = '';
     this.tagInputControl.setValue(null);
-
   }
 
   removetag(tag: string): void {

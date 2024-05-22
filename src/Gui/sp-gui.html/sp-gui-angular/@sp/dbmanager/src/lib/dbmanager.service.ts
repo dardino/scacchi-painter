@@ -328,10 +328,11 @@ export class DbmanagerService {
   }
 
   private async loadProblem() {
-    const newP = this.All[this.currentIndex - 1];
-    if (newP == null) {
+    const realIndex = this.currentIndex - 1;
+    if (realIndex < 0 || realIndex >= this.All.length) {
       return this.reset();
     }
+    const newP = this.All[realIndex];
     this.currentProblem$.next(newP);
   }
 
