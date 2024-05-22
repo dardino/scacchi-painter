@@ -25,10 +25,7 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   get date() { return this._date }
   set date(val: Date | null) {
     this._date = val;
-    if (val) {
-      this.curProbSvc.SetPublicationDate(val);
-      this.dateInputControl.setValue(val, { emitEvent: false });
-    }
+    if (val) this.curProbSvc.SetPublicationDate(val);
   }
 
   get rank(): string { return this._currentProblem?.prizeRank?.toFixed(0) ?? ""; }
@@ -59,7 +56,6 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
 
   tagInputControl = new FormControl("");
   magazineInputControl = new FormControl("");
-  dateInputControl = new FormControl<Date | null>(this._date);
   filteredTags: Observable<string[]>;
   magazineFiltered: Observable<string[]>;
 

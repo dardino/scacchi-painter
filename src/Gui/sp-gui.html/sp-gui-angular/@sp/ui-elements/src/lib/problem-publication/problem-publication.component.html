@@ -14,8 +14,7 @@
     </mat-form-field>
     <mat-form-field class="field date">
       <mat-label>Date</mat-label>
-      <input matInput #dateInput [matDatepicker]="picker" placeholder="Publication date" [(ngModel)]="date"
-        [formControl]="dateInputControl" />
+      <input matInput #dateInput [matDatepicker]="picker" placeholder="Publication date" [(ngModel)]="date"/>
       <mat-hint>publication date or request date</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>

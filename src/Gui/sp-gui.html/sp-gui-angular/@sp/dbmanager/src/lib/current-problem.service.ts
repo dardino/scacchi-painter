@@ -1,5 +1,4 @@
-import { Injectable, OnDestroy, OnInit } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Injectable } from "@angular/core";
 import { DbmanagerService } from "./dbmanager.service";
 import {
   Columns,
@@ -20,7 +19,7 @@ import { TwinTypesConfigs } from "./twinTypes";
 @Injectable({
   providedIn: "root",
 })
-export class CurrentProblemService implements OnInit, OnDestroy {
+export class CurrentProblemService {
   SetPublicationDate(val: Date) {
     if (!this.Problem) return;
     this.Problem.date = val.toISOString();
@@ -82,19 +81,14 @@ export class CurrentProblemService implements OnInit, OnDestroy {
   public get Problem() {
     return this._currentProblem;
   }
-  private _subscr: Subscription | undefined;
-  constructor(private dbManager: DbmanagerService) { }
-
-  ngOnInit() {
-    this._subscr = this.dbManager.CurrentProblem$.subscribe(newValue => {
-      this._currentProblem = newValue;
-    });
+  constructor(private dbManager: DbmanagerService) {
+    this.init();
   }
 
-  ngOnDestroy() {
-    if (this._subscr) {
-      this._subscr.unsubscribe();
-    }
+  init() {
+    this.dbManager.CurrentProblem$.subscribe(newValue => {
+      this._currentProblem = newValue;
+    });
   }
 
   AddCondition(result: string | undefined) {
@@ -278,6 +272,7 @@ export class CurrentProblemService implements OnInit, OnDestroy {
         traverse: location.traverse,
       })
     );
+
   }
   private removePiece(p: Piece): void {
     const ix = this.Problem?.pieces.indexOf(p) ?? null;
