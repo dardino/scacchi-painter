@@ -20,6 +20,16 @@ import { TwinTypesConfigs } from "./twinTypes";
   providedIn: "root",
 })
 export class CurrentProblemService {
+  PasteFEN(fen: string) {
+    // TODO: #171 implement this method
+  }
+  PasteJson(json: Partial<Problem>) {
+    if (this.Problem) Problem.applyJson(json, this.Problem);
+  }
+  GetJSONString(): string | null {
+    if (!this.Problem) return null;
+    return JSON.stringify(this.Problem.toJson());
+  }
   SetPublicationDate(val: Date) {
     if (!this.Problem) return;
     this.Problem.date = val.toISOString();
