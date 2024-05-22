@@ -50,6 +50,11 @@ export class Problem implements IProblem {
   public get currentHash(): string {
     return this.getCurrentFen();
   }
+
+  public get pieceTypes(): string[] {
+    return Array.from(new Set(this.pieces.map((piece) => piece.ToFairyNotation())));
+  }
+
   static async fromElement(source: Element) {
     const p = new Problem();
     p.stipulation = Stipulation.fromElement(source);
