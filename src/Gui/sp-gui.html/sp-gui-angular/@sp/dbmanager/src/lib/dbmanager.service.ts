@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { IProblem, prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "./providers";
@@ -35,12 +35,12 @@ export class DbmanagerService {
   get Count() {
     return this.All.length;
   }
-  private currentProblem: Problem | null = null;
-  get CurrentProblem() {
-    return this.currentProblem;
-  }
+
+  private currentProblem$ = new BehaviorSubject<Problem | null>(null);
+  get CurrentProblem() { return this.currentProblem$.value; }
+  get CurrentProblem$() { return this.currentProblem$.asObservable(); }
   get Pieces() {
-    return this.currentProblem?.pieces ?? [];
+    return this.currentProblem$.value?.pieces ?? [];
   }
   get CurrentFile(): Readonly<FolderSelected | null> {
     return this.currentFile;
@@ -328,15 +328,16 @@ export class DbmanagerService {
   }
 
   private async loadProblem() {
-    this.currentProblem = this.All[this.currentIndex - 1];
-    if (this.currentProblem == null) {
+    const newP = this.All[this.currentIndex - 1];
+    if (newP == null) {
       return this.reset();
     }
+    this.currentProblem$.next(newP);
   }
 
   private reset() {
     this.currentIndex = 1;
-    this.currentProblem = null;
+    this.currentProblem$.next(null);
   }
 
   private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {

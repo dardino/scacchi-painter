@@ -5,18 +5,26 @@
       <dl>
         <dt class="authors">Authors:</dt>
         <dd class="authors">
-          <span class="author" *ngFor="let author of problem?.authors">{{ author.nameAndSurname }}</span>
+          @for (author of problem.authors; track $index) {
+          <span class="author">{{ author.nameAndSurname }}</span>
+          }
         </dd>
-
-        <dt class="twins" *ngIf="hasTwins">Twins:</dt>
-        <dd class="twins" *ngIf="hasTwins">
-          <span class="twin" *ngFor="let twin of twins">{{ twin }}</span>
+        @if (hasTwins) {
+        <dt class="twins">Twins:</dt>
+        <dd class="twins">
+          @for (twin of twins; track $index) {
+          <span class="twin">{{ twin }}</span>
+          }
         </dd>
-
-        <dt class="twins" *ngIf="hasCondition">Conditions:</dt>
-        <dd class="twins" *ngIf="hasCondition">
-          <span class="twin" *ngFor="let condition of conditions">{{ condition }}</span>
+        }
+        @if (hasCondition) {
+        <dt class="twins">Conditions:</dt>
+        <dd class="twins">
+          @for (condition of conditions; track $index) {
+          <span class="twin">{{ condition }}</span>
+          }
         </dd>
+        }
       </dl>
     </div>
     <div class="actions">
@@ -32,7 +40,9 @@
 <div class="dbitem-status">
   <span class="status-stipulation"><span>{{ stipulation }}</span><span>{{ pieceCounter }}</span></span>
   <span class="status-twins">
-    <span class="twin" *ngFor="let twin of twins">{{twin}}</span>
+    @for (twin of twins; track $index) {
+    <span class="twin">{{twin}}</span>
+    }
   </span>
   <span class="status-index">{{ dbIndex }}</span>
 </div>

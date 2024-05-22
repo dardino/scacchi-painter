@@ -1,1 +1,87 @@
-<p>problem-publication works!</p>
+<mat-card class="publication">
+  <mat-card-title><span>Publication data</span></mat-card-title>
+  <mat-card-content>
+    <mat-form-field class="field magazine">
+      <mat-label>Magazine</mat-label>
+      <input matInput #magazineInput [formControl]="magazineInputControl" placeholder="Name of magazine"
+        [(ngModel)]="magazine" [matAutocomplete]="automagazine" />
+      <mat-autocomplete #automagazine="matAutocomplete">
+        @for (magSugg of magazineFiltered | async; track $index) {
+        <mat-option [value]="magSugg">{{magSugg}}</mat-option>
+        }
+      </mat-autocomplete>
+      <mat-hint>(ie: Best problems, Sinfonie scacchistiche...)</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="field date">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" placeholder="Publication date" [(ngModel)]="date" />
+      <mat-hint>publication date or request date</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+<mat-card class="award">
+  <mat-card-title>Award</mat-card-title>
+  <mat-card-content>
+    <mat-form-field class="field magazine">
+      <mat-label>Rank</mat-label>
+      <mat-select [(value)]="rank">
+        <mat-option value="">Clear</mat-option>
+        <mat-option value="1">1°</mat-option>
+        <mat-option value="2">2°</mat-option>
+        <mat-option value="3">3°</mat-option>
+        <mat-option value="4">4°</mat-option>
+        <mat-option value="5">5°</mat-option>
+        <mat-option value="6">6°</mat-option>
+      </mat-select>
+      <mat-hint>(ie: 1°)</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="field magazine">
+      <mat-label>Award</mat-label>
+      <input matInput placeholder="Award" [(ngModel)]="rankType" [matAutocomplete]="award" />
+      <mat-autocomplete #award="matAutocomplete">
+        <mat-option value=""></mat-option>
+        <mat-option value="Prize">Prize</mat-option>
+        <mat-option value="Honorable mention">Honorable mention</mat-option>
+        <mat-option value="Commendation">Commendation</mat-option>
+        <mat-option value="Special Prize">Special Prize</mat-option>
+        <mat-option value="Special Honorable mention">Special Honorable mention</mat-option>
+      </mat-autocomplete>
+      <mat-hint>(ie: Honorable mention)</mat-hint>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+<mat-card class="custom">
+  <mat-card-title>Custom data</mat-card-title>
+  <mat-card-content>
+    <mat-form-field class="field magazine">
+      <mat-label>Personal Id</mat-label>
+      <input matInput placeholder="Write a free text id" [(ngModel)]="personalId" />
+      <mat-hint>(ie: 234/f)</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="field magazine">
+      <mat-label>Tags</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Enter fruits">
+        @for (tag of tags; track tag) {
+        <mat-chip-row (removed)="removetag(tag)" [editable]="true" (edited)="edittag(tag, $event)"
+          [aria-description]="'press enter to edit ' + tag">
+          {{tag}}
+          <button matChipRemove [attr.aria-label]="'remove ' + tag">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+        }
+        <input placeholder="Add a tag and press Enter" #tagInput [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addtag($event)" [formControl]="tagInputControl" [matAutocomplete]="tagauto" />
+      </mat-chip-grid>
+      <mat-hint>(ie: tags)</mat-hint>
+      <mat-autocomplete #tagauto="matAutocomplete" (optionSelected)="selecttag($event)">
+        @for (tagsugg of filteredTags | async; track $index) {
+        <mat-option [value]="tagsugg">{{tagsugg}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>

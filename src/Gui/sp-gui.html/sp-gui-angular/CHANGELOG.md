@@ -1,6 +1,10 @@
 # Scacchi Painter GUI - CHANGELOG
 
-## Next
+## 0.0.12
+
+- Publications info: [#168](https://github.com/dardino/scacchi-painter/issues/168)
+
+## 0.0.11
 
 - New Grid Layout to place elements in page
 - Fixing imports from SP2: line-break

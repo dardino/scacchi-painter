@@ -10,16 +10,17 @@
       [style.fontSize]="fontSize + 'px'"
       [style.display]="BoardType !== 'HTML' ? 'none' : undefined"
     >
+    @for (item of cells; track item.location) {
       <lib-board-cell
         class="clickable"
         [active]="item === currentCell"
-        *ngFor="let item of cells"
         [piece]="item.piece"
         [location]="item.location"
         (click)="onCellClick(item)"
         (mouseup)="onMouseUp(item, $event)"
         (mousedown)="onMouseDown(item, $event)"
       ></lib-board-cell>
+    }
     </div>
   </div>
   <div class="short-info" *ngIf="!hideInfo">
@@ -27,7 +28,9 @@
     <span class="twins">
       <ol>
         <li *ngIf="viewDiagram">Diagram</li>
-        <li *ngFor="let t of twins">{{ t }}</li>
+        @for (t of twins; track $index) {
+          <li>{{ t }}</li>
+        }
       </ol>
     </span>
     <span class="piececounter">{{ pieceCounter }}</span>

@@ -1,7 +1,9 @@
 <h1>Recent files</h1>
 <ul>
-  <li *ngFor="let recent of recents" (click)="clickOnRecent(recent)">
-    <lib-dbsource [source]="recent.source"></lib-dbsource>
-    <span class="filename">{{fullpath(recent)}}</span>
-  </li>
+  @for (recent of recents; track $index) {
+    <li (click)="clickOnRecent(recent)">
+      <lib-dbsource [source]="recent.source"></lib-dbsource>
+      <span class="filename">{{fullpath(recent)}}</span>
+    </li>
+  }
 </ul>

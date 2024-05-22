@@ -26,7 +26,7 @@ export class Problem implements IProblem {
   private constructor() {}
 
   public textSolution = "";
-  public date = new Date().toLocaleString();
+  public date = new Date().toISOString();
   public stipulation = Stipulation.fromJson({});
   public prizeRank = 0;
   public personalID = "";
