@@ -51,6 +51,9 @@
       "rft-parser": [
         "dist/rft-parser/rft-parser",
         "dist/rft-parser"
+      ],
+      "@dtos/*": [
+        "api/src/dtos/*",
       ]
     }
   },

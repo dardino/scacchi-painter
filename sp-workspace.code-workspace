@@ -45,6 +45,7 @@
 		"peacock.color": "#dd0531",
 		"typescript.tsdk": "sp-gui-angular/node_modules/typescript/lib",
 		"eslint.nodePath": "sp-gui-angular/node_modules",
-		"peacock.remoteColor": "#000000"
+		"peacock.remoteColor": "#000000",
+		"debug.internalConsoleOptions": "neverOpen"
 	}
 }

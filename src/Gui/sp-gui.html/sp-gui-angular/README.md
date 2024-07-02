@@ -29,3 +29,20 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## To run the app in local
+
+exec in three different terminals:
+
+```sh
+#terminal 1
+cd api && npm run watch
+#terminal 2
+cd api && func start
+
+#terminal 3
+yarn start
+
+#terminal 4
+swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
+```
