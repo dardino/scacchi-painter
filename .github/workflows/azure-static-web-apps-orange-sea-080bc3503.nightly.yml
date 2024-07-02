@@ -37,7 +37,6 @@ jobs:
           ###### End of Repository/Build Configurations ######
           app_build_command: "yarn build:Azure"
           deployment_environment: "nightly"
-          skip_api_build: true
 
   build_and_deploy_job_release:
     if: github.event_name == 'push'
@@ -66,7 +65,6 @@ jobs:
           ###### End of Repository/Build Configurations ######
           app_build_command: "yarn build:Azure"
           deployment_environment: "nightly"
-          skip_api_build: true
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
