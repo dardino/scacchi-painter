@@ -1,10 +1,11 @@
 import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/helpers";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
-import { BridgeGlobal, EOF, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
+import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
+import { parsePopeyeRow } from "./solution-parser";
 
 class WebBridge implements BridgeGlobal {
-  private solver$: BehaviorSubject<string | EOF>;
+  private solver$: BehaviorSubject<SolutionRow | EOF>;
   private ww: Worker = new Worker("./assets/engine/popeye_ww.js");
 
   private startWorker() {
@@ -28,7 +29,7 @@ class WebBridge implements BridgeGlobal {
   private startSolve(problem: string) {
     problem.split("\n").forEach((row) => {
       setTimeout(() => {
-        this.solver$.next(row);
+        this.solver$.next({ raw: row, rowtype: "log", parsed: [] });
       }, 1);
     });
     this.startWorker();
@@ -38,7 +39,8 @@ class WebBridge implements BridgeGlobal {
     this.solver$.next({ exitCode: -1, message: ev.message });
   };
   private message = (e: MessageEvent<string>) => {
-    this.solver$.next(e.data);
+    const mov = parsePopeyeRow(e.data);
+    this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log", parsed: [] });
     if (e.data.indexOf("solution finished") > -1) {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
     }
@@ -62,12 +64,12 @@ class WebBridge implements BridgeGlobal {
     CurrentProblem: Problem,
     engine: string,
     mode: SolveModes
-  ): Observable<string | EOF> | Error {
+  ): Observable<SolutionRow | EOF> | Error {
     if (engine !== "Popeye") {
       return new Error("Engine not found.");
     }
-    this.solver$ = new BehaviorSubject<string | EOF>(
-      `starting engine <${engine}>`
+    this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
+      { raw: `starting engine <${engine}>`, rowtype: "log", parsed: [] }
     );
 
     const problem = this.problemToPopeye(CurrentProblem, mode).join("\n");
