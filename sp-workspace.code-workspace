@@ -14,6 +14,9 @@
 		},
 		{
 			"path": ".github"
+		},
+		{
+			"path": "src/CoreJS"
 		}
 	],
 	"settings": {
@@ -46,6 +49,7 @@
 		"typescript.tsdk": "sp-gui-angular/node_modules/typescript/lib",
 		"eslint.nodePath": "sp-gui-angular/node_modules",
 		"peacock.remoteColor": "#000000",
-		"debug.internalConsoleOptions": "neverOpen"
+		"debug.internalConsoleOptions": "neverOpen",
+		"jest.enable": false
 	}
 }
