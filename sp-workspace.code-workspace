@@ -50,6 +50,8 @@
 		"eslint.nodePath": "sp-gui-angular/node_modules",
 		"peacock.remoteColor": "#000000",
 		"debug.internalConsoleOptions": "neverOpen",
-		"jest.enable": false
+		"jest.enable": false,
+		"eslint.enable": true,
+		"eslint.format.enable": false
 	}
 }

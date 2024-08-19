@@ -16,7 +16,7 @@ export class AuthRedirectComponent implements OnInit {
 
   ngOnInit(): void {
     this.parseAuth();
-  };
+  }
 
   async parseAuth() {
     const authInfo = getLocalAuthInfo();
@@ -44,6 +44,7 @@ export class AuthRedirectComponent implements OnInit {
 
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async redirectMsal(authInfo: Required<LocalAuthInfo>) {
     const response = await this.myMsal
       .handleRedirectPromise()

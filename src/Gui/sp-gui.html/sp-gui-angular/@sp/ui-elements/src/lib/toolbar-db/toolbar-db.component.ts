@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 
@@ -7,7 +7,7 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
   templateUrl: "./toolbar-db.component.html",
   styleUrls: ["./toolbar-db.component.less"],
 })
-export class ToolbarDbComponent implements OnInit {
+export class ToolbarDbComponent {
   constructor(private db: DbmanagerService, private router: Router) {
   }
 
@@ -19,8 +19,6 @@ export class ToolbarDbComponent implements OnInit {
   }
   get totalCount() {
     return this.db.Count;
-  }
-  ngOnInit() {
   }
 
   public canGoPrev() {

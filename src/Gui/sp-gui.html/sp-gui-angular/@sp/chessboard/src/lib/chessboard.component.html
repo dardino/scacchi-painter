@@ -1,11 +1,11 @@
 <div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
   <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
-    <canvas [style.display]="BoardType !== 'canvas' ? 'none' : undefined" #canvas
+    <canvas tabindex="0" [style.display]="BoardType !== 'canvas' ? 'none' : undefined" #canvas
       (selectcell)="onSelectCell($event)"></canvas>
     <div class="chessboard" [style.fontSize]="fontSize + 'px'"
       [style.display]="BoardType !== 'HTML' ? 'none' : undefined">
       @for (item of cells; track item.location) {
-      <lib-board-cell (contextmenu)="triggerContextOnCell($event, item)" class="clickable" [title]="cellInfo(item)" [active]="item === currentCell" [piece]="item.piece"
+      <lib-board-cell tabindex="0" (contextmenu)="triggerContextOnCell($event, item)" class="clickable" [title]="cellInfo(item)" [active]="item === currentCell" [piece]="item.piece"
         [location]="item.location" (click)="onCellClick(item)" (mouseup)="onMouseUp(item, $event)"
         (mousedown)="onMouseDown(item, $event)"></lib-board-cell>
       }
@@ -23,7 +23,7 @@
     </span>
     <span class="piececounter">{{ pieceCounter }}</span>
   </div>
-  <div class="fen" *ngIf="!hideInfo" (click)="copyFen()">
+  <div class="fen" *ngIf="!hideInfo" tabindex="0" (click)="copyFen()">
     <span>FEN:</span>
     <span>{{ fen }}</span>
   </div>

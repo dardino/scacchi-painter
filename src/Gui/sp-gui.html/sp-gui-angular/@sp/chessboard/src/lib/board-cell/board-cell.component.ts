@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import {
   GetSquareColor,
   IPiece,
@@ -13,7 +13,7 @@ import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipaint
   templateUrl: "./board-cell.component.html",
   styleUrls: ["./board-cell.component.less"],
 })
-export class BoardCellComponent implements OnInit {
+export class BoardCellComponent {
   public get classList() {
     const classlist = ["lib-cbs"];
     classlist.push(GetSquareColor(this.location));
@@ -63,5 +63,4 @@ export class BoardCellComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
 }

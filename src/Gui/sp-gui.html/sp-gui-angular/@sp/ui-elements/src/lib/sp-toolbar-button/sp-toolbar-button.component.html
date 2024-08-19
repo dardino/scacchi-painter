@@ -2,6 +2,6 @@
   <span class="icon_text">
     <mat-icon *ngIf="!svg" class="action">{{iconText}}</mat-icon>
     <mat-icon *ngIf="svg" class="action" [svgIcon]="iconText!"></mat-icon>
-    <label *ngIf="hasLabel">{{iconLabel}}</label>
+    <span *ngIf="hasLabel">{{iconLabel}}</span>
   </span>
 </button>

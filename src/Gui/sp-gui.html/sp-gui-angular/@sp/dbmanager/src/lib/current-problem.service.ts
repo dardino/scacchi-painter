@@ -20,6 +20,7 @@ import { TwinTypesConfigs } from "./twinTypes";
   providedIn: "root",
 })
 export class CurrentProblemService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   PasteFEN(fen: string) {
     // TODO: #171 implement this method
   }

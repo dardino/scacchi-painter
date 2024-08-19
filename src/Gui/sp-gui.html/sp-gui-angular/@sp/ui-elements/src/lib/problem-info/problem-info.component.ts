@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { Author } from "@sp/dbmanager/src/lib/models/author";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import type { AuthorCardActions } from "../author-card/author-card.component";
@@ -8,7 +8,7 @@ import type { AuthorCardActions } from "../author-card/author-card.component";
   templateUrl: "./problem-info.component.html",
   styleUrls: ["./problem-info.component.less"],
 })
-export class ProblemInfoComponent implements OnInit {
+export class ProblemInfoComponent {
 
 
   constructor() { }
@@ -25,8 +25,6 @@ export class ProblemInfoComponent implements OnInit {
   public openAuthor = new EventEmitter<Author | null>();
   @Output()
   public deleteAuthor = new EventEmitter<Author>();
-
-  ngOnInit(): void { }
 
   callAuthorAction($event: { author: Author | null; action: AuthorCardActions; }) {
     switch ($event.action) {

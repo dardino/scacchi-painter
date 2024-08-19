@@ -54,7 +54,7 @@ class WebBridge implements BridgeGlobal {
   openFile(): File | PromiseLike<File | null> | null {
     throw new Error("Method not implemented.");
   }
-  saveFile(content: File): string | Promise<string> {
+  saveFile(/* content: File */): string | Promise<string> {
     throw new Error("Method not implemented.");
   }
   stopSolve(): void {

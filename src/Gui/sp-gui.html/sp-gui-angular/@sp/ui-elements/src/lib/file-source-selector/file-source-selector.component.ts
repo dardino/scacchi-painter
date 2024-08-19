@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { AvaliableFileServices } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
@@ -6,7 +6,7 @@ import { AvaliableFileServices } from "@sp/host-bridge/src/lib/fileService";
   templateUrl: "./file-source-selector.component.html",
   styleUrls: ["./file-source-selector.component.less"],
 })
-export class FileSourceSelectorComponent implements OnInit {
+export class FileSourceSelectorComponent {
   @Input()
   public hideNew: boolean;
   @Input()
@@ -15,8 +15,6 @@ export class FileSourceSelectorComponent implements OnInit {
   public sourceSelected = new EventEmitter<"new" | AvaliableFileServices>();
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   public selectSource(source: "new" | AvaliableFileServices) {
     this.sourceSelected.emit(source);

@@ -65,7 +65,7 @@ export class SaveFileComponent implements OnInit {
       default:
         return null;
     }
-  };
+  }
 
   public get currentFolderName() {
     if (this.currentFolder?.meta.type === "file") return this.actionName;
@@ -136,8 +136,8 @@ export class SaveFileComponent implements OnInit {
       source: "local",
     });
     const file = await this.db.GetFileContent();
-    let objectUrl = URL.createObjectURL(file);
-    let anchor = document.createElement("a");
+    const objectUrl = URL.createObjectURL(file);
+    const anchor = document.createElement("a");
     document.body.appendChild(anchor);
     anchor.href = objectUrl;
     anchor.download = this.selectedFile.meta.itemName;

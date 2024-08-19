@@ -1,7 +1,7 @@
 <h1>Recent files</h1>
 <ul>
   @for (recent of recents; track $index) {
-    <li (click)="clickOnRecent(recent)">
+    <li tabindex="0" (click)="clickOnRecent(recent)">
       <lib-dbsource [source]="recent.source"></lib-dbsource>
       <span class="filename">{{fullpath(recent)}}</span>
     </li>

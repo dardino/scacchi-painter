@@ -8,23 +8,7 @@
       "files": [
         "*.ts"
       ],
-      "parserOptions": {
-        "project": [
-          "@sp/gui/tsconfig.app.json",
-          "@sp/gui/tsconfig.spec.json",
-          "@sp/gui/e2e/tsconfig.json"
-        ],
-        "createDefaultProgram": true
-      },
       "rules": {
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "app",
-            "style": "kebab-case"
-          }
-        ],
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -33,19 +17,13 @@
             "style": "camelCase"
           }
         ],
-        "@typescript-eslint/array-type": [
+        "@angular-eslint/component-selector": [
           "error",
           {
-            "default": "array-simple"
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
           }
-        ],
-        "brace-style": [
-          "error",
-          "1tbs"
-        ],
-        "curly": [
-          "error",
-          "multi-line"
         ]
       }
     },

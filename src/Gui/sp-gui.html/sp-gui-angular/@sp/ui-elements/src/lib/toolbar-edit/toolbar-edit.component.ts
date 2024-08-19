@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { EditModes } from "../toolbar-piece/toolbar-piece.component";
 
 export type EditCommand =
@@ -21,7 +21,7 @@ export type EditCommand =
   templateUrl: "./toolbar-edit.component.html",
   styleUrls: ["./toolbar-edit.component.less"],
 })
-export class ToolbarEditComponent implements OnInit {
+export class ToolbarEditComponent {
   constructor() {}
   @Output() switchBoardType = new EventEmitter<void>();
 
@@ -37,9 +37,6 @@ export class ToolbarEditComponent implements OnInit {
 
   modeChange($event: EditModes) {
     this.editModeChanged.emit($event);
-  }
-
-  ngOnInit(): void {
   }
 
   rotateRight() {

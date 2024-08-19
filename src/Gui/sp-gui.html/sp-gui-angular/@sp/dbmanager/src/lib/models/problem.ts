@@ -198,6 +198,7 @@ export class Problem implements IProblem {
   }
 
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
@@ -317,4 +318,4 @@ export class Problem implements IProblem {
   }
 }
 
-const filterNumber = (v: any): v is number => typeof v === "number";
+const filterNumber = (v: unknown): v is number => typeof v === "number";

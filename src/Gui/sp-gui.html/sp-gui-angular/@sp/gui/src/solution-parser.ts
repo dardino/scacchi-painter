@@ -10,7 +10,7 @@ export function parsePopeyeRow(row: string): SolutionMove[] {
   const rx = new RegExp(popeyeParserRX.source, "gm");
   console.group("processing row: ", row);
   const returnMoves: SolutionMove[] = [];
-  let parentMove: SolutionMove;
+  // let parentMove: SolutionMove;
   let counter = 0;
   while ((matches = rx.exec(row)) !== null) {
     counter++;
@@ -42,6 +42,6 @@ export function parsePopeyeRow(row: string): SolutionMove[] {
 }
 
 function parseExtras(extra: string | undefined) {
-  if (!!extra) return []
+  if (extra) return []
   return [];
 }

@@ -70,7 +70,7 @@ export class ChessboardComponent
       this.updateBoard();
     }
     return this.uiCells;
-  };
+  }
   fontSize: number;
 
   private settings: {
@@ -225,7 +225,7 @@ export class ChessboardComponent
     // Create an observer instance linked to the callback function
     window.addEventListener("resize", this.sizeMutated);
     setTimeout(() => {
-      this.sizeMutated(null);
+      this.sizeMutated();
     }, 0);
   }
 
@@ -237,7 +237,7 @@ export class ChessboardComponent
     return this.position?.twins.TwinList.map((t) => t.toString()) ?? [];
   }
 
-  get viewDiagram(): any {
+  get viewDiagram() {
     return (
       (this.position?.twins.TwinList.length ?? 0) &&
       this.position?.twins.TwinList.every(
@@ -250,7 +250,7 @@ export class ChessboardComponent
     return this.position?.stipulation.completeStipulationDesc ?? "";
   }
 
-  private sizeMutated = (args: any) => {
+  private sizeMutated = () => {
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);

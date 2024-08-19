@@ -123,6 +123,7 @@ export class DropboxdbService implements FileService {
 
   private async getList(
     folder: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...extensions: string[]
   ): Promise<FolderItemInfo[]> {
     const urlToCall =
