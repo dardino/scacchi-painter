@@ -1,6 +1,5 @@
 import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
 import { CommonModule } from "@angular/common";
-import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
@@ -34,7 +33,6 @@ export const ThirdPartyModules = [
   MatToolbarModule,
   UiElementsModule.config(environment.assetFolder),
   ChessboardModule,
-  HttpClientModule,
   MatGridListModule,
   MatSidenavModule,
   MatListModule,

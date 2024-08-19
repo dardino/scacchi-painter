@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppTournamentsComponent } from './app-tournaments.component';
 
@@ -10,9 +10,10 @@ describe('AppTournamentsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppTournamentsComponent],
-      imports: [BrowserModule,HttpClientModule],
-    })
+    declarations: [AppTournamentsComponent],
+    imports: [BrowserModule],
+    providers: [provideHttpClient(withInterceptorsFromDi())]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(AppTournamentsComponent);

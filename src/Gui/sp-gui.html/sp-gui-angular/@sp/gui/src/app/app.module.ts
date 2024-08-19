@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { provideHttpClient, withFetch } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { AppRoutingModule } from "./app-routing.module";
@@ -39,7 +39,7 @@ import { TwinDialogComponent } from "./twin-dialog/twin-dialog.component";
     ...ThirdPartyModules,
     AppRoutingModule,
   ],
-  providers: [HttpClient, AllMatIconRegistryService],
+  providers: [provideHttpClient(withFetch()), AllMatIconRegistryService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
