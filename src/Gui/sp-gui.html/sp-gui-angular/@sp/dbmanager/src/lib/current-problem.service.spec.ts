@@ -1,8 +1,9 @@
 import { TestBed } from "@angular/core/testing";
 
 import { Injectable } from "@angular/core";
+import { FileSelected, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { CurrentProblemService } from "./current-problem.service";
 import { DbmanagerService } from "./dbmanager.service";
 import { IPiece } from "./helpers";
@@ -39,9 +40,11 @@ class MockHostBridgeService {
 
 @Injectable({ providedIn: "root" })
 class MockDbmanagerService {
-  CurrentDB: Document | null;
   public All: Problem[];
-  get FileName(): string {
+  get wip$(): Observable<boolean> {
+    throw new Error("Method not implemented.");
+  }
+  get FileName(): string | undefined {
     throw new Error("Method not implemented.");
   }
   get CurrentIndex(): number {
@@ -50,31 +53,61 @@ class MockDbmanagerService {
   get Count(): number {
     throw new Error("Method not implemented.");
   }
-  CurrentProblem = Problem.fromJson({});
-  get Pieces(): IPiece[] {
+
+  private currentProblem$ = new BehaviorSubject(Problem.fromJson({}));
+  get CurrentProblem() {
+    return this.currentProblem$.getValue();
+  }
+  set CurrentProblem(val: Problem) {
+    this.currentProblem$.next(val);
+  }
+
+  get CurrentProblem$(): Observable<Problem | null> {
+    return this.currentProblem$.asObservable();
+  }
+  get Pieces(): Piece[] {
     throw new Error("Method not implemented.");
   }
-  LoadFromLocalStorage(): void {
+  get CurrentFile(): Readonly<FolderSelected | null> {
     throw new Error("Method not implemented.");
   }
-  SaveToLocalStorage(text: string, fileName: string): void {
+  addBlankPosition(): Promise<number> {
     throw new Error("Method not implemented.");
   }
-  SaveToHost(): void {
+  deleteProblem(problem: Problem): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  LoadFromText(xmlText: string, fileName: string): Error | null {
+  deleteProblemByIndex(dbIndex: number): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  GotoIndex(arg0: number): void {
+  deleteCurrentProblem(): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  public startSolving(): Observable<string> | Error {
+  Load({ file, meta, source }: FileSelected): Promise<Error | null> {
     throw new Error("Method not implemented.");
   }
-  public stopSolving(): void {
+  public LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
     throw new Error("Method not implemented.");
   }
+  Reload(id?: number): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  SetFileMeta(meta: Omit<FileSelected, "file">): void {
+    throw new Error("Method not implemented.");
+  }
+  public SaveTemporary(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  public GetFileContent(): Promise<File> {
+    throw new Error("Method not implemented.");
+  }
+  public Save(): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+  GotoIndex(arg0: number): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
 }
 
 const WhiteQueen: Partial<IPiece> = {
@@ -263,7 +296,7 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.g4, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
-      expect(dbmanager.CurrentProblem.getCurrentFen()).toBe(
+      expect(dbmanager.CurrentProblem?.getCurrentFen()).toBe(
         "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7"
       );
       service.FlipBoard("x");
@@ -279,7 +312,7 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.g4, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
-      expect(dbmanager.CurrentProblem.getCurrentFen()).toBe(
+      expect(dbmanager.CurrentProblem?.getCurrentFen()).toBe(
         "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7"
       );
       service.FlipBoard("y");

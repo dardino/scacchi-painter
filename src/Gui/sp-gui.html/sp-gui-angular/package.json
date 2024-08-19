@@ -15,6 +15,7 @@
     "build:electron": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron",
     "build:watch": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron --watch",
     "test": "yarn ng test",
+    "test:ci": "yarn ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "lint": "yarn ng lint",
     "e2e": "yarn ng e2e",
     "build:stats": "yarn build --stats-json",

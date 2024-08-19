@@ -3,10 +3,10 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
+import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { RoutesList } from "./app-routing-list";
-import { AllMatIconRegistry } from "./registerIcons";
 
 @Component({
   selector: "app-root",
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private db: DbmanagerService,
     private breakpointObserver: BreakpointObserver,
     private bridge: HostBridgeService,
-    _allIcons: AllMatIconRegistry,
+    _allIcons: AllMatIconRegistryService,
     private route: ActivatedRoute,
     private currentProblemSvc: CurrentProblemService,
   ) { }

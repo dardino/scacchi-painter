@@ -55,7 +55,7 @@ export class ToolbarEngineComponent implements OnInit {
   }
 
   public get viewModeIcon() {
-    return mapViewModeToIcons[this.viewMode].icon;
+    return mapViewModeToIcons[this.viewMode]?.icon;
   }
 
   constructor(private preferences: PreferencesService) {

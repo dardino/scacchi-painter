@@ -32,7 +32,7 @@ export const ThirdPartyModules = [
   BrowserModule,
   BrowserAnimationsModule,
   MatToolbarModule,
-  UiElementsModule,
+  UiElementsModule.config(environment.assetFolder),
   ChessboardModule,
   HttpClientModule,
   MatGridListModule,
