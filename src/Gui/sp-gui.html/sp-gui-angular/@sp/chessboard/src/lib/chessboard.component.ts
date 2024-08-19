@@ -256,6 +256,13 @@ export class ChessboardComponent
     this.fontSize = Math.floor(this.cellSize / 1.44);
   };
 
+  cellInfo(cell: UiCell) {
+    return `${(cell.piece?.ToLongDescription() ?? "")} ${cell.location.column.slice(-1).toLowerCase()}${cell.location.traverse.slice(-1)}`;
+  }
+
+  triggerContextOnCell($event: MouseEvent, cell: UiCell) {
+    this.contextOnCell.emit({ event: $event, location: cell.location });
+  }
 }
 const notNull = <T>(v: T | null): v is T => v != null;
 

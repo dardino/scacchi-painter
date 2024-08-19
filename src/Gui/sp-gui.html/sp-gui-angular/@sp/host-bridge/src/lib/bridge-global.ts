@@ -30,4 +30,4 @@ export type SolutionMove = {
   extras: SolutionMove[],
   continuation: "threat" | "zugzwang" | "";
 };
-export type SolutionRow = { rowtype: "log" | "data", raw: string, parsed: SolutionMove[] }
+export type SolutionRow = { rowtype: "log" | "data", raw: string }

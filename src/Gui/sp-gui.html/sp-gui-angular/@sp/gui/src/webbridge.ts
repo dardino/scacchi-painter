@@ -29,7 +29,7 @@ class WebBridge implements BridgeGlobal {
   private startSolve(problem: string) {
     problem.split("\n").forEach((row) => {
       setTimeout(() => {
-        this.solver$.next({ raw: row, rowtype: "log", parsed: [] });
+        this.solver$.next({ raw: row, rowtype: "log" });
       }, 1);
     });
     this.startWorker();
@@ -40,7 +40,7 @@ class WebBridge implements BridgeGlobal {
   };
   private message = (e: MessageEvent<string>) => {
     const mov = parsePopeyeRow(e.data);
-    this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log", parsed: [] });
+    this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log" });
     if (e.data.indexOf("solution finished") > -1) {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
     }
@@ -69,7 +69,7 @@ class WebBridge implements BridgeGlobal {
       return new Error("Engine not found.");
     }
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
-      { raw: `starting engine <${engine}>`, rowtype: "log", parsed: [] }
+      { raw: `starting engine <${engine}>`, rowtype: "log" }
     );
 
     const problem = this.problemToPopeye(CurrentProblem, mode).join("\n");

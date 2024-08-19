@@ -92,11 +92,11 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   disconnect(collectionViewer: CollectionViewer): void {
     // no op
   }
-  getPositionalIndexFromId(index: number): number {
-    return this.itemsSubject.getValue().findIndex(pr => pr.dbIndex === index);
+  getPositionalIndexFromId(dbIndex: number): number {
+    return this.itemsSubject.getValue().findIndex(pr => pr.dbIndex === dbIndex);
   }
   public async deleteProblemByDbIndex(dbIndex: number) {
-    await this.db.deleteProblemByIndex(dbIndex);
+    await this.db.deleteProblemByIndex(this.getPositionalIndexFromId(dbIndex));
     await this.reload();
   }
   private async reload() {
@@ -123,7 +123,7 @@ const filterByText = (text: string, cfg = { stipulation: true, names: true, sour
   return (e: ProblemRef, i: number, a: ProblemRef[]) => {
     if (!e.problem) return false;
     const stip = e.problem.stipulation.completeStipulationDesc.toLowerCase();
-    const names = e.problem.authors.map(aut => aut.nameAndSurname.toLowerCase());
+    const names = e.problem.authors.map(aut => aut.nameAndSurname.toLowerCase()) ?? "";
     const magazine = e.problem.source.toLowerCase();
 
     const isMatch = (cfg.stipulation && textTokens.filter(tok => stip.includes(tok)).length > 0)
