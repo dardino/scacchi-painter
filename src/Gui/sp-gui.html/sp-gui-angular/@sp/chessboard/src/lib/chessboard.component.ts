@@ -16,7 +16,8 @@ import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
-  SquareLocation
+  SquareLocation,
+  Traverse
 } from "@sp/dbmanager/src/public-api";
 import {
   Piece as BP,
@@ -34,11 +35,17 @@ export class ChessboardComponent
   @Output() focusOut = new EventEmitter<void>();
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
+  @Input() smallBoard: boolean;
   @Input() cursor: { figurine: string | null; rotation: number | null } | null;
 
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
   }
+
+  getTraverse(location: SquareLocation) {
+    return Traverse.indexOf(location.traverse) + 1;
+  }
+
 
   @ViewChild("canvas", { static: true })
   canvas: ElementRef;
@@ -70,7 +77,7 @@ export class ChessboardComponent
       this.updateBoard();
     }
     return this.uiCells;
-  };
+  }
   fontSize: number;
 
   private settings: {
@@ -225,7 +232,7 @@ export class ChessboardComponent
     // Create an observer instance linked to the callback function
     window.addEventListener("resize", this.sizeMutated);
     setTimeout(() => {
-      this.sizeMutated(null);
+      this.sizeMutated();
     }, 0);
   }
 
@@ -237,7 +244,7 @@ export class ChessboardComponent
     return this.position?.twins.TwinList.map((t) => t.toString()) ?? [];
   }
 
-  get viewDiagram(): any {
+  get viewDiagram() {
     return (
       (this.position?.twins.TwinList.length ?? 0) &&
       this.position?.twins.TwinList.every(
@@ -250,12 +257,19 @@ export class ChessboardComponent
     return this.position?.stipulation.completeStipulationDesc ?? "";
   }
 
-  private sizeMutated = (args: any) => {
+  private sizeMutated = () => {
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
   };
 
+  cellInfo(cell: UiCell) {
+    return `${(cell.piece?.ToLongDescription() ?? "")} ${cell.location.column.slice(-1).toLowerCase()}${cell.location.traverse.slice(-1)}`;
+  }
+
+  triggerContextOnCell($event: MouseEvent, cell: UiCell) {
+    this.contextOnCell.emit({ event: $event, location: cell.location });
+  }
 }
 const notNull = <T>(v: T | null): v is T => v != null;
 

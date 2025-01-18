@@ -596,7 +596,7 @@ export const fenToChessBoard = (original: string) => {
   const fenrows = fen.split("/");
   const pieces = fenrows.map((f) => rowToPieces(f));
   const cells = pieces.reduce<Array<Partial<IPiece> | null>>(
-    (a, b, i, m) => a.concat(b),
+    (a, b) => a.concat(b),
     []
   );
   return cells;
@@ -765,7 +765,7 @@ export const prettifyXml = (sourceXml: string | Document) => {
 };
 
 export const notationCasingByColor: Record<PieceColors, (piecename: string) => string> = {
-  White: (txt: string) =>  txt.toUpperCase(),
-  Black: (txt: string) =>  txt.toLowerCase(),
-  Neutral: (txt: string) =>  `*${txt.toUpperCase()}`,
+  White: (txt: string) => txt.toUpperCase(),
+  Black: (txt: string) => txt.toLowerCase(),
+  Neutral: (txt: string) => `*${txt.toUpperCase()}`,
 };

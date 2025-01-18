@@ -6,8 +6,6 @@ type ListTournament = Array<Tournament>;
 
 @Component({
   selector: 'app-app-tournaments',
-  standalone: true,
-  imports: [],
   templateUrl: './app-tournaments.component.html',
   styleUrl: './app-tournaments.component.less'
 })

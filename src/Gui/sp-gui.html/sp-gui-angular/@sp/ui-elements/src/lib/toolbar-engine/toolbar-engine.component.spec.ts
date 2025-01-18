@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
+import { ThirdPartyImports } from "../thirdPartyImports";
 import { ToolbarEngineComponent } from "./toolbar-engine.component";
 
 describe("ToolbarEngineComponent", () => {
@@ -8,7 +9,8 @@ describe("ToolbarEngineComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToolbarEngineComponent ]
+      declarations: [ ToolbarEngineComponent ],
+      imports: [...ThirdPartyImports]
     })
     .compileComponents();
   }));

@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { Author } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
@@ -13,7 +13,7 @@ import {
   templateUrl: "./problem-definitions.component.html",
   styleUrls: ["./problem-definitions.component.less"]
 })
-export class ProblemDefinitionsComponent implements OnInit {
+export class ProblemDefinitionsComponent {
   @Output()
   public openTwin = new EventEmitter<Twin | null>();
 
@@ -83,8 +83,6 @@ export class ProblemDefinitionsComponent implements OnInit {
   };
 
   constructor(private current: CurrentProblemService) {}
-
-  ngOnInit(): void {}
 
   dropAuthor(event: CdkDragDrop<Author[]>) {
     moveItemInArray(this.authors, event.previousIndex, event.currentIndex);

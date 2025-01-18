@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { NgModel } from "@angular/forms";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
@@ -11,7 +11,7 @@ import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
   templateUrl: "./sp-solution-desc.component.html",
   styleUrls: ["./sp-solution-desc.component.less"],
 })
-export class SpSolutionDescComponent implements OnInit {
+export class SpSolutionDescComponent {
   editor: Editor;
   toolbar: Toolbar = [
     // default value
@@ -47,8 +47,6 @@ export class SpSolutionDescComponent implements OnInit {
 
   @Input()
   viewMode: ViewModes = "html";
-
-  ngOnInit(): void { /* */ }
 
   public get solutionFontSize() {
     return `${Math.max(this.preferences.solutionFontSize, 1)}rem`;

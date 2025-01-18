@@ -18,8 +18,8 @@ import { Observable, Subscription, map, startWith } from "rxjs";
 })
 export class ProblemPublicationComponent implements OnInit, OnDestroy {
 
-  get magazine(): string { return this._currentProblem?.source ?? ""; };
-  set magazine(val: string) { if (this._currentProblem) this._currentProblem.source = val; };
+  get magazine(): string { return this._currentProblem?.source ?? ""; }
+  set magazine(val: string) { if (this._currentProblem) this._currentProblem.source = val; }
 
   private _date: Date | null = new Date();
   get date() { return this._date }

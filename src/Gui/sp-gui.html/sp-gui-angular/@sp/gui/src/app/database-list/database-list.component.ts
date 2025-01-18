@@ -1,4 +1,4 @@
-import { CollectionViewer, DataSource } from "@angular/cdk/collections";
+import { DataSource } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from "@angular/core";
 import { Router } from "@angular/router";
@@ -50,7 +50,7 @@ export class DatabaseListComponent implements OnInit {
   public valueChange($event: Event) {
     this.searchValue = ($event.target as HTMLInputElement).value;
     this.itemSource.filter(this.searchValue);
-  };
+  }
 
   async createNewPosition() {
     const createdIndex = await this.db.addBlankPosition();
@@ -85,18 +85,18 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
     this.reload();
   }
   connect(
-    collectionViewer: CollectionViewer
+    /* collectionViewer: CollectionViewer */
   ): Observable<Array<ProblemRef | undefined>> {
     return this.items$;
   }
-  disconnect(collectionViewer: CollectionViewer): void {
+  disconnect(/* collectionViewer: CollectionViewer */): void {
     // no op
   }
-  getPositionalIndexFromId(index: number): number {
-    return this.itemsSubject.getValue().findIndex(pr => pr.dbIndex === index);
+  getPositionalIndexFromId(dbIndex: number): number {
+    return this.itemsSubject.getValue().findIndex(pr => pr.dbIndex === dbIndex);
   }
   public async deleteProblemByDbIndex(dbIndex: number) {
-    await this.db.deleteProblemByIndex(dbIndex);
+    await this.db.deleteProblemByIndex(this.getPositionalIndexFromId(dbIndex));
     await this.reload();
   }
   private async reload() {
@@ -120,10 +120,10 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
 
 const filterByText = (text: string, cfg = { stipulation: true, names: true, source: true }) => {
   const textTokens = text.toLowerCase().split(" ");
-  return (e: ProblemRef, i: number, a: ProblemRef[]) => {
+  return (e: ProblemRef /*, i: number, a: ProblemRef[] */) => {
     if (!e.problem) return false;
     const stip = e.problem.stipulation.completeStipulationDesc.toLowerCase();
-    const names = e.problem.authors.map(aut => aut.nameAndSurname.toLowerCase());
+    const names = e.problem.authors.map(aut => aut.nameAndSurname.toLowerCase()) ?? "";
     const magazine = e.problem.source.toLowerCase();
 
     const isMatch = (cfg.stipulation && textTokens.filter(tok => stip.includes(tok)).length > 0)

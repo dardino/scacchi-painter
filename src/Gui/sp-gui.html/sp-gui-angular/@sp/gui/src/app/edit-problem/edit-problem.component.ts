@@ -85,6 +85,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public rows$ubject = new BehaviorSubject<string[]>([]);
   menuX = 0;
   menuY = 0;
+  contextOnCell: SquareLocation;
 
   private resizing = { x: NaN, initialW: NaN };
 
@@ -166,6 +167,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.menuY = data.event.y - 40;
     this.menu.openMenu();
     this.editMode = "select";
+    this.contextOnCell = data.location;
     this.resetActions();
   }
 
@@ -507,6 +509,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         this.snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
       }
     }
+  }
+
+  //#region CONTEXT COMMANDS
+  ctxDeletePiece() {
+    this.current.RemovePieceAt(this.contextOnCell);
   }
 
 }

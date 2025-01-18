@@ -14,14 +14,18 @@ export class LocalDriveService implements FileService {
   constructor() { }
   sourceName: AvaliableFileServices = "local";
   async enumContent(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     itemID: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     itemType: "root" | "file" | "folder" | "drive",
-    ...extensions: string[]
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ..._extensions: string[]
   ): Promise<FolderItemInfo[]> {
     return [];
   }
 
-  async getFileContent(item: FolderItemInfo): Promise<File> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async getFileContent(item: FolderItemInfo): Promise<File> {
 
     // if (itemID === "root_no_permission") return [];
     if (!window.showOpenFilePicker) {
@@ -65,6 +69,7 @@ export class LocalDriveService implements FileService {
     await fileStream.close();
     return item;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   joinPath(...parts: string[]): string {
     throw new Error("Method not implemented.");
   }
@@ -73,7 +78,7 @@ export class LocalDriveService implements FileService {
   // withWrite is a boolean set to true if write
 
   async verifyPermission(fileHandle: FileSystemHandle, withWrite: boolean) {
-    const opts = {} as any;
+    const opts = {} as FileSystemHandlePermissionDescriptor;
     if (withWrite) {
       opts.mode = "readwrite";
     }

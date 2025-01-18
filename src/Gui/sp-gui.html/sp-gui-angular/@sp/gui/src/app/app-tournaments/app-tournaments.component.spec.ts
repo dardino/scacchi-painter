@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 import { AppTournamentsComponent } from './app-tournaments.component';
 
 describe('AppTournamentsComponent', () => {
@@ -8,10 +10,12 @@ describe('AppTournamentsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppTournamentsComponent]
-    })
+    declarations: [AppTournamentsComponent],
+    imports: [BrowserModule],
+    providers: [provideHttpClient(withInterceptorsFromDi())]
+})
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(AppTournamentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
