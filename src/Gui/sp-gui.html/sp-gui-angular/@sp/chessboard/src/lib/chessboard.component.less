@@ -24,9 +24,14 @@
 
 .chessboard {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  grid-template-columns: 5% repeat(8, 1fr) 5%;
+  grid-template-rows: 5% repeat(8, 1fr) 5%;
   background-color: #fff;
+
+  &.small {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+  }
 }
 
 .clickable {
@@ -54,7 +59,9 @@
 
   :last-child {
     word-break: break-all;
-  };
+  }
+
+  ;
 }
 
 .short-info {
@@ -99,5 +106,21 @@
     list-style: none;
     content: counter(list, lower-alpha) ") ";
     counter-increment: list;
+  }
+}
+
+.rowHeader {
+  @bgc: var(--mat-toolbar-container-background-color);
+  @fgc: var(--mat-toolbar-container-text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: @bgc;
+  >span {
+    color: @fgc;
+    font-size: 30%;
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
   }
 }
