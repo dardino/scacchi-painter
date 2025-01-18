@@ -43,9 +43,8 @@ export class ChessboardComponent
   }
 
   getTraverse(location: SquareLocation) {
-    return Traverse.indexOf(location.traverse) + 1;
+    return 8 - Traverse.indexOf(location.traverse);
   }
-
 
   @ViewChild("canvas", { static: true })
   canvas: ElementRef;
