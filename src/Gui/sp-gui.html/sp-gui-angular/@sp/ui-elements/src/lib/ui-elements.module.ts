@@ -34,15 +34,15 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     ProblemPublicationComponent,
     FileExplorerComponent,
     FileSourceSelectorComponent,
-    ConfirmDialogComponent,
     SpSolutionRowComponent,
     SortableListComponent,
     DbsourceComponent,
-    AuthorCardComponent,
     MarkdownPipe,
   ],
   imports: [
-    ...ThirdPartyImports
+    ...ThirdPartyImports,
+    ConfirmDialogComponent,
+    AuthorCardComponent,
   ],
   exports: [
     ToolbarDbComponent,

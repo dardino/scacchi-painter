@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
 import {
   AfterViewInit,
   Component,
@@ -24,12 +26,13 @@ import {
   CanvasChessBoard,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+import { BoardCellComponent } from "./board-cell/board-cell.component";
 
 @Component({
     selector: "lib-chessboard",
     templateUrl: "chessboard.component.html",
+    imports: [CommonModule, DragDropModule, BoardCellComponent],
     styleUrls: ["chessboard.component.less"],
-    standalone: false
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {

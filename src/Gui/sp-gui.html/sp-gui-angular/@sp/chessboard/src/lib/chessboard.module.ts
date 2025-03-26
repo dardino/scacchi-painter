@@ -1,17 +1,11 @@
 import { NgModule } from "@angular/core";
-import { ChessboardComponent } from "./chessboard.component";
 import { PieceSelectorComponent } from "./piece-selector/piece-selector.component";
 import { BoardCellComponent } from "./board-cell/board-cell.component";
-import { CommonModule } from "@angular/common";
-import { DragDropModule } from "@angular/cdk/drag-drop";
+import { ChessboardComponent } from "./chessboard.component";
 
 @NgModule({
-  declarations: [
-    ChessboardComponent,
-    PieceSelectorComponent,
-    BoardCellComponent,
-  ],
-  imports: [CommonModule, DragDropModule],
-  exports: [ChessboardComponent, PieceSelectorComponent],
+  declarations: [],
+  imports: [PieceSelectorComponent, BoardCellComponent, ChessboardComponent],
+  exports: [PieceSelectorComponent, BoardCellComponent, ChessboardComponent],
 })
 export class ChessboardModule {}

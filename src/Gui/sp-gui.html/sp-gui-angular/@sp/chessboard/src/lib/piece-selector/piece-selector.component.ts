@@ -1,10 +1,12 @@
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
     selector: "lib-piece-selector",
     templateUrl: "./piece-selector.component.html",
+    imports: [CommonModule, DragDropModule],
     styleUrls: ["./piece-selector.component.less"],
-    standalone: false
 })
 export class PieceSelectorComponent {
   @Input()
