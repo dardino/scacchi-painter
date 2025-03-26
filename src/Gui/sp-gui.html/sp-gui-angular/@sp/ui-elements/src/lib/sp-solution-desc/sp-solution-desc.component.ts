@@ -7,9 +7,10 @@ import { Editor, Toolbar } from 'ngx-editor';
 import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
 
 @Component({
-  selector: "lib-sp-solution-desc",
-  templateUrl: "./sp-solution-desc.component.html",
-  styleUrls: ["./sp-solution-desc.component.less"],
+    selector: "lib-sp-solution-desc",
+    templateUrl: "./sp-solution-desc.component.html",
+    styleUrls: ["./sp-solution-desc.component.less"],
+    standalone: false
 })
 export class SpSolutionDescComponent {
   editor: Editor;

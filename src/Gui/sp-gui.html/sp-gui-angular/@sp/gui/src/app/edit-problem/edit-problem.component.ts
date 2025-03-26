@@ -35,9 +35,10 @@ import { PreferencesService } from "../services/preferences.service";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 
 @Component({
-  selector: "app-edit-problem",
-  templateUrl: "./edit-problem.component.html",
-  styleUrls: ["./edit-problem.component.less"],
+    selector: "app-edit-problem",
+    templateUrl: "./edit-problem.component.html",
+    styleUrls: ["./edit-problem.component.less"],
+    standalone: false
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public get rows$() {

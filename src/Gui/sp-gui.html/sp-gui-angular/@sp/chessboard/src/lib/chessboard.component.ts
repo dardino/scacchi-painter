@@ -16,7 +16,8 @@ import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
-  SquareLocation
+  SquareLocation,
+  Traverse
 } from "@sp/dbmanager/src/public-api";
 import {
   Piece as BP,
@@ -25,19 +26,25 @@ import {
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
-  selector: "lib-chessboard",
-  templateUrl: "chessboard.component.html",
-  styleUrls: ["chessboard.component.less"],
+    selector: "lib-chessboard",
+    templateUrl: "chessboard.component.html",
+    styleUrls: ["chessboard.component.less"],
+    standalone: false
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Output() focusOut = new EventEmitter<void>();
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
+  @Input() smallBoard: boolean;
   @Input() cursor: { figurine: string | null; rotation: number | null } | null;
 
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
+  }
+
+  getTraverse(location: SquareLocation) {
+    return 8 - Traverse.indexOf(location.traverse);
   }
 
   @ViewChild("canvas", { static: true })

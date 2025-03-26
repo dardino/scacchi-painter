@@ -3,6 +3,8 @@
 ## 0.0.13
 
 - Copy and Paste
+- Fix small screen layout issues
+- Adds board coordinates
 
 ## 0.0.12
 

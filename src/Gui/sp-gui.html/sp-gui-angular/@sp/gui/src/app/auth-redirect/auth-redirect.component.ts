@@ -5,9 +5,10 @@ import { LocalAuthInfo, getLocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager
 import { MSAL_CONFIG } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: "app-auth-redirect",
-  templateUrl: "./auth-redirect.component.html",
-  styleUrls: ["./auth-redirect.component.less"],
+    selector: "app-auth-redirect",
+    templateUrl: "./auth-redirect.component.html",
+    styleUrls: ["./auth-redirect.component.less"],
+    standalone: false
 })
 export class AuthRedirectComponent implements OnInit {
   constructor() { }

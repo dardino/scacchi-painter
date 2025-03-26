@@ -17,9 +17,10 @@ export type EditCommand =
   | "pasteFromClipboard";
 
 @Component({
-  selector: "lib-toolbar-edit",
-  templateUrl: "./toolbar-edit.component.html",
-  styleUrls: ["./toolbar-edit.component.less"],
+    selector: "lib-toolbar-edit",
+    templateUrl: "./toolbar-edit.component.html",
+    styleUrls: ["./toolbar-edit.component.less"],
+    standalone: false
 })
 export class ToolbarEditComponent {
   constructor() {}

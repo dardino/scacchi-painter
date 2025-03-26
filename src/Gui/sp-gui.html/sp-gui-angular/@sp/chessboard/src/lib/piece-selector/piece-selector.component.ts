@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
-  selector: "lib-piece-selector",
-  templateUrl: "./piece-selector.component.html",
-  styleUrls: ["./piece-selector.component.less"],
+    selector: "lib-piece-selector",
+    templateUrl: "./piece-selector.component.html",
+    styleUrls: ["./piece-selector.component.less"],
+    standalone: false
 })
 export class PieceSelectorComponent {
   @Input()

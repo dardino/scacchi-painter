@@ -2,12 +2,38 @@
   <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
     <canvas tabindex="0" [style.display]="BoardType !== 'canvas' ? 'none' : undefined" #canvas
       (selectcell)="onSelectCell($event)"></canvas>
-    <div class="chessboard" [style.fontSize]="fontSize + 'px'"
+    <div class="chessboard" [class.small]="smallBoard" [style.fontSize]="fontSize + 'px'"
       [style.display]="BoardType !== 'HTML' ? 'none' : undefined">
+      @if (!smallBoard) {
+      @for (letter of ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', '']; track $index) {
+      <div class="rowHeader">
+        <span>{{ letter }}</span>
+      </div>
+      }
+      }
+
       @for (item of cells; track item.location) {
+      @if (!smallBoard && item.location.column === "ColA") {
+      <div class="rowHeader">
+        <span>{{getTraverse(item.location)}}</span>
+      </div>
+      }
       <lib-board-cell tabindex="0" (contextmenu)="triggerContextOnCell($event, item)" class="clickable" [title]="cellInfo(item)" [active]="item === currentCell" [piece]="item.piece"
         [location]="item.location" (click)="onCellClick(item)" (mouseup)="onMouseUp(item, $event)"
         (mousedown)="onMouseDown(item, $event)"></lib-board-cell>
+      @if (!smallBoard && item.location.column === "ColH") {
+      <div class="rowHeader">
+        <span>{{getTraverse(item.location)}}</span>
+      </div>
+      }
+      }
+
+      @if (!smallBoard) {
+      @for (letter of ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', '']; track $index) {
+      <div class="rowHeader">
+        <span>{{ letter }}</span>
+      </div>
+      }
       }
     </div>
   </div>

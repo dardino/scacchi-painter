@@ -4,9 +4,10 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-  selector: "app-recents",
-  templateUrl: "./recents.component.html",
-  styleUrls: ["./recents.component.less"],
+    selector: "app-recents",
+    templateUrl: "./recents.component.html",
+    styleUrls: ["./recents.component.less"],
+    standalone: false
 })
 export class RecentsComponent {
   recents: RecentFileInfo[] = [];

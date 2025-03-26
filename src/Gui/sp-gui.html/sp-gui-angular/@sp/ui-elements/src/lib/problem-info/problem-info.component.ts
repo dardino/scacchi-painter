@@ -4,9 +4,10 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import type { AuthorCardActions } from "../author-card/author-card.component";
 
 @Component({
-  selector: "lib-problem-info",
-  templateUrl: "./problem-info.component.html",
-  styleUrls: ["./problem-info.component.less"],
+    selector: "lib-problem-info",
+    templateUrl: "./problem-info.component.html",
+    styleUrls: ["./problem-info.component.less"],
+    standalone: false
 })
 export class ProblemInfoComponent {
 

@@ -4,9 +4,10 @@ import { MatButtonToggleChange } from "@angular/material/button-toggle";
 export type EditModes = "select" | "add" | "remove" | "move";
 
 @Component({
-  selector: "lib-toolbar-piece",
-  templateUrl: "./toolbar-piece.component.html",
-  styleUrls: ["./toolbar-piece.component.less"],
+    selector: "lib-toolbar-piece",
+    templateUrl: "./toolbar-piece.component.html",
+    styleUrls: ["./toolbar-piece.component.less"],
+    standalone: false
 })
 export class ToolbarPieceComponent {
   constructor() {}
