@@ -4,9 +4,10 @@ import { Author } from '@sp/dbmanager/src/lib/models';
 export type AuthorCardActions = "delete" | "edit";
 
 @Component({
-  selector: 'lib-author-card',
-  templateUrl: './author-card.component.html',
-  styleUrl: './author-card.component.less'
+    selector: 'lib-author-card',
+    templateUrl: './author-card.component.html',
+    styleUrl: './author-card.component.less',
+    standalone: false
 })
 export class AuthorCardComponent {
 

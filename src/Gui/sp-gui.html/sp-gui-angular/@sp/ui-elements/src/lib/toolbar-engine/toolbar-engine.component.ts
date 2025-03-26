@@ -9,9 +9,10 @@ const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> 
 };
 
 @Component({
-  selector: "lib-toolbar-engine",
-  templateUrl: "./toolbar-engine.component.html",
-  styleUrls: ["./toolbar-engine.component.less"],
+    selector: "lib-toolbar-engine",
+    templateUrl: "./toolbar-engine.component.html",
+    styleUrls: ["./toolbar-engine.component.less"],
+    standalone: false
 })
 export class ToolbarEngineComponent {
   @Input()

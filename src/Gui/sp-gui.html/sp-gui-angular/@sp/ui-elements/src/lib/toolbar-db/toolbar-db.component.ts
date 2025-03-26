@@ -3,9 +3,10 @@ import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: "lib-toolbar-db",
-  templateUrl: "./toolbar-db.component.html",
-  styleUrls: ["./toolbar-db.component.less"],
+    selector: "lib-toolbar-db",
+    templateUrl: "./toolbar-db.component.html",
+    styleUrls: ["./toolbar-db.component.less"],
+    standalone: false
 })
 export class ToolbarDbComponent {
   constructor(private db: DbmanagerService, private router: Router) {

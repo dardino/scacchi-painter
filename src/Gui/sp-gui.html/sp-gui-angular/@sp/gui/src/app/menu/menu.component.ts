@@ -2,9 +2,10 @@ import { Component, EventEmitter, Output } from "@angular/core";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: "app-menu",
-  templateUrl: "./menu.component.html",
-  styleUrls: ["./menu.component.less"],
+    selector: "app-menu",
+    templateUrl: "./menu.component.html",
+    styleUrls: ["./menu.component.less"],
+    standalone: false
 })
 export class MenuComponent {
   @Output()

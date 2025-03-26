@@ -9,9 +9,10 @@ import {
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
-  selector: "lib-board-cell",
-  templateUrl: "./board-cell.component.html",
-  styleUrls: ["./board-cell.component.less"],
+    selector: "lib-board-cell",
+    templateUrl: "./board-cell.component.html",
+    styleUrls: ["./board-cell.component.less"],
+    standalone: false
 })
 export class BoardCellComponent {
   public get classList() {

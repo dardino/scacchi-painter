@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { AvaliableFileServices } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-  selector: "lib-file-source-selector",
-  templateUrl: "./file-source-selector.component.html",
-  styleUrls: ["./file-source-selector.component.less"],
+    selector: "lib-file-source-selector",
+    templateUrl: "./file-source-selector.component.html",
+    styleUrls: ["./file-source-selector.component.less"],
+    standalone: false
 })
 export class FileSourceSelectorComponent {
   @Input()

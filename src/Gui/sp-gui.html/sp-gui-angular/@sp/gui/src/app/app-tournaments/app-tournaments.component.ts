@@ -5,9 +5,10 @@ import { Tournament } from '@dtos/tournament';
 type ListTournament = Array<Tournament>;
 
 @Component({
-  selector: 'app-app-tournaments',
-  templateUrl: './app-tournaments.component.html',
-  styleUrl: './app-tournaments.component.less'
+    selector: 'app-app-tournaments',
+    templateUrl: './app-tournaments.component.html',
+    styleUrl: './app-tournaments.component.less',
+    standalone: false
 })
 export class AppTournamentsComponent {
 

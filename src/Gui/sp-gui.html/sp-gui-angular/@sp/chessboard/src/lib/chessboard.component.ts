@@ -26,9 +26,10 @@ import {
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
-  selector: "lib-chessboard",
-  templateUrl: "chessboard.component.html",
-  styleUrls: ["chessboard.component.less"],
+    selector: "lib-chessboard",
+    templateUrl: "chessboard.component.html",
+    styleUrls: ["chessboard.component.less"],
+    standalone: false
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {

@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { AvaliableFileServices } from '@sp/host-bridge/src/lib/fileService';
 
 @Component({
-  selector: 'lib-dbsource',
-  templateUrl: './dbsource.component.html',
-  styleUrl: './dbsource.component.less'
+    selector: 'lib-dbsource',
+    templateUrl: './dbsource.component.html',
+    styleUrl: './dbsource.component.less',
+    standalone: false
 })
 export class DbsourceComponent {
 

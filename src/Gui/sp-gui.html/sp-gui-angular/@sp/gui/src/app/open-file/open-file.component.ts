@@ -6,9 +6,10 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-  selector: "app-sp-openfile",
-  templateUrl: "./open-file.component.html",
-  styleUrls: ["./open-file.component.less"],
+    selector: "app-sp-openfile",
+    templateUrl: "./open-file.component.html",
+    styleUrls: ["./open-file.component.less"],
+    standalone: false
 })
 export class OpenFileComponent implements OnInit {
   constructor(

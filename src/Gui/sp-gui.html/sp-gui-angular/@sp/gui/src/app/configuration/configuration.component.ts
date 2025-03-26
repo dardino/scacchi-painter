@@ -4,9 +4,10 @@ import { concat, first, interval } from "rxjs";
 import { environment } from "../../environments/environment";
 
 @Component({
-  selector: "app-configuration",
-  templateUrl: "./configuration.component.html",
-  styleUrls: ["./configuration.component.less"],
+    selector: "app-configuration",
+    templateUrl: "./configuration.component.html",
+    styleUrls: ["./configuration.component.less"],
+    standalone: false
 })
 export class ConfigurationComponent implements OnInit {
   constructor(

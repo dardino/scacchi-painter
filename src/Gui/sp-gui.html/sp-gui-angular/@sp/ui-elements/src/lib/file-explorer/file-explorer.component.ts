@@ -7,9 +7,10 @@ import {
 } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-  selector: "lib-file-explorer",
-  templateUrl: "./file-explorer.component.html",
-  styleUrls: ["./file-explorer.component.less"],
+    selector: "lib-file-explorer",
+    templateUrl: "./file-explorer.component.html",
+    styleUrls: ["./file-explorer.component.less"],
+    standalone: false
 })
 export class FileExplorerComponent implements OnInit {
   @Input() service: FileService | null;

@@ -10,9 +10,10 @@ import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/public-api";
 import { Observable, map, startWith } from "rxjs";
 
 @Component({
-  selector: "app-twin-dialog",
-  templateUrl: "./twin-dialog.component.html",
-  styleUrls: ["./twin-dialog.component.less"],
+    selector: "app-twin-dialog",
+    templateUrl: "./twin-dialog.component.html",
+    styleUrls: ["./twin-dialog.component.less"],
+    standalone: false
 })
 export class TwinDialogComponent implements OnInit {
 
