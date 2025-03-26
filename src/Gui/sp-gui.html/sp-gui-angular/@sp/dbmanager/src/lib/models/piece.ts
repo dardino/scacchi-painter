@@ -143,6 +143,15 @@ export class Piece implements IPiece {
     };
     return `${cursorColorByPieceColor[this.color]}_${this.appearance}`;
   }
+
+  ToShortDescription() {
+    return this.isFairy() ? this.ToFairyNotation() : this.ToNotation();
+  }
+
+  ToLongDescription() {
+    return `${this.color} ${this.ToShortDescription().toUpperCase()}`;
+  }
+
   private constructor() {
     this.appearance = "";
     this.fairyCode = [];

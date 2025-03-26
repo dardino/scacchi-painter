@@ -1,79 +1,29 @@
-<lib-sp-toolbar-button
-  (click)="switchBT()"
-  iconText="art_track"
-  iconLabel="Picture/Vector"
-  [noLabel]="true"
-  class="boardtype_switch"
-></lib-sp-toolbar-button>
-<lib-toolbar-piece
-  [editMode]="editMode"
-  (editModeChanged)="modeChange($event)"
-></lib-toolbar-piece>
-<lib-sp-toolbar-button
-  (click)="rotateRight()"
-  iconText="rotate_right"
-  iconLabel="Rotate right"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="rotateLeft()"
-  iconText="rotate_left"
-  iconLabel="Rotate left"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="moveDown()"
-  iconText="keyboard_arrow_down"
-  iconLabel="Move down"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="moveUp()"
-  iconText="keyboard_arrow_up"
-  iconLabel="Move up"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="moveLeft()"
-  iconText="keyboard_arrow_left"
-  iconLabel="Move left"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="moveRight()"
-  iconText="keyboard_arrow_right"
-  iconLabel="Move right"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="flipHorizontal()"
-  iconText="my_flip_h"
-  iconLabel="Flip horizontal"
-  [svg]="true"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="flipVertical()"
-  iconText="my_flip_v"
-  iconLabel="Flip vertical"
-  [svg]="true"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="clearBoard()"
-  iconText="photo_filter"
-  iconLabel="Reset position"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="resetPosition()"
-  iconText="settings_backup_restore"
-  iconLabel="Reset position"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
-<lib-sp-toolbar-button
-  (click)="updatePosition()"
-  iconText="assignment_returned"
-  iconLabel="Update position"
-  [noLabel]="true"
-></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="switchBT()" iconText="art_track" iconLabel="Picture/Vector" [noLabel]="true"
+  class="boardtype_switch"></lib-sp-toolbar-button>
+<lib-toolbar-piece [editMode]="editMode" (editModeChanged)="modeChange($event)"></lib-toolbar-piece>
+<lib-sp-toolbar-button (click)="rotateRight()" iconText="rotate_right" iconLabel="Rotate right"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="rotateLeft()" iconText="rotate_left" iconLabel="Rotate left"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="moveDown()" iconText="keyboard_arrow_down" iconLabel="Move down"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="moveUp()" iconText="keyboard_arrow_up" iconLabel="Move up"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="moveLeft()" iconText="keyboard_arrow_left" iconLabel="Move left"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="moveRight()" iconText="keyboard_arrow_right" iconLabel="Move right"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="flipHorizontal()" iconText="my_flip_h" iconLabel="Flip horizontal" [svg]="true"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="flipVertical()" iconText="my_flip_v" iconLabel="Flip vertical" [svg]="true"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="clearBoard()" iconText="photo_filter" iconLabel="Reset position"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="resetPosition()" iconText="settings_backup_restore" iconLabel="Reset position"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="updatePosition()" iconText="assignment_returned" iconLabel="Update position"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="copyPosition()" iconText="content_copy" iconLabel="Copy to clipboard"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="pastePosition()" iconText="content_paste" iconLabel="Paste from clipboard"
+  [noLabel]="true"></lib-sp-toolbar-button>

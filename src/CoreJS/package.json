@@ -1,0 +1,23 @@
+{
+  "name": "CoreJS",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --minify",
+    "watch": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --watch",
+    "test": "pnpm jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.10",
+    "esbuild": "^0.23.0",
+    "esbuild-jest": "^0.5.0",
+    "jest": "^29.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  }
+}

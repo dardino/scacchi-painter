@@ -6,9 +6,10 @@ import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 
 @Component({
-  selector: "app-conditions-dialog",
-  templateUrl: "./conditions-dialog.component.html",
-  styleUrls: ["./conditions-dialog.component.less"],
+    selector: "app-conditions-dialog",
+    templateUrl: "./conditions-dialog.component.html",
+    styleUrls: ["./conditions-dialog.component.less"],
+    standalone: false
 })
 export class ConditionsDialogComponent implements OnInit {
   myControl = new FormControl();

@@ -1,17 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { environment } from '@sp/gui/src/environments/environment';
-import { marked } from 'marked';
+import { marked, MarkedOptions } from 'marked';
 import { baseUrl } from "marked-base-url";
 
 marked.use(baseUrl(`${environment.assetFolder}/`));
 
 @Pipe({
-  name: 'markdown',
+    name: 'markdown',
+    standalone: false
 })
 export class MarkdownPipe implements PipeTransform {
-  transform(value: any, args?: any[]): any {
+  transform(value: string, options?: MarkedOptions): string | Promise<string> {
     if (value && value.length > 0) {
-      return marked(value);
+      return marked(value, options);
     }
     return value;
   }

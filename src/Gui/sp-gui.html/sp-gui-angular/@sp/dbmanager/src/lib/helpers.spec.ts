@@ -33,16 +33,17 @@ describe("Helpers", () => {
   });
 
   it("GetSquareColor", () => {
-    const color0 = GetSquareColor("ColA", "Row1" );
+    const color0 = GetSquareColor("ColA", "Row1");
     expect(color0).toBe("black");
-    const color1 = GetSquareColor("ColH", "Row1" );
+    const color1 = GetSquareColor("ColH", "Row1");
     expect(color1).toBe("white");
-    const color2 = GetSquareColor("ColH", "Row2" );
+    const color2 = GetSquareColor("ColH", "Row2");
     expect(color2).toBe("black");
-    const color3 = GetSquareColor("ColH", "Row3" );
+    const color3 = GetSquareColor("ColH", "Row3");
     expect(color3).toBe("white");
-    const color4 = GetSquareColor("ColH", "Row4" );
+    const color4 = GetSquareColor("ColH", "Row4");
     expect(color4).toBe("black");
   });
+
 
 });

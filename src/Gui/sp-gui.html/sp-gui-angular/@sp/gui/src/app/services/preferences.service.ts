@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 interface PreferencesTable {
   editWindowWidth: number;
-};
+}
 
 const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}` => {
   const retVal = `spx:pref:${value}` as const;
@@ -12,7 +12,7 @@ const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}
 const BindToLocalStorage = <T extends "number" | "string">(
   type: T,
   defaultValue?: T extends "number" ? number : string
-) => (target: any, key: any) => {
+) => (target: unknown, key: string) => {
   Object.defineProperty(target, key, {
     get: () => {
       const fromLS = localStorage.getItem(lsPropNameGetter(key)) ?? defaultValue ?? "";
@@ -35,7 +35,7 @@ const BindToLocalStorage = <T extends "number" | "string">(
 })
 export class PreferencesService implements PreferencesTable {
 
-  save(args: Partial<PreferencesTable>) {
+  save(/* args: Partial<PreferencesTable> */) {
     throw new Error("Method not implemented.");
   }
 

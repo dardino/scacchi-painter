@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { ThirdPartyImports } from "../thirdPartyImports";
 import { FileExplorerComponent } from "./file-explorer.component";
 
 describe("FileExplorerComponent", () => {
@@ -8,7 +9,8 @@ describe("FileExplorerComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FileExplorerComponent ]
+      declarations: [ FileExplorerComponent ],
+      imports: [...ThirdPartyImports]
     })
     .compileComponents();
   });

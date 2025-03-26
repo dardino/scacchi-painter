@@ -4,9 +4,10 @@ import { concat, first, interval } from "rxjs";
 import { environment } from "../../environments/environment";
 
 @Component({
-  selector: "app-configuration",
-  templateUrl: "./configuration.component.html",
-  styleUrls: ["./configuration.component.less"],
+    selector: "app-configuration",
+    templateUrl: "./configuration.component.html",
+    styleUrls: ["./configuration.component.less"],
+    standalone: false
 })
 export class ConfigurationComponent implements OnInit {
   constructor(
@@ -35,11 +36,13 @@ export class ConfigurationComponent implements OnInit {
             console.log(`Downloading new app version: ${evt.version.hash}`);
             break;
           case 'VERSION_READY':
-            console.log(`Current app version: ${evt.currentVersion.hash}`);
-            console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
-            const run = confirm(`New app version ready for use: ${evt.latestVersion.hash}\r\nRestart is reqired to load the new version.\r\nWould you like to restart the application now?`);
-            if (run) {
-              document.location.reload();
+            {
+              console.log(`Current app version: ${evt.currentVersion.hash}`);
+              console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
+              const run = confirm(`New app version ready for use: ${evt.latestVersion.hash}\r\nRestart is reqired to load the new version.\r\nWould you like to restart the application now?`);
+              if (run) {
+                document.location.reload();
+              }
             }
             break;
           case 'VERSION_INSTALLATION_FAILED':

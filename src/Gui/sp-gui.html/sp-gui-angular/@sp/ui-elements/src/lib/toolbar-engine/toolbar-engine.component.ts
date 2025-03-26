@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 
 export type ViewModes = "txt" | "html" | "both";
@@ -9,11 +9,12 @@ const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> 
 };
 
 @Component({
-  selector: "lib-toolbar-engine",
-  templateUrl: "./toolbar-engine.component.html",
-  styleUrls: ["./toolbar-engine.component.less"],
+    selector: "lib-toolbar-engine",
+    templateUrl: "./toolbar-engine.component.html",
+    styleUrls: ["./toolbar-engine.component.less"],
+    standalone: false
 })
-export class ToolbarEngineComponent implements OnInit {
+export class ToolbarEngineComponent {
   @Input()
   public hideLabels: boolean;
 
@@ -38,10 +39,11 @@ export class ToolbarEngineComponent implements OnInit {
 
   public get isMaxFont() {
     return this.fontSize >= 2;
-  };
+  }
+
   public get isMinFont() {
     return this.fontSize <= 1;
-  };
+  }
 
   public get logIcon() {
     return this.fullLog ? "compress" : "expand";
@@ -55,7 +57,7 @@ export class ToolbarEngineComponent implements OnInit {
   }
 
   public get viewModeIcon() {
-    return mapViewModeToIcons[this.viewMode].icon;
+    return mapViewModeToIcons[this.viewMode]?.icon;
   }
 
   constructor(private preferences: PreferencesService) {
@@ -87,5 +89,4 @@ export class ToolbarEngineComponent implements OnInit {
     this.toggleEditor.emit(mapViewModeToIcons[this.viewMode].nextM);
   }
 
-  ngOnInit(): void {}
 }

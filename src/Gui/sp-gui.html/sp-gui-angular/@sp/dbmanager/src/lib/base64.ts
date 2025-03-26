@@ -62,7 +62,7 @@ export class Base64 {
     let enc1: number, enc2: number, enc3: number, enc4: number;
     let i = 0;
 
-    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+    input = input.replace(/[^A-Za-z0-9+/=]/g, "");
     while (i < input.length) {
       enc1 = Base64.keyStr.indexOf(input.charAt(i++));
       enc2 = Base64.keyStr.indexOf(input.charAt(i++));
@@ -117,6 +117,7 @@ export class Base64 {
     let textString = "";
     let i = 0;
     let c: number, c1: number, c2: number, c3: number;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     c = c1 = c2 = 0;
 
     while (i < utftext.length) {

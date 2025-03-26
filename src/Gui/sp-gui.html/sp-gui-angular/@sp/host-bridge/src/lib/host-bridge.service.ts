@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Subject, Subscription } from "rxjs";
-import { BridgeGlobal, SolveModes } from "./bridge-global";
+import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "./bridge-global";
 
 declare global {
   interface HandledFile {
@@ -61,21 +61,21 @@ export class HostBridgeService {
 
     this.solveInProgress.next(true);
 
-    this.subscription = obs.subscribe((text) => {
+    this.subscription = obs.subscribe((move) => {
       this.zone.run(() => {
         // needs to run in in angular zone to update the ui
-        if (typeof text === "string") {
-          console.log(text);
-          this.solver$.next(text);
+        if (!isEOF(move)) {
+          console.log(move.raw);
+          this.solver$.next(move.raw);
         } else {
-          console.log(`exited: `, text);
-          if (typeof text.exitCode !== "number") {
-            this.solver$.next(text.message);
+          console.log(`exited: `, move.message);
+          if (typeof move.exitCode !== "number") {
+            this.solver$.next(move.message);
           } else {
             this.solver$.next(
-              `Engine process exited with code: ${text.exitCode}`
+              `Engine process exited with code: ${move.exitCode}`
             );
-            this.solver$.next(`${text.message}`);
+            this.solver$.next(`${move.message}`);
             if (this.subscription) this.subscription.unsubscribe();
             this.subscription = null;
             this.solveInProgress.next(false);
@@ -112,4 +112,8 @@ export class HostBridgeService {
     if (window.Bridge) return await window.Bridge.openFile();
     return null;
   }
+}
+
+function isEOF(move: SolutionRow | EOF): move is EOF {
+  return "exitCode" in move || "message" in move;
 }

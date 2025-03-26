@@ -1,11 +1,12 @@
-import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
-  selector: "lib-piece-selector",
-  templateUrl: "./piece-selector.component.html",
-  styleUrls: ["./piece-selector.component.less"],
+    selector: "lib-piece-selector",
+    templateUrl: "./piece-selector.component.html",
+    styleUrls: ["./piece-selector.component.less"],
+    standalone: false
 })
-export class PieceSelectorComponent implements OnInit {
+export class PieceSelectorComponent {
   @Input()
   current: string | null = "";
 
@@ -21,6 +22,4 @@ export class PieceSelectorComponent implements OnInit {
 
     this.selectedPieceChanged.emit(this.current === "" ? null : this.current);
   }
-
-  ngOnInit(): void {}
 }

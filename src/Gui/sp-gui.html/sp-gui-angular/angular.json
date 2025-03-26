@@ -20,13 +20,16 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "deleteOutputPath": true,
-            "outputPath": "dist/gui",
+            "outputPath": {
+              "base": "dist/gui"
+            },
             "index": "@sp/gui/src/index.html",
-            "main": "@sp/gui/src/main.ts",
-            "polyfills": "@sp/gui/src/polyfills.ts",
+            "polyfills": [
+              "@sp/gui/src/polyfills.ts"
+            ],
             "tsConfig": "@sp/gui/tsconfig.app.json",
             "assets": [
               "@sp/gui/src/favicon.ico",
@@ -48,12 +51,11 @@
               "quill-delta",
               "quill"
             ],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "@sp/gui/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -68,8 +70,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -82,11 +82,12 @@
                   "maximumError": "10kb"
                 }
               ],
-              "serviceWorker": true,
-              "ngswConfigPath": "@sp/gui/ngsw-config.json"
+              "serviceWorker": "@sp/gui/ngsw-config.json"
             },
             "electron": {
-              "outputPath": "../sp-gui-electron/frontend",
+              "outputPath": {
+                "base": "../sp-gui-electron/frontend"
+              },
               "fileReplacements": [
                 {
                   "replace": "@sp/gui/src/environments/environment.ts",
@@ -97,8 +98,6 @@
               "optimization": true,
               "outputHashing": "none",
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "deleteOutputPath": true,
               "budgets": [
                 {

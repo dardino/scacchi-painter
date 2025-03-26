@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
+import { ThirdPartyImports } from "../thirdPartyImports";
 import { SpToolbarButtonComponent } from "./sp-toolbar-button.component";
 
 describe("SpButtonComponent", () => {
@@ -9,6 +10,7 @@ describe("SpButtonComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SpToolbarButtonComponent],
+      imports:[...ThirdPartyImports]
     }).compileComponents();
   }));
 

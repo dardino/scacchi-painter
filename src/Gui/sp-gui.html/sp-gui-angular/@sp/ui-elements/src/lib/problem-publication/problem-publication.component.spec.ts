@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
+import { ThirdPartyImports } from "../thirdPartyImports";
 import { ProblemPublicationComponent } from "./problem-publication.component";
 
 describe("ProblemPublicationComponent", () => {
@@ -8,7 +9,8 @@ describe("ProblemPublicationComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProblemPublicationComponent ]
+      declarations: [ ProblemPublicationComponent ],
+      imports: [...ThirdPartyImports]
     })
     .compileComponents();
   }));

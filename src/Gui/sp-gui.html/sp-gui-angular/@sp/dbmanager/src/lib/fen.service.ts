@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IPiece, rowToPieces, fenToChessBoard } from "./helpers";
+import { fenToChessBoard } from "./helpers";
 
 @Injectable({
   providedIn: "root",

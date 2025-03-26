@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Author } from '@sp/dbmanager/src/lib/models';
 
 @Component({
-  selector: 'app-author-dialog',
-  templateUrl: './author-dialog.component.html',
-  styleUrl: './author-dialog.component.less'
+    selector: 'app-author-dialog',
+    templateUrl: './author-dialog.component.html',
+    styleUrl: './author-dialog.component.less',
+    standalone: false
 })
 export class AuthorDialogComponent {
   author: Author;

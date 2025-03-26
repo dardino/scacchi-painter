@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable quote-props */
 /* eslint-disable max-len */
 
@@ -168,6 +169,7 @@ export type FairyPiecesCodes = keyof typeof FairyPiecesDB;
 type FE<T extends FairyPiecesCodes> = typeof FairyPiecesDB[T];
 type FairyItem<T extends FairyPiecesCodes> = { code: T; descr: FE<T> };
 type FairiesArray<X extends FairyPiecesCodes> = Array<
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   X extends infer T ? FairyItem<X> : never
 >;
 
@@ -490,7 +492,7 @@ export const TraditionalConditions = {
   EquipollentsImmunChess : (rex: "Inclusive"| "Exclusive") => "ImmunChess Equipollents",
 } as const;
 
-export const isTraditionalCondition=(v: any): v is TraditionalConditionsNames => TraditionalConditionsNames.indexOf(v) >= 0;
+export const isTraditionalCondition=(v: unknown): v is TraditionalConditionsNames => TraditionalConditionsNames.indexOf(v as TraditionalConditionsNames) >= 0;
 
 export type TraditionalConditionsNames = keyof typeof TraditionalConditions;
 export const TraditionalConditionsNames: TraditionalConditionsNames[] = Object.keys(TraditionalConditions) as TraditionalConditionsNames[];

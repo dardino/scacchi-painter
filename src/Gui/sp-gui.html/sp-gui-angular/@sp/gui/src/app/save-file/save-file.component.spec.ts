@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AllMatIconRegistry } from '../registerIcons';
+import { AllMatIconRegistryService } from '@sp/ui-elements/src/lib/registerIcons';
 import { SaveFileComponent } from './save-file.component';
 
 describe('SaveFileComponent', () => {
@@ -10,7 +10,7 @@ describe('SaveFileComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ SaveFileComponent ],
-      providers: [AllMatIconRegistry]
+      providers: [AllMatIconRegistryService]
     })
     .compileComponents();
   });

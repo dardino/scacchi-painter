@@ -1,8 +1,8 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { RouterModule } from "@angular/router";
+import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { AppComponent } from "./app.component";
 import { ThirdPartyModules } from "./modules";
-import { AllMatIconRegistry } from "./registerIcons";
 
 describe("AppComponent", () => {
   beforeEach(waitForAsync(() => {
@@ -14,7 +14,7 @@ describe("AppComponent", () => {
       declarations: [
         AppComponent
       ],
-      providers: [AllMatIconRegistry]
+      providers: [AllMatIconRegistryService]
     }).compileComponents();
   }));
 

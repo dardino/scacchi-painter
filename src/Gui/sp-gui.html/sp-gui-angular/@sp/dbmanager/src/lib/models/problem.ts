@@ -50,6 +50,11 @@ export class Problem implements IProblem {
   public get currentHash(): string {
     return this.getCurrentFen();
   }
+
+  public get pieceTypes(): string[] {
+    return Array.from(new Set(this.pieces.map((piece) => piece.ToFairyNotation())));
+  }
+
   static async fromElement(source: Element) {
     const p = new Problem();
     p.stipulation = Stipulation.fromElement(source);
@@ -193,6 +198,7 @@ export class Problem implements IProblem {
   }
 
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
@@ -312,4 +318,4 @@ export class Problem implements IProblem {
   }
 }
 
-const filterNumber = (v: any): v is number => typeof v === "number";
+const filterNumber = (v: unknown): v is number => typeof v === "number";

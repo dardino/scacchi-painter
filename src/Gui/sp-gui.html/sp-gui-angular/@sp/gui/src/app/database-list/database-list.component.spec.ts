@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { RouterModule } from "@angular/router";
+import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { ThirdPartyModules } from "../modules";
 import { OpenFileComponent } from "../open-file/open-file.component";
 import { DatabaseListComponent } from "./database-list.component";
@@ -18,6 +19,7 @@ describe("DatabaseListComponent", () => {
           [{ path: 'openfile', component: OpenFileComponent }]
         )
       ],
+      providers: [AllMatIconRegistryService]
     }).compileComponents();
   }));
 
