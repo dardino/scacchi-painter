@@ -35,6 +35,15 @@
   }
 }
 
+/* Stile per il div */
+.rotatingToRight {
+  animation: rotateToRight 1s normal ease-in-out;
+}
+.rotatingToLeft {
+  animation: rotateToRight 3s normal ease-in-out;
+}
+
+
 .clickable {
   cursor: pointer;
 
@@ -123,5 +132,25 @@
     text-transform: uppercase;
     text-align: center;
     display: block;
+  }
+}
+
+
+/* Definizione dell'animazione */
+@keyframes rotateToRight {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(90deg);
+  }
+}
+/* Definizione dell'animazione */
+@keyframes rotateToLeft {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(90deg);
   }
 }
