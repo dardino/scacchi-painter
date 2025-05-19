@@ -91,5 +91,5 @@
     "typescript": "^5.8.2",
     "webpack-bundle-analyzer": "^4.9.0"
   },
-  "packageManager": "yarn@4.2.1"
+  "packageManager": "yarn@4.9.1"
 }
