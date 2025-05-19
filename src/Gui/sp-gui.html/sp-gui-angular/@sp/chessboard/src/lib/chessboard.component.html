@@ -2,7 +2,7 @@
   <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
     <canvas tabindex="0" [style.display]="BoardType !== 'canvas' ? 'none' : undefined" #canvas
       (selectcell)="onSelectCell($event)"></canvas>
-    <div class="chessboard" [class.small]="smallBoard" [style.fontSize]="fontSize + 'px'"
+    <div class="chessboard" #cbHtml [class.small]="smallBoard" [style.fontSize]="fontSize + 'px'"
       [style.display]="BoardType !== 'HTML' ? 'none' : undefined">
       @if (!smallBoard) {
       @for (letter of ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', '']; track $index) {

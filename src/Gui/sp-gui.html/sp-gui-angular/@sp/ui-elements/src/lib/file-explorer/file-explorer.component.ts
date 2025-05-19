@@ -1,4 +1,6 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 import {
   FileSelected,
   FileService,
@@ -9,8 +11,8 @@ import {
 @Component({
     selector: "lib-file-explorer",
     templateUrl: "./file-explorer.component.html",
+    imports: [CommonModule, MatIconModule],
     styleUrls: ["./file-explorer.component.less"],
-    standalone: false
 })
 export class FileExplorerComponent implements OnInit {
   @Input() service: FileService | null;

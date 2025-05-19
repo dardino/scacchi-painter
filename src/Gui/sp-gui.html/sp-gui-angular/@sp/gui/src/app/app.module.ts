@@ -17,6 +17,7 @@ import { OpenFileComponent } from "./open-file/open-file.component";
 import { RecentsComponent } from "./recents/recents.component";
 import { SaveFileComponent } from "./save-file/save-file.component";
 import { TwinDialogComponent } from "./twin-dialog/twin-dialog.component";
+import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { TwinDialogComponent } from "./twin-dialog/twin-dialog.component";
     ...ThirdPartyModules,
     AppRoutingModule,
   ],
-  providers: [provideHttpClient(withFetch()), AllMatIconRegistryService],
+  providers: [provideHttpClient(withFetch()), AllMatIconRegistryService, ChessboardAnimationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
