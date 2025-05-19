@@ -11,10 +11,11 @@ import { Observable, Subscription, map, startWith } from "rxjs";
 
 
 @Component({
-  selector: "lib-problem-publication",
-  templateUrl: "./problem-publication.component.html",
-  providers: [provideNativeDateAdapter()],
-  styleUrls: ["./problem-publication.component.less"]
+    selector: "lib-problem-publication",
+    templateUrl: "./problem-publication.component.html",
+    providers: [provideNativeDateAdapter()],
+    styleUrls: ["./problem-publication.component.less"],
+    standalone: false
 })
 export class ProblemPublicationComponent implements OnInit, OnDestroy {
 

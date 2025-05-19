@@ -9,9 +9,10 @@ import {
 } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: "lib-problem-definitions",
-  templateUrl: "./problem-definitions.component.html",
-  styleUrls: ["./problem-definitions.component.less"]
+    selector: "lib-problem-definitions",
+    templateUrl: "./problem-definitions.component.html",
+    styleUrls: ["./problem-definitions.component.less"],
+    standalone: false
 })
 export class ProblemDefinitionsComponent {
   @Output()

@@ -9,9 +9,10 @@ import {
 } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-  selector: "app-save-file",
-  templateUrl: "./save-file.component.html",
-  styleUrls: ["./save-file.component.less"],
+    selector: "app-save-file",
+    templateUrl: "./save-file.component.html",
+    styleUrls: ["./save-file.component.less"],
+    standalone: false
 })
 export class SaveFileComponent implements OnInit {
   constructor(

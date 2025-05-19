@@ -33,11 +33,13 @@ import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialo
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
+import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 
 @Component({
-  selector: "app-edit-problem",
-  templateUrl: "./edit-problem.component.html",
-  styleUrls: ["./edit-problem.component.less"],
+    selector: "app-edit-problem",
+    templateUrl: "./edit-problem.component.html",
+    styleUrls: ["./edit-problem.component.less"],
+    standalone: false
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public get rows$() {
@@ -66,6 +68,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     private dbManager: DbmanagerService,
     private preferences: PreferencesService,
     private snackBar: MatSnackBar,
+    private chessanim: ChessboardAnimationService,
   ) {
     this.engine.isSolving$.subscribe((state) => {
       this.solveInProgress = state;
@@ -94,7 +97,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private commandMapper: { [key in EditCommand]: () => void } = {
     flipH: () => this.current.FlipBoard("y"),
     flipV: () => this.current.FlipBoard("x"),
-    rotateL: () => this.current.RotateBoard("left"),
+    rotateL: () => {
+      this.current.RotateBoard("left");
+      this.chessanim.animate("rotateLeft");
+    },
     rotateR: () => this.current.RotateBoard("right"),
     moveU: () => this.current.ShiftBoard("-y"),
     moveD: () => this.current.ShiftBoard("y"),

@@ -2,9 +2,10 @@ import { Component, Input } from "@angular/core";
 import { MatButton } from "@angular/material/button";
 
 @Component({
-  selector: "lib-sp-toolbar-button",
-  templateUrl: "./sp-toolbar-button.component.html",
-  styleUrls: ["./sp-toolbar-button.component.less"],
+    selector: "lib-sp-toolbar-button",
+    templateUrl: "./sp-toolbar-button.component.html",
+    styleUrls: ["./sp-toolbar-button.component.less"],
+    standalone: false
 })
 export class SpToolbarButtonComponent {
   constructor() {}

@@ -27,12 +27,22 @@
   grid-template-columns: 5% repeat(8, 1fr) 5%;
   grid-template-rows: 5% repeat(8, 1fr) 5%;
   background-color: #fff;
+  background-image: url("/wood.jpg");
 
   &.small {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
   }
 }
+
+/* Stile per il div */
+.rotatingToRight {
+  animation: rotateToRight 1s normal ease-in-out;
+}
+.rotatingToLeft {
+  animation: rotateToRight 3s normal ease-in-out;
+}
+
 
 .clickable {
   cursor: pointer;
@@ -122,5 +132,25 @@
     text-transform: uppercase;
     text-align: center;
     display: block;
+  }
+}
+
+
+/* Definizione dell'animazione */
+@keyframes rotateToRight {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(90deg);
+  }
+}
+/* Definizione dell'animazione */
+@keyframes rotateToLeft {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(90deg);
   }
 }

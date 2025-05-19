@@ -3,9 +3,10 @@ import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
 @Component({
-  selector: "app-database-list-item",
-  templateUrl: "./database-list-item.component.html",
-  styleUrls: ["./database-list-item.component.less"]
+    selector: "app-database-list-item",
+    templateUrl: "./database-list-item.component.html",
+    styleUrls: ["./database-list-item.component.less"],
+    standalone: false
 })
 export class DatabaseListItemComponent {
   @Input() problem: Problem;

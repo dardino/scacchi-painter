@@ -6,7 +6,8 @@ import { baseUrl } from "marked-base-url";
 marked.use(baseUrl(`${environment.assetFolder}/`));
 
 @Pipe({
-  name: 'markdown',
+    name: 'markdown',
+    standalone: false
 })
 export class MarkdownPipe implements PipeTransform {
   transform(value: string, options?: MarkedOptions): string | Promise<string> {

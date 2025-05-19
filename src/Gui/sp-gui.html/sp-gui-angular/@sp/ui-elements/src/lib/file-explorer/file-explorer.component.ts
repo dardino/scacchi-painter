@@ -1,4 +1,6 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 import {
   FileSelected,
   FileService,
@@ -7,9 +9,10 @@ import {
 } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-  selector: "lib-file-explorer",
-  templateUrl: "./file-explorer.component.html",
-  styleUrls: ["./file-explorer.component.less"],
+    selector: "lib-file-explorer",
+    templateUrl: "./file-explorer.component.html",
+    imports: [CommonModule, MatIconModule],
+    styleUrls: ["./file-explorer.component.less"],
 })
 export class FileExplorerComponent implements OnInit {
   @Input() service: FileService | null;

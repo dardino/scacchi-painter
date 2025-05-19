@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
 import {
   AfterViewInit,
   Component,
@@ -24,11 +26,15 @@ import {
   CanvasChessBoard,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+import { BoardCellComponent } from "./board-cell/board-cell.component";
+import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: "lib-chessboard",
-  templateUrl: "chessboard.component.html",
-  styleUrls: ["chessboard.component.less"],
+    selector: "lib-chessboard",
+    templateUrl: "chessboard.component.html",
+    imports: [CommonModule, DragDropModule, BoardCellComponent],
+    styleUrls: ["chessboard.component.less"],
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -50,7 +56,10 @@ export class ChessboardComponent
   canvas: ElementRef;
 
   @ViewChild("container", { static: true })
-  chessboard: ElementRef;
+  chessboard: ElementRef<HTMLDivElement>;
+
+  @ViewChild("cbHtml")
+  cbHtml: ElementRef<HTMLDivElement>;
 
   @ViewChild("container", { static: true })
   cbImage: ElementRef;
@@ -94,7 +103,10 @@ export class ChessboardComponent
     return this.position?.getCurrentFen();
   }
 
-  constructor(private snackBar: MatSnackBar) { }
+  animationSub: Subscription;
+  constructor(private snackBar: MatSnackBar, private animationService: ChessboardAnimationService) {
+    this.animationSub = animationService.onAnimate.subscribe(this.#animate);
+  }
 
   onSelectCell($event: Event) {
     console.log($event);
@@ -102,6 +114,7 @@ export class ChessboardComponent
 
   ngOnDestroy(): void {
     // Later, you can stop observing
+    this.animationSub.unsubscribe();
     window.removeEventListener("resize", this.sizeMutated);
   }
 
@@ -268,6 +281,19 @@ export class ChessboardComponent
 
   triggerContextOnCell($event: MouseEvent, cell: UiCell) {
     this.contextOnCell.emit({ event: $event, location: cell.location });
+  }
+
+  #animate(animation: Animations) {
+    switch (animation) {
+      case "rotateLeft":
+        this.cbHtml.nativeElement.classList.add("rotateLeft");
+        break;
+      case "rotateRight":
+        this.cbHtml.nativeElement.classList.add("rotateRight");
+        break;
+      default:
+        break;
+    }
   }
 }
 const notNull = <T>(v: T | null): v is T => v != null;
