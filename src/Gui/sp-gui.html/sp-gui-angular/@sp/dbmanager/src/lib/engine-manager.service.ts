@@ -34,7 +34,9 @@ export class EngineManagerService {
     try {
       this.bridge.stopSolve();
     } catch {
+      // nope
     } finally {
+      // nope
     }
   }
 }

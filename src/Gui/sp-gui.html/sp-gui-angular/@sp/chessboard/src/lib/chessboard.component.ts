@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
 import {
   AfterViewInit,
   Component,
@@ -16,35 +18,48 @@ import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
-  SquareLocation
+  SquareLocation,
+  Traverse
 } from "@sp/dbmanager/src/public-api";
 import {
   Piece as BP,
   CanvasChessBoard,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+import { BoardCellComponent } from "./board-cell/board-cell.component";
+import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: "lib-chessboard",
-  templateUrl: "chessboard.component.html",
-  styleUrls: ["chessboard.component.less"],
+    selector: "lib-chessboard",
+    templateUrl: "chessboard.component.html",
+    imports: [CommonModule, DragDropModule, BoardCellComponent],
+    styleUrls: ["chessboard.component.less"],
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Output() focusOut = new EventEmitter<void>();
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
+  @Input() smallBoard: boolean;
   @Input() cursor: { figurine: string | null; rotation: number | null } | null;
 
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
   }
 
+  getTraverse(location: SquareLocation) {
+    return 8 - Traverse.indexOf(location.traverse);
+  }
+
   @ViewChild("canvas", { static: true })
   canvas: ElementRef;
 
   @ViewChild("container", { static: true })
-  chessboard: ElementRef;
+  chessboard: ElementRef<HTMLDivElement>;
+
+  @ViewChild("cbHtml")
+  cbHtml: ElementRef<HTMLDivElement>;
 
   @ViewChild("container", { static: true })
   cbImage: ElementRef;
@@ -70,7 +85,7 @@ export class ChessboardComponent
       this.updateBoard();
     }
     return this.uiCells;
-  };
+  }
   fontSize: number;
 
   private settings: {
@@ -88,7 +103,10 @@ export class ChessboardComponent
     return this.position?.getCurrentFen();
   }
 
-  constructor(private snackBar: MatSnackBar) { }
+  animationSub: Subscription;
+  constructor(private snackBar: MatSnackBar, private animationService: ChessboardAnimationService) {
+    this.animationSub = animationService.onAnimate.subscribe(this.#animate);
+  }
 
   onSelectCell($event: Event) {
     console.log($event);
@@ -96,6 +114,7 @@ export class ChessboardComponent
 
   ngOnDestroy(): void {
     // Later, you can stop observing
+    this.animationSub.unsubscribe();
     window.removeEventListener("resize", this.sizeMutated);
   }
 
@@ -225,7 +244,7 @@ export class ChessboardComponent
     // Create an observer instance linked to the callback function
     window.addEventListener("resize", this.sizeMutated);
     setTimeout(() => {
-      this.sizeMutated(null);
+      this.sizeMutated();
     }, 0);
   }
 
@@ -237,7 +256,7 @@ export class ChessboardComponent
     return this.position?.twins.TwinList.map((t) => t.toString()) ?? [];
   }
 
-  get viewDiagram(): any {
+  get viewDiagram() {
     return (
       (this.position?.twins.TwinList.length ?? 0) &&
       this.position?.twins.TwinList.every(
@@ -250,12 +269,32 @@ export class ChessboardComponent
     return this.position?.stipulation.completeStipulationDesc ?? "";
   }
 
-  private sizeMutated = (args: any) => {
+  private sizeMutated = () => {
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
     this.fontSize = Math.floor(this.cellSize / 1.44);
   };
 
+  cellInfo(cell: UiCell) {
+    return `${(cell.piece?.ToLongDescription() ?? "")} ${cell.location.column.slice(-1).toLowerCase()}${cell.location.traverse.slice(-1)}`;
+  }
+
+  triggerContextOnCell($event: MouseEvent, cell: UiCell) {
+    this.contextOnCell.emit({ event: $event, location: cell.location });
+  }
+
+  #animate(animation: Animations) {
+    switch (animation) {
+      case "rotateLeft":
+        this.cbHtml.nativeElement.classList.add("rotateLeft");
+        break;
+      case "rotateRight":
+        this.cbHtml.nativeElement.classList.add("rotateRight");
+        break;
+      default:
+        break;
+    }
+  }
 }
 const notNull = <T>(v: T | null): v is T => v != null;
 

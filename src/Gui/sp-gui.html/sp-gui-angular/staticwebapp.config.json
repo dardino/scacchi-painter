@@ -4,6 +4,7 @@
     { "route": "openfile", "rewrite": "/index.html" },
     { "route": "list", "rewrite": "/index.html" },
     { "route": "redirect", "rewrite": "/index.html" },
+    { "route": "tournaments", "rewrite": "/index.html" },
     { "route": "config", "rewrite": "/index.html" }
   ],
   "mimeTypes": {

@@ -21,6 +21,7 @@ export class OneDriveService implements FileService {
   async enumContent(
     itemId: string | null,
     type: FolderItemInfo["type"],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...extensions: string[]
   ): Promise<FolderItemInfo[]> {
     const tokenReponse = await this.authorize();

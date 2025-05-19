@@ -1,12 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: "app-menu",
-  templateUrl: "./menu.component.html",
-  styleUrls: ["./menu.component.less"],
+    selector: "app-menu",
+    templateUrl: "./menu.component.html",
+    styleUrls: ["./menu.component.less"],
+    standalone: false
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent {
   @Output()
   selectElement = new EventEmitter<void>();
 
@@ -14,6 +15,4 @@ export class MenuComponent implements OnInit {
   get dbLoaded() {
     return this.db.All.length !== 0;
   }
-
-  ngOnInit(): void {}
 }

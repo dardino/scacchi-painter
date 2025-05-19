@@ -10,7 +10,7 @@ export interface BridgeGlobal {
     CurrentProblem: Problem,
     engine: string,
     mode: SolveModes
-  ): Observable<string | EOF> | Error;
+  ): Observable<SolutionRow | EOF> | Error;
   supportsEngine(engine: string): boolean;
 }
 
@@ -20,3 +20,14 @@ export interface EOF {
 }
 
 export type SolveModes = "start" | "try";
+
+
+export type SolutionMove = {
+  moveN: number,
+  notice: string,
+  piece: string,
+  move: string,
+  extras: SolutionMove[],
+  continuation: "threat" | "zugzwang" | "";
+};
+export type SolutionRow = { rowtype: "log" | "data", raw: string }

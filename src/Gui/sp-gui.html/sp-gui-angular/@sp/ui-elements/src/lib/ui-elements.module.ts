@@ -1,24 +1,4 @@
-import { DragDropModule } from "@angular/cdk/drag-drop";
-import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatButtonModule } from "@angular/material/button";
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatCardModule } from "@angular/material/card";
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatListModule } from "@angular/material/list";
-import { MatSelectModule } from "@angular/material/select";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { NgxEditorModule } from 'ngx-editor';
+import { ModuleWithProviders, NgModule } from "@angular/core";
 import { AuthorCardComponent } from "./author-card/author-card.component";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
 import { DbsourceComponent } from "./dbsource/dbsource.component";
@@ -29,10 +9,12 @@ import { ProblemAuthorsComponent } from "./problem-authors/problem-authors.compo
 import { ProblemDefinitionsComponent } from "./problem-definitions/problem-definitions.component";
 import { ProblemInfoComponent } from "./problem-info/problem-info.component";
 import { ProblemPublicationComponent } from "./problem-publication/problem-publication.component";
+import { registerAssetFolder } from "./registerIcons";
 import { SortableListComponent } from './sortable-list/sortable-list.component';
 import { SpSolutionDescComponent } from "./sp-solution-desc/sp-solution-desc.component";
 import { SpSolutionRowComponent } from "./sp-solution-row/sp-solution-row.component";
 import { SpToolbarButtonComponent } from "./sp-toolbar-button/sp-toolbar-button.component";
+import { ThirdPartyImports } from "./thirdPartyImports";
 import { ToolbarDbComponent } from "./toolbar-db/toolbar-db.component";
 import { ToolbarEditComponent } from "./toolbar-edit/toolbar-edit.component";
 import { ToolbarEngineComponent } from "./toolbar-engine/toolbar-engine.component";
@@ -50,37 +32,17 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     ProblemDefinitionsComponent,
     ProblemAuthorsComponent,
     ProblemPublicationComponent,
-    FileExplorerComponent,
-    FileSourceSelectorComponent,
-    ConfirmDialogComponent,
     SpSolutionRowComponent,
     SortableListComponent,
-    DbsourceComponent,
-    AuthorCardComponent,
     MarkdownPipe,
   ],
   imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatButtonToggleModule,
-    NgxEditorModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatGridListModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    DragDropModule,
-    MatDialogModule,
-    MatListModule,
-    MatDatepickerModule,
-    MatAutocompleteModule,
-    MatChipsModule,
+    ...ThirdPartyImports,
+    FileSourceSelectorComponent,
+    FileExplorerComponent,
+    DbsourceComponent,
+    ConfirmDialogComponent,
+    AuthorCardComponent,
   ],
   exports: [
     ToolbarDbComponent,
@@ -97,4 +59,9 @@ import { ToolbarPieceComponent } from "./toolbar-piece/toolbar-piece.component";
     MarkdownPipe,
   ],
 })
-export class UiElementsModule { }
+export class UiElementsModule {
+  static config(assetFolder: string): ModuleWithProviders<UiElementsModule> {
+    registerAssetFolder(assetFolder);
+    return { ngModule: UiElementsModule, providers: [UiElementsModule] };
+  }
+}

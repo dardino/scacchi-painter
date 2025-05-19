@@ -1,14 +1,15 @@
-import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatButtonToggleChange } from "@angular/material/button-toggle";
 
 export type EditModes = "select" | "add" | "remove" | "move";
 
 @Component({
-  selector: "lib-toolbar-piece",
-  templateUrl: "./toolbar-piece.component.html",
-  styleUrls: ["./toolbar-piece.component.less"],
+    selector: "lib-toolbar-piece",
+    templateUrl: "./toolbar-piece.component.html",
+    styleUrls: ["./toolbar-piece.component.less"],
+    standalone: false
 })
-export class ToolbarPieceComponent implements OnInit {
+export class ToolbarPieceComponent {
   constructor() {}
 
   @Input()
@@ -20,5 +21,4 @@ export class ToolbarPieceComponent implements OnInit {
     this.editModeChanged.emit($event.value);
   }
 
-  ngOnInit(): void {}
 }

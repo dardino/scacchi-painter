@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
+import { Component, Input } from "@angular/core";
 import {
   GetSquareColor,
   IPiece,
@@ -9,11 +11,12 @@ import {
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
-  selector: "lib-board-cell",
-  templateUrl: "./board-cell.component.html",
-  styleUrls: ["./board-cell.component.less"],
+    selector: "lib-board-cell",
+    imports: [CommonModule, DragDropModule],
+    templateUrl: "./board-cell.component.html",
+    styleUrls: ["./board-cell.component.less"],
 })
-export class BoardCellComponent implements OnInit {
+export class BoardCellComponent {
   public get classList() {
     const classlist = ["lib-cbs"];
     classlist.push(GetSquareColor(this.location));
@@ -63,5 +66,4 @@ export class BoardCellComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
 }

@@ -8,22 +8,7 @@
       "files": [
         "*.ts"
       ],
-      "parserOptions": {
-        "project": [
-          "../../@sp/dbmanager/tsconfig.lib.json",
-          "../../@sp/dbmanager/tsconfig.spec.json"
-        ],
-        "createDefaultProgram": true
-      },
       "rules": {
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "lib",
-            "style": "kebab-case"
-          }
-        ],
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -32,19 +17,13 @@
             "style": "camelCase"
           }
         ],
-        "@typescript-eslint/array-type": [
+        "@angular-eslint/component-selector": [
           "error",
           {
-            "default": "array-simple"
+            "type": "element",
+            "prefix": "lib",
+            "style": "kebab-case"
           }
-        ],
-        "brace-style": [
-          "error",
-          "1tbs"
-        ],
-        "curly": [
-          "error",
-          "multi-line"
         ]
       }
     },

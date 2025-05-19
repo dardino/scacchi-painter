@@ -5,9 +5,10 @@ import { LocalAuthInfo, getLocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager
 import { MSAL_CONFIG } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: "app-auth-redirect",
-  templateUrl: "./auth-redirect.component.html",
-  styleUrls: ["./auth-redirect.component.less"],
+    selector: "app-auth-redirect",
+    templateUrl: "./auth-redirect.component.html",
+    styleUrls: ["./auth-redirect.component.less"],
+    standalone: false
 })
 export class AuthRedirectComponent implements OnInit {
   constructor() { }
@@ -16,7 +17,7 @@ export class AuthRedirectComponent implements OnInit {
 
   ngOnInit(): void {
     this.parseAuth();
-  };
+  }
 
   async parseAuth() {
     const authInfo = getLocalAuthInfo();
@@ -44,6 +45,7 @@ export class AuthRedirectComponent implements OnInit {
 
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async redirectMsal(authInfo: Required<LocalAuthInfo>) {
     const response = await this.myMsal
       .handleRedirectPromise()

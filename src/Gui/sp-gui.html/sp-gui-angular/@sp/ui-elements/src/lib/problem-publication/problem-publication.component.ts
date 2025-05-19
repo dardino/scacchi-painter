@@ -11,15 +11,16 @@ import { Observable, Subscription, map, startWith } from "rxjs";
 
 
 @Component({
-  selector: "lib-problem-publication",
-  templateUrl: "./problem-publication.component.html",
-  providers: [provideNativeDateAdapter()],
-  styleUrls: ["./problem-publication.component.less"]
+    selector: "lib-problem-publication",
+    templateUrl: "./problem-publication.component.html",
+    providers: [provideNativeDateAdapter()],
+    styleUrls: ["./problem-publication.component.less"],
+    standalone: false
 })
 export class ProblemPublicationComponent implements OnInit, OnDestroy {
 
-  get magazine(): string { return this._currentProblem?.source ?? ""; };
-  set magazine(val: string) { if (this._currentProblem) this._currentProblem.source = val; };
+  get magazine(): string { return this._currentProblem?.source ?? ""; }
+  set magazine(val: string) { if (this._currentProblem) this._currentProblem.source = val; }
 
   private _date: Date | null = new Date();
   get date() { return this._date }

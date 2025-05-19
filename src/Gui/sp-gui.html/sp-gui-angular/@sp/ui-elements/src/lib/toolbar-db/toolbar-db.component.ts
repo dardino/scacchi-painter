@@ -1,13 +1,14 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 
 @Component({
-  selector: "lib-toolbar-db",
-  templateUrl: "./toolbar-db.component.html",
-  styleUrls: ["./toolbar-db.component.less"],
+    selector: "lib-toolbar-db",
+    templateUrl: "./toolbar-db.component.html",
+    styleUrls: ["./toolbar-db.component.less"],
+    standalone: false
 })
-export class ToolbarDbComponent implements OnInit {
+export class ToolbarDbComponent {
   constructor(private db: DbmanagerService, private router: Router) {
   }
 
@@ -19,8 +20,6 @@ export class ToolbarDbComponent implements OnInit {
   }
   get totalCount() {
     return this.db.Count;
-  }
-  ngOnInit() {
   }
 
   public canGoPrev() {
@@ -58,4 +57,5 @@ export class ToolbarDbComponent implements OnInit {
     const createdIndex = await this.db.addBlankPosition();
     this.router.navigate(["edit", createdIndex]);
   }
+
 }

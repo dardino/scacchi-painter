@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, HostBinding } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { MatButton } from "@angular/material/button";
 
 @Component({
-  selector: "lib-sp-toolbar-button",
-  templateUrl: "./sp-toolbar-button.component.html",
-  styleUrls: ["./sp-toolbar-button.component.less"],
+    selector: "lib-sp-toolbar-button",
+    templateUrl: "./sp-toolbar-button.component.html",
+    styleUrls: ["./sp-toolbar-button.component.less"],
+    standalone: false
 })
-export class SpToolbarButtonComponent implements OnInit {
+export class SpToolbarButtonComponent {
   constructor() {}
 
   @Input()
@@ -26,5 +27,4 @@ export class SpToolbarButtonComponent implements OnInit {
     return (this.iconLabel?.length ?? 0) > 0 && this.noLabel !== true;
   }
 
-  ngOnInit(): void {}
 }

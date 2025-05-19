@@ -3,12 +3,14 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   ViewChild
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
@@ -31,11 +33,13 @@ import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialo
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
+import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 
 @Component({
-  selector: "app-edit-problem",
-  templateUrl: "./edit-problem.component.html",
-  styleUrls: ["./edit-problem.component.less"],
+    selector: "app-edit-problem",
+    templateUrl: "./edit-problem.component.html",
+    styleUrls: ["./edit-problem.component.less"],
+    standalone: false
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public get rows$() {
@@ -63,6 +67,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     private confirm: DialogService,
     private dbManager: DbmanagerService,
     private preferences: PreferencesService,
+    private snackBar: MatSnackBar,
+    private chessanim: ChessboardAnimationService,
   ) {
     this.engine.isSolving$.subscribe((state) => {
       this.solveInProgress = state;
@@ -82,6 +88,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public rows$ubject = new BehaviorSubject<string[]>([]);
   menuX = 0;
   menuY = 0;
+  contextOnCell: SquareLocation;
 
   private resizing = { x: NaN, initialW: NaN };
 
@@ -90,7 +97,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private commandMapper: { [key in EditCommand]: () => void } = {
     flipH: () => this.current.FlipBoard("y"),
     flipV: () => this.current.FlipBoard("x"),
-    rotateL: () => this.current.RotateBoard("left"),
+    rotateL: () => {
+      this.current.RotateBoard("left");
+      this.chessanim.animate("rotateLeft");
+    },
     rotateR: () => this.current.RotateBoard("right"),
     moveU: () => this.current.ShiftBoard("-y"),
     moveD: () => this.current.ShiftBoard("y"),
@@ -99,6 +109,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     resetPosition: () => this.current.Reload(), // reload current snapshot
     updatePosition: () => this.current.UpdateSnapshot(), // update current snapshot
     clearBoard: () => this.current.ClearBoard(),
+    copyToClipboard: () => this.onCopy(),
+    pasteFromClipboard: async () => {
+      const text = await navigator.clipboard.readText();
+      this.onPaste(undefined, text);
+    }
   };
 
   pieceToAdd: string | null = null;
@@ -158,6 +173,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.menuY = data.event.y - 40;
     this.menu.openMenu();
     this.editMode = "select";
+    this.contextOnCell = data.location;
     this.resetActions();
   }
 
@@ -462,6 +478,50 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return content;
   }
 
+  @HostListener('window:copy', ['$event'])
+  private onCopy = ($event?: ClipboardEvent): void => {
+    if ($event?.target instanceof HTMLElement && isEditable($event.target)) return;
+
+    if ($event) {
+      $event.preventDefault();
+    }
+    try {
+      const json = this.current.GetJSONString() ?? "";
+      navigator.clipboard.writeText(json);
+      this.snackBar.open("Position saved to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
+    } catch (err) {
+      this.snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
+    }
+  }
+
+  @HostListener('window:paste', ['$event'])
+  private onPaste = ($event?: ClipboardEvent, patext?: string) => {
+    if ($event?.target && (
+      $event.target instanceof HTMLInputElement
+      || isEditable($event.target as HTMLElement)
+    )) return;
+
+    const text = patext ?? $event?.clipboardData?.getData('text/plain') ?? null;
+    if ($event) {
+
+      $event.preventDefault();
+    }
+    if (text) {
+      // TODO: #170 check if text is a FEN, in this case use the method `this.current.PasteFEN`
+      try {
+        const probJSON = JSON.parse(text);
+        this.current.PasteJson(probJSON);
+      } catch (err) {
+        this.snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
+      }
+    }
+  }
+
+  //#region CONTEXT COMMANDS
+  ctxDeletePiece() {
+    this.current.RemovePieceAt(this.contextOnCell);
+  }
+
 }
 
 const tagAndStyle = (text: string): { t: string, css?: string } => {
@@ -470,3 +530,18 @@ const tagAndStyle = (text: string): { t: string, css?: string } => {
   else if (istructionRegExp.test(text)) return { t: "em" };
   else return { t: "strong" };
 };
+
+const isEditable = (element: HTMLElement | null): boolean => {
+  if (!element) {
+    return false;
+  }
+
+  if (element.contentEditable === 'true') {
+    return true;
+  }
+
+  // this case is for ngx-editor!
+  if (!element.isConnected) return true;
+
+  return isEditable(element.parentElement);
+}

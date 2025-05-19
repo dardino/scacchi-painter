@@ -341,7 +341,7 @@ export const getOneDriveToken = async () => {
   const localToken = JSON.parse(onedrive_token) as AuthenticationResult | null;
 
   if (localToken != null) {
-    localToken.expiresOn = new Date((localToken.expiresOn as any) as string);
+    localToken.expiresOn = new Date((localToken.expiresOn as unknown) as string);
     if (localToken.expiresOn.valueOf() > Date.now()) {
       return localToken;
     }

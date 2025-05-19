@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { EditModes } from "../toolbar-piece/toolbar-piece.component";
 
 export type EditCommand =
@@ -12,14 +12,17 @@ export type EditCommand =
   | "moveR"
   | "resetPosition"
   | "updatePosition"
-  | "clearBoard";
+  | "clearBoard"
+  | "copyToClipboard"
+  | "pasteFromClipboard";
 
 @Component({
-  selector: "lib-toolbar-edit",
-  templateUrl: "./toolbar-edit.component.html",
-  styleUrls: ["./toolbar-edit.component.less"],
+    selector: "lib-toolbar-edit",
+    templateUrl: "./toolbar-edit.component.html",
+    styleUrls: ["./toolbar-edit.component.less"],
+    standalone: false
 })
-export class ToolbarEditComponent implements OnInit {
+export class ToolbarEditComponent {
   constructor() {}
   @Output() switchBoardType = new EventEmitter<void>();
 
@@ -35,9 +38,6 @@ export class ToolbarEditComponent implements OnInit {
 
   modeChange($event: EditModes) {
     this.editModeChanged.emit($event);
-  }
-
-  ngOnInit(): void {
   }
 
   rotateRight() {
@@ -73,4 +73,11 @@ export class ToolbarEditComponent implements OnInit {
   clearBoard() {
     this.editCommand.emit("clearBoard");
   }
+  copyPosition() {
+    this.editCommand.emit("copyToClipboard");
+  }
+  pastePosition() {
+    this.editCommand.emit("pasteFromClipboard");
+  }
+
 }
