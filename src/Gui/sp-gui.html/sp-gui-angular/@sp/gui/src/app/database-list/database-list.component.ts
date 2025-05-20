@@ -1,11 +1,17 @@
 import { DataSource } from "@angular/cdk/collections";
-import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { CdkVirtualScrollViewport, ScrollingModule } from "@angular/cdk/scrolling";
+import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { BehaviorSubject, Observable } from "rxjs";
+import { DatabaseListItemComponent } from "../database-list-item/database-list-item.component";
 import { intersect } from "../tools/array";
 import { includes } from "../tools/string";
 export interface ProblemRef {
@@ -17,7 +23,16 @@ export interface ProblemRef {
     selector: "app-database-list",
     templateUrl: "./database-list.component.html",
     styleUrls: ["./database-list.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      FormsModule,
+      MatFormFieldModule,
+      ScrollingModule,
+      CommonModule,
+      MatIconModule,
+      DatabaseListItemComponent,
+      MatToolbarModule
+    ]
 })
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db);
@@ -87,7 +102,7 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   }
   connect(
     /* collectionViewer: CollectionViewer */
-  ): Observable<Array<ProblemRef | undefined>> {
+  ): Observable<(ProblemRef | undefined)[]> {
     return this.items$;
   }
   disconnect(/* collectionViewer: CollectionViewer */): void {

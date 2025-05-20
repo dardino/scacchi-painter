@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
+import { RouterModule } from "@angular/router";
+import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
@@ -6,7 +9,12 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
     selector: "app-database-list-item",
     templateUrl: "./database-list-item.component.html",
     styleUrls: ["./database-list-item.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      ChessboardModule,
+      MatIconModule,
+      RouterModule
+    ]
 })
 export class DatabaseListItemComponent {
   @Input() problem: Problem;

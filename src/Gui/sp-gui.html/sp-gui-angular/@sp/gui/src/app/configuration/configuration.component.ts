@@ -8,7 +8,7 @@ import { environment } from "../../environments/environment";
     selector: "app-configuration",
     templateUrl: "./configuration.component.html",
     styleUrls: ["./configuration.component.less"],
-    standalone: false
+    
 })
 export class ConfigurationComponent implements OnInit {
   constructor(

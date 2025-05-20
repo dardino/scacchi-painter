@@ -1,15 +1,23 @@
+import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { AbortError } from "@sp/dbmanager/src/lib/providers/AbortError";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
+import { FileExplorerComponent } from "@sp/ui-elements/src/lib/file-explorer/file-explorer.component";
+import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source-selector/file-source-selector.component";
 
 @Component({
-    selector: "app-sp-openfile",
-    templateUrl: "./open-file.component.html",
-    styleUrls: ["./open-file.component.less"],
-    standalone: false
+  selector: "app-sp-openfile",
+  templateUrl: "./open-file.component.html",
+  styleUrls: ["./open-file.component.less"],
+  standalone: true,
+  imports: [
+    FileSourceSelectorComponent,
+    FileExplorerComponent,
+    CommonModule
+  ],
 })
 export class OpenFileComponent implements OnInit {
   constructor(

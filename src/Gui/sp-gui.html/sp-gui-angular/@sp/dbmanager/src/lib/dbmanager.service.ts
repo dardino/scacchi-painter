@@ -9,7 +9,7 @@ import { DropboxdbService, LocalDriveService, OneDriveService } from "./provider
 interface IDbSpX {
   lastIndex: number;
   name: string;
-  problems: Array<Partial<IProblem>>;
+  problems: Partial<IProblem>[];
   version: 3;
 }
 

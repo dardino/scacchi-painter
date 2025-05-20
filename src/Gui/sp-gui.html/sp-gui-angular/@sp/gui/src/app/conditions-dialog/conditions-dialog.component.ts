@@ -1,6 +1,9 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogRef } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanager/src/lib/models/fairesDB";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
@@ -9,7 +12,14 @@ import { map, startWith } from "rxjs/operators";
     selector: "app-conditions-dialog",
     templateUrl: "./conditions-dialog.component.html",
     styleUrls: ["./conditions-dialog.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      FormsModule,
+      MatFormFieldModule,
+      MatAutocompleteModule,
+      CommonModule,
+      ReactiveFormsModule
+    ],
 })
 export class ConditionsDialogComponent implements OnInit {
   myControl = new FormControl();

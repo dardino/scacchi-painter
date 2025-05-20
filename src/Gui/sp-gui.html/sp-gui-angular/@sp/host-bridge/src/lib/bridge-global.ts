@@ -22,12 +22,12 @@ export interface EOF {
 export type SolveModes = "start" | "try";
 
 
-export type SolutionMove = {
+export interface SolutionMove {
   moveN: number,
   notice: string,
   piece: string,
   move: string,
   extras: SolutionMove[],
   continuation: "threat" | "zugzwang" | "";
-};
-export type SolutionRow = { rowtype: "log" | "data", raw: string }
+}
+export interface SolutionRow { rowtype: "log" | "data", raw: string }

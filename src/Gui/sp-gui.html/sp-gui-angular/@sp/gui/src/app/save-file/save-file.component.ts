@@ -1,4 +1,10 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
@@ -7,12 +13,25 @@ import {
   FileService,
   FolderSelected,
 } from "@sp/host-bridge/src/lib/fileService";
+import { FileExplorerComponent } from "@sp/ui-elements/src/lib/file-explorer/file-explorer.component";
+import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source-selector/file-source-selector.component";
 
 @Component({
-    selector: "app-save-file",
-    templateUrl: "./save-file.component.html",
-    styleUrls: ["./save-file.component.less"],
-    standalone: false
+  selector: "app-save-file",
+  templateUrl: "./save-file.component.html",
+  styleUrls: ["./save-file.component.less"],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    FileSourceSelectorComponent,
+    FileExplorerComponent
+  ],
+  standalone: true
 })
 export class SaveFileComponent implements OnInit {
   constructor(

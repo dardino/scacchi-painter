@@ -1,9 +1,9 @@
 import { enableProdMode } from "@angular/core";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 
-import { AppModule } from "./app/app.module";
-import { polyfillBridge } from "./webbridge";
+import { AppComponent } from "./app/app.component";
 import { environment } from "./environments/environment";
+import { polyfillBridge } from "./webbridge";
 
 if (environment.production) {
   enableProdMode();
@@ -12,5 +12,5 @@ if (environment.production) {
 polyfillBridge();
 
 platformBrowserDynamic()
-  .bootstrapModule(AppModule)
+  .bootstrapModule(AppComponent)
   .catch((err) => console.error(err));

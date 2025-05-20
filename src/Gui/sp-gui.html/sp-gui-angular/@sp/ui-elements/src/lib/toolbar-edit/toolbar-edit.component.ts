@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { EditModes } from "../toolbar-piece/toolbar-piece.component";
+import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
+import { EditModes, ToolbarPieceComponent } from "../toolbar-piece/toolbar-piece.component";
 
 export type EditCommand =
   | "rotateL"
@@ -20,10 +21,14 @@ export type EditCommand =
     selector: "lib-toolbar-edit",
     templateUrl: "./toolbar-edit.component.html",
     styleUrls: ["./toolbar-edit.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      SpToolbarButtonComponent,
+      ToolbarPieceComponent,
+    ]
 })
 export class ToolbarEditComponent {
-  constructor() {}
+
   @Output() switchBoardType = new EventEmitter<void>();
 
   @Output() editCommand = new EventEmitter<EditCommand>();

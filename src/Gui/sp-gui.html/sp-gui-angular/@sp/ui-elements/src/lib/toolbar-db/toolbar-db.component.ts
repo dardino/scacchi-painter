@@ -1,12 +1,15 @@
 import { Component, Input } from "@angular/core";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 
 @Component({
     selector: "lib-toolbar-db",
     templateUrl: "./toolbar-db.component.html",
     styleUrls: ["./toolbar-db.component.less"],
-    standalone: false
+    imports: [SpToolbarButtonComponent, MatToolbarModule],
+    standalone: true
 })
 export class ToolbarDbComponent {
   constructor(private db: DbmanagerService, private router: Router) {

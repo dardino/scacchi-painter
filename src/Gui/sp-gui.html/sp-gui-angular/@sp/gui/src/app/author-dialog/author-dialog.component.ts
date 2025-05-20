@@ -1,12 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { Author } from '@sp/dbmanager/src/lib/models';
 
 @Component({
     selector: 'app-author-dialog',
     templateUrl: './author-dialog.component.html',
     styleUrl: './author-dialog.component.less',
-    standalone: false
+    imports: [
+      FormsModule,
+      CommonModule,
+      MatFormFieldModule
+    ],
+    standalone: true
 })
 export class AuthorDialogComponent {
   author: Author;

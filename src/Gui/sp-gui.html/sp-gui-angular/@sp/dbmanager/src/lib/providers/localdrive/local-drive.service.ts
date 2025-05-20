@@ -11,7 +11,7 @@ import { AbortError } from "../AbortError";
   providedIn: "root",
 })
 export class LocalDriveService implements FileService {
-  constructor() { }
+
   sourceName: AvaliableFileServices = "local";
   async enumContent(
     _itemID: string,
