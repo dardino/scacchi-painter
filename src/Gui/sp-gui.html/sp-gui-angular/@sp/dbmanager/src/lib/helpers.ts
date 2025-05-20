@@ -104,7 +104,7 @@ export interface IProblem {
   snapshots: { [key in string | number]: string };
 }
 
-export enum SequnceTypes {
+export enum SequenceTypes {
   Normal = "Normal",
 }
 export const TwinTypes = [
@@ -139,7 +139,7 @@ export enum TwinModes {
 export type TwinModesKeys = keyof typeof TwinModes;
 
 export interface ITwins {
-  TwinSequenceTypes?: SequnceTypes;
+  TwinSequenceTypes?: SequenceTypes;
   TwinList?: ITwin[];
 }
 

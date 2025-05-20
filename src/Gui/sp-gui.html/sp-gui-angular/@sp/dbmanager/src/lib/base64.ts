@@ -1,7 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable one-var */
-/* eslint-disable no-bitwise */
-
 /**
  *  Base64 encode / decode
  *  http://www.webtoolkit.info

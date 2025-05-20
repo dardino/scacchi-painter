@@ -34,7 +34,7 @@ export class FileExplorerComponent implements OnInit {
     this.refresh();
   }
 
-  trackByFn(index: number, item: FolderItemInfo): string {
+  trackByFn(item: FolderItemInfo): string {
     return item.fullPath ?? "$";
   }
 

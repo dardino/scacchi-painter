@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Figurine,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
@@ -144,7 +143,7 @@ export class SP2 {
       return Array.from(ft).map((c) => ({
           code: c.getAttribute("code") ?? "",
           params: Array.from(c.querySelectorAll("Param"))
-            .map((el, i, all) => {
+            .map((_el, i, all) => {
               const byIndex = all.find(
                 (parm) => parm.getAttribute("id") === i.toFixed(0)
               );

@@ -542,7 +542,154 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-browser@npm:4.12.0":
+"@azure/abort-controller@npm:^2.0.0":
+  version: 2.1.2
+  resolution: "@azure/abort-controller@npm:2.1.2"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/484e34a8121e5815f764af4da1c8b51d4713106e43f1c44e59671773ffff52da066780821c7633cf601668daa1181a57a1c88f57854d60b62ecc5560f9c52932
+  languageName: node
+  linkType: hard
+
+"@azure/core-auth@npm:^1.3.0, @azure/core-auth@npm:^1.4.0, @azure/core-auth@npm:^1.8.0":
+  version: 1.9.0
+  resolution: "@azure/core-auth@npm:1.9.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-util": "npm:^1.11.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10/d1ae2847fddfad752b5f4092a3cbe7ad5809bc5c510447809b5e678abc3fc280af629c5155d2100f37ca8f43f88d7d3ea78279f98bd9f7eb44ec492f6cdbbe35
+  languageName: node
+  linkType: hard
+
+"@azure/core-client@npm:^1.0.0":
+  version: 1.9.4
+  resolution: "@azure/core-client@npm:1.9.4"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-auth": "npm:^1.4.0"
+    "@azure/core-rest-pipeline": "npm:^1.20.0"
+    "@azure/core-tracing": "npm:^1.0.0"
+    "@azure/core-util": "npm:^1.6.1"
+    "@azure/logger": "npm:^1.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10/e065d547477e9ecaad120ae39ee720e7f2932bdbeea1e50aeb658e70579c7d2dde729c0cac488922b322ee57eb6271e1431d25eab002ad56406ea15b482fc8c4
+  languageName: node
+  linkType: hard
+
+"@azure/core-paging@npm:^1.1.1":
+  version: 1.6.2
+  resolution: "@azure/core-paging@npm:1.6.2"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/fb1d4c4fcd5705dbcd2332724d0ead324b988a874bfe739483cf65056b8ad5567aaa5ae02f4d0467c71c3be035bbd15682fe0d8f6e47043a66903d439593f5b8
+  languageName: node
+  linkType: hard
+
+"@azure/core-rest-pipeline@npm:^1.1.0, @azure/core-rest-pipeline@npm:^1.20.0":
+  version: 1.20.0
+  resolution: "@azure/core-rest-pipeline@npm:1.20.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-auth": "npm:^1.8.0"
+    "@azure/core-tracing": "npm:^1.0.1"
+    "@azure/core-util": "npm:^1.11.0"
+    "@azure/logger": "npm:^1.0.0"
+    "@typespec/ts-http-runtime": "npm:^0.2.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10/7e8ef60323bfe7804b0b76befa3e534c1c9ec46a7dc86f34ffb72f2cbf6dac9723d7e300a28c0a8aecc5da00cdffa361d9abd7c32dc1be117e79884971be8894
+  languageName: node
+  linkType: hard
+
+"@azure/core-tracing@npm:^1.0.0, @azure/core-tracing@npm:^1.0.1":
+  version: 1.2.0
+  resolution: "@azure/core-tracing@npm:1.2.0"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/5d63ffc8f6361545b55b108b2898cda2b424db1a533d11a56890d53ba3b385e9be8f50cfd48a21b897351e1f4bbc56ede14d57187ea927d4489637fc93ebe615
+  languageName: node
+  linkType: hard
+
+"@azure/core-util@npm:^1.11.0, @azure/core-util@npm:^1.6.1":
+  version: 1.12.0
+  resolution: "@azure/core-util@npm:1.12.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@typespec/ts-http-runtime": "npm:^0.2.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10/6a5544451fae579d91f0066807477ee1ffba93b4bf7629e73f53c561560f792770590ebf86d214ff5242ea8a2808c44e48f4188561352d34372734a6affe8e87
+  languageName: node
+  linkType: hard
+
+"@azure/core-xml@npm:^1.0.0":
+  version: 1.4.5
+  resolution: "@azure/core-xml@npm:1.4.5"
+  dependencies:
+    fast-xml-parser: "npm:^5.0.7"
+    tslib: "npm:^2.8.1"
+  checksum: 10/707bf83de629c2a602d5ae660a6d5bae12334ddfcc34fda49c3f42d8dcd0181d518258b89e7a3f6002e62379810fd4b30d42eb1ab6eb0f11cec339a3e243b520
+  languageName: node
+  linkType: hard
+
+"@azure/data-tables@npm:^13.3.0":
+  version: 13.3.0
+  resolution: "@azure/data-tables@npm:13.3.0"
+  dependencies:
+    "@azure/core-auth": "npm:^1.3.0"
+    "@azure/core-client": "npm:^1.0.0"
+    "@azure/core-paging": "npm:^1.1.1"
+    "@azure/core-rest-pipeline": "npm:^1.1.0"
+    "@azure/core-tracing": "npm:^1.0.0"
+    "@azure/core-util": "npm:^1.6.1"
+    "@azure/core-xml": "npm:^1.0.0"
+    "@azure/logger": "npm:^1.0.0"
+    tslib: "npm:^2.2.0"
+  checksum: 10/8ad98ea1cf90606f93fee63ef26489bc2f6df21eb3599710597d05e01e980ec7389cc8072b3090a3b15ba4289165444d346a5f350f4dd40b81117f2f6089b987
+  languageName: node
+  linkType: hard
+
+"@azure/functions-extensions-base@npm:0.1.0-preview":
+  version: 0.1.0-preview
+  resolution: "@azure/functions-extensions-base@npm:0.1.0-preview"
+  checksum: 10/47f1fe4de8045e7b5deee5407d4e5503c110e5ed3f5277dbece0584007b492161b178bd7639a3ad41b9c92513dbb75f9e9c60ba7d7e28063a18abbd76d132e83
+  languageName: node
+  linkType: hard
+
+"@azure/functions@npm:^4.7.1-preview":
+  version: 4.7.1-preview
+  resolution: "@azure/functions@npm:4.7.1-preview"
+  dependencies:
+    "@azure/functions-extensions-base": "npm:0.1.0-preview"
+    cookie: "npm:^0.7.0"
+    long: "npm:^4.0.0"
+    undici: "npm:^5.13.0"
+  checksum: 10/6e8e17a0ace36219ce51caf6db0e3a78053bb3ef3fa90189c7c6b79f0ad7954acd7a50e8e8aa54e128138be56a8946827a13a7c7eef53e2cc232750474e73f00
+  languageName: node
+  linkType: hard
+
+"@azure/logger@npm:^1.0.0":
+  version: 1.2.0
+  resolution: "@azure/logger@npm:1.2.0"
+  dependencies:
+    "@typespec/ts-http-runtime": "npm:^0.2.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10/21347e019c7c66be0707968f824210845ea9aa21c96ae8b1075f7a53b6a23c230e631db53ba63696b0ede577f1ca5665e4fc4a346b61896b376d15f0a01717ee
+  languageName: node
+  linkType: hard
+
+"@azure/msal-angular@npm:^4.0.12":
+  version: 4.0.12
+  resolution: "@azure/msal-angular@npm:4.0.12"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@azure/msal-browser": ^4.12.0
+    rxjs: ^7.0.0
+  checksum: 10/9f9c8a81fa6c305a51f8ad8562b72ef369abbe93505a660941e1b43683870d5f47a027d5b0e211be863c5c59ba9e24641773220dfd181f4c52aa70b6e8094290
+  languageName: node
+  linkType: hard
+
+"@azure/msal-browser@npm:^4.12.0":
   version: 4.12.0
   resolution: "@azure/msal-browser@npm:4.12.0"
   dependencies:
@@ -2336,7 +2483,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.27.0":
+"@eslint/js@npm:9.27.0, @eslint/js@npm:^9.27.0":
   version: 9.27.0
   resolution: "@eslint/js@npm:9.27.0"
   checksum: 10/cdbe380fd31bb325b9ec65ae310fb92a57efb796d3cc5d8bc9dafef447d634c64e497bedade6a49e0cf44a5b14560ab6ac9ed9da5a38e2415b31ae01ae5b758e
@@ -2357,6 +2504,13 @@ __metadata:
     "@eslint/core": "npm:^0.14.0"
     levn: "npm:^0.4.1"
   checksum: 10/ab0c4cecadc6c38c7ae5f71b9831d3521d08237444d8f327751d1133a4369ccd42093a1c06b26fd6c311015807a27d95a0184a761d1cdd264b090896dcf0addb
+  languageName: node
+  linkType: hard
+
+"@fastify/busboy@npm:^2.0.0":
+  version: 2.1.1
+  resolution: "@fastify/busboy@npm:2.1.1"
+  checksum: 10/2bb8a7eca8289ed14c9eb15239bc1019797454624e769b39a0b90ed204d032403adc0f8ed0d2aef8a18c772205fa7808cf5a1b91f21c7bfc7b6032150b1062c5
   languageName: node
   linkType: hard
 
@@ -4294,6 +4448,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typespec/ts-http-runtime@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "@typespec/ts-http-runtime@npm:0.2.2"
+  dependencies:
+    http-proxy-agent: "npm:^7.0.0"
+    https-proxy-agent: "npm:^7.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10/71aa7cea8fee84d3b3f076ab41b2b1b6a4761c2b08e05e475d20a00eeab89739e5d95b96aa633c6ebb33093c2eaeaf9b331c956ff21d3a204adfb1b607a7ba96
+  languageName: node
+  linkType: hard
+
 "@vitejs/plugin-basic-ssl@npm:1.2.0":
   version: 1.2.0
   resolution: "@vitejs/plugin-basic-ssl@npm:1.2.0"
@@ -5738,6 +5903,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:^0.7.0":
+  version: 0.7.2
+  resolution: "cookie@npm:0.7.2"
+  checksum: 10/24b286c556420d4ba4e9bc09120c9d3db7d28ace2bd0f8ccee82422ce42322f73c8312441271e5eefafbead725980e5996cc02766dbb89a90ac7f5636ede608f
+  languageName: node
+  linkType: hard
+
 "cookie@npm:~0.4.1":
   version: 0.4.2
   resolution: "cookie@npm:0.4.2"
@@ -6832,7 +7004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:9.27.0":
+"eslint@npm:^9.27.0":
   version: 9.27.0
   resolution: "eslint@npm:9.27.0"
   dependencies:
@@ -7144,6 +7316,17 @@ __metadata:
   version: 3.0.1
   resolution: "fast-uri@npm:3.0.1"
   checksum: 10/e8ee4712270de0d29eb0fbf41ffad0ac80952e8797be760e8bb62c4707f08f50a86fe2d7829681ca133c07d6eb4b4a75389a5fc36674c5b254a3ac0891a68fc7
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^5.0.7":
+  version: 5.2.3
+  resolution: "fast-xml-parser@npm:5.2.3"
+  dependencies:
+    strnum: "npm:^2.1.0"
+  bin:
+    fxparser: src/cli/cli.js
+  checksum: 10/8135b518b8e8988b71b0564dccbe69fab8b70432508377e4146de7da2f7f182f5a73c1a764f7e0b8a3a7bfb0ada73cfb31d6bf0a38347acafb770b059a9f83d5
   languageName: node
   linkType: hard
 
@@ -7636,6 +7819,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"globals@npm:^16.1.0":
+  version: 16.1.0
+  resolution: "globals@npm:16.1.0"
+  checksum: 10/b24fa86c9d9e7f452572977105cefa66529ac166faf1d81abe6618e0ccce98cdd32f8cbc25d37ed6c2dbe7936b00d442696fd0c96da4c90567490488ecefb8fa
+  languageName: node
+  linkType: hard
+
 "globalthis@npm:^1.0.3":
   version: 1.0.4
   resolution: "globalthis@npm:1.0.4"
@@ -7942,7 +8132,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"https-proxy-agent@npm:7.0.6":
+"https-proxy-agent@npm:7.0.6, https-proxy-agent@npm:^7.0.0":
   version: 7.0.6
   resolution: "https-proxy-agent@npm:7.0.6"
   dependencies:
@@ -9214,6 +9404,13 @@ __metadata:
     rfdc: "npm:^1.3.0"
     streamroller: "npm:^3.1.5"
   checksum: 10/421fb9c1e5a8859a810a40c9ee01fb8e4dfc2fed838049946e67c0064d197bdf76ca43b8fc45df50c5d709e6fc4f218d314f189a0feb8be0c48bdae80cb0934c
+  languageName: node
+  linkType: hard
+
+"long@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "long@npm:4.0.0"
+  checksum: 10/8296e2ba7bab30f9cfabb81ebccff89c819af6a7a78b4bb5a70ea411aa764ee0532f7441381549dfa6a1a98d72abe9138bfcf99f4fa41238629849bc035b845b
   languageName: node
   linkType: hard
 
@@ -12368,7 +12565,11 @@ __metadata:
     "@angular/platform-browser-dynamic": "npm:^19.2.3"
     "@angular/router": "npm:^19.2.3"
     "@angular/service-worker": "npm:^19.2.3"
-    "@azure/msal-browser": "npm:4.12.0"
+    "@azure/data-tables": "npm:^13.3.0"
+    "@azure/functions": "npm:^4.7.1-preview"
+    "@azure/msal-angular": "npm:^4.0.12"
+    "@azure/msal-browser": "npm:^4.12.0"
+    "@eslint/js": "npm:^9.27.0"
     "@microsoft/microsoft-graph-client": "npm:^3.0.5"
     "@microsoft/microsoft-graph-types": "npm:^2.6.0"
     "@types/file-saver": "npm:^2.0.3"
@@ -12380,11 +12581,12 @@ __metadata:
     "@typescript-eslint/parser": "npm:8.32.1"
     canvas-chessboard: "npm:^0.0.17"
     concurrently: "npm:9.1.2"
-    eslint: "npm:9.27.0"
+    eslint: "npm:^9.27.0"
     eslint-plugin-import: "npm:^2.27.5"
     eslint-plugin-jsdoc: "npm:50.6.17"
     eslint-plugin-prefer-arrow: "npm:^1.2.3"
     file-saver: "npm:^2.0.5"
+    globals: "npm:^16.1.0"
     jasmine-core: "npm:^5.0.1"
     jasmine-spec-reporter: "npm:^7.0.0"
     karma: "npm:^6.4.2"
@@ -12404,6 +12606,7 @@ __metadata:
     ts-node: "npm:^10.9.1"
     tslib: "npm:^2.6.0"
     typescript: "npm:^5.8.2"
+    typescript-eslint: "npm:^8.32.1"
     webpack-bundle-analyzer: "npm:^4.9.0"
     zone.js: "npm:^0.15.0"
   languageName: unknown
@@ -12668,6 +12871,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"strnum@npm:^2.1.0":
+  version: 2.1.1
+  resolution: "strnum@npm:2.1.1"
+  checksum: 10/d5fe6e4333cddc17569331048e403e876ffcf629989815f0359b0caf05dae9441b7eef3d7dd07427313ac8b3f05a8f60abc1f61efc15f97245dbc24028362bc9
+  languageName: node
+  linkType: hard
+
 "supports-color@npm:^5.3.0":
   version: 5.5.0
   resolution: "supports-color@npm:5.5.0"
@@ -12929,7 +13139,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1":
+"tslib@npm:2.8.1, tslib@npm:^2.6.2, tslib@npm:^2.8.1":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
@@ -13055,6 +13265,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript-eslint@npm:^8.32.1":
+  version: 8.32.1
+  resolution: "typescript-eslint@npm:8.32.1"
+  dependencies:
+    "@typescript-eslint/eslint-plugin": "npm:8.32.1"
+    "@typescript-eslint/parser": "npm:8.32.1"
+    "@typescript-eslint/utils": "npm:8.32.1"
+  peerDependencies:
+    eslint: ^8.57.0 || ^9.0.0
+    typescript: ">=4.8.4 <5.9.0"
+  checksum: 10/4a042815f73825b510954579938a26c8664c2134e9663b0ac6f771f5f7338d4d41d78e5ded685ab42c1c6410117d955bac2c01fcc7e8ad3ef06c5e7dc2c95a7d
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^5.8.2":
   version: 5.8.2
   resolution: "typescript@npm:5.8.2"
@@ -13067,11 +13291,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A^5.8.2#optional!builtin<compat/typescript>":
   version: 5.8.2
-  resolution: "typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=b45daf"
+  resolution: "typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/6ae9b2c4d3254ec2eaee6f26ed997e19c02177a212422993209f81e87092b2bb0a4738085549c5b0164982a5609364c047c72aeb281f6c8d802cd0d1c6f0d353
+  checksum: 10/97920a082ffc57583b1cb6bc4faa502acc156358e03f54c7fc7fdf0b61c439a717f4c9070c449ee9ee683d4cfc3bb203127c2b9794b2950f66d9d307a4ff262c
   languageName: node
   linkType: hard
 
@@ -13105,6 +13329,15 @@ __metadata:
   version: 6.21.0
   resolution: "undici-types@npm:6.21.0"
   checksum: 10/ec8f41aa4359d50f9b59fa61fe3efce3477cc681908c8f84354d8567bb3701fafdddf36ef6bff307024d3feb42c837cf6f670314ba37fc8145e219560e473d14
+  languageName: node
+  linkType: hard
+
+"undici@npm:^5.13.0":
+  version: 5.29.0
+  resolution: "undici@npm:5.29.0"
+  dependencies:
+    "@fastify/busboy": "npm:^2.0.0"
+  checksum: 10/0ceca8924a32acdcc0cfb8dd2d368c217840970aa3f5e314fc169608474be6341c5b8e50cad7bd257dbe3b4e432bc5d0a0d000f83644b54fa11a48735ec52b93
   languageName: node
   linkType: hard
 

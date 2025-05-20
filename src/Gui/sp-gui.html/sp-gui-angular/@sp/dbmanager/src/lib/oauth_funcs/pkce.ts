@@ -37,13 +37,9 @@ export const getImplicitAuthorizationUrl = ({
 
 export interface TokenResponse {
   uid: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   access_token: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   token_type: string;
   state: string;
   scope: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   account_id: string;
 }
-

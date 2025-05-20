@@ -24,7 +24,7 @@ export class RecentsComponent {
       if (!(result instanceof Error)) {
         this.router.navigate(["/list"]);
       }
-    } catch(err) {
+    } catch(_err) {
         //noop
     }
   }

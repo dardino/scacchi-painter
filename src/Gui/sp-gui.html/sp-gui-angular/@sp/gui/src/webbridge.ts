@@ -136,13 +136,13 @@ const handleFiles = async (files: HandledFile[]) => {
         // blob.handle = file;
         const text = await blob.text();
         // TODO: open the file
-        console.log(`${file.name} handled, content: ${text}`);
+        console.warn(`${file.name} handled, content: ${text}`);
     }
 };
 
 export const polyfillBridge = () => {
   if ("launchQueue" in window) {
-    console.log("File Handling API is supported!");
+    console.warn("File Handling API is supported!");
     window.launchQueue?.setConsumer((launchParams) => {
       handleFiles(launchParams.files);
     });

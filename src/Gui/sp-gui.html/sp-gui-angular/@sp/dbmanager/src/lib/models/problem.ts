@@ -19,7 +19,6 @@ import { Piece } from "./piece";
 import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
 const main_snapshot = "$_MAIN_$";
 
 export class Problem implements IProblem {
@@ -198,7 +197,6 @@ export class Problem implements IProblem {
   }
 
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {

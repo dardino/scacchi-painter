@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable quote-props */
-/* eslint-disable max-len */
 
 export const FairyPiecesDB = {
   "15": "1,5-leaper",
@@ -169,7 +167,6 @@ export type FairyPiecesCodes = keyof typeof FairyPiecesDB;
 type FE<T extends FairyPiecesCodes> = typeof FairyPiecesDB[T];
 type FairyItem<T extends FairyPiecesCodes> = { code: T; descr: FE<T> };
 type FairiesArray<X extends FairyPiecesCodes> = Array<
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   X extends infer T ? FairyItem<X> : never
 >;
 

@@ -65,15 +65,15 @@ export class ToolbarEngineComponent {
   }
 
   start() {
-    console.log("[LOG] -> try to start process...");
+    console.warn("[LOG] -> try to start process...");
     this.startSolve.emit("start");
   }
   stop() {
-    console.log("[LOG] -> try to stop process...");
+    console.warn("[LOG] -> try to stop process...");
     this.stopSolve.emit("stop");
   }
   tryMove() {
-    console.log("[LOG] -> start engine in try mode...");
+    console.warn("[LOG] -> start engine in try mode...");
     this.startSolve.emit("try");
   }
   increaseFontSize() {

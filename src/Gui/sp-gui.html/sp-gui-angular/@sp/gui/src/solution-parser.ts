@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { SolutionMove } from "@sp/host-bridge/src/lib/bridge-global";
 const rxSource = `(?<move_no>\\d?[. ]+)?(?:(?<piece>[A-Z]*)(?<move>[a-z][1-8][-*][a-z][1-8](?:[-*][a-z][1-8])?)(?<extra>\\[[^\\[]*\\]|=[A-Z]+)?(?<notice>[ .!?+#=]+)?(?<cont>threat:)?)` as const;
 type RxGroups<T extends string> = T extends `${string}<${infer G}>${infer X}` ? G | RxGroups<X> : never;
