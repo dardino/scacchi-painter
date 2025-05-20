@@ -178,7 +178,7 @@ export class SaveFileComponent implements OnInit {
       if (file) {
         this.router.navigateByUrl("/list");
       }
-    } catch (err) {
+    } catch (_err) {
       await this.download();
     }
     return null;

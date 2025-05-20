@@ -13,6 +13,7 @@ import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipaint
 @Component({
     selector: "lib-board-cell",
     imports: [CommonModule, DragDropModule],
+    standalone: true,
     templateUrl: "./board-cell.component.html",
     styleUrls: ["./board-cell.component.less"],
 })

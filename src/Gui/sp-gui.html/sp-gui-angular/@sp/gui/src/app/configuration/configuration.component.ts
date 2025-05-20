@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ApplicationRef, Component, OnInit } from "@angular/core";
 import { SwUpdate } from "@angular/service-worker";
 import { concat, first, interval } from "rxjs";

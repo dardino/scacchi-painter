@@ -8,7 +8,7 @@ const sasToken = `sp=r&st=2024-07-02T10:54:35Z&se=2025-07-03T10:54:00Z&spr=https
 
 type TableTournaments = Pick<Tournament, "title" | "submissionDeadline"> & { sections: string; };
 
-export async function listtournament(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function listtournament(_request: HttpRequest, _context: InvocationContext): Promise<HttpResponseInit> {
   const tournamentList: Tournament[] = [];
   const client = new TableClient(`${tablesUrl}?${sasToken}`, "Tournaments");
   const entities = client.listEntities<TableTournaments>();
@@ -16,7 +16,6 @@ export async function listtournament(request: HttpRequest, context: InvocationCo
   // this loop will get all the entities from all the pages
   // returned by the service
   for await (const entity of entities) {
-    console.log(entity);
     tournamentList.push({
       title: entity.title,
       sections: JSON.parse(entity.sections),

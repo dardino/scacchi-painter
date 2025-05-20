@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
 import {
@@ -26,9 +25,9 @@ import {
   CanvasChessBoard,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+import { Subscription } from "rxjs";
 import { BoardCellComponent } from "./board-cell/board-cell.component";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
-import { Subscription } from "rxjs";
 
 @Component({
     selector: "lib-chessboard",
@@ -109,6 +108,7 @@ export class ChessboardComponent
   }
 
   onSelectCell($event: Event) {
+    // eslint-disable-next-line no-console
     console.log($event);
   }
 
@@ -206,7 +206,7 @@ export class ChessboardComponent
       this.cellMiddleClick.emit({ ...cell.location });
     }
   }
-  onMouseDown(cell: UiCell, $event: MouseEvent) {
+  onMouseDown(_cell: UiCell, $event: MouseEvent) {
     const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
     if ($event.button === 1 && !haskeymod) {
       $event.preventDefault();

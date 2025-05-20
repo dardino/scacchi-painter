@@ -14,11 +14,8 @@ export class LocalDriveService implements FileService {
   constructor() { }
   sourceName: AvaliableFileServices = "local";
   async enumContent(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    itemID: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    itemType: "root" | "file" | "folder" | "drive",
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _itemID: string,
+    _itemType: "root" | "file" | "folder" | "drive",
     ..._extensions: string[]
   ): Promise<FolderItemInfo[]> {
     return [];
@@ -55,7 +52,7 @@ export class LocalDriveService implements FileService {
       const filecontent = await fileHandle.getFile();
       return filecontent;
     } catch(err) {
-      console.log("🚀 ~ LocalDriveService ~ getFileContent ~ err:", err);
+      console.error("🚀 ~ LocalDriveService ~ getFileContent ~ err:", err);
       throw new AbortError((err as Error).message);
     }
   }

@@ -5,7 +5,7 @@ import {
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
-import { getOneDriveToken } from "../../oauth_providers/onedrivecli";
+import { OneDriveCliProvider } from "../../oauth_providers/onedrive.cli";
 
 @Injectable({
   providedIn: "root",
@@ -110,7 +110,7 @@ export class OneDriveService implements FileService {
   }
 
   async authorize() {
-    const token = await getOneDriveToken();
+    const token = await OneDriveCliProvider.getToken();
     return token;
   }
 }

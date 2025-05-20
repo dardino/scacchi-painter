@@ -42,7 +42,7 @@ export class HostBridgeService {
   }
 
   stopSolve() {
-    console.log("[LOG] -> stop solve: cancel subscriptions...");
+    console.warn("[LOG] -> stop solve: cancel subscriptions...");
     if (window.Bridge) window.Bridge.stopSolve();
   }
 
@@ -65,10 +65,9 @@ export class HostBridgeService {
       this.zone.run(() => {
         // needs to run in in angular zone to update the ui
         if (!isEOF(move)) {
-          console.log(move.raw);
           this.solver$.next(move.raw);
         } else {
-          console.log(`exited: `, move.message);
+          console.warn(`exited: `, move.message);
           if (typeof move.exitCode !== "number") {
             this.solver$.next(move.message);
           } else {

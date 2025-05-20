@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { ITwins, SequnceTypes, TwinModes, createXmlElement } from "../helpers";
 import { Twin } from "./twin";
 

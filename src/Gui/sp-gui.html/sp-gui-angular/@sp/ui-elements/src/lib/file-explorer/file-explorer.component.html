@@ -3,7 +3,7 @@
   @if (hasParent) {
     <li class="folderItem typeFolder" tabindex="0" (click)="navToParent()"><mat-icon>subdirectory_arrow_left</mat-icon></li>
   }
-  @for (item of items; track trackByFn) {
+  @for (item of items; track trackByFn(item)) {
     <li
       class="folderItem"
       [ngClass]="{
