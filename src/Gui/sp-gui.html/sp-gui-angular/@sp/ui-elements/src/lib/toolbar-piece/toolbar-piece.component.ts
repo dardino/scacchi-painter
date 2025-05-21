@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { MatButtonToggleChange } from "@angular/material/button-toggle";
+import { MatButtonToggleChange, MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatIconModule } from "@angular/material/icon";
 
 export type EditModes = "select" | "add" | "remove" | "move";
 
@@ -7,11 +8,10 @@ export type EditModes = "select" | "add" | "remove" | "move";
     selector: "lib-toolbar-piece",
     templateUrl: "./toolbar-piece.component.html",
     styleUrls: ["./toolbar-piece.component.less"],
-    standalone: false
+    imports: [MatIconModule, MatButtonToggleModule],
+    standalone: true
 })
 export class ToolbarPieceComponent {
-  constructor() {}
-
   @Input()
   editMode: EditModes = "select";
 

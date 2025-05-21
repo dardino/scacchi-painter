@@ -1,4 +1,4 @@
-import { Location } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import {
   AfterViewInit,
   Component,
@@ -8,10 +8,16 @@ import {
   OnInit,
   ViewChild
 } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
+import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
+import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
@@ -24,22 +30,36 @@ import {
   notNull,
 } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
-import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
-import { ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
+import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
+import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
+import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
+import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
 import { BehaviorSubject, Subscription, skip } from "rxjs";
 import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
-import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 
 @Component({
     selector: "app-edit-problem",
     templateUrl: "./edit-problem.component.html",
     styleUrls: ["./edit-problem.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      MatToolbarModule,
+      ToolbarEditComponent,
+      ChessboardModule,
+      MatTabsModule,
+      ProblemInfoComponent,
+      CommonModule,
+      ToolbarEngineComponent,
+      SpSolutionDescComponent,
+      MatMenuModule,
+      MatButtonModule,
+      MatIconModule
+    ]
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public get rows$() {
@@ -94,7 +114,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private leaveTimeout?: ReturnType<typeof setTimeout>;
 
-  private commandMapper: { [key in EditCommand]: () => void } = {
+  private commandMapper: Record<EditCommand, () => void> = {
     flipH: () => this.current.FlipBoard("y"),
     flipV: () => this.current.FlipBoard("x"),
     rotateL: () => {

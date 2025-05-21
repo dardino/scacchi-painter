@@ -1,18 +1,25 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { Author } from "@sp/dbmanager/src/lib/models/author";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import type { AuthorCardActions } from "../author-card/author-card.component";
+import { ProblemAuthorsComponent } from "../problem-authors/problem-authors.component";
+import { ProblemDefinitionsComponent } from "../problem-definitions/problem-definitions.component";
+import { ProblemPublicationComponent } from "../problem-publication/problem-publication.component";
 
 @Component({
-    selector: "lib-problem-info",
-    templateUrl: "./problem-info.component.html",
-    styleUrls: ["./problem-info.component.less"],
-    standalone: false
+  selector: "lib-problem-info",
+  templateUrl: "./problem-info.component.html",
+  styleUrls: ["./problem-info.component.less"],
+  imports: [
+    MatExpansionModule,
+    ProblemAuthorsComponent,
+    ProblemPublicationComponent,
+    ProblemDefinitionsComponent
+  ],
+  standalone: true
 })
 export class ProblemInfoComponent {
-
-
-  constructor() { }
 
   @Output()
   public openTwin = new EventEmitter<Twin | null>();

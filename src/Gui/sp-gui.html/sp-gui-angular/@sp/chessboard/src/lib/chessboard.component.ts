@@ -33,6 +33,7 @@ import { Animations, ChessboardAnimationService } from "./chessboard-animation.s
     selector: "lib-chessboard",
     templateUrl: "chessboard.component.html",
     imports: [CommonModule, DragDropModule, BoardCellComponent],
+    standalone: true,
     styleUrls: ["chessboard.component.less"],
 })
 export class ChessboardComponent
@@ -78,7 +79,7 @@ export class ChessboardComponent
   currentCell: UiCell | null = null;
   private lastHash?: string;
   private uiCells: UiCell[] = [];
-  get cells(): Readonly<UiCell[]> {
+  get cells(): readonly UiCell[] {
     if (this.position?.currentHash !== this.lastHash) {
       this.lastHash = this.position?.currentHash;
       this.updateBoard();

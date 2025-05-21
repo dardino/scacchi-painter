@@ -1,16 +1,24 @@
+import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
-import { NgModel } from "@angular/forms";
+import { FormsModule, NgModel } from "@angular/forms";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
-import { Editor, Toolbar } from 'ngx-editor';
+import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
+import { SpSolutionRowComponent } from "../sp-solution-row/sp-solution-row.component";
 import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
 
 @Component({
     selector: "lib-sp-solution-desc",
     templateUrl: "./sp-solution-desc.component.html",
     styleUrls: ["./sp-solution-desc.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      CommonModule,
+      NgxEditorModule,
+      FormsModule,
+      SpSolutionRowComponent
+    ]
 })
 export class SpSolutionDescComponent {
   editor: Editor;
@@ -44,7 +52,7 @@ export class SpSolutionDescComponent {
   }
 
   @Input()
-  showLog: boolean = false;
+  showLog = false;
 
   @Input()
   viewMode: ViewModes = "html";
@@ -69,7 +77,7 @@ export class SpSolutionDescComponent {
     this.problem.SetHTMLSolution(text);
   }
 
-  get rows(): Array<{ row: string; className: "instruction" | "log" | "solution" }> {
+  get rows(): { row: string; className: "instruction" | "log" | "solution" }[] {
     return this.problem.textSolution.split("\n").map(row => ({
       row,
       className: this.getClass(row)

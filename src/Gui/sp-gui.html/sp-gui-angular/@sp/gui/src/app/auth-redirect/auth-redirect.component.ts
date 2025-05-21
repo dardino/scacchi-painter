@@ -8,11 +8,9 @@ import { MSAL_CONFIG } from "@sp/dbmanager/src/public-api";
     selector: "app-auth-redirect",
     templateUrl: "./auth-redirect.component.html",
     styleUrls: ["./auth-redirect.component.less"],
-    standalone: false
+
 })
 export class AuthRedirectComponent implements OnInit {
-  constructor() { }
-
   private myMsal = new PublicClientApplication(MSAL_CONFIG);
 
   ngOnInit(): void {

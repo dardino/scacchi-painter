@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Tournament } from '@dtos/tournament';
 
-type ListTournament = Array<Tournament>;
+type ListTournament = Tournament[];
 
 @Component({
     selector: 'app-app-tournaments',
     templateUrl: './app-tournaments.component.html',
     styleUrl: './app-tournaments.component.less',
-    standalone: false
+    
 })
 export class AppTournamentsComponent {
 

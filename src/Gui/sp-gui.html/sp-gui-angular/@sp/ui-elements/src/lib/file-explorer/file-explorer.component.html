@@ -1,7 +1,7 @@
 <p *ngIf="mode === 'open'">Current Path: {{ currentItem.fullPath }}</p>
 <ul class="folder">
   @if (hasParent) {
-    <li class="folderItem typeFolder" tabindex="0" (click)="navToParent()"><mat-icon>subdirectory_arrow_left</mat-icon></li>
+    <li class="folderItem typeFolder" tabindex="0" (keydown.enter)="navToParent()" (click)="navToParent()"><mat-icon>subdirectory_arrow_left</mat-icon></li>
   }
   @for (item of items; track trackByFn(item)) {
     <li
@@ -11,6 +11,7 @@
         typeFile: item.type === 'file'
       }"
       tabindex="0"
+      (keydown.enter)="clickElement(item)"
       (click)="clickElement(item)"
       title="{{ item.itemName }}"
     >

@@ -11,7 +11,7 @@ import { OneDriveCliProvider } from "../../oauth_providers/onedrive.cli";
   providedIn: "root",
 })
 export class OneDriveService implements FileService {
-  constructor() {}
+
   get sourceName() {
     return "onedrive" as const;
   }

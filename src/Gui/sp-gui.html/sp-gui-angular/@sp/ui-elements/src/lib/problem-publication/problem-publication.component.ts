@@ -1,10 +1,17 @@
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { MatChipEditedEvent, MatChipInputEvent } from "@angular/material/chips";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatCardModule } from "@angular/material/card";
+import { MatChipEditedEvent, MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { provideNativeDateAdapter } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 import { Problem } from "@sp/dbmanager/src/lib/models/problem";
 import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Observable, Subscription, map, startWith } from "rxjs";
@@ -15,7 +22,20 @@ import { Observable, Subscription, map, startWith } from "rxjs";
     templateUrl: "./problem-publication.component.html",
     providers: [provideNativeDateAdapter()],
     styleUrls: ["./problem-publication.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      MatCardModule,
+       FormsModule,
+       ReactiveFormsModule,
+       MatAutocompleteModule,
+       MatSelectModule,
+       CommonModule,
+       MatIconModule,
+       MatFormFieldModule,
+       MatChipsModule,
+       MatDatepickerModule,
+       MatInputModule
+      ]
 })
 export class ProblemPublicationComponent implements OnInit, OnDestroy {
 

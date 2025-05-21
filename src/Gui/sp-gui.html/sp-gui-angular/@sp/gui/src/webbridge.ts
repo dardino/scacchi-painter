@@ -91,7 +91,7 @@ class WebBridge implements BridgeGlobal {
     }
     // Pieces
     rows.push("Pieces");
-    (["White", "Black", "Neutral"] as Array<Piece["color"]>).forEach(
+    (["White", "Black", "Neutral"] as Piece["color"][]).forEach(
       (color) => {
         const withAttr = problem.pieces
           .filter((c) => c.color === color)
@@ -169,7 +169,7 @@ const toPopeyePiece = (a: Piece): string =>
     a.traverse[3],
   ].join("");
 
-export const popeyeTwinMapper: { [key in TwinTypesKeys]: (...args: string[]) => string } = {
+export const popeyeTwinMapper: Record<TwinTypesKeys, (...args: string[]) => string> = {
   Custom: (...args: string[]) => args.join(" ").trim(),
   Diagram: () => `Diagram`,
   MovePiece: (...args: string[]) => `Move ${args.join(" ")}`.trim(),

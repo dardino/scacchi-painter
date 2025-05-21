@@ -59,7 +59,8 @@ export class AllMatIconRegistryService {
       )
     );
   }
-}
-export const registerAssetFolder = (_assetFolder: string) => {
-  assetFolder = _assetFolder;
+  static registerAssetFolder = (_assetFolder: string) => {
+    assetFolder = _assetFolder;
+    return AllMatIconRegistryService;
+  }
 }

@@ -8,7 +8,7 @@ import { LandingComponent } from "./landing/landing.component";
 import { OpenFileComponent } from "./open-file/open-file.component";
 import { SaveFileComponent } from "./save-file/save-file.component";
 
-const getRoutes = <T extends { [key: string]: Routes[number] }>(e: T): T => e;
+const getRoutes = <T extends Record<string, Routes[number]>>(e: T): T => e;
 
 export const RoutesList = getRoutes({
   edit: {

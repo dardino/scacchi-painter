@@ -13,14 +13,16 @@ jobs:
   build_and_deploy_job_prerelease:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-22.04
-    name: Build and Deploy Job (prerelease)
+    name: Build and Deploy Job (nightly-prerelease)
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: lts/*
           check-latest: true
       - name: Build And Deploy
         id: builddeploy
@@ -41,8 +43,9 @@ jobs:
   build_and_deploy_job_release:
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
-    name: Build and Deploy Job
+    name: Build and Deploy Job (nightly-release)
     steps:
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -50,7 +53,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: lts/*
           check-latest: true
       - name: Build And Deploy
         id: builddeploy
