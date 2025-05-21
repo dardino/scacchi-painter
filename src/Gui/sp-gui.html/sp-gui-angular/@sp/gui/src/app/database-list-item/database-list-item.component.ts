@@ -15,7 +15,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
       ChessboardModule,
       MatIconModule,
       RouterModule,
-      MatButtonModule
+      MatButtonModule,
     ]
 })
 export class DatabaseListItemComponent {
@@ -32,6 +32,9 @@ export class DatabaseListItemComponent {
     const twinsNoDiagram = this.problem?.twins?.TwinList.filter(twin => twin.TwinType !== "Diagram") ?? [];
     if (!twinsNoDiagram.length) return [];
     return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index+1}) ${twin.toString()}`);
+  }
+  get hasAuthors() {
+    return (this.problem?.authors?.length ?? 0) > 0;
   }
 
   get hasCondition() {
@@ -50,6 +53,10 @@ export class DatabaseListItemComponent {
   }
   get pieceCounter() {
     return `${this.problem?.getPieceCounter() ?? "0+0"}`;
+  }
+
+  get solutionHTML() {
+    return this.problem?.htmlSolution;
   }
 
   removeItem() {

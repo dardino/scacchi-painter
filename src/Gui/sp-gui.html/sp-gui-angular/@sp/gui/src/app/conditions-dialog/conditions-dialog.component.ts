@@ -2,8 +2,10 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { FairyAttributesDBNames, TraditionalConditionsNames } from "@sp/dbmanager/src/lib/models/fairesDB";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
@@ -18,6 +20,9 @@ import { map, startWith } from "rxjs/operators";
       MatFormFieldModule,
       MatAutocompleteModule,
       CommonModule,
+      MatInputModule,
+      MatButtonModule,
+      MatDialogModule,
       ReactiveFormsModule
     ],
 })

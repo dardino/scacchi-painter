@@ -1,6 +1,7 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 
@@ -12,7 +13,8 @@ import { MatListModule } from "@angular/material/list";
     MatListModule,
     CommonModule,
     DragDropModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   standalone: true
 })

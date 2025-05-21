@@ -17,6 +17,7 @@ interface IDbSpX {
   providedIn: "root",
 })
 export class DbmanagerService {
+  /** @description Current problem index is 1 based */
   private currentIndex = 1;
   private currentFile: FolderSelected | null = null;
   private workInProgress: Subject<boolean> = new Subject<boolean>();
@@ -57,26 +58,28 @@ export class DbmanagerService {
 
   async deleteProblem(problem: Problem) {
     const pIndex = this.All.indexOf(problem);
-    await this.deleteProblemAtPosition(pIndex);
+    await this.deleteProblemAtIndex(pIndex);
   }
-  async deleteProblemByIndex(dbIndex: number) {
-    await this.deleteProblemAtPosition(dbIndex);
+  async deleteProblemByIndex(index: number) {
+    await this.deleteProblemAtIndex(index);
   }
 
   async deleteCurrentProblem() {
-    await this.deleteProblemAtPosition(this.currentIndex);
+    await this.deleteProblemAtIndex(this.currentIndex - 1);
   }
 
-  private async deleteProblemAtPosition(pIndex: number) {
+  private async deleteProblemAtIndex(pIndex: number) {
     this.workInProgress.next(true);
-    if (pIndex < this.All.length && pIndex > -1) this.All.splice(pIndex - 1, 1);
+    if (pIndex < this.All.length && pIndex > -1) {
+      this.All.splice(pIndex, 1);
+    }
     if (this.All.length === 0) {
       //if deleted problem is the lastone in database then create a blank problem
       await this.addBlankPosition();
     } else {
       // if problem index is the same as current then move current problem to the previous if present
-      if (pIndex === this.currentIndex) {
-        this.currentIndex = Math.max(0, pIndex - 1);
+      if (pIndex === this.currentIndex - 1) {
+        this.currentIndex = Math.max(0, pIndex - 1) + 1;
       }
     }
     await this.loadProblem();
@@ -146,7 +149,11 @@ export class DbmanagerService {
     }
   }
 
-  async Reload(id?: number) {
+  /**
+   * Reload current position by id that is 1-based
+   * @param id
+   */
+  async Reload(/** this parameter is 1 based */ id?: number) {
     this.workInProgress.next(true);
     this.reset();
     this.currentFile = await this.loadFromLocalStorage();
@@ -317,8 +324,13 @@ export class DbmanagerService {
     return null;
   }
 
+  /**
+   * Sposta al problema con indice arg0 (1-based)
+   * @param arg0
+   * @returns
+   */
   async GotoIndex(arg0: number) {
-    if (arg0 > this.All.length || arg0 < 0) {
+    if (arg0 > this.All.length || arg0 <= 0) {
       return;
     }
     this.reset();

@@ -113,7 +113,7 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
     // no op
   }
   getPositionalIndexFromId(dbIndex: number): number {
-    return this.itemsSubject.getValue().findIndex(pr => pr.dbIndex === dbIndex);
+    return this.originalDataSource.findIndex(pr => pr.dbIndex === dbIndex);
   }
   public async deleteProblemByDbIndex(dbIndex: number) {
     await this.db.deleteProblemByIndex(this.getPositionalIndexFromId(dbIndex));

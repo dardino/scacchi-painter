@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatButtonModule } from "@angular/material/button";
 import { MatOptionModule } from "@angular/material/core";
 import {
   MAT_DIALOG_DATA,
@@ -9,6 +10,7 @@ import {
   MatDialogRef,
 } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
   TwinTypeItem,
@@ -26,6 +28,8 @@ import { Observable, map, startWith } from "rxjs";
     MatOptionModule,
     MatAutocompleteModule,
     FormsModule,
+    MatInputModule,
+    MatButtonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     CommonModule,
