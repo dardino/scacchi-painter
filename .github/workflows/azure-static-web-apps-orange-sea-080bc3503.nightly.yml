@@ -13,14 +13,8 @@ jobs:
   build_and_deploy_job_prerelease:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-22.04
-    name: Build and Deploy Job (prerelease)
+    name: Build and Deploy Job (nightly-prerelease)
     steps:
-
-      - name: Install required libraries
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libstdc++-12
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -49,12 +43,8 @@ jobs:
   build_and_deploy_job_release:
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
-    name: Build and Deploy Job
+    name: Build and Deploy Job (nightly-release)
     steps:
-      - name: Install required libraries
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libstdc++-12
 
       - name: Checkout
         uses: actions/checkout@v4
