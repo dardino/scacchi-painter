@@ -4085,6 +4085,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/eslint-scope@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "@types/eslint-scope@npm:8.3.0"
+  dependencies:
+    "@types/eslint": "npm:*"
+    "@types/estree": "npm:*"
+  checksum: 10/fa2bfe142bc0f4c473f8d76815185774b35addea00c9644603986fa42dfc60d4fd0a17006578f66451edf423c0d4ecaa38be1a50f5ff29b3b74c6e993ada5530
+  languageName: node
+  linkType: hard
+
 "@types/eslint@npm:*":
   version: 8.56.10
   resolution: "@types/eslint@npm:8.56.10"
@@ -7085,7 +7095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.26.0":
+"eslint@npm:^9.27.0":
   version: 9.27.0
   resolution: "eslint@npm:9.27.0"
   dependencies:
@@ -12648,6 +12658,7 @@ __metadata:
     "@eslint/js": "npm:^9.27.0"
     "@microsoft/microsoft-graph-client": "npm:^3.0.5"
     "@microsoft/microsoft-graph-types": "npm:^2.6.0"
+    "@types/eslint-scope": "npm:^8.3.0"
     "@types/file-saver": "npm:^2.0.3"
     "@types/jasmine": "npm:5.1.8"
     "@types/jasminewd2": "npm:~2.0.10"
@@ -12656,7 +12667,7 @@ __metadata:
     angular-eslint: "npm:19.4.0"
     canvas-chessboard: "npm:^0.0.17"
     concurrently: "npm:9.1.2"
-    eslint: "npm:^9.26.0"
+    eslint: "npm:^9.27.0"
     eslint-plugin-import: "npm:^2.27.5"
     eslint-plugin-jsdoc: "npm:50.6.17"
     eslint-plugin-prefer-arrow: "npm:^1.2.3"
