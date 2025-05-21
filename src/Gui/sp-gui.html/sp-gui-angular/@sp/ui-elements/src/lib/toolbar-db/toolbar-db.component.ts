@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
@@ -8,7 +9,11 @@ import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button
     selector: "lib-toolbar-db",
     templateUrl: "./toolbar-db.component.html",
     styleUrls: ["./toolbar-db.component.less"],
-    imports: [SpToolbarButtonComponent, MatToolbarModule],
+    imports: [
+      SpToolbarButtonComponent,
+      MatToolbarModule,
+      MatButtonModule
+    ],
     standalone: true
 })
 export class ToolbarDbComponent {

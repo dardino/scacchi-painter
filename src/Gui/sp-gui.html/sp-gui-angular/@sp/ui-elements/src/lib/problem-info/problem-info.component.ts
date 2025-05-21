@@ -11,7 +11,12 @@ import { ProblemPublicationComponent } from "../problem-publication/problem-publ
   selector: "lib-problem-info",
   templateUrl: "./problem-info.component.html",
   styleUrls: ["./problem-info.component.less"],
-  imports: [MatExpansionModule, ProblemAuthorsComponent, ProblemPublicationComponent, ProblemDefinitionsComponent],
+  imports: [
+    MatExpansionModule,
+    ProblemAuthorsComponent,
+    ProblemPublicationComponent,
+    ProblemDefinitionsComponent
+  ],
   standalone: true
 })
 export class ProblemInfoComponent {

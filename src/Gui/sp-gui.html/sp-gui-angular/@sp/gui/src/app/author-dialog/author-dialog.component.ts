@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
 import { Author } from '@sp/dbmanager/src/lib/models';
 
 @Component({
@@ -11,8 +12,11 @@ import { Author } from '@sp/dbmanager/src/lib/models';
     styleUrl: './author-dialog.component.less',
     imports: [
       FormsModule,
+      ReactiveFormsModule,
       CommonModule,
-      MatFormFieldModule
+      MatInputModule,
+      MatButtonModule,
+      MatDialogModule,
     ],
     standalone: true
 })

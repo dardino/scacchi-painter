@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
@@ -14,7 +15,11 @@ const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> 
     selector: "lib-toolbar-engine",
     templateUrl: "./toolbar-engine.component.html",
     styleUrls: ["./toolbar-engine.component.less"],
-    imports: [MatToolbarModule, SpToolbarButtonComponent],
+    imports: [
+      MatToolbarModule,
+      SpToolbarButtonComponent,
+      CommonModule,
+    ],
     standalone: true
 })
 export class ToolbarEngineComponent {

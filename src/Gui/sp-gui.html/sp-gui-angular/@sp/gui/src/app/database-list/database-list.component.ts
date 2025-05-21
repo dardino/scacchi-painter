@@ -3,8 +3,10 @@ import { CdkVirtualScrollViewport, ScrollingModule } from "@angular/cdk/scrollin
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { Problem } from "@sp/dbmanager/src/lib/models";
@@ -27,11 +29,13 @@ export interface ProblemRef {
     imports: [
       FormsModule,
       MatFormFieldModule,
+      MatInputModule,
       ScrollingModule,
       CommonModule,
       MatIconModule,
       DatabaseListItemComponent,
-      MatToolbarModule
+      MatToolbarModule,
+      MatButtonModule,
     ]
 })
 export class DatabaseListComponent implements OnInit {
@@ -125,8 +129,8 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
     if (text.trim() !== "") {
       this.filteredDataSource = this.filteredDataSource.filter(filterByText(text));
     }
-    this.filteredDataSource.unshift({ dbIndex: -1, problem: null });
     this.sortDescByDate();
+    this.filteredDataSource.unshift({ dbIndex: -1, problem: null });
     this.itemsSubject.next(this.filteredDataSource);
   }
   private async sortDescByDate() {

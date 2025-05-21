@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterModule } from "@angular/router";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
@@ -14,7 +14,6 @@ import { SpToolbarButtonComponent, ToolbarDbComponent } from "@sp/ui-elements/sr
 import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { RoutesList } from "./app-routing-list";
-import { AppRoutingModule } from "./app-routing.module";
 import { MenuComponent } from "./menu/menu.component";
 
 @Component({
@@ -23,7 +22,7 @@ import { MenuComponent } from "./menu/menu.component";
     styleUrls: ["./app.component.less"],
     imports: [
       DbsourceComponent,
-      AppRoutingModule,
+      RouterModule,
       MatProgressSpinner,
       MatSidenavModule,
       MenuComponent,

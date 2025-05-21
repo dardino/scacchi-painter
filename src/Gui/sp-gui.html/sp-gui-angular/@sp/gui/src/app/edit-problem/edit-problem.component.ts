@@ -1,4 +1,4 @@
-import { Location } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import {
   AfterViewInit,
   Component,
@@ -8,6 +8,7 @@ import {
   OnInit,
   ViewChild
 } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
@@ -52,9 +53,11 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
       ChessboardModule,
       MatTabsModule,
       ProblemInfoComponent,
+      CommonModule,
       ToolbarEngineComponent,
       SpSolutionDescComponent,
       MatMenuModule,
+      MatButtonModule,
       MatIconModule
     ]
 })

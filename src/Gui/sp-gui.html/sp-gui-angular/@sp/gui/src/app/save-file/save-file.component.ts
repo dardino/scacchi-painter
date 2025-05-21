@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
@@ -24,6 +25,7 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    MatInputModule,
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,

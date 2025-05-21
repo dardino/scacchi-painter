@@ -9,14 +9,14 @@
   --neutral-color: green;
 }
 
-html{
+html {
   min-height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
-body{
+body {
   min-height: 100vh;
   width: 100%;
   margin: 0;
@@ -31,9 +31,10 @@ body{
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto auto auto auto 1fr;
+  grid-template-areas: "menu header" "toolbar1 toolbar1" "toolbar2 toolbar2" "side main" "side main" "side main";
 }
 
-.figurine{
+.figurine {
   color: var(--black-color);
   font-family: "ScacchiPainter", sans-serif;
   text-rendering: optimizeLegibility !important;
@@ -48,6 +49,7 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .figurine:after,
 .figurine:before {
   height: 1em;
@@ -65,27 +67,33 @@ body{
   color: var(--white-color);
   content: attr(data-bg-piece);
 }
+
 .figurine:after {
   content: attr(data-colored-piece);
 }
 
 
-.mat-tab-body-wrapper{
+.mat-tab-body-wrapper {
   flex: 1 1 auto;
 }
-.mat-tab-body-content{
+
+.mat-tab-body-content {
   display: flex;
   flex-direction: column;
 }
+
 :focus {
   outline: none;
 }
-.mat-mdc-tab-body.mat-mdc-tab-body-active{
+
+.mat-mdc-tab-body.mat-mdc-tab-body-active {
   overflow: initial !important;
 }
-.mat-mdc-tab-body-content{
+
+.mat-mdc-tab-body-content {
   overflow: initial !important;
 }
+
 .mat-mdc-tab-body-wrapper {
   flex: 1 1 auto;
 }
@@ -97,4 +105,9 @@ body{
 
 app-root {
   display: contents;
+}
+
+img {
+  max-width: min(90vw, 90%);
+  max-height: 80vh;
 }

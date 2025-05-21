@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { RouterModule } from "@angular/router";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
@@ -13,7 +14,8 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
     imports: [
       ChessboardModule,
       MatIconModule,
-      RouterModule
+      RouterModule,
+      MatButtonModule
     ]
 })
 export class DatabaseListItemComponent {

@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Output } from "@angular/core";
-import { MatNavList } from "@angular/material/list";
+import { MatListModule, MatNavList } from "@angular/material/list";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterModule } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
@@ -14,7 +14,8 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
       MatToolbarModule,
       CommonModule,
       MatNavList,
-      RouterModule
+      RouterModule,
+      MatListModule
     ]
 })
 export class MenuComponent {

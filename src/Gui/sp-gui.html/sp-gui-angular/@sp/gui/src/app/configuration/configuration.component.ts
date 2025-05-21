@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
+import { CommonModule } from "@angular/common";
 import { ApplicationRef, Component, OnInit } from "@angular/core";
-import { SwUpdate } from "@angular/service-worker";
+import { MatButtonModule } from "@angular/material/button";
+import { ServiceWorkerModule, SwUpdate } from "@angular/service-worker";
 import { concat, first, interval } from "rxjs";
 import { environment } from "../../environments/environment";
 
@@ -8,7 +10,12 @@ import { environment } from "../../environments/environment";
     selector: "app-configuration",
     templateUrl: "./configuration.component.html",
     styleUrls: ["./configuration.component.less"],
-    
+    standalone: true,
+    imports: [
+      ServiceWorkerModule,
+      MatButtonModule,
+      CommonModule
+    ]
 })
 export class ConfigurationComponent implements OnInit {
   constructor(
