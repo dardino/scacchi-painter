@@ -27,6 +27,26 @@
       "port": 9000,
       "url": "https://localhost:4200/*",
       "webRoot": "${workspaceRoot}/src"
+    },
+    {
+      "name": "Run SCRIPT in debug",
+      "console": "integratedTerminal",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": [
+        "vite-node",
+        "${input:scriptFile}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "type": "node",
+      "request": "launch",
+      "sourceMaps": true
+    }
+  ],
+  "inputs": [
+    {
+      "id": "scriptFile",
+      "type": "promptString",
+      "description": "Inserisci il percorso del file script da eseguire"
     }
   ]
 }
