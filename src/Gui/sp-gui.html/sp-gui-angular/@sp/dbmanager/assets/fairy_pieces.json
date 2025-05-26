@@ -1,0 +1,1612 @@
+[
+  {
+    "index": 0,
+    "code1": "",
+    "code2": ".",
+    "fr": "vide",
+    "code3": ".",
+    "de": "leer",
+    "code4": ".",
+    "en": "empty"
+  },
+  {
+    "index": 1,
+    "code1": "",
+    "code2": "",
+    "fr": "hors echiquier",
+    "code3": "",
+    "de": "ausserhalb",
+    "code4": "",
+    "en": "outside board"
+  },
+  {
+    "index": 2,
+    "code1": "K",
+    "code2": "r",
+    "fr": "roi",
+    "code3": "k",
+    "de": "K\"onig",
+    "code4": "k",
+    "en": "king"
+  },
+  {
+    "index": 3,
+    "code1": "B",
+    "code2": "p",
+    "fr": "pion",
+    "code3": "b",
+    "de": "Bauer",
+    "code4": "p",
+    "en": "pawn"
+  },
+  {
+    "index": 4,
+    "code1": "D",
+    "code2": "d",
+    "fr": "dame",
+    "code3": "d",
+    "de": "Dame",
+    "code4": "q",
+    "en": "queen"
+  },
+  {
+    "index": 5,
+    "code1": "S",
+    "code2": "c",
+    "fr": "cavalier",
+    "code3": "s",
+    "de": "Springer",
+    "code4": "s",
+    "en": "knight"
+  },
+  {
+    "index": 6,
+    "code1": "T",
+    "code2": "t",
+    "fr": "tour",
+    "code3": "t",
+    "de": "Turm",
+    "code4": "r",
+    "en": "rook"
+  },
+  {
+    "index": 7,
+    "code1": "L",
+    "code2": "f",
+    "fr": "fou",
+    "code3": "l",
+    "de": "Laeufer",
+    "code4": "b",
+    "en": "bishop"
+  },
+  {
+    "index": 8,
+    "code1": "DR",
+    "code2": "le",
+    "fr": "leo",
+    "code3": "le",
+    "de": "Leo",
+    "code4": "le",
+    "en": "leo"
+  },
+  {
+    "index": 9,
+    "code1": "SR",
+    "code2": "ma",
+    "fr": "mao",
+    "code3": "ma",
+    "de": "Mao",
+    "code4": "ma",
+    "en": "mao"
+  },
+  {
+    "index": 10,
+    "code1": "TL",
+    "code2": "pa",
+    "fr": "pao",
+    "code3": "pa",
+    "de": "Pao",
+    "code4": "pa",
+    "en": "pao"
+  },
+  {
+    "index": 11,
+    "code1": "LL",
+    "code2": "va",
+    "fr": "vao",
+    "code3": "va",
+    "de": "Vao",
+    "code4": "va",
+    "en": "vao"
+  },
+  {
+    "index": 12,
+    "code1": "TR",
+    "code2": "ro",
+    "fr": "rose",
+    "code3": "ro",
+    "de": "Rose",
+    "code4": "ro",
+    "en": "rose"
+  },
+  {
+    "index": 13,
+    "code1": "DU",
+    "code2": "s",
+    "fr": "sauterelle",
+    "code3": "g",
+    "de": "Grash\"upfer",
+    "code4": "g",
+    "en": "grashopper"
+  },
+  {
+    "index": 14,
+    "code1": "SU",
+    "code2": "n",
+    "fr": "noctambule",
+    "code3": "n",
+    "de": "Nachtreiter",
+    "code4": "n",
+    "en": "nightrider"
+  },
+  {
+    "index": 15,
+    "code1": "SR",
+    "code2": "z",
+    "fr": "zebre",
+    "code3": "z",
+    "de": "Zebra",
+    "code4": "z",
+    "en": "zebra"
+  },
+  {
+    "index": 16,
+    "code1": "SL",
+    "code2": "ch",
+    "fr": "chameau",
+    "code3": "ca",
+    "de": "Kamel",
+    "code4": "ca",
+    "en": "camel"
+  },
+  {
+    "index": 17,
+    "code1": "LL",
+    "code2": "gi",
+    "fr": "girafe",
+    "code3": "gi",
+    "de": "Giraffe",
+    "code4": "gi",
+    "en": "giraffe"
+  },
+  {
+    "index": 18,
+    "code1": "TU",
+    "code2": "cc",
+    "fr": "cavalier racine carree cinquante",
+    "code3": "wf",
+    "de": "\\w{50}-S",
+    "code4": "rf",
+    "en": "root-50-leaper"
+  },
+  {
+    "index": 19,
+    "code1": "LU",
+    "code2": "bu",
+    "fr": "bucephale",
+    "code3": "bu",
+    "de": "\\w{25}-S",
+    "code4": "bu",
+    "en": "root-25-leaper"
+  },
+  {
+    "index": 20,
+    "code1": "TU",
+    "code2": "vi",
+    "fr": "vizir",
+    "code3": "we",
+    "de": "Wesir",
+    "code4": "we",
+    "en": "wazir"
+  },
+  {
+    "index": 21,
+    "code1": "LR",
+    "code2": "al",
+    "fr": "alfil",
+    "code3": "al",
+    "de": "Alfil",
+    "code4": "al",
+    "en": "alfil"
+  },
+  {
+    "index": 22,
+    "code1": "LL",
+    "code2": "fe",
+    "fr": "fers",
+    "code3": "fe",
+    "de": "Fers",
+    "code4": "fe",
+    "en": "fers"
+  },
+  {
+    "index": 23,
+    "code1": "TR",
+    "code2": "da",
+    "fr": "dabbaba",
+    "code3": "da",
+    "de": "Dabbaba",
+    "code4": "da",
+    "en": "dabbaba"
+  },
+  {
+    "index": 24,
+    "code1": "DL",
+    "code2": "li",
+    "fr": "lion",
+    "code3": "li",
+    "de": "Lion",
+    "code4": "li",
+    "en": "lion"
+  },
+  {
+    "index": 25,
+    "code1": "DR",
+    "code2": "eq",
+    "fr": "equisauteur (non-stop)",
+    "code3": "ne",
+    "de": "Non-stop Equihopper",
+    "code4": "ne",
+    "en": "nonstop equihopper"
+  },
+  {
+    "index": 26,
+    "code1": "DR",
+    "code2": "l",
+    "fr": "locuste",
+    "code3": "h",
+    "de": "Heuschrecke",
+    "code4": "l",
+    "en": "locust"
+  },
+  {
+    "index": 27,
+    "code1": "BU",
+    "code2": "pb",
+    "fr": "pion berolina",
+    "code3": "bb",
+    "de": "Berolina Bauer",
+    "code4": "bp",
+    "en": "berolina pawn"
+  },
+  {
+    "index": 28,
+    "code1": "DL",
+    "code2": "am",
+    "fr": "amazone",
+    "code3": "am",
+    "de": "Amazone",
+    "code4": "am",
+    "en": "amazon"
+  },
+  {
+    "index": 29,
+    "code1": "TU",
+    "code2": "im",
+    "fr": "imperatrice",
+    "code3": "kn",
+    "de": "Kaiserin",
+    "code4": "em",
+    "en": "empress"
+  },
+  {
+    "index": 30,
+    "code1": "LU",
+    "code2": "pr",
+    "fr": "princesse",
+    "code3": "pr",
+    "de": "Prinzessin",
+    "code4": "pr",
+    "en": "princess"
+  },
+  {
+    "index": 31,
+    "code1": "LR",
+    "code2": "g",
+    "fr": "gnou",
+    "code3": "gn",
+    "de": "Gnu",
+    "code4": "gn",
+    "en": "gnu"
+  },
+  {
+    "index": 32,
+    "code1": "LR",
+    "code2": "an",
+    "fr": "antilope",
+    "code3": "an",
+    "de": "Antilope",
+    "code4": "an",
+    "en": "antelope"
+  },
+  {
+    "index": 33,
+    "code1": "SR",
+    "code2": "ec",
+    "fr": "ecureuil",
+    "code3": "ei",
+    "de": "Eichh\"ornchen",
+    "code4": "sq",
+    "en": "squirrel"
+  },
+  {
+    "index": 34,
+    "code1": "TR",
+    "code2": "v",
+    "fr": "varan",
+    "code3": "wa",
+    "de": "Waran",
+    "code4": "wa",
+    "en": "waran"
+  },
+  {
+    "index": 35,
+    "code1": "SR",
+    "code2": "dr",
+    "fr": "dragon",
+    "code3": "dr",
+    "de": "Drache",
+    "code4": "dr",
+    "en": "dragon"
+  },
+  {
+    "index": 36,
+    "code1": "DL",
+    "code2": "ka",
+    "fr": "kangourou",
+    "code3": "ka",
+    "de": "K\"anguruh",
+    "code4": "ka",
+    "en": "kangaroo"
+  },
+  {
+    "index": 37,
+    "code1": "SR",
+    "code2": "cs",
+    "fr": "cavalier spirale",
+    "code3": "ss",
+    "de": "Spiralspringer",
+    "code4": "ss",
+    "en": "Spiralspringer"
+  },
+  {
+    "index": 38,
+    "code1": "SR",
+    "code2": "uu",
+    "fr": "UbiUbi",
+    "code3": "uu",
+    "de": "UbiUbi",
+    "code4": "uu",
+    "en": "UbiUbi"
+  },
+  {
+    "index": 39,
+    "code1": "DR",
+    "code2": "ha",
+    "fr": "hamster",
+    "code3": "ha",
+    "de": "Hamster",
+    "code4": "ha",
+    "en": "hamster"
+  },
+  {
+    "index": 40,
+    "code1": "DL",
+    "code2": "e",
+    "fr": "elan",
+    "code3": "el",
+    "de": "Elch",
+    "code4": "m",
+    "en": "moose"
+  },
+  {
+    "index": 41,
+    "code1": "TL",
+    "code2": "ai",
+    "fr": "aigle",
+    "code3": "ad",
+    "de": "Adler",
+    "code4": "ea",
+    "en": "eagle"
+  },
+  {
+    "index": 42,
+    "code1": "SR",
+    "code2": "m",
+    "fr": "moineaux",
+    "code3": "sp",
+    "de": "Spatz",
+    "code4": "sw",
+    "en": "sparrow"
+  },
+  {
+    "index": 43,
+    "code1": "LU",
+    "code2": "ar",
+    "fr": "archeveque",
+    "code3": "er",
+    "de": "Erzbischof",
+    "code4": "ar",
+    "en": "archbishop"
+  },
+  {
+    "index": 44,
+    "code1": "LL",
+    "code2": "fr",
+    "fr": "fou rebondissant",
+    "code3": "rl",
+    "de": "Reflektierender L\"aufer",
+    "code4": "rb",
+    "en": "reflecting bishop"
+  },
+  {
+    "index": 45,
+    "code1": "LR",
+    "code2": "ca",
+    "fr": "cardinal",
+    "code3": "kl",
+    "de": "Kardinal",
+    "code4": "c",
+    "en": "cardinal"
+  },
+  {
+    "index": 46,
+    "code1": "LR",
+    "code2": "sn",
+    "fr": "noctambule sauteur",
+    "code3": "nh",
+    "de": "Nachtreiter-H\"upfer",
+    "code4": "nh",
+    "en": "nightrider-hopper"
+  },
+  {
+    "index": 47,
+    "code1": "KL",
+    "code2": "pi",
+    "fr": "piece impuissant",
+    "code3": "du",
+    "de": "Dummy",
+    "code4": "du",
+    "en": "dummy"
+  },
+  {
+    "index": 48,
+    "code1": "TL",
+    "code2": "cn",
+    "fr": "chameau noctambule",
+    "code3": "cr",
+    "de": "Kamelreiter",
+    "code4": "cr",
+    "en": "camelrider"
+  },
+  {
+    "index": 49,
+    "code1": "SR",
+    "code2": "zn",
+    "fr": "zebre noctambule",
+    "code3": "zr",
+    "de": "Zebrareiter",
+    "code4": "zr",
+    "en": "zebrarider"
+  },
+  {
+    "index": 50,
+    "code1": "SR",
+    "code2": "gn",
+    "fr": "gnou noctambule",
+    "code3": "gr",
+    "de": "Gnureiter",
+    "code4": "gr",
+    "en": "gnurider"
+  },
+  {
+    "index": 51,
+    "code1": "TL",
+    "code2": "sc",
+    "fr": "chameau sauteur",
+    "code3": "ch",
+    "de": "Kamelreiterh\"upfer",
+    "code4": "ch",
+    "en": "camelrider hopper"
+  },
+  {
+    "index": 52,
+    "code1": "SR",
+    "code2": "sz",
+    "fr": "zebre sauteur",
+    "code3": "zh",
+    "de": "Zebrareiterh\"upfer",
+    "code4": "zh",
+    "en": "zebrarider hopper"
+  },
+  {
+    "index": 53,
+    "code1": "SL",
+    "code2": "sg",
+    "fr": "gnou sauteur",
+    "code3": "gh",
+    "de": "Gnureiterh\"upfer",
+    "code4": "gh",
+    "en": "gnurider hopper"
+  },
+  {
+    "index": 54,
+    "code1": "SL",
+    "code2": "cd",
+    "fr": "cavalier spirale diagonale",
+    "code3": "ds",
+    "de": "Diagonalspiral Springer",
+    "code4": "ds",
+    "en": "DiagonalSpiralSpringer"
+  },
+  {
+    "index": 55,
+    "code1": "SR",
+    "code2": "cr",
+    "fr": "cavalier rebondissant",
+    "code3": "rs",
+    "de": "Reflektierender Springer",
+    "code4": "bk",
+    "en": "bouncy knight"
+  },
+  {
+    "index": 56,
+    "code1": "DR",
+    "code2": "ea",
+    "fr": "equisauteur anglais",
+    "code3": "eq",
+    "de": "Equihopper",
+    "code4": "eq",
+    "en": "equihoppper"
+  },
+  {
+    "index": 57,
+    "code1": "LR",
+    "code2": "ct",
+    "fr": "CAT (= cavalier de troie)",
+    "code3": "ct",
+    "de": "CAT (= cavalier de troie)",
+    "code4": "ct",
+    "en": "CAT (= cavalier de troie)"
+  },
+  {
+    "index": 58,
+    "code1": "BR",
+    "code2": "bs",
+    "fr": "berolina superpion",
+    "code3": "bs",
+    "de": "Superberolinabauer",
+    "code4": "bs",
+    "en": "berolina superpawn"
+  },
+  {
+    "index": 59,
+    "code1": "BL",
+    "code2": "sp",
+    "fr": "superpion",
+    "code3": "sb",
+    "de": "Superbauer",
+    "code4": "sp",
+    "en": "superpawn"
+  },
+  {
+    "index": 60,
+    "code1": "TL",
+    "code2": "tl",
+    "fr": "tour-lion",
+    "code3": "tl",
+    "de": "Turm-Lion",
+    "code4": "rl",
+    "en": "rook-lion"
+  },
+  {
+    "index": 61,
+    "code1": "LL",
+    "code2": "fl",
+    "fr": "fou-lion",
+    "code3": "ll",
+    "de": "L\"aufer-Lion",
+    "code4": "bl",
+    "en": "bishop-lion"
+  },
+  {
+    "index": 62,
+    "code1": "DL",
+    "code2": "si",
+    "fr": "sirene",
+    "code3": "si",
+    "de": "Sirene",
+    "code4": "si",
+    "en": "sirene"
+  },
+  {
+    "index": 63,
+    "code1": "TL",
+    "code2": "tr",
+    "fr": "triton",
+    "code3": "tr",
+    "de": "Triton",
+    "code4": "tr",
+    "en": "triton"
+  },
+  {
+    "index": 64,
+    "code1": "LU",
+    "code2": "ne",
+    "fr": "nereide",
+    "code3": "nd",
+    "de": "Nereide",
+    "code4": "nd",
+    "en": "nereide"
+  },
+  {
+    "index": 65,
+    "code1": "BL",
+    "code2": "o",
+    "fr": "orphan",
+    "code3": "o",
+    "de": "Orphan",
+    "code4": "o",
+    "en": "orphan"
+  },
+  {
+    "index": 66,
+    "code1": "DL",
+    "code2": "eh",
+    "fr": "\"edgehog\", \"randschwein\"",
+    "code3": "ra",
+    "de": "Randschwein",
+    "code4": "eh",
+    "en": "edgehog"
+  },
+  {
+    "index": 67,
+    "code1": "SL",
+    "code2": "mo",
+    "fr": "moa",
+    "code3": "mo",
+    "de": "Moa",
+    "code4": "mo",
+    "en": "moa"
+  },
+  {
+    "index": 68,
+    "code1": "TR",
+    "code2": "tc",
+    "fr": "tour/fou chasseur",
+    "code3": "tj",
+    "de": "Turm/L\"aufer-J\"ager",
+    "code4": "rr",
+    "en": "rook/bishop-hunter"
+  },
+  {
+    "index": 69,
+    "code1": "TL",
+    "code2": "fc",
+    "fr": "fou/tour chasseur",
+    "code3": "lj",
+    "de": "L\"aufer/Turm-J\"ager",
+    "code4": "br",
+    "en": "bishop/rook-hunter"
+  },
+  {
+    "index": 70,
+    "code1": "SR",
+    "code2": "ao",
+    "fr": "maorider",
+    "code3": "ao",
+    "de": "Maoreiter",
+    "code4": "ao",
+    "en": "maorider"
+  },
+  {
+    "index": 71,
+    "code1": "SL",
+    "code2": "oa",
+    "fr": "moarider",
+    "code3": "oa",
+    "de": "Moareiter",
+    "code4": "oa",
+    "en": "moarider"
+  },
+  {
+    "index": 72,
+    "code1": "TU",
+    "code2": "st",
+    "fr": "sauterelle tour",
+    "code3": "th",
+    "de": "Turmh\"upfer",
+    "code4": "rh",
+    "en": "rookhopper"
+  },
+  {
+    "index": 73,
+    "code1": "LU",
+    "code2": "sf",
+    "fr": "sauterelle fou",
+    "code3": "lh",
+    "de": "L\"auferh\"upfer",
+    "code4": "bh",
+    "en": "bishophopper"
+  },
+  {
+    "index": 74,
+    "code1": "TR",
+    "code2": "re",
+    "fr": "roi des elfes",
+    "code3": "ek",
+    "de": "Erlk\"onig",
+    "code4": "ek",
+    "en": "erlking"
+  },
+  {
+    "index": 75,
+    "code1": "LU",
+    "code2": "bt",
+    "fr": "boy-scout",
+    "code3": "pf",
+    "de": "Pfadfinder",
+    "code4": "bt",
+    "en": "boyscout"
+  },
+  {
+    "index": 76,
+    "code1": "TR",
+    "code2": "gt",
+    "fr": "girl-scout",
+    "code3": "pn",
+    "de": "Pfadfinderin",
+    "code4": "gt",
+    "en": "girlscout"
+  },
+  {
+    "index": 77,
+    "code1": "I",
+    "code2": "sk",
+    "fr": "skylla",
+    "code3": "sk",
+    "de": "Skylla",
+    "code4": "sk",
+    "en": "Skylla"
+  },
+  {
+    "index": 78,
+    "code1": "I",
+    "code2": "cy",
+    "fr": "charybdis",
+    "code3": "cy",
+    "de": "Charybdis",
+    "code4": "cy",
+    "en": "Charybdis"
+  },
+  {
+    "index": 79,
+    "code1": "I",
+    "code2": "sa",
+    "fr": "sauterelle contA",
+    "code3": "kg",
+    "de": "Kontragrash\"upfer",
+    "code4": "cg",
+    "en": "contra grashopper"
+  },
+  {
+    "index": 80,
+    "code1": "I",
+    "code2": "rl",
+    "fr": "rose lion",
+    "code3": "rn",
+    "de": "Rosenlion",
+    "code4": "rn",
+    "en": "RoseLion"
+  },
+  {
+    "index": 81,
+    "code1": "I",
+    "code2": "rs",
+    "fr": "rose sauteur",
+    "code3": "rh",
+    "de": "Rosenh\"upfer",
+    "code4": "rp",
+    "en": "RoseHopper"
+  },
+  {
+    "index": 82,
+    "code1": "LL",
+    "code2": "ok",
+    "fr": "okapi",
+    "code3": "ok",
+    "de": "Okapi",
+    "code4": "ok",
+    "en": "Okapi"
+  },
+  {
+    "index": 83,
+    "code1": "LR",
+    "code2": "37",
+    "fr": "3:7-cavalier",
+    "code3": "37",
+    "de": "3:7-Springer",
+    "code4": "37",
+    "en": "3:7-leaper"
+  },
+  {
+    "index": 84,
+    "code1": "I",
+    "code2": "s2",
+    "fr": "sauterelle-2",
+    "code3": "g2",
+    "de": "Grash\"upfer-2",
+    "code4": "g2",
+    "en": "grasshopper-2"
+  },
+  {
+    "index": 85,
+    "code1": "I",
+    "code2": "s3",
+    "fr": "sauterelle-3",
+    "code3": "g3",
+    "de": "Grash\"upfer-3",
+    "code4": "g3",
+    "en": "grasshopper-3"
+  },
+  {
+    "index": 86,
+    "code1": "DL",
+    "code2": "16",
+    "fr": "1:6-cavalier",
+    "code3": "16",
+    "de": "Flamingo",
+    "code4": "16",
+    "en": "1:6-leaper"
+  },
+  {
+    "index": 87,
+    "code1": "SL",
+    "code2": "24",
+    "fr": "2:4-cavalier",
+    "code3": "24",
+    "de": "Hase",
+    "code4": "24",
+    "en": "2:4-leaper"
+  },
+  {
+    "index": 88,
+    "code1": "SL",
+    "code2": "35",
+    "fr": "3:5-cavalier",
+    "code3": "35",
+    "de": "3:5-Springer",
+    "code4": "35",
+    "en": "3:5-leaper"
+  },
+  {
+    "index": 89,
+    "code1": "TU",
+    "code2": "ds",
+    "fr": "double sauterelle",
+    "code3": "dg",
+    "de": "Doppelgrash\"upfer",
+    "code4": "dg",
+    "en": "Double Grasshopper"
+  },
+  {
+    "index": 90,
+    "code1": "DR",
+    "code2": "sr",
+    "fr": "roi sauteur",
+    "code3": "kh",
+    "de": "K\"onigsh\"upfer",
+    "code4": "kh",
+    "en": "Kinghopper"
+  },
+  {
+    "index": 91,
+    "code1": "DL",
+    "code2": "or",
+    "fr": "orix",
+    "code3": "or",
+    "de": "Orix",
+    "code4": "or",
+    "en": "Orix"
+  },
+  {
+    "index": 92,
+    "code1": "LU",
+    "code2": "15",
+    "fr": "1:5-cavalier",
+    "code3": "15",
+    "de": "Ibis",
+    "code4": "15",
+    "en": "1:5-leaper"
+  },
+  {
+    "index": 93,
+    "code1": "LR",
+    "code2": "25",
+    "fr": "2:5-cavalier",
+    "code3": "25",
+    "de": "2:5-Springer",
+    "code4": "25",
+    "en": "2:5-leaper"
+  },
+  {
+    "index": 94,
+    "code1": "I",
+    "code2": "gl",
+    "fr": "gral",
+    "code3": "gl",
+    "de": "Gral",
+    "code4": "gl",
+    "en": "Gral"
+  },
+  {
+    "index": 95,
+    "code1": "I",
+    "code2": "lt",
+    "fr": "tour locuste",
+    "code3": "ht",
+    "de": "Turmheuschrecke",
+    "code4": "lr",
+    "en": "rook locust"
+  },
+  {
+    "index": 96,
+    "code1": "I",
+    "code2": "lf",
+    "fr": "fou locuste",
+    "code3": "hl",
+    "de": "Laeuferheuschrecke",
+    "code4": "lb",
+    "en": "bishop locust"
+  },
+  {
+    "index": 97,
+    "code1": "I",
+    "code2": "ln",
+    "fr": "noctambule locuste",
+    "code3": "hn",
+    "de": "Nachtschrecke",
+    "code4": "ln",
+    "en": "nightrider locust"
+  },
+  {
+    "index": 98,
+    "code1": "I",
+    "code2": "vs",
+    "fr": "vizir sauteur",
+    "code3": "wr",
+    "de": "Wesirreiter",
+    "code4": "wr",
+    "en": "wazirrider"
+  },
+  {
+    "index": 99,
+    "code1": "I",
+    "code2": "fs",
+    "fr": "fers sauteur",
+    "code3": "fr",
+    "de": "Fersreiter",
+    "code4": "fr",
+    "en": "fersrider"
+  },
+  {
+    "index": 100,
+    "code1": "I",
+    "code2": "bi",
+    "fr": "bison",
+    "code3": "bi",
+    "de": "Bison",
+    "code4": "bi",
+    "en": "bison"
+  },
+  {
+    "index": 101,
+    "code1": "I",
+    "code2": "el",
+    "fr": "elephant",
+    "code3": "et",
+    "de": "Elefant",
+    "code4": "et",
+    "en": "elephant"
+  },
+  {
+    "index": 102,
+    "code1": "I",
+    "code2": "na",
+    "fr": "nao",
+    "code3": "na",
+    "de": "Nao",
+    "code4": "na",
+    "en": "nao"
+  },
+  {
+    "index": 103,
+    "code1": "TR",
+    "code2": "et",
+    "fr": "elan tour",
+    "code3": "tc",
+    "de": "Turmelch",
+    "code4": "rm",
+    "en": "rook moose"
+  },
+  {
+    "index": 104,
+    "code1": "TL",
+    "code2": "at",
+    "fr": "aigle tour",
+    "code3": "ta",
+    "de": "Turmadler",
+    "code4": "re",
+    "en": "rook eagle"
+  },
+  {
+    "index": 105,
+    "code1": "TU",
+    "code2": "mt",
+    "fr": "moineaux tour",
+    "code3": "ts",
+    "de": "Turmspatz",
+    "code4": "rw",
+    "en": "rook sparrow"
+  },
+  {
+    "index": 106,
+    "code1": "LR",
+    "code2": "ef",
+    "fr": "elan fou",
+    "code3": "lc",
+    "de": "Laeuferelch",
+    "code4": "bm",
+    "en": "bishop moose"
+  },
+  {
+    "index": 107,
+    "code1": "LL",
+    "code2": "af",
+    "fr": "aigle fou",
+    "code3": "la",
+    "de": "Laeuferadler",
+    "code4": "be",
+    "en": "bishop eagle"
+  },
+  {
+    "index": 108,
+    "code1": "LU",
+    "code2": "mf",
+    "fr": "moineaux fou",
+    "code3": "ls",
+    "de": "Laeuferspatz",
+    "code4": "bw",
+    "en": "bishop sparrow"
+  },
+  {
+    "index": 109,
+    "code1": "TU",
+    "code2": "ra",
+    "fr": "rao",
+    "code3": "ra",
+    "de": "Rao",
+    "code4": "ra",
+    "en": "rao"
+  },
+  {
+    "index": 110,
+    "code1": "I",
+    "code2": "so",
+    "fr": "scorpion",
+    "code3": "so",
+    "de": "Skorpion",
+    "code4": "so",
+    "en": "scorpion"
+  },
+  {
+    "index": 111,
+    "code1": "I",
+    "code2": "mg",
+    "fr": "marguerite",
+    "code3": "mg",
+    "de": "Marguerite",
+    "code4": "mg",
+    "en": "marguerite"
+  },
+  {
+    "index": 112,
+    "code1": "SR",
+    "code2": "36",
+    "fr": "3:6-cavalier",
+    "code3": "36",
+    "de": "3:6-Springer",
+    "code4": "36",
+    "en": "3:6-leaper"
+  },
+  {
+    "index": 113,
+    "code1": "I",
+    "code2": "nl",
+    "fr": "noctambule lion",
+    "code3": "nl",
+    "de": "Nachtreiterlion",
+    "code4": "nl",
+    "en": "nightrider lion"
+  },
+  {
+    "index": 114,
+    "code1": "I",
+    "code2": "ml",
+    "fr": "noctambule mao lion",
+    "code3": "ml",
+    "de": "Maoreiterlion",
+    "code4": "ml",
+    "en": "maorider lion"
+  },
+  {
+    "index": 115,
+    "code1": "I",
+    "code2": "mm",
+    "fr": "noctambule moa lion",
+    "code3": "mm",
+    "de": "Moareiterlion",
+    "code4": "mm",
+    "en": "moarider lion"
+  },
+  {
+    "index": 116,
+    "code1": "I",
+    "code2": "a",
+    "fr": "ami",
+    "code3": "f",
+    "de": "Freund",
+    "code4": "f",
+    "en": "friend"
+  },
+  {
+    "index": 117,
+    "code1": "I",
+    "code2": "dn",
+    "fr": "dauphin",
+    "code3": "de",
+    "de": "Delphin",
+    "code4": "do",
+    "en": "dolphin"
+  },
+  {
+    "index": 118,
+    "code1": "I",
+    "code2": "la",
+    "fr": "lapin",
+    "code3": "he",
+    "de": "Hase",
+    "code4": "rt",
+    "en": "rabbit"
+  },
+  {
+    "index": 119,
+    "code1": "I",
+    "code2": "bo",
+    "fr": "bob",
+    "code3": "bo",
+    "de": "Bob",
+    "code4": "bo",
+    "en": "bob"
+  },
+  {
+    "index": 120,
+    "code1": "I",
+    "code2": "qa",
+    "fr": "equis anglais",
+    "code3": "qe",
+    "de": "EquiEnglisch",
+    "code4": "qe",
+    "en": "equi english"
+  },
+  {
+    "index": 121,
+    "code1": "I",
+    "code2": "qf",
+    "fr": "equis francais",
+    "code3": "qf",
+    "de": "EquiFranzoesisch",
+    "code4": "qf",
+    "en": "equi french"
+  },
+  {
+    "index": 122,
+    "code1": "I",
+    "code2": "qq",
+    "fr": "querquisite",
+    "code3": "od",
+    "de": "Odysseus",
+    "code4": "qq",
+    "en": "querquisite"
+  },
+  {
+    "index": 123,
+    "code1": "I",
+    "code2": "b1",
+    "fr": "bouncer",
+    "code3": "b1",
+    "de": "Bouncer",
+    "code4": "b1",
+    "en": "bouncer"
+  },
+  {
+    "index": 124,
+    "code1": "I",
+    "code2": "b2",
+    "fr": "tour bouncer",
+    "code3": "b2",
+    "de": "TurmBouncer",
+    "code4": "b2",
+    "en": "rook bouncer"
+  },
+  {
+    "index": 125,
+    "code1": "I",
+    "code2": "b3",
+    "fr": "fou bouncer",
+    "code3": "b3",
+    "de": "LaeuferBouncer",
+    "code4": "b3",
+    "en": "bishop bouncer"
+  },
+  {
+    "index": 126,
+    "code1": "BR",
+    "code2": "pc",
+    "fr": "pion chinois",
+    "code3": "cb",
+    "de": "chinesischer Bauer",
+    "code4": "cp",
+    "en": "chinese pawn"
+  },
+  {
+    "index": 127,
+    "code1": "SR",
+    "code2": "cl",
+    "fr": "cavalier radial",
+    "code3": "rp",
+    "de": "Radialspringer",
+    "code4": "rk",
+    "en": "radial knight"
+  },
+  {
+    "index": 128,
+    "code1": "I",
+    "code2": "pv",
+    "fr": "pion renverse",
+    "code3": "rb",
+    "de": "ReversBauer",
+    "code4": "pp",
+    "en": "protean pawn"
+  },
+  {
+    "index": 129,
+    "code1": "SR",
+    "code2": "lr",
+    "fr": "rose locuste",
+    "code3": "lr",
+    "de": "RosenHeuschrecke",
+    "code4": "ls",
+    "en": "Rose Locust"
+  },
+  {
+    "index": 130,
+    "code1": "SR",
+    "code2": "ze",
+    "fr": "zebu",
+    "code3": "ze",
+    "de": "Zebu",
+    "code4": "ze",
+    "en": "zebu"
+  },
+  {
+    "index": 131,
+    "code1": "SR",
+    "code2": "nr",
+    "fr": "noctambule rebondissant",
+    "code3": "nr",
+    "de": "Reflektierender Nachreiter",
+    "code4": "bn",
+    "en": "Bouncy Nightrider"
+  },
+  {
+    "index": 132,
+    "code1": "SR",
+    "code2": "n2",
+    "fr": "spiralspringer (2,0)",
+    "code3": "s2",
+    "de": "spiralspringer (2,0)",
+    "code4": "s2",
+    "en": "spiralspringer (2,0)"
+  },
+  {
+    "index": 133,
+    "code1": "SR",
+    "code2": "n4",
+    "fr": "spiralspringer (4,0)",
+    "code3": "s4",
+    "de": "spiralspringer (4,0)",
+    "code4": "s4",
+    "en": "spiralspringer (4,0)"
+  },
+  {
+    "index": 134,
+    "code1": "SR",
+    "code2": "n1",
+    "fr": "diagonalspiralspringer (1,1)",
+    "code3": "s1",
+    "de": "diagonalspiralspringer (1,1)",
+    "code4": "s1",
+    "en": "diagonalspiralspringer (1,1)"
+  },
+  {
+    "index": 135,
+    "code1": "SR",
+    "code2": "n3",
+    "fr": "diagonalspiralspringer (3,3)",
+    "code3": "s3",
+    "de": "diagonalspiralspringer (3,3)",
+    "code4": "s3",
+    "en": "diagonalspiralspringer (3,3)"
+  },
+  {
+    "index": 136,
+    "code1": "I",
+    "code2": "qn",
+    "fr": "quintessence",
+    "code3": "qn",
+    "de": "quintessence",
+    "code4": "qn",
+    "en": "quintessence"
+  },
+  {
+    "index": 137,
+    "code1": "TR",
+    "code2": "dt",
+    "fr": "double tour-sauterelle",
+    "code3": "dt",
+    "de": "Doppelturmhuepfer",
+    "code4": "dk",
+    "en": "double rookhopper"
+  },
+  {
+    "index": 138,
+    "code1": "LR",
+    "code2": "df",
+    "fr": "double fou-sauterelle",
+    "code3": "dl",
+    "de": "Doppellaeuferhuepfer",
+    "code4": "db",
+    "en": "double bishopper"
+  },
+  {
+    "index": 139,
+    "code1": "I",
+    "code2": "no",
+    "fr": "orix (non-stop)",
+    "code3": "no",
+    "de": "orix (non-stop)",
+    "code4": "no",
+    "en": "orix (non-stop)"
+  },
+  {
+    "index": 140,
+    "code1": "I",
+    "code2": "sb",
+    "fr": "treehopper",
+    "code3": "uh",
+    "de": "treehopper",
+    "code4": "th",
+    "en": "treehopper"
+  },
+  {
+    "index": 141,
+    "code1": "I",
+    "code2": "se",
+    "fr": "leafhopper",
+    "code3": "bh",
+    "de": "leafhopper",
+    "code4": "lh",
+    "en": "leafhopper"
+  },
+  {
+    "index": 142,
+    "code1": "I",
+    "code2": "sm",
+    "fr": "greater treehopper",
+    "code3": "gu",
+    "de": "greater treehopper",
+    "code4": "ge",
+    "en": "greater treehopper"
+  },
+  {
+    "index": 143,
+    "code1": "I",
+    "code2": "su",
+    "fr": "greater leafhopper",
+    "code3": "gb",
+    "de": "greater leafhopper",
+    "code4": "gf",
+    "en": "greater leafhopper"
+  },
+  {
+    "index": 144,
+    "code1": "I",
+    "code2": "kl",
+    "fr": "kangarou lion",
+    "code3": "lk",
+    "de": "kangarou lion",
+    "code4": "kl",
+    "en": "kangarou lion"
+  },
+  {
+    "index": 145,
+    "code1": "I",
+    "code2": "ko",
+    "fr": "kao",
+    "code3": "ko",
+    "de": "kao",
+    "code4": "ko",
+    "en": "kao"
+  },
+  {
+    "index": 146,
+    "code1": "SR",
+    "code2": "sv",
+    "fr": "knighthopper",
+    "code3": "sh",
+    "de": "springerhuepfer",
+    "code4": "kp",
+    "en": "knighthopper"
+  },
+  {
+    "index": 147,
+    "code1": "TR",
+    "code2": "ba",
+    "fr": "bateau",
+    "code3": "sc",
+    "de": "schiff",
+    "code4": "sh",
+    "en": "ship"
+  },
+  {
+    "index": 148,
+    "code1": "LR",
+    "code2": "gy",
+    "fr": "gryphon",
+    "code3": "gy",
+    "de": "gryphon",
+    "code4": "gy",
+    "en": "gryphon"
+  },
+  {
+    "index": 149,
+    "code1": "SR",
+    "code2": "cm",
+    "fr": "cavalier marin",
+    "code3": "ms",
+    "de": "mariner Springer",
+    "code4": "ms",
+    "en": "marine knight"
+  },
+  {
+    "index": 150,
+    "code1": "KR",
+    "code2": "po",
+    "fr": "pos\\'eidon",
+    "code3": "po",
+    "de": "Poseidon",
+    "code4": "po",
+    "en": "poseidon"
+  },
+  {
+    "index": 151,
+    "code1": "BR",
+    "code2": "pm",
+    "fr": "pion marin",
+    "code3": "mb",
+    "de": "mariner Bauer",
+    "code4": "mp",
+    "en": "marine pawn"
+  },
+  {
+    "index": 152,
+    "code1": "TR",
+    "code2": "bm",
+    "fr": "bateau marin",
+    "code3": "mc",
+    "de": "marines Schiff",
+    "code4": "mh",
+    "en": "marine ship"
+  },
+  {
+    "index": 153,
+    "code1": "KU",
+    "code2": "ep",
+    "fr": "epine",
+    "code3": "st",
+    "de": "Stachel",
+    "code4": "st",
+    "en": "Sting"
+  },
+  {
+    "index": 154,
+    "code1": "SL",
+    "code2": "ah",
+    "fr": "Mao sauteur",
+    "code3": "ah",
+    "de": "Maohuepfer",
+    "code4": "ah",
+    "en": "Mao hopper"
+  },
+  {
+    "index": 155,
+    "code1": "SR",
+    "code2": "oh",
+    "fr": "Moa sauteur",
+    "code3": "oh",
+    "de": "Moahuepfer",
+    "code4": "oh",
+    "en": "Moa hopper"
+  },
+  {
+    "index": 156,
+    "code1": "DL",
+    "code2": "se",
+    "fr": "Senora",
+    "code3": "se",
+    "de": "Senora",
+    "code4": "se",
+    "en": "Senora"
+  },
+  {
+    "index": 157,
+    "code1": "TL",
+    "code2": "fa",
+    "fr": "Faro",
+    "code3": "fa",
+    "de": "Faro",
+    "code4": "fa",
+    "en": "Faro"
+  },
+  {
+    "index": 158,
+    "code1": "LL",
+    "code2": "lo",
+    "fr": "Loco",
+    "code3": "lo",
+    "de": "Loco",
+    "code4": "lo",
+    "en": "Loco"
+  },
+  {
+    "index": 159,
+    "code1": "SL",
+    "code2": "sa",
+    "fr": "Saltador",
+    "code3": "sl",
+    "de": "Saltador",
+    "code4": "sa",
+    "en": "Saltador"
+  },
+  {
+    "index": 160,
+    "code1": "HC",
+    "code2": "hc",
+    "fr": "ContraHamster",
+    "code3": "hc",
+    "de": "ContraHamster",
+    "code4": "hc",
+    "en": "ContraHamster"
+  }
+]

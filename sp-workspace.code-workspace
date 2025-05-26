@@ -4,9 +4,6 @@
 			"path": "src/Gui/sp-gui.html/sp-gui-angular"
 		},
 		{
-			"path": "src/Gui/sp-gui.html/sp-gui-electron"
-		},
-		{
 			"path": "graphics"
 		},
 		{
@@ -17,6 +14,9 @@
 		},
 		{
 			"path": "src/CoreJS"
+		},
+		{
+			"path": "src/Gui/sp-gui.html/sp-gui"
 		}
 	],
 	"settings": {
@@ -27,25 +27,25 @@
 		},
 		"workbench.colorCustomizations": {
 			"activityBar.activeBorder": "#155e02",
-			"activityBar.activeBackground": "#262626",
-			"activityBar.background": "#262626",
+			"activityBar.activeBackground": "#1a1a1a",
+			"activityBar.background": "#1a1a1a",
 			"activityBar.foreground": "#e7e7e7",
 			"activityBar.inactiveForeground": "#e7e7e799",
 			"activityBarBadge.background": "#606020",
 			"activityBarBadge.foreground": "#e7e7e7",
 			"commandCenter.border": "#e7e7e799",
-			"sash.hoverBorder": "#262626",
-			"statusBar.background": "#0d0d0d",
+			"sash.hoverBorder": "#1a1a1a",
+			"statusBar.background": "#000000",
 			"statusBar.foreground": "#e7e7e7",
-			"statusBarItem.hoverBackground": "#262626",
-			"statusBarItem.remoteBackground": "#0d0d0d",
+			"statusBarItem.hoverBackground": "#1a1a1a",
+			"statusBarItem.remoteBackground": "#000000",
 			"statusBarItem.remoteForeground": "#e7e7e7",
-			"titleBar.activeBackground": "#0d0d0d",
+			"titleBar.activeBackground": "#000000",
 			"titleBar.activeForeground": "#e7e7e7",
-			"titleBar.inactiveBackground": "#0d0d0d99",
+			"titleBar.inactiveBackground": "#00000099",
 			"titleBar.inactiveForeground": "#e7e7e799"
 		},
-		"peacock.color": "#0d0d0d",
+		"peacock.color": "#000000",
 		"typescript.tsdk": "sp-gui-angular/node_modules/typescript/lib",
 		"eslint.nodePath": "sp-gui-angular/node_modules",
 		"peacock.remoteColor": "#0d0d0d",

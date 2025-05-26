@@ -1,8 +1,0 @@
-BeginProblem
-Pieces
-White Kd1 Re2 Be1 Pc2 Sd3
-Black Pg2 Rg1 Bh5 Kb6 Pb5 Pg6 Pa6 Bh6 Pc3 Sa2 Pa5 Qa3 Sc6 Rc5
-Stipulation H#4
-Option WhiteToPlay NoBoard Try Set Variation
-Twin Move d3 b2
-EndProblem
