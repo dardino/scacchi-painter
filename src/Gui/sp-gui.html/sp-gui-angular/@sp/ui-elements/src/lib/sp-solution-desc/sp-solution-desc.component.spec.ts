@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ThirdPartyImports } from "../thirdPartyImports";
 import { SpSolutionDescComponent } from "./sp-solution-desc.component";
 
 describe("SpSolutionDescComponent", () => {
@@ -10,7 +9,6 @@ describe("SpSolutionDescComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SpSolutionDescComponent ],
-      imports: [...ThirdPartyImports]
     })
     .compileComponents();
   }));

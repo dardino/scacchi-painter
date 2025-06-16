@@ -1,4 +1,4 @@
-export const Columns = [
+export const Files = [
   "ColA",
   "ColB",
   "ColC",
@@ -7,17 +7,27 @@ export const Columns = [
   "ColF",
   "ColG",
   "ColH",
-] as const;
-export type Columns = typeof Columns[number];
+] as const satisfies `Col${"A" | "B" | "C" | "D" | "E" | "F" | "G" | "H"}`[];
+export type Files = typeof Files[number];
 
-export const Traverse = [
-  "Row8",
-  "Row7",
-  "Row6",
-  "Row5",
-  "Row4",
-  "Row3",
-  "Row2",
+export const Ranks = [
   "Row1",
-] as const;
-export type Traverse = typeof Traverse[number];
+  "Row2",
+  "Row3",
+  "Row4",
+  "Row5",
+  "Row6",
+  "Row7",
+  "Row8",
+] as const satisfies `Row${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`[];
+export type Ranks = typeof Ranks[number];
+
+// the bitboard is a 64-bit number where each bit represents a square on the chessboard
+export type Bitboard = bigint;
+export type BitboardArray = Bitboard[];
+
+export const BB_WHITE = "#white#";
+export const BB_BLACK = "#black#";
+export const BB_NEUTRAL = "#neutral#";
+
+export type BitboardMap = Map<string, Bitboard>;

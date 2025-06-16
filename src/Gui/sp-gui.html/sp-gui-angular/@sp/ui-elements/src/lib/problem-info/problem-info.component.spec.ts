@@ -5,7 +5,6 @@ import { ProblemAuthorsComponent } from "../problem-authors/problem-authors.comp
 import { ProblemDefinitionsComponent } from "../problem-definitions/problem-definitions.component";
 import { ProblemPublicationComponent } from "../problem-publication/problem-publication.component";
 import { SortableListComponent } from "../sortable-list/sortable-list.component";
-import { ThirdPartyImports } from "../thirdPartyImports";
 import { ProblemInfoComponent } from "./problem-info.component";
 
 describe("ProblemInfoComponent", () => {
@@ -22,7 +21,6 @@ describe("ProblemInfoComponent", () => {
         SortableListComponent,
         AuthorCardComponent,
       ],
-      imports: [...ThirdPartyImports]
     })
     .compileComponents();
   }));

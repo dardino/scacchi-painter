@@ -24,7 +24,14 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/src/Gui/sp-web-gui/Views"
             }
+        },
+        {
+            "name": "Attach to Node Functions",
+            "type": "node",
+            "request": "attach",
+            "restart": true,
+            "port": 9229,
+            "preLaunchTask": "func: host start"
         }
-
     ]
 }
