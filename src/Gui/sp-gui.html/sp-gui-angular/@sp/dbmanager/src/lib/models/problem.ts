@@ -1,3 +1,4 @@
+import { HalfMoveInfo } from "@dardino-chess/core";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
 import {
@@ -34,6 +35,7 @@ export class Problem implements IProblem {
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
+  public jsonSolution: HalfMoveInfo[] = [];
   public htmlSolution = "";
   public conditions: string[] = [];
   public fairyCells: string[] = [];

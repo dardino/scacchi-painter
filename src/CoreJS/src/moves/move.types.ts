@@ -6,12 +6,6 @@ export type MoveNum = `${number}.` | `${number}...`;
 
 /**
  * Represents information about a single half-move in a chess game.
- *
- * @property num - The number of the move.
- * @property part - Indicates which half of the move: "l" for left half move, "r" for right half move.
- * @property from - The square from which the piece is moving.
- * @property to - The square to which the piece is moving.
- * @property type - The type of move: "-" for a regular move, "*" for a capture.
  */
 export interface HalfMoveInfo {
   /** The number of the move */
@@ -26,12 +20,24 @@ export interface HalfMoveInfo {
   type: MoveType;
   /** Indicates if the move is a promotion */
   isPromotion: boolean;
+  /** The piece that is promoted */
+  promotedPiece: string;
   /** Indicates if the move is a check */
   isCheck: boolean;
   /** Indicates if the move is a checkmate */
   isCheckMate: boolean;
   /** Indicates if the move is a stalemate */
   isStaleMate: boolean;
+  /** Indicates if the move is a try */
+  isTry: boolean;
+  /** Indicates if the move is a refutation */
+  refutes: boolean;
   /** extra moves for fairies */
   extraMoves: string[];
+  /** The piece that is moving */
+  piece: string;
+  /** Indicates if the move is a threat */
+  threat: boolean;
+  /** Indicates if the move is a zugzwang */
+  zugzwang: boolean;
 }

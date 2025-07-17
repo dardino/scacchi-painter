@@ -8,7 +8,7 @@ describe("RecentsComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecentsComponent ]
+      declarations: []
     })
     .compileComponents();
   }));

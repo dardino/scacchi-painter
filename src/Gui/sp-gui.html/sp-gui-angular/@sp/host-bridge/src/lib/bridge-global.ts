@@ -1,5 +1,6 @@
+import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Observable } from "rxjs";
-import { Problem } from "../../../dbmanager/src/lib/models/problem";
+import type { Problem } from "../../../dbmanager/src/lib/models/problem";
 
 export interface BridgeGlobal {
   openFile(): File | PromiseLike<File | null> | null;
@@ -21,13 +22,8 @@ export interface EOF {
 
 export type SolveModes = "start" | "try";
 
-
-export interface SolutionMove {
-  moveN: number,
-  notice: string,
-  piece: string,
-  move: string,
-  extras: SolutionMove[],
-  continuation: "threat" | "zugzwang" | "";
+export interface SolutionRow {
+  rowtype: "log" | "data",
+  raw: string,
+  moveTree: HalfMoveInfo[];
 }
-export interface SolutionRow { rowtype: "log" | "data", raw: string }

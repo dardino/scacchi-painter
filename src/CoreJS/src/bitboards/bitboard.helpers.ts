@@ -1,5 +1,6 @@
 import { WK_BB_SQ } from "../board/board.const";
-import { Bitboard, BitboardMap, Files, Ranks, SquareNames } from "../board/board.types";
+import { Bitboard, BitboardMap, Files, Ranks } from "../board/board.types";
+import { SquareNames } from "../moves/move.types";
 import { Piece, PieceArray } from "../pieces/piece.types";
 
 /**

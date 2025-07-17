@@ -16,6 +16,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
+import { HalfMoveInfo } from "@dardino-chess/core";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
@@ -62,9 +63,6 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
     ]
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
-  public get rows$() {
-    return this.rows$ubject.asObservable();
-  }
 
   public get problem() {
     return this.current.Problem;
@@ -103,9 +101,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscribe: Subscription;
 
   public editMode: EditModes = "select";
-  public rows: string[] = [];
   public boardType: "HTML" | "canvas" = "HTML";
-  public rows$ubject = new BehaviorSubject<string[]>([]);
+  public rows$ubject = new BehaviorSubject<HalfMoveInfo[] | null>(null);
   menuX = 0;
   menuY = 0;
   contextOnCell: SquareLocation;
@@ -199,8 +196,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   startSolve(mode: "start" | "try") {
-    this.rows = [];
-    this.rows$ubject.next(this.rows);
+    if (!this.problem) {
+      console.warn("[WARN] -> No problem selected!");
+      return;
+    }
+    this.problem.jsonSolution = [];
+    this.rows$ubject.next(null);
+    this.rows$ubject.next([]);
     if (this.current.Problem) {
       this.current.Problem.htmlSolution = "";
       this.current.Problem.textSolution = "";
@@ -224,12 +226,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribe = this.engine.solution$.pipe(
       skip(1) // skip first execution to avoid the reset of text at load
     ).subscribe((msg) => {
-      this.rows.push(...msg.replace(/[\r\n]+/g, "\n").split("\n"));
-      this.rows$ubject.next(this.rows);
-      if (this.current.Problem) {
-        this.current.Problem.htmlSolution = this.toHtml(this.rows);
-        this.current.Problem.textSolution = this.rows.join(`\n`);
-      }
+      if (msg === null) return;
+      if (!this.current.Problem) return;
+      const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
+      this.current.Problem.htmlSolution += this.toHtml([...raw]);
+      this.current.Problem.textSolution += `\n` +raw.join(`\n`);
+      this.current.Problem.jsonSolution.push(...msg.moveTree);
+      this.rows$ubject.next(msg.moveTree);
     });
 
     this.route.params.subscribe((params) => {

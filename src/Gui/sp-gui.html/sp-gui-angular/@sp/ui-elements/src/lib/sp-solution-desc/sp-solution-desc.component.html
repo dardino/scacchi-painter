@@ -5,10 +5,36 @@
     placeholder="Run solution engine with the 'play' button" [(ngModel)]="solutionHtml">
   </ngx-editor>
 </div>
-<div *ngIf="viewMode === 'both' || viewMode === 'txt'" class="solutions" [style.fontSize]="solutionFontSize">
-  <ng-template [ngForOf]="rows" ngFor let-item>
-    <div *ngIf="item.className !== 'solution' && showLog" [class]="item.className">{{item.row}}</div>
-    <lib-sp-solution-row *ngIf="item.className === 'solution'" [value]="item.row"
-      [class]="item.className"></lib-sp-solution-row>
-  </ng-template>
-</div>
+@if (viewMode === 'both' || viewMode === 'txt') {
+  <div [style.fontSize]="solutionFontSize" class="solutions">
+    @for (move of rows; track $index) {
+      @let prevItem = $index < 1 ? null : rows[$index - 1];
+      @let prevMove = prevItem == null ? 0
+        : prevItem.num + (prevItem.part == "l" ? 0 : 0.5);
+      <!-- se esiste una mossa la gestisco come tale -->
+      @let myMove = move.num + (move.part == "l" ? 0 : 0.5);
+      @if (myMove === firstMove) {
+        <hr />
+      }
+      @let lineBr = myMove < prevMove || prevItem == null || prevItem.zugzwang;
+      @if (lineBr) {
+        <div class="linebr"></div>
+      }
+      <lib-sp-solution-row
+        [attr.data-moveno]="myMove"
+        [attr.data-movenopre]="prevMove"
+        [hideNum]="mode == 'inline' && !lineBr && prevItem != null"
+        [value]="move"
+        [class]="[
+          'solution',
+          mode,
+          move.threat ? 'threat' : '',
+          move.zugzwang ? 'zugzwang' : '',
+          move.refutes && myMove === firstMove ? 'key' : '',
+          move.refutes && myMove !== firstMove ? 'refutes' : '',
+          prevMove == myMove ? 'demolition' : '',
+        ].join(' ')"
+      ></lib-sp-solution-row>
+    }
+  </div>
+}
