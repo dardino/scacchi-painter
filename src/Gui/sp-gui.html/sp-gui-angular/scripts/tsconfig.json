@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "target": "ES2022",
+    "outDir": "dist",
+    "rootDir": ".",
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "./*.ts"
+  ]
+}

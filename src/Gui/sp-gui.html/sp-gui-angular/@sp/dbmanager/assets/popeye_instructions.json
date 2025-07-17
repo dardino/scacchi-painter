@@ -1,0 +1,726 @@
+{
+  "CLI_Parameters": {
+    "-maxmem": "You can provide for Popeye for example 40960 kilobyte (or 40 megabye) of memory with -maxmem 40960 resp. -maxmem 40M to speed up solving. Popeye uses this memory to avoid testing the same intermediate positions repeatedly. You can indicate -maxmem 0 to turn off this optimisation.",
+    "-maxtime": "Indicate the maximum number of seconds that Popeye may spend on each problem. This command line option is equivalent to the option maxtime that can be used in the problem definition (see below). Example: -maxtime 60 If a problem hasn't been solved after one minute, solving continues with the next problem in the input file (if any).",
+    "-regression": "FOR DEVELOPERS MAINLY Popeye version info and solving times are suppressed from output files."
+  },
+  "Commands": {
+    "CommandList": {
+      "remark": " - remark: this keyword introduces a comment. Everything up to the end of the\n\tline will be ignored and has no further effects.\n",
+      "author": " - author: The parameter to this command is the author of the problem. All\n\tText up to end of line will be put above the diagram in the output.\n\tThis input is completely optional and has no effect to the other\n\tcapabilities of the program. All the input of multiple author\n\tcommands will be placed on the output.\n",
+      "origin": " - origin: All the same as the author command.",
+      "title": " - title:  All the same as the author command.\n",
+      "protocol": " - protocol: The parameter to his command is interpreted as filename, and all\n\tfurther output of popeye on the screen is also placed in the given\n\tfile. If the file exists already, the output of popeye is appended to\n\tthe file. The file will not be deleted.\n",
+      "condition": {
+        "Circe": {
+          "name": "Circe",
+          "description": []
+        },
+        "Madrasi": {
+          "name": "Madrasi",
+          "description": []
+        },
+        "Volage": {
+          "name": "Volage",
+          "description": []
+        },
+        "Hypervolage": {
+          "name": "Hypervolage",
+          "description": []
+        },
+        "BichromChess": {
+          "name": "BichromChess",
+          "description": []
+        },
+        "MonochromChess": {
+          "name": "MonochromChess",
+          "description": []
+        },
+        "GridChess": {
+          "name": "GridChess",
+          "description": []
+        },
+        "KoeKo": {
+          "name": "KoeKo",
+          "description": []
+        },
+        "BlackEdgemover": {
+          "name": "BlackEdgemover",
+          "description": []
+        },
+        "WhiteEdgemover": {
+          "name": "WhiteEdgemover",
+          "description": []
+        },
+        "Leofamily": {
+          "name": "Leofamily",
+          "description": []
+        },
+        "ChineseChess": {
+          "name": "ChineseChess",
+          "description": []
+        },
+        "Patrouille": {
+          "name": "Patrouille",
+          "description": []
+        },
+        "NoCapture": {
+          "name": "NoCapture",
+          "description": []
+        },
+        "ImmunChess": {
+          "name": "ImmunChess",
+          "description": []
+        },
+        "ContactGridChess": {
+          "name": "ContactGridChess",
+          "description": []
+        },
+        "Imitator": {
+          "name": "Imitator",
+          "description": []
+        },
+        "CavalierMajeur": {
+          "name": "CavalierMajeur",
+          "description": []
+        },
+        "HaanerChess": {
+          "name": "HaanerChess",
+          "description": []
+        },
+        "Sentinelles": {
+          "name": "Sentinelles",
+          "description": []
+        },
+        "Maximummer": {
+          "name": "Maximummer",
+          "description": [
+            "(applies to the defending side - don't mix with Black/White...)"
+          ]
+        },
+        "UltraSchachZwang": {
+          "name": "UltraSchachZwang",
+          "description": [
+            "(dito)"
+          ]
+        },
+        "BlackMaximummer": {
+          "name": "BlackMaximummer",
+          "description": []
+        },
+        "WhiteMaximummer": {
+          "name": "WhiteMaximummer",
+          "description": [
+            "WhiteUltraSchachZwang",
+            "BlackUltraSchachZwang"
+          ]
+        },
+        "BlackMinimummer": {
+          "name": "BlackMinimummer",
+          "description": []
+        },
+        "WhiteMinimummer": {
+          "name": "WhiteMinimummer",
+          "description": []
+        },
+        "MagicSquares": {
+          "name": "MagicSquares",
+          "description": []
+        },
+        "Tibet": {
+          "name": "Tibet",
+          "description": []
+        },
+        "DoubleTibet": {
+          "name": "DoubleTibet",
+          "description": []
+        },
+        "Hole": {
+          "name": "Hole",
+          "description": [
+            "(= a square where you cannot move to)"
+          ]
+        },
+        "BlackMustCapture": {
+          "name": "BlackMustCapture",
+          "description": []
+        },
+        "WhiteMustCapture": {
+          "name": "WhiteMustCapture",
+          "description": []
+        },
+        "TransmutedKings": {
+          "name": "TransmutedKings",
+          "description": []
+        },
+        "BlackFollowMyLeader": {
+          "name": "BlackFollowMyLeader",
+          "description": []
+        },
+        "WhiteFollowMyLeader": {
+          "name": "WhiteFollowMyLeader",
+          "description": []
+        },
+        "DuellistChess": {
+          "name": "DuellistChess",
+          "description": []
+        },
+        "NoIProm": {
+          "name": "NoIProm",
+          "description": [
+            "No Promotion to Imitator allowed"
+          ]
+        },
+        "VogtlaenderChess": {
+          "name": "VogtlaenderChess",
+          "description": []
+        },
+        "EinsteinChess": {
+          "name": "EinsteinChess",
+          "description": []
+        },
+        "Bicolores": {
+          "name": "Bicolores",
+          "description": []
+        },
+        "NewKoeko": {
+          "name": "NewKoeko",
+          "description": []
+        },
+        "AntiCirce": {
+          "name": "AntiCirce",
+          "description": []
+        },
+        "ReversalEinsteinChess": {
+          "name": "ReversalEinsteinChess",
+          "description": []
+        },
+        "RelegationChess": {
+          "name": "RelegationChess",
+          "description": []
+        },
+        "NorskSjakk": {
+          "name": "NorskSjakk",
+          "description": []
+        },
+        "TraitorChess": {
+          "name": "TraitorChess",
+          "description": []
+        },
+        "AndernachChess": {
+          "name": "AndernachChess",
+          "description": []
+        },
+        "BlackForcedSquare": {
+          "name": "BlackForcedSquare",
+          "description": []
+        },
+        "WhiteForcedSquare": {
+          "name": "WhiteForcedSquare",
+          "description": []
+        },
+        "BlackConsequentForcedSquare": {
+          "name": "BlackConsequentForcedSquare",
+          "description": []
+        },
+        "WhiteConsequentForcedSquare": {
+          "name": "WhiteConsequentForcedSquare",
+          "description": []
+        },
+        "ReflectiveKings": {
+          "name": "ReflectiveKings",
+          "description": []
+        },
+        "ChameleonChess": {
+          "name": "ChameleonChess",
+          "description": []
+        },
+        "FunctionaryChess": {
+          "name": "FunctionaryChess",
+          "description": []
+        },
+        "GlasgowChess": {
+          "name": "GlasgowChess",
+          "description": []
+        },
+        "AntiAndernachChess": {
+          "name": "AntiAndernachChess",
+          "description": []
+        },
+        "Isardam": {
+          "name": "Isardam",
+          "description": []
+        },
+        "ChecklessChess": {
+          "name": "ChecklessChess",
+          "description": []
+        },
+        "PromOnly": {
+          "name": "PromOnly",
+          "description": []
+        },
+        "ExclusiveChess": {
+          "name": "ExclusiveChess",
+          "description": []
+        },
+        "Marscirce": {
+          "name": "Marscirce",
+          "description": []
+        },
+        "PhantomChess": {
+          "name": "PhantomChess",
+          "description": []
+        },
+        "WhiteTransmutedKing": {
+          "name": "WhiteTransmutedKing",
+          "description": []
+        },
+        "BlackTransmutedKing": {
+          "name": "BlackTransmutedKing",
+          "description": []
+        },
+        "WhiteReflectiveKing": {
+          "name": "WhiteReflectiveKing",
+          "description": []
+        },
+        "BlackReflectiveKing": {
+          "name": "BlackReflectiveKing",
+          "description": []
+        },
+        "AntiEinsteinChess": {
+          "name": "AntiEinsteinChess",
+          "description": []
+        },
+        "BlackRoyalSquare": {
+          "name": "BlackRoyalSquare",
+          "description": []
+        },
+        "WhiteRoyalSquare": {
+          "name": "WhiteRoyalSquare",
+          "description": []
+        },
+        "PlusChess": {
+          "name": "PlusChess",
+          "description": []
+        },
+        "BrunnerChess": {
+          "name": "BrunnerChess",
+          "description": []
+        },
+        "CentralChess": {
+          "name": "CentralChess",
+          "description": []
+        },
+        "ExtinctionChess": {
+          "name": "ExtinctionChess",
+          "description": []
+        },
+        "RepublicanChess": {
+          "name": "RepublicanChess",
+          "description": [
+            "ActuatedRevolvingBoard",
+            "MessignyChess",
+            "Woozles",
+            "BiWoozles",
+            "Heffalumps",
+            "BiHeffalumps"
+          ]
+        },
+        "WhitePromSquares": {
+          "name": "WhitePromSquares",
+          "description": []
+        },
+        "BlackPromSquares": {
+          "name": "BlackPromSquares",
+          "description": []
+        },
+        "NoWhitePromotion": {
+          "name": "NoWhitePromotion",
+          "description": []
+        },
+        "NoBlackPromotion": {
+          "name": "NoBlackPromotion",
+          "description": []
+        },
+        "EiffelChess": {
+          "name": "EiffelChess",
+          "description": []
+        },
+        "ActuatedRevolvingCentre": {
+          "name": "ActuatedRevolvingCentre",
+          "description": []
+        },
+        "ShieldedKings": {
+          "name": "ShieldedKings",
+          "description": []
+        },
+        "NoWhiteCapture": {
+          "name": "NoWhiteCapture",
+          "description": []
+        },
+        "NoBlackCapture": {
+          "name": "NoBlackCapture",
+          "description": []
+        },
+        "AlphabeticChess": {
+          "name": "AlphabeticChess",
+          "description": []
+        },
+        "LineChameleonChess": {
+          "name": "LineChameleonChess",
+          "description": []
+        },
+        "AMU": {
+          "name": "AMU",
+          "description": []
+        },
+        "SingleBox": {
+          "name": "SingleBox",
+          "description": []
+        },
+        "MAFF": {
+          "name": "MAFF",
+          "description": []
+        },
+        "OWU": {
+          "name": "OWU",
+          "description": []
+        },
+        "WhiteOscillatingKings": {
+          "name": "WhiteOscillatingKings",
+          "description": []
+        },
+        "BlackOscillatingKings": {
+          "name": "BlackOscillatingKings",
+          "description": []
+        },
+        "AntiKings": {
+          "name": "AntiKings",
+          "description": []
+        },
+        "AntiMarsCirce": {
+          "name": "AntiMarsCirce",
+          "description": []
+        },
+        "WhiteSuperTransmutingKing": {
+          "name": "WhiteSuperTransmutingKing",
+          "description": []
+        },
+        "BlackSuperTransmutingKing": {
+          "name": "BlackSuperTransmutingKing",
+          "description": []
+        },
+        "UltraPatrol": {
+          "name": "UltraPatrol",
+          "description": []
+        },
+        "SwappingKings": {
+          "name": "SwappingKings",
+          "description": []
+        },
+        "RoyalDynasty": {
+          "name": "RoyalDynasty",
+          "description": []
+        },
+        "SAT": {
+          "name": "SAT",
+          "description": []
+        },
+        "StrictSAT": {
+          "name": "StrictSAT",
+          "description": []
+        },
+        "Take&MakeChess": {
+          "name": "Take&MakeChess",
+          "description": []
+        },
+        "Make&TakeChess": {
+          "name": "Make&TakeChess",
+          "description": []
+        },
+        "BlackSynchronMover": {
+          "name": "BlackSynchronMover",
+          "description": []
+        },
+        "WhiteSynchronMover": {
+          "name": "WhiteSynchronMover",
+          "description": []
+        },
+        "BlackAntiSynchronMover": {
+          "name": "BlackAntiSynchronMover",
+          "description": []
+        },
+        "WhiteAntiSynchronMover": {
+          "name": "WhiteAntiSynchronMover",
+          "description": []
+        },
+        "Masand": {
+          "name": "Masand",
+          "description": []
+        },
+        "MasandGeneralised": {
+          "name": "MasandGeneralised",
+          "description": []
+        },
+        "BGL": {
+          "name": "BGL",
+          "description": []
+        },
+        "AnnanChess": {
+          "name": "AnnanChess",
+          "description": []
+        },
+        "NannaChess": {
+          "name": "NannaChess",
+          "description": []
+        },
+        "NormalPawn": {
+          "name": "NormalPawn",
+          "description": []
+        },
+        "BlackChecks": {
+          "name": "BlackChecks",
+          "description": []
+        },
+        "GenevaChess": {
+          "name": "GenevaChess",
+          "description": []
+        },
+        "VaultingKings": {
+          "name": "VaultingKings",
+          "description": []
+        },
+        "WhiteVaultingKing": {
+          "name": "WhiteVaultingKing",
+          "description": []
+        },
+        "BlackVaultingKing": {
+          "name": "BlackVaultingKing",
+          "description": []
+        },
+        "ProteanChess": {
+          "name": "ProteanChess",
+          "description": []
+        },
+        "Lortap": {
+          "name": "Lortap",
+          "description": []
+        },
+        "Antikoeko": {
+          "name": "Antikoeko",
+          "description": []
+        },
+        "CastlingChess": {
+          "name": "CastlingChess",
+          "description": []
+        },
+        "ChameleonPursuit": {
+          "name": "ChameleonPursuit",
+          "description": []
+        },
+        "LosingChess": {
+          "name": "LosingChess",
+          "description": []
+        },
+        "GhostChess": {
+          "name": "GhostChess",
+          "description": []
+        },
+        "Football": {
+          "name": "Football",
+          "description": []
+        },
+        "WhiteAlphabeticChess": {
+          "name": "WhiteAlphabeticChess",
+          "description": []
+        },
+        "BlackAlphabeticChess": {
+          "name": "BlackAlphabeticChess",
+          "description": []
+        },
+        "KobulKings": {
+          "name": "KobulKings",
+          "description": []
+        },
+        "SuperGuards": {
+          "name": "SuperGuards",
+          "description": []
+        },
+        "Wormholes": {
+          "name": "Wormholes",
+          "description": []
+        },
+        "MarineChess": {
+          "name": "MarineChess",
+          "description": []
+        },
+        "UltramarineChess": {
+          "name": "UltramarineChess",
+          "description": []
+        },
+        "BackHome": {
+          "name": "BackHome",
+          "description": []
+        },
+        "FaceToFace": {
+          "name": "FaceToFace",
+          "description": []
+        },
+        "BackToBack": {
+          "name": "BackToBack",
+          "description": []
+        },
+        "CheekToCheek": {
+          "name": "CheekToCheek",
+          "description": []
+        },
+        "Disparate": {
+          "name": "Disparate",
+          "description": []
+        },
+        "SnekChess": {
+          "name": "SnekChess",
+          "description": []
+        },
+        "SnekCircleChess": {
+          "name": "SnekCircleChess",
+          "description": []
+        },
+        "ArgentinianChess": {
+          "name": "ArgentinianChess",
+          "description": []
+        },
+        "LostPieces": {
+          "name": "LostPieces",
+          "description": []
+        },
+        "PartialParalysis": {
+          "name": "PartialParalysis",
+          "description": []
+        },
+        "LeseMajeste": {
+          "name": "LeseMajeste",
+          "description": []
+        },
+        "Rokagogo": {
+          "name": "Rokagogo",
+          "description": []
+        },
+        "Breton": {
+          "name": "Breton",
+          "description": []
+        },
+        "PointReflection": {
+          "name": "PointReflection",
+          "description": []
+        },
+        "Bolero": {
+          "name": "Bolero",
+          "description": []
+        },
+        "BoleroInverse": {
+          "name": "BoleroInverse",
+          "description": []
+        },
+        "Influencer": {
+          "name": "Influencer",
+          "description": []
+        },
+        "RoleExchange": {
+          "name": "RoleExchange",
+          "description": []
+        },
+        "BlackMaxDister": {
+          "name": "BlackMaxDister",
+          "description": []
+        },
+        "BlackMinDister": {
+          "name": "BlackMinDister",
+          "description": []
+        },
+        "WhiteMaxDister": {
+          "name": "WhiteMaxDister",
+          "description": []
+        },
+        "WhiteMinDister": {
+          "name": "WhiteMinDister",
+          "description": []
+        },
+        "SeriesCapture": {
+          "name": "SeriesCapture",
+          "description": []
+        },
+        "Pepo": {
+          "name": "Pepo",
+          "description": []
+        },
+        "CASTchess": {
+          "name": "CASTchess",
+          "description": []
+        },
+        "CASTInverse": {
+          "name": "CASTInverse",
+          "description": []
+        },
+        "MultiCaptures": {
+          "name": "MultiCaptures",
+          "description": []
+        },
+        "FuddledMen": {
+          "name": "FuddledMen",
+          "description": []
+        },
+        "Bicaptures": {
+          "name": "Bicaptures",
+          "description": []
+        },
+        "TransmissionMenace": {
+          "name": "TransmissionMenace",
+          "description": []
+        },
+        "PowerTransfer": {
+          "name": "PowerTransfer",
+          "description": []
+        },
+        "Anda": {
+          "name": "Anda",
+          "description": []
+        },
+        "AndaInverse": {
+          "name": "AndaInverse",
+          "description": []
+        },
+        "AllInChess": {
+          "name": "AllInChess",
+          "description": []
+        },
+        "HalfInChess": {
+          "name": "HalfInChess",
+          "description": []
+        },
+        "MainlyInChess": {
+          "name": "MainlyInChess",
+          "description": []
+        },
+        "FrankfurtChess": {
+          "name": "FrankfurtChess",
+          "description": []
+        },
+        "AntiGuards": {
+          "name": "AntiGuards",
+          "description": []
+        },
+        "Leffie": {
+          "name": "Leffie",
+          "description": []
+        }
+      },
+      "option": " - option: Everything which should be in effect should be given here as\n\tblank seperated list. The following is recognized:\n\n\tTry             calculate if a move is a try.\n\tDefence         this option is followed by a number indicating\n\t\t\tthe number of defences which should be taken\n\t\t\tinto consideration. For instance Defence 1 all\n\t\t\treal tries are calculated.\n\tTrivialTriesAvoid\tRemove trivial tries from the output.\n\t\t\tCurrently, refuted first moves delivering check\n\t\t\tare considered trivial.\n\tSetPlay         calculate setplay.\n\tNullMoves\tAllows the moving side to play a null move.\n\t\t\tServers for finding tempo tries.\n\tThreat          for moremovers: This option must be followed\n\t\t\tby an integer. The opposit party has defended\n\t\t\twhen there is no threat in less or equal this\n\t\t\tnumber of moves.\n\tWhiteToPlay     white starts moving in helpplay.\n\tVariation       show threats and variations.\n\tMoveNumbers     Movenumber, already calculated move and cumulated\n\t\t\tsolving time on output.\n\tStartMoveNumber This option is followed by the Movenumber\n\t\t\tpopeye was interrupted at.\n\tUpToMoveNumber\tThis option is followed by the Movenumber\n\t\t\tPopeye will be interrupted at.\n\tNoWk            without white king\n\tNoBk            without black king\n\tDuplex          calculate stipulation for both sides\n\tNoThreat        calculate variations without calculating threats\n\tMaxSolutions    This option must be followed by an integer. Popeye\n\t\t\tstops calculating if this number of solutions \n\t\t\tare reached.\n\tMaxFlightsquares  for moremovers: This option must be followed\n\t\t\tby an integer. The opposit party has defended\n\t\t\twhen the number of flightsquares for it's king\n\t\t\tare more or equal this number.\n\tEnPassant       Must be followed by 3-4 squares which indicate the\n\t\t\tpawn move just played:\n\t\t\t- departure square\n\t\t\t- avoided squares\n\t\t\t- arrival square\n\t\t\tThis information is used for potential en passant\n\t\t\tkeys.\n\tCastlingMutuallyExclusive <wrooksquare><brooksquare>\n\t\t\tCastlings with the rooks that occupy the\n\t\t\tindicated squares in the game array are\n\t\t\tmutually exclusive.\n                        Example: CastlingMutuallyExclusive a1h8\n                        For indicating more than one pair of mutually\n                        exclusive castlings, the option can used\n                        multiple times.\n\tNoBoard         The chessboard is not printed to screen or into file.\n\tNoShortVariations  Short variations are suppressed on output.\n\tHalfDuplex      calculate stipulation only for the opponent side.\n\tPostKeyPlay     The position entered is considered to be the position\n\t\t\tafter the key. Just the solution play is analysed.\n\tNonTrivial m n  A special option to solve/cook/test long self and\n\t\t\t(semi)reflex problems. The second argument n\n\t\t\tdeter- mines which black moves are considered\n\t\t\tto be trivial - a move that can be met by a\n\t\t\ts#n (or r=n resp.). In long problems (more\n\t\t\tthan n moves) black has at every stage at\n\t\t\tleast one nontrivial move. I. e. a move that\n\t\t\tdoesnot lead to a s#n. The first argument m\n\t\t\tdetermines how many additional nontrivial\n\t\t\tmoves can be granted to black by white during\n\t\t\tthe whole solving procedure.  Example: nontr 0\n\t\t\t1. This is the most restrictive option.  White\n\t\t\tforced to play moves that leave black with\n\t\t\tonly one move not met by a s#1.\n\tIntelligent     intelligent (quick) solving of help(stale)mate\n\t\t\tmoremovers.\n\t\t\tAfter the intelligent option, the maximum number of \n\t\t\tsolutions per (stale)mate position can be given.\n\t\t\tNote: doesn't find stalemates without king!\n\tMaxTime         This option must be followed by an integer. Popeye\n\t\t\tstops calculating if this number of seconds  \n\t\t\tsolving time are reached.\n\n\tNoCastling\tThis option must be followed by the squares of those\n\t\t\tpieces that cannot castle anymore in the\n\t\t\tdiagram position.\n\tQuodlibet       In s# or r# also direct mates are a solution.\n\tStopOnShortSolutions  Calculation is terminated after detecting of\n\t\t\t      short solutions.\n\tBeep            This option can be followed by an integer. Each time\n\t\t\tPopeye has found a solution it beeps a number\n\t\t\tof times.\n\tSuppressGrid    (Grid Chess) Suppress the rendition of grid lines \n\t\t\tin text and LaTeX output.\n\tWriteGrid\t(Grid Chess) Writes an additional board that\n\t\t\tthe partition of the board into grid cells.\n\t\t\tUseful for irregular grids.\n\tKeepMatingPiece\tStop solving when there is no piece left that could\n\t\t\tdeliver mate.\n\tLastCapture\tFollow by a colour, piece and square as in the piece\n\t\t\tcommand. Specifies piece captured on move leading to \n\t\t\tthe diagram.\n\tGoalIsEnd\tapplicable if the goal doesn't lead to immobility\n\t\t\t(e.g. z, x): the play ends if the wrong side reaches\n\t\t\tthe goal.\n\tMatesIn1\tdon't suppress mates in 1 in self play if play would\n\t\t\tallow longer variations)\n\n",
+      "stipulation": " - stipulation: popeye knows the following stipulations:\n\n\tany meaningful combination of\n\t\n\t\t\t\t\t\t{#= }\t    {#=  }\n\t\t\t\t\t\t{!= }\t    {!=  }\n\t\t\t\t\t\t{!# }       {!#  }\n\t\t\t\t\t\t{00 }\t    {00  }\n\t\t\t\t\t\t{%  }\t    {%\t }\n\t\t\t\t\t\t{~  }\t    {~\t }\n\t\t\t\t\t\t{ep }\t    {ep  }\n\t\t\t   {SER- }   {H }\t{#  }\t    {#\t }\n\t\t\t   {PSER-}   {S }\t{=  }\t    {=\t }\n\t{m->} + {EXACT-} + {PHSER-}+ {R } + ( + {== } + ) + {==  } + n\n\t\t\t   {SEMI-}   {HS}\t{+  }\t    {+\t }\n\t\t\t   {RECI-}   {HR}\t{Zxy}\t    {Zxy }\n\t\t\t\t\t\t{x  }\t    {x\t }\n\t\t\t\t\t\t{## }\t    {##  }\n\t\t\t\t\t\t{##!}\t    {##! }\n\t\t\t\t\t\t{ct }\t    {ct  }\n\t\t\t\t\t\t{<> }\t    {<>  }\n\t\t\t\t\t\t{ctr}\t    {ctr }\n\t\t\t\t\t\t{<>r}\t    {<>r }\n\t\t\t\t\t\t{c81}\t    {c81 }\n\t\t\t\t\t\t\t    {Kxy }\n      \n\t\t\t\t\t\t\t    {dia } + n{.5}\n\t\t\t   {SER-}\t\t\t  + {dia } + n\n\t\t\t\t\t\t\t    {a=>b} + n{.5}\n\t\t\t   {SER-}\t\t\t  + {a=>b} + n\n\n\t(m, n are the number of moves)\n\n\tfor example:\n\n\t#3              mate in three moves\n\tHZg74           help-targetsquare-g7 in 4 moves\n\tsKa74           self-kiss of the piece on a7 in 5 moves\n\tS+2             self-check in 2 moves\n\tR==3            reflex-doublestalemate in 3 moves\n\tHS#3            helpselfmate in 3 moves      (= help forced selfmate)\n\tSER-+7          series-check in 7 moves\n\tSEMI-R+4        semi-reflex-check in 4 moves\n\tx3              Capture in 3 moves\n\tRECI-H#2        reciprocal helpmate in 2        (= Grazer helpmate)\n\tRECI-H(=)#2\treciprocal help(stale)mate in 2 moves (black\n\t\t\t\t delivers stalemate or allows being mated)\n\tSER-%4          series-Win_a_Piece in 4 moves\n\tH##!4           help-\"gegenmatt\" in 4 moves\n\tSER-H##3        series-help-\"beidmatt\" in 3 moves\n\t2->ser-h#4      white makes 2 moves, then ser-h#4\n\th003            help-castling in 3 moves\n\tdia6.5          Shortest Proofgame in 13 halfmoves\n\t\t\t\t\t(after the seventh move of white)\n\tser-dia9        Series-Proofgame in 9 moves\n\treci-h(=)#4     helpalternative(stale)mate in 4 moves\n\tser-!=7         Series-AutoStalemate in 7 moves\n\tser-ct10        Series-direct circuit (switchback) in 10 moves\n\t\t\t(of W piece)\n\th<>3            help exchange place in 3 moves\n\t\t\t(Bl helps W swap 2 pieces from diagram)\n\tser-sctr2       series self circuit by rebirth in 2 moves\n\t\t\t(W forces Bl to complete switchback of a W piece)\n\tser-h<>r5       series help exchange place by rebirth in 5 moves\n\t\t\t(Bl helps W complete by rebirth the exchange \n\t\t\t of two Bl pieces)\n\t#=2             mate or stalemate in 2 moves\n\th~1             any helpmove\n\tHR#3            helpreflexmate in 3 moves  (= help forced reflexmate)\n\tpser-h#6\tParry series helpmate in 6\n\tphser-s#6\tParry series selfmate in 6 (parry moves are help moves)\n\n\tSEMI is valid only in combination with direct reflex-play.\n\n   All these stipulations must be followed by a number giving the\n   count of moves.\n",
+      "sstipulation": " - sstipulation: The stipulation can also be indicated in \"structured form\".\n\tThis form allows all stipulations to be indicated that can also be\n\tindicated in traditional form using the command \"stipulation\". In\n\taddition, it allows many more stipulations to be indicated.\n\t(Exception: pser stipulations are not supported currently)\n\n\tWith sstipulation, the play is described as a tree structure. Play \n\tstarts at the root, continues through branches that may fork,\n\tand ends in one or more leaves. After the keyword sstipulation, \n\tindicate the root by specifying the side to move, then the branches\n\tand the leaves in the language as specified below.\n\n\n\tAnatomy of a sstipulation\n\t-------------------------\n\n\tExample: sstipulation white 5s[#]\n\n\tIn this stipulation, it is White to move. Play consists of a\n\tbranch that leads into a leaf. The branch consists of 5\n\t*s*eries moves. The leaf simply tests whether a mate has been\n\treached.\n\n        The definition of a branch normally consists of:\n\t- the maximum length in half-moves (in the example: 5)\n\t- the type of the branch           (s for series)\n\t- leaves                           (#)\n\t- forks                            (don't occur in the example)\n        - constraints                      (don't occur in the example)\n\n\tPlay ends in one or multiple leaves. Their definition normally\n\tconsists of the goal (in the example: #) to be reached.\n\n\tWhen changing from a branch to another or to a leaf, the right\n\tto move is changed. In the example, it is Black to move in the\n\tleaf, i.e. the leaf tests whether Black is mate.\n\n\tThe example is thus a synonym for\n\n\tstipulation ser-#5\n\n\n\tBranch types\n\t------------\n\n\tType           Notation    Examples        Synonyms as stipulation\n\tSeries         s           5s[#]           ser-#5\n\t\"Battle play\"  ad          3a[+]d, 4ad[x]  +2, sx2\n\t               da          3d[==]a         s==2 option postkeyplay\n\tHelp play      hh          5h[=]h          h=2.5\n\n\tThe letters s (series move), a (attacking move), d (defending\n\tmove) and h (help move) each represent a half-move.\n\n\tA fork following a, h or s defines what the respective move is\n\tsupposed to reach, and a fork following d what the move\n\tdefends against.\n\n\tNote: a da branch is solvable if the side to move DOES NOT have\n\ta refutation.\n\n\n\tFork into a branch\n\t------------------\n\n\tA fork leads into a nested branch.\n\n\tExamples        Synonyms as stipulation\n        3a[1a[#]d]d     semi-r#2\n\t4hh[1a[#]d]     not supported (Help-Semireflexmate in 2.5)\n\t6s[1d[#]a]      ser-s#6\n\n\n\tBranches with more than one fork or leaf\n\t----------------------------------------\n\n\tAfter each half-move, both a leaf and a fork can be indicated.\n\n\tExamples        Synonyms as stipulation\n\t4a[#=]d[#=]     s#=2 option quodlibet\n        3a[#][1a[#]d]d  semi-r#2 option quodlibet\n\n\n\tLogical expressions\n\t-------------------\n\n\tThe following operators can be applied to leaves and branches\n\tto form expressions:\n\n\tOperator  Meaning\n\t!         Negation\n        |         OR\n\t&         AND\n\n\tExamples         Meaning  \n\t!#               the side to move is not mate\n\t!3a[#]d          there is no solution to a direct twomover\n\t4ad[#] | 3h[#]h  s#2 or h#1.5\n\t1h[#]h & 2hh[#]  #1 and h#1 (i.e. reci-h#1)\n\n\tBoth operands of the binary operators have to belong to the\n\tsame of the following groups:\n\t- leaf     # = zh1 ...\n\t- attack   ad hh s\n\t- defense  da\n\n\tAn expression belongs to the same group as its operand(s) and\n\tcan therefore be the operand of an expression, e.g. (as\n\talternative to triplets):\n\n\t3a[#]d & 4hh[#] & 4ad[#]\n\n\tThe three partial expressions as well as the & expressions\n\tbelong to the attack group.\n\n\n\tOperators are normally evaluated from left to right. If\n\tnecessary, use () to define the proper precedence. E.g.\n\n\t4hh[#] & ( 4ad[#] | 4hh[=] )\n\n\n\tConstraints\n\t-----------\n\n\tConstraints can be indicated in branches using curly braces\n\t({}).\n\n\tExample                Synonym as stipulation\n        3a[1a[#]d]d{!1a[#]d}   r#2\n\n\tNote: even if the constraint follows the d, it is enforced\n\tBEFORE each attacking move (including the first one!). The\n\tproblem has thus no solution if the constraint is violated in\n\tthe diagram.\n\n\tThe two principal differences between nested branches/leaves\n\tand restrictions are:\n\t- the requirement expressed by the nested branch/leaf only\n\t  needs to be fulfilled at the end of play; a restriction,\n\t  however, has to be fulfilled each time before the respective\n\t  move is played\n\t- the moves played for the verification of a constraint don't\n\t  appear in the printed solution, with the following 2\n\t  exceptions:\n\t  * if a constraint is violated in the diagram position\n\t  * if the refutation of a try leads to a violated constraint\n\t    (\"reflex defense\")\n\n\n\tBranches with minimal length\n\t----------------------------\n\n\tThe syntax m:n can be used to define a branch with minimal\n\tlength (m=minimal, n=maximal length):\n\n\tExamples    synonym as stipulation\n\t4:4hh[#]    exact-h#2\n\t3:5s[#]     not supported (series mate in 3 to 5 moves)\n\n\n\tSpecial operators at the beginning of a branch\n\t----------------------------------------------\n\n\tThe operators >, / and - can occur in this order at the\n\tbeginning of branches.\n\n\t> at the beginning of the definition of a nested branch ends\n\tplay in the containing branch in positions where the nested\n\tbranch has a solution. E.g. a problem with\n\n\tsstipulation white 3h[1a[x]d]h\n\n\tcan have the solutions\n\n\t1.g3-g4 h5*g4 x \n\t1.g3-g4 h5*g4   2.h4-h5 g4*f3 x \n\n\tThe longer sequence is a solution although the goal has been\n\treached after the first two half-moves already. If play is to\n\tend as soon as the goal is reached, write\n\n\tsstipulation white 3h[>1a[x]d]h\n\n\n\tThe operator / at the beginning of a nested branch prevents\n\tthe moves played in that branch from appearing in the output.\n\n\tE.g. the capturing moves forced by Zugzwang in CapZug\n\tstipulations are not part of the solution. Help CapZug in 2.5\n\tmoves is thus defined as\n\n\tsstipulation black - 5h[/1d[x]a{!+}]h\n\n\n\tThe side to move at the beginning of a branch can be changed\n\tusing the - operator.\n\n\tExamples        Synonyms as stipulation\n\t- 7h[#]h        h#3.5\n\t3h[- 4hh[#]]h   not supported (h#4 without 2nd white move)\n\n\n\tConditional right to move\n\t-------------------------\n\n\tThe right to move can be restrained by a requirement R by prefixing the\n\trespective symbol (h resp. d) with ?R?.\n\n\tThe right to move represented by a symbol decorated in this way is\n\tgranted only if the requirement is fulfilled at the relevant time.\n\n\tExample: sstipulation white 7h[#]?+?h  (synonym of stipulation phser-#4)\n\n\tCurrently, the only supported requirement R is that the side at the move\n\tbe in check.\n\n\tIn addition, ?R? is only applicaple in two contexts:\n\t- in ad to the d\n\t- in hh to the second h, provided that the maximum length of the branch\n\t\tis not divisible by 2\n\n\tFurther examples:\n\twhite 15a[#]?+?d\t\t\t(pser-#8)\n\twhite 15a[1d[#]a]?+?d\t\t\t(pser-s#8)\n\twhite 15a[>1a[#]d]?+?d\t\t\t(pser-semi-r#8)\n\twhite 15a[>1a[#]d]?+?d{!1a[#]d}\t\t(pser-r#8)\n\tblack 15h[1a[#]d]?+?h\t\t\t(pser-h#8)\n\twhite 15h[1d[#]a]?+?h\t\t\t(phser-s#8)\n\nAll these commands up to now are very easy to use (except maybe\nsstipulation). A little bit more elaborate are the commands\n",
+      "forsyth": " - forsyth: With this command you can enter the position in forsyth notation.\n\n\tExamples: \n\t\trsbqkbsr/pppppppp/8/8/8/8/PPPPPPPP/RSBQKBSR (game array)\n\t\trsbqkbsrpppppppp32PPPPPPPPRSBQKBSR          (game array; alternative)\n\t\t48/5gPp/5K1k                                (V.Onitiu, #6 - black grasshopper)\n\t\t1.PA6/8/1Q2.ma3/8/k1.pa.pa4/8/1P1K          (Z.Mach, #2 - chinese pieces)\n\n\tPieces represented by one letter in the \"pieces\" command are entered using that\t\n\tsame letter in the forsyth command. The squares are registered from a8 to h8, followed\n\tby a7 to h7, etc. down to h1. Runs of blank squares are registered by a number which\n\tcounts the number of blanks, and the \"/\" character separates each rank.\n\n\tLowercase letters represent black pieces and uppercase letters represent white pieces.\n\tThe \"/\" character is optional. Runs of blanks squares of 10 or more can be entered. Blank\n\tsquares after the last piece can be omitted (e.g. Mach example above, 4/8 has been omitted). \n\n\tThe notation is extended to allow input of fairy pieces as follows:\n \n\t - a piece can begin with an optional colour specification character (which overrides use of a \n\t \tlowercase/uppercase letter)\n\t\t+ \tWhite\n\t\t- \tBlack\n\t\t= \tNeutral\n\t\tExamples:\n\t\t+g  White grasshopper (or +G)\n\t\t=p  Neutral pawn (or =P)\n\n\t - a piece which is represented by two letters or digits in the \"pieces\" command can be entered\n\t   with the \"forsyth\" command by commencing with a \".\". The first of the two following letters\n\t   determines whether it is white or black, unless a colour specifier is used. Examples:\n\t   .PA \tWhite Pao \n\t   .ma  Black Mao  \n\t   .g2  Black Grasshopper-2\n\t   +.15 White (1,5)-leaper\n\t   -.15 Black (1,5)-leaper\n\t   =.li Neutral Lion\n\n\t   Note only the first of the two letters is checked for lowercase/uppercase to determine the colour.\n\t   It is only necessary to use a colour specifier +/-/= for neutral pieces, or for pieces whose  \n\t   representation is two digits. \n\t   At present pieces with other attributes (paralysing, royal etc.) cannot be entered with this command. It\n\t   is possible to enter additional pieces with the \"pieces\" command, either before or after the \"forsyth\"\n\t   command (blank squares in the forsyth command will not be cleared)\n",
+      "pieces": " - pieces: This command specifies all the pieces belonging to the problem.\n\tAfter this keyword, the color of the following pieces must be given:\n\tThis is one of:\n\n\tWhite\n\tBlack\n\tNeutral\n\n\tAfter the color specification \n\n\tChameleon\n\tJigger\n\tKamikaze\n\tParalysing\n\tRoyal\n\tVolage\n\tFunctionary\n\tHalfNeutral\n\tHurdleColourChanging          (only for hoppers !)\n\tProtean\n\tMagic\n\tUncapturable\n\tFrischAuf\n\tAnda\n\tAndaInverse\n\tBul\n\tDob\n\n\tmay be given. All the pieces given after this will have these\n\tattributes. After this specification follows the list of\n\tpieces: First the walk of the piece followed by the list of\n\tsquares where pieces should be placed on. By giving a new color\n\tspecifiation pieces of another color may be entered without\n\trepeating the pieces command.\n\n\tIf a piece is placed on an occupied square, the previous piece\n\tis transfered below the square to the top of the underworld. In the\n\tfairy conditions Circe Volcanic, Circe Parachute, GhostChess and\n\tHauntedChess, moves from that square cause pieces from the underworld\n\tto be transfered back into the real world. Otherwise, pieces in the\n\tunderworld allow promoting pawns into their walk.\n\n\tPopeye supports the following piece walks:\n\n\t15      1,5-leaper\n\t16      1,6-leaper\n\t24      2,4-leaper\n\t25      2,5-leaper\n\t35      3,5-leaper\n\t36      3,6-leaper\n\t37      3,7-leaper\n\tah\tMAoHopper\n\tal      alfil   \n\tam      amazon   \n\tan      antelope   \n\tao      maorider\n\tar      archbishop   \n\tb       bishop\n\tb1\tbouncer\n\tb2\trook bouncer\n\tb3\tbishop bouncer\n\tbe      bishop eagle\n\tbh      bishop hopper\n\tbi      bison                           1,3+2,3 leaper\n\tbk      bouncy knight\n\tbl      bishop-lion\n\tbm      bishop moose\n        bn      bouncy nightrider (continues ride by bouncing in any direction from board edge)\n\tbo\tbob\n\tbp      berolina pawn   \n\tbr      bishop/rook hunter\t\tabsolute B/R hunter\n\tbs      berolina superpawn\n\tbt      boyscout\n\tbu      root-25-leaper (bucephale)   \n\tbw      bishop sparrow\n\tc       cardinal\n\tca      camel\n\tcg      contra grasshopper\n\tch      camelrider hopper\n\tcp      chinese pawn\n\tcr      camelrider\n\tct      CAT (cavalier trojan)\n\tcy      charybdis\n\tda      dabbaba\n\tdb      doublebishopper\n\tdg      doublegrasshopper\n\tdk      doublerookhopper\n\tdo      dolphin                        grasshopper + kangaroo\n\tdr      dragon\n\tds      (\"Diagonalspiralspringer\")\n\tdu      dummy\n\tea      eagle\n\tee\teagle equihopper\n\teh      edgehog\n\tek      erlking\n\tem      empress\n\ten\teagle nonstop equihopper\n\teq      equihopper\n\tet      elephant\t\t\t0,1+1,1+1,2 rider\n\tf       friend\n\tfa\tfaro\t\t\t\tArgentinien Rook\n\tfe      fers\n\tfr      fersrider           like bishop, but different rebirth square\n\tg       grasshopper\n\tg2      grasshopper-2\n\tg3      grasshopper-3\n\tge      greater treehopper\n\tgf      greater leafhopper\n\tgh      gnurider hopper\n\tgi      giraffe\n\tgl      gral                           alfil + rookhopper\n\tgn      gnu\n\tgr      gnurider\n\tgt      girlscout\n\tha      hamster\n\thc      ContraHamster\n\tk       king\n\tka      kangaroo\n\tkh      kinghopper\n\tkl      kangaroo lion\n\tko      kao\n\tkp      knight hopper\n\tl       locust\n\tlb      bishop locust\n\tle      leo\n\tlh      leaf hopper\n\tli      lion\n\tln      nightrider locust\n\tlo\tloco\t\t\t\tArgentinian Bishop\n\tlr      rook locust\n        ls      rose locust\n\tm       moose\n\tma      mao\n\tmg      marguerite                      g+sw+ea+m+ha\n\tmh      marine ship\n\tml      maorider lion\n\tmm      moarider lion\n\tmo      moa\n\tmp      marine pawn\n\tms      marine knight\n\tn       nightrider\n\tna      nao\t\t\t\tchinese nightrider\n\tnd      nereide\n\tne      nonstop equihopper\n\tnh      nightrider hopper\n\tnl      nightrider lion\n\to       orphan\n\toa      moarider\n\toh\tMOaHopper\n\tok      okapi                           knight + zebra\n\tor      Orix                        English equihopper on queen lines\n\tp       pawn\n\tpa      pao \n\tpo      poseidon  \n\tpp      reverse pawn       moves opposite to normal p and promotes at opp end of board\n\tpr      princess   \n\tq       queen   \n\tqe      equistopper\t\t\tstoppable\n\tqf      non-stop equistopper  \t\tnot stoppable\n        qn      quintessence = (3,1)-Zigzag Nightrider (e.g. a1-b3-d2-e4-g3...)\n\tqq      querquisite\n\tr       rook   \n\tra      rao                             chinese rose\n\trb      reflecting bishop   \n\tre      rook eagle\n\trf      root-50-leaper\n\trh      rook hopper\n\trk      radial leaper (aka radial knight)\n\trl      rook-lion\n\trm      rook moose\n\trn      rose-lion\n\trp      rose-hopper\n\tro      rose   \n\trr      rook/bishop hunter\t\tabsolute R/B hunter\n\trt\trabbit\n\trw      rook sparrow\n\ts       knight   \n        s1      (1,1)-Zigzag Nightrider (e.g. b1-a3-c2-b4-d3...)\n        s2      (2,0)-Zigzag Nightrider (e.g. a1-b3-c1-d3-e1...)\n        s3      (3,3)-Zigzag Nightrider (e.g. a1-b3-d4-e6-g7...)\n        s4      (4,0)-Zigzag Nightrider (e.g. a1-c2-e1-g2...)\n\tsa\tsaltador\t\tArgentinian Knight\n\tse\tsenora\t\t\tArgentinian Queen\n\tsh      ship\n\tsi      sirene\n\tsk      skylla\n\tso      scorpion\n\tsp      superpawn\n\tsq      squirrel   \n\tss      (\"Spiralspringer\")\n\tst      sting (king + royal grasshopper)\n\tsw      sparrow\n\tth      tree hopper\n\ttr      triton\n\tuu      ubiubi\n\tva      vao   \n\twa      waran   \n\twe      wazir   \n\twr      wazirrider            like rook, but different rebirth square\n\tz       zebra   \n\tze      Zebu                  1,3+1,4 knight\n\tzh      zebrarider hopper\n\tzr      zebrarider\n        X/Y     X/Y hunter            generalized hunter:\n                                      away from the homebase like a n X,\n                                      in direction of the homebase like an Y;\n                                      horizontal moves not allowed\n\n\tThe \"pseudo color\" TotalInvisible followed by a positive number\n\tmay be used to indicate the number of TotalInvisible pieces.\n\n",
+      "twin": " - Twin: Solving/testing of positions obtained by small changes of the\n\tinitial position. The following specifications are supported:\n    Stipulation ...: The stipulation is changed. See the repective basic\n\tcommand.\n    Condition ...: Cange of fairy conditions. The old conditions are\n\tsubsituted by those put in.\n    Move <square1> <square2>: Move the piece from square1 to square2. A\n\tpiece accidentally standing on square2 will be removed. Example:\n\ttwin move a3 b4.\n    Exchange <square1> <square2>: The pieces on <square1> and <square2>\n\texchange places. Example: twin exchange a3 b4.\n    Remove <square>: The piece located on the square specified is removed.\n\tExample: twin remove e5.\n    Substitute <piece1> <piece2>: All pieces of type <piece1> are replaced\n\tby pieces of type <piece2>. Colour and further piece specifications\n\t(like paralysing etc.) are not affected. Example: twin\n\tsubstitute R B.  All rooks are replaced by bishops.\n    Add <colour> <piecespecs> <type><squarelist>: Add pieces - present pieces\n\tare replaced.\n\tExample: twin add black para NHa6 - a black paralysing NightriderHopper is\n\tadded on a6. See the basic command \"pieces\".\n\tThe \"pseudo color\" TotalInvisible followed by a positive number can\n\tbe used to indicate twinning by modification of the number of TotalInvisible\n\tpieces.\n    Rotate n: Turns the board by n degrees to the left (n=90, 180, 270).\n\tExample: twin rotate 180.\n    Mirror a1<-->h1: Mirrors the position on the vertical middle line.\n    Mirror a1<-->a8: Mirrors the position on the horizontal middle line.\n    Mirror a1<-->h8: Mirrors the position on the diagonal a8-h1.\n    Mirror a8<-->h1: Mirrors the position on the diagonal a1-h8.\n\tSo, not the mirror line is given, but square into which a1 (or h1)\n\tis turned into.\n    Shift <square1> <square2>: Shift the whole position into the direction\n\tdetermined by the two squares entered. Example: twin shift a1 a2 -\n\tall pieces are moved one square up.\n    PolishType: All pieces change colour.\n\tMore than one change may be specified, for example twin rem e7\n\tadd white qe8. As you can see the twinning commands can abreviated.\n\tBy default the changes refer to the position initially set.\n\tAlternatively the changes can be applied to the position solved most\n\trecently. Just enter \"continued\" (or \"cont\") immediately after\n\t\"twin\". Example twin cont rem a1.\n\n - ZeroPosition: This command can be used alternatively to the command\n\t\"twin\". It indicates that the initial position is not for solving.\n\tThe command must be followed by the changes for the first position\n\tto be solved. Example: zero move b4 d5\n\t\t\t       twin move c5 b5.\n\nWhen all data have been entered to describe completely the problem,\nthe solving may be started by giving the keyword `endproblem' to\npopeye.\nImmediately after reading this, provided no input errors were discovered,\npopeye starts to solve the problem."
+    }
+  }
+}

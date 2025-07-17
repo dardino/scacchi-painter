@@ -67,5 +67,8 @@
     "fullTemplateTypeCheck": true,
     "strictTemplates": true,
     "strictInjectionParameters": true
-  }
+  },
+  "exclude": [
+    "./scripts/**/*.*"
+  ]
 }
