@@ -106,6 +106,14 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "src"
-  ]
+    "src",
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.test.json"
+    }
+  ],
 }

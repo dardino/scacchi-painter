@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
+import { HalfMoveInfo } from "@dardino-chess/core";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
@@ -57,6 +58,14 @@ export class SpSolutionDescComponent {
   @Input()
   viewMode: ViewModes = "html";
 
+  get firstMove() {
+    return Math.floor(this.totalMoves) === Math.ceil(this.totalMoves) ? 1 : 1.5;
+  }
+
+  get totalMoves() {
+    return this.problem.Problem?.stipulation.moves ?? 1;
+  }
+
   public get solutionFontSize() {
     return `${Math.max(this.preferences.solutionFontSize, 1)}rem`;
   }
@@ -77,11 +86,8 @@ export class SpSolutionDescComponent {
     this.problem.SetHTMLSolution(text);
   }
 
-  get rows(): { row: string; className: "instruction" | "log" | "solution" }[] {
-    return this.problem.textSolution.split("\n").map(row => ({
-      row,
-      className: this.getClass(row)
-    })) ?? [];
+  get rows(): HalfMoveInfo[] {
+    return this.problem.Problem?.jsonSolution ?? [];
   }
 
   getClass(item: string) {
@@ -95,4 +101,5 @@ export class SpSolutionDescComponent {
     updateOn: "blur"
   };
 
+  mode: 'inline' | 'block' = 'inline';
 }

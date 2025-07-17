@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
+import { SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { BehaviorSubject } from "rxjs";
 import { Problem } from "./models";
@@ -8,7 +8,7 @@ import { Problem } from "./models";
   providedIn: "root",
 })
 export class EngineManagerService {
-  solution$ = new BehaviorSubject("");
+  solution$ = new BehaviorSubject<SolutionRow | null>(null);
   isSolving$ = new BehaviorSubject(false);
   supportsSolve = true;
 

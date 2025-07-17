@@ -1,8 +1,8 @@
+import { parsePopeyeRow } from "@ph/moveParser";
 import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/helpers";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
-import { parsePopeyeRow } from "./solution-parser";
 
 class WebBridge implements BridgeGlobal {
   private solver$: BehaviorSubject<SolutionRow | EOF>;
@@ -29,7 +29,7 @@ class WebBridge implements BridgeGlobal {
   private startSolve(problem: string) {
     problem.split("\n").forEach((row) => {
       setTimeout(() => {
-        this.solver$.next({ raw: row, rowtype: "log" });
+        this.solver$.next({ raw: row, rowtype: "log", moveTree: [] });
       }, 1);
     });
     this.startWorker();
@@ -40,7 +40,8 @@ class WebBridge implements BridgeGlobal {
   };
   private message = (e: MessageEvent<string>) => {
     const mov = parsePopeyeRow(e.data);
-    this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log" });
+    const halfMoves = mov.flatMap((m) => m[1]).filter(move => !!move);
+    this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
     if (e.data.indexOf("solution finished") > -1) {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
     }
@@ -69,7 +70,11 @@ class WebBridge implements BridgeGlobal {
       return new Error("Engine not found.");
     }
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
-      { raw: `starting engine <${engine}>`, rowtype: "log" }
+      {
+        raw: `starting engine <${engine}>`,
+        rowtype: "log",
+        moveTree: [],
+      }
     );
 
     const problem = this.problemToPopeye(CurrentProblem, mode).join("\n");

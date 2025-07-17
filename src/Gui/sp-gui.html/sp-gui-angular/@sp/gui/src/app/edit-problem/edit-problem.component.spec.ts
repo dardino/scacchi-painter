@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { RouterModule } from "@angular/router";
-import { ThirdPartyModules } from "../modules";
 import { EditProblemComponent } from "./edit-problem.component";
 
 describe("EditProblemComponent", () => {
@@ -10,8 +9,8 @@ describe("EditProblemComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...ThirdPartyModules, RouterModule.forRoot([])],
-      declarations: [ EditProblemComponent ],
+      imports: [RouterModule.forRoot([])],
+      declarations: [],
       providers: []
     })
     .compileComponents();

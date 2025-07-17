@@ -8,7 +8,7 @@ type ListTournament = Tournament[];
     selector: 'app-app-tournaments',
     templateUrl: './app-tournaments.component.html',
     styleUrl: './app-tournaments.component.less',
-    
+    standalone: true
 })
 export class AppTournamentsComponent {
 

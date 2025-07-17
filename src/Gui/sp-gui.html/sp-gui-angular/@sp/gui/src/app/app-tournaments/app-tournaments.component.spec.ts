@@ -10,7 +10,7 @@ describe('AppTournamentsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [AppTournamentsComponent],
+    declarations: [],
     imports: [BrowserModule],
     providers: [provideHttpClient(withInterceptorsFromDi())]
 })
