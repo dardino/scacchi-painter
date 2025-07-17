@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { BehaviorSubject } from "rxjs";
@@ -12,7 +12,9 @@ export class EngineManagerService {
   isSolving$ = new BehaviorSubject(false);
   supportsSolve = true;
 
-  constructor(private bridge: HostBridgeService) {
+  private bridge = inject(HostBridgeService);
+
+  constructor() {
     this.bridge.Solver$.subscribe((msg) => {
       this.solution$.next(msg);
     });

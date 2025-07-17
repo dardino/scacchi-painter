@@ -4856,6 +4856,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tauri-apps/api@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "@tauri-apps/api@npm:2.6.0"
+  checksum: 10/db22140e6f65a36ac4af72625f906f3b2bf4422eb00e66243732b797a1b5eea6cd3a1f632234c788f52882c1d4d60f21df15f1224157a51f5983c6b8aee9fa89
+  languageName: node
+  linkType: hard
+
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.11
   resolution: "@tsconfig/node10@npm:1.0.11"
@@ -13997,6 +14004,7 @@ __metadata:
     "@eslint/js": "npm:^9.27.0"
     "@microsoft/microsoft-graph-client": "npm:^3.0.5"
     "@microsoft/microsoft-graph-types": "npm:^2.6.0"
+    "@tauri-apps/api": "npm:^2.6.0"
     "@types/eslint-scope": "npm:^8.3.0"
     "@types/file-saver": "npm:^2.0.3"
     "@types/jasmine": "npm:5.1.8"
