@@ -1,7 +1,7 @@
 import { inject, Injectable, NgZone } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Subject, Subscription } from "rxjs";
-import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "./bridge-global";
+import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "./bridge-global";
 
 declare global {
   interface HandledFile {
@@ -46,7 +46,7 @@ export class HostBridgeService {
     if (window.Bridge) window.Bridge.stopSolve();
   }
 
-  supportsEngine(engine: string) {
+  supportsEngine(engine: Engines) {
     return window.Bridge?.supportsEngine(engine);
   }
 

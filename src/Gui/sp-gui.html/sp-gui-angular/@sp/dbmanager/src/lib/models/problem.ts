@@ -1,4 +1,5 @@
 import { HalfMoveInfo } from "@dardino-chess/core";
+import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
 import {
@@ -31,7 +32,7 @@ export class Problem implements IProblem {
   public personalID = "";
   public prizeDescription = "";
   public source = "";
-  public engine = "Popeye";
+  public engine: Engines = "Popeye";
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});

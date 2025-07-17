@@ -1,10 +1,7 @@
-
 BeginProblem
-Condition Isardam
 Pieces
-White Bh8 Kg4 Pf2 Re1
-Black Bd4 Ke5 Re6
+White Bf4 Kb5 Se1 Pg2 Pa5 Pc5 Rh1 Rh8
+Black Kf2 GNb4 Pe2 Pb7 Pg6 Rb2 Rh7
 Stipulation HS#3
-Option NoBoard Try Set Variation
+Option WhiteToPlay NoBoard Try Set Variation
 EndProblem
-  

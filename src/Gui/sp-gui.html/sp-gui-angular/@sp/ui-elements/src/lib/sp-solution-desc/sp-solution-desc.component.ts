@@ -1,5 +1,5 @@
 
-import { Component, Input } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
 import { HalfMoveInfo } from "@dardino-chess/core";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
@@ -38,10 +38,11 @@ export class SpSolutionDescComponent {
     ['undo', 'redo'],
   ];
   colorPresets = ['red', '#FF0000', 'rgb(255, 0, 0)'];
-  constructor(
-    private preferences: PreferencesService,
-    private problem: CurrentProblemService
-  ) {
+
+  private problem = inject(CurrentProblemService);
+  private preferences = inject(PreferencesService);
+
+  constructor() {
     // noop
     this.editor = new Editor({
       history: true,

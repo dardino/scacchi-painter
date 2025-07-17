@@ -1,4 +1,4 @@
-import { popeyeTwinMapper } from "@sp/gui/src/webbridge";
+import { popeyeTwinMapper } from "@ph/problemToPopeye";
 import {
   ITwin,
   TwinModes,
