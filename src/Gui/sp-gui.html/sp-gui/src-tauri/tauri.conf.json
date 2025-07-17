@@ -5,9 +5,9 @@
   "identifier": "com.scacchipainter.app",
   "build": {
     "beforeDevCommand": "yarn start",
-    "devUrl": "https://localhost:4200",
+    "devUrl": "http://localhost:4200",
     "beforeBuildCommand": "yarn build",
-    "frontendDist": "../dist/browser"
+    "frontendDist": "../dist/gui"
   },
   "app": {
     "windows": [

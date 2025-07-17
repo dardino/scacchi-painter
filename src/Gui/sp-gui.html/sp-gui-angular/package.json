@@ -12,7 +12,7 @@
     "start:pwa": "yarn start --configuration production",
     "start": "yarn ng serve --ssl true --host=0.0.0.0 --disable-host-check",
     "build": "yarn ng build gui --configuration production",
-    "build:electron": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron",
+    "build:tauri": "export BROWSERSLIST_ENV=\"tauri\" && yarn ng build -c tauri",
     "build:watch": "export BROWSERSLIST_ENV=\"electron\" && yarn ng build -c electron --watch",
     "test": "yarn ng test",
     "test:ci": "yarn ng test --no-watch --no-progress --browsers=ChromeHeadless",
