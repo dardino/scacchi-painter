@@ -2,12 +2,12 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "sp-gui",
   "version": "0.1.0",
-  "identifier": "com.scacchipainter.app",
+  "identifier": "com.scacchipainter.gui",
   "build": {
     "beforeDevCommand": "yarn start",
     "devUrl": "http://localhost:4200",
     "beforeBuildCommand": "yarn build",
-    "frontendDist": "../dist/gui"
+    "frontendDist": "../build/gui/browser"
   },
   "app": {
     "windows": [
