@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, OnInit } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -29,10 +29,9 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule,
     FileSourceSelectorComponent,
     FileExplorerComponent
-  ],
+],
   standalone: true
 })
 export class SaveFileComponent implements OnInit {

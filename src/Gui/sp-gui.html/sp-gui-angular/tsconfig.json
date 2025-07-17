@@ -15,7 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "strictPropertyInitialization": false,
     "skipDefaultLibCheck": true,
@@ -53,7 +53,7 @@
         "dist/rft-parser"
       ],
       "@dtos/*": [
-        "api/src/dtos/*",
+        "api/src/dtos/*"
       ],
       "@dardino-chess/core": [
         "../../../CoreJS/src/main.ts"

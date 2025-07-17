@@ -1,6 +1,6 @@
 import { DataSource } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport, ScrollingModule } from "@angular/cdk/scrolling";
-import { CommonModule } from "@angular/common";
+
 import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -27,16 +27,15 @@ export interface ProblemRef {
     styleUrls: ["./database-list.component.less"],
     standalone: true,
     imports: [
-      FormsModule,
-      MatFormFieldModule,
-      MatInputModule,
-      ScrollingModule,
-      CommonModule,
-      MatIconModule,
-      DatabaseListItemComponent,
-      MatToolbarModule,
-      MatButtonModule,
-    ]
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ScrollingModule,
+    MatIconModule,
+    DatabaseListItemComponent,
+    MatToolbarModule,
+    MatButtonModule
+]
 })
 export class DatabaseListComponent implements OnInit {
   itemSource = new MyDataSource(this.db);

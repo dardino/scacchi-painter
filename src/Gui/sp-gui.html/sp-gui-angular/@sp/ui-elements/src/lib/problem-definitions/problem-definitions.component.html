@@ -68,20 +68,22 @@
     <mat-card-content cdkDropList class="list" (cdkDropListDropped)="dropTwin($event)">
       <lib-sortable-list [elements]="twins" [isDragDisabledForItem]="isDragDisabledForTwin"
         (deleteItem)="deleteTwin.emit($event)" [canBeDeleted]="twinCanBeDeleted"></lib-sortable-list>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="tile">
-    <mat-card-title>
-      <div class="tile-title">
-        <span>Conditions</span><button type="button" mat-mini-fab color="primary" (click)="addCondition.emit()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </mat-card-title>
-    <mat-card-content *ngIf="conditions.length > 0" cdkDropList class="list"
-      (cdkDropListDropped)="dropCondition($event)">
-      <lib-sortable-list [elements]="conditions"
-        (deleteItem)="deleteCondition.emit($event)"></lib-sortable-list>
-    </mat-card-content>
-  </mat-card>
+  </mat-card-content>
+</mat-card>
+<mat-card class="tile">
+  <mat-card-title>
+    <div class="tile-title">
+      <span>Conditions</span><button type="button" mat-mini-fab color="primary" (click)="addCondition.emit()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</mat-card-title>
+@if (conditions.length > 0) {
+  <mat-card-content cdkDropList class="list"
+    (cdkDropListDropped)="dropCondition($event)">
+    <lib-sortable-list [elements]="conditions"
+    (deleteItem)="deleteCondition.emit($event)"></lib-sortable-list>
+  </mat-card-content>
+}
+</mat-card>
 </div>

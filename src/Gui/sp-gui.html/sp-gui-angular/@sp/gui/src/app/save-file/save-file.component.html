@@ -1,23 +1,27 @@
 <h1 class="title">Save to:</h1>
 <div>
   <lib-file-source-selector [hideNew]="true" [current]="currentSource"
-    (sourceSelected)="setCurrentSource($event)"></lib-file-source-selector>
+  (sourceSelected)="setCurrentSource($event)"></lib-file-source-selector>
 </div>
 <mat-toolbar class="fileSaveToolbar">
   <span>{{ currentFolderName }}</span>
   <div class="saveinput">
     <mat-form-field class="save-field" subscriptSizing="dynamic">
       <input aria-label="File Name" matInput type="text" [(ngModel)]="fileName" />
-      <button *ngIf="fileName" matSuffix mat-icon-button aria-label="Clear" (click)="fileName = ''">
-        <mat-icon>close</mat-icon>
-      </button>
+      @if (fileName) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="fileName = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
     </mat-form-field>
     <button [title]="actionName" mat-fab (click)="saveFile()" color="primary" class="save-button">
       <mat-icon>save</mat-icon>
     </button>
   </div>
 </mat-toolbar>
-<div *ngIf="showFilePicker">
-  <lib-file-explorer mode="save" [service]="currentFileService" (folderChanged)="expandFolder($event)"
+@if (showFilePicker) {
+  <div>
+    <lib-file-explorer mode="save" [service]="currentFileService" (folderChanged)="expandFolder($event)"
     (selectFile)="selectFile($event)"></lib-file-explorer>
-</div>
+  </div>
+}

@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, EventEmitter, Output } from "@angular/core";
 import { MatListModule, MatNavList } from "@angular/material/list";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -11,12 +11,11 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
     styleUrls: ["./menu.component.less"],
     standalone: true,
     imports: [
-      MatToolbarModule,
-      CommonModule,
-      MatNavList,
-      RouterModule,
-      MatListModule
-    ]
+    MatToolbarModule,
+    MatNavList,
+    RouterModule,
+    MatListModule
+]
 })
 export class MenuComponent {
   @Output()

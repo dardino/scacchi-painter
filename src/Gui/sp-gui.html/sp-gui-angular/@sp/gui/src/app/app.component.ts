@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { CommonModule } from "@angular/common";
+
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatSidenavModule } from "@angular/material/sidenav";
@@ -21,16 +21,15 @@ import { MenuComponent } from "./menu/menu.component";
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.less"],
     imports: [
-      DbsourceComponent,
-      RouterModule,
-      MatProgressSpinner,
-      MatSidenavModule,
-      MenuComponent,
-      MatToolbarModule,
-      SpToolbarButtonComponent,
-      ToolbarDbComponent,
-      CommonModule,
-    ],
+    DbsourceComponent,
+    RouterModule,
+    MatProgressSpinner,
+    MatSidenavModule,
+    MenuComponent,
+    MatToolbarModule,
+    SpToolbarButtonComponent,
+    ToolbarDbComponent
+],
     providers: [
       AllMatIconRegistryService,
       ChessboardAnimationService,

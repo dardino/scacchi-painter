@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { CommonModule } from "@angular/common";
+
 import { ApplicationRef, Component, OnInit } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { ServiceWorkerModule, SwUpdate } from "@angular/service-worker";
@@ -12,10 +12,9 @@ import { environment } from "../../environments/environment";
     styleUrls: ["./configuration.component.less"],
     standalone: true,
     imports: [
-      ServiceWorkerModule,
-      MatButtonModule,
-      CommonModule
-    ]
+    ServiceWorkerModule,
+    MatButtonModule
+]
 })
 export class ConfigurationComponent implements OnInit {
   constructor(

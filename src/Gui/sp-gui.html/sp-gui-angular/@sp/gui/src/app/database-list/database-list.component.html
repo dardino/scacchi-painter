@@ -20,15 +20,18 @@
   <div
     class="dbitem-container" #dbItemContainer
     *cdkVirtualFor="let item of itemSource; let index = index"
-  >
-    <div *ngIf="!item || item.problem === null" class="add-item"><button
-      class="add-item-button" mat-button (click)="createNewPosition()">
-      <mat-icon>library_add</mat-icon>
-      add new problem
-    </button></div>
-    <app-database-list-item
-      (delete)="deleteItem($event)"
-      *ngIf="item && item.problem !== null"
-     [problem]="item!.problem!" [dbIndex]="item!.dbIndex"></app-database-list-item>
+    >
+    @if (!item || item.problem === null) {
+      <div class="add-item"><button
+        class="add-item-button" mat-button (click)="createNewPosition()">
+        <mat-icon>library_add</mat-icon>
+        add new problem
+      </button></div>
+    }
+    @if (item && item.problem !== null) {
+      <app-database-list-item
+        (delete)="deleteItem($event)"
+      [problem]="item!.problem!" [dbIndex]="item!.dbIndex"></app-database-list-item>
+    }
   </div>
 </cdk-virtual-scroll-viewport>
