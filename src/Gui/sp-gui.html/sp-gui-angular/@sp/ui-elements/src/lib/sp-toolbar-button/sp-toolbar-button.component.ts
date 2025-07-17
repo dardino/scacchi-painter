@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, Input } from "@angular/core";
 import { MatButton, MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -7,7 +7,7 @@ import { MatIconModule } from "@angular/material/icon";
   selector: "lib-sp-toolbar-button",
   templateUrl: "./sp-toolbar-button.component.html",
   styleUrls: ["./sp-toolbar-button.component.less"],
-  imports: [MatButtonModule, MatIconModule,CommonModule],
+  imports: [MatButtonModule, MatIconModule],
   standalone: true
 })
 export class SpToolbarButtonComponent {

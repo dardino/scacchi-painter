@@ -1,5 +1,5 @@
 import { CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
-import { CommonModule } from "@angular/common";
+
 import { Component, EventEmitter, Output } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatMiniFabButton } from "@angular/material/button";
@@ -23,18 +23,17 @@ import { SortableListComponent } from "../sortable-list/sortable-list.component"
     styleUrls: ["./problem-definitions.component.less"],
     standalone: true,
     imports: [
-      MatCardModule,
-      FormsModule,
-      ReactiveFormsModule,
-      MatFormFieldModule,
-      MatSelectModule,
-      MatIconModule,
-      MatInputModule,
-      CommonModule,
-      SortableListComponent,
-      CdkDropList,
-      MatMiniFabButton
-    ]
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatIconModule,
+    MatInputModule,
+    SortableListComponent,
+    CdkDropList,
+    MatMiniFabButton
+]
 })
 export class ProblemDefinitionsComponent {
   @Output()

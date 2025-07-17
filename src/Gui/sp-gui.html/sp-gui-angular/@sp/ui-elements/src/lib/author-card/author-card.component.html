@@ -1,17 +1,23 @@
 <mat-card class="author-card">
-  <mat-card-header *ngIf="author">
-    <mat-card-title-group>
-      <mat-card-title>{{nameAndSurname}}</mat-card-title>
-      <mat-card-subtitle>{{country}}</mat-card-subtitle>
-      <!-- <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" > -->
-    </mat-card-title-group>
-  </mat-card-header>
+  @if (author) {
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>{{nameAndSurname}}</mat-card-title>
+        <mat-card-subtitle>{{country}}</mat-card-subtitle>
+        <!-- <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" > -->
+      </mat-card-title-group>
+    </mat-card-header>
+  }
   <mat-card-content>
     {{longText}}
-    <button class="new-author" *ngIf="!author" mat-flat-button><mat-icon>add</mat-icon>Add an author</button>
+    @if (!author) {
+      <button class="new-author" mat-flat-button><mat-icon>add</mat-icon>Add an author</button>
+    }
   </mat-card-content>
-  <mat-card-actions *ngIf="author">
-    <button (click)="execDelete()" mat-button>delete</button>
-    <button (click)="execEdit()" mat-button>edit</button>
-  </mat-card-actions>
+  @if (author) {
+    <mat-card-actions>
+      <button (click)="execDelete()" mat-button>delete</button>
+      <button (click)="execEdit()" mat-button>edit</button>
+    </mat-card-actions>
+  }
 </mat-card>

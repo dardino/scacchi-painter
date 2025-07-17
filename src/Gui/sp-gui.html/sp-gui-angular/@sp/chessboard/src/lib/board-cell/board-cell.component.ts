@@ -1,5 +1,5 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
-import { CommonModule } from "@angular/common";
+
 import { Component, Input } from "@angular/core";
 import {
   GetSquareColor,
@@ -12,7 +12,7 @@ import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipaint
 
 @Component({
     selector: "lib-board-cell",
-    imports: [CommonModule, DragDropModule],
+    imports: [DragDropModule],
     standalone: true,
     templateUrl: "./board-cell.component.html",
     styleUrls: ["./board-cell.component.less"],

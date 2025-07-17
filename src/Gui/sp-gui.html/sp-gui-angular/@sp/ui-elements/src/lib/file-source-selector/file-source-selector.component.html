@@ -1,12 +1,14 @@
 <ul class="open-from">
-  <li *ngIf="!hideNew" [ngClass]="{ current: current === 'new' }">
-    <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('new')" (click)="selectSource('new')">
-      <span class="open-button">
-        <mat-icon>library_add</mat-icon>
-        <span>New file</span>
-      </span>
-    </a>
-  </li>
+  @if (!hideNew) {
+    <li [ngClass]="{ current: current === 'new' }">
+      <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('new')" (click)="selectSource('new')">
+        <span class="open-button">
+          <mat-icon>library_add</mat-icon>
+          <span>New file</span>
+        </span>
+      </a>
+    </li>
+  }
   <li [ngClass]="{ current: current === 'local' }">
     <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('local')" (click)="selectSource('local')">
       <span class="open-button">

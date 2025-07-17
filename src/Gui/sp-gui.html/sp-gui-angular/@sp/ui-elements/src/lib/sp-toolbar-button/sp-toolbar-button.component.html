@@ -1,7 +1,13 @@
 <button mat-button [color]="color" [disabled]="disabled" [title]="iconLabel">
   <span class="icon_text">
-    <mat-icon *ngIf="!svg" class="action">{{iconText}}</mat-icon>
-    <mat-icon *ngIf="svg" class="action" [svgIcon]="iconText!"></mat-icon>
-    <span *ngIf="hasLabel">{{iconLabel}}</span>
+    @if (!svg) {
+      <mat-icon class="action">{{iconText}}</mat-icon>
+    }
+    @if (svg) {
+      <mat-icon class="action" [svgIcon]="iconText!"></mat-icon>
+    }
+    @if (hasLabel) {
+      <span>{{iconLabel}}</span>
+    }
   </span>
 </button>

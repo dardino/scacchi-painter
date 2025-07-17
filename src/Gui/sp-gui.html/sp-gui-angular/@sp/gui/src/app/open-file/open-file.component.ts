@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
@@ -15,9 +15,8 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
   standalone: true,
   imports: [
     FileSourceSelectorComponent,
-    FileExplorerComponent,
-    CommonModule
-  ],
+    FileExplorerComponent
+],
 })
 export class OpenFileComponent implements OnInit {
   constructor(

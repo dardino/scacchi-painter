@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, Input } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
 import { HalfMoveInfo } from "@dardino-chess/core";
@@ -15,11 +15,10 @@ import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
     styleUrls: ["./sp-solution-desc.component.less"],
     standalone: true,
     imports: [
-      CommonModule,
-      NgxEditorModule,
-      FormsModule,
-      SpSolutionRowComponent
-    ]
+    NgxEditorModule,
+    FormsModule,
+    SpSolutionRowComponent
+]
 })
 export class SpSolutionDescComponent {
   editor: Editor;

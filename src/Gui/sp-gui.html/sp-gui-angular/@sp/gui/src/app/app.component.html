@@ -1,11 +1,13 @@
-<div class="spinner-container" *ngIf="fsWip">
-  <mat-progress-spinner
-    class="progress-spinner"
-    color="accent"
-    mode="indeterminate"
-  >
-  </mat-progress-spinner>
-</div>
+@if (fsWip) {
+  <div class="spinner-container">
+    <mat-progress-spinner
+      class="progress-spinner"
+      color="accent"
+      mode="indeterminate"
+      >
+    </mat-progress-spinner>
+  </div>
+}
 <mat-sidenav-container id="app-main" class="sidenav-container">
   <mat-sidenav
     (click)="drawer.toggle()"
@@ -15,7 +17,7 @@
     role="dialog"
     mode="over"
     [opened]="false"
-  >
+    >
     <app-menu></app-menu>
   </mat-sidenav>
   <mat-sidenav-content class="sidenav-content">
@@ -29,14 +31,17 @@
           <span>Scacchi Painter</span>
           <sub><lib-dbsource [source]="fileSource" ></lib-dbsource> {{ fileName }}</sub>
         </div>
-        <lib-toolbar-db *ngIf="dbLoaded && pathIsEdit" [hideLabels]="true"></lib-toolbar-db>
-        <lib-sp-toolbar-button
-          *ngIf="hasCloseButton"
-          (click)="closeMe()"
-          color="accent"
-          type="inset"
-          iconText="close"
-        ></lib-sp-toolbar-button>
+        @if (dbLoaded && pathIsEdit) {
+          <lib-toolbar-db [hideLabels]="true"></lib-toolbar-db>
+        }
+        @if (hasCloseButton) {
+          <lib-sp-toolbar-button
+            (click)="closeMe()"
+            color="accent"
+            type="inset"
+            iconText="close"
+          ></lib-sp-toolbar-button>
+        }
       </mat-toolbar-row>
     </mat-toolbar>
     <router-outlet></router-outlet>

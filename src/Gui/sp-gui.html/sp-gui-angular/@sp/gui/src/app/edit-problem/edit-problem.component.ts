@@ -1,4 +1,4 @@
-import { CommonModule, Location } from "@angular/common";
+import { Location } from "@angular/common";
 import {
   AfterViewInit,
   Component,
@@ -49,18 +49,17 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
     styleUrls: ["./edit-problem.component.less"],
     standalone: true,
     imports: [
-      MatToolbarModule,
-      ToolbarEditComponent,
-      ChessboardModule,
-      MatTabsModule,
-      ProblemInfoComponent,
-      CommonModule,
-      ToolbarEngineComponent,
-      SpSolutionDescComponent,
-      MatMenuModule,
-      MatButtonModule,
-      MatIconModule
-    ]
+    MatToolbarModule,
+    ToolbarEditComponent,
+    ChessboardModule,
+    MatTabsModule,
+    ProblemInfoComponent,
+    ToolbarEngineComponent,
+    SpSolutionDescComponent,
+    MatMenuModule,
+    MatButtonModule,
+    MatIconModule
+]
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
