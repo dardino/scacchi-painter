@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from "@angular/core";
+import { inject, Injectable, NgZone } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Subject, Subscription } from "rxjs";
 import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "./bridge-global";
@@ -35,7 +35,7 @@ export class HostBridgeService {
     return this.solveInProgress.asObservable();
   }
 
-  constructor(private zone: NgZone) {}
+  private zone = inject(NgZone);
 
   getRecents(): string[] {
     return [];
