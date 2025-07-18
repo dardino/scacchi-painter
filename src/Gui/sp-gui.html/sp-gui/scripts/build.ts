@@ -38,7 +38,7 @@ async function copyPopeyeExecutable() {
   await fetch(url)
     .then((response) => response.blob())
     .then(async (blob) => {
-      const outPath = path.join(__dirname, "..", "dist", "windows", "pywin64.exe");
+      const outPath = path.join(__dirname, "..", "src-tauri", "popeye", "pywin64.exe");
       await fs.mkdir(path.dirname(outPath), { recursive: true });
       return await fs.writeFile(outPath, Buffer.from(await blob.arrayBuffer()));
     })

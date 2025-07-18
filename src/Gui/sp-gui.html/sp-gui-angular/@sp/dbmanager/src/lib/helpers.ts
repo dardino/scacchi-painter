@@ -427,7 +427,7 @@ Stipulation="Mate"
         <ZipCode/>
         <StateOrProvince/>
         <Country/>
-        <Language>it-IT</Language>
+        <Language>it</Language>
       </Author>
       <Author>
         <NameAndSurname>Valerio Agostini</NameAndSurname>
@@ -437,7 +437,7 @@ Stipulation="Mate"
         <ZipCode/>
         <StateOrProvince/>
         <Country/>
-        <Language>it-IT</Language>
+        <Language>it</Language>
       </Author>
     </Authors>
     <Pieces>
