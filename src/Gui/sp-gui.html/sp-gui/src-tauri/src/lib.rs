@@ -35,7 +35,7 @@ fn get_popeye_executable() -> &'static str {
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
-fn run_popeye<R: Runtime>(
+async fn run_popeye<R: Runtime>(
     window: tauri::Window,
     app: tauri::AppHandle<R>,
     name: &str
@@ -68,6 +68,10 @@ fn run_popeye<R: Runtime>(
 
     // Spawn the process
     let process = Command::new(popeye_path)
+        .arg("-maxmem")
+        .arg("8G")
+        .arg("-maxtime")
+        .arg("600")
         .arg(fname)
         .stdout(Stdio::piped())
         .spawn();

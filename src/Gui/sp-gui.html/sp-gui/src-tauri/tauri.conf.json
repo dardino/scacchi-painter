@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "sp-gui",
+  "productName": "scacchi-painter-x",
   "version": "0.1.0",
   "identifier": "com.scacchipainter.gui",
   "build": {
@@ -10,11 +10,15 @@
     "frontendDist": "../build/gui/browser"
   },
   "app": {
+    "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "sp-gui",
+        "title": "Scacchi Painter X",
         "width": 800,
-        "height": 600
+        "height": 1280,
+        "fullscreen": true,
+        "decorations": false,
+        "hiddenTitle": true
       }
     ],
     "security": {
