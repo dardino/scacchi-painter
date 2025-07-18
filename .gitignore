@@ -299,3 +299,5 @@ __pycache__/
 # /.vs/slnx.sqlite
 # /.vs/scacchi-painter/v15
 # /.vs
+
+.DS_Store
