@@ -13,13 +13,11 @@ pub fn write_temp_file(fname: &str, content: &str) -> std::io::Result<()> {
         Ok(mut file) => {
             let wr_res = file.write_all(content.as_bytes());
             match wr_res {
-                Err(e) => {
-                  Err(e)
-                }
+                Err(e) => Err(e),
                 Ok(_) => {
-                  file.flush().expect("failed to flush tmp file");
-                  Ok(())
-                },
+                    file.flush().expect("failed to flush tmp file");
+                    Ok(())
+                }
             }
         }
     }

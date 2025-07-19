@@ -4,6 +4,10 @@ use std::process::{Command, Stdio};
 use std::ptr::eq;
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
+// windows
+#[cfg(target_os = "windows")] use std::os::windows::process::CommandExt;
+
+// import write_temp_file as module
 mod write_temp_file;
 
 fn get_popeye_executable() -> &'static str {
@@ -67,14 +71,21 @@ async fn run_popeye<R: Runtime>(
     let popeye_path = base_path.join(exe);
 
     // Spawn the process
-    let process = Command::new(popeye_path)
-        .arg("-maxmem")
+    let mut process_def = Command::new(popeye_path);
+
+    process_def.arg("-maxmem")
         .arg("8G")
         .arg("-maxtime")
         .arg("600")
         .arg(fname)
-        .stdout(Stdio::piped())
-        .spawn();
+        .stdout(Stdio::piped());
+
+    #[cfg(target_os = "windows")] {
+        const CREATE_NO_WINDOW: u32 = 0x08000000;
+        process_def.creation_flags(CREATE_NO_WINDOW);
+    }
+
+    let process = process_def.spawn();
 
     match process {
         Err(e) => {

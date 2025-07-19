@@ -14,11 +14,16 @@
     "windows": [
       {
         "title": "Scacchi Painter X",
-        "width": 800,
-        "height": 1280,
-        "fullscreen": true,
-        "decorations": false,
-        "hiddenTitle": true
+        "backgroundColor": "#000000",
+        "center": true,
+        "useHttpsScheme": true,
+        "width": 1800,
+        "height": 1080,
+        "resizable": true,
+        "closable": true,
+        "maximizable": true,
+        "minimizable": true,
+        "shadow": true
       }
     ],
     "security": {
@@ -26,6 +31,7 @@
     }
   },
   "bundle": {
+    "copyright": "Copyright (c) 2025, Gabriele Brunori",
     "active": true,
     "resources": [
       "popeye/*"

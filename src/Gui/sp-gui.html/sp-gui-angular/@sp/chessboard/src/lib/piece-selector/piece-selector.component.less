@@ -8,7 +8,7 @@
 }
 
 .piece-selector {
-  display:flex;
+  display: flex;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -16,6 +16,8 @@
   background-color: #fff;
   flex-flow: row wrap;
   font-size: 3rem;
+  container-type: size;
+  container-name: piece-selector;
 
   em {
     flex: 0 0 3rem;
@@ -23,27 +25,38 @@
     align-items: center;
     justify-content: center;
     flex: 0 0 11.1%;
-    font-size: 0.6em;
     height: 33.3%;
+
+    @container piece-selector (width <=500px) {
+      font-size: 0.8em;
+    }
+
+    @container piece-selector (width <=450px) {
+      font-size: 0.7em;
+    }
+
+    @container piece-selector (width <=400px) {
+      font-size: 0.6em;
+    }
   }
 
   @media (orientation: portrait) and (max-width: @smallScreen) {
     font-size: calc(100vw / 9);
   }
 
-  @media (orientation: landscape) and (max-height: @smallScreen){
+  @media (orientation: landscape) and (max-height: @smallScreen) {
     font-size: 2rem;
   }
 
 }
 
 .piece-selector-item {
-  &:hover{
-    outline:  solid 0.1rem red;
-    cursor : pointer;
+  &:hover {
+    outline: solid 0.1rem red;
+    cursor: pointer;
   }
 
-  &.selected{
+  &.selected {
     background-color: rgba(0, 255, 0, 0.45);
   }
 }
