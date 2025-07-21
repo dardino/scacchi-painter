@@ -6,7 +6,7 @@ import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
-import { SpSolutionRowComponent } from "../sp-solution-row/sp-solution-row.component";
+import { SpSolutionMoveComponent } from "../sp-solution-move/sp-solution-move.component";
 import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
 
 @Component({
@@ -17,7 +17,7 @@ import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
     imports: [
     NgxEditorModule,
     FormsModule,
-    SpSolutionRowComponent
+    SpSolutionMoveComponent
 ]
 })
 export class SpSolutionDescComponent {
@@ -59,11 +59,11 @@ export class SpSolutionDescComponent {
   viewMode: ViewModes = "html";
 
   get firstMove() {
-    return Math.floor(this.totalMoves) === Math.ceil(this.totalMoves) ? 1 : 1.5;
+    return this.problem.Problem?.startMoveN ?? 1;
   }
 
   get totalMoves() {
-    return this.problem.Problem?.stipulation.moves ?? 1;
+    return this.problem.Problem?.stipulation.moves ?? 2;
   }
 
   public get solutionFontSize() {

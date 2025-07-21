@@ -2,17 +2,20 @@ import { Component, Input } from "@angular/core";
 import type { HalfMoveInfo } from "@dardino-chess/core";
 
 @Component({
-    selector: "lib-sp-solution-row",
-    templateUrl: "./sp-solution-row.component.html",
-    styleUrls: ["./sp-solution-row.component.less"],
+    selector: "lib-sp-solution-move",
+    templateUrl: "./sp-solution-move.component.html",
+    styleUrls: ["./sp-solution-move.component.less"],
     standalone: true,
 })
-export class SpSolutionRowComponent {
+export class SpSolutionMoveComponent {
   @Input()
   value: HalfMoveInfo;
 
   @Input()
   hideNum: boolean;
+
+  @Input()
+  refutes: boolean;
 
   get numText() {
     return [
@@ -35,6 +38,7 @@ export class SpSolutionRowComponent {
       this.value.isStaleMate ? "=" : "",
       this.value.isTry ? "?" : "",
       this.value.refutes ? "!" : "",
+      this.value.isKey ? "!" : "",
     ].join("");
   }
 }

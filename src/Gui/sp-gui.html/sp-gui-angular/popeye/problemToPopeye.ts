@@ -70,7 +70,7 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   });
   // Stipulation
   let dmoves = Math.floor(problem.stipulation.moves);
-  if (dmoves !== problem.stipulation.moves) {
+  if (problem.startMoveN === 1.5) {
     extraOptions.push("WhiteToPlay");
     dmoves++;
   }

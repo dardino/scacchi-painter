@@ -5,6 +5,7 @@ import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "@sp/host-bridge/src/
 import { BehaviorSubject, Observable } from "rxjs";
 
 class WebBridge implements BridgeGlobal {
+  private problem: Problem;
   private solver$: BehaviorSubject<SolutionRow | EOF>;
   private ww: Worker = new Worker("./assets/engine/popeye_ww.js");
 
@@ -39,7 +40,7 @@ class WebBridge implements BridgeGlobal {
     this.solver$.next({ exitCode: -1, message: ev.message });
   };
   private message = (e: MessageEvent<string>) => {
-    const mov = parsePopeyeRow(e.data);
+    const mov = parsePopeyeRow(e.data, this.problem.startMoveN);
     const halfMoves = mov.flatMap((m) => m[1]).filter(move => !!move);
     this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
     if (e.data.indexOf("solution finished") > -1) {
@@ -69,6 +70,7 @@ class WebBridge implements BridgeGlobal {
     if (engine !== "Popeye") {
       return new Error("Engine not found.");
     }
+    this.problem = CurrentProblem;
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
       {
         raw: `starting engine <${engine}>`,

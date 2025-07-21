@@ -22,21 +22,22 @@
       @if (lineBr) {
         <div class="linebr"></div>
       }
-      <lib-sp-solution-row
+      <lib-sp-solution-move
         [attr.data-moveno]="myMove"
         [attr.data-movenopre]="prevMove"
-        [hideNum]="mode == 'inline' && !lineBr && prevItem != null"
+        [hideNum]="mode == 'inline' && !lineBr && prevItem != null && !move.refutes"
         [value]="move"
+        [refutes]="move.refutes"
         [class]="[
           'solution',
           mode,
           move.threat ? 'threat' : '',
           move.zugzwang ? 'zugzwang' : '',
-          move.refutes && myMove === firstMove ? 'key' : '',
-          move.refutes && myMove !== firstMove ? 'refutes' : '',
+          move.isKey ? 'key' : '',
+          move.refutes ? 'refutes' : '',
           prevMove == myMove ? 'demolition' : '',
         ].join(' ')"
-      ></lib-sp-solution-row>
+      ></lib-sp-solution-move>
     }
   </div>
 }

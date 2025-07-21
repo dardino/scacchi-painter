@@ -48,6 +48,10 @@ export class Problem implements IProblem {
     return Object.keys(this.snapshots).filter((f) => this.snapshots[f] != null);
   }
 
+  public get startMoveN(): number {
+    return Math.floor(this.stipulation.moves) === Math.ceil(this.stipulation.moves) ? 1 : 1.5;
+  }
+
   public get currentHash(): string {
     return this.getCurrentFen();
   }

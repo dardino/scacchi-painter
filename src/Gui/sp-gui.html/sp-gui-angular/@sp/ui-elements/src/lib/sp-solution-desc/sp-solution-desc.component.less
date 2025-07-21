@@ -42,10 +42,10 @@
 }
 
 :not(.solution)+.solution {
-  margin-top: .5em;
+  margin: .2em;
 }
 
-.solution+ :not(.solution):not(.linebr) {
+.solution+ :not(.solution):not(.linebr):not(hr) {
   margin-top: 1em;
 }
 
@@ -75,9 +75,13 @@
   color: rgba(255, 202, 202, 0.8);
 }
 
-.refutes::before {
-  content: "But: ";
-  color: rgba(246, 255, 202, 0.8);
+.refutes {
+  width: 100%;
+
+  &::before {
+    content: "But: ";
+    color: rgba(246, 255, 202, 0.8);
+  }
 }
 
 .demolition {
@@ -86,4 +90,10 @@
 
 .key {
   color: greenyellow
+}
+
+hr {
+  border-top: none;
+  border-color: gray;
+  margin: 0;
 }

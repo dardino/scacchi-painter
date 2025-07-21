@@ -16,7 +16,7 @@ class TauriBridge implements BridgeGlobal {
   }
 
   private processData(data: string) {
-    const mov = parsePopeyeRow(data);
+    const mov = parsePopeyeRow(data, this.currentProblem.startMoveN);
     const halfMoves = mov.flatMap((m) => m[1]).filter(move => !!move);
     this.solver$.next({ raw: data, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
     if (data.indexOf("solution finished") > -1) {
@@ -44,7 +44,9 @@ class TauriBridge implements BridgeGlobal {
     this.endSolve({ exitCode: -1, message: "solution stopped!" });
   }
   private solver$: BehaviorSubject<SolutionRow | EOF>;
+  private currentProblem: Problem;
   runSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes): Observable<SolutionRow | EOF> | Error {
+    this.currentProblem = CurrentProblem;
     if (engine !== "Popeye") {
       return new Error("Engine not found!");
     }

@@ -32,6 +32,8 @@ export interface HalfMoveInfo {
   isTry: boolean;
   /** Indicates if the move is a refutation */
   refutes: boolean;
+  /** Indicates if the move is a key */
+  isKey: boolean;
   /** extra moves for fairies */
   extraMoves: string[];
   /** The piece that is moving */
