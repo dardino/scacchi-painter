@@ -2,10 +2,18 @@
 
 ## Version 0.0.13
 
+- Improved Popeye move parser: this is a first step towards enabling
+  solution navigation with real-time board updates
+- Added support for Tauri:
+  - A Bridge to run the platform-specific Popeye process
+  - A configuration to build executables for Mac and Windows
+- Added Terms and Conditions page
+- Fix small screen layout issues
+- Adds board coordinates
 - Added functionality to copy and paste position in the editor page:
-  - se il cursore è posizionato in un elemento editabile (input o text editor) il comportamento è standard
-  - se il cursore non è posizionato in alcun elemento allora gli eventi di copia e incolla agiscono sulla posizione corrente
-  - aggiunti due pulsanti alla toolbar di modifica per copia posizione e incolla:
+  - If the cursor is placed in an editable element (input or text editor), the behavior is standard.
+  - If the cursor is not placed in any element, then the copy and paste events act on the current position.
+  - Two buttons have been added to the editor toolbar for copying and pasting the position:
     ![New buttons in toolbar for copy and paste](./release-notes-images/0.0.13/toolbar_copy_paste.png)
   
 ## Version 0.0.12

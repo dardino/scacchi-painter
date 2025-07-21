@@ -2,6 +2,10 @@
 
 ## 0.0.13
 
+- Improved Popeye move parser
+- Added support for Tauri to build desktop applications
+- Added Bridge support for Tauri to run the platform-specific Popeye process
+- Added Terms and Conditions page
 - Copy and Paste
 - Fix small screen layout issues
 - Adds board coordinates
