@@ -116,3 +116,20 @@ img {
   max-width: min(90vw, 90%);
   max-height: 80vh;
 }
+
+.document {
+  box-sizing: border-box;
+  width: 100vw;
+  padding: 2rem;
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+
+  .page {
+    border-radius: 1rem;
+    padding: 2rem;
+    background: white;
+    color: black;
+  }
+}

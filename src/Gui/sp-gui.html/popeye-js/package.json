@@ -5,12 +5,12 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@types/eslint": "^8",
-    "concat": "^1.0.3",
-    "eslint": "^8.45.0",
-    "google-closure-compiler": "^20230502.0.0",
-    "serve": "^11.3.2",
-    "typescript": "^4.2.2"
+    "@types/eslint": "9.6.1",
+    "concat": "3.0.0",
+    "eslint": "9.31.0",
+    "google-closure-compiler": "20250716.0.0",
+    "serve": "14.2.4",
+    "typescript": "5.8.3"
   },
   "scripts": {
     "compile": "yarn tsc -p ./src/tsconfig.json",
