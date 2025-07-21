@@ -6,6 +6,7 @@ import { DatabaseListComponent } from "./database-list/database-list.component";
 import { EditProblemComponent } from "./edit-problem/edit-problem.component";
 import { LandingComponent } from "./landing/landing.component";
 import { OpenFileComponent } from "./open-file/open-file.component";
+import { PrivacyAndTermsComponent } from "./privacy-and-terms/privacy-and-terms.component";
 import { SaveFileComponent } from "./save-file/save-file.component";
 
 const getRoutes = <T extends Record<string, Routes[number]>>(e: T): T => e;
@@ -23,4 +24,5 @@ export const RoutesList = getRoutes({
   config: { path: "config", component: ConfigurationComponent },
   tournaments: { path: "tournaments", component: AppTournamentsComponent },
   home: { path: "", component: LandingComponent, pathMatch: "full" },
+  terms: { path: "terms", component: PrivacyAndTermsComponent },
 });

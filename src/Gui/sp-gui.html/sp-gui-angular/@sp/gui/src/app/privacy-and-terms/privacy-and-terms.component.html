@@ -1,0 +1,75 @@
+@let current = { lang: 'it' };
+
+<div>
+  <mat-form-field>
+    <mat-label>Select Language</mat-label>
+    <mat-select [(value)]="current.lang" #lang (change)="current.lang = lang.value">
+      <mat-option value="it">Italian</mat-option>
+      <mat-option value="en">English</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="document">
+  @if (lang.value === 'en') {
+    <div class="page" lang="en">
+      <h1>Terms of Service</h1>
+
+      <h2>1. Acceptance of Terms</h2>
+      <p>Use of this service implies acceptance of the Terms of Service described herein. If you do not agree with the terms, please refrain from using the service.</p>
+
+      <h2>2. Changes to Terms</h2>
+      <p>We reserve the right to modify these terms at any time. Any changes will be communicated within the site. Continued use of the service implies acceptance of the updated terms.</p>
+
+      <h2>3. Access and Use</h2>
+      <p>Users agree to use the service in compliance with applicable laws and to refrain from any harmful or disruptive activities towards the service or third parties.</p>
+
+      <h2>4. User Content</h2>
+      <p>Any content created or saved through the service remains the responsibility of the user. The service does not share or transmit such content online.</p>
+
+      <h2>5. Intellectual Property</h2>
+      <p>All content, logos, and trademarks displayed on the service are the property of the operator or their respective owners and are protected by applicable laws.</p>
+
+      <h2>6. Limitation of Liability</h2>
+      <p>The service is provided "as is", without any warranties. We are not responsible for any loss or damage resulting from the use of the service.</p>
+
+      <h2>7. Privacy and User Data</h2>
+      <p>The service does not collect or process personal data. All data remains locally stored in the user's browser and is not transmitted via the Internet.</p>
+
+      <h2>8. Governing Law</h2>
+      <p>These terms are governed by Italian law. Any disputes shall be subject to the exclusive jurisdiction of the Court of Milan.</p>
+
+    </div>
+  }
+  @if (lang.value === 'it') {
+    <div class="page" lang="it">
+
+      <h1>Termini di Servizio</h1>
+
+      <h2>1. Accettazione dei Termini</h2>
+      <p>L'utilizzo del presente servizio implica l'accettazione dei Termini di Servizio qui descritti. Se non si è d'accordo con i termini, si consiglia di non utilizzare il servizio.</p>
+
+      <h2>2. Modifiche ai Termini</h2>
+      <p>Ci riserviamo il diritto di modificare i presenti termini in qualsiasi momento. Le modifiche saranno comunicate all'interno del sito. L’uso continuato del servizio implica l’accettazione delle modifiche.</p>
+
+      <h2>3. Accesso e Utilizzo</h2>
+      <p>L’utente si impegna a utilizzare il servizio in conformità alle leggi vigenti e a non intraprendere attività dannose o lesive nei confronti del servizio o di terzi.</p>
+
+      <h2>4. Contenuti degli Utenti</h2>
+      <p>Qualsiasi contenuto creato o salvato tramite il servizio rimane sotto la responsabilità dell’utente. Il servizio non condivide né trasmette tali contenuti online.</p>
+
+      <h2>5. Proprietà Intellettuale</h2>
+      <p>Tutti i contenuti, loghi e marchi visibili nel servizio sono di proprietà del gestore o dei rispettivi titolari e sono protetti dalle normative vigenti.</p>
+
+      <h2>6. Limitazione di Responsabilità</h2>
+      <p>Il servizio è fornito "così com'è", senza garanzie di alcun tipo. Non siamo responsabili per eventuali perdite o danni derivanti dall’utilizzo del servizio.</p>
+
+      <h2>7. Privacy e Dati dell’Utente</h2>
+      <p>Il servizio non raccoglie né elabora dati personali. Tutti i dati rimangono salvati localmente nel browser dell'utente e non vengono trasmessi attraverso Internet.</p>
+
+      <h2>8. Legge Applicabile</h2>
+      <p>I presenti termini sono regolati dalla legge italiana. Eventuali controversie saranno di competenza esclusiva del Foro di Milano.</p>
+    </div>
+  }
+
+</div>
