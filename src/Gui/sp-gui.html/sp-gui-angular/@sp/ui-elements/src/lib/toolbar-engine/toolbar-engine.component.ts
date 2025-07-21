@@ -1,5 +1,8 @@
+
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
+import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 
 export type ViewModes = "txt" | "html" | "both";
 const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> = {
@@ -12,7 +15,11 @@ const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> 
     selector: "lib-toolbar-engine",
     templateUrl: "./toolbar-engine.component.html",
     styleUrls: ["./toolbar-engine.component.less"],
-    standalone: false
+    imports: [
+    MatToolbarModule,
+    SpToolbarButtonComponent
+],
+    standalone: true
 })
 export class ToolbarEngineComponent {
   @Input()
@@ -65,15 +72,15 @@ export class ToolbarEngineComponent {
   }
 
   start() {
-    console.log("[LOG] -> try to start process...");
+    console.warn("[LOG] -> try to start process...");
     this.startSolve.emit("start");
   }
   stop() {
-    console.log("[LOG] -> try to stop process...");
+    console.warn("[LOG] -> try to stop process...");
     this.stopSolve.emit("stop");
   }
   tryMove() {
-    console.log("[LOG] -> start engine in try mode...");
+    console.warn("[LOG] -> start engine in try mode...");
     this.startSolve.emit("try");
   }
   increaseFontSize() {

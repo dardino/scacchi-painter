@@ -1,9 +1,14 @@
+import { provideHttpClient, withFetch } from "@angular/common/http";
 import { enableProdMode } from "@angular/core";
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-
-import { AppModule } from "./app/app.module";
-import { polyfillBridge } from "./webbridge";
+import { bootstrapApplication } from "@angular/platform-browser";
+import { provideRouter } from "@angular/router";
+import { provideServiceWorker } from "@angular/service-worker";
+import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
+import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
+import { RoutesList } from "./app/app-routing-list";
+import { AppComponent } from "./app/app.component";
 import { environment } from "./environments/environment";
+import { polyfillBridge } from "./webbridge";
 
 if (environment.production) {
   enableProdMode();
@@ -11,6 +16,12 @@ if (environment.production) {
 
 polyfillBridge();
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch((err) => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+     provideHttpClient(withFetch()),
+     provideRouter(Object.entries(RoutesList).map(e => e[1])),
+     AllMatIconRegistryService.registerAssetFolder(environment.assetFolder),
+     ChessboardAnimationService,
+     provideServiceWorker("ngsw-worker.js", { enabled: environment.production }),
+  ],
+}).catch(err => console.error(err));

@@ -1,6 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-
-import { ThirdPartyModules } from "../modules";
 import { OpenFileComponent } from "./open-file.component";
 
 describe("OpenfileComponent", () => {
@@ -9,8 +7,8 @@ describe("OpenfileComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OpenFileComponent ],
-      imports: [...ThirdPartyModules]
+      declarations: [],
+      imports: []
     })
     .compileComponents();
   }));

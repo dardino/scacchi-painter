@@ -10,20 +10,22 @@
   font-style: italic;
   font-size: @instructionFontSize;
 }
+
 .log {
   padding: 0;
   margin: 0;
   font-style: italic;
   font-size: @logFontSize;
 }
+
 .solutions {
   font-size: @baseFontSize;
   line-height: initial;
-  white-space: pre;
   padding: 1em 1em 10rem 1em;
   background-color: black;
   width: 100%;
 }
+
 .solution {
   margin: 0;
   padding: 0;
@@ -31,12 +33,20 @@
   font-family: monospace;
   word-wrap: break-word;
   font-size: @solutionFontSize;
+
+  &.inline {
+    display: inline-flex;
+    flex-flow: row wrap;
+  }
+
 }
-:not(.solution) + .solution {
-  margin-top: 1rem;
+
+:not(.solution)+.solution {
+  margin: .2em;
 }
-.solution + :not(.solution) {
-  margin-top: 1rem;
+
+.solution+ :not(.solution):not(.linebr):not(hr) {
+  margin-top: 1em;
 }
 
 .richeditor {
@@ -44,7 +54,46 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+
   :last-child {
     flex: 1 1 auto;
   }
+}
+
+.linebr {
+  height: 0px;
+  margin: 0px;
+}
+
+.threat::after {
+  content: "Threat: ";
+  color: rgba(255, 202, 202, 0.8);
+}
+
+.zugzwang::after {
+  content: "(Zugzwang.) ";
+  color: rgba(255, 202, 202, 0.8);
+}
+
+.refutes {
+  width: 100%;
+
+  &::before {
+    content: "But: ";
+    color: rgba(246, 255, 202, 0.8);
+  }
+}
+
+.demolition {
+  color: rgba(255, 202, 202, 0.8);
+}
+
+.key {
+  color: greenyellow
+}
+
+hr {
+  border-top: none;
+  border-color: gray;
+  margin: 0;
 }

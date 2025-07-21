@@ -1,7 +1,7 @@
-import { Injectable, NgZone } from "@angular/core";
+import { inject, Injectable, NgZone } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Subject, Subscription } from "rxjs";
-import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "./bridge-global";
+import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "./bridge-global";
 
 declare global {
   interface HandledFile {
@@ -23,7 +23,7 @@ declare global {
   providedIn: "root",
 })
 export class HostBridgeService {
-  private solver$ = new Subject<string>();
+  private solver$ = new Subject<SolutionRow>();
   private subscription: Subscription | null = null;
   private solveInProgress = new Subject<boolean>();
 
@@ -35,18 +35,18 @@ export class HostBridgeService {
     return this.solveInProgress.asObservable();
   }
 
-  constructor(private zone: NgZone) {}
+  private zone = inject(NgZone);
 
   getRecents(): string[] {
     return [];
   }
 
   stopSolve() {
-    console.log("[LOG] -> stop solve: cancel subscriptions...");
+    console.warn("[LOG] -> stop solve: cancel subscriptions...");
     if (window.Bridge) window.Bridge.stopSolve();
   }
 
-  supportsEngine(engine: string) {
+  supportsEngine(engine: Engines) {
     return window.Bridge?.supportsEngine(engine);
   }
 
@@ -65,17 +65,26 @@ export class HostBridgeService {
       this.zone.run(() => {
         // needs to run in in angular zone to update the ui
         if (!isEOF(move)) {
-          console.log(move.raw);
-          this.solver$.next(move.raw);
+          this.solver$.next(move);
         } else {
-          console.log(`exited: `, move.message);
+          console.warn(`exited: `, move.message);
           if (typeof move.exitCode !== "number") {
-            this.solver$.next(move.message);
+            this.solver$.next({
+              raw: move.message,
+              rowtype: "log",
+              moveTree: [],
+            });
           } else {
-            this.solver$.next(
-              `Engine process exited with code: ${move.exitCode}`
-            );
-            this.solver$.next(`${move.message}`);
+            this.solver$.next({
+              rowtype: "log",
+              moveTree: [],
+              raw: `Engine process exited with code: ${move.exitCode}`
+            });
+            this.solver$.next({
+              raw: `${move.message}`,
+              rowtype: "log",
+              moveTree: [],
+            });
             if (this.subscription) this.subscription.unsubscribe();
             this.subscription = null;
             this.solveInProgress.next(false);

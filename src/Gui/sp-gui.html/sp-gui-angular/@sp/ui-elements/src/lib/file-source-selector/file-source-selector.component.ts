@@ -8,6 +8,7 @@ import { AvaliableFileServices } from "@sp/host-bridge/src/lib/fileService";
     selector: "lib-file-source-selector",
     templateUrl: "./file-source-selector.component.html",
     imports: [CommonModule, MatIconModule, MatButtonModule],
+    standalone: true,
     styleUrls: ["./file-source-selector.component.less"],
 })
 export class FileSourceSelectorComponent {
@@ -17,8 +18,6 @@ export class FileSourceSelectorComponent {
   public current: "new" | AvaliableFileServices;
   @Output()
   public sourceSelected = new EventEmitter<"new" | AvaliableFileServices>();
-
-  constructor() {}
 
   public selectSource(source: "new" | AvaliableFileServices) {
     this.sourceSelected.emit(source);

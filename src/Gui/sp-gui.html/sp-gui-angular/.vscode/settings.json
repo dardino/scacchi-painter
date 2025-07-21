@@ -6,4 +6,16 @@
   "azureFunctions.projectLanguageModel": 4,
   "azureFunctions.preDeployTask": "npm prune (functions)",
   "jest.enable": false,
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "eslint.codeActionsOnSave.mode": "all",
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
 }

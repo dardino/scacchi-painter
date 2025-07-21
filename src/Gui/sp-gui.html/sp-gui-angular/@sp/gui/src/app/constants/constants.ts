@@ -1,11 +1,23 @@
 export const istructionRegExp = new RegExp(
-  // eslint-disable-next-line max-len
   `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye|try play).*$`
 );
 export const outlogRegExp = new RegExp(
-  `^(ERR:|Execute|Popeye|starting engine|Engine process|program exited).*$`
+  `^(${[
+    "ERR:",
+    "\\[I\\]",
+    "\\[E\\]",
+    "Execute",
+    "Popeye",
+    "starting engine",
+    "Engine process",
+    "program exited",
+    "PostKeyPlay not applicable",
+    "\\s*add_to_move_generation_stack",
+    "\\s*play_move:",
+    "\\s*is_white_king_square_attacked:",
+    "\\s*is_black_king_square_attacked:",
+  ].join("|")}).*$`
 );
-
 
 /*
  * BeginProblem

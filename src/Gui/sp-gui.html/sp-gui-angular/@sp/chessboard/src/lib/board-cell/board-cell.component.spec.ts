@@ -11,7 +11,7 @@ describe("BoardCellComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonModule, DragDropModule],
-      declarations: [ BoardCellComponent ]
+      declarations: []
     })
     .compileComponents();
   }));

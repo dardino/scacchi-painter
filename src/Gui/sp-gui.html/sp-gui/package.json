@@ -1,0 +1,25 @@
+{
+  "name": "sp-gui",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "yarn vite-node ./scripts/build.ts",
+    "icons": "yarn tauricon ./src-tauri/logo.svg",
+    "start": "yarn --cwd ../sp-gui-angular startinsecure --configuration tauri",
+    "tauri": "tauri"
+  },
+  "private": true,
+  "dependencies": {
+    "@tauri-apps/api": "^2.6.0",
+    "@tauri-apps/plugin-opener": "^2.4.0",
+    "@tauri-apps/plugin-shell": "~2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.6.2",
+    "@tauri-apps/tauricon": "^1.0.3",
+    "@types/node": "^24.0.14",
+    "chalk": "^5.4.1",
+    "typescript": "^5.8.3",
+    "vite-node": "^3.2.4"
+  },
+  "packageManager": "yarn@4.9.2"
+}

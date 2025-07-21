@@ -2,8 +2,13 @@
 <mat-nav-list>
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/']">Home</a>
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/openfile']">Open database</a>
-  <a (click)="selectElement.emit()" mat-list-item *ngIf="dbLoaded" [routerLink]="['/savefile']">Save database as...</a>
-  <a (click)="selectElement.emit()" mat-list-item *ngIf="dbLoaded" [routerLink]="['/list']">List problems in database</a>
+  @if (dbLoaded) {
+    <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/savefile']">Save database as...</a>
+  }
+  @if (dbLoaded) {
+    <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/list']">List problems in database</a>
+  }
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/config']">Configuration</a>
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/tournaments']">Tournaments</a>
+  <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/terms']">Privacy and Terms</a>
 </mat-nav-list>

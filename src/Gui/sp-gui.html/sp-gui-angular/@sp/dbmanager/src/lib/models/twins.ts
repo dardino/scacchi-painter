@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { ITwins, SequnceTypes, TwinModes, createXmlElement } from "../helpers";
+import { ITwins, SequenceTypes, TwinModes, createXmlElement } from "../helpers";
 import { Twin } from "./twin";
 
 export class Twins implements ITwins {
   TwinList: Twin[] = [Twin.fromJson({ TwinModes: TwinModes.Normal, TwinType: "Diagram" })];
-  TwinSequenceTypes: SequnceTypes = SequnceTypes.Normal;
+  TwinSequenceTypes: SequenceTypes = SequenceTypes.Normal;
   get HasDiagram(): boolean {
     return (this.TwinList ?? []).some(tw => tw.TwinType === "Diagram");
   }
@@ -16,8 +15,8 @@ export class Twins implements ITwins {
     const t = new Twins();
     if (el == null) return t;
     t.TwinSequenceTypes =
-      SequnceTypes[
-        (el.getAttribute("TwinSequenceTypes") as keyof typeof SequnceTypes) ||
+      SequenceTypes[
+        (el.getAttribute("TwinSequenceTypes") as keyof typeof SequenceTypes) ||
           "Normal"
       ];
     t.TwinList = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
@@ -48,7 +47,7 @@ export class Twins implements ITwins {
   }
   toJson(): Partial<ITwins> {
     const p: Partial<ITwins> = {};
-    if (this.TwinSequenceTypes !== SequnceTypes.Normal) p.TwinSequenceTypes = this.TwinSequenceTypes;
+    if (this.TwinSequenceTypes !== SequenceTypes.Normal) p.TwinSequenceTypes = this.TwinSequenceTypes;
     if (this.TwinList.length > 0) p.TwinList = this.TwinList.map(t => t.toJson());
     return p;
   }

@@ -11,7 +11,7 @@ describe("PieceSelectorComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CommonModule, DragDropModule],
-      declarations: [PieceSelectorComponent],
+      declarations: [],
     }).compileComponents();
   }));
 

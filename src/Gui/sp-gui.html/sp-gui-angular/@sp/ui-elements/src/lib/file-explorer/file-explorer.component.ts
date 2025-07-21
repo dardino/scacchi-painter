@@ -12,6 +12,7 @@ import {
     selector: "lib-file-explorer",
     templateUrl: "./file-explorer.component.html",
     imports: [CommonModule, MatIconModule],
+    standalone: true,
     styleUrls: ["./file-explorer.component.less"],
 })
 export class FileExplorerComponent implements OnInit {
@@ -28,13 +29,11 @@ export class FileExplorerComponent implements OnInit {
   };
   public items: FolderItemInfo[] = [];
 
-  constructor() {}
-
   ngOnInit(): void {
     this.refresh();
   }
 
-  trackByFn(index: number, item: FolderItemInfo): string {
+  trackByFn(item: FolderItemInfo): string {
     return item.fullPath ?? "$";
   }
 

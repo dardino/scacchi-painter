@@ -7,8 +7,10 @@
     (change)="selectLocalFile(fileloader.files!)"
     #fileloader
     style="display: none"
-  />
+    />
 </div>
-<div *ngIf="showFilePicker" class="explorer">
-  <lib-file-explorer [service]="currentFileService" (selectFile)="openFile($event)"></lib-file-explorer>
-</div>
+@if (showFilePicker) {
+  <div class="explorer">
+    <lib-file-explorer [service]="currentFileService" (selectFile)="openFile($event)"></lib-file-explorer>
+  </div>
+}

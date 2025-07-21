@@ -1,5 +1,13 @@
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
+
 import { Component, EventEmitter, Output } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatMiniFabButton } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 import { Author } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
@@ -7,12 +15,25 @@ import {
   EndingTypes,
   ProblemTypes
 } from "@sp/dbmanager/src/public-api";
+import { SortableListComponent } from "../sortable-list/sortable-list.component";
 
 @Component({
     selector: "lib-problem-definitions",
     templateUrl: "./problem-definitions.component.html",
     styleUrls: ["./problem-definitions.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatIconModule,
+    MatInputModule,
+    SortableListComponent,
+    CdkDropList,
+    MatMiniFabButton
+]
 })
 export class ProblemDefinitionsComponent {
   @Output()

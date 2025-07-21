@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
-import { ThirdPartyModules } from "../modules";
 import { LandingComponent } from "./landing.component";
 
 describe("LandingComponent", () => {
@@ -10,9 +9,9 @@ describe("LandingComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...ThirdPartyModules],
+      imports: [],
       providers: [provideHttpClient(withInterceptorsFromDi())],
-      declarations: [ LandingComponent ]
+      declarations: []
     })
     .compileComponents();
   }));

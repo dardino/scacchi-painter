@@ -1,6 +1,7 @@
+import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Observable } from "rxjs";
-import { Problem } from "../../../dbmanager/src/lib/models/problem";
-
+import type { Problem } from "../../../dbmanager/src/lib/models/problem";
+export type Engines = "Popeye" | "SpCore";
 export interface BridgeGlobal {
   openFile(): File | PromiseLike<File | null> | null;
   saveFile(content: File): string | Promise<string>;
@@ -8,10 +9,10 @@ export interface BridgeGlobal {
   stopSolve(): void;
   runSolve(
     CurrentProblem: Problem,
-    engine: string,
+    engine: Engines,
     mode: SolveModes
   ): Observable<SolutionRow | EOF> | Error;
-  supportsEngine(engine: string): boolean;
+  supportsEngine(engine: Engines): boolean;
 }
 
 export interface EOF {
@@ -21,13 +22,8 @@ export interface EOF {
 
 export type SolveModes = "start" | "try";
 
-
-export type SolutionMove = {
-  moveN: number,
-  notice: string,
-  piece: string,
-  move: string,
-  extras: SolutionMove[],
-  continuation: "threat" | "zugzwang" | "";
-};
-export type SolutionRow = { rowtype: "log" | "data", raw: string }
+export interface SolutionRow {
+  rowtype: "log" | "data",
+  raw: string,
+  moveTree: HalfMoveInfo[];
+}

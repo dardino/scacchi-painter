@@ -2,12 +2,14 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
+import { DbsourceComponent } from "@sp/ui-elements/src/lib/dbsource/dbsource.component";
 
 @Component({
     selector: "app-recents",
     templateUrl: "./recents.component.html",
     styleUrls: ["./recents.component.less"],
-    standalone: false
+    imports: [DbsourceComponent],
+    standalone: true
 })
 export class RecentsComponent {
   recents: RecentFileInfo[] = [];
@@ -24,7 +26,7 @@ export class RecentsComponent {
       if (!(result instanceof Error)) {
         this.router.navigate(["/list"]);
       }
-    } catch(err) {
+    } catch(_err) {
         //noop
     }
   }

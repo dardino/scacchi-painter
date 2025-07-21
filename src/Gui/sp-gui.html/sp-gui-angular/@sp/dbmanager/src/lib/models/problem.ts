@@ -1,3 +1,5 @@
+import { HalfMoveInfo } from "@dardino-chess/core";
+import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
 import {
@@ -19,11 +21,9 @@ import { Piece } from "./piece";
 import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
 const main_snapshot = "$_MAIN_$";
 
 export class Problem implements IProblem {
-  private constructor() {}
 
   public textSolution = "";
   public date = new Date().toISOString();
@@ -32,19 +32,24 @@ export class Problem implements IProblem {
   public personalID = "";
   public prizeDescription = "";
   public source = "";
-  public engine = "Popeye";
+  public engine: Engines = "Popeye";
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
-  public htmlSolution: string = "";
+  public jsonSolution: HalfMoveInfo[] = [];
+  public htmlSolution = "";
   public conditions: string[] = [];
   public fairyCells: string[] = [];
   public tags: string[] = [];
 
   public snapshots: IProblem["snapshots"] = {};
   public currentSnapshotId: keyof IProblem["snapshots"] = main_snapshot;
-  private get snap_keys(): Array<string | number> {
+  private get snap_keys(): (string | number)[] {
     return Object.keys(this.snapshots).filter((f) => this.snapshots[f] != null);
+  }
+
+  public get startMoveN(): number {
+    return Math.floor(this.stipulation.moves) === Math.ceil(this.stipulation.moves) ? 1 : 1.5;
   }
 
   public get currentHash(): string {
@@ -198,7 +203,6 @@ export class Problem implements IProblem {
   }
 
   saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
@@ -238,7 +242,7 @@ export class Problem implements IProblem {
   }
   loadSnapshot(
     id?: keyof IProblem["snapshots"],
-    ignoreChanges: boolean = false
+    ignoreChanges = false
   ) {
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
@@ -248,7 +252,7 @@ export class Problem implements IProblem {
     Problem.applyJson(prob, this);
     this.currentSnapshotId = id;
   }
-  loadMainSnapshot(ignoreChanges: boolean = false) {
+  loadMainSnapshot(ignoreChanges = false) {
     this.loadSnapshot(main_snapshot, ignoreChanges);
   }
 

@@ -1,9 +1,11 @@
-<p *ngIf="mode === 'open'">Current Path: {{ currentItem.fullPath }}</p>
+@if (mode === 'open') {
+  <p>Current Path: {{ currentItem.fullPath }}</p>
+}
 <ul class="folder">
   @if (hasParent) {
-    <li class="folderItem typeFolder" tabindex="0" (click)="navToParent()"><mat-icon>subdirectory_arrow_left</mat-icon></li>
+    <li class="folderItem typeFolder" tabindex="0" (keydown.enter)="navToParent()" (click)="navToParent()"><mat-icon>subdirectory_arrow_left</mat-icon></li>
   }
-  @for (item of items; track trackByFn) {
+  @for (item of items; track trackByFn(item)) {
     <li
       class="folderItem"
       [ngClass]="{
@@ -11,11 +13,16 @@
         typeFile: item.type === 'file'
       }"
       tabindex="0"
+      (keydown.enter)="clickElement(item)"
       (click)="clickElement(item)"
       title="{{ item.itemName }}"
-    >
-      <mat-icon *ngIf="item.type === 'folder'">folder</mat-icon>
-      <mat-icon *ngIf="item.type === 'file'">insert_drive_file</mat-icon>
+      >
+      @if (item.type === 'folder') {
+        <mat-icon>folder</mat-icon>
+      }
+      @if (item.type === 'file') {
+        <mat-icon>insert_drive_file</mat-icon>
+      }
       <span>{{ item.itemName }}</span>
     </li>
   }

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { popeyeTwinMapper } from "@sp/gui/src/webbridge";
+import { popeyeTwinMapper } from "@ph/problemToPopeye";
 import {
   ITwin,
   TwinModes,

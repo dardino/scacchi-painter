@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Figurine,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
@@ -17,12 +16,12 @@ import {
 } from "./helpers";
 
 const invertMap = <K extends string, V extends string>(
-  o: { [key in K]: V }
-): { [key in V]: K } => {
+  o: Record<K, V>
+): Record<V, K> => {
   const keys = Object.keys(o) as K[];
   return keys.reduce(
     (m, k: K) => ({ ...m, [o[k]]: k }),
-    {} as { [key in V]: K }
+    {} as Record<V, K>
   );
 };
 
@@ -138,13 +137,13 @@ export class SP2 {
   //#endregion
 
   // fairy
-  static getFairyCodes(f: Element): Array<{ code: string; params: string[] }> {
+  static getFairyCodes(f: Element): { code: string; params: string[] }[] {
     const ft = f.querySelectorAll("FairyType");
     if (ft.length > 0) {
       return Array.from(ft).map((c) => ({
           code: c.getAttribute("code") ?? "",
           params: Array.from(c.querySelectorAll("Param"))
-            .map((el, i, all) => {
+            .map((_el, i, all) => {
               const byIndex = all.find(
                 (parm) => parm.getAttribute("id") === i.toFixed(0)
               );
@@ -159,7 +158,7 @@ export class SP2 {
   }
   static setFairyCode(
     el: Element,
-    fairyCode: Array<{ code: string; params: string[] }>
+    fairyCode: { code: string; params: string[] }[]
   ) {
     if (fairyCode == null) return;
     fairyCode.forEach((fc) => {

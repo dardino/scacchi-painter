@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "scacchi-painter-x",
+  "version": "0.1.0",
+  "identifier": "com.scacchipainter.gui",
+  "build": {
+    "beforeDevCommand": "yarn start",
+    "devUrl": "http://localhost:4200",
+    "beforeBuildCommand": "yarn build",
+    "frontendDist": "../build/gui/browser"
+  },
+  "app": {
+    "macOSPrivateApi": true,
+    "windows": [
+      {
+        "title": "Scacchi Painter X",
+        "backgroundColor": "#000000",
+        "center": true,
+        "useHttpsScheme": true,
+        "width": 1800,
+        "height": 1080,
+        "resizable": true,
+        "closable": true,
+        "maximizable": true,
+        "minimizable": true,
+        "shadow": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "copyright": "Copyright (c) 2025, Gabriele Brunori",
+    "active": true,
+    "resources": [
+      "popeye/*"
+    ],
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

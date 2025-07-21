@@ -56,22 +56,22 @@
 import { FairyAttributes, PieceColors, TwinTypesKeys } from "./helpers";
 import { SquareLocations } from "./models/locations";
 
-const Squares = Object.keys(SquareLocations) as Array<keyof typeof SquareLocations>;
+const Squares = Object.keys(SquareLocations) as (keyof typeof SquareLocations)[];
 
-export type TwinTypeItemParameter = {
+export interface TwinTypeItemParameter {
   type: "string" | "string[]" | "pieceName";
   id: string;
   optional?: boolean;
   description: string;
   values?: string[];
-};
+}
 
-export type TwinTypeItem<K extends TwinTypesKeys> = {
+export interface TwinTypeItem<K extends TwinTypesKeys> {
   keyword: K;
   title: string;
   parameters: TwinTypeItemParameter[];
   template: string;
-};
+}
 
 export const TwinTypesConfigs: { [key in TwinTypesKeys]: TwinTypeItem<key> } = {
   Stipulation: {

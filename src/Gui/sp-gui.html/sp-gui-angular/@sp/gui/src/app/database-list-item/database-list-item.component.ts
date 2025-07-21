@@ -1,4 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { RouterModule } from "@angular/router";
+import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
@@ -6,7 +10,13 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
     selector: "app-database-list-item",
     templateUrl: "./database-list-item.component.html",
     styleUrls: ["./database-list-item.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+      ChessboardModule,
+      MatIconModule,
+      RouterModule,
+      MatButtonModule,
+    ]
 })
 export class DatabaseListItemComponent {
   @Input() problem: Problem;
@@ -22,6 +32,9 @@ export class DatabaseListItemComponent {
     const twinsNoDiagram = this.problem?.twins?.TwinList.filter(twin => twin.TwinType !== "Diagram") ?? [];
     if (!twinsNoDiagram.length) return [];
     return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index+1}) ${twin.toString()}`);
+  }
+  get hasAuthors() {
+    return (this.problem?.authors?.length ?? 0) > 0;
   }
 
   get hasCondition() {
@@ -40,6 +53,10 @@ export class DatabaseListItemComponent {
   }
   get pieceCounter() {
     return `${this.problem?.getPieceCounter() ?? "0+0"}`;
+  }
+
+  get solutionHTML() {
+    return this.problem?.htmlSolution;
   }
 
   removeItem() {

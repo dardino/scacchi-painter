@@ -9,7 +9,7 @@ describe('SaveFileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaveFileComponent ],
+      declarations: [],
       providers: [AllMatIconRegistryService]
     })
     .compileComponents();

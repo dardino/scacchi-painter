@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ThirdPartyModules } from "../modules";
 import { ConfigurationComponent } from "./configuration.component";
 
 describe("ConfigurationComponent", () => {
@@ -9,8 +8,8 @@ describe("ConfigurationComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfigurationComponent ],
-      imports: [...ThirdPartyModules],
+      declarations: [],
+      imports: [],
     })
     .compileComponents();
   }));

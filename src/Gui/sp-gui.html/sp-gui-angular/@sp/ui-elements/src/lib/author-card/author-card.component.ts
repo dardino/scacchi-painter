@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,10 +8,11 @@ import { Author } from '@sp/dbmanager/src/lib/models';
 export type AuthorCardActions = "delete" | "edit";
 
 @Component({
-    selector: 'lib-author-card',
-    templateUrl: './author-card.component.html',
-    imports: [MatCardModule, MatIconModule, CommonModule, MatButtonModule],
-    styleUrl: './author-card.component.less',
+  selector: 'lib-author-card',
+  templateUrl: './author-card.component.html',
+  imports: [MatCardModule, MatIconModule, MatButtonModule],
+  styleUrl: './author-card.component.less',
+  standalone: true
 })
 export class AuthorCardComponent {
 

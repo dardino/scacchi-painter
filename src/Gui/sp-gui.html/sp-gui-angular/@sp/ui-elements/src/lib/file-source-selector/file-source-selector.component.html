@@ -1,14 +1,16 @@
 <ul class="open-from">
-  <li *ngIf="!hideNew" [ngClass]="{ current: current === 'new' }">
-    <a tabindex="0" mat-stroked-button (click)="selectSource('new')">
-      <span class="open-button">
-        <mat-icon>library_add</mat-icon>
-        <span>New file</span>
-      </span>
-    </a>
-  </li>
+  @if (!hideNew) {
+    <li [ngClass]="{ current: current === 'new' }">
+      <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('new')" (click)="selectSource('new')">
+        <span class="open-button">
+          <mat-icon>library_add</mat-icon>
+          <span>New file</span>
+        </span>
+      </a>
+    </li>
+  }
   <li [ngClass]="{ current: current === 'local' }">
-    <a tabindex="0" mat-stroked-button (click)="selectSource('local')">
+    <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('local')" (click)="selectSource('local')">
       <span class="open-button">
         <mat-icon>folder</mat-icon>
         <span>Local folder</span>
@@ -16,7 +18,7 @@
     </a>
   </li>
   <li [ngClass]="{ current: current === 'dropbox' }">
-    <a tabindex="0" mat-stroked-button (click)="selectSource('dropbox')">
+    <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('dropbox')" (click)="selectSource('dropbox')">
       <span class="open-button">
         <mat-icon svgIcon="dropbox_icon"></mat-icon>
         <span>Dropbox</span>
@@ -24,7 +26,7 @@
     </a>
   </li>
   <li [ngClass]="{ current: current === 'onedrive' }">
-    <a tabindex="0" mat-stroked-button (click)="selectSource('onedrive')">
+    <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('onedrive')" (click)="selectSource('onedrive')">
       <span class="open-button">
         <mat-icon svgIcon="onedrive_icon"></mat-icon>
         <span>OneDrive</span>

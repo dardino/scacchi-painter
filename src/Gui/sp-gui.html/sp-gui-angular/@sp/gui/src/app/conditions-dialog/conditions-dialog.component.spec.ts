@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ThirdPartyModules } from "../modules";
 import { ConditionsDialogComponent } from "./conditions-dialog.component";
 
 describe("ConditionsDialogComponent", () => {
@@ -10,8 +9,8 @@ describe("ConditionsDialogComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConditionsDialogComponent ],
-      imports: [...ThirdPartyModules],
+      declarations: [],
+      imports: [],
       providers: [
         {provide: MatDialogRef, useValue: {}},
         {provide: MAT_DIALOG_DATA, useValue: []},

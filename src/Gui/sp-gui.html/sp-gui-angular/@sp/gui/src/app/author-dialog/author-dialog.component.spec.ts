@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ThirdPartyModules } from '../modules';
 import { AuthorDialogComponent } from './author-dialog.component';
 
 describe('AuthorDialogComponent', () => {
@@ -10,8 +9,8 @@ describe('AuthorDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthorDialogComponent],
-      imports: [...ThirdPartyModules],
+      declarations: [],
+      imports: [],
       providers: [
         {provide: MatDialogRef, useValue: {}},
         {provide: MAT_DIALOG_DATA, useValue: []},

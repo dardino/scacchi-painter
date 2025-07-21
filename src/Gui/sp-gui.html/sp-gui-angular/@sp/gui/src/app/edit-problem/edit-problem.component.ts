@@ -8,10 +8,17 @@ import {
   OnInit,
   ViewChild
 } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
+import { HalfMoveInfo } from "@dardino-chess/core";
+import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
+import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
@@ -24,27 +31,37 @@ import {
   notNull,
 } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
-import { EditCommand } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
-import { ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
+import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
+import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
+import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
+import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
 import { BehaviorSubject, Subscription, skip } from "rxjs";
 import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
-import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 
 @Component({
     selector: "app-edit-problem",
     templateUrl: "./edit-problem.component.html",
     styleUrls: ["./edit-problem.component.less"],
-    standalone: false
+    standalone: true,
+    imports: [
+    MatToolbarModule,
+    ToolbarEditComponent,
+    ChessboardModule,
+    MatTabsModule,
+    ProblemInfoComponent,
+    ToolbarEngineComponent,
+    SpSolutionDescComponent,
+    MatMenuModule,
+    MatButtonModule,
+    MatIconModule
+]
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
-  public get rows$() {
-    return this.rows$ubject.asObservable();
-  }
 
   public get problem() {
     return this.current.Problem;
@@ -83,9 +100,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscribe: Subscription;
 
   public editMode: EditModes = "select";
-  public rows: string[] = [];
   public boardType: "HTML" | "canvas" = "HTML";
-  public rows$ubject = new BehaviorSubject<string[]>([]);
+  public rows$ubject = new BehaviorSubject<HalfMoveInfo[] | null>(null);
   menuX = 0;
   menuY = 0;
   contextOnCell: SquareLocation;
@@ -94,7 +110,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private leaveTimeout?: ReturnType<typeof setTimeout>;
 
-  private commandMapper: { [key in EditCommand]: () => void } = {
+  private commandMapper: Record<EditCommand, () => void> = {
     flipH: () => this.current.FlipBoard("y"),
     flipV: () => this.current.FlipBoard("x"),
     rotateL: () => {
@@ -179,8 +195,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   startSolve(mode: "start" | "try") {
-    this.rows = [];
-    this.rows$ubject.next(this.rows);
+    if (!this.problem) {
+      console.warn("[WARN] -> No problem selected!");
+      return;
+    }
+    this.problem.jsonSolution = [];
+    this.rows$ubject.next(null);
+    this.rows$ubject.next([]);
     if (this.current.Problem) {
       this.current.Problem.htmlSolution = "";
       this.current.Problem.textSolution = "";
@@ -204,12 +225,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribe = this.engine.solution$.pipe(
       skip(1) // skip first execution to avoid the reset of text at load
     ).subscribe((msg) => {
-      this.rows.push(...msg.replace(/[\r\n]+/g, "\n").split("\n"));
-      this.rows$ubject.next(this.rows);
-      if (this.current.Problem) {
-        this.current.Problem.htmlSolution = this.toHtml(this.rows);
-        this.current.Problem.textSolution = this.rows.join(`\n`);
-      }
+      if (msg === null) return;
+      if (!this.current.Problem) return;
+      const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
+      this.current.Problem.htmlSolution += this.toHtml([...raw]);
+      this.current.Problem.textSolution += `\n` +raw.join(`\n`);
+      this.current.Problem.jsonSolution.push(...msg.moveTree);
+      this.rows$ubject.next(msg.moveTree);
     });
 
     this.route.params.subscribe((params) => {

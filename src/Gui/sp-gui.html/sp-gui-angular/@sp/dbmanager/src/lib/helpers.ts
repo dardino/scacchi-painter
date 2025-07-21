@@ -96,15 +96,15 @@ export interface IProblem {
   personalID: string;
   prizeDescription: string;
   source: string;
-  authors: Array<Partial<Author>>;
-  pieces: Array<Partial<IPiece>> | null;
+  authors: Partial<Author>[];
+  pieces: Partial<IPiece>[] | null;
   twins: Partial<ITwins> | null;
   conditions: string[];
   tags: string[];
-  snapshots: { [key in string | number]: string };
+  snapshots: Record<string | number, string>;
 }
 
-export enum SequnceTypes {
+export enum SequenceTypes {
   Normal = "Normal",
 }
 export const TwinTypes = [
@@ -139,7 +139,7 @@ export enum TwinModes {
 export type TwinModesKeys = keyof typeof TwinModes;
 
 export interface ITwins {
-  TwinSequenceTypes?: SequnceTypes;
+  TwinSequenceTypes?: SequenceTypes;
   TwinList?: ITwin[];
 }
 
@@ -164,7 +164,7 @@ export interface Author {
 
 export interface IPiece {
   appearance: Figurine | "";
-  fairyCode: Array<{ code: string; params: string[] }>;
+  fairyCode: { code: string; params: string[] }[];
   color: PieceColors;
   column: Columns;
   traverse: Traverse;
@@ -390,9 +390,7 @@ const RotationsCodes = [
 ] as const;
 type RotationsCodes = typeof RotationsCodes[number];
 
-const RotationsCodeMap: {
-  [key in RotationsCodes]: PieceRotation;
-} = {
+const RotationsCodeMap: Record<RotationsCodes, PieceRotation> = {
   "+ ": "NoRotation",
   "+/": "Clockwise45",
   "+-": "Clockwise90",
@@ -429,7 +427,7 @@ Stipulation="Mate"
         <ZipCode/>
         <StateOrProvince/>
         <Country/>
-        <Language>it-IT</Language>
+        <Language>it</Language>
       </Author>
       <Author>
         <NameAndSurname>Valerio Agostini</NameAndSurname>
@@ -439,7 +437,7 @@ Stipulation="Mate"
         <ZipCode/>
         <StateOrProvince/>
         <Country/>
-        <Language>it-IT</Language>
+        <Language>it</Language>
       </Author>
     </Authors>
     <Pieces>
@@ -550,11 +548,11 @@ export const getPiecesString = (row: string): string[] => {
   return piecesStrings;
 };
 
-export const rowToPieces = (row1: string): Array<Partial<IPiece> | null> => {
+export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
   const fairies = /\{[a-z]*\}/.exec(row1);
   const piecesStrings = getPiecesString(row1);
 
-  const pieces: Array<Partial<IPiece> | null> = [];
+  const pieces: (Partial<IPiece> | null)[] = [];
   let f = 0;
   for (const c of piecesStrings) {
     // empty cell
@@ -595,7 +593,7 @@ export const fenToChessBoard = (original: string) => {
   const [fen] = original.split(" ");
   const fenrows = fen.split("/");
   const pieces = fenrows.map((f) => rowToPieces(f));
-  const cells = pieces.reduce<Array<Partial<IPiece> | null>>(
+  const cells = pieces.reduce<(Partial<IPiece> | null)[]>(
     (a, b) => a.concat(b),
     []
   );

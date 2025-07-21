@@ -51,3 +51,6 @@ log.txt
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
+
+#scripts
+scripts/*.txt

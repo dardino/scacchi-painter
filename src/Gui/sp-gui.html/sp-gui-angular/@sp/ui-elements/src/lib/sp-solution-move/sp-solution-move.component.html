@@ -1,0 +1,7 @@
+@let num = value.num;
+<div [attr.data-indent]="hideNum ? 0 : num" [attr.data-part]="value.part"  class="move">
+  @if (!hideNum || value.part === "l") {
+    <span class="num">{{numText}}</span>
+  }
+  <span>{{moveText}}</span>
+</div>

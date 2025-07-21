@@ -1,4 +1,4 @@
-import { ITwins, SequnceTypes, TwinModes } from "../helpers";
+import { ITwins, SequenceTypes, TwinModes } from "../helpers";
 import { Twin } from "./twin";
 import { Twins } from "./twins";
 
@@ -21,7 +21,7 @@ describe("Twins - fromJson", () => {
           ValueC: ""
         },
       ],
-      TwinSequenceTypes: SequnceTypes.Normal,
+      TwinSequenceTypes: SequenceTypes.Normal,
     };
 
     const twins = Twins.fromJson(json);
@@ -31,7 +31,7 @@ describe("Twins - fromJson", () => {
     expect(twins.TwinList[0].TwinType).toBe("Diagram");
     expect(twins.TwinList[1].TwinModes).toBe(TwinModes.Normal);
     expect(twins.TwinList[1].TwinType).toBe("Custom");
-    expect(twins.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins.TwinSequenceTypes).toBe(SequenceTypes.Normal);
   });
 
   it("should handle null or undefined input", () => {
@@ -39,19 +39,19 @@ describe("Twins - fromJson", () => {
     expect(twins1.TwinList.length).toBe(1);
     expect(twins1.TwinList[0].TwinModes).toBe(TwinModes.Normal);
     expect(twins1.TwinList[0].TwinType).toBe("Diagram");
-    expect(twins1.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins1.TwinSequenceTypes).toBe(SequenceTypes.Normal);
 
     const twins2 = Twins.fromJson(undefined);
     expect(twins2.TwinList.length).toBe(1);
     expect(twins2.TwinList[0].TwinModes).toBe(TwinModes.Normal);
     expect(twins2.TwinList[0].TwinType).toBe("Diagram");
-    expect(twins2.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins2.TwinSequenceTypes).toBe(SequenceTypes.Normal);
   });
 
   it("should handle empty TwinList", () => {
     const json: ITwins = {
       TwinList: [],
-      TwinSequenceTypes: SequnceTypes.Normal,
+      TwinSequenceTypes: SequenceTypes.Normal,
     };
 
     const twins = Twins.fromJson(json);
@@ -59,7 +59,7 @@ describe("Twins - fromJson", () => {
     expect(twins.TwinList.length).toBe(1);
     expect(twins.TwinList[0].TwinModes).toBe(TwinModes.Normal);
     expect(twins.TwinList[0].TwinType).toBe("Diagram");
-    expect(twins.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins.TwinSequenceTypes).toBe(SequenceTypes.Normal);
   });
 
   it("should handle sigle TwinList", () => {
@@ -71,7 +71,7 @@ describe("Twins - fromJson", () => {
           ValueB: "",
           ValueC: ""
         }],
-      TwinSequenceTypes: SequnceTypes.Normal,
+      TwinSequenceTypes: SequenceTypes.Normal,
     };
 
     const twins = Twins.fromJson(json);
@@ -79,7 +79,7 @@ describe("Twins - fromJson", () => {
     expect(twins.TwinList.length).toBe(1);
     expect(twins.TwinList[0].TwinModes).toBe(TwinModes.Normal);
     expect(twins.TwinList[0].TwinType).toBe("Diagram");
-    expect(twins.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins.TwinSequenceTypes).toBe(SequenceTypes.Normal);
   });
 
   it("should handle multiple 'Diagram' Twins", () => {
@@ -107,7 +107,7 @@ describe("Twins - fromJson", () => {
           ValueC: ""
         },
       ],
-      TwinSequenceTypes: SequnceTypes.Normal,
+      TwinSequenceTypes: SequenceTypes.Normal,
     };
 
     const twins = Twins.fromJson(json);
@@ -117,13 +117,13 @@ describe("Twins - fromJson", () => {
     expect(twins.TwinList[0].TwinType).toBe("Diagram");
     expect(twins.TwinList[1].TwinModes).toBe(TwinModes.Normal);
     expect(twins.TwinList[1].TwinType).toBe("Custom");
-    expect(twins.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins.TwinSequenceTypes).toBe(SequenceTypes.Normal);
   });
 
   it("should add 'Diagram' Twin if TwinList is empty or doesn't have 'Diagram'", () => {
     const json1: ITwins = {
       TwinList: [],
-      TwinSequenceTypes: SequnceTypes.Normal,
+      TwinSequenceTypes: SequenceTypes.Normal,
     };
 
     const twins1 = Twins.fromJson(json1);
@@ -131,7 +131,7 @@ describe("Twins - fromJson", () => {
     expect(twins1.TwinList.length).toBe(1);
     expect(twins1.TwinList[0].TwinModes).toBe(TwinModes.Normal);
     expect(twins1.TwinList[0].TwinType).toBe("Diagram");
-    expect(twins1.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins1.TwinSequenceTypes).toBe(SequenceTypes.Normal);
 
     const json2: ITwins = {
       TwinList: [
@@ -143,7 +143,7 @@ describe("Twins - fromJson", () => {
           ValueC: ""
         },
       ],
-      TwinSequenceTypes: SequnceTypes.Normal,
+      TwinSequenceTypes: SequenceTypes.Normal,
     };
 
     const twins2 = Twins.fromJson(json2);
@@ -153,7 +153,7 @@ describe("Twins - fromJson", () => {
     expect(twins2.TwinList[0].TwinType).toBe("Diagram");
     expect(twins2.TwinList[1].TwinModes).toBe(TwinModes.Normal);
     expect(twins2.TwinList[1].TwinType).toBe("Custom");
-    expect(twins2.TwinSequenceTypes).toBe(SequnceTypes.Normal);
+    expect(twins2.TwinSequenceTypes).toBe(SequenceTypes.Normal);
   });
 });
 describe("Twins - HasDiagram", () => {
@@ -168,7 +168,7 @@ describe("Twins - HasDiagram", () => {
           ValueC: ""
         },
       ],
-      TwinSequenceTypes: SequnceTypes.Normal,
+      TwinSequenceTypes: SequenceTypes.Normal,
     };
     const p = Twins.fromJson({});
     p.TwinList = (twins.TwinList ?? []).map(Twin.fromJson);

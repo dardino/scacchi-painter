@@ -6,7 +6,6 @@
     "analytics": "014f9cc7-0686-40f3-9849-09116ddf25ba"
   },
   "newProjectRoot": "@sp",
-
   "projects": {
     "gui": {
       "projectType": "application",
@@ -84,33 +83,36 @@
               ],
               "serviceWorker": "@sp/gui/ngsw-config.json"
             },
-            "electron": {
-              "outputPath": {
-                "base": "../sp-gui-electron/frontend"
-              },
+            "tauri": {
+              "deleteOutputPath": true,
+              "outputMode": "static",
               "fileReplacements": [
                 {
                   "replace": "@sp/gui/src/environments/environment.ts",
-                  "with": "@sp/gui/src/environments/environment.electron.ts"
+                  "with": "@sp/gui/src/environments/environment.tauri.ts"
                 }
               ],
-              "baseHref": "./",
+              "outputPath": {
+                "base": "../sp-gui/build/gui"
+              },
               "optimization": true,
-              "outputHashing": "none",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
               "extractLicenses": true,
-              "deleteOutputPath": true,
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "5mb",
-                  "maximumError": "15mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": "@sp/gui/ngsw-config.json"
             }
           },
           "defaultConfiguration": ""
@@ -123,6 +125,9 @@
           "configurations": {
             "production": {
               "buildTarget": "gui:build:production"
+            },
+            "tauri": {
+              "buildTarget": "gui:build:tauri"
             }
           }
         },
@@ -333,6 +338,30 @@
     },
     "@angular-eslint/schematics:library": {
       "setParserOptionsProject": true
+    },
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   }
 }

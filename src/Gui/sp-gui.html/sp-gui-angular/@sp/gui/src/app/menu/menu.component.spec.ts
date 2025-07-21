@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { AppRoutingModule } from "../app-routing.module";
-import { ThirdPartyModules } from "../modules";
+import { RouterModule } from "@angular/router";
 import { MenuComponent } from "./menu.component";
 
 describe("MenuComponent", () => {
@@ -10,8 +9,8 @@ describe("MenuComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...ThirdPartyModules, AppRoutingModule],
-      declarations: [ MenuComponent ]
+      imports: [RouterModule.forRoot([])],
+      declarations: []
     })
     .compileComponents();
   }));

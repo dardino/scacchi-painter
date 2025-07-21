@@ -33,7 +33,7 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/src/Gui/sp-gui.html/sp-gui-angular" # App source code path
           api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api" # Api source code path - optional
-          output_location: "dist/gui" # Built app content directory - optional
+          output_location: "dist/gui/browser" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
           app_build_command: "yarn build:Azure"
           deployment_environment: "release"
@@ -63,7 +63,7 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/src/Gui/sp-gui.html/sp-gui-angular" # App source code path
           api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api" # Api source code path - optional
-          output_location: "dist/gui" # Built app content directory - optional
+          output_location: "dist/gui/browser" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
           app_build_command: "yarn build:Azure"
 
