@@ -1,6 +1,7 @@
 // Create the main myMSALObj instance
 
 import { AccountInfo, AuthenticationResult, InteractionRequiredAuthError, PopupRequest, PublicClientApplication, SilentRequest } from "@azure/msal-browser";
+import { setLocalAuthInfo } from "./helpers";
 import { MSAL_CONFIG, REQUESTS } from "./onedrive.config";
 
 
@@ -46,6 +47,10 @@ class OneDriveCliProvider {
         if (result instanceof Error) {
           console.error("Silent Error: " + result);
           if (result instanceof InteractionRequiredAuthError) {
+            setLocalAuthInfo({
+              redirect: "onedrive",
+              return_url: location.pathname + location.hash,
+            });
             await this.#myMSALObj.acquireTokenRedirect(REQUESTS.LOGIN);
           }
         }
@@ -105,6 +110,10 @@ class OneDriveCliProvider {
       if (error instanceof InteractionRequiredAuthError) {
         // fallback to interaction when silent call fails
         console.warn("acquiring token using redirect");
+        setLocalAuthInfo({
+          redirect: "onedrive",
+          return_url: location.pathname + location.hash,
+        });
         this.#myMSALObj.acquireTokenRedirect(request);
       } else {
         console.error(error);
