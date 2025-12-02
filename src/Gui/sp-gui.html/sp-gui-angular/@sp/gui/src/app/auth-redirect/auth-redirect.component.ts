@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { PublicClientApplication } from "@azure/msal-browser";
 import { TokenResponse } from "@sp/dbmanager/src/lib/oauth_funcs/pkce";
 import { LocalAuthInfo, getLocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager/src/lib/oauth_providers/helpers";
-import { MSAL_CONFIG } from "@sp/dbmanager/src/public-api";
+import { OneDriveCliProvider } from "@sp/dbmanager/src/lib/oauth_providers/onedrive.cli";
 
 @Component({
     selector: "app-auth-redirect",
@@ -11,7 +10,6 @@ import { MSAL_CONFIG } from "@sp/dbmanager/src/public-api";
 
 })
 export class AuthRedirectComponent implements OnInit {
-  private myMsal = new PublicClientApplication(MSAL_CONFIG);
 
   ngOnInit(): void {
     this.parseAuth();
@@ -45,20 +43,18 @@ export class AuthRedirectComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async redirectMsal(authInfo: Required<LocalAuthInfo>) {
-    const response = await this.myMsal
-      .handleRedirectPromise()
-      .then((sal) => {
-        setLocalAuthInfo({ onedrive_token: JSON.stringify(sal) });
-        return true;
-      })
-      .catch((err) => {
-        console.error(err);
-        return false;
-      });
-    return response;
+    try {
+      // Use OneDriveCliProvider which properly initializes and handles the redirect
+      await OneDriveCliProvider.initialize();
+      setLocalAuthInfo({ onedrive_token: "authenticated" });
+      return true;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
   }
-
   async redirectDropbox(authInfo: Required<LocalAuthInfo>) {
     const search = new URLSearchParams(`?${location.hash.substring(1)}`);
     const tokenMessage: TokenResponse = {

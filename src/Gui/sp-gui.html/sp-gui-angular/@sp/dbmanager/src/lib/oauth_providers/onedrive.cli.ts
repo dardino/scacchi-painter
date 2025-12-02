@@ -23,17 +23,6 @@ class OneDriveCliProvider {
     }
   }
 
-  static async #ssoSilent(): Promise<void | AuthenticationResult | Error> {
-    try {
-      const response = await this.#myMSALObj.ssoSilent(REQUESTS.LOGIN);
-      this.#accountId = response.account.homeAccountId;
-      this.showWelcomeMessage(response.account);
-      return await this.getTokenRedirect(REQUESTS.LOGIN, response.account);
-    } catch (error) {
-      return error as Error;
-    }
-  }
-
   static async handleResponse(resp: AuthenticationResult | null) {
     if (resp !== null) {
       this.#accountId = resp.account.homeAccountId;
@@ -43,17 +32,13 @@ class OneDriveCliProvider {
       // need to call getAccount here?
       const currentAccounts = this.#myMSALObj.getAllAccounts();
       if (!currentAccounts || currentAccounts.length < 1) {
-        const result = await this.#ssoSilent();
-        if (result instanceof Error) {
-          console.error("Silent Error: " + result);
-          if (result instanceof InteractionRequiredAuthError) {
-            setLocalAuthInfo({
-              redirect: "onedrive",
-              return_url: location.pathname + location.hash,
-            });
-            await this.#myMSALObj.acquireTokenRedirect(REQUESTS.LOGIN);
-          }
-        }
+        // No accounts found, redirect to login
+        console.log("No accounts found, redirecting to login");
+        setLocalAuthInfo({
+          redirect: "onedrive",
+          return_url: location.pathname + location.hash,
+        });
+        await this.#myMSALObj.loginRedirect(REQUESTS.LOGIN);
       } else if (currentAccounts.length > 1) {
         // Add choose account code here
       } else if (currentAccounts.length === 1) {
