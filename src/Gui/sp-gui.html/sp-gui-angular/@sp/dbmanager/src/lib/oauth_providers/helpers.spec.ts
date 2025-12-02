@@ -29,6 +29,7 @@ describe("OAuth Helpers", () => {
       expect(authInfo.state).toBe("");
       expect(authInfo.dropbox_token).toBe("null");
       expect(authInfo.onedrive_token).toBe("null");
+      expect(authInfo.return_url).toBe("");
     });
 
     it("should return stored redirect value", () => {
@@ -63,6 +64,14 @@ describe("OAuth Helpers", () => {
       const authInfo = getLocalAuthInfo();
 
       expect(authInfo.onedrive_token).toBe(mockToken);
+    });
+
+    it("should return stored return_url value", () => {
+      localStorage.setItem("return_url", "/savefile#dropbox");
+
+      const authInfo = getLocalAuthInfo();
+
+      expect(authInfo.return_url).toBe("/savefile#dropbox");
     });
 
     it("should return all stored values together", () => {
@@ -110,6 +119,12 @@ describe("OAuth Helpers", () => {
       expect(localStorage.getItem("onedrive_token")).toBe(mockToken);
     });
 
+    it("should set return_url value in localStorage", () => {
+      setLocalAuthInfo({ return_url: "/savefile#onedrive" });
+
+      expect(localStorage.getItem("return_url")).toBe("/savefile#onedrive");
+    });
+
     it("should only set provided properties", () => {
       // First set some values
       localStorage.setItem("redirect", "dropbox");
@@ -127,7 +142,8 @@ describe("OAuth Helpers", () => {
         redirect: "dropbox",
         state: "multi-state",
         dropbox_token: "token-123",
-        onedrive_token: "token-456"
+        onedrive_token: "token-456",
+        return_url: "/edit/1"
       };
 
       setLocalAuthInfo(authInfo);
@@ -136,6 +152,7 @@ describe("OAuth Helpers", () => {
       expect(localStorage.getItem("state")).toBe("multi-state");
       expect(localStorage.getItem("dropbox_token")).toBe("token-123");
       expect(localStorage.getItem("onedrive_token")).toBe("token-456");
+      expect(localStorage.getItem("return_url")).toBe("/edit/1");
     });
 
     it("should handle empty object without errors", () => {
@@ -200,6 +217,67 @@ describe("OAuth Helpers", () => {
 
       const authInfo = getLocalAuthInfo();
       expect(authInfo.redirect).toBe("null");
+    });
+
+    it("should store return_url for Dropbox auth and retrieve it after authentication", () => {
+      // Simulate storing auth info with return_url before Dropbox redirect
+      setLocalAuthInfo({
+        redirect: "dropbox",
+        state: "dropbox-auth-state",
+        return_url: "/savefile#dropbox"
+      });
+
+      // Simulate retrieving auth info after redirect
+      const authInfo = getLocalAuthInfo();
+
+      expect(authInfo.redirect).toBe("dropbox");
+      expect(authInfo.return_url).toBe("/savefile#dropbox");
+    });
+
+    it("should store return_url for OneDrive auth and retrieve it after authentication", () => {
+      // Simulate storing auth info with return_url before OneDrive redirect
+      setLocalAuthInfo({
+        redirect: "onedrive",
+        state: "onedrive-auth-state",
+        return_url: "/savefile#onedrive"
+      });
+
+      // Simulate retrieving auth info after redirect
+      const authInfo = getLocalAuthInfo();
+
+      expect(authInfo.redirect).toBe("onedrive");
+      expect(authInfo.return_url).toBe("/savefile#onedrive");
+    });
+
+    it("should preserve return_url through token storage", () => {
+      // Simulate pre-auth state with return_url
+      setLocalAuthInfo({
+        redirect: "dropbox",
+        state: "pre-auth",
+        return_url: "/edit/5"
+      });
+
+      // Simulate post-auth token storage (should not clear return_url)
+      const mockToken = JSON.stringify({
+        access_token: "authenticated-token"
+      });
+      setLocalAuthInfo({ dropbox_token: mockToken });
+
+      // Verify return_url was preserved
+      const authInfo = getLocalAuthInfo();
+      expect(authInfo.return_url).toBe("/edit/5");
+      expect(authInfo.dropbox_token).toBe(mockToken);
+    });
+
+    it("should return empty return_url when not set (fallback to default)", () => {
+      // Simulate auth without setting return_url
+      setLocalAuthInfo({
+        redirect: "dropbox",
+        state: "auth-state"
+      });
+
+      const authInfo = getLocalAuthInfo();
+      expect(authInfo.return_url).toBe("");
     });
   });
 });

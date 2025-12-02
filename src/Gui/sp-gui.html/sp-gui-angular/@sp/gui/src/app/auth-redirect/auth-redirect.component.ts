@@ -34,8 +34,9 @@ export class AuthRedirectComponent implements OnInit {
     }
     setTimeout(() => {
       if (response) {
-        const urlredirect = "/openfile#" + authInfo.redirect;
-        location.href = urlredirect;
+        // Redirect to the original URL the user was on, or fallback to /openfile
+        const returnUrl = authInfo.return_url || "/openfile#" + authInfo.redirect;
+        location.href = returnUrl;
       } else {
         location.href = "/";
       }
