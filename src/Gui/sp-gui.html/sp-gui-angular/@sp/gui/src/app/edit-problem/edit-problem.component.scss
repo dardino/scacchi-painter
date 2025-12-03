@@ -1,5 +1,5 @@
-@import "../../../../mediaquery";
-@import "../../../../toolbarcommon";
+@use "../../../../mediaquery" as mq;
+@use "../../../../toolbarcommon" as tb;
 
 :host {
   display: contents;
@@ -9,13 +9,13 @@
   display: block;
   grid-column: span 2;
 
-  @media (min-width: ($smallScreen + 1)) and (orientation: landscape) {
+  @media (min-width: (mq.$smallScreen + 1)) and (orientation: landscape) {
     position: sticky;
-    top: $maintoolbarH;
+    top: mq.$maintoolbarH;
     z-index: 2;
   }
 
-  @media (max-height: $smallScreen) {
+  @media (max-height: mq.$smallScreen) {
     top: 0;
   }
 }
@@ -46,34 +46,34 @@
   margin: 0.5rem;
   grid-row: 2 / -1;
 
-  @media (max-width: $smallScreen) and (orientation: portrait) {
+  @media (max-width: mq.$smallScreen) and (orientation: portrait) {
     width: calc(100vw - 1rem) !important;
   }
 
-  @media (max-width: $smallScreen) and (orientation: landscape) {
-    width: $boardwidthSM !important;
+  @media (max-width: mq.$smallScreen) and (orientation: landscape) {
+    width: mq.$boardwidthSM !important;
   }
 
   .chessboard-workarea {
     z-index: 1;
 
-    @media (min-width: ($smallScreen + 1)) {
+    @media (min-width: (mq.$smallScreen + 1)) {
       position: sticky;
-      top: calc($maintoolbarH + 3.8rem);
+      top: calc(mq.$maintoolbarH + 3.8rem);
     }
 
-    @media (max-width: $smallScreen) and (orientation: landscape) {
+    @media (max-width: mq.$smallScreen) and (orientation: landscape) {
       position: sticky;
       top: 0.5rem;
     }
 
-    @media (max-height: $smallScreen) {
+    @media (max-height: mq.$smallScreen) {
       top: 3.8rem;
     }
   }
 }
 
-@media (max-width: $smallScreen) and (orientation: portrait) {
+@media (max-width: mq.$smallScreen) and (orientation: portrait) {
   #toolbar {
     grid-row: 1;
     grid-column: 1 / -1;
@@ -90,7 +90,7 @@
   }
 }
 
-@include toolbar();
+@include tb.toolbar();
 
 .editbtn {
   position: fixed;
@@ -108,7 +108,7 @@
   background: #393939;
   cursor: ew-resize;
 
-  @media (max-width: $smallScreen) {
+  @media (max-width: mq.$smallScreen) {
     display: none;
   }
 }

@@ -1,4 +1,4 @@
-@import "../../../../mediaquery";
+@use "../../../../mediaquery" as mq;
 
 :host {
   display: contents;
@@ -14,12 +14,12 @@
     margin: 0;
     display: block;
     width: 4em;
-    background-color: rgba(255, 255, 255, .2);
+    background-color: rgba(255, 255, 255, 0.2);
     text-align: right;
     padding: 0 0.5rem;
     flex: 0 0 auto;
 
-    @media (max-width: $smallScreen) {
+    @media (max-width: mq.$smallScreen) {
       flex: 1 1 auto;
     }
   }
@@ -29,7 +29,7 @@
     flex: 1 1 0%;
     padding: 0 1rem;
 
-    @media (max-width: $smallScreen) {
+    @media (max-width: mq.$smallScreen) {
       display: none;
     }
 
@@ -49,11 +49,10 @@
     box-sizing: border-box;
     align-items: center;
 
-    @media (max-width: $smallScreen) {
+    @media (max-width: mq.$smallScreen) {
       width: 8.6rem;
-      font-size: .7em;
+      font-size: 0.7em;
     }
-
   }
 }
 
@@ -61,7 +60,7 @@
   flex: 1 1 0;
   display: block;
 
-  @media (max-width: $smallScreen) {
+  @media (max-width: mq.$smallScreen) {
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -81,25 +80,24 @@
   flex-direction: column;
 
   .twins {
-    @media (min-width: $smallScreen) {
+    @media (min-width: mq.$smallScreen) {
       display: none;
     }
   }
 
-  >dl {
+  > dl {
     margin: 0;
     flex: 0 0 auto;
     padding: 1rem;
 
-    @media (max-width: $smallScreen) {
-      padding: .5rem;
+    @media (max-width: mq.$smallScreen) {
+      padding: 0.5rem;
     }
   }
 
   dd {
     margin: 0;
     padding: 0;
-
   }
 
   dt {
@@ -131,7 +129,7 @@
   height: 14.6rem;
   flex: 0 0 auto;
 
-  @media (max-width: $smallScreen) {
+  @media (max-width: mq.$smallScreen) {
     width: 8.6rem;
     height: 8.6rem;
   }
@@ -163,7 +161,7 @@
 
       ::after {
         content: "/";
-        padding: 0 .2rem;
+        padding: 0 0.2rem;
         display: inline;
       }
     }

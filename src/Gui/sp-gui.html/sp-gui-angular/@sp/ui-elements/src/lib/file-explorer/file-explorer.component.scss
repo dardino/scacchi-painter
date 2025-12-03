@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .folderItem {
   display: flex;
   cursor: pointer;
@@ -25,7 +27,7 @@
   padding: 0;
 }
 .typeFolder {
-  background-color: darken(#144e6c, 10);
+  background-color: color.adjust(#144e6c, $lightness: -10%);
 }
 .typeFile {
   background-color: #144e6c;

@@ -92,9 +92,6 @@ importers:
       tslib:
         specifier: ^2.6.0
         version: 2.8.1
-      zone.js:
-        specifier: ^0.15.0
-        version: 0.15.1
     devDependencies:
       '@analogjs/vite-plugin-angular':
         specifier: ^2.1.2
@@ -13666,4 +13663,5 @@ snapshots:
 
   zod@3.25.76: {}
 
-  zone.js@0.15.1: {}
+  zone.js@0.15.1:
+    optional: true

@@ -1,4 +1,4 @@
-@import "../../../../mediaquery";
+@use "../../../../mediaquery" as mq;
 
 :host {
   display: contents;
@@ -16,7 +16,7 @@
   margin: 0.3rem;
 }
 .boardtype_switch {
-  @media (max-width: $smallScreen) {
+  @media (max-width: mq.$smallScreen) {
     display: none;
   }
 }

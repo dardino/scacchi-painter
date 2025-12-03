@@ -1,15 +1,15 @@
-@import "../../../../mediaquery";
+@use "../../../../mediaquery" as mq;
 
 :host {
   display: contents;
 }
-h1.title{
+h1.title {
   text-shadow: -1px -1px 1px grey, 1px 1px 0px black;
   opacity: 0.8;
   padding: 1rem;
   grid-column: span 2;
 }
-@media screen and (max-width: $smallScreen) {
+@media screen and (max-width: mq.$smallScreen) {
   .sources {
     grid-column: span 2;
   }
