@@ -78,7 +78,6 @@ export class ChessboardComponent
     }
     return this.uiCells;
   }
-  fontSize: number;
 
   private settings: {
     CELLCOLORS: [string, string];
@@ -110,7 +109,7 @@ export class ChessboardComponent
   ngOnDestroy(): void {
     // Later, you can stop observing
     this.animationSub.unsubscribe();
-    window.removeEventListener("resize", this.sizeMutated);
+   // window.removeEventListener("resize", this.sizeMutated);
   }
 
   ngOnInit() {
@@ -267,7 +266,6 @@ export class ChessboardComponent
   private sizeMutated = () => {
     this.cellSize =
       (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
-    this.fontSize = Math.floor(this.cellSize / 1.44);
   };
 
   cellInfo(cell: UiCell) {

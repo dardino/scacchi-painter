@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { AbortError } from "@sp/dbmanager/src/lib/providers/AbortError";
@@ -26,7 +26,7 @@ export class OpenFileComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  public showFilePicker = false;
+  public showFilePicker = signal(false);
   @ViewChild("fileloader") fileloader: ElementRef<HTMLInputElement>;
 
   public currentFileService: FileService | null = null;
@@ -53,35 +53,26 @@ export class OpenFileComponent implements OnInit {
   ngOnInit() {
     // Check route parameter first
     this.route.paramMap.subscribe(params => {
-      const source = params.get('source');
+      const source = params.get('source') as AvaliableFileServices | "new" | null | undefined;
       if (source) {
+        // Reset state when switching sources
+        this.showFilePicker.set(false);
+        this.currentFileService = null;
+
         setTimeout(() => {
-          this.sourceSelected(source as AvaliableFileServices | "new");
+          this.sourceSelected(source);
         }, 1);
         return;
       }
 
-      // Fallback to hash for backward compatibility
-      const urlhash = location.hash;
-      if (urlhash === "#dropbox") {
-        setTimeout(() => {
-          this.fromDropbox();
-        }, 1);
-      }
-      if (urlhash === "#onedrive") {
-        setTimeout(() => {
-          this.fromOneDrive();
-        }, 1);
-      }
-      if (urlhash === "#newfile") {
-        setTimeout(() => {
-          this.newFile();
-        }, 1);
-      }
     });
   }
 
   async sourceSelected(source: "new" | AvaliableFileServices) {
+    // Reset state first
+    this.showFilePicker.set(false);
+    this.currentFileService = null;
+
     switch (source) {
       case "new":
         await this.newFile();
@@ -139,13 +130,13 @@ export class OpenFileComponent implements OnInit {
   async fromDropbox() {
     await this.dropboxService.authorize();
     this.currentFileService = this.dropboxService;
-    this.showFilePicker = true;
+    this.showFilePicker.set(true);
   }
 
   async fromOneDrive() {
     await this.onedriveService.authorize();
     this.currentFileService = this.onedriveService;
-    this.showFilePicker = true;
+    this.showFilePicker.set(true);
   }
 
   private async loadFromFile(fileInfo: FileSelected | null) {
