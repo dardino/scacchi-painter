@@ -1,4 +1,4 @@
-@import "../../../mediaquery";
+@use "../../../mediaquery" as mq;
 
 :host {
   display: block;
@@ -7,13 +7,12 @@
 }
 
 .chessboard-image {
-
   position: relative;
   padding-top: 100%;
   width: 100%;
 
-  >.chessboard,
-  >canvas {
+  > .chessboard,
+  > canvas {
     position: absolute;
     top: 0;
     right: 0;
@@ -43,8 +42,6 @@
       font-size: 9.5cqh;
     }
   }
-
-
 }
 
 /* Stile per il div */
@@ -55,7 +52,6 @@
 .rotatingToLeft {
   animation: rotateToRight 3s normal ease-in-out;
 }
-
 
 .clickable {
   cursor: pointer;
@@ -83,8 +79,6 @@
   :last-child {
     word-break: break-all;
   }
-
-  ;
 }
 
 .short-info {
@@ -143,7 +137,7 @@
   justify-content: center;
   background-color: $bgc;
 
-  >span {
+  > span {
     color: $fgc;
     font-size: 3.3cqw;
     text-transform: uppercase;
@@ -151,7 +145,6 @@
     display: block;
   }
 }
-
 
 /* Definizione dell'animazione */
 @keyframes rotateToRight {

@@ -97,7 +97,7 @@ canvas {
 .active {
   outline: solid 0.01em red;
   z-index: 1;
-  background-color: transparentify(lime, 0.45);
+  background-color: rgba(lime, 0.45);
 }
 .rotate-0 {
   transform: rotate(0deg);

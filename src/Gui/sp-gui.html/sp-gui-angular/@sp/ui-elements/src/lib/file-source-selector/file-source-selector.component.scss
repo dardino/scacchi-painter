@@ -1,4 +1,4 @@
-@import "../../../../mediaquery";
+@use "../../../../mediaquery" as mq;
 
 :host {
   display: contents;
@@ -12,12 +12,11 @@
   justify-content: flex-start;
   flex-flow: column nowrap;
 
-  @media screen and (max-width: $smallScreen) {
+  @media screen and (max-width: mq.$smallScreen) {
     /* Add your styles for small screens here */
     flex-flow: row wrap;
     justify-content: flex-start;
   }
-
 
   > li {
     margin: 1rem;

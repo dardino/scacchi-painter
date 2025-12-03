@@ -123,6 +123,46 @@ export class ExampleComponent {}
 
 Bootstrap is done via `bootstrapApplication()` in `@sp/gui/src/main.ts` with `provideRouter()`.
 
+### Zoneless Change Detection (Signal-Based)
+
+**This project runs without zone.js** using Angular's zoneless mode with signals:
+
+- **NO zone.js dependency** - removed from package.json
+- **Change detection**: Uses `provideZonelessChangeDetection()` in main.ts
+- **Manual updates**: External async operations (like Popeye solver) trigger change detection via `ApplicationRef.tick()`
+
+```typescript
+// main.ts
+import { provideZonelessChangeDetection } from '@angular/core';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZonelessChangeDetection(),  // Enables zoneless mode
+    // ... other providers
+  ],
+});
+```
+
+**For async operations outside Angular** (e.g., WebWorkers, Tauri IPC):
+```typescript
+import { ApplicationRef, inject } from '@angular/core';
+
+export class MyService {
+  private appRef = inject(ApplicationRef);
+
+  handleExternalCallback(data: unknown) {
+    this.updateState(data);
+    this.appRef.tick();  // Manually trigger change detection
+  }
+}
+```
+
+**Migration considerations**:
+- ✅ Prefer signals (`signal()`, `computed()`, `effect()`) over RxJS Observables
+- ✅ Use `ApplicationRef.tick()` for external async callbacks
+- ❌ NO `NgZone` imports - removed from codebase
+- ❌ NO `runOutsideAngular()` - not needed in zoneless mode
+
 ### Environment Configuration
 
 Three environment files control behavior:
@@ -198,6 +238,55 @@ Use configured paths (in `tsconfig.json`):
 - `@sp/chessboard/src/*` → `@sp/chessboard/src/*`
 - Always import from `/src/` subdirectories, not from package roots
 
+### SCSS Styling (Dart Sass 3.0 Compatible)
+
+**This project uses modern SCSS with `@use` and `@forward`** (not deprecated `@import`):
+
+```scss
+// ✅ GOOD: Modern module system
+@use "sass:color";
+@use "../../mediaquery" as mq;
+@use "../../toolbarcommon" as tb;
+
+.example {
+  width: mq.$smallScreen;
+  @include tb.toolbar();
+  background: color.adjust(#144e6c, $lightness: -10%);
+}
+```
+
+```scss
+// ❌ BAD: Deprecated syntax (will break in Dart Sass 3.0)
+@import "mediaquery";
+@import "toolbarcommon";
+
+.example {
+  width: $smallScreen;
+  @include toolbar();
+  background: darken(#144e6c, 10);
+}
+```
+
+**Key SCSS conventions**:
+- **Shared variables**: `@sp/mediaquery.scss` exports `$smallScreen`, `$maintoolbarH`, `$boardwidthSM`, `$verySmallScreen`
+- **Shared mixins**: `@sp/toolbarcommon.scss` exports `toolbar()` mixin
+- **Namespace usage**: Always use namespace prefix (`mq.$variable`, `tb.mixin()`)
+- **Color functions**: Use `sass:color` module (`color.adjust()`, `color.scale()`) instead of global `darken()`/`lighten()`
+- **Transparency**: Use `rgba()` instead of deprecated `transparentify()`
+
+**Component-level SCSS pattern**:
+```scss
+@use "../../../../mediaquery" as mq;
+
+:host {
+  display: block;
+}
+
+@media (max-width: mq.$smallScreen) {
+  // Mobile styles
+}
+```
+
 ## Common Tasks
 
 ### Adding a New Component
@@ -207,6 +296,8 @@ Use configured paths (in `tsconfig.json`):
 ng generate component component-name --standalone
 # Add --project=chessboard|dbmanager|uiElements|hostBridge for library components
 ```
+
+**For components with styles**: Angular CLI generates `.scss` files by default (configured in `angular.json` → `schematics.style: "scss"`). Always use `@use` with namespaces for shared variables/mixins.
 
 ### Running Tests
 
@@ -229,7 +320,9 @@ cd sp-gui-angular && pnpm build
 cd sp-gui && pnpm build
 ```
 
-**Build Tool**: Uses Vite for Angular builds (via `@angular-devkit/build-angular:application` builder).
+**Build Tool**: Uses Vite for Angular builds (via `@angular-devkit/build-angular:application` builder), **Dart Sass** for SCSS compilation.
+
+**Tech Stack**: Angular 21, TypeScript 5.9, Vite, Vitest 4, pnpm 9, Zoneless (signals), **Dart Sass 3.0-compatible SCSS**
 
 ### Updating Popeye Metadata
 

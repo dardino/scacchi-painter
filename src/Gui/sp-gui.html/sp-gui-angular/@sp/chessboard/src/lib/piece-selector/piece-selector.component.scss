@@ -1,5 +1,4 @@
-@import "../../../../mediaquery";
-
+@use "../../../../mediaquery" as mq;
 
 :host {
   display: block;
@@ -28,7 +27,6 @@
     height: 33.3%;
     font-size: 7.8cqw;
   }
-
 }
 
 .piece-selector-item {

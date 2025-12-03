@@ -1,4 +1,4 @@
-@import "../../mediaquery";
+@use "../../mediaquery" as mq;
 
 /* You can add global styles to this file, and also import other style files */
 :root {
@@ -31,7 +31,6 @@ body {
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto auto auto auto 1fr;
   grid-template-areas: "menu header" "toolbar1 toolbar1" "toolbar2 toolbar2" "side main" "side main" "side main";
-
 }
 
 .dark-theme {
@@ -76,7 +75,6 @@ body {
 .figurine:after {
   content: attr(data-colored-piece);
 }
-
 
 .mat-tab-body-wrapper {
   flex: 1 1 auto;
