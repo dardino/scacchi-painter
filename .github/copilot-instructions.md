@@ -59,13 +59,13 @@ Run four terminals simultaneously:
 
 ```powershell
 # Terminal 1: Watch Azure Functions API
-cd sp-gui-angular/api && npm run watch
+cd sp-gui-angular/api && pnpm run watch
 
 # Terminal 2: Start Azure Functions locally
 cd sp-gui-angular/api && func start
 
 # Terminal 3: Angular dev server
-cd sp-gui-angular && yarn start
+cd sp-gui-angular && pnpm start
 
 # Terminal 4: Azure Static Web Apps emulator
 cd sp-gui-angular && swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
@@ -77,7 +77,7 @@ cd sp-gui-angular && swa start https://localhost:4200/ --ssl --api-devserver-url
 
 ```powershell
 cd sp-gui
-yarn build  # Runs scripts/build.ts: builds Angular + downloads Popeye + bundles Tauri
+pnpm build  # Runs scripts/build.ts: builds Angular + downloads Popeye + bundles Tauri
 ```
 
 The build script (`sp-gui/scripts/build.ts`) orchestrates:
@@ -87,15 +87,30 @@ The build script (`sp-gui/scripts/build.ts`) orchestrates:
 
 ### Production Deployment
 
-**Azure**: GitHub Actions workflow (`.github/workflows/azure-static-web-apps-orange-sea-080bc3503.yml`) automatically deploys on push to `master` or PRs. Build command: `yarn build:Azure`.
+**Azure**: GitHub Actions workflow (`.github/workflows/azure-static-web-apps-orange-sea-080bc3503.yml`) automatically deploys on push to `master` or PRs. Build command: `pnpm build:Azure`.
 
-**Tauri**: Manual release builds via `yarn tauri build` (requires Rust installed).
+**Tauri**: Manual release builds via `pnpm tauri build` (requires Rust installed).
 
 ## Key Technologies & Patterns
 
-### Angular 20 Standalone Components
+### Package Manager: pnpm
 
-**This project uses Angular 20+ standalone components exclusively** - no NgModules for feature code:
+**This project uses pnpm exclusively** (not npm or yarn):
+
+```powershell
+pnpm install           # Install dependencies
+pnpm start            # Development server
+pnpm build            # Production build
+pnpm test             # Run tests
+```
+
+Configuration:
+- `.npmrc` - pnpm-specific settings (shamefully-hoist, public-hoist-pattern)
+- `pnpm-workspace.yaml` - Workspace configuration (if using monorepo features)
+
+### Angular 21 Standalone Components
+
+**This project uses Angular 21+ standalone components exclusively** - no NgModules for feature code:
 
 ```typescript
 @Component({
@@ -197,19 +212,24 @@ ng generate component component-name --standalone
 
 ```powershell
 cd sp-gui-angular
-yarn test           # Karma unit tests
-yarn test:ci        # Headless Chrome (CI mode)
+pnpm test           # Vitest interactive mode
+pnpm test:ci        # Vitest run mode (CI)
+pnpm test:ui        # Vitest UI mode (browser-based)
 ```
+
+**Test Framework**: This project uses **Vitest 4.0.15** with jsdom environment, not Karma/Jasmine.
 
 ### Building for Production
 
 ```powershell
 # Azure Static Web App
-cd sp-gui-angular && yarn build
+cd sp-gui-angular && pnpm build
 
 # Tauri Desktop App
-cd sp-gui && yarn build
+cd sp-gui && pnpm build
 ```
+
+**Build Tool**: Uses Vite for Angular builds (via `@angular-devkit/build-angular:application` builder).
 
 ### Updating Popeye Metadata
 
@@ -217,9 +237,11 @@ Scripts fetch data from Popeye repository:
 
 ```powershell
 cd sp-gui-angular
-yarn vite-node ./scripts/update_fairy_pieces.ts
-yarn vite-node ./scripts/update_popeye_instructions.ts
+pnpm exec vite-node ./scripts/update_fairy_pieces.ts
+pnpm exec vite-node ./scripts/update_popeye_instructions.ts
 ```
+
+**Note**: Uses `vite-node` for TypeScript execution (not ts-node).
 
 ## Troubleshooting
 
@@ -232,8 +254,9 @@ yarn vite-node ./scripts/update_popeye_instructions.ts
 ### Build Failures
 
 - **"Cannot find module @sp/*"**: Check `tsconfig.json` paths and ensure libraries are built
-- **Angular CLI errors**: Verify Node.js >= 20 (`package.json` engines requirement)
+- **Angular CLI errors**: Verify Node.js >= 20 and pnpm >= 9 (`package.json` engines requirement)
 - **Tauri build errors**: Ensure Rust toolchain is installed and Popeye binary is in `src-tauri/popeye/`
+- **pnpm install issues**: Clear node_modules and pnpm lock: `rm -rf node_modules pnpm-lock.yaml && pnpm install`
 
 ### Asset Path Issues
 
@@ -243,16 +266,140 @@ Environment-specific asset paths can cause 404s. Verify:
 
 ## Testing Philosophy
 
+**Test Framework**: Vitest 4.0.15 with jsdom environment (migrated from Karma/Jasmine in Angular 21 migration).
+
+### Test Structure & Best Practices
+
+All test files (`*.spec.ts`) MUST include Vitest imports:
+
+```typescript
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it } from 'vitest';  // Required!
+
+describe('MyComponent', () => {
+  let component: MyComponent;
+  let fixture: ComponentFixture<MyComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [MyComponent],  // Standalone component
+    });
+    fixture = TestBed.createComponent(MyComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+```
+
+### Key Testing Patterns
+
+**1. MSAL/Crypto-dependent tests** - Skip or mock when browser APIs unavailable:
+```typescript
+import { describe, it, vi } from 'vitest';
+
+describe.skip('OneDriveCliProvider', () => {
+  // Tests requiring browser crypto API - skipped in jsdom
+});
+```
+
+**2. Lazy initialization for MSAL** - Avoid module-level initialization:
+```typescript
+// ❌ BAD: Immediate initialization fails in jsdom
+static #myMSALObj = new PublicClientApplication(config);
+
+// ✅ GOOD: Lazy getter pattern
+static #myMSALObj: PublicClientApplication | null = null;
+static #getMSALObj() {
+  if (!this.#myMSALObj) {
+    this.#myMSALObj = new PublicClientApplication(config);
+  }
+  return this.#myMSALObj;
+}
+```
+
+**3. Vitest API usage** - Use Vitest APIs, not Jasmine:
+```typescript
+// ❌ BAD: Jasmine APIs
+spyOn(obj, 'method').and.returnValue(value);
+expect(value).toBeTrue();
+
+// ✅ GOOD: Vitest APIs
+vi.spyOn(obj, 'method').mockReturnValue(value);
+vi.spyOn(obj, 'asyncMethod').mockResolvedValue(value);
+expect(value).toBeTruthy();
+```
+
+**4. Mock providers** - Use Vitest mocks for services:
+```typescript
+beforeEach(() => {
+  const mockService = {
+    method: vi.fn().mockReturnValue('value'),
+  };
+
+  TestBed.configureTestingModule({
+    imports: [MyComponent],
+    providers: [
+      { provide: MyService, useValue: mockService },
+      { provide: MatSnackBar, useValue: { open: vi.fn() } },
+    ],
+  });
+});
+```
+
+**5. ActivatedRoute mock** - Include all required properties:
+```typescript
+import { of } from 'rxjs';
+
+providers: [
+  {
+    provide: ActivatedRoute,
+    useValue: {
+      params: of({}),
+      queryParams: of({}),
+      paramMap: of(new Map()),  // Don't forget paramMap!
+    },
+  },
+]
+```
+
+### Test Configuration
+
+- `vitest.config.ts` - Main Vitest configuration with path aliases
+- `test-setup.ts` - Global test setup (webcrypto polyfills, Angular testing imports)
+- Path aliases use regex patterns for specificity:
+  ```typescript
+  alias: [
+    { find: /^@sp\/dbmanager\/src\/lib\/models\/twin$/, replacement: '...' },
+    { find: /^@sp\/dbmanager\/(.*)$/, replacement: '...' },
+  ]
+  ```
+
+### Coverage & CI
+
+```powershell
+pnpm test:coverage  # Run tests with coverage report
+```
+
+Test targets:
 - Unit tests for data models and utilities (`*.spec.ts`)
 - Component tests use Angular TestBed with minimal dependencies
 - Mock `DbmanagerService` and `HostBridgeService` in tests
-- Core chess logic tests in `CoreJS/src/**/*.spec.ts` (Jest)
+- Core chess logic tests in `CoreJS/src/**/*.spec.ts` (separate pnpm workspace)
 
 ## Important Files
 
-- `angular.json` - Workspace configuration, build targets, file replacements
+- `angular.json` - Workspace configuration, build targets, file replacements, Vite integration
+- `vite.config.ts` - Vite configuration for Angular builds
+- `vitest.config.ts` - Vitest test runner configuration
+- `test-setup.ts` - Global Vitest test setup
 - `staticwebapp.config.json` - Azure SWA routing rules
 - `@sp/host-bridge/src/lib/bridge-global.ts` - Platform abstraction interface
 - `@sp/gui/src/app/app-routing-list.ts` - Route definitions
 - `popeye/problemToPopeye.ts` - Popeye format converter
 - `src-tauri/src/lib.rs` - Tauri native commands (Rust)
+- `.npmrc` - pnpm configuration
+- `pnpm-lock.yaml` - pnpm lockfile (DO NOT modify manually)
