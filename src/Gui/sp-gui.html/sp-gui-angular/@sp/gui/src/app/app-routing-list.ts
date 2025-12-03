@@ -18,6 +18,7 @@ export const RoutesList = getRoutes({
     pathMatch: "full",
   },
   open: { path: "openfile", component: OpenFileComponent },
+  openWithSource: { path: "openfile/:source", component: OpenFileComponent },
   save: { path: "savefile", component: SaveFileComponent },
   list: { path: "list", component: DatabaseListComponent },
   redirect: { path: "redirect", component: AuthRedirectComponent },

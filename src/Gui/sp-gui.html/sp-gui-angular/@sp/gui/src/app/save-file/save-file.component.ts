@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -35,13 +35,12 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
   standalone: true
 })
 export class SaveFileComponent implements OnInit {
-  constructor(
-    private db: DbmanagerService,
-    private dropboxFS: DropboxdbService,
-    private onedriveFS: OneDriveService,
-    private localFS: LocalDriveService,
-    private router: Router,
-  ) { }
+  private db = inject(DbmanagerService);
+  private dropboxFS = inject(DropboxdbService);
+  private onedriveFS = inject(OneDriveService);
+  private localFS = inject(LocalDriveService);
+  private router = inject(Router);
+
 
   private currentFolder: FolderSelected = {
     meta: {

@@ -1,11 +1,33 @@
 {
   "routes": [
-    { "route": "edit/*", "rewrite": "/index.html" },
-    { "route": "openfile", "rewrite": "/index.html" },
-    { "route": "list", "rewrite": "/index.html" },
-    { "route": "redirect", "rewrite": "/index.html" },
-    { "route": "tournaments", "rewrite": "/index.html" },
-    { "route": "config", "rewrite": "/index.html" }
+    {
+      "route": "edit/*",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "openfile",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "openfile/*",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "list",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "redirect",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "tournaments",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "config",
+      "rewrite": "/index.html"
+    }
   ],
   "mimeTypes": {
     ".json": "text/json",
@@ -16,6 +38,9 @@
   },
   "navigationFallback": {
     "rewrite": "index.html",
-    "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+    "exclude": [
+      "/images/*.{png,jpg,gif}",
+      "/css/*"
+    ]
   }
 }

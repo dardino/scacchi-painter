@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
@@ -22,6 +22,8 @@ const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> 
     standalone: true
 })
 export class ToolbarEngineComponent {
+  private preferences = inject(PreferencesService);
+
   @Input()
   public hideLabels: boolean;
 
@@ -65,10 +67,6 @@ export class ToolbarEngineComponent {
 
   public get viewModeIcon() {
     return mapViewModeToIcons[this.viewMode]?.icon;
-  }
-
-  constructor(private preferences: PreferencesService) {
-
   }
 
   start() {

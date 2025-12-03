@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { ApplicationRef, Component, OnInit } from "@angular/core";
+import { ApplicationRef, Component, OnInit, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { ServiceWorkerModule, SwUpdate } from "@angular/service-worker";
 import { concat, first, interval } from "rxjs";
@@ -17,10 +17,10 @@ import { environment } from "../../environments/environment";
 ]
 })
 export class ConfigurationComponent implements OnInit {
-  constructor(
-    appRef: ApplicationRef,
-    swUpdate: SwUpdate
-  ) {
+  constructor() {
+    const appRef = inject(ApplicationRef);
+    const swUpdate = inject(SwUpdate);
+
 
     // CHECK for UPDATES
     const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));

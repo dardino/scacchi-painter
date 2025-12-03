@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Tournament } from '@dtos/tournament';
 
 type ListTournament = Tournament[];
@@ -11,10 +11,12 @@ type ListTournament = Tournament[];
     standalone: true
 })
 export class AppTournamentsComponent {
+  private http = inject(HttpClient);
+
 
   message: string;
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.http.get<ListTournament>('api/listtournament')
       .subscribe((resp) => this.message = resp.map(row => [row.id,row.title].join(" - ")).join("\r\n"));
   }

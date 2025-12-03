@@ -43,7 +43,6 @@ export class AuthRedirectComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async redirectMsal(authInfo: Required<LocalAuthInfo>) {
     try {
       // Use OneDriveCliProvider which properly initializes and handles the redirect

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
@@ -27,13 +27,11 @@ import { map, startWith } from "rxjs/operators";
     ],
 })
 export class ConditionsDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<ConditionsDialogComponent, string>>(MatDialogRef);
+
   myControl = new FormControl();
   newCondition = "";
   filteredOptions: Observable<string[]>;
-
-  constructor(
-    public dialogRef: MatDialogRef<ConditionsDialogComponent, string>
-  ) {}
   clickCancel() {
     this.dialogRef.close();
   }

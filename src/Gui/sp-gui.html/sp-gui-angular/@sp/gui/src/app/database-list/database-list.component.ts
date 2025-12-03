@@ -1,7 +1,7 @@
 import { DataSource } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport, ScrollingModule } from "@angular/cdk/scrolling";
 
-import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, ViewChildren, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -38,14 +38,16 @@ export interface ProblemRef {
 ]
 })
 export class DatabaseListComponent implements OnInit {
+  private db = inject(DbmanagerService);
+  private modal = inject(DialogService);
+  private router = inject(Router);
+
   itemSource = new MyDataSource(this.db);
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
   @ViewChildren('dbItemContainer') dbItemContainer: ElementRef[];
 
   get itemSize() {
     return Math.round(this.dbItemContainer?.[0]?.nativeElement?.getBoundingClientRect().height ?? 256);
-  }
-  constructor(private db: DbmanagerService, private modal: DialogService, private router: Router) {
   }
   ngOnInit(): void {
     if (this.db.All.length < 1) {

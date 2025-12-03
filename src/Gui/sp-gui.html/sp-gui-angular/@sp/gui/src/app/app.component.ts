@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -37,14 +37,13 @@ import { MenuComponent } from "./menu/menu.component";
     standalone: true
 })
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(
-    private db: DbmanagerService,
-    private breakpointObserver: BreakpointObserver,
-    private bridge: HostBridgeService,
-    _allIcons: AllMatIconRegistryService,
-    private route: ActivatedRoute,
-    private currentProblemSvc: CurrentProblemService,
-  ) { }
+  private db = inject(DbmanagerService);
+  private breakpointObserver = inject(BreakpointObserver);
+  private bridge = inject(HostBridgeService);
+  private route = inject(ActivatedRoute);
+  private currentProblemSvc = inject(CurrentProblemService);
+  private iconRegistry = inject(AllMatIconRegistryService); // Force instantiation to register icons
+
   get hasCloseButton() {
     return this.bridge.supportsClose;
   }

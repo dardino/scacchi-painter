@@ -1,5 +1,5 @@
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -20,14 +20,16 @@ import { Author } from '@sp/dbmanager/src/lib/models';
     standalone: true
 })
 export class AuthorDialogComponent {
+  dialogRef = inject<MatDialogRef<AuthorDialogComponent, Author | null>>(MatDialogRef);
+  data = inject<Author | null>(MAT_DIALOG_DATA);
+
   author: Author;
 
   get Id() { return this.author.AuthorID; }
 
-  constructor(
-    public dialogRef: MatDialogRef<AuthorDialogComponent, Author | null>,
-    @Inject(MAT_DIALOG_DATA) public data: Author | null,
-  ) {
+  constructor() {
+    const data = this.data;
+
     // clone to keep old values unchanged until save
     this.author = Author.fromJson(data ?? {}, data?.AuthorID ?? -1);
   }

@@ -1,6 +1,6 @@
 
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, ElementRef, OnInit, ViewChild, inject } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { AbortError } from "@sp/dbmanager/src/lib/providers/AbortError";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
@@ -19,13 +19,12 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
 ],
 })
 export class OpenFileComponent implements OnInit {
-  constructor(
-    private db: DbmanagerService,
-    private dropboxService: DropboxdbService,
-    private onedriveService: OneDriveService,
-    private localFolderService: LocalDriveService,
-    private router: Router
-  ) {}
+  private db = inject(DbmanagerService);
+  private dropboxService = inject(DropboxdbService);
+  private onedriveService = inject(OneDriveService);
+  private localFolderService = inject(LocalDriveService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   public showFilePicker = false;
   @ViewChild("fileloader") fileloader: ElementRef<HTMLInputElement>;
@@ -50,23 +49,36 @@ export class OpenFileComponent implements OnInit {
       });
     }
   }
+
   ngOnInit() {
-    const urlhash = location.hash;
-    if (urlhash === "#dropbox") {
-      setTimeout(() => {
-        this.fromDropbox();
-      }, 1);
-    }
-    if (urlhash === "#onedrive") {
-      setTimeout(() => {
-        this.fromOneDrive();
-      }, 1);
-    }
-    if (urlhash === "#newfile") {
-      setTimeout(() => {
-        this.newFile();
-      }, 1);
-    }
+    // Check route parameter first
+    this.route.paramMap.subscribe(params => {
+      const source = params.get('source');
+      if (source) {
+        setTimeout(() => {
+          this.sourceSelected(source as AvaliableFileServices | "new");
+        }, 1);
+        return;
+      }
+
+      // Fallback to hash for backward compatibility
+      const urlhash = location.hash;
+      if (urlhash === "#dropbox") {
+        setTimeout(() => {
+          this.fromDropbox();
+        }, 1);
+      }
+      if (urlhash === "#onedrive") {
+        setTimeout(() => {
+          this.fromOneDrive();
+        }, 1);
+      }
+      if (urlhash === "#newfile") {
+        setTimeout(() => {
+          this.newFile();
+        }, 1);
+      }
+    });
   }
 
   async sourceSelected(source: "new" | AvaliableFileServices) {

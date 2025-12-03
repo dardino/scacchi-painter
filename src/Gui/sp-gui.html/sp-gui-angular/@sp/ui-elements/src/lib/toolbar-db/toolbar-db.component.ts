@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
@@ -17,8 +17,9 @@ import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button
     standalone: true
 })
 export class ToolbarDbComponent {
-  constructor(private db: DbmanagerService, private router: Router) {
-  }
+  private db = inject(DbmanagerService);
+  private router = inject(Router);
+
 
   @Input() boardType: "canvas" | "HTML";
   @Input() hideLabels?: boolean;
