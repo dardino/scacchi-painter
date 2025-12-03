@@ -1,5 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { beforeEach, describe, expect, it } from 'vitest';
 import { AuthorCardComponent } from "../author-card/author-card.component";
 import { ProblemAuthorsComponent } from "../problem-authors/problem-authors.component";
 import { ProblemDefinitionsComponent } from "../problem-definitions/problem-definitions.component";
@@ -11,9 +12,9 @@ describe("ProblemInfoComponent", () => {
   let component: ProblemInfoComponent;
   let fixture: ComponentFixture<ProblemInfoComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         ProblemInfoComponent,
         ProblemPublicationComponent,
         ProblemAuthorsComponent,
@@ -21,11 +22,7 @@ describe("ProblemInfoComponent", () => {
         SortableListComponent,
         AuthorCardComponent,
       ],
-    })
-    .compileComponents();
-  }));
-
-  beforeEach(() => {
+    });
     fixture = TestBed.createComponent(ProblemInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

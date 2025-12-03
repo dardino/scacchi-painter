@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { getLocalAuthInfo, setLocalAuthInfo, HASHES, LocalAuthInfo } from "./helpers";
 
 describe("OAuth Helpers", () => {

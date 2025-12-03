@@ -9,14 +9,22 @@ class OneDriveCliProvider {
   private constructor() { }
 
   // configuration parameters are located at authConfig.js
-  static #myMSALObj = new PublicClientApplication(MSAL_CONFIG);
+  // Lazy initialization to avoid crypto errors in test environment
+  static #myMSALObj: PublicClientApplication | null = null;
   static #accountId: string;
+
+  static #getMSALObj(): PublicClientApplication {
+    if (!this.#myMSALObj) {
+      this.#myMSALObj = new PublicClientApplication(MSAL_CONFIG);
+    }
+    return this.#myMSALObj;
+  }
 
   static async initialize() {
     // Redirect: once login is successful and redirects with tokens, call Graph API
     try {
-      await this.#myMSALObj.initialize();
-      const resp = await this.#myMSALObj.handleRedirectPromise();
+      await this.#getMSALObj().initialize();
+      const resp = await this.#getMSALObj().handleRedirectPromise();
       await this.handleResponse(resp);
     } catch (error) {
       console.error(error);
@@ -26,11 +34,11 @@ class OneDriveCliProvider {
   static async handleResponse(resp: AuthenticationResult | null) {
     if (resp !== null) {
       this.#accountId = resp.account.homeAccountId;
-      this.#myMSALObj.setActiveAccount(resp.account);
+      this.#getMSALObj().setActiveAccount(resp.account);
       this.showWelcomeMessage(resp.account);
     } else {
       // need to call getAccount here?
-      const currentAccounts = this.#myMSALObj.getAllAccounts();
+      const currentAccounts = this.#getMSALObj().getAllAccounts();
       if (!currentAccounts || currentAccounts.length < 1) {
         // No accounts found, redirect to login
         console.log("No accounts found, redirecting to login");
@@ -38,12 +46,12 @@ class OneDriveCliProvider {
           redirect: "onedrive",
           return_url: location.pathname + location.hash,
         });
-        await this.#myMSALObj.loginRedirect(REQUESTS.LOGIN);
+        await this.#getMSALObj().loginRedirect(REQUESTS.LOGIN);
       } else if (currentAccounts.length > 1) {
         // Add choose account code here
       } else if (currentAccounts.length === 1) {
         const activeAccount = currentAccounts[0];
-        this.#myMSALObj.setActiveAccount(activeAccount);
+        this.#getMSALObj().setActiveAccount(activeAccount);
         this.#accountId = activeAccount.homeAccountId;
         this.showWelcomeMessage(activeAccount);
       }
@@ -52,34 +60,34 @@ class OneDriveCliProvider {
 
   static async signIn(method: "popup" | "redirect") {
     if (method === "popup") {
-      return this.#myMSALObj.loginPopup(REQUESTS.LOGIN).then(this.handleResponse).catch(function (error) {
+      return this.#getMSALObj().loginPopup(REQUESTS.LOGIN).then(this.handleResponse).catch(function (error) {
         console.error(error);
       });
     } else if (method === "redirect") {
-      return this.#myMSALObj.loginRedirect(REQUESTS.LOGIN);
+      return this.#getMSALObj().loginRedirect(REQUESTS.LOGIN);
     }
   }
 
   static signOut(interactionType: "popup" | "redirect") {
     const logoutRequest = {
-      account: this.#myMSALObj.getAccount({homeAccountId: this.#accountId}),
+      account: this.#getMSALObj().getAccount({homeAccountId: this.#accountId}),
     };
 
     if (interactionType === "popup") {
-      this.#myMSALObj.logoutPopup(logoutRequest).then(() => {
+      this.#getMSALObj().logoutPopup(logoutRequest).then(() => {
         window.location.reload();
       });
     } else {
-      this.#myMSALObj.logoutRedirect(logoutRequest);
+      this.#getMSALObj().logoutRedirect(logoutRequest);
     }
   }
 
   static async getTokenPopup(request: PopupRequest | SilentRequest) {
-    return await this.#myMSALObj.acquireTokenSilent(request).catch(async (error) => {
+    return await this.#getMSALObj().acquireTokenSilent(request).catch(async (error) => {
       console.warn("silent token acquisition fails.");
       if (error instanceof InteractionRequiredAuthError) {
         console.warn("acquiring token using popup");
-        return this.#myMSALObj.acquireTokenPopup(request).catch(error => {
+        return this.#getMSALObj().acquireTokenPopup(request).catch(error => {
           console.error(error);
         });
       } else {
@@ -90,7 +98,7 @@ class OneDriveCliProvider {
 
   // This function can be removed if you do not need to support IE
   static async getTokenRedirect(request: PopupRequest | SilentRequest, _accountInfo?: AccountInfo) {
-    return await this.#myMSALObj.acquireTokenSilent(request).catch(async (error) => {
+    return await this.#getMSALObj().acquireTokenSilent(request).catch(async (error) => {
       console.warn("silent token acquisition fails.");
       if (error instanceof InteractionRequiredAuthError) {
         // fallback to interaction when silent call fails
@@ -99,7 +107,7 @@ class OneDriveCliProvider {
           redirect: "onedrive",
           return_url: location.pathname + location.hash,
         });
-        this.#myMSALObj.acquireTokenRedirect(request);
+        this.#getMSALObj().acquireTokenRedirect(request);
       } else {
         console.error(error);
       }

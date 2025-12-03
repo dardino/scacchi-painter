@@ -1,5 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { beforeEach, describe, expect, it } from 'vitest';
 import { RouterModule } from "@angular/router";
 import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { OpenFileComponent } from "../open-file/open-file.component";
@@ -9,19 +10,16 @@ describe("DatabaseListComponent", () => {
   let component: DatabaseListComponent;
   let fixture: ComponentFixture<DatabaseListComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [],
       imports: [
+        DatabaseListComponent,
         RouterModule.forRoot(
           [{ path: 'openfile', component: OpenFileComponent }]
         )
       ],
       providers: [AllMatIconRegistryService]
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
+    });
     fixture = TestBed.createComponent(DatabaseListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

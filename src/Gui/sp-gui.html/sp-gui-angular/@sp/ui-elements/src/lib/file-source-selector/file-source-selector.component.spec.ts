@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ThirdPartyImports } from '../thirdPartyImports';
 import { FileSourceSelectorComponent } from './file-source-selector.component';
 
@@ -7,15 +8,10 @@ describe('FileSourceSelectorComponent', () => {
   let component: FileSourceSelectorComponent;
   let fixture: ComponentFixture<FileSourceSelectorComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ FileSourceSelectorComponent ],
-      imports: [...ThirdPartyImports]
-    })
-    .compileComponents();
-  });
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [ FileSourceSelectorComponent, ...ThirdPartyImports ]
+    });
     fixture = TestBed.createComponent(FileSourceSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

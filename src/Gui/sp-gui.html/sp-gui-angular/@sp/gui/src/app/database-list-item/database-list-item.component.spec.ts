@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { beforeEach, describe, expect, it } from 'vitest';
 import { RouterModule } from "@angular/router";
 import { DatabaseListItemComponent } from "./database-list-item.component";
 
@@ -9,8 +10,7 @@ describe("DatabaseListItemComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
-      declarations: []
+      imports: [DatabaseListItemComponent, RouterModule.forRoot([])]
     });
     fixture = TestBed.createComponent(DatabaseListItemComponent);
     component = fixture.componentInstance;
