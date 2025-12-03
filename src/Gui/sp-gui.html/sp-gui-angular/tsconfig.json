@@ -29,7 +29,6 @@
     ],
     "types": [
       "wicg-file-system-access",
-      "jasmine"
     ],
     "paths": {
       "chessboard": [
