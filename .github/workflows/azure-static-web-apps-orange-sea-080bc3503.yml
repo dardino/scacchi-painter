@@ -22,6 +22,9 @@ jobs:
         with:
           node-version: latest
           check-latest: true
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -35,7 +38,7 @@ jobs:
           api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api" # Api source code path - optional
           output_location: "dist/gui/browser" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-          app_build_command: "yarn build:Azure"
+          app_build_command: "pnpm build:Azure"
           deployment_environment: "release"
 
   build_and_deploy_job_release:
@@ -52,6 +55,9 @@ jobs:
         with:
           node-version: latest
           check-latest: true
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -65,7 +71,7 @@ jobs:
           api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api" # Api source code path - optional
           output_location: "dist/gui/browser" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-          app_build_command: "yarn build:Azure"
+          app_build_command: "pnpm build:Azure"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
