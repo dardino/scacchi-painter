@@ -52,6 +52,7 @@
 		"debug.internalConsoleOptions": "neverOpen",
 		"jest.enable": false,
 		"eslint.enable": true,
-		"eslint.format.enable": false
+		"eslint.format.enable": false,
+		"powershell.cwd": "sp-gui-angular"
 	}
 }

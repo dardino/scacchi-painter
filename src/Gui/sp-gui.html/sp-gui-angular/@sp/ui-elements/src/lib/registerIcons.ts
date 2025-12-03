@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 
@@ -6,10 +6,12 @@ let assetFolder = ".";
 
 @Injectable({
   providedIn: "root",
-  deps: [DomSanitizer, MatIconRegistry]
 })
 export class AllMatIconRegistryService {
-  constructor(@Inject(MatIconRegistry) private matIconRegistry: MatIconRegistry, @Inject(DomSanitizer) private domSanitizer: DomSanitizer) {
+  constructor(
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
     this.matIconRegistry.addSvgIcon(
       `select_piece`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(

@@ -1,6 +1,6 @@
 import { CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
 
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, EventEmitter, Output, inject } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatMiniFabButton } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -36,6 +36,8 @@ import { SortableListComponent } from "../sortable-list/sortable-list.component"
 ]
 })
 export class ProblemDefinitionsComponent {
+  private current = inject(CurrentProblemService);
+
   @Output()
   public openTwin = new EventEmitter<Twin | null>();
 
@@ -103,8 +105,6 @@ export class ProblemDefinitionsComponent {
     const isDiagram = twin.TwinType === "Diagram";
     return (tooFewElements || tooFewElementsWDiagram || isDiagram);
   };
-
-  constructor(private current: CurrentProblemService) {}
 
   dropAuthor(event: CdkDragDrop<Author[]>) {
     moveItemInArray(this.authors, event.previousIndex, event.currentIndex);

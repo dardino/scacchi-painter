@@ -38,6 +38,9 @@ import { Observable, Subscription, map, startWith } from "rxjs";
       ]
 })
 export class ProblemPublicationComponent implements OnInit, OnDestroy {
+  private db = inject(DbmanagerService);
+  private curProbSvc = inject(CurrentProblemService);
+
 
   get magazine(): string { return this._currentProblem?.source ?? ""; }
   set magazine(val: string) { if (this._currentProblem) this._currentProblem.source = val; }
@@ -90,8 +93,6 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   }
 
   private _currentProblem: Problem | null;
-
-  constructor(private db: DbmanagerService, private curProbSvc: CurrentProblemService) { }
 
   ngOnInit(): void {
     this._subscr = this.db.CurrentProblem$.subscribe(value => {

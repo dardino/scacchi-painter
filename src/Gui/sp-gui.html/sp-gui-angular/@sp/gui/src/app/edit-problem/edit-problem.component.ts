@@ -1,24 +1,16 @@
-import { Location } from "@angular/common";
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from "@angular/core";
+import { Location, CommonModule } from "@angular/common";
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
 import { HalfMoveInfo } from "@dardino-chess/core";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
+import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
@@ -49,10 +41,11 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
     styleUrls: ["./edit-problem.component.less"],
     standalone: true,
     imports: [
+    CommonModule,
     MatToolbarModule,
     ToolbarEditComponent,
     ChessboardModule,
-    MatTabsModule,
+    PieceSelectorComponent,
     ProblemInfoComponent,
     ToolbarEngineComponent,
     SpSolutionDescComponent,
@@ -62,6 +55,19 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 ]
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
+  activeTab = 0;
+
+  private current = inject(CurrentProblemService);
+  private location = inject(Location);
+  private route = inject(ActivatedRoute);
+  private engine = inject(EngineManagerService);
+  private dialog = inject(MatDialog);
+  private confirm = inject(DialogService);
+  private dbManager = inject(DbmanagerService);
+  private preferences = inject(PreferencesService);
+  private snackBar = inject(MatSnackBar);
+  private chessanim = inject(ChessboardAnimationService);
+
 
   public get problem() {
     return this.current.Problem;
@@ -75,18 +81,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   showLog: boolean;
   viewMode: ViewModes;
 
-  constructor(
-    private current: CurrentProblemService,
-    private location: Location,
-    private route: ActivatedRoute,
-    private engine: EngineManagerService,
-    private dialog: MatDialog,
-    private confirm: DialogService,
-    private dbManager: DbmanagerService,
-    private preferences: PreferencesService,
-    private snackBar: MatSnackBar,
-    private chessanim: ChessboardAnimationService,
-  ) {
+  constructor() {
     this.engine.isSolving$.subscribe((state) => {
       this.solveInProgress = state;
     });

@@ -1,17 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, inject } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
@@ -38,6 +27,9 @@ import { Animations, ChessboardAnimationService } from "./chessboard-animation.s
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+  private snackBar = inject(MatSnackBar);
+  private animationService = inject(ChessboardAnimationService);
+
   @Output() focusOut = new EventEmitter<void>();
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
@@ -104,7 +96,9 @@ export class ChessboardComponent
   }
 
   animationSub: Subscription;
-  constructor(private snackBar: MatSnackBar, private animationService: ChessboardAnimationService) {
+  constructor() {
+    const animationService = this.animationService;
+
     this.animationSub = animationService.onAnimate.subscribe(this.#animate);
   }
 

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
@@ -12,11 +12,14 @@ import { DbsourceComponent } from "@sp/ui-elements/src/lib/dbsource/dbsource.com
     standalone: true
 })
 export class RecentsComponent {
+  private db = inject(DbmanagerService);
+  private router = inject(Router);
+
   recents: RecentFileInfo[] = [];
   fullpath(recent: RecentFileInfo) {
     return recent.meta.fullPath.replace(/^\//, "");
   }
-  constructor(private db: DbmanagerService, private router: Router) {
+  constructor() {
     this.recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
   }
 

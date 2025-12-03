@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
@@ -37,6 +37,9 @@ import { Observable, map, startWith } from "rxjs";
   standalone: true,
 })
 export class TwinDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<TwinDialogComponent>>(MatDialogRef);
+  data = inject<Twin>(MAT_DIALOG_DATA);
+
   myControl = new FormControl();
   newTwinType: TwinTypesKeys | "" = "";
   filteredTwinTypes: Observable<TwinTypeItem<TwinTypesKeys>[]>;
@@ -63,11 +66,6 @@ export class TwinDialogComponent implements OnInit {
     });
     return cmd.replace(/ +/g, " ");
   }
-
-  constructor(
-    public dialogRef: MatDialogRef<TwinDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Twin
-  ) {}
 
   ngOnInit() {
     this.filteredTwinTypes = this.myControl.valueChanges.pipe(

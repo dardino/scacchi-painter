@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { BehaviorSubject, Subject } from "rxjs";
@@ -17,6 +17,11 @@ interface IDbSpX {
   providedIn: "root",
 })
 export class DbmanagerService {
+  private dropboxFS = inject(DropboxdbService);
+  private oneDriveFS = inject(OneDriveService);
+  private localDriveFS = inject(LocalDriveService);
+  private snackBar = inject(MatSnackBar);
+
   /** @description Current problem index is 1 based */
   private currentIndex = 1;
   private currentFile: FolderSelected | null = null;
@@ -91,13 +96,6 @@ export class DbmanagerService {
       duration: 2000,
     });
   }
-
-  constructor(
-    private dropboxFS: DropboxdbService,
-    private oneDriveFS: OneDriveService,
-    private localDriveFS: LocalDriveService,
-    private snackBar: MatSnackBar
-  ) { }
 
   private get fileService(): FileService | null {
     switch (this.currentFile?.source) {

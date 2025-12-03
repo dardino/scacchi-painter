@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MarkdownPipe } from "@sp/ui-elements/src/lib/markdown.pipe";
 import { environment } from "../../environments/environment";
 import { RecentsComponent } from "../recents/recents.component";
@@ -15,10 +15,10 @@ import { RecentsComponent } from "../recents/recents.component";
     ]
 })
 export class LandingComponent implements OnInit {
+  private http = inject(HttpClient);
+
 
   public news = "";
-
-  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.http.get(`${environment.assetFolder}/release-notes.md`, { responseType: 'text' })

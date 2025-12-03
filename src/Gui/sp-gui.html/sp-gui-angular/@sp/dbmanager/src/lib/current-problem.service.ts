@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { DbmanagerService } from "./dbmanager.service";
 import {
   Columns,
@@ -20,6 +20,8 @@ import { TwinTypesConfigs } from "./twinTypes";
   providedIn: "root",
 })
 export class CurrentProblemService {
+  private dbManager = inject(DbmanagerService);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   PasteFEN(fen: string) {
     // TODO: #171 implement this method
@@ -92,7 +94,7 @@ export class CurrentProblemService {
   public get Problem() {
     return this._currentProblem;
   }
-  constructor(private dbManager: DbmanagerService) {
+  constructor() {
     this.init();
   }
 
