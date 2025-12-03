@@ -20,7 +20,7 @@ export type EditCommand =
 @Component({
     selector: "lib-toolbar-edit",
     templateUrl: "./toolbar-edit.component.html",
-    styleUrls: ["./toolbar-edit.component.less"],
+    styleUrls: ["./toolbar-edit.component.scss"],
     standalone: true,
     imports: [
       SpToolbarButtonComponent,

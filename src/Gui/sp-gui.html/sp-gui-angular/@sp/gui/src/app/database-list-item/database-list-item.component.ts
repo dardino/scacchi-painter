@@ -9,7 +9,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 @Component({
     selector: "app-database-list-item",
     templateUrl: "./database-list-item.component.html",
-    styleUrls: ["./database-list-item.component.less"],
+    styleUrls: ["./database-list-item.component.scss"],
     standalone: true,
     imports: [
       ChessboardModule,

@@ -21,7 +21,7 @@ import { Observable, Subscription, map, startWith } from "rxjs";
     selector: "lib-problem-publication",
     templateUrl: "./problem-publication.component.html",
     providers: [provideNativeDateAdapter()],
-    styleUrls: ["./problem-publication.component.less"],
+    styleUrls: ["./problem-publication.component.scss"],
     standalone: true,
     imports: [
       MatCardModule,

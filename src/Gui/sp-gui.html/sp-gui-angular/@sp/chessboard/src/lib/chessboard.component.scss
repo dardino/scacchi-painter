@@ -1,0 +1,176 @@
+@import "../../../mediaquery";
+
+:host {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.chessboard-image {
+
+  position: relative;
+  padding-top: 100%;
+  width: 100%;
+
+  >.chessboard,
+  >canvas {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+.chessboard {
+  display: grid;
+  grid-template-columns: 5% repeat(8, 1fr) 5%;
+  grid-template-rows: 5% repeat(8, 1fr) 5%;
+  background-color: #fff;
+  background-image: url("/wood.jpg");
+  container-type: size;
+  container-name: chessboard;
+
+  lib-board-cell {
+    font-size: 8.5cqh;
+  }
+
+  &.small {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+
+    lib-board-cell {
+      font-size: 9.5cqh;
+    }
+  }
+
+
+}
+
+/* Stile per il div */
+.rotatingToRight {
+  animation: rotateToRight 1s normal ease-in-out;
+}
+
+.rotatingToLeft {
+  animation: rotateToRight 3s normal ease-in-out;
+}
+
+
+.clickable {
+  cursor: pointer;
+
+  .customCursor & {
+    cursor: unset;
+  }
+}
+
+.fen {
+  background-color: rgb(0, 0, 0);
+  width: 100%;
+  padding: 0.2em;
+  box-sizing: border-box;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  :first-child {
+    margin-right: 1em;
+    color: rgb(197, 197, 255);
+  }
+
+  :last-child {
+    word-break: break-all;
+  }
+
+  ;
+}
+
+.short-info {
+  display: flex;
+  background-color: rgb(88 88 88);
+  width: 100%;
+  box-sizing: border-box;
+  container-type: size;
+  container-name: short-info;
+  min-height: 3em;
+
+  .stipulation,
+  .twins,
+  .piececounter {
+    padding: 0.5em;
+    font-size: 3cqw;
+  }
+
+  .stipulation {
+    flex: 0 0 17%;
+    text-align: left;
+  }
+
+  .twins {
+    flex: 1 1 1%;
+    text-align: center;
+  }
+
+  .piececounter {
+    flex: 0 0 17%;
+    text-align: right;
+  }
+}
+
+.twins {
+  ol {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    list-style: none;
+    counter-reset: list;
+  }
+
+  li::before {
+    list-style: none;
+    content: counter(list, lower-alpha) ") ";
+    counter-increment: list;
+  }
+}
+
+.rowHeader {
+  $bgc: var(--mat-toolbar-container-background-color);
+  $fgc: var(--mat-toolbar-container-text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $bgc;
+
+  >span {
+    color: $fgc;
+    font-size: 3.3cqw;
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+  }
+}
+
+
+/* Definizione dell'animazione */
+@keyframes rotateToRight {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(90deg);
+  }
+}
+
+/* Definizione dell'animazione */
+@keyframes rotateToLeft {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(90deg);
+  }
+}

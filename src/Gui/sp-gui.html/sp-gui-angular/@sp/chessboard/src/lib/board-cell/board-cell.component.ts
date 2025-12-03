@@ -15,7 +15,7 @@ import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipaint
     imports: [DragDropModule],
     standalone: true,
     templateUrl: "./board-cell.component.html",
-    styleUrls: ["./board-cell.component.less"],
+    styleUrls: ["./board-cell.component.scss"],
 })
 export class BoardCellComponent {
   public get classList() {

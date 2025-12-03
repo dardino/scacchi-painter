@@ -20,7 +20,7 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
 @Component({
   selector: "app-save-file",
   templateUrl: "./save-file.component.html",
-  styleUrls: ["./save-file.component.less"],
+  styleUrls: ["./save-file.component.scss"],
   imports: [
     MatButtonModule,
     MatIconModule,

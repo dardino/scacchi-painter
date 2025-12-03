@@ -1,0 +1,99 @@
+$baseFontSize: 1rem;
+
+$instructionFontSize: 0.8em;
+$logFontSize: 0.6em;
+$solutionFontSize: 1em;
+
+.instruction {
+  padding: 0;
+  margin: 0;
+  font-style: italic;
+  font-size: $instructionFontSize;
+}
+
+.log {
+  padding: 0;
+  margin: 0;
+  font-style: italic;
+  font-size: $logFontSize;
+}
+
+.solutions {
+  font-size: $baseFontSize;
+  line-height: initial;
+  padding: 1em 1em 10rem 1em;
+  background-color: black;
+  width: 100%;
+}
+
+.solution {
+  margin: 0;
+  padding: 0;
+  white-space: pre-wrap;
+  font-family: monospace;
+  word-wrap: break-word;
+  font-size: $solutionFontSize;
+
+  &.inline {
+    display: inline-flex;
+    flex-flow: row wrap;
+  }
+
+}
+
+:not(.solution)+.solution {
+  margin: .2em;
+}
+
+.solution+ :not(.solution):not(.linebr):not(hr) {
+  margin-top: 1em;
+}
+
+.richeditor {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  :last-child {
+    flex: 1 1 auto;
+  }
+}
+
+.linebr {
+  height: 0px;
+  margin: 0px;
+}
+
+.threat::after {
+  content: "Threat: ";
+  color: rgba(255, 202, 202, 0.8);
+}
+
+.zugzwang::after {
+  content: "(Zugzwang.) ";
+  color: rgba(255, 202, 202, 0.8);
+}
+
+.refutes {
+  width: 100%;
+
+  &::before {
+    content: "But: ";
+    color: rgba(246, 255, 202, 0.8);
+  }
+}
+
+.demolition {
+  color: rgba(255, 202, 202, 0.8);
+}
+
+.key {
+  color: greenyellow
+}
+
+hr {
+  border-top: none;
+  border-color: gray;
+  margin: 0;
+}

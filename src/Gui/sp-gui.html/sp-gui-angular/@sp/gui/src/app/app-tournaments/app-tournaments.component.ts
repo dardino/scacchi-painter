@@ -7,7 +7,7 @@ type ListTournament = Tournament[];
 @Component({
     selector: 'app-app-tournaments',
     templateUrl: './app-tournaments.component.html',
-    styleUrl: './app-tournaments.component.less',
+    styleUrl: './app-tournaments.component.scss',
     standalone: true
 })
 export class AppTournamentsComponent {

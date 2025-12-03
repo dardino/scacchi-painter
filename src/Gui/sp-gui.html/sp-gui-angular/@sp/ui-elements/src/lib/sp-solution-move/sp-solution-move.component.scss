@@ -1,0 +1,41 @@
+// Generate padding-left for data-indent from 1 to 10
+:host:first-child,
+div + :host {
+  @for $i from 1 through 10 {
+    [data-indent="#{$i}"] {
+      padding-left: ($i - 1) * 1em;
+
+      &[data-part="r"] {
+        padding-left: ($i - 1) * 1em + 1.5em;
+      }
+    }
+  }
+}
+
+[data-indent] {
+  margin-right: 1em;
+  flex: 1 0 auto;
+
+  & + [data-indent="0"]::before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 1em;
+  }
+}
+
+:host {
+  display: block;
+}
+
+.move {
+  cursor: pointer;
+
+  &:hover {
+    background: #144e6c;
+  }
+}
+
+.num {
+  color: #b9e8ff;
+}

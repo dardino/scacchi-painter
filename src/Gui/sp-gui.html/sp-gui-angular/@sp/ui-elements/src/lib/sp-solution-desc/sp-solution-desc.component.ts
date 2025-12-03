@@ -12,7 +12,7 @@ import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
 @Component({
     selector: "lib-sp-solution-desc",
     templateUrl: "./sp-solution-desc.component.html",
-    styleUrls: ["./sp-solution-desc.component.less"],
+    styleUrls: ["./sp-solution-desc.component.scss"],
     standalone: true,
     imports: [
     NgxEditorModule,

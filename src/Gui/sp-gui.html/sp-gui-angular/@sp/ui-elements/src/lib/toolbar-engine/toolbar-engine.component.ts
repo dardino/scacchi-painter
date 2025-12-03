@@ -14,7 +14,7 @@ const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> 
 @Component({
     selector: "lib-toolbar-engine",
     templateUrl: "./toolbar-engine.component.html",
-    styleUrls: ["./toolbar-engine.component.less"],
+    styleUrls: ["./toolbar-engine.component.scss"],
     imports: [
     MatToolbarModule,
     SpToolbarButtonComponent

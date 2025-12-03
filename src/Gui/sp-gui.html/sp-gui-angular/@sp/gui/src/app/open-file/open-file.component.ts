@@ -11,7 +11,7 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
 @Component({
   selector: "app-sp-openfile",
   templateUrl: "./open-file.component.html",
-  styleUrls: ["./open-file.component.less"],
+  styleUrls: ["./open-file.component.scss"],
   standalone: true,
   imports: [
     FileSourceSelectorComponent,

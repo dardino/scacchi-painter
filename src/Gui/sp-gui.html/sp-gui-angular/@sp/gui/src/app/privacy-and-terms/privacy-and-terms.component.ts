@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
   imports: [MatSelectModule, MatFormFieldModule],
   standalone: true,
   templateUrl: './privacy-and-terms.component.html',
-  styleUrl: './privacy-and-terms.component.less'
+  styleUrl: './privacy-and-terms.component.scss'
 })
 export class PrivacyAndTermsComponent {
 

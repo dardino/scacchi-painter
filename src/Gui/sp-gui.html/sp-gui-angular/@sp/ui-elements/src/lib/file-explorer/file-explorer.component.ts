@@ -13,7 +13,7 @@ import {
     templateUrl: "./file-explorer.component.html",
     imports: [CommonModule, MatIconModule],
     standalone: true,
-    styleUrls: ["./file-explorer.component.less"],
+    styleUrls: ["./file-explorer.component.scss"],
 })
 export class FileExplorerComponent implements OnInit, OnChanges {
   @Input() service: FileService | null;

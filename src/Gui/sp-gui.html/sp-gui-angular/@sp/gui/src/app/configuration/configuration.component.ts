@@ -9,7 +9,7 @@ import { environment } from "../../environments/environment";
 @Component({
     selector: "app-configuration",
     templateUrl: "./configuration.component.html",
-    styleUrls: ["./configuration.component.less"],
+    styleUrls: ["./configuration.component.scss"],
     standalone: true,
     imports: [
     ServiceWorkerModule,

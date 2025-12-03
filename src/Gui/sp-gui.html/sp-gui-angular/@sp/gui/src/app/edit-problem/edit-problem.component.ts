@@ -38,7 +38,7 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 @Component({
     selector: "app-edit-problem",
     templateUrl: "./edit-problem.component.html",
-    styleUrls: ["./edit-problem.component.less"],
+    styleUrls: ["./edit-problem.component.scss"],
     standalone: true,
     imports: [
     CommonModule,

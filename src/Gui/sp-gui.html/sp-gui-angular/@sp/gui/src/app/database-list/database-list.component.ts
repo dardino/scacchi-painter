@@ -24,7 +24,7 @@ export interface ProblemRef {
 @Component({
     selector: "app-database-list",
     templateUrl: "./database-list.component.html",
-    styleUrls: ["./database-list.component.less"],
+    styleUrls: ["./database-list.component.scss"],
     standalone: true,
     imports: [
     FormsModule,

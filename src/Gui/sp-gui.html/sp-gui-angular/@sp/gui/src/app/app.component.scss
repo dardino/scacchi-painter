@@ -1,0 +1,67 @@
+@import "../../../mediaquery";
+
+.sidenav-container {
+  display: contents;
+}
+
+.sidenav-content {
+  display: contents;
+}
+
+.main-app-toolbar {
+  grid-row: 1;
+  grid-column: span 2;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+
+  @media (max-height: $smallScreen) {
+    position: static;
+  }
+}
+
+.app-title {
+  flex: 1 1 0px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  span,
+  sub {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  sub {
+    padding: 0 1em 0 0;
+    margin: 0;
+    line-height: 1em;
+    font-style: italic;
+    font-size: 0.6em;
+  }
+}
+
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+router-outlet {
+  display: contents;
+}

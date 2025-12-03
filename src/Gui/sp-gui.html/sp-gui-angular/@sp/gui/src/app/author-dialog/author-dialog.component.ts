@@ -9,7 +9,7 @@ import { Author } from '@sp/dbmanager/src/lib/models';
 @Component({
     selector: 'app-author-dialog',
     templateUrl: './author-dialog.component.html',
-    styleUrl: './author-dialog.component.less',
+    styleUrl: './author-dialog.component.scss',
     imports: [
     FormsModule,
     ReactiveFormsModule,

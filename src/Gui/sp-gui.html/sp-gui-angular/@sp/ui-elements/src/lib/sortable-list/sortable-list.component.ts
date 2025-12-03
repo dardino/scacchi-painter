@@ -8,7 +8,7 @@ import { MatListModule } from "@angular/material/list";
 @Component({
   selector: "lib-sortable-list",
   templateUrl: "./sortable-list.component.html",
-  styleUrls: ["./sortable-list.component.less"],
+  styleUrls: ["./sortable-list.component.scss"],
   imports: [
     MatListModule,
     DragDropModule,

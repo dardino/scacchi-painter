@@ -10,7 +10,7 @@ import { AvaliableFileServices } from "@sp/host-bridge/src/lib/fileService";
     templateUrl: "./file-source-selector.component.html",
     imports: [CommonModule, MatIconModule, MatButtonModule],
     standalone: true,
-    styleUrls: ["./file-source-selector.component.less"],
+    styleUrls: ["./file-source-selector.component.scss"],
 })
 export class FileSourceSelectorComponent {
   private router = inject(Router);

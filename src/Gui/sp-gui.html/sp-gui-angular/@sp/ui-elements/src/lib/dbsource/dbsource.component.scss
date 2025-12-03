@@ -1,0 +1,23 @@
+
+.source {
+  display: inline-block;
+  border: solid 1px #c2c2c2;
+  margin: 0;
+  padding: .2em;
+  border-radius: 1em .2em 1em .2em;
+  font-size: smaller;
+  width: 5em;
+  text-align: center;
+}
+.unknown {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.dropbox {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+.onedrive {
+  background-color: rgba(0, 238, 255, 0.5);
+}
+.local {
+  background-color: rgba(225, 0, 255, 0.5);
+}

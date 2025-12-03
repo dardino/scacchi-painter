@@ -6,7 +6,7 @@ import { AuthorCardActions, AuthorCardComponent } from "../author-card/author-ca
 @Component({
   selector: "lib-problem-authors",
   templateUrl: "./problem-authors.component.html",
-  styleUrls: ["./problem-authors.component.less"],
+  styleUrls: ["./problem-authors.component.scss"],
   imports: [AuthorCardComponent],
   standalone: true
 })

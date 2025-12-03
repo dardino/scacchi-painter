@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     templateUrl: "./piece-selector.component.html",
     imports: [DragDropModule],
     standalone: true,
-    styleUrls: ["./piece-selector.component.less"],
+    styleUrls: ["./piece-selector.component.scss"],
 })
 export class PieceSelectorComponent {
   @Input()

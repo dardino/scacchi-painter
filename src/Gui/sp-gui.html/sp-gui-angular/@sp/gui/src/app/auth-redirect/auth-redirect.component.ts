@@ -6,7 +6,7 @@ import { OneDriveCliProvider } from "@sp/dbmanager/src/lib/oauth_providers/onedr
 @Component({
     selector: "app-auth-redirect",
     templateUrl: "./auth-redirect.component.html",
-    styleUrls: ["./auth-redirect.component.less"],
+    styleUrls: ["./auth-redirect.component.scss"],
 
 })
 export class AuthRedirectComponent implements OnInit {

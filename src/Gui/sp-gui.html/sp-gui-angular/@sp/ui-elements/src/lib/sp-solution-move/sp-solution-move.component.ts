@@ -4,7 +4,7 @@ import type { HalfMoveInfo } from "@dardino-chess/core";
 @Component({
     selector: "lib-sp-solution-move",
     templateUrl: "./sp-solution-move.component.html",
-    styleUrls: ["./sp-solution-move.component.less"],
+    styleUrls: ["./sp-solution-move.component.scss"],
     standalone: true,
 })
 export class SpSolutionMoveComponent {

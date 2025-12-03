@@ -7,7 +7,7 @@ import { DbsourceComponent } from "@sp/ui-elements/src/lib/dbsource/dbsource.com
 @Component({
     selector: "app-recents",
     templateUrl: "./recents.component.html",
-    styleUrls: ["./recents.component.less"],
+    styleUrls: ["./recents.component.scss"],
     imports: [DbsourceComponent],
     standalone: true
 })
