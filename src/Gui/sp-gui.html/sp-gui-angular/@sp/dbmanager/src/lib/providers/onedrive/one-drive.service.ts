@@ -36,10 +36,10 @@ export class OneDriveService implements FileService {
       const aw: { value?: Drive[] } = await client.api("/drives").get();
       return (aw.value ?? []).map<FolderItemInfo>((dir) => ({
         fullPath: `${dir.parentReference?.path ?? "/drives/root:"}/${
-          dir.description ?? dir.driveType ?? dir.id ?? "Personal"
+          dir.description || dir.name || dir.driveType || dir.id || "Personal"
         }`,
         id: dir.id ?? "",
-        itemName: dir.description ?? dir.driveType ?? dir.id ?? "Personal",
+        itemName: dir.description || dir.name || dir.driveType || dir.id || "Personal",
         type: "drive",
       }));
     }

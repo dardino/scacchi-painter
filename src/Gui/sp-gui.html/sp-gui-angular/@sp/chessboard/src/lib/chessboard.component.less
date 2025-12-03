@@ -28,17 +28,30 @@
   grid-template-rows: 5% repeat(8, 1fr) 5%;
   background-color: #fff;
   background-image: url("/wood.jpg");
+  container-type: size;
+  container-name: chessboard;
+
+  lib-board-cell {
+    font-size: 8.5cqh;
+  }
 
   &.small {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
+
+    lib-board-cell {
+      font-size: 9.5cqh;
+    }
   }
+
+
 }
 
 /* Stile per il div */
 .rotatingToRight {
   animation: rotateToRight 1s normal ease-in-out;
 }
+
 .rotatingToLeft {
   animation: rotateToRight 3s normal ease-in-out;
 }
@@ -78,13 +91,16 @@
   display: flex;
   background-color: rgb(88 88 88);
   width: 100%;
-  padding: 0.5em;
   box-sizing: border-box;
-  font-size: 18px;
+  container-type: size;
+  container-name: short-info;
+  min-height: 3em;
 
-  @media (max-width: @smallScreen) {
-    padding: 0.2em;
-    font-size: 12px;
+  .stipulation,
+  .twins,
+  .piececounter {
+    padding: 0.5em;
+    font-size: 3cqw;
   }
 
   .stipulation {
@@ -126,9 +142,10 @@
   align-items: center;
   justify-content: center;
   background-color: @bgc;
+
   >span {
     color: @fgc;
-    font-size: 30%;
+    font-size: 3.3cqw;
     text-transform: uppercase;
     text-align: center;
     display: block;
@@ -139,18 +156,21 @@
 /* Definizione dell'animazione */
 @keyframes rotateToRight {
   from {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
+
   to {
-      transform: rotate(90deg);
+    transform: rotate(90deg);
   }
 }
+
 /* Definizione dell'animazione */
 @keyframes rotateToLeft {
   from {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
+
   to {
-      transform: rotate(90deg);
+    transform: rotate(90deg);
   }
 }

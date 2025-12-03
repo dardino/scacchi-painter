@@ -9,7 +9,7 @@
     style="display: none"
     />
 </div>
-@if (showFilePicker) {
+@if (showFilePicker()) {
   <div class="explorer">
     <lib-file-explorer [service]="currentFileService" (selectFile)="openFile($event)"></lib-file-explorer>
   </div>

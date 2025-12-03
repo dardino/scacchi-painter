@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, signal } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 import {
   FileSelected,
@@ -15,11 +15,12 @@ import {
     standalone: true,
     styleUrls: ["./file-explorer.component.less"],
 })
-export class FileExplorerComponent implements OnInit {
+export class FileExplorerComponent implements OnInit, OnChanges {
   @Input() service: FileService | null;
   @Input() mode: "save" | "open";
   @Output() selectFile = new EventEmitter<FileSelected>();
   @Output() folderChanged = new EventEmitter<FolderSelected>();
+  public isloading = signal(false);
 
   public currentItem: FolderItemInfo & { parent?: FolderItemInfo } = {
     fullPath: "",
@@ -75,12 +76,22 @@ export class FileExplorerComponent implements OnInit {
   }
 
   private refresh() {
+    this.isloading.set(true);
     if (this.service) {
       this.service
         .enumContent(this.currentItem.id, this.currentItem.type, "sp2")
         .then((items) => {
           this.items = items;
+        }).catch(() => {
+          this.items = [];
+        }).finally(() => {
+          this.isloading.set(false);
         });
     }
+  }
+
+  ngOnChanges(): void {
+    if (this.isloading()) return;
+    this.refresh();
   }
 }
