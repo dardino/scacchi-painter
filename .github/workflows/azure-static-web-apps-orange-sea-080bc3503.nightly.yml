@@ -37,7 +37,7 @@ jobs:
           api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api" # Api source code path - optional
           output_location: "dist/gui/browser" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-          app_build_command: "yarn build:Azure"
+          app_build_command: "pnpm build:Azure"
           deployment_environment: "nightly"
 
   build_and_deploy_job_release:
@@ -68,7 +68,7 @@ jobs:
           api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api" # Api source code path - optional
           output_location: "dist/gui/browser" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-          app_build_command: "yarn build:Azure"
+          app_build_command: "pnpm build:Azure"
           deployment_environment: "nightly"
 
   close_pull_request_job:
