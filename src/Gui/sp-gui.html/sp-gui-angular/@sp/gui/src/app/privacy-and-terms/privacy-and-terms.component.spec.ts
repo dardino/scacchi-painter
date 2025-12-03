@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { beforeEach, describe, expect, it } from 'vitest';
 import { PrivacyAndTermsComponent } from './privacy-and-terms.component';
 
 describe('PrivacyAndTermsComponent', () => {

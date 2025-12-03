@@ -137,29 +137,6 @@
             "buildTarget": "gui:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "@sp/gui/src/test.ts",
-            "polyfills": "@sp/gui/src/polyfills.ts",
-            "tsConfig": "@sp/gui/tsconfig.spec.json",
-            "karmaConfig": "@sp/gui/karma.conf.js",
-            "assets": [
-              "@sp/gui/src/favicon.ico",
-              "@sp/gui/src/favicon.png",
-              "@sp/gui/src/favicon.icns",
-              "@sp/gui/src/apple-touch-icon.png",
-              "@sp/gui/src/assets",
-              "@sp/gui/src/manifest.webmanifest"
-            ],
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-              "./custom-theme.scss",
-              "@sp/gui/src/styles.less"
-            ],
-            "scripts": []
-          }
-        },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
@@ -187,14 +164,6 @@
             "production": {
               "tsConfig": "@sp/chessboard/tsconfig.lib.prod.json"
             }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "@sp/chessboard/src/test.ts",
-            "tsConfig": "@sp/chessboard/tsconfig.spec.json",
-            "karmaConfig": "@sp/chessboard/karma.conf.js"
           }
         },
         "lint": {
@@ -226,14 +195,6 @@
             }
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "@sp/dbmanager/src/test.ts",
-            "tsConfig": "@sp/dbmanager/tsconfig.spec.json",
-            "karmaConfig": "@sp/dbmanager/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
@@ -263,14 +224,6 @@
             }
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "@sp/ui-elements/src/test.ts",
-            "tsConfig": "@sp/ui-elements/tsconfig.spec.json",
-            "karmaConfig": "@sp/ui-elements/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
@@ -298,14 +251,6 @@
             "production": {
               "tsConfig": "@sp/host-bridge/tsconfig.lib.prod.json"
             }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "@sp/host-bridge/src/test.ts",
-            "tsConfig": "@sp/host-bridge/tsconfig.spec.json",
-            "karmaConfig": "@sp/host-bridge/karma.conf.js"
           }
         },
         "lint": {

@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { MarkdownPipe } from './markdown.pipe';
 
 describe('MarkdownPipe', () => {

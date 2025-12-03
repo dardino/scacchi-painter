@@ -1,5 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ConditionsDialogComponent } from "./conditions-dialog.component";
 
@@ -7,19 +8,14 @@ describe("ConditionsDialogComponent", () => {
   let component: ConditionsDialogComponent;
   let fixture: ComponentFixture<ConditionsDialogComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [],
-      imports: [],
+      imports: [ConditionsDialogComponent],
       providers: [
         {provide: MatDialogRef, useValue: {}},
         {provide: MAT_DIALOG_DATA, useValue: []},
       ]
-    })
-  .compileComponents();
-  }));
-
-  beforeEach(() => {
+    });
     fixture = TestBed.createComponent(ConditionsDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

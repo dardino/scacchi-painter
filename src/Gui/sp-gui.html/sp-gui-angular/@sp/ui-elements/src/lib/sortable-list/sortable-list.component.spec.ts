@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SortableListComponent } from "./sortable-list.component";
 
 describe("SortableListComponent", () => {
@@ -9,7 +10,7 @@ describe("SortableListComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SortableListComponent],
+      imports: [SortableListComponent],
     });
     fixture = TestBed.createComponent(SortableListComponent);
     component = fixture.componentInstance;

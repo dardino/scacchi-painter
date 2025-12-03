@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { ITwins, SequenceTypes, TwinModes } from "../helpers";
 import { Twin } from "./twin";
 import { Twins } from "./twins";
@@ -172,7 +173,7 @@ describe("Twins - HasDiagram", () => {
     };
     const p = Twins.fromJson({});
     p.TwinList = (twins.TwinList ?? []).map(Twin.fromJson);
-    expect(p.HasDiagram).toBeTrue();
+    expect(p.HasDiagram).toBeTruthy();
 
   })
 })

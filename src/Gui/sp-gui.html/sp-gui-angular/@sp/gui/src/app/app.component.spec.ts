@@ -1,18 +1,19 @@
-import { TestBed, waitForAsync } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
+import { beforeEach, describe, expect, it } from 'vitest';
 import { RouterModule } from "@angular/router";
 import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { AppComponent } from "./app.component";
 
 describe("AppComponent", () => {
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        AppComponent,
         RouterModule.forRoot([])
       ],
-      declarations: [],
       providers: [AllMatIconRegistryService]
-    }).compileComponents();
-  }));
+    });
+  });
 
   it("should create the app", () => {
     const fixture = TestBed.createComponent(AppComponent);
