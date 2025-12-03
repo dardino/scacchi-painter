@@ -5,21 +5,21 @@
     "node": ">=20"
   },
   "scripts": {
-    "debugger": "yarn remotedebug_ios_webkit_adapter --port 9000",
-    "tunnel": "yarn lt --port 4200 --local-https true --allow-invalid-cert -o",
-    "debug": "yarn concurrently --kill-others \"yarn debugger\" \"yarn tunnel\"",
-    "startinsecure": "yarn ng serve --host=0.0.0.0 --disable-host-check",
-    "start:pwa": "yarn start --configuration production",
-    "start": "yarn ng serve --ssl true --host=0.0.0.0 --disable-host-check",
-    "build": "yarn ng build gui --configuration production",
-    "build:tauri": "env-cmd -f .tauri.env yarn ng build gui -c tauri",
-    "test": "yarn ng test",
-    "test:ci": "yarn ng test --no-watch --no-progress --browsers=ChromeHeadless",
-    "lint": "yarn ng lint",
-    "e2e": "yarn ng e2e",
-    "build:stats": "yarn build --stats-json",
+    "debugger": "pnpm remotedebug_ios_webkit_adapter --port 9000",
+    "tunnel": "pnpm lt --port 4200 --local-https true --allow-invalid-cert -o",
+    "debug": "pnpm concurrently --kill-others \"pnpm debugger\" \"pnpm tunnel\"",
+    "startinsecure": "pnpm ng serve --host=0.0.0.0 --disable-host-check",
+    "start:pwa": "pnpm start --configuration production",
+    "start": "pnpm ng serve --ssl true --host=0.0.0.0 --disable-host-check",
+    "build": "pnpm ng build gui --configuration production",
+    "build:tauri": "env-cmd -f .tauri.env pnpm ng build gui -c tauri",
+    "test": "pnpm ng test",
+    "test:ci": "pnpm ng test --no-watch --no-progress --browsers=ChromeHeadless",
+    "lint": "pnpm ng lint",
+    "e2e": "pnpm ng e2e",
+    "build:stats": "pnpm build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/gui/stats.json",
-    "build:Azure": "yarn tsc --version && yarn ng version && yarn build"
+    "build:Azure": "pnpm tsc --version && pnpm ng version && pnpm build"
   },
   "private": true,
   "dependencies": {
@@ -52,8 +52,10 @@
     "tslib": "^2.6.0",
     "zone.js": "^0.15.0"
   },
-  "resolutions": {
-    "prosemirror-model": "1.21.0"
+  "pnpm": {
+    "overrides": {
+      "prosemirror-model": "1.21.0"
+    }
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.2001.1",
@@ -95,5 +97,5 @@
     "vite-node": "^3.1.4",
     "webpack-bundle-analyzer": "^4.9.0"
   },
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "pnpm@9.15.0"
 }
