@@ -168,18 +168,6 @@
               "@sp/gui/**/*.html"
             ]
           }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "@sp/gui/e2e/protractor.conf.js",
-            "devServerTarget": "gui:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "gui:serve:production"
-            }
-          }
         }
       }
     },
