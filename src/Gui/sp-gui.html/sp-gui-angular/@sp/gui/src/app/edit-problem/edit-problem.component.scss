@@ -1,0 +1,177 @@
+@import "../../../../mediaquery";
+@import "../../../../toolbarcommon";
+
+:host {
+  display: contents;
+}
+
+#toolbar {
+  display: block;
+  grid-column: span 2;
+
+  @media (min-width: ($smallScreen + 1)) and (orientation: landscape) {
+    position: sticky;
+    top: $maintoolbarH;
+    z-index: 2;
+  }
+
+  @media (max-height: $smallScreen) {
+    top: 0;
+  }
+}
+
+.workboard {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: 2 / -1;
+  grid-template-rows: subgrid;
+  grid-template-columns: subgrid;
+}
+
+#info {
+  margin: 0;
+  position: relative;
+  grid-row: 2 / -1;
+  grid-column: 2;
+  display: flex;
+
+  > section {
+    flex: 1 1 auto;
+    margin: 0.5rem;
+  }
+}
+
+#chessboard {
+  width: 20rem;
+  margin: 0.5rem;
+  grid-row: 2 / -1;
+
+  @media (max-width: $smallScreen) and (orientation: portrait) {
+    width: calc(100vw - 1rem) !important;
+  }
+
+  @media (max-width: $smallScreen) and (orientation: landscape) {
+    width: $boardwidthSM !important;
+  }
+
+  .chessboard-workarea {
+    z-index: 1;
+
+    @media (min-width: ($smallScreen + 1)) {
+      position: sticky;
+      top: calc($maintoolbarH + 3.8rem);
+    }
+
+    @media (max-width: $smallScreen) and (orientation: landscape) {
+      position: sticky;
+      top: 0.5rem;
+    }
+
+    @media (max-height: $smallScreen) {
+      top: 3.8rem;
+    }
+  }
+}
+
+@media (max-width: $smallScreen) and (orientation: portrait) {
+  #toolbar {
+    grid-row: 1;
+    grid-column: 1 / -1;
+  }
+
+  #chessboard {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
+  #info {
+    grid-row: 3;
+    grid-column: 1 / -1;
+  }
+}
+
+@include toolbar();
+
+.editbtn {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.solution-row {
+  list-style: none;
+}
+
+.vertical-splitter {
+  flex: 0 0 auto;
+  width: 10px;
+  background: #393939;
+  cursor: ew-resize;
+
+  @media (max-width: $smallScreen) {
+    display: none;
+  }
+}
+
+.custom-tabs {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  flex: 1 1 auto;
+
+  .tab-header {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .tab-button {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.87);
+    }
+
+    &.active {
+      color: #3f51b5;
+      border-bottom-color: #3f51b5;
+    }
+  }
+
+  .tab-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+  }
+}
+
+.tab-group {
+  min-height: 100%;
+
+  > * {
+    flex: 1 1 auto;
+  }
+}
+
+.tab-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+lib-sp-solution-desc {
+  display: flex;
+  min-height: 100%;
+  flex: 1 1 auto;
+}

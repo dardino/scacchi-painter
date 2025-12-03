@@ -11,7 +11,7 @@ export type AuthorCardActions = "delete" | "edit";
   selector: 'lib-author-card',
   templateUrl: './author-card.component.html',
   imports: [MatCardModule, MatIconModule, MatButtonModule],
-  styleUrl: './author-card.component.less',
+  styleUrl: './author-card.component.scss',
   standalone: true
 })
 export class AuthorCardComponent {

@@ -1,0 +1,40 @@
+.stipulation-tile {
+  width: 100%;
+  padding: 0.2rem;
+}
+
+.tile-container {
+  display: flex;
+  flex-flow: row wrap;
+  margin: -1rem;
+}
+.tile {
+  flex: 1 1 20rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+.tile-title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 2.5rem;
+  > span {
+    font-size: 1rem;
+  }
+}
+
+.placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  min-height: 3rem;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tile-input {
+  width: 100%;
+}
+
+mat-card-content {
+  box-sizing: border-box;
+}

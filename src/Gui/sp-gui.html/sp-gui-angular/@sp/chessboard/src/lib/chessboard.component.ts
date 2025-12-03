@@ -23,7 +23,7 @@ import { Animations, ChessboardAnimationService } from "./chessboard-animation.s
     templateUrl: "chessboard.component.html",
     imports: [CommonModule, DragDropModule, BoardCellComponent],
     standalone: true,
-    styleUrls: ["chessboard.component.less"],
+    styleUrls: ["chessboard.component.scss"],
 })
 export class ChessboardComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {

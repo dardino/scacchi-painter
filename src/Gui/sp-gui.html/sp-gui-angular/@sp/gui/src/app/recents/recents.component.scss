@@ -1,0 +1,33 @@
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  gap: 1rem;
+  cursor: pointer;
+  background-color: #144e6c;
+  border: dashed 1px #c2c2c2;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.5rem;
+  margin-top: -1px;
+  font-size: 1.2rem;
+
+  &:hover {
+    background-color: rgba(#144e6c, 0.5);
+  }
+}
+
+.filename {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: right;
+  white-space: nowrap;
+}

@@ -11,7 +11,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "less"
+          "style": "scss"
         }
       },
       "root": "@sp/gui",
@@ -41,7 +41,7 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "./custom-theme.scss",
-              "@sp/gui/src/styles.less"
+              "@sp/gui/src/styles.scss"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [

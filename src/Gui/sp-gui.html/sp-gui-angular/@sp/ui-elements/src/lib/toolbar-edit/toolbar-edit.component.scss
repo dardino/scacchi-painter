@@ -1,0 +1,22 @@
+@import "../../../../mediaquery";
+
+:host {
+  display: contents;
+
+  &:after {
+    content: "";
+    display: block;
+    width: 1rem;
+    height: 100%;
+    flex: 0 0 auto;
+  }
+}
+.sp-toolbar-label {
+  display: inline-flex;
+  margin: 0.3rem;
+}
+.boardtype_switch {
+  @media (max-width: $smallScreen) {
+    display: none;
+  }
+}

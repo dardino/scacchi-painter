@@ -1,0 +1,135 @@
+@import "../../mediaquery";
+
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --cell-white-color: white;
+  --cell-black-color: #ddd;
+  --white-color: white;
+  --black-color: #333;
+  --neutral-color: green;
+}
+
+html {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
+
+body {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  background-size: 10rem;
+  background-position: center;
+  background-attachment: local;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto auto auto 1fr;
+  grid-template-areas: "menu header" "toolbar1 toolbar1" "toolbar2 toolbar2" "side main" "side main" "side main";
+
+}
+
+.dark-theme {
+  background-color: black;
+  background-image: url("./assets/bg.jpg");
+}
+
+.figurine {
+  color: var(--black-color);
+  font-family: "ScacchiPainter", sans-serif;
+  text-rendering: optimizeLegibility !important;
+  letter-spacing: normal !important;
+  font-style: normal;
+  font-weight: normal;
+  height: 1.42em;
+  width: 1.42em;
+  position: relative;
+  display: block;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.figurine:after,
+.figurine:before {
+  height: 1em;
+  width: 1em;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  margin: auto;
+  position: absolute;
+  display: inline-block;
+}
+
+.figurine:before {
+  color: var(--white-color);
+  content: attr(data-bg-piece);
+}
+
+.figurine:after {
+  content: attr(data-colored-piece);
+}
+
+
+.mat-tab-body-wrapper {
+  flex: 1 1 auto;
+}
+
+.mat-tab-body-content {
+  display: flex;
+  flex-direction: column;
+}
+
+:focus {
+  outline: none;
+}
+
+.mat-mdc-tab-body.mat-mdc-tab-body-active {
+  overflow: initial !important;
+}
+
+.mat-mdc-tab-body-content {
+  overflow: initial !important;
+}
+
+.mat-mdc-tab-body-wrapper {
+  flex: 1 1 auto;
+}
+
+.ql-snow .ql-editor .ql-code-block-container {
+  background-color: transparent;
+  color: #333;
+}
+
+app-root {
+  display: contents;
+}
+
+img {
+  max-width: min(90vw, 90%);
+  max-height: 80vh;
+}
+
+.document {
+  box-sizing: border-box;
+  width: 100vw;
+  padding: 2rem;
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+
+  .page {
+    border-radius: 1rem;
+    padding: 2rem;
+    background: white;
+    color: black;
+  }
+}

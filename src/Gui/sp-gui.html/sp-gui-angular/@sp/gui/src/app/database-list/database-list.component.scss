@@ -1,0 +1,67 @@
+@import "../../../../mediaquery";
+@import "../../../../toolbarcommon";
+
+:host {
+  display: contents;
+}
+
+.dbitem-container {
+  height: auto;
+  margin: 1rem;
+  border: solid 1px rgba(255, 255, 255, .3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-width: calc(100vw - 2rem);
+  background-color: #303030;
+
+  @media (orientation: portrait) and (max-width: $smallScreen) {
+    height: 10rem;
+    width: 100%;
+  }
+}
+
+.add-item {
+  height: 100%;
+  background-color: #303030;
+}
+
+.add-item-button {
+  width: 100%;
+  height: 100%;
+  min-height: 3rem;
+}
+
+.dblist {
+  height: 100%;
+  width: 100%;
+}
+
+#toolbar {
+  grid-column: 1;
+}
+
+#searchbar {
+  grid-column: 1;
+}
+
+#dbScrollViewport {
+  grid-column: 2;
+  grid-row: 2 / -1;
+}
+
+@media (orientation: portrait) and (max-width: $smallScreen) {
+  #toolbar {
+    grid-column: span 2;
+  }
+
+  #searchbar {
+    grid-column: span 2;
+  }
+
+  #dbScrollViewport {
+    grid-column: span 2;
+    grid-row: auto / -1;
+  }
+}

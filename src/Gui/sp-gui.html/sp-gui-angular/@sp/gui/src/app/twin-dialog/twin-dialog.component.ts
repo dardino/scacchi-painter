@@ -22,7 +22,7 @@ import { Observable, map, startWith } from "rxjs";
 @Component({
   selector: "app-twin-dialog",
   templateUrl: "./twin-dialog.component.html",
-  styleUrls: ["./twin-dialog.component.less"],
+  styleUrls: ["./twin-dialog.component.scss"],
   imports: [
     MatDialogModule,
     MatOptionModule,

@@ -10,7 +10,7 @@ import { ProblemPublicationComponent } from "../problem-publication/problem-publ
 @Component({
   selector: "lib-problem-info",
   templateUrl: "./problem-info.component.html",
-  styleUrls: ["./problem-info.component.less"],
+  styleUrls: ["./problem-info.component.scss"],
   imports: [
     MatExpansionModule,
     ProblemAuthorsComponent,

@@ -1,0 +1,9 @@
+$smallScreen: 850px;
+$verySmallScreen: 384px;
+
+$boardwidthSM: 58vh;
+$maintoolbarH: 4rem;
+
+@mixin containerMinHeight() {
+  min-height: calc(100vh - $maintoolbarH);
+}

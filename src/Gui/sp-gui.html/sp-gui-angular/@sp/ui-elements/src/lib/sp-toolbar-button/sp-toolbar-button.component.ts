@@ -6,7 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 @Component({
   selector: "lib-sp-toolbar-button",
   templateUrl: "./sp-toolbar-button.component.html",
-  styleUrls: ["./sp-toolbar-button.component.less"],
+  styleUrls: ["./sp-toolbar-button.component.scss"],
   imports: [MatButtonModule, MatIconModule],
   standalone: true
 })

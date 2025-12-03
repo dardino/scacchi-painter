@@ -7,7 +7,7 @@ import { RecentsComponent } from "../recents/recents.component";
 @Component({
     selector: "app-landing",
     templateUrl: "./landing.component.html",
-    styleUrls: ["./landing.component.less"],
+    styleUrls: ["./landing.component.scss"],
     standalone: true,
     imports: [
       RecentsComponent,

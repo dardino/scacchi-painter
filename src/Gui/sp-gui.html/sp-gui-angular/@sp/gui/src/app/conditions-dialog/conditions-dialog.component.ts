@@ -13,7 +13,7 @@ import { map, startWith } from "rxjs/operators";
 @Component({
     selector: "app-conditions-dialog",
     templateUrl: "./conditions-dialog.component.html",
-    styleUrls: ["./conditions-dialog.component.less"],
+    styleUrls: ["./conditions-dialog.component.scss"],
     standalone: true,
     imports: [
       FormsModule,

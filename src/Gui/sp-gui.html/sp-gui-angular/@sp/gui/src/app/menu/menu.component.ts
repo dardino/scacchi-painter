@@ -8,7 +8,7 @@ import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 @Component({
     selector: "app-menu",
     templateUrl: "./menu.component.html",
-    styleUrls: ["./menu.component.less"],
+    styleUrls: ["./menu.component.scss"],
     standalone: true,
     imports: [
     MatToolbarModule,

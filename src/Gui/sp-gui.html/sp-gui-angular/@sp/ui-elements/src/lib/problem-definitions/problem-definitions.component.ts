@@ -20,7 +20,7 @@ import { SortableListComponent } from "../sortable-list/sortable-list.component"
 @Component({
     selector: "lib-problem-definitions",
     templateUrl: "./problem-definitions.component.html",
-    styleUrls: ["./problem-definitions.component.less"],
+    styleUrls: ["./problem-definitions.component.scss"],
     standalone: true,
     imports: [
     MatCardModule,
