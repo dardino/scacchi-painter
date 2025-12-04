@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, inject, signal, input } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, inject, signal, input, effect } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
@@ -72,14 +72,7 @@ export class ChessboardComponent
   private lastHash = signal<string | undefined>(undefined);
   private uiCells = signal<UiCell[]>([]);
 
-  cells = computed(() => {
-    const pos = this.position();
-    if (pos?.currentHash !== this.lastHash()) {
-      this.lastHash.set(pos?.currentHash);
-      this.updateBoard();
-    }
-    return this.uiCells();
-  });
+  cells = computed(() => this.uiCells());
 
   fen = computed(() => this.position()?.getCurrentFen());
   pieceCounter = computed(() => this.position()?.getPieceCounter());
@@ -109,9 +102,12 @@ export class ChessboardComponent
     this.animationSub = animationService.onAnimate.subscribe(this.#animate);
 
     // Watch position changes and update board
-    computed(() => {
-      this.position();
-      this.updateBoard();
+    effect(() => {
+      const pos = this.position();
+      if (pos?.currentHash !== this.lastHash()) {
+        this.lastHash.set(pos?.currentHash);
+        this.updateBoard();
+      }
     });
   }
 
