@@ -53,7 +53,7 @@ jobs:
   create_release_notes:
     needs: deploy_production
     runs-on: ubuntu-22.04
-    name: Create Release Notes
+    name: Create/Update Release Notes
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,16 +62,24 @@ jobs:
         id: tag_version
         run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Create Release
-        uses: actions/create-release@v1
+      - name: Create or Update Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag_version.outputs.version }}
-          release_name: Release ${{ steps.tag_version.outputs.version }}
-          body: |
-            Release ${{ steps.tag_version.outputs.version }}
+        run: |
+          NEW_LINE="Live at: https://orange-sea-080bc3503.azurestaticapps.net/"
+          
+          # Check if release exists
+          if gh release view "${{ steps.tag_version.outputs.version }}" &>/dev/null; then
+            # Release exists - get current body and append new line
+            CURRENT_BODY=$(gh release view "${{ steps.tag_version.outputs.version }}" --json body -q .body)
+            UPDATED_BODY="$CURRENT_BODY
 
-            Live at: https://orange-sea-080bc3503.azurestaticapps.net/
-          draft: false
-          prerelease: false
+          $NEW_LINE"
+            gh release edit "${{ steps.tag_version.outputs.version }}" --notes "$UPDATED_BODY"
+          else
+            # Release doesn't exist - create new one
+            RELEASE_BODY="Release ${{ steps.tag_version.outputs.version }}
+
+          $NEW_LINE"
+            gh release create "${{ steps.tag_version.outputs.version }}" --title "Release ${{ steps.tag_version.outputs.version }}" --notes "$RELEASE_BODY" --draft=false
+          fi
