@@ -1,0 +1,45 @@
+name: CI - Push Master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ci:
+    uses: ./.github/workflows/reusable-ci.yml
+
+  deploy_nightly:
+    needs: ci
+    runs-on: ubuntu-22.04
+    name: Deploy to Nightly
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure Static Web Apps (Nightly)
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SEA_080BC3503 }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/src/Gui/sp-gui.html/sp-gui-angular/dist/gui/browser"
+          api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api"
+          output_location: ""
+          skip_app_build: true
+          deployment_environment: "nightly"
+
+  close_release_environment:
+    runs-on: ubuntu-22.04
+    name: Close Release Environment
+    steps:
+      - name: Close Pull Request Job
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          app_location: "/src/Gui/sp-gui.html/sp-gui-angular"
+          api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api"
+          deployment_environment: "release"
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SEA_080BC3503 }}
+          action: "close"
