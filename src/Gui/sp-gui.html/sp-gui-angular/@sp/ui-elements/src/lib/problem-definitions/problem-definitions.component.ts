@@ -1,6 +1,6 @@
 import { CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
 
-import { Component, EventEmitter, Output, inject } from "@angular/core";
+import { Component, EventEmitter, Output, computed, inject } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatMiniFabButton } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -50,46 +50,47 @@ export class ProblemDefinitionsComponent {
   @Output()
   public deleteTwin = new EventEmitter<Twin>();
 
-  public get completeDesc() {
-    return this.current.Problem?.stipulation.completeStipulationDesc;
-  }
-  public get authors(): Author[] {
+  completeDesc = computed(() => this.current.Problem?.stipulation.completeStipulationDesc);
+
+  get authors(): Author[] {
     return this.current.Problem?.authors ?? [];
   }
-  public set authors(v: Author[]) {
+  set authors(v: Author[]) {
     this.current.SetAuthors(v);
   }
 
-  public get twins(): Twin[] {
+  get twins(): Twin[] {
     return this.current.Problem?.twins.TwinList ?? [];
   }
-  public set twins(v: Twin[]) {
+  set twins(v: Twin[]) {
     this.current.SetTwins(v);
   }
 
-  public get conditions(): string[] {
+  get conditions(): string[] {
     return this.current.Problem?.conditions ?? [];
   }
-  public set conditions(v: string[]) {
+  set conditions(v: string[]) {
     this.current.SetConditions(v);
   }
 
-  public get problemType(): ProblemTypes {
+  get problemType(): ProblemTypes {
     return this.current.Problem?.stipulation.problemType ?? "-";
   }
-  public set problemType(v: ProblemTypes) {
+  set problemType(v: ProblemTypes) {
     this.current.SetProblemType(v);
   }
-  public get leadsTo(): EndingTypes {
+
+  get leadsTo(): EndingTypes {
     return this.current.Problem?.stipulation.stipulationType ?? "#";
   }
-  public set leadsTo(v: EndingTypes) {
+  set leadsTo(v: EndingTypes) {
     this.current.SetStipulationType(v);
   }
-  public get moves(): string {
+
+  get moves(): string {
     return (this.current.Problem?.stipulation.moves ?? 2).toString();
   }
-  public set moves(v: string) {
+  set moves(v: string) {
     const moves = parseFloat(v.replace(",", "."));
     this.current.SetStipulationMoves(!isNaN(moves) ? moves : this.current.Problem?.stipulation.moves ?? 2);
   }

@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
-import { Component, Input } from "@angular/core";
+import { Component, Input, computed } from "@angular/core";
 import {
   GetSquareColor,
   IPiece,
@@ -18,7 +18,16 @@ import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipaint
     styleUrls: ["./board-cell.component.scss"],
 })
 export class BoardCellComponent {
-  public get classList() {
+  @Input()
+  public piece?: IPiece | null;
+
+  @Input()
+  public active?: boolean;
+
+  @Input()
+  public location!: SquareLocation;
+
+  classList = computed(() => {
     const classlist = ["lib-cbs"];
     classlist.push(GetSquareColor(this.location));
     if (this.piece?.rotation) {
@@ -29,41 +38,22 @@ export class BoardCellComponent {
     }
     if (this.active) classlist.push("active");
     return classlist.join(" ");
-  }
+  });
 
-  @Input()
-  public piece?: IPiece | null;
-
-  @Input()
-  public active?: boolean;
-
-  @Input()
-  public location: SquareLocation;
-
-  get piecechar(): string {
+  piecechar = computed(() => {
     if (!this.piece) return "";
     const color = getCanvasColor(this.piece.color);
     const pieces = GetConfig()[color];
     const fig = getFigurine(this.piece.appearance);
     if (fig == null) return "";
     return pieces[fig];
-  }
+  });
 
-  get figurine(): string {
-    return this.piece?.appearance.toLowerCase() ?? "";
-  }
-  get color(): string {
-    return this.piece?.color[0].toLowerCase() ?? "";
-  }
-  get colored() {
-    return `${this.color}_${this.figurine}`;
-  }
-  get bg() {
-    return `__${this.figurine}`;
-  }
-  get fairy(): string {
-    return (this.piece?.fairyCode ?? []).map(p => p.code).join("+");
-  }
+  figurine = computed(() => this.piece?.appearance.toLowerCase() ?? "");
+  color = computed(() => this.piece?.color[0].toLowerCase() ?? "");
+  colored = computed(() => `${this.color()}_${this.figurine()}`);
+  bg = computed(() => `__${this.figurine()}`);
+  fairy = computed(() => (this.piece?.fairyCode ?? []).map(p => p.code).join("+"));
 
   constructor() {}
 

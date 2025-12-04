@@ -12,13 +12,13 @@
         }
       }
 
-      @for (item of cells; track item.location) {
+      @for (item of cells(); track item.location) {
         @if (!smallBoard && item.location.column === "ColA") {
           <div class="rowHeader">
             <span>{{getTraverse(item.location)}}</span>
           </div>
         }
-        <lib-board-cell tabindex="0" (contextmenu)="triggerContextOnCell($event, item)" class="clickable" [title]="cellInfo(item)" [active]="item === currentCell" [piece]="item.piece"
+        <lib-board-cell tabindex="0" (contextmenu)="triggerContextOnCell($event, item)" class="clickable" [title]="cellInfo(item)" [active]="item === currentCell()" [piece]="item.piece"
           [location]="item.location" (click)="onCellClick(item)" (mouseup)="onMouseUp(item, $event)"
         (mousedown)="onMouseDown(item, $event)"></lib-board-cell>
         @if (!smallBoard && item.location.column === "ColH") {
@@ -39,24 +39,24 @@
   </div>
   @if (!hideInfo) {
     <div class="short-info">
-      <span class="stipulation">{{stipulationDesc}}</span>
+      <span class="stipulation">{{stipulationDesc()}}</span>
       <span class="twins">
         <ol>
-          @if (viewDiagram) {
+          @if (viewDiagram()) {
             <li>Diagram</li>
           }
-          @for (t of twins; track $index) {
+          @for (t of twins(); track $index) {
             <li>{{ t }}</li>
           }
         </ol>
       </span>
-      <span class="piececounter">{{ pieceCounter }}</span>
+      <span class="piececounter">{{ pieceCounter() }}</span>
     </div>
   }
   @if (!hideInfo) {
     <div class="fen" tabindex="0" (click)="copyFen()" (keydown.enter)="copyFen()">
       <span>FEN:</span>
-      <span>{{ fen }}</span>
+      <span>{{ fen() }}</span>
     </div>
   }
 </div>

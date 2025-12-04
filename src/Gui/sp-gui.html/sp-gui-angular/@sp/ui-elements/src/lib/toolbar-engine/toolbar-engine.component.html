@@ -28,26 +28,26 @@
   <lib-sp-toolbar-button
     (click)="increaseFontSize()"
     iconText="text_increase"
-    mat-toolip="Increase text size">
+    mat-toolip="Increase text size"
     [noLabel]="hideLabels"
-    [disabled]="isMaxFont"
-  </lib-sp-toolbar-button>
+    [disabled]="isMaxFont()"
+  ></lib-sp-toolbar-button>
   <lib-sp-toolbar-button
     (click)="decreaseFontSize()"
     iconText="text_decrease"
-    mat-toolip="Decrease text size">
+    mat-toolip="Decrease text size"
     [noLabel]="hideLabels"
-    [disabled]="isMinFont"
-  </lib-sp-toolbar-button>
+    [disabled]="isMinFont()"
+  ></lib-sp-toolbar-button>
   <lib-sp-toolbar-button
     (click)="toggleEngineLog()"
-    [iconText]="logIcon"
+    [iconText]="logIcon()"
     iconLabel="Update position"
     [noLabel]="true"
   ></lib-sp-toolbar-button>
   <lib-sp-toolbar-button
     (click)="toggleEditorview()"
-    [iconText]="viewModeIcon"
+    [iconText]="viewModeIcon()"
     iconLabel="Toggle editor"
     [noLabel]="true"
   ></lib-sp-toolbar-button>

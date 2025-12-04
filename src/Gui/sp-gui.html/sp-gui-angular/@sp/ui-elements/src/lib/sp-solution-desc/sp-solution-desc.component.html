@@ -2,20 +2,20 @@
   <div class="richeditor">
     <ngx-editor-menu [editor]="editor" [toolbar]="toolbar" [colorPresets]="colorPresets">
     </ngx-editor-menu>
-    <ngx-editor [editor]="editor" [style.fontSize]="solutionFontSize" outputFormat="html"
+    <ngx-editor [editor]="editor" [style.fontSize]="solutionFontSize()" outputFormat="html"
       placeholder="Run solution engine with the 'play' button" [(ngModel)]="solutionHtml">
     </ngx-editor>
   </div>
 }
 @if (viewMode === 'both' || viewMode === 'txt') {
-  <div [style.fontSize]="solutionFontSize" class="solutions">
-    @for (move of rows; track $index) {
-      @let prevItem = $index < 1 ? null : rows[$index - 1];
+  <div [style.fontSize]="solutionFontSize()" class="solutions">
+    @for (move of rows(); track $index) {
+      @let prevItem = $index < 1 ? null : rows()[$index - 1];
       @let prevMove = prevItem == null ? 0
       : prevItem.num + (prevItem.part == "l" ? 0 : 0.5);
       <!-- se esiste una mossa la gestisco come tale -->
       @let myMove = move.num + (move.part == "l" ? 0 : 0.5);
-      @if (myMove === firstMove) {
+      @if (myMove === firstMove()) {
         <hr />
       }
       @let lineBr = myMove < prevMove || prevItem == null || prevItem.zugzwang;

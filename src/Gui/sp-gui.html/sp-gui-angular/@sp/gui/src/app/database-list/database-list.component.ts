@@ -1,7 +1,7 @@
 import { DataSource } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport, ScrollingModule } from "@angular/cdk/scrolling";
 
-import { Component, ElementRef, OnInit, ViewChild, ViewChildren, inject } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, ViewChildren, computed, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -46,9 +46,8 @@ export class DatabaseListComponent implements OnInit {
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
   @ViewChildren('dbItemContainer') dbItemContainer: ElementRef[];
 
-  get itemSize() {
-    return Math.round(this.dbItemContainer?.[0]?.nativeElement?.getBoundingClientRect().height ?? 256);
-  }
+  itemSize = computed(() => Math.round(this.dbItemContainer?.[0]?.nativeElement?.getBoundingClientRect().height ?? 256));
+
   ngOnInit(): void {
     if (this.db.All.length < 1) {
       this.router.navigate(["/openfile"]);
@@ -66,11 +65,12 @@ export class DatabaseListComponent implements OnInit {
     }
   }
 
-  public searchValue = "";
+  public searchValue = signal("");
 
   public valueChange($event: Event) {
-    this.searchValue = ($event.target as HTMLInputElement).value;
-    this.itemSource.filter(this.searchValue);
+    const value = ($event.target as HTMLInputElement).value;
+    this.searchValue.set(value);
+    this.itemSource.filter(value);
   }
 
   async createNewPosition() {

@@ -1,5 +1,5 @@
 import { Location, CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, inject } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
@@ -55,7 +55,7 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 ]
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
-  activeTab = 0;
+  activeTab = signal(0);
 
   private current = inject(CurrentProblemService);
   private location = inject(Location);
@@ -77,15 +77,14 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.engine?.supportsSolve === true;
   }
 
-  solveInProgress: boolean;
-  showLog: boolean;
-  viewMode: ViewModes;
+  solveInProgress = signal(false);
+  showLog = signal(false);
+  viewMode = signal<ViewModes>("html");
 
   constructor() {
     this.engine.isSolving$.subscribe((state) => {
-      this.solveInProgress = state;
+      this.solveInProgress.set(state);
     });
-    this.viewMode = "html";
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
@@ -94,12 +93,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscribe: Subscription;
 
-  public editMode: EditModes = "select";
-  public boardType: "HTML" | "canvas" = "HTML";
+  public editMode = signal<EditModes>("select");
+  public boardType = signal<"HTML" | "canvas">("HTML");
   public rows$ubject = new BehaviorSubject<HalfMoveInfo[] | null>(null);
-  menuX = 0;
-  menuY = 0;
-  contextOnCell: SquareLocation;
+  menuX = signal(0);
+  menuY = signal(0);
+  contextOnCell = signal<SquareLocation | null>(null);
 
   private resizing = { x: NaN, initialW: NaN };
 
@@ -127,64 +126,67 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
-  pieceToAdd: string | null = null;
-  rotationToAdd: number | null = null;
-  pieceToMove: Piece | null = null;
+  pieceToAdd = signal<string | null>(null);
+  rotationToAdd = signal<number | null>(null);
+  pieceToMove = signal<Piece | null>(null);
 
-  private actualCursor: null | {
+  private actualCursor = signal<null | {
     figurine: string | null;
     rotation: number | null;
-  } = {
-      figurine: null,
-      rotation: null,
-    };
+  }>({
+    figurine: null,
+    rotation: null,
+  });
 
-  get boardCursor(): {
+  boardCursor = computed<{
     figurine: string | null;
     rotation: number | null;
-  } | null {
-    const editModeCursor = (this.editMode === "remove" ? "X" : null);
+  } | null>(() => {
+    const editModeValue = this.editMode();
+    const editModeCursor = (editModeValue === "remove" ? "X" : null);
+    const pieceToMoveValue = this.pieceToMove();
     const figurine =
-      this.editMode === "select" ? null
-        : this.pieceToAdd ??
-        this.pieceToMove?.cursor() ?? editModeCursor;
+      editModeValue === "select" ? null
+        : this.pieceToAdd() ??
+        pieceToMoveValue?.cursor() ?? editModeCursor;
 
     const rotation =
-      this.rotationToAdd ??
-      (this.pieceToMove?.rotation
-        ? getCanvasRotation(this.pieceToMove.rotation)
+      this.rotationToAdd() ??
+      (pieceToMoveValue?.rotation
+        ? getCanvasRotation(pieceToMoveValue.rotation)
         : null) ??
       null;
 
+    const currentCursor = this.actualCursor();
     if (
       figurine &&
-      (this.actualCursor?.figurine !== figurine ||
-        this.actualCursor.rotation !== rotation)
+      (currentCursor?.figurine !== figurine ||
+        currentCursor.rotation !== rotation)
     ) {
-      this.actualCursor = {
+      this.actualCursor.set({
         figurine,
         rotation,
-      };
+      });
     }
 
-    return this.actualCursor;
-  }
+    return this.actualCursor();
+  });
 
-  toggleLog = () => this.showLog = !this.showLog;
+  toggleLog = () => this.showLog.update(v => !v);
   toggleEditor($event: ViewModes) {
-    this.viewMode = $event;
+    this.viewMode.set($event);
   }
   switchBoardType() {
-    this.boardType = this.boardType === "HTML" ? "canvas" : "HTML";
+    this.boardType.update(current => current === "HTML" ? "canvas" : "HTML");
     this.resetActions();
   }
   onTriggerContextMenu(data: { event: MouseEvent, location: SquareLocation }) {
     data.event.preventDefault();
-    this.menuX = data.event.x - 20;
-    this.menuY = data.event.y - 40;
+    this.menuX.set(data.event.x - 20);
+    this.menuY.set(data.event.y - 40);
     this.menu.openMenu();
-    this.editMode = "select";
-    this.contextOnCell = data.location;
+    this.editMode.set("select");
+    this.contextOnCell.set(data.location);
     this.resetActions();
   }
 
@@ -303,15 +305,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.commandMapper[$event]();
   }
   setPieceToAdd($event: string | null) {
+    const currentPieceToAdd = this.pieceToAdd();
     if (
-      this.pieceToAdd === null ||
-      ($event != null && this.pieceToAdd !== $event)
+      currentPieceToAdd === null ||
+      ($event != null && currentPieceToAdd !== $event)
     ) {
       this.resetActions();
-      this.editMode = $event == null ? "select" : "add";
-      this.pieceToAdd = $event;
+      this.editMode.set($event == null ? "select" : "add");
+      this.pieceToAdd.set($event);
     } else {
-      this.editMode = "select";
+      this.editMode.set("select");
       this.resetActions();
     }
   }
@@ -319,31 +322,34 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if ($event == null) this.resetActions();
   }
   clickOnCell($event: SquareLocation, button: "left" | "middle") {
+    const editModeValue = this.editMode();
+    const pieceToMoveValue = this.pieceToMove();
     if (button === "middle") {
       this.current.RemovePieceAt($event);
-      this.editMode = "select";
+      this.editMode.set("select");
       this.resetActions();
       return;
     }
-    if ($event == null || this.sameCell($event, this.pieceToMove)) {
-      this.editMode = "select";
+    if ($event == null || this.sameCell($event, pieceToMoveValue)) {
+      this.editMode.set("select");
       this.resetActions();
       return;
     }
-    if (this.editMode === "remove") {
+    if (editModeValue === "remove") {
       this.current.RemovePieceAt($event);
       this.resetActions();
       return;
     }
-    if (this.editMode === "add" && this.pieceToAdd != null) {
-      this.addPiece(this.pieceToAdd, $event);
+    const pieceToAddValue = this.pieceToAdd();
+    if (editModeValue === "add" && pieceToAddValue != null) {
+      this.addPiece(pieceToAddValue, $event);
       return;
     }
-    if (this.editMode === "add" && this.pieceToAdd == null) {
-      this.editMode = "select";
+    if (editModeValue === "add" && pieceToAddValue == null) {
+      this.editMode.set("select");
     }
-    if (this.editMode === "move") {
-      if (this.pieceToMove == null) {
+    if (editModeValue === "move") {
+      if (pieceToMoveValue == null) {
         this.prepareMovePiece(
           this.current.Problem?.GetPieceAt($event.column, $event.traverse)
         );
@@ -352,13 +358,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return;
     }
-    if (this.editMode === "select") {
+    if (editModeValue === "select") {
       const piece = this.current.Problem?.GetPieceAt(
         $event.column,
         $event.traverse
       );
       if (piece != null) {
-        this.editMode = "move";
+        this.editMode.set("move");
         this.prepareMovePiece(piece);
       }
       return;
@@ -366,7 +372,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   editModeChanged($event: EditModes) {
     this.resetActions();
-    this.editMode = $event;
+    this.editMode.set($event);
   }
 
   boardBlur() {
@@ -388,24 +394,25 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private prepareMovePiece(p: Piece | undefined) {
     if (!p) return;
-    this.pieceToMove = p;
+    this.pieceToMove.set(p);
   }
 
   private completeMove(loc: SquareLocation) {
-    if (!this.pieceToMove) return;
-    const from = this.pieceToMove.GetLocation();
+    const pieceToMoveValue = this.pieceToMove();
+    if (!pieceToMoveValue) return;
+    const from = pieceToMoveValue.GetLocation();
     this.current.MovePiece(from, loc, "replace");
-    this.editMode = "select";
+    this.editMode.set("select");
     this.resetActions();
   }
 
   private resetActions() {
-    this.actualCursor = {
+    this.actualCursor.set({
       figurine: null,
       rotation: null,
-    };
-    this.pieceToAdd = null;
-    this.pieceToMove = null;
+    });
+    this.pieceToAdd.set(null);
+    this.pieceToMove.set(null);
   }
 
   private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {
@@ -536,7 +543,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   //#region CONTEXT COMMANDS
   ctxDeletePiece() {
-    this.current.RemovePieceAt(this.contextOnCell);
+    const cell = this.contextOnCell();
+    if (cell) this.current.RemovePieceAt(cell);
   }
 
 }

@@ -130,6 +130,7 @@ Bootstrap is done via `bootstrapApplication()` in `@sp/gui/src/main.ts` with `pr
 - **NO zone.js dependency** - removed from package.json
 - **Change detection**: Uses `provideZonelessChangeDetection()` in main.ts
 - **Manual updates**: External async operations (like Popeye solver) trigger change detection via `ApplicationRef.tick()`
+- **Signal-Based Components**: All UI components converted to use Angular signals (`signal()`, `computed()`) for reactive state management
 
 ```typescript
 // main.ts
@@ -157,11 +158,50 @@ export class MyService {
 }
 ```
 
+**Component Signal Pattern** - All critical UI components follow this pattern:
+
+```typescript
+import { Component, Input, computed, inject } from '@angular/core';
+
+@Component({
+  selector: 'lib-toolbar-example',
+  standalone: true,
+})
+export class ToolbarExampleComponent {
+  private service = inject(MyService);
+
+  @Input() viewMode: ViewModes;
+
+  // Computed signals for derived/read-only properties
+  isMaxFont = computed(() => this.service.fontSize() >= 2);
+  isMinFont = computed(() => this.service.fontSize() <= 1);
+  
+  // Signal-backed state
+  activeTab = signal('html');
+  
+  // Methods that update signals
+  increaseFont() {
+    this.service.fontSize.update(val => Math.min(val + 0.1, 2));
+  }
+}
+```
+
+**Template usage** - Signal properties called as functions:
+
+```html
+<button [disabled]="isMaxFont()">Increase</button>
+<button [disabled]="isMinFont()">Decrease</button>
+@if (activeTab() === 'html') { ... }
+```
+
 **Migration considerations**:
-- ✅ Prefer signals (`signal()`, `computed()`, `effect()`) over RxJS Observables
+- ✅ Prefer signals (`signal()`, `computed()`, `effect()`) over RxJS Observables for component state
 - ✅ Use `ApplicationRef.tick()` for external async callbacks
+- ✅ All UI-facing components use `computed()` for derived properties
+- ✅ Input bindings remain as traditional @Input() with getter/setter for compatibility
 - ❌ NO `NgZone` imports - removed from codebase
 - ❌ NO `runOutsideAngular()` - not needed in zoneless mode
+- ❌ NO computed signals with get/set syntax - use traditional getters/setters or `signal.update()`
 
 ### Environment Configuration
 

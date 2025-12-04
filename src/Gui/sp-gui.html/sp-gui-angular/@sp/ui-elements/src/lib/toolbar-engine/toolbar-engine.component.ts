@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
+import { Component, EventEmitter, Input, Output, inject, computed } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
@@ -46,28 +46,11 @@ export class ToolbarEngineComponent {
   @Input()
   viewMode: ViewModes;
 
-  public get isMaxFont() {
-    return this.fontSize >= 2;
-  }
-
-  public get isMinFont() {
-    return this.fontSize <= 1;
-  }
-
-  public get logIcon() {
-    return this.fullLog ? "compress" : "expand";
-  }
-
-  public get fontSize() {
-    return this.preferences.solutionFontSize;
-  }
-  public set fontSize(newVal: number) {
-    this.preferences.solutionFontSize = Math.min(Math.max(newVal, 1), 2);
-  }
-
-  public get viewModeIcon() {
-    return mapViewModeToIcons[this.viewMode]?.icon;
-  }
+  isMaxFont = computed(() => this.fontSize() >= 2);
+  isMinFont = computed(() => this.fontSize() <= 1);
+  logIcon = computed(() => this.fullLog ? "compress" : "expand");
+  fontSize = computed(() => this.preferences.solutionFontSize);
+  viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode]?.icon);
 
   start() {
     console.warn("[LOG] -> try to start process...");
@@ -82,10 +65,10 @@ export class ToolbarEngineComponent {
     this.startSolve.emit("try");
   }
   increaseFontSize() {
-    this.fontSize += .1;
+    this.preferences.solutionFontSize = Math.min(Math.max(this.preferences.solutionFontSize + 0.1, 1), 2);
   }
   decreaseFontSize() {
-    this.fontSize -= .1;
+    this.preferences.solutionFontSize = Math.min(Math.max(this.preferences.solutionFontSize - 0.1, 1), 2);
   }
   toggleEngineLog() {
     this.toggleLog.emit();
