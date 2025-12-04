@@ -4,7 +4,7 @@
     <mat-form-field class="field magazine">
       <mat-label>Magazine</mat-label>
       <input matInput #magazineInput [formControl]="magazineInputControl" placeholder="Name of magazine"
-        [(ngModel)]="magazine" [matAutocomplete]="automagazine" />
+        [matAutocomplete]="automagazine" />
       <mat-autocomplete #automagazine="matAutocomplete">
         @for (magSugg of magazineFiltered | async; track $index) {
         <mat-option [value]="magSugg">{{magSugg}}</mat-option>

@@ -7,7 +7,7 @@
   </section>
   <section id="chessboard" #panelleft>
     <div class="chessboard-workarea">
-      <lib-chessboard class="lib-chessboard" [position]="problem" [boardType]="boardType()" [cursor]="boardCursor()"
+      <lib-chessboard class="lib-chessboard" [position]="problem()" [boardType]="boardType()" [cursor]="boardCursor()"
         (cellMiddleClick)="clickOnCell($event, 'middle')" (contextOnCell)="onTriggerContextMenu($event)"
         (currentCellChanged)="currentCellChange($event)" (cellClick)="clickOnCell($event, 'left')"
       (focusOut)="boardBlur()"></lib-chessboard>

@@ -68,10 +68,14 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private snackBar = inject(MatSnackBar);
   private chessanim = inject(ChessboardAnimationService);
 
+  // Signal di versione per forzare il re-render quando il Problem cambia internamente
+  private problemVersion = signal(0);
 
-  public get problem() {
-    return this.current.Problem;
-  }
+  public problem = computed(() => {
+    // Traccia la versione per far ri-eseguire questo computed
+    this.problemVersion();
+    return this.current?.Problem?.clone();
+  });
 
   public get engineEnabled() {
     return this.engine?.supportsSolve === true;
@@ -130,13 +134,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   rotationToAdd = signal<number | null>(null);
   pieceToMove = signal<Piece | null>(null);
 
-  private actualCursor = signal<null | {
+  private actualCursor: {
     figurine: string | null;
     rotation: number | null;
-  }>({
+  } = {
     figurine: null,
     rotation: null,
-  });
+  };
 
   boardCursor = computed<{
     figurine: string | null;
@@ -157,19 +161,19 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         : null) ??
       null;
 
-    const currentCursor = this.actualCursor();
+    const currentCursor = this.actualCursor;
+
     if (
       figurine &&
       (currentCursor?.figurine !== figurine ||
         currentCursor.rotation !== rotation)
     ) {
-      this.actualCursor.set({
+      this.actualCursor = {
         figurine,
         rotation,
-      });
+      };
     }
-
-    return this.actualCursor();
+    return this.actualCursor;
   });
 
   toggleLog = () => this.showLog.update(v => !v);
@@ -196,10 +200,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       console.warn("[WARN] -> No problem selected!");
       return;
     }
-    this.problem.jsonSolution = [];
     this.rows$ubject.next(null);
     this.rows$ubject.next([]);
     if (this.current.Problem) {
+      this.current.Problem.jsonSolution = [];
       this.current.Problem.htmlSolution = "";
       this.current.Problem.textSolution = "";
       this.engine.startSolving(this.current.Problem, mode);
@@ -303,6 +307,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   editCommand($event: EditCommand) {
     this.resetActions();
     this.commandMapper[$event]();
+    // Notify solo per comandi che modificano la board (escludi copy/paste)
+    if ($event !== 'copyToClipboard' && $event !== 'pasteFromClipboard') {
+      this.notifyProblemChanged();
+    }
   }
   setPieceToAdd($event: string | null) {
     const currentPieceToAdd = this.pieceToAdd();
@@ -326,6 +334,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const pieceToMoveValue = this.pieceToMove();
     if (button === "middle") {
       this.current.RemovePieceAt($event);
+      this.notifyProblemChanged();
       this.editMode.set("select");
       this.resetActions();
       return;
@@ -337,6 +346,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (editModeValue === "remove") {
       this.current.RemovePieceAt($event);
+      this.notifyProblemChanged();
       this.resetActions();
       return;
     }
@@ -379,6 +389,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     // no op
   }
 
+  private notifyProblemChanged() {
+    // Incrementa la versione per forzare il re-render della chessboard
+    this.problemVersion.update(v => v + 1);
+  }
+
   private addPiece(figurine: string, loc: SquareLocation) {
     const p = Piece.fromPartial({
       appearance: figurine[2] as IPiece["appearance"],
@@ -390,6 +405,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
             : "Neutral",
     }) as Piece;
     this.current.AddPieceAt(loc, p);
+    this.notifyProblemChanged();
   }
 
   private prepareMovePiece(p: Piece | undefined) {
@@ -402,15 +418,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!pieceToMoveValue) return;
     const from = pieceToMoveValue.GetLocation();
     this.current.MovePiece(from, loc, "replace");
+    this.notifyProblemChanged();
     this.editMode.set("select");
     this.resetActions();
   }
 
   private resetActions() {
-    this.actualCursor.set({
+    this.actualCursor = {
       figurine: null,
       rotation: null,
-    });
+    };
     this.pieceToAdd.set(null);
     this.pieceToMove.set(null);
   }
@@ -544,7 +561,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   //#region CONTEXT COMMANDS
   ctxDeletePiece() {
     const cell = this.contextOnCell();
-    if (cell) this.current.RemovePieceAt(cell);
+    if (cell) {
+      this.current.RemovePieceAt(cell);
+      this.notifyProblemChanged();
+    }
   }
 
 }
