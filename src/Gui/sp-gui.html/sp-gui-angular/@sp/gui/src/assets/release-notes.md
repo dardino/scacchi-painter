@@ -1,5 +1,26 @@
 # Release Notes
 
+## Version 0.1.0
+
+### Performance and Stability Improvements
+
+This release introduces significant improvements in responsiveness and interface fluidity.
+
+**What's New:**
+
+- ⚡ **Faster and more responsive interface** - The application responds instantly to your commands
+- 🎯 **Immediate rendering** - No visible delays when modifying positions or stipulations
+- 📊 **Improved stability** - Eliminated display update issues
+
+**What changes for you:**
+
+- The editor responds faster when you move pieces on the board
+- The toolbar updates immediately when you change edit modes
+- Database search is smoother and more responsive
+- All changes to problems are displayed instantly without delays
+
+**No changes to saved files** - Your files remain completely compatible with previous versions.
+
 ## Version 0.0.13
 
 - Improved Popeye move parser: this is a first step towards enabling
