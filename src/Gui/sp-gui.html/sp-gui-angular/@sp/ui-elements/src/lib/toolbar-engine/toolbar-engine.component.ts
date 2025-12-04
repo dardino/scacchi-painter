@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, Output, inject, computed, input } from "@angular/core";
+import { Component, EventEmitter, Output, inject, computed, input } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
