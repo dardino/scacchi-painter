@@ -16,6 +16,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          check-latest: true
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install dependencies
+        working-directory: ./src/Gui/sp-gui.html/sp-gui-angular
+        run: pnpm install
+
+      - name: Build application
+        working-directory: ./src/Gui/sp-gui.html/sp-gui-angular
+        run: pnpm build:Azure
 
       - name: Deploy to Azure Static Web Apps (Production)
         id: builddeploy
