@@ -1,5 +1,11 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.1.0
+
+- [sp-gui-anuglar] Angular 21
+- [sp-gui-anuglar] Migration to pnpm + vitest + sass
+- [sp-gui-anuglar] Implements change detection with signals
+
 ## 0.0.13
 
 - Improved Popeye move parser
