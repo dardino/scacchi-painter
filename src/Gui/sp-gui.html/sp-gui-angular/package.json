@@ -48,14 +48,14 @@
     "marked": "15.0.11",
     "marked-base-url": "^1.1.3",
     "ngx-editor": "18.0.0",
-    "prosemirror-model": "^1.21.0",
+    "prosemirror-model": "^1.25.4",
     "rtf.js": "^3.0.9",
     "rxjs": "^7.8.1",
     "tslib": "^2.6.0"
   },
   "pnpm": {
     "overrides": {
-      "prosemirror-model": "1.21.0"
+      "prosemirror-model": "1.25.4"
     }
   },
   "devDependencies": {
