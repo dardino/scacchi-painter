@@ -1,13 +1,13 @@
-@if (problem) {
+@if (problem()) {
   <div class="dbitem-infos">
     <div class="dbitem">
-      <lib-chessboard [smallBoard]="true" [hideInfo]="true" boardType="HTML" class="miniboard" [position]="problem"></lib-chessboard>
+      <lib-chessboard [smallBoard]="true" [hideInfo]="true" boardType="HTML" class="miniboard" [position]="problem()"></lib-chessboard>
       <div class="description">
         <dl>
           <dt class="authors">Authors:</dt>
           @if (hasAuthors()) {
             <dd class="authors">
-              @for (author of problem.authors; track $index) {
+              @for (author of problem().authors; track $index) {
               <span class="author">{{ author.nameAndSurname }}</span>
               }
             </dd>
@@ -35,7 +35,7 @@
         <button title="Delete" type="button" class="action-button" mat-icon-button color="accent" (click)="removeItem()">
           <mat-icon class="action">delete_permanent</mat-icon>
         </button>
-        <a title="Edit" class="action-button" mat-icon-button color="accent" [routerLink]="['/edit/' + dbIndex]">
+        <a title="Edit" class="action-button" mat-icon-button color="accent" [routerLink]="['/edit/' + dbIndex()]">
           <mat-icon class="action">forward</mat-icon>
         </a>
       </div>
@@ -48,6 +48,6 @@
       <span class="twin">{{twin}}</span>
       }
     </span>
-    <span class="status-index">{{ dbIndex }}</span>
+    <span class="status-index">{{ dbIndex() }}</span>
   </div>
 }
