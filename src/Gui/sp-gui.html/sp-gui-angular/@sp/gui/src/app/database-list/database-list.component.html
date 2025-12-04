@@ -10,13 +10,13 @@
 <section id="searchbar">
   <mat-form-field>
     <mat-label>Search for problem</mat-label>
-    <input matInput [value]="searchValue" (change)="valueChange($event)">
+    <input matInput [value]="searchValue()" (change)="valueChange($event)">
     <mat-icon matSuffix>search</mat-icon>
     <mat-hint>Example: Hm#3 or d2-d3</mat-hint>
   </mat-form-field>
 </section>
 
-<cdk-virtual-scroll-viewport id="dbScrollViewport" [itemSize]="itemSize" class="dblist">
+<cdk-virtual-scroll-viewport id="dbScrollViewport" [itemSize]="itemSize()" class="dblist">
   <div
     class="dbitem-container" #dbItemContainer
     *cdkVirtualFor="let item of itemSource; let index = index"

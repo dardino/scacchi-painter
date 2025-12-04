@@ -1,5 +1,6 @@
 
-import { Component, EventEmitter, Output, inject } from "@angular/core";
+
+import { Component, EventEmitter, Output, inject, computed } from "@angular/core";
 import { MatListModule, MatNavList } from "@angular/material/list";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterModule } from "@angular/router";
@@ -22,7 +23,6 @@ export class MenuComponent {
 
   @Output()
   selectElement = new EventEmitter<void>();
-  get dbLoaded() {
-    return this.db.All.length !== 0;
-  }
+
+  dbLoaded = computed(() => this.db.All.length !== 0);
 }

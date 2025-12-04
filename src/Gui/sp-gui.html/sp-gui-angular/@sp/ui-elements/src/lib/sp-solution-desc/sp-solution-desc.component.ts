@@ -1,5 +1,5 @@
 
-import { Component, inject, Input } from "@angular/core";
+import { Component, inject, Input, computed } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
 import { HalfMoveInfo } from "@dardino-chess/core";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
@@ -58,20 +58,12 @@ export class SpSolutionDescComponent {
   @Input()
   viewMode: ViewModes = "html";
 
-  get firstMove() {
-    return this.problem.Problem?.startMoveN ?? 1;
-  }
-
-  get totalMoves() {
-    return this.problem.Problem?.stipulation.moves ?? 2;
-  }
-
-  public get solutionFontSize() {
-    return `${Math.max(this.preferences.solutionFontSize, 1)}rem`;
-  }
+  firstMove = computed(() => this.problem.Problem?.startMoveN ?? 1);
+  totalMoves = computed(() => this.problem.Problem?.stipulation.moves ?? 2);
+  solutionFontSize = computed(() => `${Math.max(this.preferences.solutionFontSize, 1)}rem`);
+  rows = computed(() => this.problem.Problem?.jsonSolution ?? []);
 
   get solution() {
-
     return this.problem.textSolution ?? "";
   }
   set solution(txt: string) {
@@ -84,10 +76,6 @@ export class SpSolutionDescComponent {
   }
   set solutionHtml(text: string) {
     this.problem.SetHTMLSolution(text);
-  }
-
-  get rows(): HalfMoveInfo[] {
-    return this.problem.Problem?.jsonSolution ?? [];
   }
 
   getClass(item: string) {

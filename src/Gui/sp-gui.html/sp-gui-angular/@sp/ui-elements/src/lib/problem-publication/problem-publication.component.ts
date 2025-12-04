@@ -1,7 +1,7 @@
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, effect, inject, signal } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatCardModule } from "@angular/material/card";
@@ -41,27 +41,50 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   private db = inject(DbmanagerService);
   private curProbSvc = inject(CurrentProblemService);
 
+  private _currentProblem = signal<Problem | null>(null);
 
-  get magazine(): string { return this._currentProblem?.source ?? ""; }
-  set magazine(val: string) { if (this._currentProblem) this._currentProblem.source = val; }
+  get magazine(): string { return this._currentProblem()?.source ?? ""; }
+  set magazine(val: string) {
+    const prob = this._currentProblem();
+    if (prob) prob.source = val;
+  }
 
-  private _date: Date | null = new Date();
-  get date() { return this._date }
+  private _date = signal<Date | null>(new Date());
+  get date(): Date | null { return this._date(); }
   set date(val: Date | null) {
-    this._date = val;
+    this._date.set(val);
     if (val) this.curProbSvc.SetPublicationDate(val);
   }
 
-  get rank(): string { return this._currentProblem?.prizeRank?.toFixed(0) ?? ""; }
-  set rank(v: string) { if (this._currentProblem) this._currentProblem.prizeRank = parseInt(v); }
+  get rank(): string { return this._currentProblem()?.prizeRank?.toFixed(0) ?? ""; }
+  set rank(v: string) {
+    const prob = this._currentProblem();
+    if (prob) prob.prizeRank = parseInt(v);
+  }
 
-  public get rankType(): string { return this._currentProblem?.prizeDescription ?? ""; }
-  public set rankType(value: string) { if (this._currentProblem) this._currentProblem.prizeDescription = value; }
+  get rankType(): string { return this._currentProblem()?.prizeDescription ?? ""; }
+  set rankType(value: string) {
+    const prob = this._currentProblem();
+    if (prob) prob.prizeDescription = value;
+  }
 
-  public get personalId(): string { return this._currentProblem?.personalID ?? ""; }
-  public set personalId(value: string) { if (this._currentProblem) this._currentProblem.personalID = value; }
+  get personalId(): string { return this._currentProblem()?.personalID ?? ""; }
+  set personalId(value: string) {
+    const prob = this._currentProblem();
+    if (prob) prob.personalID = value;
+  }
 
-  tags: string[] = [];
+  tags = signal<string[]>([]);
+
+  constructor() {
+    // Effetto per sincronizzare i tag quando cambia il problema
+    effect(() => {
+      const problem = this._currentProblem();
+      if (problem) {
+        this.tags.set([...problem.tags]);
+      }
+    });
+  }
 
   addOnBlur = true;
   announcer = inject(LiveAnnouncer);
@@ -92,20 +115,16 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
     return this.allMagazines.filter(mag => mag.toLowerCase().includes(filterValue.toLowerCase()));
   }
 
-  private _currentProblem: Problem | null;
-
   ngOnInit(): void {
     this._subscr = this.db.CurrentProblem$.subscribe(value => {
-      this._currentProblem = value;
+      this._currentProblem.set(value);
       if (value) {
-        this._date = new Date(value.date);
-        this.tags = value.tags;
+        this._date.set(new Date(value.date));
       } else {
-        this._date = null;
-        this.tags = [];
+        this._date.set(null);
       }
     })
-    this._currentProblem = this.db.CurrentProblem;
+    this._currentProblem.set(this.db.CurrentProblem);
     this.filteredTags = this.tagInputControl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => (tag ? this._filterTags(tag) : this.allPreviousTags.slice())),
@@ -125,21 +144,26 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   addtag(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     // Add our tag
-    const arleadyExists = this.tags.indexOf(value) > -1;
+    const currentTags = this.tags();
+    const arleadyExists = currentTags.indexOf(value) > -1;
     if (value && !arleadyExists) {
-      this.tags.push(value);
+      this.tags.update(tags => [...tags, value]);
     }
     this.tagInput.nativeElement.value = '';
     this.tagInputControl.setValue(null);
   }
 
   removetag(tag: string): void {
-    const index = this.tags.indexOf(tag);
-
-    if (index >= 0) {
-      this.tags.splice(index, 1);
-      this.announcer.announce(`Removed ${tag}`);
-    }
+    this.tags.update(tags => {
+      const index = tags.indexOf(tag);
+      if (index >= 0) {
+        const newTags = [...tags];
+        newTags.splice(index, 1);
+        this.announcer.announce(`Removed ${tag}`);
+        return newTags;
+      }
+      return tags;
+    });
   }
 
   edittag(tag: string, event: MatChipEditedEvent) {
@@ -152,13 +176,18 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
     }
 
     // Edit existing fruit
-    const index = this.tags.indexOf(tag);
-    if (index >= 0) {
-      this.tags[index] = value;
-    }
+    this.tags.update(tags => {
+      const index = tags.indexOf(tag);
+      if (index >= 0) {
+        const newTags = [...tags];
+        newTags[index] = value;
+        return newTags;
+      }
+      return tags;
+    });
   }
   selecttag(event: MatAutocompleteSelectedEvent) {
-    this.tags.push(event.option.viewValue);
+    this.tags.update(tags => [...tags, event.option.viewValue]);
     this.tagInput.nativeElement.value = '';
     this.tagInputControl.setValue(null);
   }

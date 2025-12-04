@@ -63,7 +63,7 @@
     <mat-form-field class="field magazine">
       <mat-label>Tags</mat-label>
       <mat-chip-grid #chipGrid aria-label="Enter fruits">
-        @for (tag of tags; track tag) {
+        @for (tag of tags(); track tag) {
         <mat-chip-row (removed)="removetag(tag)" [editable]="true" (edited)="edittag(tag, $event)"
           [aria-description]="'press enter to edit ' + tag">
           {{tag}}

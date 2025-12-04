@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, inject } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, inject, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import {
@@ -68,16 +68,26 @@ export class ChessboardComponent
   @Output()
   contextOnCell = new EventEmitter<{ event: MouseEvent, location: SquareLocation }>();
 
-  currentCell: UiCell | null = null;
-  private lastHash?: string;
-  private uiCells: UiCell[] = [];
-  get cells(): readonly UiCell[] {
-    if (this.position?.currentHash !== this.lastHash) {
-      this.lastHash = this.position?.currentHash;
+  currentCell = signal<UiCell | null>(null);
+  private lastHash = signal<string | undefined>(undefined);
+  private uiCells = signal<UiCell[]>([]);
+
+  cells = computed(() => {
+    if (this.position?.currentHash !== this.lastHash()) {
+      this.lastHash.set(this.position?.currentHash);
       this.updateBoard();
     }
-    return this.uiCells;
-  }
+    return this.uiCells();
+  });
+
+  fen = computed(() => this.position?.getCurrentFen());
+  pieceCounter = computed(() => this.position?.getPieceCounter());
+  twins = computed(() => this.position?.twins.TwinList.map((t) => t.toString()) ?? []);
+  viewDiagram = computed(() => {
+    const twinList = this.position?.twins.TwinList ?? [];
+    return twinList.length > 0 && twinList.every((t) => t.TwinType !== "Diagram");
+  });
+  stipulationDesc = computed(() => this.position?.stipulation.completeStipulationDesc ?? "");
 
   private settings: {
     CELLCOLORS: [string, string];
@@ -90,9 +100,6 @@ export class ChessboardComponent
     };
   private canvasBoard: CanvasChessBoard | null;
   private cellSize = 32;
-  public get fen() {
-    return this.position?.getCurrentFen();
-  }
 
   animationSub: Subscription;
   constructor() {
@@ -160,25 +167,27 @@ export class ChessboardComponent
   }
 
   clearCells() {
-    this.uiCells = [];
+    const cells: UiCell[] = [];
     for (let i = 0; i < 64; i++) {
-      this.uiCells.push({
+      cells.push({
         location: GetLocationFromIndex(i),
         piece: null,
       });
     }
+    this.uiCells.set(cells);
   }
 
   updateBoard() {
     this.clearCells();
     const pp = this.position?.pieces;
+    const cells = this.uiCells();
     if (pp) {
       for (const piece of pp) {
         const index = GetSquareIndex(piece.column, piece.traverse);
         if (index < 0 || index > 63) {
           console.error(piece.column, piece.traverse);
         }
-        this.cells[index].piece = piece;
+        cells[index].piece = piece;
       }
     }
     if (this.canvasBoard && pp) {
@@ -210,14 +219,16 @@ export class ChessboardComponent
   }
   onCellClick(cell: UiCell) {
     this.cellClick.emit({ ...cell.location });
-    if (cell !== this.currentCell) this.currentCell = cell;
-    else this.currentCell = null;
+    const current = this.currentCell();
+    if (cell !== current) this.currentCell.set(cell);
+    else this.currentCell.set(null);
     this.currentCellChanged.emit(
-      this.currentCell ? { ...this.currentCell?.location } : null
+      this.currentCell() ? { ...this.currentCell()!.location } : null
     );
   }
   copyFen() {
-    if (!this.fen) {
+    const fenValue = this.fen();
+    if (!fenValue) {
       this.snackBar.open("No FEN to copy!", undefined, {
         verticalPosition: "top",
         politeness: "assertive",
@@ -225,7 +236,7 @@ export class ChessboardComponent
       });
       return
     }
-    navigator.clipboard.writeText(this.fen);
+    navigator.clipboard.writeText(fenValue);
     this.snackBar.open("Fen copied to clipboard!", undefined, {
       verticalPosition: "top",
       politeness: "assertive",
@@ -240,27 +251,6 @@ export class ChessboardComponent
     setTimeout(() => {
       this.sizeMutated();
     }, 0);
-  }
-
-  get pieceCounter() {
-    return this.position?.getPieceCounter();
-  }
-
-  get twins(): string[] {
-    return this.position?.twins.TwinList.map((t) => t.toString()) ?? [];
-  }
-
-  get viewDiagram() {
-    return (
-      (this.position?.twins.TwinList.length ?? 0) &&
-      this.position?.twins.TwinList.every(
-        (t) => t.TwinType !== "Diagram"
-      )
-    );
-  }
-
-  get stipulationDesc(): string {
-    return this.position?.stipulation.completeStipulationDesc ?? "";
   }
 
   private sizeMutated = () => {

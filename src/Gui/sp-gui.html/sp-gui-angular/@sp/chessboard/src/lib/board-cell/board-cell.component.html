@@ -1,5 +1,5 @@
-<div [class]="classList">
+<div [class]="classList()">
   <sup></sup>
-  <em draggable="true" [class]="figurine ? 'figurine' : ''" [attr.data-bg-piece]="bg" [attr.data-colored-piece]="colored"></em>
-  <sub>{{fairy}}</sub>
+  <em draggable="true" [class]="figurine() ? 'figurine' : ''" [attr.data-bg-piece]="bg()" [attr.data-colored-piece]="colored()"></em>
+  <sub>{{fairy()}}</sub>
 </div>

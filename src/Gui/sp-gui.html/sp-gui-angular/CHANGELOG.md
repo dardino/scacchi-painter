@@ -2,9 +2,23 @@
 
 ## 0.1.0
 
-- [sp-gui-anuglar] Angular 21
-- [sp-gui-anuglar] Migration to pnpm + vitest + sass
-- [sp-gui-anuglar] Implements change detection with signals
+- [sp-gui-angular] Angular 21
+- [sp-gui-angular] Migration to pnpm + vitest + sass
+- [sp-gui-angular] Implements change detection with signals
+- [sp-gui-angular] **Completed signal-based reactivity**: Converted 11 critical UI components to use Angular signals for zoneless change detection:
+  - **ChessboardComponent** - Chessboard visualization with cell rendering
+  - **EditProblemComponent** - Problem editor with all UI state
+  - **BoardCellComponent** - Individual cell computed properties
+  - **SpSolutionDescComponent** - Solution display and editing
+  - **DatabaseListComponent** - Problem list with search filtering
+  - **DatabaseListItemComponent** - List item display properties
+  - **ProblemPublicationComponent** - Publication metadata form
+  - **ProblemDefinitionsComponent** - Problem stipulation and conditions
+  - **ToolbarEngineComponent** - Engine toolbar with fontSize state
+  - **ToolbarDbComponent** - Database navigation toolbar
+  - **MenuComponent** - Main navigation menu
+  - Implemented computed signals for derived properties and signal wrappers for mutable state
+  - All components verified to compile without errors and provide instant UI updates without zone.js
 
 ## 0.0.13
 
