@@ -28,7 +28,7 @@ export class FileExplorerComponent implements OnInit, OnChanges {
     itemName: "/",
     type: "root",
   };
-  public items: FolderItemInfo[] = [];
+  public items = signal<FolderItemInfo[]>([]);
 
   ngOnInit(): void {
     this.refresh();
@@ -60,7 +60,7 @@ export class FileExplorerComponent implements OnInit, OnChanges {
 
   private clickFolder(item: FolderItemInfo): void {
     this.currentItem = { ...item, parent: this.currentItem };
-    this.items = [];
+    this.items.set([]);
     this.folderChanged.emit({ meta: item, source: this.service?.sourceName ?? "unknown" });
     this.refresh();
   }
@@ -81,9 +81,9 @@ export class FileExplorerComponent implements OnInit, OnChanges {
       this.service
         .enumContent(this.currentItem.id, this.currentItem.type, "sp2")
         .then((items) => {
-          this.items = items;
+          this.items.set(items);
         }).catch(() => {
-          this.items = [];
+          this.items.set([]);
         }).finally(() => {
           this.isloading.set(false);
         });
