@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, Output, inject, computed } from "@angular/core";
+import { Component, EventEmitter, Input, Output, inject, computed, input } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
@@ -24,8 +24,7 @@ const mapViewModeToIcons: Record<ViewModes, { icon: string, nextM: ViewModes }> 
 export class ToolbarEngineComponent {
   private preferences = inject(PreferencesService);
 
-  @Input()
-  public hideLabels: boolean;
+  hideLabels = input<boolean>(false);
 
   @Output()
   public startSolve = new EventEmitter<"start" | "try">();
@@ -39,18 +38,15 @@ export class ToolbarEngineComponent {
   @Output()
   public toggleEditor = new EventEmitter<ViewModes>();
 
-  @Input()
-  isRunning: boolean;
-  @Input()
-  fullLog: boolean;
-  @Input()
-  viewMode: ViewModes;
+  isRunning = input<boolean>(false);
+  fullLog = input<boolean>(false);
+  viewMode = input<ViewModes>("both");
 
   isMaxFont = computed(() => this.fontSize() >= 2);
   isMinFont = computed(() => this.fontSize() <= 1);
-  logIcon = computed(() => this.fullLog ? "compress" : "expand");
+  logIcon = computed(() => this.fullLog() ? "compress" : "expand");
   fontSize = computed(() => this.preferences.solutionFontSize);
-  viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode]?.icon);
+  viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode()]?.icon);
 
   start() {
     console.warn("[LOG] -> try to start process...");
@@ -74,7 +70,7 @@ export class ToolbarEngineComponent {
     this.toggleLog.emit();
   }
   toggleEditorview() {
-    this.toggleEditor.emit(mapViewModeToIcons[this.viewMode].nextM);
+    this.toggleEditor.emit(mapViewModeToIcons[this.viewMode()].nextM);
   }
 
 }

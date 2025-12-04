@@ -1,8 +1,9 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, inject, signal } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, inject, signal, input } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
+import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
@@ -36,6 +37,8 @@ export class ChessboardComponent
   @Input() smallBoard: boolean;
   @Input() cursor: { figurine: string | null; rotation: number | null } | null;
 
+  position = input<Problem | null>(null);
+
   get BoardType() {
     return this.boardType ? this.boardType : "HTML";
   }
@@ -56,9 +59,6 @@ export class ChessboardComponent
   @ViewChild("container", { static: true })
   cbImage: ElementRef;
 
-  @Input()
-  position?: Problem | null;
-
   @Output()
   currentCellChanged = new EventEmitter<SquareLocation | null>();
   @Output()
@@ -73,21 +73,22 @@ export class ChessboardComponent
   private uiCells = signal<UiCell[]>([]);
 
   cells = computed(() => {
-    if (this.position?.currentHash !== this.lastHash()) {
-      this.lastHash.set(this.position?.currentHash);
+    const pos = this.position();
+    if (pos?.currentHash !== this.lastHash()) {
+      this.lastHash.set(pos?.currentHash);
       this.updateBoard();
     }
     return this.uiCells();
   });
 
-  fen = computed(() => this.position?.getCurrentFen());
-  pieceCounter = computed(() => this.position?.getPieceCounter());
-  twins = computed(() => this.position?.twins.TwinList.map((t) => t.toString()) ?? []);
+  fen = computed(() => this.position()?.getCurrentFen());
+  pieceCounter = computed(() => this.position()?.getPieceCounter());
+  twins = computed(() => this.position()?.twins.TwinList.map((t: Twin) => t.toString()) ?? []);
   viewDiagram = computed(() => {
-    const twinList = this.position?.twins.TwinList ?? [];
-    return twinList.length > 0 && twinList.every((t) => t.TwinType !== "Diagram");
+    const twinList = this.position()?.twins.TwinList ?? [];
+    return twinList.length > 0 && twinList.every((t: Twin) => t.TwinType !== "Diagram");
   });
-  stipulationDesc = computed(() => this.position?.stipulation.completeStipulationDesc ?? "");
+  stipulationDesc = computed(() => this.position()?.stipulation.completeStipulationDesc ?? "");
 
   private settings: {
     CELLCOLORS: [string, string];
@@ -106,6 +107,12 @@ export class ChessboardComponent
     const animationService = this.animationService;
 
     this.animationSub = animationService.onAnimate.subscribe(this.#animate);
+
+    // Watch position changes and update board
+    computed(() => {
+      this.position();
+      this.updateBoard();
+    });
   }
 
   onSelectCell($event: Event) {
@@ -124,9 +131,6 @@ export class ChessboardComponent
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-    if (changes.position && !changes.position.isFirstChange()) {
-      this.updateBoard();
-    }
     if (changes.cursor && this.cbImage) {
       if (changes.cursor.currentValue?.figurine != null) {
         const dataURL = getPieceIcon(
@@ -179,7 +183,7 @@ export class ChessboardComponent
 
   updateBoard() {
     this.clearCells();
-    const pp = this.position?.pieces;
+    const pp = this.position()?.pieces;
     const cells = this.uiCells();
     if (pp) {
       for (const piece of pp) {
