@@ -32,3 +32,42 @@ getTestBed().initTestEnvironment(
     teardown: { destroyAfterEach: true },
   }
 );
+
+// Helper function to check if an error is related to icon loading
+function isIconError(value: any): boolean {
+  const str = String(value || '');
+  if (str.includes('Error retrieving icon') || str.includes('Unable to find icon')) {
+    return true;
+  }
+
+  if (value instanceof Error) {
+    return isIconError(value.message) || isIconError(value.stack);
+  }
+
+  if (typeof value === 'object') {
+    return isIconError(value.message) || isIconError(value.toString());
+  }
+
+  return false;
+}
+
+// Suppress console output for Material icon loading errors during tests
+// These errors are expected when SVG assets are not available in jsdom test environment
+const originalConsoleError = console.error;
+const originalConsoleWarn = console.warn;
+
+console.error = function(...args: any[]) {
+  // Check if this is an icon-related error
+  if (args.some(isIconError)) {
+    return;
+  }
+  originalConsoleError.apply(console, args);
+};
+
+console.warn = function(...args: any[]) {
+  // Check if this is an icon-related warning
+  if (args.some(isIconError)) {
+    return;
+  }
+  originalConsoleWarn.apply(console, args);
+};
