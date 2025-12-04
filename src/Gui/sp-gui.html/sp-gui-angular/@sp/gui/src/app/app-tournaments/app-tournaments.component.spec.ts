@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppTournamentsComponent } from './app-tournaments.component';
