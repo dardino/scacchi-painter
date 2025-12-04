@@ -11,21 +11,21 @@
   <div [style.fontSize]="solutionFontSize()" class="solutions">
     @for (move of rows(); track $index) {
       @let prevItem = $index < 1 ? null : rows()[$index - 1];
-      @let prevMove = prevItem == null ? 0
-      : prevItem.num + (prevItem.part == "l" ? 0 : 0.5);
+      @let prevMove = prevItem === null ? 0
+      : prevItem.num + (prevItem.part === "l" ? 0 : 0.5);
       <!-- se esiste una mossa la gestisco come tale -->
-      @let myMove = move.num + (move.part == "l" ? 0 : 0.5);
+      @let myMove = move.num + (move.part === "l" ? 0 : 0.5);
       @if (myMove === firstMove()) {
         <hr />
       }
-      @let lineBr = myMove < prevMove || prevItem == null || prevItem.zugzwang;
+      @let lineBr = myMove < prevMove || prevItem === null || prevItem.zugzwang;
       @if (lineBr) {
         <div class="linebr"></div>
       }
       <lib-sp-solution-move
         [attr.data-moveno]="myMove"
         [attr.data-movenopre]="prevMove"
-        [hideNum]="mode == 'inline' && !lineBr && prevItem != null && !move.refutes"
+        [hideNum]="mode === 'inline' && !lineBr && prevItem !== null && !move.refutes"
         [value]="move"
         [refutes]="move.refutes"
         [class]="[
@@ -35,7 +35,7 @@
           move.zugzwang ? 'zugzwang' : '',
           move.isKey ? 'key' : '',
           move.refutes ? 'refutes' : '',
-          prevMove == myMove ? 'demolition' : '',
+          prevMove === myMove ? 'demolition' : '',
         ].join(' ')"
       ></lib-sp-solution-move>
     }

@@ -1,7 +1,6 @@
 
 import { Component, inject, Input, computed } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
-import { HalfMoveInfo } from "@dardino-chess/core";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";

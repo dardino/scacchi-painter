@@ -27,6 +27,7 @@ class OneDriveCliProvider {
       const resp = await this.#getMSALObj().handleRedirectPromise();
       await this.handleResponse(resp);
     } catch (error) {
+
       console.error(error);
     }
   }
@@ -41,6 +42,7 @@ class OneDriveCliProvider {
       const currentAccounts = this.#getMSALObj().getAllAccounts();
       if (!currentAccounts || currentAccounts.length < 1) {
         // No accounts found, redirect to login
+        // eslint-disable-next-line no-console
         console.log("No accounts found, redirecting to login");
         setLocalAuthInfo({
           redirect: "onedrive",
