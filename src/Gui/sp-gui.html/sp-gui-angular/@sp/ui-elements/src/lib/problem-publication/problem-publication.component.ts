@@ -120,11 +120,22 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
       this._currentProblem.set(value);
       if (value) {
         this._date.set(new Date(value.date));
+        this.magazineInputControl.setValue(value.source ?? "", { emitEvent: false });
       } else {
         this._date.set(null);
+        this.magazineInputControl.setValue("", { emitEvent: false });
       }
     })
     this._currentProblem.set(this.db.CurrentProblem);
+
+    // Sincronizza magazine dal FormControl al modello
+    this.magazineInputControl.valueChanges.subscribe(value => {
+      const prob = this._currentProblem();
+      if (prob) {
+        prob.source = value ?? "";
+      }
+    });
+
     this.filteredTags = this.tagInputControl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => (tag ? this._filterTags(tag) : this.allPreviousTags.slice())),
