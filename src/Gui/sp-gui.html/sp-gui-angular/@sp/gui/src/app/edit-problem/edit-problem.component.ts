@@ -74,7 +74,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   public problem = computed(() => {
     // Traccia la versione per far ri-eseguire questo computed
     this.problemVersion();
-    return this.current?.Problem?.clone();
+    return this.current?.Problem?.clone() ?? null;
   });
 
   public get engineEnabled() {

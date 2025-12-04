@@ -1,5 +1,17 @@
 # Release Notes
 
+## Version 0.1.1
+
+**Bug fix release**: Fixed critical chessboard rendering issue and improved signal-based reactivity.
+
+**What's Fixed:**
+
+- 🔧 **Chessboard rendering** - Piece changes (add/remove/move) now properly trigger UI updates
+- ⚙️ **Signal-based reactivity** - Improved how the system detects and reflects Problem object changes
+- 🧹 **Code quality** - Refactored change detection logic for better maintainability
+
+**No changes to saved files** - Your files remain completely compatible with previous versions.
+
 ## Version 0.1.0
 
 ### Performance and Stability Improvements

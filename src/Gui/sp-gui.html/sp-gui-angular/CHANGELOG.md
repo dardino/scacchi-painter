@@ -1,5 +1,19 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.1.1
+
+**Bug fix release**: Fixed critical chessboard rendering issue and improved signal-based reactivity.
+
+- [sp-gui-angular] **Fixed chessboard reactivity**: Resolved issue where piece changes (add/remove/move) were not triggering UI re-renders
+  - Implemented version signal pattern to force computed re-evaluation when Problem object changes internally
+  - Added Problem cloning to ensure change detection works correctly with input signals
+  - Centralized change notifications after all board manipulation commands
+- [sp-gui-angular] **Improved code organization**: Refactored edit-problem component for better maintainability
+  - Consolidated board update notifications in single location
+  - Cleaned up command mapper to separate business logic from change detection
+- [sp-gui-angular] **Fixed signal violations**: Removed deprecated patterns causing NG0600 errors in computed expressions
+- [sp-gui-angular] **Added comprehensive unit tests**: Created test suite for chessboard interaction features (14 passing tests)
+
 ## 0.1.0
 
 - [sp-gui-angular] Angular 21
