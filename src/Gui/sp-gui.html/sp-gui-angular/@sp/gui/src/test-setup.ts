@@ -10,14 +10,18 @@ import { webcrypto } from 'node:crypto';
 
 // Polyfill crypto for MSAL browser in jsdom environment
 if (typeof global.crypto === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (global as any).crypto = webcrypto;
 }
 
 // Polyfill TextEncoder/TextDecoder if needed
 if (typeof global.TextEncoder === 'undefined') {
-  const { TextEncoder, TextDecoder } = require('util');
-  (global as any).TextEncoder = TextEncoder;
-  (global as any).TextDecoder = TextDecoder;
+  import('util').then((util) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).TextEncoder = util.TextEncoder;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).TextDecoder = util.TextDecoder;
+  });
 }
 
 // Initialize the Angular testing environment

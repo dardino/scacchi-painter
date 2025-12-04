@@ -1,0 +1,47 @@
+name: Reusable CI Workflow
+
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        description: 'Working directory for CI tasks'
+        required: false
+        default: './src/Gui/sp-gui.html/sp-gui-angular'
+        type: string
+
+jobs:
+  ci:
+    runs-on: ubuntu-22.04
+    name: Build, Test, and Lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          check-latest: true
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.working_directory }}
+        run: pnpm install
+
+      - name: Run linting
+        working-directory: ${{ inputs.working_directory }}
+        run: pnpm lint
+
+      - name: Build application
+        working-directory: ${{ inputs.working_directory }}
+        run: pnpm build:Azure
+
+      - name: Run tests
+        working-directory: ${{ inputs.working_directory }}
+        run: pnpm test:ci
