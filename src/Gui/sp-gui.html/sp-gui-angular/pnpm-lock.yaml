@@ -51,8 +51,8 @@ importers:
         specifier: ^4.7.1-preview
         version: 4.10.0
       '@azure/msal-angular':
-        specifier: ^4.0.12
-        version: 4.0.22(@azure/msal-browser@4.27.0)(rxjs@7.8.2)
+        specifier: ^4.0.23
+        version: 4.0.23(@azure/msal-browser@4.27.0)(rxjs@7.8.2)
       '@azure/msal-browser':
         specifier: ^4.27.0
         version: 4.27.0
@@ -601,10 +601,10 @@ packages:
     resolution: {integrity: sha512-fCqPIfOcLE+CGqGPd66c8bZpwAji98tZ4JI9i/mlTNTlsIWslCfpg48s/ypyLxZTump5sypjrKn2/kY7q8oAbA==}
     engines: {node: '>=20.0.0'}
 
-  '@azure/msal-angular@4.0.22':
-    resolution: {integrity: sha512-ndtQ/EFj90Eu7EwODKxGyKwdp8xLmIuXbke5YWUdLKXcWc1hoOf4guYDFS6AqbODgeJzolLJg+p14b1w+kKjVA==}
+  '@azure/msal-angular@4.0.23':
+    resolution: {integrity: sha512-4cNowcqFoDwpzRaT9PQblaVeJICCK0lq/j4NGwVIN+FiKaXBbiqLp5vABrHz9DGCVF417zrGqSzTRAwL0QJ99Q==}
     peerDependencies:
-      '@azure/msal-browser': ^4.26.2
+      '@azure/msal-browser': ^4.27.0
       rxjs: ^7.0.0
 
   '@azure/msal-browser@4.27.0':
@@ -7143,7 +7143,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@azure/msal-angular@4.0.22(@azure/msal-browser@4.27.0)(rxjs@7.8.2)':
+  '@azure/msal-angular@4.0.23(@azure/msal-browser@4.27.0)(rxjs@7.8.2)':
     dependencies:
       '@azure/msal-browser': 4.27.0
       rxjs: 7.8.2
