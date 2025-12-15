@@ -115,8 +115,8 @@ importers:
         specifier: ^21.0.2
         version: 21.0.2(@angular/compiler@21.0.2)(typescript@5.9.3)
       '@angular/language-service':
-        specifier: ^21.0.2
-        version: 21.0.2
+        specifier: ^21.0.5
+        version: 21.0.5
       '@eslint/js':
         specifier: ^9.27.0
         version: 9.39.1
@@ -493,8 +493,8 @@ packages:
       '@standard-schema/spec': ^1.0.0
       rxjs: ^6.5.3 || ^7.4.0
 
-  '@angular/language-service@21.0.2':
-    resolution: {integrity: sha512-wE6LkRoXaer+hWBMgW6Y5zKi7EPi4pQ1TJwa/N7XK7BhkOrDQPi6CWcJSnRjI71rR4AByScPMJLVUnhU3hd3UQ==}
+  '@angular/language-service@21.0.5':
+    resolution: {integrity: sha512-yjaNr6o/cxlF6i8v2mPRfI3C15PfBgWWImPTp99RnqPVdIZYvbYwIATW33VNcdbmmNYz5h+Jq5Kl2aOhh2kGrw==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
 
   '@angular/material@21.0.2':
@@ -6996,7 +6996,7 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@angular/language-service@21.0.2': {}
+  '@angular/language-service@21.0.5': {}
 
   '@angular/material@21.0.2(qgtlln5hj3b7b4c74dkdsrtto4)':
     dependencies:
