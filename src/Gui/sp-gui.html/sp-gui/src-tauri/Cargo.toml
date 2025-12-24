@@ -1,5 +1,5 @@
 [package]
-name = "scacchi-painter-gui"
+name = "scacchi-painter-x"
 version = "0.1.0"
 description = "Scacchi Painter X"
 authors = ["Gabriele Brunori"]
