@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "identifier": "com.scacchipainter.gui",
   "build": {
-    "beforeDevCommand": "yarn start",
+    "beforeDevCommand": "pnpm start",
     "devUrl": "http://localhost:4200",
-    "beforeBuildCommand": "yarn build",
+    "beforeBuildCommand": "pnpm build",
     "frontendDist": "../build/gui/browser"
   },
   "app": {
