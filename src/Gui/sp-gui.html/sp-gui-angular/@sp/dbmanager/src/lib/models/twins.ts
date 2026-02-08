@@ -7,17 +7,19 @@ export class Twins implements ITwins {
   get HasDiagram(): boolean {
     return (this.TwinList ?? []).some(tw => tw.TwinType === "Diagram");
   }
+
   get ZeroPosition(): boolean {
     return !this.HasDiagram && this.TwinList.length > 1;
   }
+
   private constructor() {}
   public static fromElement(el: Element | null): Twins {
     const t = new Twins();
     if (el == null) return t;
-    t.TwinSequenceTypes =
-      SequenceTypes[
-        (el.getAttribute("TwinSequenceTypes") as keyof typeof SequenceTypes) ||
-          "Normal"
+    t.TwinSequenceTypes
+      = SequenceTypes[
+        (el.getAttribute("TwinSequenceTypes") as keyof typeof SequenceTypes)
+        || "Normal"
       ];
     t.TwinList = Array.from(el.querySelectorAll("Twin")).map(Twin.fromElement);
     // cleanup if there are too many "Diagram"
@@ -29,6 +31,7 @@ export class Twins implements ITwins {
     }
     return t;
   }
+
   static fromJson(twins: ITwins | null | undefined): Twins {
     const p = new Twins();
     if (twins == null) return p;
@@ -45,16 +48,18 @@ export class Twins implements ITwins {
     }
     return p;
   }
+
   toJson(): Partial<ITwins> {
     const p: Partial<ITwins> = {};
     if (this.TwinSequenceTypes !== SequenceTypes.Normal) p.TwinSequenceTypes = this.TwinSequenceTypes;
     if (this.TwinList.length > 0) p.TwinList = this.TwinList.map(t => t.toJson());
     return p;
   }
+
   toSP2Xml(): Element {
     const twins = createXmlElement("Twins");
     twins.setAttribute("TwinSequenceTypes", this.TwinSequenceTypes);
-    this.TwinList.forEach(t => {
+    this.TwinList.forEach((t) => {
       twins.appendChild(t.toSP2Xml());
     });
     return twins;

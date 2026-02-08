@@ -9,10 +9,10 @@ import { setLocalAuthInfo } from "../../oauth_providers/helpers";
 
 interface DropboxFileInfo {
   ".tag": "folder" | "file";
-  id: string;
-  name: string;
-  path_display: string;
-  path_lower: string;
+  "id": string;
+  "name": string;
+  "path_display": string;
+  "path_lower": string;
 }
 interface DropboxFileSavedInfo {
   name: string; // "Database Problemi Gabriele (1).sp2";
@@ -23,7 +23,7 @@ interface DropboxFileSavedInfo {
   server_modified: string; // "2021-03-11T15:25:40Z";
   rev: string; // "5bd446568a0ae060f1482";
   size: number; // 706507;
-  is_downloadable: boolean; //true;
+  is_downloadable: boolean; // true;
   content_hash: string; // "b3d449e5a836d3ad55c153d360466f6f5d4e3891209a9094504636c5091f1286";
 }
 
@@ -54,7 +54,7 @@ export class DropboxdbService implements FileService {
 
   async saveFileContent(
     file: File,
-    item: FolderItemInfo
+    item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
     if (this.token == null) {
       await this.authorize();
@@ -84,7 +84,8 @@ export class DropboxdbService implements FileService {
         itemName: json.name,
         type: "folder",
       };
-    } else {
+    }
+    else {
       const message = await result.text();
       console.error(message);
       return new Error(message);
@@ -126,8 +127,8 @@ export class DropboxdbService implements FileService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...extensions: string[]
   ): Promise<FolderItemInfo[]> {
-    const urlToCall =
-      this.currentCursor?.length ?? 0 > 0
+    const urlToCall
+      = this.currentCursor?.length ?? 0 > 0
         ? "https://api.dropboxapi.com/2/files/list_folder/continue"
         : "https://api.dropboxapi.com/2/files/list_folder";
     const result = await fetch(urlToCall, {
@@ -146,13 +147,14 @@ export class DropboxdbService implements FileService {
       } = await result.json();
       this.currentCursor = respJson.cursor;
       this.hasMore = respJson.has_more;
-      return respJson.entries.map((ent) => ({
+      return respJson.entries.map(ent => ({
         type: ent[".tag"],
         id: ent.id,
         fullPath: ent.path_display,
         itemName: ent.name,
       }));
-    } else {
+    }
+    else {
       if (result.status === 400 || result.status === 401) {
         setLocalAuthInfo({ dropbox_token: "null" });
         this.authorize();

@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { FenService } from "./fen.service";
 
 describe("FenService", () => {

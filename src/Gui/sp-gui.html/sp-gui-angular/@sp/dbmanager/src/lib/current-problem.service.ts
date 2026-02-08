@@ -9,7 +9,7 @@ import {
   SquareLocation,
   Traverse,
   TwinModes,
-  TwinTypesKeys
+  TwinTypesKeys,
 } from "./helpers";
 import { Author, Piece, Problem } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
@@ -26,13 +26,16 @@ export class CurrentProblemService {
   PasteFEN(fen: string) {
     // TODO: #171 implement this method
   }
+
   PasteJson(json: Partial<Problem>) {
     if (this.Problem) Problem.applyJson(json, this.Problem);
   }
+
   GetJSONString(): string | null {
     if (!this.Problem) return null;
     return JSON.stringify(this.Problem.toJson());
   }
+
   SetPublicationDate(val: Date) {
     if (!this.Problem) return;
     this.Problem.date = val.toISOString();
@@ -52,6 +55,7 @@ export class CurrentProblemService {
       this.recalcStipulationDesc();
     }
   }
+
   AddTwin(twindesc: string | Twin) {
     if (this.Problem) {
       if (typeof twindesc === "string") {
@@ -62,44 +66,51 @@ export class CurrentProblemService {
           TwinModes: TwinModes.Normal,
           ValueA: twinargs[0],
           ValueB: twinargs[1],
-          ValueC: twinargs[2]
+          ValueC: twinargs[2],
         });
       }
       if (this.Problem.twins.HasDiagram && twindesc.TwinType === "Diagram") return; // only ONE Diagram can be accepted
       this.Problem.twins.TwinList.push(twindesc);
     }
   }
+
   SetStipulationType(v: EndingTypes) {
     if (this.Problem) {
       this.Problem.stipulation.stipulationType = v;
       this.recalcStipulationDesc();
     }
   }
+
   SetProblemType(v: ProblemTypes) {
     if (this.Problem) {
       this.Problem.stipulation.problemType = v;
       this.recalcStipulationDesc();
     }
   }
+
   SetConditions(v: string[]) {
     if (this.Problem) this.Problem.conditions = v;
   }
+
   SetTwins(v: Twin[]) {
     if (this.Problem) this.Problem.twins.TwinList = v;
   }
+
   SetAuthors(v: Author[]) {
     if (this.Problem) this.Problem.authors = v;
   }
+
   private _currentProblem: Problem | null;
   public get Problem() {
     return this._currentProblem;
   }
+
   constructor() {
     this.init();
   }
 
   init() {
-    this.dbManager.CurrentProblem$.subscribe(newValue => {
+    this.dbManager.CurrentProblem$.subscribe((newValue) => {
       this._currentProblem = newValue;
     });
   }
@@ -109,62 +120,71 @@ export class CurrentProblemService {
       this.Problem.conditions.push(result);
     }
   }
+
   RemoveCondition(cond: string | undefined) {
     if (typeof cond === "string" && cond.length > 0 && this.Problem) {
       const index = this.Problem.conditions.indexOf(cond) ?? -1;
       if (index > -1) this.Problem.conditions.splice(index, 1);
     }
   }
+
   RemoveTwin($event: Twin) {
     if (!this.Problem) return;
-    const original = this.Problem.twins.TwinList.find((f) => (
-        f.ValueA === $event.ValueA &&
-        f.ValueB === $event.ValueB &&
-        f.ValueC === $event.ValueC &&
-        f.TwinType === $event.TwinType &&
-        f.TwinModes === $event.TwinModes
-      ));
+    const original = this.Problem.twins.TwinList.find(f => (
+      f.ValueA === $event.ValueA
+      && f.ValueB === $event.ValueB
+      && f.ValueC === $event.ValueC
+      && f.TwinType === $event.TwinType
+      && f.TwinModes === $event.TwinModes
+    ));
     if (original) {
       const ix = this.Problem.twins.TwinList.indexOf(original);
       this.Problem.twins.TwinList.splice(ix, 1);
     }
   }
+
   AddPieceAt(location: SquareLocation, piece: Piece) {
     const problem = this.Problem;
     if (!problem || !piece) return;
     this.addPieceAt(location, piece);
   }
+
   RemovePieceAt(location: SquareLocation) {
     if (!this.Problem) return;
     this.removePieceAt(location);
   }
+
   MovePiece(
     from: SquareLocation,
     to: SquareLocation,
-    mode: "swap" | "replace" = "replace"
+    mode: "swap" | "replace" = "replace",
   ) {
     if (!this.Problem) return;
     if (from.column === to.column && from.traverse === to.traverse) return;
     if (mode === "swap") this.swapPieces(from, to);
     if (mode === "replace") this.movePiece(from, to);
   }
+
   RotatePiece(location: SquareLocation, angle: PieceRotation) {
     if (!this.Problem) return;
 
     const p = this.Problem.GetPieceAt(location.column, location.traverse);
     if (p) p.rotation = angle;
   }
+
   SetPieceFairyAttribute(location: SquareLocation, attribute: string) {
     if (!this.Problem) return;
 
     const p = this.Problem.GetPieceAt(location.column, location.traverse);
     if (p) p.fairyAttribute = attribute;
   }
+
   SetCellFairyAttribute(location: SquareLocation, attribute: string) {
     const problem = this.Problem;
     if (!problem) return;
     problem.setCellFairyAttribute(location, attribute);
   }
+
   SetAsFairyPiece(location: SquareLocation, fairyCode: FairyPiecesCodes) {
     const problem = this.Problem;
     if (!problem) return;
@@ -172,6 +192,7 @@ export class CurrentProblemService {
     const p = problem.GetPieceAt(location.column, location.traverse);
     if (p) p.fairyCode = [{ code: fairyCode, params: [] }];
   }
+
   RotateBoard(angle: "left" | "right") {
     const problem = this.Problem;
     if (!problem) return;
@@ -192,6 +213,7 @@ export class CurrentProblemService {
       });
     });
   }
+
   FlipBoard(axis: "x" | "y") {
     const problem = this.Problem;
     if (!problem) return;
@@ -206,6 +228,7 @@ export class CurrentProblemService {
       });
     });
   }
+
   ShiftBoard(axis: "x" | "y" | "-x" | "-y") {
     const problem = this.Problem;
     if (!problem) return;
@@ -217,6 +240,7 @@ export class CurrentProblemService {
       this.setPieceLocation(p, { traverse: newRow, column: newCol });
     });
   }
+
   ClearBoard() {
     if (!this.Problem) return;
 
@@ -227,12 +251,14 @@ export class CurrentProblemService {
     if (!this.Problem) return;
     this.Problem.loadSnapshot(snapshotID, true);
   }
+
   UpdateSnapshot() {
     if (!this.Problem) return;
 
     this.Problem.saveSnapshot(this.Problem.currentSnapshotId);
     this.dbManager.SaveTemporary();
   }
+
   Snapshot() {
     if (!this.Problem) return;
     this.Problem.saveSnapshot();
@@ -253,15 +279,18 @@ export class CurrentProblemService {
     if (result.AuthorID < 0) {
       result.AuthorID = Math.max(...this.Problem.authors.map(au => au.AuthorID)) + 1;
       this.Problem.authors.push(result);
-    } else {
+    }
+    else {
       const real = this.Problem.authors.find(au => au.AuthorID === result.AuthorID);
       if (!real) {
         this.Problem.authors.push(result);
-      } else {
+      }
+      else {
         real.updateFrom(result);
       }
     }
   }
+
   RemoveAuthor($event: Author) {
     if (!this.Problem) return;
     const real = this.Problem.authors.findIndex(au => au.AuthorID === $event.AuthorID);
@@ -276,6 +305,7 @@ export class CurrentProblemService {
     if (p2) this.addPieceAt(from, p2);
     if (p1) this.addPieceAt(to, p1);
   }
+
   private addPieceAt(location: SquareLocation, piece: Piece) {
     this.removePieceAt(location);
     this.Problem?.pieces.push(
@@ -283,19 +313,21 @@ export class CurrentProblemService {
         ...piece,
         column: location.column,
         traverse: location.traverse,
-      })
+      }),
     );
-
   }
+
   private removePiece(p: Piece): void {
     const ix = this.Problem?.pieces.indexOf(p) ?? null;
     if (ix === null || !this.Problem) return;
     this.Problem?.pieces.splice(ix, 1);
   }
+
   private movePiece(from: SquareLocation, to: SquareLocation) {
     this.removePieceAt(to);
     this.swapPieces(from, to);
   }
+
   private removePieceAt(location: SquareLocation) {
     const problem = this.Problem;
     if (!problem) return;
@@ -309,7 +341,7 @@ export class CurrentProblemService {
 
   private setPieceLocation(
     piece: Piece | undefined,
-    location: SquareLocation
+    location: SquareLocation,
   ): void {
     if (!piece) return;
     piece.SetLocation(location.column, location.traverse);

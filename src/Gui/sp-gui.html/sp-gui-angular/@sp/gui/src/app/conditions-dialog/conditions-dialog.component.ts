@@ -11,20 +11,20 @@ import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 
 @Component({
-    selector: "app-conditions-dialog",
-    templateUrl: "./conditions-dialog.component.html",
-    styleUrls: ["./conditions-dialog.component.scss"],
-    standalone: true,
-    imports: [
-      FormsModule,
-      MatFormFieldModule,
-      MatAutocompleteModule,
-      CommonModule,
-      MatInputModule,
-      MatButtonModule,
-      MatDialogModule,
-      ReactiveFormsModule
-    ],
+  selector: "app-conditions-dialog",
+  templateUrl: "./conditions-dialog.component.html",
+  styleUrls: ["./conditions-dialog.component.scss"],
+  standalone: true,
+  imports: [
+    FormsModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    CommonModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+  ],
 })
 export class ConditionsDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<ConditionsDialogComponent, string>>(MatDialogRef);
@@ -35,13 +35,15 @@ export class ConditionsDialogComponent implements OnInit {
   clickCancel() {
     this.dialogRef.close();
   }
+
   clickAdd() {
     this.dialogRef.close(this.newCondition);
   }
+
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(""),
-      map((value) => this.filter(value))
+      map(value => this.filter(value)),
     );
   }
 
@@ -53,7 +55,7 @@ export class ConditionsDialogComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return [...FairyAttributesDBNames, ...TraditionalConditionsNames].filter(
-      (option) => option.toLowerCase().indexOf(filterValue) === 0
+      option => option.toLowerCase().indexOf(filterValue) === 0,
     ).sort();
   }
 }

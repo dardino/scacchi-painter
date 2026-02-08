@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { SpSolutionMoveComponent } from "./sp-solution-move.component";
 import { HalfMoveInfo } from "@dardino-chess/core";
 
@@ -17,13 +17,13 @@ describe("SpSolutionMoveComponent", () => {
     // Initialize required input property
     component.value = {
       num: 1,
-      part: 'l',
-      piece: 'K',
-      from: 'e1',
-      type: '-',
-      to: 'e2',
+      part: "l",
+      piece: "K",
+      from: "e1",
+      type: "-",
+      to: "e2",
       isPromotion: false,
-      promotedPiece: '',
+      promotedPiece: "",
       extraMoves: [],
       isCheck: false,
       isCheckMate: false,

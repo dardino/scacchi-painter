@@ -15,26 +15,30 @@ import { ProblemPublicationComponent } from "../problem-publication/problem-publ
     MatExpansionModule,
     ProblemAuthorsComponent,
     ProblemPublicationComponent,
-    ProblemDefinitionsComponent
+    ProblemDefinitionsComponent,
   ],
-  standalone: true
+  standalone: true,
 })
 export class ProblemInfoComponent {
-
   @Output()
   public openTwin = new EventEmitter<Twin | null>();
+
   @Output()
   public addCondition = new EventEmitter<void>();
+
   @Output()
   public deleteCondition = new EventEmitter<string>();
+
   @Output()
   public deleteTwin = new EventEmitter<Twin>();
+
   @Output()
   public openAuthor = new EventEmitter<Author | null>();
+
   @Output()
   public deleteAuthor = new EventEmitter<Author>();
 
-  callAuthorAction($event: { author: Author | null; action: AuthorCardActions; }) {
+  callAuthorAction($event: { author: Author | null; action: AuthorCardActions }) {
     switch ($event.action) {
       case "delete":
         if ($event.author) this.deleteAuthor.emit($event.author);
@@ -43,6 +47,5 @@ export class ProblemInfoComponent {
         this.openAuthor.emit($event.author);
         break;
     }
-
   }
 }

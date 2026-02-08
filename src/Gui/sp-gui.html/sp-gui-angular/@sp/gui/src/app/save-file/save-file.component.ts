@@ -1,4 +1,3 @@
-
 import { Component, OnInit, inject } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -30,9 +29,9 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
     FormsModule,
     ReactiveFormsModule,
     FileSourceSelectorComponent,
-    FileExplorerComponent
-],
-  standalone: true
+    FileExplorerComponent,
+  ],
+  standalone: true,
 })
 export class SaveFileComponent implements OnInit {
   private db = inject(DbmanagerService);
@@ -40,7 +39,6 @@ export class SaveFileComponent implements OnInit {
   private onedriveFS = inject(OneDriveService);
   private localFS = inject(LocalDriveService);
   private router = inject(Router);
-
 
   private currentFolder: FolderSelected = {
     meta: {
@@ -51,6 +49,7 @@ export class SaveFileComponent implements OnInit {
     },
     source: "unknown",
   };
+
   private selectedFile: FolderSelected = {
     meta: {
       fullPath: "",
@@ -64,15 +63,19 @@ export class SaveFileComponent implements OnInit {
   public get currentSource(): AvaliableFileServices {
     return this.selectedFile?.source ?? "unknown";
   }
+
   public get showFilePicker() {
     return this.currentSource !== "unknown" && this.currentSource !== "local";
   }
+
   public get fileName() {
     return this.selectedFile.meta.itemName;
   }
+
   public set fileName(v: string) {
     this.selectedFile.meta.itemName = v;
   }
+
   public get currentFileService(): FileService | null {
     switch (this.currentSource) {
       case "local":
@@ -95,7 +98,8 @@ export class SaveFileComponent implements OnInit {
   public get actionName() {
     if (this.currentFileService == null) {
       return "Download file";
-    } else return "Save file as";
+    }
+    else return "Save file as";
   }
 
   ngOnInit(): void {
@@ -106,19 +110,23 @@ export class SaveFileComponent implements OnInit {
       setTimeout(() => {
         this.toDropbox();
       }, 1);
-    } else if (urlhash === "#onedrive") {
+    }
+    else if (urlhash === "#onedrive") {
       setTimeout(() => {
         this.toOneDrive();
       }, 1);
-    } else if (this.selectedFile?.source === "dropbox") {
+    }
+    else if (this.selectedFile?.source === "dropbox") {
       setTimeout(() => {
         this.toDropbox();
       }, 1);
-    } else if (this.selectedFile?.source === "onedrive") {
+    }
+    else if (this.selectedFile?.source === "onedrive") {
       setTimeout(() => {
         this.toOneDrive();
       }, 1);
-    } else {
+    }
+    else {
       setTimeout(() => {
         this.toLocal();
       }, 1);
@@ -165,18 +173,21 @@ export class SaveFileComponent implements OnInit {
     URL.revokeObjectURL(objectUrl);
     document.body.removeChild(anchor);
   }
+
   /**
    * open dropbox folder selector
    */
   public async toDropbox() {
     if (this.selectedFile) this.selectedFile.source = "dropbox";
   }
+
   /**
    * open onedrive folder selector
    */
   public async toOneDrive() {
     if (this.selectedFile) this.selectedFile.source = "onedrive";
   }
+
   /**
    * set as local folder
    */
@@ -197,7 +208,8 @@ export class SaveFileComponent implements OnInit {
       if (file) {
         this.router.navigateByUrl("/list");
       }
-    } catch (_err) {
+    }
+    catch (_err) {
       await this.download();
     }
     return null;
@@ -208,9 +220,10 @@ export class SaveFileComponent implements OnInit {
     if (this.currentFileService) {
       this.selectedFile.meta.fullPath = this.currentFileService.joinPath(
         folder.meta.fullPath,
-        this.selectedFile.meta.itemName
+        this.selectedFile.meta.itemName,
       );
-    } else {
+    }
+    else {
       this.selectedFile.meta.fullPath = [
         folder.meta.fullPath,
         this.selectedFile.meta.itemName,

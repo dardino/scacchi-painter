@@ -19,12 +19,12 @@ polyfillBridge();
 
 bootstrapApplication(AppComponent, {
   providers: [
-     provideZonelessChangeDetection(),
-     provideAnimations(),
-     provideHttpClient(withFetch()),
-     provideRouter(Object.entries(RoutesList).map(e => e[1])),
-     AllMatIconRegistryService.registerAssetFolder(environment.assetFolder),
-     ChessboardAnimationService,
-     provideServiceWorker("ngsw-worker.js", { enabled: environment.production }),
+    provideZonelessChangeDetection(),
+    provideAnimations(),
+    provideHttpClient(withFetch()),
+    provideRouter(Object.entries(RoutesList).map(e => e[1])),
+    AllMatIconRegistryService.registerAssetFolder(environment.assetFolder),
+    ChessboardAnimationService,
+    provideServiceWorker("ngsw-worker.js", { enabled: environment.production }),
   ],
 }).catch(err => console.error(err));

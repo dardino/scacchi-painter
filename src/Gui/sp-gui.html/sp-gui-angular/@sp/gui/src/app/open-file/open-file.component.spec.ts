@@ -17,10 +17,10 @@ describe("OpenfileComponent", () => {
           useValue: {
             params: of({}),
             queryParams: of({}),
-            paramMap: of(new Map())
-          }
-        }
-      ]
+            paramMap: of(new Map()),
+          },
+        },
+      ],
     });
     fixture = TestBed.createComponent(OpenFileComponent);
     component = fixture.componentInstance;

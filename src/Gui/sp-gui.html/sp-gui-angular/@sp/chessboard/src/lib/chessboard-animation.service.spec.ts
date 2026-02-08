@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
-import { ChessboardAnimationService } from './chessboard-animation.service';
+import { beforeEach, describe, expect, it } from "vitest";
+import { ChessboardAnimationService } from "./chessboard-animation.service";
 
-describe('ChessboardAnimationService', () => {
+describe("ChessboardAnimationService", () => {
   let service: ChessboardAnimationService;
 
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('ChessboardAnimationService', () => {
     service = TestBed.inject(ChessboardAnimationService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

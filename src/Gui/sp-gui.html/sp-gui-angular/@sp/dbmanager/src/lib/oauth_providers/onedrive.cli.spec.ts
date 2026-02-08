@@ -9,14 +9,13 @@ import { describe, expect, it, vi } from "vitest";
  * SKIP: MSAL requires actual browser crypto API which is not available in jsdom
  */
 describe.skip("OneDriveCliProvider", () => {
-
   const mockAccountInfo: AccountInfo = {
     homeAccountId: "test-account-id",
     localAccountId: "local-test-id",
     username: "test@example.com",
     environment: "test-env",
     tenantId: "test-tenant",
-    name: "Test User"
+    name: "Test User",
   };
 
   describe("showWelcomeMessage", () => {
@@ -32,7 +31,7 @@ describe.skip("OneDriveCliProvider", () => {
       const consoleSpy = vi.spyOn(console, "warn");
       const accountWithDifferentUsername: AccountInfo = {
         ...mockAccountInfo,
-        username: "admin@company.onmicrosoft.com"
+        username: "admin@company.onmicrosoft.com",
       };
 
       OneDriveCliProvider.showWelcomeMessage(accountWithDifferentUsername);
@@ -44,7 +43,7 @@ describe.skip("OneDriveCliProvider", () => {
       const consoleSpy = vi.spyOn(console, "warn");
       const accountWithEmptyUsername: AccountInfo = {
         ...mockAccountInfo,
-        username: ""
+        username: "",
       };
 
       OneDriveCliProvider.showWelcomeMessage(accountWithEmptyUsername);

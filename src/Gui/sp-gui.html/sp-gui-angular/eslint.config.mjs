@@ -1,10 +1,11 @@
-//@ts-check
+// @ts-check
 
 import js from "@eslint/js";
 import angular from "angular-eslint";
 import { defineConfig } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import stylistic from "@stylistic/eslint-plugin";
 
 /** @type {import("typescript-eslint").ConfigWithExtends[]} */
 export default defineConfig([
@@ -13,11 +14,17 @@ export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts}"], languageOptions: { globals: globals.browser } },
   {
     files: ["**/*.{js,mjs,cjs,ts}"],
-        extends: [
+    extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
+      stylistic.configs.customize({
+        // the following options are the default values
+        indent: 2,
+        quotes: "double",
+        semi: true,
+        // ...
+      }),
     ],
     processor: angular.processInlineTemplates,
     rules: {
@@ -38,13 +45,13 @@ export default defineConfig([
         },
       ],
       "@typescript-eslint/no-unused-vars": ["error", {
-        "args": "all",
-        "argsIgnorePattern": "^_",
-        "caughtErrors": "all",
-        "caughtErrorsIgnorePattern": "^_",
-        "destructuredArrayIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
-        "ignoreRestSiblings": true
+        args: "all",
+        argsIgnorePattern: "^_",
+        caughtErrors: "all",
+        caughtErrorsIgnorePattern: "^_",
+        destructuredArrayIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        ignoreRestSiblings: true,
       }],
       "@typescript-eslint/no-empty-object-type": "off",
       "no-console": ["warn", { allow: ["warn", "error", "group", "groupEnd"] }],
@@ -77,13 +84,13 @@ export default defineConfig([
     languageOptions: {
       globals: {
         ...globals.node,
-        "module": "readonly",
-        "require": "readonly"
-      }
+        module: "readonly",
+        require: "readonly",
+      },
     },
     rules: {
-      "@typescript-eslint/no-require-imports": "off"
-    }
+      "@typescript-eslint/no-require-imports": "off",
+    },
   },
   {
     files: ["**/*.html"],
@@ -92,5 +99,5 @@ export default defineConfig([
       ...angular.configs.templateAccessibility,
     ],
     rules: {},
-  }
+  },
 ]);

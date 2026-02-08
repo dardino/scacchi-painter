@@ -66,7 +66,8 @@ export class HostBridgeService {
       if (!isEOF(move)) {
         this.solver$.next(move);
         this.appRef.tick();
-      } else {
+      }
+      else {
         console.warn(`exited: `, move.message);
         if (typeof move.exitCode !== "number") {
           this.solver$.next({
@@ -74,11 +75,12 @@ export class HostBridgeService {
             rowtype: "log",
             moveTree: [],
           });
-        } else {
+        }
+        else {
           this.solver$.next({
             rowtype: "log",
             moveTree: [],
-            raw: `Engine process exited with code: ${move.exitCode}`
+            raw: `Engine process exited with code: ${move.exitCode}`,
           });
           this.solver$.next({
             raw: `${move.message}`,
@@ -99,24 +101,30 @@ export class HostBridgeService {
   public async saveFile(content: File, type: "sp2" | "sp3") {
     if (window.Bridge) {
       return window.Bridge.saveFile(content);
-    } else {
+    }
+    else {
       const fls = await import("file-saver");
       fls.saveAs(content, content.name + `.${type}`);
       return "OK";
     }
   }
+
   public get supportsClose(): boolean {
     return typeof window.Bridge?.closeApp === "function";
   }
+
   public get supportsSolve(): boolean {
     return typeof window.Bridge?.runSolve === "function";
   }
+
   public get supportsOpen(): boolean {
     return typeof window.Bridge?.openFile === "function";
   }
+
   public closeApp() {
     if (window.Bridge) return window.Bridge.closeApp?.();
   }
+
   public async openFile(): Promise<File | null> {
     if (window.Bridge) return await window.Bridge.openFile();
     return null;

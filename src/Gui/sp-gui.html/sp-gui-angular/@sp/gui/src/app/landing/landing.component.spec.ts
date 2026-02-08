@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { LandingComponent } from "./landing.component";
 
@@ -11,7 +11,7 @@ describe("LandingComponent", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [LandingComponent],
-      providers: [provideHttpClient(withInterceptorsFromDi())]
+      providers: [provideHttpClient(withInterceptorsFromDi())],
     });
     fixture = TestBed.createComponent(LandingComponent);
     component = fixture.componentInstance;

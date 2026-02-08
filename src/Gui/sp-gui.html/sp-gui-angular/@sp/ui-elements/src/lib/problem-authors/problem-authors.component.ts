@@ -8,15 +8,14 @@ import { AuthorCardActions, AuthorCardComponent } from "../author-card/author-ca
   templateUrl: "./problem-authors.component.html",
   styleUrls: ["./problem-authors.component.scss"],
   imports: [AuthorCardComponent],
-  standalone: true
+  standalone: true,
 })
 export class ProblemAuthorsComponent {
   private current = inject(CurrentProblemService);
 
-
   get currentProblem() { return this.current.Problem; }
   @Output()
-  public callAction = new EventEmitter<{ author: Author | null, action: AuthorCardActions }>();
+  public callAction = new EventEmitter<{ author: Author | null; action: AuthorCardActions }>();
 
   action($event: AuthorCardActions, author: Author | null) {
     this.callAction.emit({ action: $event, author });

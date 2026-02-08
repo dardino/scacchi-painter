@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { Problem } from "./problem";
 
 describe("Snapshots", () => {
@@ -24,7 +24,7 @@ describe("Snapshots", () => {
     expect(Object.keys(problem.snapshots).length).toBe(4);
 
     expect(Object.keys(problem.snapshots).join(",")).toBe(
-      "1,2,3,$_MAIN_$"
+      "1,2,3,$_MAIN_$",
     );
   });
 

@@ -6,7 +6,6 @@ import {
 import { getLocalAuthInfo, setLocalAuthInfo } from "./helpers";
 
 export const getDropboxToken = async (): Promise<TokenResponse | null> => {
-
   const dropbox_token = getLocalAuthInfo().dropbox_token ?? "null";
 
   const localToken = JSON.parse(dropbox_token) as TokenResponse | null;
@@ -20,7 +19,7 @@ export const getDropboxToken = async (): Promise<TokenResponse | null> => {
     redirect: "dropbox",
     state: stateString,
     return_url: location.pathname + location.hash,
-  })
+  });
   // : generate authorization url
   const authUrl = getImplicitAuthorizationUrl({
     authEp: "https://www.dropbox.com/oauth2/authorize",

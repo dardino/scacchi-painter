@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { DbmanagerService } from "./dbmanager.service";
@@ -16,5 +16,4 @@ describe("DbmanagerService", () => {
   it("should be created", () => {
     expect(service).toBeTruthy();
   });
-
 });

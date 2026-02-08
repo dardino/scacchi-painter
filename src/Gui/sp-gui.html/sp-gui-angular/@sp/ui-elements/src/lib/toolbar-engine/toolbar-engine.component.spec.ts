@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { ToolbarEngineComponent } from "./toolbar-engine.component";
 
 describe("ToolbarEngineComponent", () => {
@@ -9,7 +9,7 @@ describe("ToolbarEngineComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ ToolbarEngineComponent ],
+      imports: [ToolbarEngineComponent],
     });
     fixture = TestBed.createComponent(ToolbarEngineComponent);
     component = fixture.componentInstance;

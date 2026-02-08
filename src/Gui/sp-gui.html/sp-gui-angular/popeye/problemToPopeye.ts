@@ -42,8 +42,8 @@ const pieceSortByName = (a: Piece, b: Piece): -1 | 0 | 1 => {
 
 const toPopeyePiece = (a: Piece): string =>
   [
-    (a.fairyCode[0] ?? {}).code?.toUpperCase() ||
-      a.appearance.toUpperCase().replace("N", "S"),
+    (a.fairyCode[0] ?? {}).code?.toUpperCase()
+    || a.appearance.toUpperCase().replace("N", "S"),
     a.column[3].toLowerCase(),
     a.traverse[3],
   ].join("");
@@ -56,14 +56,14 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   // BeginProblem
   rows.push("BeginProblem");
   // Condition
-  if (problem.conditions.filter((f) => f !== "").length > 0) {
+  if (problem.conditions.filter(f => f !== "").length > 0) {
     rows.push(`Condition ${problem.conditions.join(" ")}`);
   }
   // Pieces
   rows.push("Pieces");
   (["White", "Black", "Neutral"] as Piece["color"][]).forEach((color) => {
     const withAttr = problem.pieces
-      .filter((c) => c.color === color)
+      .filter(c => c.color === color)
       .sort(pieceSortByName)
       .map(toPopeyePiece);
     if (withAttr.length > 0) rows.push(`${color} ${withAttr.join(" ")}`);
@@ -76,7 +76,7 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   }
   if (mode === "try") extraOptions.push("PostKeyPlay");
   rows.push(
-    `Stipulation ${problem.stipulation.simpleStipulationDesc}${dmoves}`
+    `Stipulation ${problem.stipulation.simpleStipulationDesc}${dmoves}`,
   );
 
   // Options
@@ -89,7 +89,7 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
     rows.push(
       `Twin ${
         t.TwinModes === TwinModes.Combined ? "Cont " : ""
-      }${popeyeTwinMapper[t.TwinType](t.ValueA, t.ValueB, t.ValueC)}`
+      }${popeyeTwinMapper[t.TwinType](t.ValueA, t.ValueB, t.ValueC)}`,
     );
   });
 

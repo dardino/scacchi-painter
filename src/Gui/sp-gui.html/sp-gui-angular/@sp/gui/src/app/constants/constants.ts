@@ -1,5 +1,5 @@
 export const istructionRegExp = new RegExp(
-  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye|try play).*$`
+  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye|try play).*$`,
 );
 export const outlogRegExp = new RegExp(
   `^(${[
@@ -16,7 +16,7 @@ export const outlogRegExp = new RegExp(
     "\\s*play_move:",
     "\\s*is_white_king_square_attacked:",
     "\\s*is_black_king_square_attacked:",
-  ].join("|")}).*$`
+  ].join("|")}).*$`,
 );
 
 /*

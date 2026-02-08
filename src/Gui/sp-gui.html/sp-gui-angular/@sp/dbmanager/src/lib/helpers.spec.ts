@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 import { GetLocationFromIndex, GetSquareColor } from "./helpers";
 
 describe("Helpers", () => {
@@ -45,6 +45,4 @@ describe("Helpers", () => {
     const color4 = GetSquareColor("ColH", "Row4");
     expect(color4).toBe("black");
   });
-
-
 });

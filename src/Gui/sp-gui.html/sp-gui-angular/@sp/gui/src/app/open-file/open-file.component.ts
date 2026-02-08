@@ -1,4 +1,3 @@
-
 import { Component, ElementRef, OnInit, ViewChild, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
@@ -15,8 +14,8 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
   standalone: true,
   imports: [
     FileSourceSelectorComponent,
-    FileExplorerComponent
-],
+    FileExplorerComponent,
+  ],
 })
 export class OpenFileComponent implements OnInit {
   private db = inject(DbmanagerService);
@@ -52,8 +51,8 @@ export class OpenFileComponent implements OnInit {
 
   ngOnInit() {
     // Check route parameter first
-    this.route.paramMap.subscribe(params => {
-      const source = params.get('source') as AvaliableFileServices | "new" | null | undefined;
+    this.route.paramMap.subscribe((params) => {
+      const source = params.get("source") as AvaliableFileServices | "new" | null | undefined;
       if (source) {
         // Reset state when switching sources
         this.showFilePicker.set(false);
@@ -64,7 +63,6 @@ export class OpenFileComponent implements OnInit {
         }, 1);
         return;
       }
-
     });
   }
 
@@ -111,16 +109,17 @@ export class OpenFileComponent implements OnInit {
       const file = await this.currentFileService.getFileContent({
         fullPath: "",
         id: "",
-        itemName:"",
-        type: "file"
+        itemName: "",
+        type: "file",
       });
       this.openFile({ file, meta: {
         fullPath: file.name,
         id: file.name,
         itemName: file.name,
-        type: "file"
+        type: "file",
       }, source: this.currentFileService.sourceName });
-    } catch (err) {
+    }
+    catch (err) {
       if (!(err instanceof AbortError))
         // if something was wrong use native element;
         this.fileloader.nativeElement.click();

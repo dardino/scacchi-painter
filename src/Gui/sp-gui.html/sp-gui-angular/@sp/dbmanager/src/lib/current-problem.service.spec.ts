@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TestBed } from "@angular/core/testing";
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { Injectable } from "@angular/core";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { Injectable, Signal, signal } from "@angular/core";
 import { FileSelected, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
@@ -20,21 +20,27 @@ class MockHostBridgeService {
   get Solver$(): Observable<string> {
     return this.#solver$;
   }
+
   solveInProgress(): boolean {
     throw new Error("Method not implemented.");
   }
+
   stopSolve(): void {
     throw new Error("Method not implemented.");
   }
+
   startSolve(CurrentProblem: Problem): Error | undefined {
     throw new Error("Method not implemented.");
   }
+
   public saveFile(content: File): Promise<string | undefined> {
     throw new Error("Method not implemented.");
   }
+
   public get supportsClose(): boolean {
     throw new Error("Method not implemented.");
   }
+
   public closeApp(): void {
     throw new Error("Method not implemented.");
   }
@@ -43,15 +49,18 @@ class MockHostBridgeService {
 @Injectable({ providedIn: "root" })
 class MockDbmanagerService {
   public All: Problem[];
-  get wip$(): Observable<boolean> {
-    throw new Error("Method not implemented.");
+  get wip$(): Signal<boolean> {
+    return signal(false).asReadonly();
   }
+
   get FileName(): string | undefined {
     throw new Error("Method not implemented.");
   }
+
   get CurrentIndex(): number {
     throw new Error("Method not implemented.");
   }
+
   get Count(): number {
     throw new Error("Method not implemented.");
   }
@@ -60,6 +69,7 @@ class MockDbmanagerService {
   get CurrentProblem() {
     return this.currentProblem$.getValue();
   }
+
   set CurrentProblem(val: Problem) {
     this.currentProblem$.next(val);
   }
@@ -67,49 +77,62 @@ class MockDbmanagerService {
   get CurrentProblem$(): Observable<Problem | null> {
     return this.currentProblem$.asObservable();
   }
+
   get Pieces(): Piece[] {
     throw new Error("Method not implemented.");
   }
+
   get CurrentFile(): Readonly<FolderSelected | null> {
     throw new Error("Method not implemented.");
   }
+
   addBlankPosition(): Promise<number> {
     throw new Error("Method not implemented.");
   }
+
   deleteProblem(problem: Problem): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   deleteProblemByIndex(dbIndex: number): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   deleteCurrentProblem(): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   Load({ file, meta, source }: FileSelected): Promise<Error | null> {
     throw new Error("Method not implemented.");
   }
+
   public LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
     throw new Error("Method not implemented.");
   }
+
   Reload(id?: number): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   SetFileMeta(meta: Omit<FileSelected, "file">): void {
     throw new Error("Method not implemented.");
   }
+
   public SaveTemporary(): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   public GetFileContent(): Promise<File> {
     throw new Error("Method not implemented.");
   }
+
   public Save(): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
+
   GotoIndex(arg0: number): Promise<void> {
     throw new Error("Method not implemented.");
   }
-
 }
 
 const WhiteQueen: Partial<IPiece> = {
@@ -124,7 +147,6 @@ const BlackRook: Partial<IPiece> = {
   color: "Black",
   appearance: "r",
 };
-
 
 describe("CurrentProblemService", () => {
   let service: CurrentProblemService;
@@ -299,7 +321,7 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
       expect(dbmanager.CurrentProblem?.getCurrentFen()).toBe(
-        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7"
+        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7",
       );
       service.FlipBoard("x");
       const fen = dbmanager.CurrentProblem?.getCurrentFen();
@@ -315,7 +337,7 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
       expect(dbmanager.CurrentProblem?.getCurrentFen()).toBe(
-        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7"
+        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7",
       );
       service.FlipBoard("y");
       const fen = dbmanager.CurrentProblem?.getCurrentFen();
@@ -341,7 +363,6 @@ describe("CurrentProblemService", () => {
       fen = dbmanager.CurrentProblem?.getCurrentFen();
       expect(fen).toBe("8/8/8/8/8/8/8/8");
     });
-
   });
   describe("Shift", () => {
     beforeEach(() => {
@@ -376,5 +397,4 @@ describe("CurrentProblemService", () => {
       expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8");
     });
   });
-
 });

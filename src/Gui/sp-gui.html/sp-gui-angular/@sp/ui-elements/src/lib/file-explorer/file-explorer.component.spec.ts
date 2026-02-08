@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { FileExplorerComponent } from "./file-explorer.component";
 
 describe("FileExplorerComponent", () => {
@@ -9,7 +9,7 @@ describe("FileExplorerComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ FileExplorerComponent ],
+      imports: [FileExplorerComponent],
     });
     fixture = TestBed.createComponent(FileExplorerComponent);
     component = fixture.componentInstance;

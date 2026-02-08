@@ -8,5 +8,4 @@ export class FenService {
   FenToChessBoard(fen: string) {
     return fenToChessBoard(fen);
   }
-
 }

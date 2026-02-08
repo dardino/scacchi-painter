@@ -12,14 +12,14 @@ describe("Twins - fromJson", () => {
           TwinType: "Diagram",
           ValueA: "",
           ValueB: "",
-          ValueC: ""
+          ValueC: "",
         },
         {
           TwinModes: TwinModes.Normal,
           TwinType: "Custom",
           ValueA: "",
           ValueB: "",
-          ValueC: ""
+          ValueC: "",
         },
       ],
       TwinSequenceTypes: SequenceTypes.Normal,
@@ -66,12 +66,12 @@ describe("Twins - fromJson", () => {
   it("should handle sigle TwinList", () => {
     const json: ITwins = {
       TwinList: [{
-          TwinModes: TwinModes.Normal,
-          TwinType: "Diagram",
-          ValueA: "",
-          ValueB: "",
-          ValueC: ""
-        }],
+        TwinModes: TwinModes.Normal,
+        TwinType: "Diagram",
+        ValueA: "",
+        ValueB: "",
+        ValueC: "",
+      }],
       TwinSequenceTypes: SequenceTypes.Normal,
     };
 
@@ -91,21 +91,21 @@ describe("Twins - fromJson", () => {
           TwinType: "Diagram",
           ValueA: "",
           ValueB: "",
-          ValueC: ""
+          ValueC: "",
         },
         {
           TwinModes: TwinModes.Normal,
           TwinType: "Diagram",
           ValueA: "",
           ValueB: "",
-          ValueC: ""
+          ValueC: "",
         },
         {
           TwinModes: TwinModes.Normal,
           TwinType: "Custom",
           ValueA: "",
           ValueB: "",
-          ValueC: ""
+          ValueC: "",
         },
       ],
       TwinSequenceTypes: SequenceTypes.Normal,
@@ -141,7 +141,7 @@ describe("Twins - fromJson", () => {
           TwinType: "Custom",
           ValueA: "",
           ValueB: "",
-          ValueC: ""
+          ValueC: "",
         },
       ],
       TwinSequenceTypes: SequenceTypes.Normal,
@@ -166,7 +166,7 @@ describe("Twins - HasDiagram", () => {
           TwinType: "Diagram",
           ValueA: "",
           ValueB: "",
-          ValueC: ""
+          ValueC: "",
         },
       ],
       TwinSequenceTypes: SequenceTypes.Normal,
@@ -174,6 +174,5 @@ describe("Twins - HasDiagram", () => {
     const p = Twins.fromJson({});
     p.TwinList = (twins.TwinList ?? []).map(Twin.fromJson);
     expect(p.HasDiagram).toBeTruthy();
-
-  })
-})
+  });
+});

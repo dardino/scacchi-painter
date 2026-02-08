@@ -7,16 +7,16 @@ import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
 @Component({
-    selector: "app-database-list-item",
-    templateUrl: "./database-list-item.component.html",
-    styleUrls: ["./database-list-item.component.scss"],
-    standalone: true,
-    imports: [
-      ChessboardModule,
-      MatIconModule,
-      RouterModule,
-      MatButtonModule,
-    ]
+  selector: "app-database-list-item",
+  templateUrl: "./database-list-item.component.html",
+  styleUrls: ["./database-list-item.component.scss"],
+  standalone: true,
+  imports: [
+    ChessboardModule,
+    MatIconModule,
+    RouterModule,
+    MatButtonModule,
+  ],
 })
 export class DatabaseListItemComponent {
   problem = input<Problem>(null!);
@@ -32,13 +32,13 @@ export class DatabaseListItemComponent {
   twins = computed(() => {
     const twinsNoDiagram = this.problem()?.twins?.TwinList.filter(twin => twin.TwinType !== "Diagram") ?? [];
     if (!twinsNoDiagram.length) return [];
-    return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index+1}) ${twin.toString()}`);
+    return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index + 1}) ${twin.toString()}`);
   });
 
   hasAuthors = computed(() => (this.problem()?.authors?.length ?? 0) > 0);
   hasCondition = computed(() => (this.problem()?.conditions?.length ?? 0) > 0);
   conditions = computed(() => this.problem()?.conditions ?? []);
-  authors = computed(() => this.problem()?.authors.map((author) => author.nameAndSurname).join(", "));
+  authors = computed(() => this.problem()?.authors.map(author => author.nameAndSurname).join(", "));
   stipulation = computed(() => `${this.problem()?.stipulation.completeStipulationDesc}`);
   pieceCounter = computed(() => `${this.problem()?.getPieceCounter() ?? "0+0"}`);
   solutionHTML = computed(() => this.problem()?.htmlSolution);

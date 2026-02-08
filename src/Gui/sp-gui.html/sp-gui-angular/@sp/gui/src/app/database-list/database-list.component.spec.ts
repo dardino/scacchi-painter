@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { RouterModule } from "@angular/router";
 import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { OpenFileComponent } from "../open-file/open-file.component";
@@ -15,10 +15,10 @@ describe("DatabaseListComponent", () => {
       imports: [
         DatabaseListComponent,
         RouterModule.forRoot(
-          [{ path: 'openfile', component: OpenFileComponent }]
-        )
+          [{ path: "openfile", component: OpenFileComponent }],
+        ),
       ],
-      providers: [AllMatIconRegistryService]
+      providers: [AllMatIconRegistryService],
     });
     fixture = TestBed.createComponent(DatabaseListComponent);
     component = fixture.componentInstance;

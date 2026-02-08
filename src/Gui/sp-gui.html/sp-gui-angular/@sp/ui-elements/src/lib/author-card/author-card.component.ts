@@ -1,21 +1,19 @@
-
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { Author } from '@sp/dbmanager/src/lib/models';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { Author } from "@sp/dbmanager/src/lib/models";
 
 export type AuthorCardActions = "delete" | "edit";
 
 @Component({
-  selector: 'lib-author-card',
-  templateUrl: './author-card.component.html',
+  selector: "lib-author-card",
+  templateUrl: "./author-card.component.html",
   imports: [MatCardModule, MatIconModule, MatButtonModule],
-  styleUrl: './author-card.component.scss',
-  standalone: true
+  styleUrl: "./author-card.component.scss",
+  standalone: true,
 })
 export class AuthorCardComponent {
-
   @Input() author: Author | null;
 
   get nameAndSurname() { return this.author?.nameAndSurname; }
@@ -26,9 +24,10 @@ export class AuthorCardComponent {
   public action = new EventEmitter<AuthorCardActions>();
 
   execDelete = () => {
-    this.action.emit("delete")
-  }
+    this.action.emit("delete");
+  };
+
   execEdit = () => {
-    this.action.emit("edit")
-  }
+    this.action.emit("edit");
+  };
 }

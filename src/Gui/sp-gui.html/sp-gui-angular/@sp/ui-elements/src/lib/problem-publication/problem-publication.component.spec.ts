@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { ProblemPublicationComponent } from "./problem-publication.component";
 
 describe("ProblemPublicationComponent", () => {
@@ -9,7 +9,7 @@ describe("ProblemPublicationComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ ProblemPublicationComponent ],
+      imports: [ProblemPublicationComponent],
     });
     fixture = TestBed.createComponent(ProblemPublicationComponent);
     component = fixture.componentInstance;

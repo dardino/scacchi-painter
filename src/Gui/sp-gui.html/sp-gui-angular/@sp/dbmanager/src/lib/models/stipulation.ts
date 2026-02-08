@@ -29,10 +29,11 @@ export class Stipulation implements IStipulation {
     p.maximum = source.getAttribute("Maximum") === "true";
     p.serie = source.getAttribute("Serie") === "true";
     p.stipulationType = getEndingType(source.getAttribute("Stipulation") as XMLStipulationTypes);
-    p.completeStipulationDesc =
-      source.getAttribute("CompleteStipulationDesc") ?? "#2";
+    p.completeStipulationDesc
+      = source.getAttribute("CompleteStipulationDesc") ?? "#2";
     return p;
   }
+
   static fromJson(stipulation: Partial<IStipulation> | undefined): Stipulation {
     const p = new Stipulation();
     if (!stipulation) return p;
@@ -44,6 +45,7 @@ export class Stipulation implements IStipulation {
     p.completeStipulationDesc = stipulation.completeStipulationDesc ?? "#2";
     return p;
   }
+
   toJson(): Partial<IStipulation> {
     const json: Partial<IStipulation> = {};
     if (this.problemType !== "-") json.problemType = this.problemType;
@@ -58,6 +60,7 @@ export class Stipulation implements IStipulation {
     }
     return json;
   }
+
   getXMLEndingType(): XMLStipulationTypes {
     switch (this.stipulationType) {
       case "#": return "Mate";
@@ -65,15 +68,16 @@ export class Stipulation implements IStipulation {
       default : return "Custom";
     }
   }
+
   getXMLProblemType(): XMLProblemTypesKeys {
     switch (this.problemType) {
-      case "-":  return "Direct";
-      case "H":  return "Help";
-      case "S":  return "Self";
+      case "-": return "Direct";
+      case "H": return "Help";
+      case "S": return "Self";
       case "HS": return "HelpSelf";
-      case "R":  return "Custom";
+      case "R": return "Custom";
       case "HR": return "Custom";
-      default:   return "Direct";
+      default: return "Direct";
     }
   }
 

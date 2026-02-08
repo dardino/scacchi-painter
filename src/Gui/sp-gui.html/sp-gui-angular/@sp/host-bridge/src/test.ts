@@ -9,6 +9,6 @@ import "zone.js/testing";
 getTestBed().initTestEnvironment(
   BrowserTestingModule,
   platformBrowserTesting(), {
-  teardown: { destroyAfterEach: false }
-}
+    teardown: { destroyAfterEach: false },
+  },
 );

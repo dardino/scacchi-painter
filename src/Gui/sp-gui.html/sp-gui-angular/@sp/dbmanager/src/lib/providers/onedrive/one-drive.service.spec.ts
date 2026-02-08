@@ -53,7 +53,7 @@ describe.skip("OneDriveService", () => {
   describe("authorize", () => {
     it("should call OneDriveCliProvider.getToken", async () => {
       const getTokenSpy = vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined)
+        Promise.resolve(undefined),
       );
 
       await service.authorize();
@@ -69,7 +69,7 @@ describe.skip("OneDriveService", () => {
           localAccountId: "local-id",
           username: "test@example.com",
           environment: "login.microsoftonline.com",
-          tenantId: "test-tenant"
+          tenantId: "test-tenant",
         },
         authority: "https://login.microsoftonline.com/common",
         uniqueId: "unique-id",
@@ -80,11 +80,11 @@ describe.skip("OneDriveService", () => {
         fromCache: false,
         expiresOn: new Date(Date.now() + 3600000),
         tokenType: "Bearer",
-        correlationId: "correlation-id"
+        correlationId: "correlation-id",
       };
 
       vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(mockToken)
+        Promise.resolve(mockToken),
       );
 
       const result = await service.authorize();
@@ -95,7 +95,7 @@ describe.skip("OneDriveService", () => {
 
     it("should return undefined when authentication fails", async () => {
       vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined)
+        Promise.resolve(undefined),
       );
 
       const result = await service.authorize();
@@ -107,7 +107,7 @@ describe.skip("OneDriveService", () => {
   describe("enumContent", () => {
     it("should return empty array when authorization fails", async () => {
       vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined)
+        Promise.resolve(undefined),
       );
 
       const result = await service.enumContent(null, "root");
@@ -119,18 +119,18 @@ describe.skip("OneDriveService", () => {
   describe("getFileContent", () => {
     it("should throw error when authorization fails", async () => {
       vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined)
+        Promise.resolve(undefined),
       );
 
       const mockItem: FolderItemInfo = {
         fullPath: "/drives/root:/test.txt",
         id: "test-id",
         itemName: "test.txt",
-        type: "file"
+        type: "file",
       };
 
       await expect(service.getFileContent(mockItem)).rejects.toThrowError(
-        "Unable to open file: /drives/root:/test.txt"
+        "Unable to open file: /drives/root:/test.txt",
       );
     });
   });
@@ -138,7 +138,7 @@ describe.skip("OneDriveService", () => {
   describe("saveFileContent", () => {
     it("should throw error when authorization fails", async () => {
       vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined)
+        Promise.resolve(undefined),
       );
 
       const mockFile = new File(["test content"], "test.txt");
@@ -146,11 +146,11 @@ describe.skip("OneDriveService", () => {
         fullPath: "/drives/root:/test.txt",
         id: "test-id",
         itemName: "test.txt",
-        type: "file"
+        type: "file",
       };
 
       await expect(
-        service.saveFileContent(mockFile, mockItem)
+        service.saveFileContent(mockFile, mockItem),
       ).rejects.toThrowError("Unable to open file: /drives/root:/test.txt");
     });
   });
@@ -165,7 +165,7 @@ describe("OneDriveService with mocked auth", () => {
       localAccountId: "local-test-id",
       username: "testuser@onedrive.com",
       environment: "login.microsoftonline.com",
-      tenantId: "test-tenant"
+      tenantId: "test-tenant",
     },
     authority: "https://login.microsoftonline.com/common",
     uniqueId: "unique-id",
@@ -176,7 +176,7 @@ describe("OneDriveService with mocked auth", () => {
     fromCache: false,
     expiresOn: new Date(Date.now() + 3600000),
     tokenType: "Bearer",
-    correlationId: "correlation-id"
+    correlationId: "correlation-id",
   };
 
   beforeEach(() => {
@@ -185,7 +185,7 @@ describe("OneDriveService with mocked auth", () => {
 
     // Mock the auth provider to return a valid token
     vi.spyOn(OneDriveCliProvider, "getToken").mockResolvedValue(
-      mockToken
+      mockToken,
     );
   });
 

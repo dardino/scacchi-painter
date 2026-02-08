@@ -6,7 +6,7 @@ import urlsConfig from "./urlsConfig.json";
 
 async function download() {
   await fetch(urlsConfig.instructions)
-    .then((response) => response.text())
+    .then(response => response.text())
     .then((text) => {
       const filePath = path.join(__dirname, "instructions.txt");
       return fs.writeFile(filePath, text);
@@ -30,8 +30,8 @@ const sectionHeaders = [
 ];
 
 function normalizeHeader(line: string) {
-  return sectionHeaders.find((header) =>
-    line.trim().toLowerCase().startsWith(header.toLowerCase())
+  return sectionHeaders.find(header =>
+    line.trim().toLowerCase().startsWith(header.toLowerCase()),
   );
 }
 
@@ -48,7 +48,8 @@ function extractSections(lines: string[]): Record<string, string> {
         buffer = [];
       }
       currentSection = header.replace(":", "");
-    } else if (currentSection) {
+    }
+    else if (currentSection) {
       buffer.push(line);
     }
   }
@@ -74,7 +75,8 @@ function extractCommandlineParameters(text: string): Record<string, string> {
       }
       currentParam = match[1];
       buffer = [line.replace(currentParam, "").trim()];
-    } else if (currentParam) {
+    }
+    else if (currentParam) {
       buffer.push(line.trim());
     }
   }
@@ -90,8 +92,8 @@ const rxCondition = /^\t([\w&]+)($|\t| {4})/i;
 function extractConditions(text: string): Record<string, { name: string; description: string[] }> {
   const lines = text.split(/\r?\n/);
   // search line index containing "The following conditions are implemented:"
-  const index = lines.findIndex((line) =>
-    line.toLowerCase().includes("the following conditions are implemented:")
+  const index = lines.findIndex(line =>
+    line.toLowerCase().includes("the following conditions are implemented:"),
   );
   if (index === -1) {
     return {};
@@ -119,28 +121,27 @@ function extractConditions(text: string): Record<string, { name: string; descrip
     if (txt2Add === "") continue;
 
     conditions[lastCondition].description.push(txt2Add);
-
   }
 
   return conditions;
 }
 
 type PossibleCommandInfoType = string | Record<string, {
-    name: string;
-    description: string[];
-}>
+  name: string;
+  description: string[];
+}>;
 
-type Commands = Record<string, Record<string, PossibleCommandInfoType>>
+type Commands = Record<string, Record<string, PossibleCommandInfoType>>;
 
 function extractCommandsFromText(
-  text: string
+  text: string,
 ): Commands {
   const commands: Commands = {};
   // splitto per riga
   const lines = text.split(/\r?\n/);
   // cerco la riga contenente "following commands may be used:"
-  const index = lines.findIndex((line) =>
-    line.toLowerCase().includes("following commands may be used:")
+  const index = lines.findIndex(line =>
+    line.toLowerCase().includes("following commands may be used:"),
   );
   if (index === -1) {
     return commands;
@@ -162,8 +163,8 @@ function extractCommandsFromText(
   }
   const allCommands = commandBuffer
     .split(",")
-    .map((command) => command.trim())
-    .filter((command) => !!command)
+    .map(command => command.trim())
+    .filter(command => !!command)
     .reduce((aggr, comm) => {
       return {
         ...aggr,
@@ -209,10 +210,10 @@ async function main() {
   const sections = extractSections(lines);
   const jsonOut = {
     CLI_Parameters: extractCommandlineParameters(
-      sections["Commandline parameters"]
+      sections["Commandline parameters"],
     ),
     Commands: extractCommandsFromText(
-      sections["Description of the input language of popeye"]
+      sections["Description of the input language of popeye"],
     ),
   };
   const outputFilePath = path.join(__dirname, "..", "@sp", "dbmanager", "assets", "popeye_instructions.json");

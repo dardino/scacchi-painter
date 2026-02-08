@@ -14,7 +14,7 @@ import {
   createXmlElement,
   fenToChessBoard,
   notEmpty,
-  notNull
+  notNull,
 } from "../helpers";
 import { Author } from "./author";
 import { Piece } from "./piece";
@@ -24,7 +24,6 @@ import { Twins } from "./twins";
 const main_snapshot = "$_MAIN_$";
 
 export class Problem implements IProblem {
-
   public textSolution = "";
   public date = new Date().toISOString();
   public stipulation = Stipulation.fromJson({});
@@ -45,7 +44,7 @@ export class Problem implements IProblem {
   public snapshots: IProblem["snapshots"] = {};
   public currentSnapshotId: keyof IProblem["snapshots"] = main_snapshot;
   private get snap_keys(): (string | number)[] {
-    return Object.keys(this.snapshots).filter((f) => this.snapshots[f] != null);
+    return Object.keys(this.snapshots).filter(f => this.snapshots[f] != null);
   }
 
   public get startMoveN(): number {
@@ -57,14 +56,14 @@ export class Problem implements IProblem {
   }
 
   public get pieceTypes(): string[] {
-    return Array.from(new Set(this.pieces.map((piece) => piece.ToFairyNotation())));
+    return Array.from(new Set(this.pieces.map(piece => piece.ToFairyNotation())));
   }
 
   static async fromElement(source: Element) {
     const p = new Problem();
     p.stipulation = Stipulation.fromElement(source);
     p.pieces = Array.from(source.querySelectorAll("Piece")).map(
-      Piece.fromSP2Xml
+      Piece.fromSP2Xml,
     );
     p.twins = Twins.fromElement(source.querySelector("Twins") ?? null);
     const sol = await GetSolutionFromElement(source);
@@ -78,10 +77,10 @@ export class Problem implements IProblem {
     p.source = source.getAttribute("Source") ?? "";
     p.authors = Array.from(source.querySelectorAll("Author")).map(Author.fromElement);
     p.conditions = Array.from(source.querySelectorAll("Condition") ?? [])
-      .map((el) => el.getAttribute("Value") ?? "")
+      .map(el => el.getAttribute("Value") ?? "")
       .filter(notEmpty);
     p.tags = Array.from(source.querySelectorAll("Tag") ?? [])
-      .map((el) => el.getAttribute("Value") ?? "")
+      .map(el => el.getAttribute("Value") ?? "")
       .filter(notEmpty);
 
     p.fairyCells = [];
@@ -97,7 +96,8 @@ export class Problem implements IProblem {
     p.snapshots = { ...jsonObj.snapshots };
     if (Object.keys(p.snapshots).length === 0) {
       p.saveAsMainSnapshot();
-    } else {
+    }
+    else {
       p.saveSnapshot(p.currentSnapshotId ?? main_snapshot);
     }
     return p;
@@ -114,16 +114,16 @@ export class Problem implements IProblem {
   }
 
   static applyJson(a: Partial<IProblem>, b: Problem) {
-    b.authors =
-      (a.authors?.length ?? 0)
+    b.authors
+      = (a.authors?.length ?? 0)
         ? (a.authors ?? []).map(Author.fromJson)
         : [];
-    b.pieces =
-      (a.pieces?.length ?? 0)
-        ? (a.pieces ?? []).map((p) => Piece.fromJson(p))
+    b.pieces
+      = (a.pieces?.length ?? 0)
+        ? (a.pieces ?? []).map(p => Piece.fromJson(p))
         : [];
-    b.stipulation =
-      a.stipulation != null
+    b.stipulation
+      = a.stipulation != null
         ? Stipulation.fromJson(a.stipulation ?? {})
         : Stipulation.fromJson({});
     b.twins = a.twins ? Twins.fromJson(a.twins) : Twins.fromJson({});
@@ -140,10 +140,10 @@ export class Problem implements IProblem {
   toJson(): Partial<IProblem> {
     const json: Partial<IProblem> = {};
     if (this.authors.length > 0) {
-      json.authors = this.authors.map((a) => a.toJson());
+      json.authors = this.authors.map(a => a.toJson());
     }
     if (this.pieces.length > 0) {
-      json.pieces = this.pieces.map((p) => p.toJson());
+      json.pieces = this.pieces.map(p => p.toJson());
     }
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
@@ -159,7 +159,7 @@ export class Problem implements IProblem {
     if (this.snap_keys.length > 0) {
       json.snapshots = this.snap_keys.reduce(
         (a, k) => ({ ...a, [k]: this.snapshots[k] }),
-        {}
+        {},
       );
     }
     return json;
@@ -183,15 +183,15 @@ export class Problem implements IProblem {
     SP2.setPrizeDescription(item, this.prizeDescription);
     SP2.setCompleteStipulationDesc(
       item,
-      this.stipulation.completeStipulationDesc
+      this.stipulation.completeStipulationDesc,
     );
     SP2.setAuthors(
       item,
-      this.authors.map((a) => a.toSP2Xml())
+      this.authors.map(a => a.toSP2Xml()),
     );
     SP2.setPieces(
       item,
-      this.pieces.map((p) => p.toSP2Xml())
+      this.pieces.map(p => p.toSP2Xml()),
     );
     SP2.setTwins(item, this.twins.toSP2Xml());
     SP2.setConditions(item, this.conditions);
@@ -209,27 +209,30 @@ export class Problem implements IProblem {
       const newKey = this.getNextId(this.currentSnapshotId);
       this.snapshots[newKey] = snap;
       this.currentSnapshotId = newKey;
-    } else {
+    }
+    else {
       this.snapshots[snapshotId] = snap;
       this.currentSnapshotId = snapshotId;
     }
   }
+
   saveAsMainSnapshot() {
     this.saveSnapshot(main_snapshot);
   }
 
   getNextId(
-    currentSnapshotId: keyof IProblem["snapshots"]
+    currentSnapshotId: keyof IProblem["snapshots"],
   ): keyof IProblem["snapshots"] {
     if (currentSnapshotId === main_snapshot) {
       currentSnapshotId = -1;
     }
     if (typeof currentSnapshotId === "number") {
       return (
-        Math.max(currentSnapshotId, 0, ...this.snap_keys.filter(filterNumber)) +
-        1
+        Math.max(currentSnapshotId, 0, ...this.snap_keys.filter(filterNumber))
+        + 1
       );
-    } else {
+    }
+    else {
       return currentSnapshotId + "*";
     }
   }
@@ -240,18 +243,20 @@ export class Problem implements IProblem {
     }
     delete this.snapshots[id];
   }
+
   loadSnapshot(
     id?: keyof IProblem["snapshots"],
-    ignoreChanges = false
+    ignoreChanges = false,
   ) {
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
     const prob = JSON.parse(
-      Base64.decode(this.snapshots[id])
+      Base64.decode(this.snapshots[id]),
     ) as Partial<IProblem>;
     Problem.applyJson(prob, this);
     this.currentSnapshotId = id;
   }
+
   loadMainSnapshot(ignoreChanges = false) {
     this.loadSnapshot(main_snapshot, ignoreChanges);
   }
@@ -263,13 +268,15 @@ export class Problem implements IProblem {
   }
 
   get whitePieces() {
-    return this.pieces?.filter((f) => f.color === "White").length ?? 0;
+    return this.pieces?.filter(f => f.color === "White").length ?? 0;
   }
+
   get blackPieces() {
-    return this.pieces?.filter((f) => f.color === "Black").length ?? 0;
+    return this.pieces?.filter(f => f.color === "Black").length ?? 0;
   }
+
   get neutralPieces() {
-    return this.pieces?.filter((f) => f.color === "Neutral").length ?? 0;
+    return this.pieces?.filter(f => f.color === "Neutral").length ?? 0;
   }
 
   public getCurrentFen(): string {
@@ -283,7 +290,8 @@ export class Problem implements IProblem {
           if (empty > 0) row += empty.toString();
           row += p.ToNotation();
           empty = 0;
-        } else {
+        }
+        else {
           empty++;
         }
       }
@@ -296,23 +304,23 @@ export class Problem implements IProblem {
   }
 
   private getFairiesFen(): string {
-    const fps = this.pieces.filter((p) => p.isFairy());
+    const fps = this.pieces.filter(p => p.isFairy());
     if (fps.length === 0) return "";
-    return ` [${fps.map((p) => p.ToFairyNotation()).join(",")}]`;
+    return ` [${fps.map(p => p.ToFairyNotation()).join(",")}]`;
   }
 
   private getPieceAt(row: number, col: number) {
     const p = this.pieces?.find(
-      (f) =>
-        Columns.indexOf(f.column) === col &&
-        Traverse.indexOf(f.traverse) === 8 - row - 1
+      f =>
+        Columns.indexOf(f.column) === col
+        && Traverse.indexOf(f.traverse) === 8 - row - 1,
     );
     return p;
   }
 
   GetPieceAt(column: Columns, traverse: Traverse) {
     const p = this.pieces?.find(
-      (f) => f.column === column && f.traverse === traverse
+      f => f.column === column && f.traverse === traverse,
     );
     return p;
   }
