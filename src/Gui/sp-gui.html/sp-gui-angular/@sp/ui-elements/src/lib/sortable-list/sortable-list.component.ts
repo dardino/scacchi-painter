@@ -13,12 +13,11 @@ import { MatListModule } from "@angular/material/list";
     MatListModule,
     DragDropModule,
     MatIconModule,
-    MatButtonModule
-],
-  standalone: true
+    MatButtonModule,
+  ],
+  standalone: true,
 })
 export class SortableListComponent<T extends { toString: () => string }> {
-
   @Input()
   elements: T[];
 
@@ -30,5 +29,4 @@ export class SortableListComponent<T extends { toString: () => string }> {
 
   @Output()
   deleteItem = new EventEmitter<T>();
-
 }

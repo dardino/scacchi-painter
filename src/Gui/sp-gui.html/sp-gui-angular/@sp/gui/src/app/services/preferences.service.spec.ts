@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
-import { PreferencesService } from './preferences.service';
+import { beforeEach, describe, expect, it } from "vitest";
+import { PreferencesService } from "./preferences.service";
 
-describe('PreferencesService', () => {
+describe("PreferencesService", () => {
   let service: PreferencesService;
 
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('PreferencesService', () => {
     service = TestBed.inject(PreferencesService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

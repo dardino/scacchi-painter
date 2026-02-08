@@ -19,7 +19,6 @@ export interface FileService {
   joinPath(...parts: string[]): string;
 }
 
-
 export interface FileSelected {
   file: File;
   meta: FolderItemInfo;
@@ -29,6 +28,6 @@ export interface FileSelected {
 export type FolderSelected = Omit<FileSelected, "file">;
 
 export interface RecentFileInfo {
-  source: AvaliableFileServices,
-  meta: FolderItemInfo,
+  source: AvaliableFileServices;
+  meta: FolderItemInfo;
 }

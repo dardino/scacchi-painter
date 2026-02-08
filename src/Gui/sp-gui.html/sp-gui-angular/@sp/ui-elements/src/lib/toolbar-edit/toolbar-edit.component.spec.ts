@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { AllMatIconRegistryService } from "../registerIcons";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 import { ToolbarEditComponent } from "./toolbar-edit.component";
@@ -12,7 +12,7 @@ describe("EditToolbarComponent", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ToolbarEditComponent, SpToolbarButtonComponent],
-      providers: [AllMatIconRegistryService]
+      providers: [AllMatIconRegistryService],
     });
     fixture = TestBed.createComponent(ToolbarEditComponent);
     component = fixture.componentInstance;

@@ -36,11 +36,11 @@ import { PreferencesService } from "../services/preferences.service";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 
 @Component({
-    selector: "app-edit-problem",
-    templateUrl: "./edit-problem.component.html",
-    styleUrls: ["./edit-problem.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-edit-problem",
+  templateUrl: "./edit-problem.component.html",
+  styleUrls: ["./edit-problem.component.scss"],
+  standalone: true,
+  imports: [
     CommonModule,
     MatToolbarModule,
     ToolbarEditComponent,
@@ -51,8 +51,8 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
     SpSolutionDescComponent,
     MatMenuModule,
     MatButtonModule,
-    MatIconModule
-]
+    MatIconModule,
+  ],
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   activeTab = signal(0);
@@ -127,7 +127,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     pasteFromClipboard: async () => {
       const text = await navigator.clipboard.readText();
       this.onPaste(undefined, text);
-    }
+    },
   };
 
   pieceToAdd = signal<string | null>(null);
@@ -149,24 +149,25 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const editModeValue = this.editMode();
     const editModeCursor = (editModeValue === "remove" ? "X" : null);
     const pieceToMoveValue = this.pieceToMove();
-    const figurine =
-      editModeValue === "select" ? null
-        : this.pieceToAdd() ??
-        pieceToMoveValue?.cursor() ?? editModeCursor;
+    const figurine
+      = editModeValue === "select"
+        ? null
+        : this.pieceToAdd()
+          ?? pieceToMoveValue?.cursor() ?? editModeCursor;
 
-    const rotation =
-      this.rotationToAdd() ??
-      (pieceToMoveValue?.rotation
-        ? getCanvasRotation(pieceToMoveValue.rotation)
-        : null) ??
-      null;
+    const rotation
+      = this.rotationToAdd()
+        ?? (pieceToMoveValue?.rotation
+          ? getCanvasRotation(pieceToMoveValue.rotation)
+          : null)
+        ?? null;
 
     const currentCursor = this.actualCursor;
 
     if (
-      figurine &&
-      (currentCursor?.figurine !== figurine ||
-        currentCursor.rotation !== rotation)
+      figurine
+      && (currentCursor?.figurine !== figurine
+        || currentCursor.rotation !== rotation)
     ) {
       this.actualCursor = {
         figurine,
@@ -180,11 +181,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   toggleEditor($event: ViewModes) {
     this.viewMode.set($event);
   }
+
   switchBoardType() {
     this.boardType.update(current => current === "HTML" ? "canvas" : "HTML");
     this.resetActions();
   }
-  onTriggerContextMenu(data: { event: MouseEvent, location: SquareLocation }) {
+
+  onTriggerContextMenu(data: { event: MouseEvent; location: SquareLocation }) {
     data.event.preventDefault();
     this.menuX.set(data.event.x - 20);
     this.menuY.set(data.event.y - 40);
@@ -193,7 +196,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.contextOnCell.set(data.location);
     this.resetActions();
   }
-
 
   startSolve(mode: "start" | "try") {
     if (!this.problem) {
@@ -221,16 +223,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resetActions();
   }
 
-  //#region NG Component life cycle
+  // #region NG Component life cycle
   ngOnInit(): void {
     this.subscribe = this.engine.solution$.pipe(
-      skip(1) // skip first execution to avoid the reset of text at load
+      skip(1), // skip first execution to avoid the reset of text at load
     ).subscribe((msg) => {
       if (msg === null) return;
       if (!this.current.Problem) return;
       const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
       this.current.Problem.htmlSolution += this.toHtml([...raw]);
-      this.current.Problem.textSolution += `\n` +raw.join(`\n`);
+      this.current.Problem.textSolution += `\n` + raw.join(`\n`);
       this.current.Problem.jsonSolution.push(...msg.moveTree);
       this.rows$ubject.next(msg.moveTree);
     });
@@ -239,7 +241,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       setTimeout(() => {
         if (this.dbManager.All.length === 0) {
           this.dbManager.Reload(+params.id);
-        } else {
+        }
+        else {
           this.dbManager.GotoIndex(+params.id);
         }
       }, 1);
@@ -259,7 +262,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.applyPreferences();
     });
   }
-  //#endregion NG Component life cycle
+  // #endregion NG Component life cycle
 
   resize = ($event: MouseEvent) => {
     if (isNaN(this.resizing.x)) return;
@@ -283,7 +286,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   startResize($event: MouseEvent) {
     this.resetActions();
     const width = parseFloat(
-      getComputedStyle(this.panelleft.nativeElement as HTMLDivElement).width
+      getComputedStyle(this.panelleft.nativeElement as HTMLDivElement).width,
     );
     this.resizing = { x: $event.x, initialW: width };
     this.workboard.nativeElement.addEventListener("mousemove", this.resize);
@@ -308,27 +311,31 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resetActions();
     this.commandMapper[$event]();
     // Notify solo per comandi che modificano la board (escludi copy/paste)
-    if ($event !== 'copyToClipboard' && $event !== 'pasteFromClipboard') {
+    if ($event !== "copyToClipboard" && $event !== "pasteFromClipboard") {
       this.notifyProblemChanged();
     }
   }
+
   setPieceToAdd($event: string | null) {
     const currentPieceToAdd = this.pieceToAdd();
     if (
-      currentPieceToAdd === null ||
-      ($event != null && currentPieceToAdd !== $event)
+      currentPieceToAdd === null
+      || ($event != null && currentPieceToAdd !== $event)
     ) {
       this.resetActions();
       this.editMode.set($event == null ? "select" : "add");
       this.pieceToAdd.set($event);
-    } else {
+    }
+    else {
       this.editMode.set("select");
       this.resetActions();
     }
   }
+
   currentCellChange($event: SquareLocation | null) {
     if ($event == null) this.resetActions();
   }
+
   clickOnCell($event: SquareLocation, button: "left" | "middle") {
     const editModeValue = this.editMode();
     const pieceToMoveValue = this.pieceToMove();
@@ -361,9 +368,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if (editModeValue === "move") {
       if (pieceToMoveValue == null) {
         this.prepareMovePiece(
-          this.current.Problem?.GetPieceAt($event.column, $event.traverse)
+          this.current.Problem?.GetPieceAt($event.column, $event.traverse),
         );
-      } else {
+      }
+      else {
         this.completeMove($event);
       }
       return;
@@ -371,7 +379,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if (editModeValue === "select") {
       const piece = this.current.Problem?.GetPieceAt(
         $event.column,
-        $event.traverse
+        $event.traverse,
       );
       if (piece != null) {
         this.editMode.set("move");
@@ -380,6 +388,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
   }
+
   editModeChanged($event: EditModes) {
     this.resetActions();
     this.editMode.set($event);
@@ -443,7 +452,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         minWidth: "25rem",
         maxWidth: "95%",
         data: Twin.fromJson($event?.toJson() ?? {}),
-      }
+      },
     );
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -458,7 +467,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       {
         width: "25rem",
         maxWidth: "95%",
-      }
+      },
     );
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -472,8 +481,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       {
         width: "25rem",
         maxWidth: "95%",
-        data: $event
-      }
+        data: $event,
+      },
     );
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -495,8 +504,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       cancelText: "No!",
       confirmText: "Yes! Remove Author!",
       message: `Are you sure you want to remove the author ${$event.nameAndSurname} (${$event.AuthorID})? This operation cannot be undone!`,
-      title: "Remove Author Confirm"
-    }).subscribe(res => {
+      title: "Remove Author Confirm",
+    }).subscribe((res) => {
       if (res === true) {
         this.current.RemoveAuthor($event);
       }
@@ -519,7 +528,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return content;
   }
 
-  @HostListener('window:copy', ['$event'])
+  @HostListener("window:copy", ["$event"])
   private onCopy = ($event?: ClipboardEvent): void => {
     if ($event?.target instanceof HTMLElement && isEditable($event.target)) return;
 
@@ -530,21 +539,21 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       const json = this.current.GetJSONString() ?? "";
       navigator.clipboard.writeText(json);
       this.snackBar.open("Position saved to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
-    } catch (err) {
+    }
+    catch (err) {
       this.snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
     }
-  }
+  };
 
-  @HostListener('window:paste', ['$event'])
+  @HostListener("window:paste", ["$event"])
   private onPaste = ($event?: ClipboardEvent, patext?: string) => {
     if ($event?.target && (
       $event.target instanceof HTMLInputElement
       || isEditable($event.target as HTMLElement)
     )) return;
 
-    const text = patext ?? $event?.clipboardData?.getData('text/plain') ?? null;
+    const text = patext ?? $event?.clipboardData?.getData("text/plain") ?? null;
     if ($event) {
-
       $event.preventDefault();
     }
     if (text) {
@@ -552,13 +561,14 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       try {
         const probJSON = JSON.parse(text);
         this.current.PasteJson(probJSON);
-      } catch (err) {
+      }
+      catch (err) {
         this.snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
       }
     }
-  }
+  };
 
-  //#region CONTEXT COMMANDS
+  // #region CONTEXT COMMANDS
   ctxDeletePiece() {
     const cell = this.contextOnCell();
     if (cell) {
@@ -566,10 +576,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.notifyProblemChanged();
     }
   }
-
 }
 
-const tagAndStyle = (text: string): { t: string, css?: string } => {
+const tagAndStyle = (text: string): { t: string; css?: string } => {
   text = text.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;");
   if (outlogRegExp.test(text)) return { t: "em" };
   else if (istructionRegExp.test(text)) return { t: "em" };
@@ -581,7 +590,7 @@ const isEditable = (element: HTMLElement | null): boolean => {
     return false;
   }
 
-  if (element.contentEditable === 'true') {
+  if (element.contentEditable === "true") {
     return true;
   }
 
@@ -589,4 +598,4 @@ const isEditable = (element: HTMLElement | null): boolean => {
   if (!element.isConnected) return true;
 
   return isEditable(element.parentElement);
-}
+};

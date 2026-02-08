@@ -5,11 +5,11 @@ import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { DbsourceComponent } from "@sp/ui-elements/src/lib/dbsource/dbsource.component";
 
 @Component({
-    selector: "app-recents",
-    templateUrl: "./recents.component.html",
-    styleUrls: ["./recents.component.scss"],
-    imports: [DbsourceComponent],
-    standalone: true
+  selector: "app-recents",
+  templateUrl: "./recents.component.html",
+  styleUrls: ["./recents.component.scss"],
+  imports: [DbsourceComponent],
+  standalone: true,
 })
 export class RecentsComponent {
   private db = inject(DbmanagerService);
@@ -19,6 +19,7 @@ export class RecentsComponent {
   fullpath(recent: RecentFileInfo) {
     return recent.meta.fullPath.replace(/^\//, "");
   }
+
   constructor() {
     this.recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
   }
@@ -29,8 +30,9 @@ export class RecentsComponent {
       if (!(result instanceof Error)) {
         this.router.navigate(["/list"]);
       }
-    } catch(_err) {
-        //noop
+    }
+    catch (_err) {
+      // noop
     }
   }
 }

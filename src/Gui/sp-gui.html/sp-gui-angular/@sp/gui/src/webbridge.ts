@@ -15,6 +15,7 @@ class WebBridge implements BridgeGlobal {
     this.ww.addEventListener("message", this.message);
     this.ww.addEventListener("messageerror", this.messageError);
   }
+
   private stopWorker() {
     this.ww.removeEventListener("error", this.error);
     this.ww.removeEventListener("message", this.message);
@@ -27,6 +28,7 @@ class WebBridge implements BridgeGlobal {
     this.stopWorker();
     setTimeout(() => this.solver$.unsubscribe(), 500);
   }
+
   private startSolve(problem: string) {
     problem.split("\n").forEach((row) => {
       setTimeout(() => {
@@ -39,33 +41,40 @@ class WebBridge implements BridgeGlobal {
   private error = (ev: ErrorEvent) => {
     this.solver$.next({ exitCode: -1, message: ev.message });
   };
+
   private message = (e: MessageEvent<string>) => {
     const mov = parsePopeyeRow(e.data, this.problem.startMoveN);
-    const halfMoves = mov.flatMap((m) => m[1]).filter(move => !!move);
+    const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
     this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
     if (e.data.indexOf("solution finished") > -1) {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
     }
   };
+
   private messageError = (e: MessageEvent<string>) => {
     this.solver$.next({ exitCode: -1, message: e.data });
   };
+
   supportsEngine(engine: string): boolean {
     return engine === "Popeye";
   }
+
   openFile(): File | PromiseLike<File | null> | null {
     throw new Error("Method not implemented.");
   }
+
   saveFile(/* content: File */): string | Promise<string> {
     throw new Error("Method not implemented.");
   }
+
   stopSolve(): void {
     this.endSolve({ exitCode: -1, message: "solution stopped!" });
   }
+
   runSolve(
     CurrentProblem: Problem,
     engine: string,
-    mode: SolveModes
+    mode: SolveModes,
   ): Observable<SolutionRow | EOF> | Error {
     if (engine !== "Popeye") {
       return new Error("Engine not found.");
@@ -76,7 +85,7 @@ class WebBridge implements BridgeGlobal {
         raw: `starting engine <${engine}>`,
         rowtype: "log",
         moveTree: [],
-      }
+      },
     );
 
     const problem = problemToPopeye(CurrentProblem, mode).join("\n");
@@ -85,17 +94,16 @@ class WebBridge implements BridgeGlobal {
 
     return this.solver$.asObservable();
   }
-
 }
 
 const handleFiles = async (files: HandledFile[]) => {
-    for (const file of files) {
-        const blob = await file.getFile();
-        // blob.handle = file;
-        const text = await blob.text();
-        // TODO: open the file
-        console.warn(`${file.name} handled, content: ${text}`);
-    }
+  for (const file of files) {
+    const blob = await file.getFile();
+    // blob.handle = file;
+    const text = await blob.text();
+    // TODO: open the file
+    console.warn(`${file.name} handled, content: ${text}`);
+  }
 };
 
 export const polyfillBridge = () => {
@@ -104,7 +112,8 @@ export const polyfillBridge = () => {
     window.launchQueue?.setConsumer((launchParams) => {
       handleFiles(launchParams.files);
     });
-  } else {
+  }
+  else {
     console.error("File Handling API is not supported!");
   }
 

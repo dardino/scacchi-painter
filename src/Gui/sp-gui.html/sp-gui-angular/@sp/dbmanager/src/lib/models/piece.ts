@@ -51,7 +51,7 @@ export class Piece implements IPiece {
 
   static fromPartial(
     data?: Partial<IPiece> | null,
-    l?: SquareLocation
+    l?: SquareLocation,
   ): Piece | null {
     if (data == null) return null;
     const p = new Piece();
@@ -88,11 +88,12 @@ export class Piece implements IPiece {
 
   public SetLocation(
     newCol: Columns = this.column,
-    newRow: Traverse = this.traverse
+    newRow: Traverse = this.traverse,
   ) {
     this.column = newCol;
     this.traverse = newRow;
   }
+
   GetLocation(): SquareLocation {
     return {
       column: this.column,
@@ -112,14 +113,14 @@ export class Piece implements IPiece {
   ToFairyNotation(): string {
     if (!this.isFairy()) return "";
     return `${this.fairyCode
-      .map((c) => c.code.toUpperCase())
+      .map(c => c.code.toUpperCase())
       .join("/")}${this.column[3].toLowerCase()}${this.traverse[3]}`;
   }
 
   isFairy() {
     return (
-      (this.fairyCode ?? []).length > 0 ||
-      (this.fairyAttribute || "None") !== "None"
+      (this.fairyCode ?? []).length > 0
+      || (this.fairyAttribute || "None") !== "None"
     );
   }
 
@@ -139,7 +140,7 @@ export class Piece implements IPiece {
     const cursorColorByPieceColor: Record<PieceColors, string> = {
       Black: "b",
       Neutral: "n",
-      White: "w"
+      White: "w",
     };
     return `${cursorColorByPieceColor[this.color]}_${this.appearance}`;
   }

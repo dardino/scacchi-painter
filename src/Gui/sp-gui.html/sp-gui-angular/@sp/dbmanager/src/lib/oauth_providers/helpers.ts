@@ -1,7 +1,7 @@
 export const HASHES = [
   "dropbox",
   "onedrive",
-  "null"
+  "null",
 ] as const;
 
 export type HASHES = typeof HASHES[number];
@@ -21,7 +21,7 @@ export function getLocalAuthInfo(): Required<LocalAuthInfo> {
     dropbox_token: localStorage.getItem("dropbox_token") ?? "null",
     onedrive_token: localStorage.getItem("onedrive_token") ?? "null",
     return_url: localStorage.getItem("return_url") ?? "",
-  }
+  };
 }
 
 export function setLocalAuthInfo(props: LocalAuthInfo) {

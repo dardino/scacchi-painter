@@ -4,7 +4,7 @@ import {
   TwinModes,
   TwinModesKeys,
   TwinTypesKeys,
-  createXmlElement
+  createXmlElement,
 } from "../helpers";
 
 export class Twin implements ITwin {
@@ -17,8 +17,8 @@ export class Twin implements ITwin {
   public static fromElement(el: Element): Twin {
     const t = new Twin();
     t.TwinType = (el.getAttribute("TwinType") as TwinTypesKeys) ?? "Diagram";
-    t.TwinModes =
-      TwinModes[(el.getAttribute("TwinModes") as TwinModesKeys) ?? "Normal"];
+    t.TwinModes
+      = TwinModes[(el.getAttribute("TwinModes") as TwinModesKeys) ?? "Normal"];
     t.ValueA = el.getAttribute("ValueA") ?? "";
     t.ValueB = el.getAttribute("ValueB") ?? "";
     t.ValueC = el.getAttribute("ValueC") ?? "";
@@ -30,6 +30,7 @@ export class Twin implements ITwin {
     t.TwinType = "Diagram";
     return t;
   }
+
   static fromJson(fromJson: Partial<ITwin>): Twin {
     const t = new Twin();
     t.TwinType = fromJson.TwinType ?? "Diagram";
@@ -47,9 +48,11 @@ export class Twin implements ITwin {
     this.ValueB = "";
     this.ValueC = "";
   }
+
   public toString(): string {
     return popeyeTwinMapper[this.TwinType](this.ValueA, this.ValueB, this.ValueC);
   }
+
   toSP2Xml(): Element {
     const twin = createXmlElement("Twin");
     twin.setAttribute("TwinType", this.TwinType);
@@ -59,6 +62,7 @@ export class Twin implements ITwin {
     twin.setAttribute("TwinModes", this.TwinModes);
     return twin;
   }
+
   toJson(): ITwin {
     const twin: ITwin = {
       TwinType: this.TwinType,

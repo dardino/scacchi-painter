@@ -16,8 +16,8 @@ describe("EditProblemComponent - Interactive Features", () => {
     await TestBed.configureTestingModule({
       imports: [EditProblemComponent, RouterModule.forRoot([])],
       providers: [
-        { provide: MatSnackBar, useValue: { open: vi.fn(), dismiss: vi.fn() } }
-      ]
+        { provide: MatSnackBar, useValue: { open: vi.fn(), dismiss: vi.fn() } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditProblemComponent);

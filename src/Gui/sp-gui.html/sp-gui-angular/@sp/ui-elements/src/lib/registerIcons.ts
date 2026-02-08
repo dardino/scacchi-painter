@@ -15,54 +15,55 @@ export class AllMatIconRegistryService {
     this.matIconRegistry.addSvgIcon(
       `select_piece`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/select_piece.svg`
-      )
+        `${assetFolder}/toolbar/select_piece.svg`,
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       `add_piece`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/add_piece.svg`
-      )
+        `${assetFolder}/toolbar/add_piece.svg`,
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       `remove_piece`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/remove_piece.svg`
-      )
+        `${assetFolder}/toolbar/remove_piece.svg`,
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       `move_piece`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/move_piece.svg`
-      )
+        `${assetFolder}/toolbar/move_piece.svg`,
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       `dropbox_icon`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/dropbox_icon.svg`
-      )
+        `${assetFolder}/toolbar/dropbox_icon.svg`,
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       `onedrive_icon`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/onedrive_icon.svg`
-      )
+        `${assetFolder}/toolbar/onedrive_icon.svg`,
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       `my_flip_h`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/fliph.svg`
-      )
+        `${assetFolder}/toolbar/fliph.svg`,
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       `my_flip_v`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        `${assetFolder}/toolbar/flipv.svg`
-      )
+        `${assetFolder}/toolbar/flipv.svg`,
+      ),
     );
   }
+
   static registerAssetFolder = (_assetFolder: string) => {
     assetFolder = _assetFolder;
     return AllMatIconRegistryService;
-  }
+  };
 }

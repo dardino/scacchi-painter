@@ -9,11 +9,11 @@ import {
 } from "@sp/host-bridge/src/lib/fileService";
 
 @Component({
-    selector: "lib-file-explorer",
-    templateUrl: "./file-explorer.component.html",
-    imports: [CommonModule, MatIconModule],
-    standalone: true,
-    styleUrls: ["./file-explorer.component.scss"],
+  selector: "lib-file-explorer",
+  templateUrl: "./file-explorer.component.html",
+  imports: [CommonModule, MatIconModule],
+  standalone: true,
+  styleUrls: ["./file-explorer.component.scss"],
 })
 export class FileExplorerComponent implements OnInit, OnChanges {
   @Input() service: FileService | null;
@@ -28,6 +28,7 @@ export class FileExplorerComponent implements OnInit, OnChanges {
     itemName: "/",
     type: "root",
   };
+
   public items = signal<FolderItemInfo[]>([]);
 
   ngOnInit(): void {
@@ -70,7 +71,8 @@ export class FileExplorerComponent implements OnInit, OnChanges {
     try {
       const file = await this.service.getFileContent(item);
       this.selectFile.emit({ file, meta: item, source: this.service.sourceName });
-    } catch (err) {
+    }
+    catch (err) {
       console.error(err);
     }
   }

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from "vitest";
 import { RouterModule } from "@angular/router";
 import { MenuComponent } from "./menu.component";
 
@@ -10,7 +10,7 @@ describe("MenuComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MenuComponent, RouterModule.forRoot([])]
+      imports: [MenuComponent, RouterModule.forRoot([])],
     });
     fixture = TestBed.createComponent(MenuComponent);
     component = fixture.componentInstance;

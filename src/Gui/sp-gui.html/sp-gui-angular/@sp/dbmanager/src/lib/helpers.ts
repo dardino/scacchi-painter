@@ -8,20 +8,20 @@ import {
 
 import { Base64 } from "./base64";
 
-export type XMLProblemTypesKeys =
-  | "Direct"
-  | "Help"
-  | "Self"
-  | "HelpSelf"
-  | "Custom";
+export type XMLProblemTypesKeys
+  = | "Direct"
+    | "Help"
+    | "Self"
+    | "HelpSelf"
+    | "Custom";
 
 export const ProblemTypeCodes = {
   "-": "Direct",
-  H: "Help",
-  S: "Self",
-  HS: "HelpSelf",
-  R: "Reflex",
-  HR: "HelpReflex",
+  "H": "Help",
+  "S": "Self",
+  "HS": "HelpSelf",
+  "R": "Reflex",
+  "HR": "HelpReflex",
 } as const;
 
 export const EndingTypeCodes = {
@@ -36,22 +36,22 @@ export const EndingTypeCodes = {
   "!=": "(!=)",
   "!#": "(!#)",
   "00": "(00)",
-  ep: "(ep)",
-  Zxy: "(Zxy)",
-  x: "(x)",
+  "ep": "(ep)",
+  "Zxy": "(Zxy)",
+  "x": "(x)",
   "##!": "(##!)",
-  ct: "(ct)",
+  "ct": "(ct)",
   "<>": "(&lt;>)",
-  ctr: "(ctr)",
+  "ctr": "(ctr)",
   "<>r": "(&lt;>r)",
-  c81: "(c81)",
+  "c81": "(c81)",
 } as const;
 
 export type XMLStipulationTypes = "Mate" | "Stalemate" | "Custom";
 
 export type ProblemTypes = keyof typeof ProblemTypeCodes;
 export const getProblemType = (
-  original: XMLProblemTypesKeys | null = "Direct"
+  original: XMLProblemTypesKeys | null = "Direct",
 ): ProblemTypes => {
   switch (original) {
     case "Direct":
@@ -264,17 +264,17 @@ export const PieceRotation = [
 ] as const;
 export type PieceRotation = typeof PieceRotation[number];
 
-export type SP2PieceName =
-  | "King"
-  | "Queen"
-  | "Rook"
-  | "Rock"
-  | "Horse"
-  | "Bishop"
-  | "Pawn"
-  | "HorseQueen"
-  | "HorseTower"
-  | "HorseBishop";
+export type SP2PieceName
+  = | "King"
+    | "Queen"
+    | "Rook"
+    | "Rock"
+    | "Horse"
+    | "Bishop"
+    | "Pawn"
+    | "HorseQueen"
+    | "HorseTower"
+    | "HorseBishop";
 
 export const getCanvasRotation = (rotation: PieceRotation) => {
   switch (rotation) {
@@ -494,14 +494,16 @@ export const GetSolutionFromElement = async (el: Element) => {
   if (solRft != null && solRft.innerHTML.length > 0) {
     try {
       solText = await convertFromRtf(
-        Base64.decode(solRft.innerHTML).replace(/[\r\n]+/g, "\n")
+        Base64.decode(solRft.innerHTML).replace(/[\r\n]+/g, "\n"),
       );
-    } catch (err) {
+    }
+    catch (err) {
       console.error(err);
       solText = [];
     }
     if (solDec === "") solDec = solText.map(row => row.innerText).join("\n");
-  } else {
+  }
+  else {
     if (!sol) solText = [];
     else {
       solText = solDec
@@ -574,7 +576,7 @@ export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
     }
 
     // TODO: in fen we haven't params for fairies?
-    const fairyCode = fairy?.replace(/[{}]/g, "").split("+").map((fp) => ({ code: fp, params: [] }));
+    const fairyCode = fairy?.replace(/[{}]/g, "").split("+").map(fp => ({ code: fp, params: [] }));
     const nonNeutralColor = pieceName.toLowerCase() !== pieceName ? "White" : "Black";
     const color = isNeutral ? "Neutral" : nonNeutralColor;
 
@@ -592,10 +594,10 @@ export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
 export const fenToChessBoard = (original: string) => {
   const [fen] = original.split(" ");
   const fenrows = fen.split("/");
-  const pieces = fenrows.map((f) => rowToPieces(f));
+  const pieces = fenrows.map(f => rowToPieces(f));
   const cells = pieces.reduce<(Partial<IPiece> | null)[]>(
     (a, b) => a.concat(b),
-    []
+    [],
   );
   return cells;
 };
@@ -617,7 +619,8 @@ export function prepare(element: HTMLElement): HTMLElement {
     const newEl = document.createElement("p");
     newEl.innerHTML = element.innerHTML;
     return newEl;
-  } else {
+  }
+  else {
     return element;
   }
 }
@@ -631,7 +634,8 @@ export const convertFromRtf = async (rtf: string) => {
     const doc = new RTFJS.Document(stringToArrayBuffer(rtf), {});
     const htmlElements = await doc.render();
     return htmlElements.map(prepare);
-  } catch (err) {
+  }
+  catch (err) {
     console.warn(err, rtf);
     return rtf.split(/[\r\n]+/g).map((d) => {
       const div = document.createElement("p");
@@ -651,29 +655,29 @@ export const convertToRtf = async (html: string): Promise<string | null> => {
   // Singleton tags
   richText = richText.replace(
     /<(?:hr)(?:\s+[^>]*)?\s*\/?>/gi,
-    "{\\pard \\brdrb \\brdrs \\brdrw10 \\brsp20 \\par}\n{\\pard\\par}\n"
+    "{\\pard \\brdrb \\brdrs \\brdrw10 \\brsp20 \\par}\n{\\pard\\par}\n",
   );
   richText = richText.replace(
     /<(?:br)(?:\s+[^>]*)?\s*\/?>/gi,
-    "{\\pard\\par}\n"
+    "{\\pard\\par}\n",
   );
 
   // Empty tags
   richText = richText.replace(
     /<(?:p|div|section|article)(?:\s+[^>]*)?\s*\/>/gi,
-    "{\\pard\\par}\n"
+    "{\\pard\\par}\n",
   );
   richText = richText.replace(/<(?:[^>]+)\/>/g, "");
 
   // Hyperlinks
   richText = richText.replace(
     /<a(?:\s+[^>]*)?(?:\s+href=(["'])(?:javascript:void\(0?\);?|#|return false;?|void\(0?\);?|)\1)(?:\s+[^>]*)?>/gi,
-    "{{{\n"
+    "{{{\n",
   );
   const tmpRichText = richText;
   richText = richText.replace(
     /<a(?:\s+[^>]*)?(?:\s+href=(["'])(.+)\1)(?:\s+[^>]*)?>/gi,
-    '{\\field{\\*\\fldinst{HYPERLINK\n "$2"\n}}{\\fldrslt{\\ul\\cf1\n'
+    "{\\field{\\*\\fldinst{HYPERLINK\n \"$2\"\n}}{\\fldrslt{\\ul\\cf1\n",
   );
   const hasHyperlinks = richText !== tmpRichText;
   richText = richText.replace(/<a(?:\s+[^>]*)?>/gi, "{{{\n");
@@ -688,28 +692,28 @@ export const convertToRtf = async (html: string): Promise<string | null> => {
   richText = richText.replace(/<sub(?:\s+[^>]*)?>/gi, "{\\sub\n");
   richText = richText.replace(
     /<(?:p|div|section|article)(?:\s+[^>]*)?>/gi,
-    "{\\pard\n"
+    "{\\pard\n",
   );
 
   // End tags
   richText = richText.replace(
     /<\/(?:p|div|section|article)(?:\s+[^>]*)?>/gi,
-    "\n\\par}\n"
+    "\n\\par}\n",
   );
   richText = richText.replace(
     /<\/(?:b|strong|i|em|u|ins|strike|del|sup|sub)(?:\s+[^>]*)?>/gi,
-    "\n}"
+    "\n}",
   );
 
   // Strip any other remaining HTML tags [but leave their contents]
   richText = richText.replace(/<(?:[^>]+)>/g, "");
 
   // Prefix and suffix the rich text with the necessary syntax
-  richText =
-    "{\\rtf1\\ansi\n" +
-    (hasHyperlinks ? "{\\colortbl\n;\n\\red0\\green0\\blue255;\n}\n" : "") +
-    richText +
-    "\n}";
+  richText
+    = "{\\rtf1\\ansi\n"
+      + (hasHyperlinks ? "{\\colortbl\n;\n\\red0\\green0\\blue255;\n}\n" : "")
+      + richText
+      + "\n}";
 
   richText = richText.replace(/&gt;/gi, ">");
   richText = richText.replace(/&lt;/gi, "<");
@@ -732,7 +736,7 @@ const parser = new DOMParser();
 export const createXmlElement = (elName: string): Element => {
   const dom = parser.parseFromString(
     `<${elName}></${elName}>`,
-    "application/xml"
+    "application/xml",
   );
   return dom.querySelector(elName) as Element;
 };
@@ -742,18 +746,18 @@ export const prettifyXml = (sourceXml: string | Document) => {
   const xsltDoc = new DOMParser().parseFromString(
     [
       // describes how we want to modify the XML - indent everything
-      '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">',
-      '  <xsl:strip-space elements="*"/>',
-      '  <xsl:template match="para[content-style][not(text())]">', // change to just text() to strip space in text nodes
-      '    <xsl:value-of select="normalize-space(.)"/>',
+      "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">",
+      "  <xsl:strip-space elements=\"*\"/>",
+      "  <xsl:template match=\"para[content-style][not(text())]\">", // change to just text() to strip space in text nodes
+      "    <xsl:value-of select=\"normalize-space(.)\"/>",
       "  </xsl:template>",
-      '  <xsl:template match="node()|@*">',
-      '    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>',
+      "  <xsl:template match=\"node()|@*\">",
+      "    <xsl:copy><xsl:apply-templates select=\"node()|@*\"/></xsl:copy>",
       "  </xsl:template>",
-      '  <xsl:output indent="yes"/>',
+      "  <xsl:output indent=\"yes\"/>",
       "</xsl:stylesheet>",
     ].join("\n"),
-    "application/xml"
+    "application/xml",
   );
   const xsltProcessor = new XSLTProcessor();
   xsltProcessor.importStylesheet(xsltDoc);

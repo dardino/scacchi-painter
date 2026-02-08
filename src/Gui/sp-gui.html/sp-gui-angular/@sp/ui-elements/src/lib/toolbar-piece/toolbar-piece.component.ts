@@ -5,11 +5,11 @@ import { MatIconModule } from "@angular/material/icon";
 export type EditModes = "select" | "add" | "remove" | "move";
 
 @Component({
-    selector: "lib-toolbar-piece",
-    templateUrl: "./toolbar-piece.component.html",
-    styleUrls: ["./toolbar-piece.component.scss"],
-    imports: [MatIconModule, MatButtonToggleModule],
-    standalone: true
+  selector: "lib-toolbar-piece",
+  templateUrl: "./toolbar-piece.component.html",
+  styleUrls: ["./toolbar-piece.component.scss"],
+  imports: [MatIconModule, MatButtonToggleModule],
+  standalone: true,
 })
 export class ToolbarPieceComponent {
   @Input()
@@ -20,5 +20,4 @@ export class ToolbarPieceComponent {
   modeChange($event: MatButtonToggleChange) {
     this.editModeChanged.emit($event.value);
   }
-
 }

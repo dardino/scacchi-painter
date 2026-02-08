@@ -11,7 +11,7 @@ const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}
 
 const BindToLocalStorage = <T extends "number" | "string">(
   type: T,
-  defaultValue?: T extends "number" ? number : string
+  defaultValue?: T extends "number" ? number : string,
 ) => (target: unknown, key: string) => {
   Object.defineProperty(target, key, {
     get: () => {
@@ -31,10 +31,9 @@ const BindToLocalStorage = <T extends "number" | "string">(
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class PreferencesService implements PreferencesTable {
-
   save(/* args: Partial<PreferencesTable> */) {
     throw new Error("Method not implemented.");
   }

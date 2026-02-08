@@ -14,12 +14,12 @@ interface PieceNameRow {
 
 /** load piecenam.txt from url https://raw.githubusercontent.com/thomas-maeder/popeye/refs/heads/develop/piecenam.txt */
 
-const urlToFetch =
-  "https://raw.githubusercontent.com/thomas-maeder/popeye/refs/heads/develop/piecenam.txt";
+const urlToFetch
+  = "https://raw.githubusercontent.com/thomas-maeder/popeye/refs/heads/develop/piecenam.txt";
 
 async function run() {
   await fetch(urlToFetch)
-    .then((response) => response.text())
+    .then(response => response.text())
     .then((text) => {
       const filePath = path.join(__dirname, "piecenam.txt");
       fs.writeFileSync(filePath, text);
@@ -41,7 +41,7 @@ async function run() {
     const parts = line
       .replace(/\/\*.*\*\//, "")
       .split("|")
-      .map((s) => s.trim());
+      .map(s => s.trim());
 
     // The columns are: [ '', code1, code2, fr, code3, de, code4, en ]
     if (parts.length < 8) continue;

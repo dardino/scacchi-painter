@@ -1,7 +1,7 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, inject, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { IProblem, prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "./providers";
@@ -25,19 +25,22 @@ export class DbmanagerService {
   /** @description Current problem index is 1 based */
   private currentIndex = 1;
   private currentFile: FolderSelected | null = null;
-  private workInProgress: Subject<boolean> = new Subject<boolean>();
+  private workInProgress = signal(false);
 
-  //#region public Properties
+  // #region public Properties
   public All: Problem[] = [];
   get wip$() {
-    return this.workInProgress.asObservable();
+    return this.workInProgress.asReadonly();
   }
+
   get FileName() {
     return this.currentFile?.meta.itemName;
   }
+
   get CurrentIndex() {
     return this.currentIndex;
   }
+
   get Count() {
     return this.All.length;
   }
@@ -48,10 +51,11 @@ export class DbmanagerService {
   get Pieces() {
     return this.currentProblem$.value?.pieces ?? [];
   }
+
   get CurrentFile(): Readonly<FolderSelected | null> {
     return this.currentFile;
   }
-  //#endregion
+  // #endregion
 
   async addBlankPosition() {
     this.All.push(Problem.fromJson({}));
@@ -65,6 +69,7 @@ export class DbmanagerService {
     const pIndex = this.All.indexOf(problem);
     await this.deleteProblemAtIndex(pIndex);
   }
+
   async deleteProblemByIndex(index: number) {
     await this.deleteProblemAtIndex(index);
   }
@@ -74,14 +79,15 @@ export class DbmanagerService {
   }
 
   private async deleteProblemAtIndex(pIndex: number) {
-    this.workInProgress.next(true);
+    this.workInProgress.set(true);
     if (pIndex < this.All.length && pIndex > -1) {
       this.All.splice(pIndex, 1);
     }
     if (this.All.length === 0) {
-      //if deleted problem is the lastone in database then create a blank problem
+      // if deleted problem is the lastone in database then create a blank problem
       await this.addBlankPosition();
-    } else {
+    }
+    else {
       // if problem index is the same as current then move current problem to the previous if present
       if (pIndex === this.currentIndex - 1) {
         this.currentIndex = Math.max(0, pIndex - 1) + 1;
@@ -89,7 +95,7 @@ export class DbmanagerService {
     }
     await this.loadProblem();
     await this.saveToLocalStorage();
-    this.workInProgress.next(false);
+    this.workInProgress.set(false);
     this.snackBar.open("Problem deleted!", undefined, {
       verticalPosition: "top",
       politeness: "assertive",
@@ -111,39 +117,49 @@ export class DbmanagerService {
     }
   }
 
-  //#region PUBLIC LOADS
+  // #region PUBLIC LOADS
   async Load({ file, meta, source }: FileSelected): Promise<Error | null> {
-    this.workInProgress.next(true);
-    this.reset();
-    this.currentFile = { meta, source };
-    const content = await file.text();
-    const result = await this.loadFromContent(content);
-    this.workInProgress.next(false);
-    saveToRecentFiles(meta, source);
-    this.snackBar.open("Load db completed!", undefined, {
-      verticalPosition: "top",
-      politeness: "assertive",
-      duration: 2000,
-    });
-    return result;
-  }
-  public async LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
+    this.workInProgress.set(true);
     try {
-      this.workInProgress.next(true);
+      this.reset();
+      this.currentFile = { meta, source };
+      const content = await file.text();
+      const result = await this.loadFromContent(content);
+      saveToRecentFiles(meta, source);
+      this.snackBar.open("Load db completed!", undefined, {
+        verticalPosition: "top",
+        politeness: "assertive",
+        duration: 2000,
+      });
+      return result;
+    }
+    catch (err) {
+      return err as Error;
+    }
+    finally {
+      this.workInProgress.set(false);
+    }
+  }
+
+  public async LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
+    this.workInProgress.set(true);
+    try {
       this.currentFile = { meta, source };
       if (source == "unknown") {
-        this.workInProgress.next(false);
         return null;
       }
       const file = await this.fileService?.getFileContent(meta);
       if (!file) {
         return new Error("Unable to load file content from service!");
       }
-      return this.Load({ file, meta, source });
-    } catch (err) {
+      // Load gestisce completamente il loader
+      return await this.Load({ file, meta, source });
+    }
+    catch (err) {
       return err as Error;
-    } finally {
-      this.workInProgress.next(false);
+    }
+    finally {
+      this.workInProgress.set(false);
     }
   }
 
@@ -152,22 +168,23 @@ export class DbmanagerService {
    * @param id
    */
   async Reload(/** this parameter is 1 based */ id?: number) {
-    this.workInProgress.next(true);
+    this.workInProgress.set(true);
     this.reset();
     this.currentFile = await this.loadFromLocalStorage();
     this.currentIndex = id ?? this.currentIndex;
     await this.loadProblem();
-    this.workInProgress.next(false);
+    this.workInProgress.set(false);
     this.snackBar.open("Reload db completed!", undefined, {
       verticalPosition: "top",
       politeness: "assertive",
       duration: 2000,
     });
   }
+
   SetFileMeta(meta: Omit<FileSelected, "file">) {
     this.currentFile = { ...meta };
   }
-  //#endregion PUBLIC LOADS
+  // #endregion PUBLIC LOADS
 
   private async loadFromLocalStorage() {
     const spdb = localStorage.getItem("spdb") ?? null;
@@ -190,24 +207,24 @@ export class DbmanagerService {
   private toJSON(): IDbSpX {
     return {
       lastIndex: this.currentIndex,
-      problems: this.All.map((p) => p.toJson()),
+      problems: this.All.map(p => p.toJson()),
       name: "Scacchi Painter X Database",
       version: 3,
     };
   }
 
   private async ToXML(): Promise<Document> {
-    const problems = await Promise.all(this.All.map((f) => f.toSP2Xml()));
+    const problems = await Promise.all(this.All.map(f => f.toSP2Xml()));
     const parser = new DOMParser();
     const doc = parser.parseFromString(
       "<ScacchiPainterDatabase></ScacchiPainterDatabase>",
-      "application/xml"
+      "application/xml",
     );
     const root = doc.querySelector("ScacchiPainterDatabase") as Element;
     root.setAttribute("version", "0.1.0.2");
     root.setAttribute("name", "Scacchi Painter 2 Database");
     root.setAttribute("lastIndex", this.CurrentIndex.toFixed(0));
-    problems.forEach((p) => root.appendChild(p));
+    problems.forEach(p => root.appendChild(p));
     return doc;
   }
 
@@ -216,7 +233,8 @@ export class DbmanagerService {
     if (type === "sp2") {
       const filesp2 = await this.getDbFile("sp2");
       return filesp2;
-    } else {
+    }
+    else {
       const filesp3 = await this.getDbFile("sp3");
       return filesp3;
     }
@@ -226,15 +244,18 @@ export class DbmanagerService {
     const fileSaver = await import("file-saver");
     fileSaver.saveAs(file, this.FileName);
   }
+
   public async SaveTemporary() {
     await this.saveToLocalStorage();
   }
+
   public async GetFileContent(): Promise<File> {
     // first of all save the current problem into local storage
     await this.saveToLocalStorage();
     const file = await this.createFile();
     return file;
   }
+
   public async Save() {
     const file = await this.GetFileContent();
     const fs = this.fileService;
@@ -250,52 +271,58 @@ export class DbmanagerService {
             verticalPosition: "top",
             politeness: "assertive",
             duration: 1500,
-          }
+          },
         );
-      } else {
+      }
+      else {
         this.snackBar.open("Unable to save: " + result.message, undefined, {
           verticalPosition: "top",
           politeness: "off",
           duration: 2000,
         });
       }
-    } else {
+    }
+    else {
       if (this.currentFile?.source === "local") {
         this.download(file);
-      } else {
-        this.workInProgress.next(false);
+      }
+      else {
+        this.workInProgress.set(false);
         return false;
       }
     }
-    this.workInProgress.next(false);
+    this.workInProgress.set(false);
     return true;
   }
 
   private async loadFromJson(jsonString: string): Promise<Error | null> {
     try {
       const obj = JSON.parse(jsonString) as IDbSpX;
-      this.All = obj.problems.map((p) => Problem.fromJson(p));
+      this.All = obj.problems.map(p => Problem.fromJson(p));
       this.currentIndex = obj.lastIndex ?? 1;
       return null;
-    } catch (err) {
+    }
+    catch (err) {
       return err as Error;
     }
   }
+
   private async loadFromXML(xmlText: string) {
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
       this.All = await Promise.all(
-        Array.from(xmlDoc.querySelectorAll("SP_Item")).map((e) =>
-          Problem.fromElement(e)
-        )
+        Array.from(xmlDoc.querySelectorAll("SP_Item")).map(e =>
+          Problem.fromElement(e),
+        ),
       );
       this.currentIndex = parseInt(
         xmlDoc.documentElement.getAttribute("lastIndex") ?? "1",
-        10
+        10,
       );
       return null;
-    } catch (ex) {
+    }
+    catch (ex) {
       console.error(ex);
       return ex as Error;
     }
@@ -303,11 +330,11 @@ export class DbmanagerService {
 
   private async loadFromContent(
     content: string,
-    forceVersion?: "sp2" | "sp3"
+    forceVersion?: "sp2" | "sp3",
   ): Promise<Error | null> {
-    const version: "sp2" | "sp3" =
-      forceVersion ??
-      (this.currentFile?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3");
+    const version: "sp2" | "sp3"
+      = forceVersion
+        ?? (this.currentFile?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3");
     switch (version) {
       case "sp2":
         await this.loadFromXML(content);
@@ -354,11 +381,12 @@ export class DbmanagerService {
   private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {
     if (type === "sp2") {
       const xmlDoc = await this.ToXML();
-      const text =
-        '<?xml version="1.0" encoding="utf-8"?>\r\n' + prettifyXml(xmlDoc);
+      const text
+        = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" + prettifyXml(xmlDoc);
       const fullpath = this.currentFile?.meta.fullPath ?? "temp.sp2";
       return new File([text], fullpath, { type: "application/octect-stream" });
-    } else {
+    }
+    else {
       const text = JSON.stringify(this.toJSON());
       const fullpath = this.currentFile?.meta.fullPath ?? "temp.sp3";
       return new File([text], fullpath, { type: "application/octect-stream" });

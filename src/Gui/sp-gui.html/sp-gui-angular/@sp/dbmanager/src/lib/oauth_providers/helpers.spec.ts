@@ -1,8 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { getLocalAuthInfo, setLocalAuthInfo, HASHES, LocalAuthInfo } from "./helpers";
 
 describe("OAuth Helpers", () => {
-
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
@@ -144,7 +143,7 @@ describe("OAuth Helpers", () => {
         state: "multi-state",
         dropbox_token: "token-123",
         onedrive_token: "token-456",
-        return_url: "/edit/1"
+        return_url: "/edit/1",
       };
 
       setLocalAuthInfo(authInfo);
@@ -166,7 +165,7 @@ describe("OAuth Helpers", () => {
       // Simulate storing auth info before redirect
       setLocalAuthInfo({
         redirect: "onedrive",
-        state: "onedrive-auth-state"
+        state: "onedrive-auth-state",
       });
 
       // Simulate retrieving auth info after redirect
@@ -180,7 +179,7 @@ describe("OAuth Helpers", () => {
       // Simulate storing auth info before redirect
       setLocalAuthInfo({
         redirect: "dropbox",
-        state: "dropbox-auth-state"
+        state: "dropbox-auth-state",
       });
 
       // Simulate retrieving auth info after redirect
@@ -194,13 +193,13 @@ describe("OAuth Helpers", () => {
       // Simulate pre-auth state
       setLocalAuthInfo({
         redirect: "onedrive",
-        state: "pre-auth"
+        state: "pre-auth",
       });
 
       // Simulate post-auth token storage
       const mockToken = JSON.stringify({
         accessToken: "authenticated-token",
-        expiresOn: Date.now() + 3600000
+        expiresOn: Date.now() + 3600000,
       });
       setLocalAuthInfo({ onedrive_token: mockToken });
 
@@ -225,7 +224,7 @@ describe("OAuth Helpers", () => {
       setLocalAuthInfo({
         redirect: "dropbox",
         state: "dropbox-auth-state",
-        return_url: "/savefile#dropbox"
+        return_url: "/savefile#dropbox",
       });
 
       // Simulate retrieving auth info after redirect
@@ -240,7 +239,7 @@ describe("OAuth Helpers", () => {
       setLocalAuthInfo({
         redirect: "onedrive",
         state: "onedrive-auth-state",
-        return_url: "/savefile#onedrive"
+        return_url: "/savefile#onedrive",
       });
 
       // Simulate retrieving auth info after redirect
@@ -255,12 +254,12 @@ describe("OAuth Helpers", () => {
       setLocalAuthInfo({
         redirect: "dropbox",
         state: "pre-auth",
-        return_url: "/edit/5"
+        return_url: "/edit/5",
       });
 
       // Simulate post-auth token storage (should not clear return_url)
       const mockToken = JSON.stringify({
-        access_token: "authenticated-token"
+        access_token: "authenticated-token",
       });
       setLocalAuthInfo({ dropbox_token: mockToken });
 
@@ -274,7 +273,7 @@ describe("OAuth Helpers", () => {
       // Simulate auth without setting return_url
       setLocalAuthInfo({
         redirect: "dropbox",
-        state: "auth-state"
+        state: "auth-state",
       });
 
       const authInfo = getLocalAuthInfo();

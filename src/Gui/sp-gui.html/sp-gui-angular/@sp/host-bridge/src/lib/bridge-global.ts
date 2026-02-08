@@ -23,7 +23,7 @@ export interface EOF {
 export type SolveModes = "start" | "try";
 
 export interface SolutionRow {
-  rowtype: "log" | "data",
-  raw: string,
+  rowtype: "log" | "data";
+  raw: string;
   moveTree: HalfMoveInfo[];
 }

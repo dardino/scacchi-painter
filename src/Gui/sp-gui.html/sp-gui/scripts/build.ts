@@ -7,7 +7,7 @@ function buildApp(): Promise<boolean> {
   return new Promise((resolve, reject) => {
     console.log(chalk.green("STEP 1: Building Angular APP"));
     try {
-      const child = childProcess.spawn("yarn build:tauri", {
+      const child = childProcess.spawn("pnpm build:tauri", {
         shell: true,
         stdio: "inherit",
         cwd: "../sp-gui-angular",

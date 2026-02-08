@@ -5,7 +5,8 @@ use std::ptr::eq;
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
 // windows
-#[cfg(target_os = "windows")] use std::os::windows::process::CommandExt;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 
 // import write_temp_file as module
 mod write_temp_file;
@@ -42,9 +43,8 @@ fn get_popeye_executable() -> &'static str {
 async fn run_popeye<R: Runtime>(
     window: tauri::Window,
     app: tauri::AppHandle<R>,
-    name: &str
+    name: &str,
 ) -> Result<String, String> {
-
     let tmp_path = app.path().temp_dir();
     if tmp_path.is_err() {
         return Ok("[E] Failed to get temp dir".to_string());
@@ -52,9 +52,11 @@ async fn run_popeye<R: Runtime>(
     let bin = tmp_path.unwrap().join("temp_file");
     let fname = bin.to_str().unwrap();
     let done = write_temp_file::write_temp_file(fname, name);
-    
+
     if done.is_err() {
-        window.emit("popeye-update", format!("[E] {}", done.err().unwrap())).ok();
+        window
+            .emit("popeye-update", format!("[E] {}", done.err().unwrap()))
+            .ok();
         return Ok("[E] Failed to write temp file".to_string());
     }
 
@@ -73,14 +75,16 @@ async fn run_popeye<R: Runtime>(
     // Spawn the process
     let mut process_def = Command::new(popeye_path);
 
-    process_def.arg("-maxmem")
+    process_def
+        .arg("-maxmem")
         .arg("8G")
         .arg("-maxtime")
         .arg("600")
         .arg(fname)
         .stdout(Stdio::piped());
 
-    #[cfg(target_os = "windows")] {
+    #[cfg(target_os = "windows")]
+    {
         const CREATE_NO_WINDOW: u32 = 0x08000000;
         process_def.creation_flags(CREATE_NO_WINDOW);
     }

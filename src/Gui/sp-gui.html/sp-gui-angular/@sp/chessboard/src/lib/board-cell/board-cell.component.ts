@@ -11,11 +11,11 @@ import {
 import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
 
 @Component({
-    selector: "lib-board-cell",
-    imports: [DragDropModule],
-    standalone: true,
-    templateUrl: "./board-cell.component.html",
-    styleUrls: ["./board-cell.component.scss"],
+  selector: "lib-board-cell",
+  imports: [DragDropModule],
+  standalone: true,
+  templateUrl: "./board-cell.component.html",
+  styleUrls: ["./board-cell.component.scss"],
 })
 export class BoardCellComponent {
   piece = input<IPiece | null | undefined>(undefined);
@@ -51,5 +51,4 @@ export class BoardCellComponent {
   fairy = computed(() => (this.piece()?.fairyCode ?? []).map(p => p.code).join("+"));
 
   constructor() {}
-
 }

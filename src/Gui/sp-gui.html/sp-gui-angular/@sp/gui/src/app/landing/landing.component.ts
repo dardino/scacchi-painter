@@ -5,14 +5,14 @@ import { environment } from "../../environments/environment";
 import { RecentsComponent } from "../recents/recents.component";
 
 @Component({
-    selector: "app-landing",
-    templateUrl: "./landing.component.html",
-    styleUrls: ["./landing.component.scss"],
-    standalone: true,
-    imports: [
-      RecentsComponent,
-      MarkdownPipe
-    ]
+  selector: "app-landing",
+  templateUrl: "./landing.component.html",
+  styleUrls: ["./landing.component.scss"],
+  standalone: true,
+  imports: [
+    RecentsComponent,
+    MarkdownPipe,
+  ],
 })
 export class LandingComponent implements OnInit {
   private http = inject(HttpClient);
@@ -20,15 +20,14 @@ export class LandingComponent implements OnInit {
   public news = signal("");
 
   ngOnInit(): void {
-    this.http.get(`${environment.assetFolder}/release-notes.md`, { responseType: 'text' })
+    this.http.get(`${environment.assetFolder}/release-notes.md`, { responseType: "text" })
       .subscribe({
         next: (content: string) => {
           this.news.set(content);
         },
         error: (error) => {
           this.news.set(error.message);
-        }
+        },
       });
   }
-
 }

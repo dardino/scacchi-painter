@@ -1,7 +1,7 @@
-import packageJson from '../../../../package.json';
+import packageJson from "../../../../package.json";
 
 export const environment = {
   production: true,
   assetFolder: `./assets`,
-  version: packageJson.version
+  version: packageJson.version,
 };

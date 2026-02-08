@@ -1,5 +1,5 @@
-const charecters =
-  "qwertzuioplkjhgfdsayxcvbnm1234567890YAQWSXCDERFVBGTZHNMJUIKLOP";
+const charecters
+  = "qwertzuioplkjhgfdsayxcvbnm1234567890YAQWSXCDERFVBGTZHNMJUIKLOP";
 export const generateStateString = (): string => {
   let len = 16;
   let generated = "";
@@ -23,14 +23,14 @@ export const getImplicitAuthorizationUrl = ({
   scopes: string[];
   state: string;
 }): string => {
-  const authUrl =
-    authEp +
-    "?" +
-    "response_type=token" +
-    `&client_id=${clientId}` +
-    `&redirect_uri=${redirectUri}` +
-    `&scope=${scopes.join("+")}` +
-    `&state=${state}`;
+  const authUrl
+    = authEp
+      + "?"
+      + "response_type=token"
+      + `&client_id=${clientId}`
+      + `&redirect_uri=${redirectUri}`
+      + `&scope=${scopes.join("+")}`
+      + `&state=${state}`;
 
   return authUrl;
 };

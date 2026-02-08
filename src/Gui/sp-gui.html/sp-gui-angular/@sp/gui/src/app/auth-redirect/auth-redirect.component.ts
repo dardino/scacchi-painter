@@ -4,13 +4,12 @@ import { LocalAuthInfo, getLocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager
 import { OneDriveCliProvider } from "@sp/dbmanager/src/lib/oauth_providers/onedrive.cli";
 
 @Component({
-    selector: "app-auth-redirect",
-    templateUrl: "./auth-redirect.component.html",
-    styleUrls: ["./auth-redirect.component.scss"],
+  selector: "app-auth-redirect",
+  templateUrl: "./auth-redirect.component.html",
+  styleUrls: ["./auth-redirect.component.scss"],
 
 })
 export class AuthRedirectComponent implements OnInit {
-
   ngOnInit(): void {
     this.parseAuth();
   }
@@ -35,11 +34,11 @@ export class AuthRedirectComponent implements OnInit {
         // Redirect to the original URL the user was on, or fallback to /openfile
         const returnUrl = authInfo.return_url || "/openfile#" + authInfo.redirect;
         location.href = returnUrl;
-      } else {
+      }
+      else {
         location.href = "/";
       }
     }, 100);
-
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,11 +48,13 @@ export class AuthRedirectComponent implements OnInit {
       await OneDriveCliProvider.initialize();
       setLocalAuthInfo({ onedrive_token: "authenticated" });
       return true;
-    } catch (err) {
+    }
+    catch (err) {
       console.error(err);
       return false;
     }
   }
+
   async redirectDropbox(authInfo: Required<LocalAuthInfo>) {
     const search = new URLSearchParams(`?${location.hash.substring(1)}`);
     const tokenMessage: TokenResponse = {
@@ -68,7 +69,8 @@ export class AuthRedirectComponent implements OnInit {
     if (tokenMessage.state === state && state !== "") {
       setLocalAuthInfo({ dropbox_token: JSON.stringify(tokenMessage) });
       return true;
-    } else {
+    }
+    else {
       return false;
     }
   }

@@ -1,5 +1,5 @@
 import { LiveAnnouncer } from "@angular/cdk/a11y";
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { CommonModule } from "@angular/common";
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, effect, inject, signal } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -16,26 +16,25 @@ import { Problem } from "@sp/dbmanager/src/lib/models/problem";
 import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { Observable, Subscription, map, startWith } from "rxjs";
 
-
 @Component({
-    selector: "lib-problem-publication",
-    templateUrl: "./problem-publication.component.html",
-    providers: [provideNativeDateAdapter()],
-    styleUrls: ["./problem-publication.component.scss"],
-    standalone: true,
-    imports: [
-      MatCardModule,
-       FormsModule,
-       ReactiveFormsModule,
-       MatAutocompleteModule,
-       MatSelectModule,
-       CommonModule,
-       MatIconModule,
-       MatFormFieldModule,
-       MatChipsModule,
-       MatDatepickerModule,
-       MatInputModule
-      ]
+  selector: "lib-problem-publication",
+  templateUrl: "./problem-publication.component.html",
+  providers: [provideNativeDateAdapter()],
+  styleUrls: ["./problem-publication.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    CommonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatInputModule,
+  ],
 })
 export class ProblemPublicationComponent implements OnInit, OnDestroy {
   private db = inject(DbmanagerService);
@@ -89,13 +88,14 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   addOnBlur = true;
   announcer = inject(LiveAnnouncer);
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
-  @ViewChild('magazineInput') magazineInput: ElementRef<HTMLInputElement>;
+  @ViewChild("tagInput") tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild("magazineInput") magazineInput: ElementRef<HTMLInputElement>;
 
   get allPreviousTags(): string[] {
     const values = new Set(this.db.All.map(problem => problem.tags).flat());
     return Array.from(values);
   }
+
   get allMagazines(): string[] {
     const values = new Set(this.db.All.map(problem => problem.source).flat());
     return Array.from(values);
@@ -110,26 +110,28 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
     const filterValue = item.toLowerCase();
     return this.allPreviousTags.filter(tag => tag.toLowerCase().includes(filterValue.toLowerCase()));
   }
+
   private _filterMagazine(item: string): string[] {
     const filterValue = item.toLowerCase();
     return this.allMagazines.filter(mag => mag.toLowerCase().includes(filterValue.toLowerCase()));
   }
 
   ngOnInit(): void {
-    this._subscr = this.db.CurrentProblem$.subscribe(value => {
+    this._subscr = this.db.CurrentProblem$.subscribe((value) => {
       this._currentProblem.set(value);
       if (value) {
         this._date.set(new Date(value.date));
         this.magazineInputControl.setValue(value.source ?? "", { emitEvent: false });
-      } else {
+      }
+      else {
         this._date.set(null);
         this.magazineInputControl.setValue("", { emitEvent: false });
       }
-    })
+    });
     this._currentProblem.set(this.db.CurrentProblem);
 
     // Sincronizza magazine dal FormControl al modello
-    this.magazineInputControl.valueChanges.subscribe(value => {
+    this.magazineInputControl.valueChanges.subscribe((value) => {
       const prob = this._currentProblem();
       if (prob) {
         prob.source = value ?? "";
@@ -153,19 +155,19 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   }
 
   addtag(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+    const value = (event.value || "").trim();
     // Add our tag
     const currentTags = this.tags();
     const arleadyExists = currentTags.indexOf(value) > -1;
     if (value && !arleadyExists) {
       this.tags.update(tags => [...tags, value]);
     }
-    this.tagInput.nativeElement.value = '';
+    this.tagInput.nativeElement.value = "";
     this.tagInputControl.setValue(null);
   }
 
   removetag(tag: string): void {
-    this.tags.update(tags => {
+    this.tags.update((tags) => {
       const index = tags.indexOf(tag);
       if (index >= 0) {
         const newTags = [...tags];
@@ -187,7 +189,7 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
     }
 
     // Edit existing fruit
-    this.tags.update(tags => {
+    this.tags.update((tags) => {
       const index = tags.indexOf(tag);
       if (index >= 0) {
         const newTags = [...tags];
@@ -197,9 +199,10 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
       return tags;
     });
   }
+
   selecttag(event: MatAutocompleteSelectedEvent) {
     this.tags.update(tags => [...tags, event.option.viewValue]);
-    this.tagInput.nativeElement.value = '';
+    this.tagInput.nativeElement.value = "";
     this.tagInputControl.setValue(null);
   }
 }

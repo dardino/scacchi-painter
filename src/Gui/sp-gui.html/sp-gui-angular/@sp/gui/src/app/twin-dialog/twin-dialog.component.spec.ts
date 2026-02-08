@@ -12,9 +12,9 @@ describe("TwinDialogComponent", () => {
     TestBed.configureTestingModule({
       imports: [TwinDialogComponent],
       providers: [
-        {provide: MatDialogRef, useValue: {}},
-        {provide: MAT_DIALOG_DATA, useValue: []},
-      ]
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: [] },
+      ],
     });
     fixture = TestBed.createComponent(TwinDialogComponent);
     component = fixture.componentInstance;

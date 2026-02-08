@@ -70,7 +70,7 @@ export class TwinDialogComponent implements OnInit {
   ngOnInit() {
     this.filteredTwinTypes = this.myControl.valueChanges.pipe(
       startWith(""),
-      map((value) => this.filter(value))
+      map(value => this.filter(value)),
     );
   }
 
@@ -83,11 +83,11 @@ export class TwinDialogComponent implements OnInit {
   private filter(value: string): TwinTypeItem<TwinTypesKeys>[] {
     const filterValue = value.toLocaleLowerCase();
     return [...Object.values(TwinTypesConfigs)]
-      .filter((option) =>
-        option.keyword.toLocaleLowerCase().startsWith(filterValue)
+      .filter(option =>
+        option.keyword.toLocaleLowerCase().startsWith(filterValue),
       )
       .sort((a, b) =>
-        a.keyword > b.keyword ? 1 : a.keyword < b.keyword ? -1 : 0
+        a.keyword > b.keyword ? 1 : a.keyword < b.keyword ? -1 : 0,
       );
   }
 }

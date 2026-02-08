@@ -4,7 +4,6 @@ import { AccountInfo, AuthenticationResult, InteractionRequiredAuthError, PopupR
 import { setLocalAuthInfo } from "./helpers";
 import { MSAL_CONFIG, REQUESTS } from "./onedrive.config";
 
-
 class OneDriveCliProvider {
   private constructor() { }
 
@@ -26,8 +25,8 @@ class OneDriveCliProvider {
       await this.#getMSALObj().initialize();
       const resp = await this.#getMSALObj().handleRedirectPromise();
       await this.handleResponse(resp);
-    } catch (error) {
-
+    }
+    catch (error) {
       console.error(error);
     }
   }
@@ -37,7 +36,8 @@ class OneDriveCliProvider {
       this.#accountId = resp.account.homeAccountId;
       this.#getMSALObj().setActiveAccount(resp.account);
       this.showWelcomeMessage(resp.account);
-    } else {
+    }
+    else {
       // need to call getAccount here?
       const currentAccounts = this.#getMSALObj().getAllAccounts();
       if (!currentAccounts || currentAccounts.length < 1) {
@@ -49,9 +49,11 @@ class OneDriveCliProvider {
           return_url: location.pathname + location.hash,
         });
         await this.#getMSALObj().loginRedirect(REQUESTS.LOGIN);
-      } else if (currentAccounts.length > 1) {
+      }
+      else if (currentAccounts.length > 1) {
         // Add choose account code here
-      } else if (currentAccounts.length === 1) {
+      }
+      else if (currentAccounts.length === 1) {
         const activeAccount = currentAccounts[0];
         this.#getMSALObj().setActiveAccount(activeAccount);
         this.#accountId = activeAccount.homeAccountId;
@@ -65,21 +67,23 @@ class OneDriveCliProvider {
       return this.#getMSALObj().loginPopup(REQUESTS.LOGIN).then(this.handleResponse).catch(function (error) {
         console.error(error);
       });
-    } else if (method === "redirect") {
+    }
+    else if (method === "redirect") {
       return this.#getMSALObj().loginRedirect(REQUESTS.LOGIN);
     }
   }
 
   static signOut(interactionType: "popup" | "redirect") {
     const logoutRequest = {
-      account: this.#getMSALObj().getAccount({homeAccountId: this.#accountId}),
+      account: this.#getMSALObj().getAccount({ homeAccountId: this.#accountId }),
     };
 
     if (interactionType === "popup") {
       this.#getMSALObj().logoutPopup(logoutRequest).then(() => {
         window.location.reload();
       });
-    } else {
+    }
+    else {
       this.#getMSALObj().logoutRedirect(logoutRequest);
     }
   }
@@ -89,10 +93,11 @@ class OneDriveCliProvider {
       console.warn("silent token acquisition fails.");
       if (error instanceof InteractionRequiredAuthError) {
         console.warn("acquiring token using popup");
-        return this.#getMSALObj().acquireTokenPopup(request).catch(error => {
+        return this.#getMSALObj().acquireTokenPopup(request).catch((error) => {
           console.error(error);
         });
-      } else {
+      }
+      else {
         console.error(error);
       }
     });
@@ -110,7 +115,8 @@ class OneDriveCliProvider {
           return_url: location.pathname + location.hash,
         });
         this.#getMSALObj().acquireTokenRedirect(request);
-      } else {
+      }
+      else {
         console.error(error);
       }
     });

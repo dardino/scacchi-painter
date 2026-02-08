@@ -22,11 +22,11 @@ export interface ProblemRef {
 }
 
 @Component({
-    selector: "app-database-list",
-    templateUrl: "./database-list.component.html",
-    styleUrls: ["./database-list.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-database-list",
+  templateUrl: "./database-list.component.html",
+  styleUrls: ["./database-list.component.scss"],
+  standalone: true,
+  imports: [
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -34,8 +34,8 @@ export interface ProblemRef {
     MatIconModule,
     DatabaseListItemComponent,
     MatToolbarModule,
-    MatButtonModule
-]
+    MatButtonModule,
+  ],
 })
 export class DatabaseListComponent implements OnInit {
   private db = inject(DbmanagerService);
@@ -44,7 +44,7 @@ export class DatabaseListComponent implements OnInit {
 
   itemSource = new MyDataSource(this.db);
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
-  @ViewChildren('dbItemContainer') dbItemContainer: ElementRef[];
+  @ViewChildren("dbItemContainer") dbItemContainer: ElementRef[];
 
   itemSize = computed(() => Math.round(this.dbItemContainer?.[0]?.nativeElement?.getBoundingClientRect().height ?? 256));
 
@@ -83,8 +83,8 @@ export class DatabaseListComponent implements OnInit {
       title: "Delete confirmation",
       message: "Do you want to remove this problem from the database? This action can NOT be restored!",
       cancelText: "No",
-      confirmText: "Yes"
-    }).subscribe(res => {
+      confirmText: "Yes",
+    }).subscribe((res) => {
       if (res === true) {
         this.itemSource.deleteProblemByDbIndex(dbIndex);
       }
@@ -93,38 +93,44 @@ export class DatabaseListComponent implements OnInit {
   }
 }
 
-
 export class MyDataSource extends DataSource<ProblemRef | undefined> {
   private originalDataSource: ProblemRef[];
   private filteredDataSource: ProblemRef[];
   private get items$() {
     return this.itemsSubject.asObservable();
   }
+
   private itemsSubject = new BehaviorSubject<ProblemRef[]>([]);
   constructor(private db: DbmanagerService) {
     super();
     this.reload();
   }
+
   connect(
     /* collectionViewer: CollectionViewer */
   ): Observable<(ProblemRef | undefined)[]> {
     return this.items$;
   }
+
   disconnect(/* collectionViewer: CollectionViewer */): void {
     // no op
   }
+
   getPositionalIndexFromId(dbIndex: number): number {
     return this.originalDataSource.findIndex(pr => pr.dbIndex === dbIndex);
   }
+
   public async deleteProblemByDbIndex(dbIndex: number) {
     await this.db.deleteProblemByIndex(this.getPositionalIndexFromId(dbIndex));
     await this.reload();
   }
+
   private async reload() {
     const items = this.db.All;
     this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex: dbIndex + 1, problem }));
     this.filter("");
   }
+
   public async filter(text: string) {
     this.filteredDataSource = this.originalDataSource.slice();
     if (text.trim() !== "") {
@@ -134,6 +140,7 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
     this.filteredDataSource.unshift({ dbIndex: -1, problem: null });
     this.itemsSubject.next(this.filteredDataSource);
   }
+
   private async sortDescByDate() {
     this.filteredDataSource.reverse();
   }
@@ -141,15 +148,15 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
 
 const filterByText = (text: string, cfg = { stipulation: true, names: true, source: true }) => {
   const textTokens = text.toLowerCase().split(" ");
-  return (e: ProblemRef /*, i: number, a: ProblemRef[] */) => {
+  return (e: ProblemRef /* , i: number, a: ProblemRef[] */) => {
     if (!e.problem) return false;
     const stip = e.problem.stipulation.completeStipulationDesc.toLowerCase();
     const names = e.problem.authors.map(aut => aut.nameAndSurname.toLowerCase()) ?? "";
     const magazine = e.problem.source.toLowerCase();
 
     const isMatch = (cfg.stipulation && textTokens.filter(tok => stip.includes(tok)).length > 0)
-        || (cfg.names && intersect(names, textTokens, includes).length > 0)
-        || (cfg.source && textTokens.filter(tok =>  magazine.includes(tok)).length > 0);
+      || (cfg.names && intersect(names, textTokens, includes).length > 0)
+      || (cfg.source && textTokens.filter(tok => magazine.includes(tok)).length > 0);
 
     return isMatch;
   };

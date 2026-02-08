@@ -11,7 +11,6 @@ import { AbortError } from "../AbortError";
   providedIn: "root",
 })
 export class LocalDriveService implements FileService {
-
   sourceName: AvaliableFileServices = "local";
   async enumContent(
     _itemID: string,
@@ -21,9 +20,8 @@ export class LocalDriveService implements FileService {
     return [];
   }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async getFileContent(item: FolderItemInfo): Promise<File> {
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getFileContent(item: FolderItemInfo): Promise<File> {
     // if (itemID === "root_no_permission") return [];
     if (!window.showOpenFilePicker) {
       throw new Error("Your current device does not support the File System API. Try again on desktop Chrome!");
@@ -51,14 +49,15 @@ export class LocalDriveService implements FileService {
 
       const filecontent = await fileHandle.getFile();
       return filecontent;
-    } catch(err) {
-      console.error("🚀 ~ LocalDriveService ~ getFileContent ~ err:", err);
+    }
+    catch (err) {
       throw new AbortError((err as Error).message);
     }
   }
+
   async saveFileContent(
     file: File,
-    item: FolderItemInfo
+    item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
     const fileHandle = await window.showSaveFilePicker({ suggestedName: item.itemName });
     const fileStream = await fileHandle.createWritable();
@@ -66,6 +65,7 @@ export class LocalDriveService implements FileService {
     await fileStream.close();
     return item;
   }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   joinPath(...parts: string[]): string {
     throw new Error("Method not implemented.");

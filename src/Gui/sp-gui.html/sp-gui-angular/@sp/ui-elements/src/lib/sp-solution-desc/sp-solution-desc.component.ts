@@ -1,42 +1,42 @@
-
 import { Component, inject, Input, computed } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
-import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
+import { Editor, NgxEditorModule, Toolbar } from "ngx-editor";
 import { SpSolutionMoveComponent } from "../sp-solution-move/sp-solution-move.component";
 import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
 
 @Component({
-    selector: "lib-sp-solution-desc",
-    templateUrl: "./sp-solution-desc.component.html",
-    styleUrls: ["./sp-solution-desc.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "lib-sp-solution-desc",
+  templateUrl: "./sp-solution-desc.component.html",
+  styleUrls: ["./sp-solution-desc.component.scss"],
+  standalone: true,
+  imports: [
     NgxEditorModule,
     FormsModule,
-    SpSolutionMoveComponent
-]
+    SpSolutionMoveComponent,
+  ],
 })
 export class SpSolutionDescComponent {
   editor: Editor;
   toolbar: Toolbar = [
     // default value
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'link'],
+    ["bold", "italic"],
+    ["underline", "strike"],
+    ["code", "link"],
     // ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
     // or, set options for link:
-    //[{ link: { showOpenInNewTab: false } }, 'image'],
-    ['text_color', 'background_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-    [/*'horizontal_rule', */'format_clear', 'indent', 'outdent'],
+    // [{ link: { showOpenInNewTab: false } }, 'image'],
+    ["text_color", "background_color"],
+    ["align_left", "align_center", "align_right", "align_justify"],
+    [/* 'horizontal_rule', */"format_clear", "indent", "outdent"],
     // ['superscript', 'subscript'],
-    ['undo', 'redo'],
+    ["undo", "redo"],
   ];
-  colorPresets = ['red', '#FF0000', 'rgb(255, 0, 0)'];
+
+  colorPresets = ["red", "#FF0000", "rgb(255, 0, 0)"];
 
   private problem = inject(CurrentProblemService);
   private preferences = inject(PreferencesService);
@@ -47,7 +47,7 @@ export class SpSolutionDescComponent {
       history: true,
       parseOptions: {
         preserveWhitespace: true,
-      }
+      },
     });
   }
 
@@ -65,6 +65,7 @@ export class SpSolutionDescComponent {
   get solution() {
     return this.problem.textSolution ?? "";
   }
+
   set solution(txt: string) {
     this.problem.SetTextSolution(txt);
   }
@@ -73,6 +74,7 @@ export class SpSolutionDescComponent {
     const changedText = this.problem.htmlSolution ?? "";
     return changedText;
   }
+
   set solutionHtml(text: string) {
     this.problem.SetHTMLSolution(text);
   }
@@ -85,8 +87,8 @@ export class SpSolutionDescComponent {
   }
 
   ngModelOptions: NgModel["options"] = {
-    updateOn: "blur"
+    updateOn: "blur",
   };
 
-  mode: 'inline' | 'block' = 'inline';
+  mode: "inline" | "block" = "inline";
 }

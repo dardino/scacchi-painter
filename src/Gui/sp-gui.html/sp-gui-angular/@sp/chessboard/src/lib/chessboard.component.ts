@@ -8,7 +8,7 @@ import {
   GetLocationFromIndex,
   GetSquareIndex,
   SquareLocation,
-  Traverse
+  Traverse,
 } from "@sp/dbmanager/src/public-api";
 import {
   Piece as BP,
@@ -20,14 +20,14 @@ import { BoardCellComponent } from "./board-cell/board-cell.component";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
 
 @Component({
-    selector: "lib-chessboard",
-    templateUrl: "chessboard.component.html",
-    imports: [CommonModule, DragDropModule, BoardCellComponent],
-    standalone: true,
-    styleUrls: ["chessboard.component.scss"],
+  selector: "lib-chessboard",
+  templateUrl: "chessboard.component.html",
+  imports: [CommonModule, DragDropModule, BoardCellComponent],
+  standalone: true,
+  styleUrls: ["chessboard.component.scss"],
 })
 export class ChessboardComponent
-  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private animationService = inject(ChessboardAnimationService);
 
@@ -61,12 +61,15 @@ export class ChessboardComponent
 
   @Output()
   currentCellChanged = new EventEmitter<SquareLocation | null>();
+
   @Output()
   cellClick = new EventEmitter<SquareLocation>();
+
   @Output()
   cellMiddleClick = new EventEmitter<SquareLocation>();
+
   @Output()
-  contextOnCell = new EventEmitter<{ event: MouseEvent, location: SquareLocation }>();
+  contextOnCell = new EventEmitter<{ event: MouseEvent; location: SquareLocation }>();
 
   currentCell = signal<UiCell | null>(null);
   private lastHash = signal<string | undefined>(undefined);
@@ -81,6 +84,7 @@ export class ChessboardComponent
     const twinList = this.position()?.twins.TwinList ?? [];
     return twinList.length > 0 && twinList.every((t: Twin) => t.TwinType !== "Diagram");
   });
+
   stipulationDesc = computed(() => this.position()?.stipulation.completeStipulationDesc ?? "");
 
   private settings: {
@@ -88,10 +92,11 @@ export class ChessboardComponent
     PIECECOLORS: [string, string];
     BORDER_SIZE: number;
   } = {
-      BORDER_SIZE: 1,
-      CELLCOLORS: ["#fff", "#ddd"],
-      PIECECOLORS: ["#fff", "#333"],
-    };
+    BORDER_SIZE: 1,
+    CELLCOLORS: ["#fff", "#ddd"],
+    PIECECOLORS: ["#fff", "#333"],
+  };
+
   private canvasBoard: CanvasChessBoard | null;
   private cellSize = 32;
 
@@ -119,7 +124,7 @@ export class ChessboardComponent
   ngOnDestroy(): void {
     // Later, you can stop observing
     this.animationSub.unsubscribe();
-   // window.removeEventListener("resize", this.sizeMutated);
+    // window.removeEventListener("resize", this.sizeMutated);
   }
 
   ngOnInit() {
@@ -132,32 +137,34 @@ export class ChessboardComponent
         const dataURL = getPieceIcon(
           changes.cursor.currentValue?.figurine ?? "q",
           this.cellSize,
-          changes.cursor.currentValue?.rotation ?? null
+          changes.cursor.currentValue?.rotation ?? null,
         );
         (this.cbImage
           .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
-            this.cellSize / 2
-          )} ${Math.floor(this.cellSize / 2)}, auto`;
-      } else {
+          this.cellSize / 2,
+        )} ${Math.floor(this.cellSize / 2)}, auto`;
+      }
+      else {
         (this.cbImage.nativeElement as HTMLDivElement).style.cursor = "unset";
       }
     }
     if (
-      changes.boardType &&
-      !changes.boardType.isFirstChange() &&
-      changes.boardType.currentValue === "canvas" &&
-      this.canvas
+      changes.boardType
+      && !changes.boardType.isFirstChange()
+      && changes.boardType.currentValue === "canvas"
+      && this.canvas
     ) {
       this.canvasBoard = new CanvasChessBoard(
         this.canvas.nativeElement,
-        this.settings
+        this.settings,
       );
       const cfg = GetConfig();
       cfg.fontSize = 1;
       this.canvasBoard.AddFontConfig("ScacchiPainter", cfg);
       this.canvasBoard.SetFont("ScacchiPainter");
       this.updateBoard();
-    } else if (changes.boardType?.currentValue !== "canvas") {
+    }
+    else if (changes.boardType?.currentValue !== "canvas") {
       this.canvasBoard = null;
     }
   }
@@ -200,6 +207,7 @@ export class ChessboardComponent
       this.canvasBoard.Redraw();
     }
   }
+
   onMouseUp(cell: UiCell, $event: MouseEvent) {
     const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
     if ($event.button === 1 && !haskeymod) {
@@ -209,6 +217,7 @@ export class ChessboardComponent
       this.cellMiddleClick.emit({ ...cell.location });
     }
   }
+
   onMouseDown(_cell: UiCell, $event: MouseEvent) {
     const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
     if ($event.button === 1 && !haskeymod) {
@@ -217,15 +226,17 @@ export class ChessboardComponent
       $event.stopPropagation();
     }
   }
+
   onCellClick(cell: UiCell) {
     this.cellClick.emit({ ...cell.location });
     const current = this.currentCell();
     if (cell !== current) this.currentCell.set(cell);
     else this.currentCell.set(null);
     this.currentCellChanged.emit(
-      this.currentCell() ? { ...this.currentCell()!.location } : null
+      this.currentCell() ? { ...this.currentCell()!.location } : null,
     );
   }
+
   copyFen() {
     const fenValue = this.fen();
     if (!fenValue) {
@@ -234,7 +245,7 @@ export class ChessboardComponent
         politeness: "assertive",
         duration: 1000,
       });
-      return
+      return;
     }
     navigator.clipboard.writeText(fenValue);
     this.snackBar.open("Fen copied to clipboard!", undefined, {
@@ -243,7 +254,6 @@ export class ChessboardComponent
       duration: 1000,
     });
   }
-
 
   ngAfterViewInit() {
     // Create an observer instance linked to the callback function
@@ -254,8 +264,8 @@ export class ChessboardComponent
   }
 
   private sizeMutated = () => {
-    this.cellSize =
-      (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
+    this.cellSize
+      = (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
   };
 
   cellInfo(cell: UiCell) {
@@ -298,7 +308,7 @@ interface UiCell {
 const getPieceIcon = (
   figurine: string,
   cellSize: number,
-  rot: number | null
+  rot: number | null,
 ) => {
   const canvas = document.createElement("canvas");
   canvas.width = cellSize;
@@ -310,7 +320,7 @@ const getPieceIcon = (
   const fsize = Math.floor(cellSize / 1.44);
   const margin = Math.floor((cellSize - fsize) / 2);
   ctx.font = `${fsize}px ${figurine === "X" ? "Arial, sans" : "ScacchiPainter"
-    }`;
+  }`;
   ctx.lineWidth = 2;
 
   if (rot != null) {

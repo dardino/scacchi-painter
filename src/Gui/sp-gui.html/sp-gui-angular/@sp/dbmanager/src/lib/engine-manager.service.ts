@@ -18,7 +18,7 @@ export class EngineManagerService {
     this.bridge.Solver$.subscribe((msg) => {
       this.solution$.next(msg);
     });
-    this.bridge.solveInProgress$.subscribe((v) => this.isSolving$.next(v));
+    this.bridge.solveInProgress$.subscribe(v => this.isSolving$.next(v));
   }
 
   public startSolving(problem: Problem, mode: SolveModes): void {
@@ -35,9 +35,11 @@ export class EngineManagerService {
   public stopSolving(): void {
     try {
       this.bridge.stopSolve();
-    } catch {
+    }
+    catch {
       // nope
-    } finally {
+    }
+    finally {
       // nope
     }
   }

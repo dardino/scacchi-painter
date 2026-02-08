@@ -1,26 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Vitest setup file for Angular
-import 'zone.js';
-import 'zone.js/testing';
-import { getTestBed } from '@angular/core/testing';
+import "zone.js";
+import "zone.js/testing";
+import { getTestBed } from "@angular/core/testing";
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
-} from '@angular/platform-browser-dynamic/testing';
-import { webcrypto } from 'node:crypto';
+} from "@angular/platform-browser-dynamic/testing";
+import { webcrypto } from "node:crypto";
 
 // Polyfill crypto for MSAL browser in jsdom environment
-if (typeof global.crypto === 'undefined') {
-   
+if (typeof global.crypto === "undefined") {
   (global as any).crypto = webcrypto;
 }
 
 // Polyfill TextEncoder/TextDecoder if needed
-if (typeof global.TextEncoder === 'undefined') {
-  import('util').then((util) => {
-     
+if (typeof global.TextEncoder === "undefined") {
+  import("util").then((util) => {
     (global as any).TextEncoder = util.TextEncoder;
-     
+
     (global as any).TextDecoder = util.TextDecoder;
   });
 }
@@ -31,13 +29,13 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
   {
     teardown: { destroyAfterEach: true },
-  }
+  },
 );
 
 // Helper function to check if an error is related to icon loading
 function isIconError(value: any): boolean {
-  const str = String(value || '');
-  if (str.includes('Error retrieving icon') || str.includes('Unable to find icon')) {
+  const str = String(value || "");
+  if (str.includes("Error retrieving icon") || str.includes("Unable to find icon")) {
     return true;
   }
 
@@ -45,7 +43,7 @@ function isIconError(value: any): boolean {
     return isIconError(value.message) || isIconError(value.stack);
   }
 
-  if (typeof value === 'object') {
+  if (typeof value === "object") {
     return isIconError(value.message) || isIconError(value.toString());
   }
 
@@ -57,7 +55,7 @@ function isIconError(value: any): boolean {
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
 
-console.error = function(...args: any[]) {
+console.error = function (...args: any[]) {
   // Check if this is an icon-related error
   if (args.some(isIconError)) {
     return;
@@ -65,7 +63,7 @@ console.error = function(...args: any[]) {
   originalConsoleError.apply(console, args);
 };
 
-console.warn = function(...args: any[]) {
+console.warn = function (...args: any[]) {
   // Check if this is an icon-related warning
   if (args.some(isIconError)) {
     return;
