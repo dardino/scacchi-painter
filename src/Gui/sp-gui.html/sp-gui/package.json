@@ -4,22 +4,23 @@
   "scripts": {
     "build": "yarn vite-node ./scripts/build.ts",
     "icons": "yarn tauricon ./src-tauri/logo.svg",
-    "start": "yarn --cwd ../sp-gui-angular startinsecure --configuration tauri",
+    "start": "echo 'il server è già avviato a mano in locahost:4200'",
     "tauri": "tauri"
   },
   "private": true,
   "dependencies": {
     "@tauri-apps/api": "^2.6.0",
-    "@tauri-apps/plugin-opener": "^2.4.0",
-    "@tauri-apps/plugin-shell": "~2"
+    "@tauri-apps/plugin-opener": "~2.5.2",
+    "@tauri-apps/plugin-shell": "~2.3.3",
+    "@tauri-apps/plugin-updater": "~2.9.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.6.2",
+    "@tauri-apps/cli": "^2.9.6",
     "@tauri-apps/tauricon": "^1.0.3",
-    "@types/node": "^24.0.14",
-    "chalk": "^5.4.1",
+    "@types/node": "^25.0.3",
+    "chalk": "^5.6.2",
     "typescript": "^5.8.3",
-    "vite-node": "^3.2.4"
+    "vite-node": "^5.2.0"
   },
   "packageManager": "yarn@4.9.2"
 }
