@@ -87,7 +87,7 @@
     "globals": "^16.1.0",
     "jsdom": "^27.2.0",
     "localtunnel": "^2.0.2",
-    "ng-packagr": "^21.0.0",
+    "ng-packagr": "^21.1.0",
     "remotedebug-ios-webkit-adapter": "^0.4.2",
     "ts-node": "^10.9.1",
     "typescript": "~5.9.0",
