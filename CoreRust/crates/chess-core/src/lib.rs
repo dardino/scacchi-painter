@@ -276,6 +276,33 @@ impl OrthodoxPosition {
             match piece.kind {
                 PieceKind::King => self.push_king_moves(square, piece.side, &mut moves),
                 PieceKind::Knight => self.push_knight_moves(square, piece.side, &mut moves),
+                PieceKind::Rook => self.push_sliding_moves(
+                    square,
+                    piece.side,
+                    &[(1, 0), (-1, 0), (0, 1), (0, -1)],
+                    &mut moves,
+                ),
+                PieceKind::Bishop => self.push_sliding_moves(
+                    square,
+                    piece.side,
+                    &[(1, 1), (1, -1), (-1, 1), (-1, -1)],
+                    &mut moves,
+                ),
+                PieceKind::Queen => self.push_sliding_moves(
+                    square,
+                    piece.side,
+                    &[
+                        (1, 0),
+                        (-1, 0),
+                        (0, 1),
+                        (0, -1),
+                        (1, 1),
+                        (1, -1),
+                        (-1, 1),
+                        (-1, -1),
+                    ],
+                    &mut moves,
+                ),
                 _ => {}
             }
         }
@@ -312,6 +339,30 @@ impl OrthodoxPosition {
         for (df, dr) in knight_offsets {
             if let Some(to) = offset_square(from, df, dr) {
                 self.push_if_target_allowed(from, to, side, out);
+            }
+        }
+    }
+
+    fn push_sliding_moves(
+        &self,
+        from: Square,
+        side: Side,
+        directions: &[(i8, i8)],
+        out: &mut Vec<Move>,
+    ) {
+        for &(df, dr) in directions {
+            let mut current = from;
+            while let Some(next) = offset_square(current, df, dr) {
+                match self.board.get(next) {
+                    None => out.push(Move { from, to: next }),
+                    Some(piece) if piece.side != side => {
+                        out.push(Move { from, to: next });
+                        break;
+                    }
+                    Some(_) => break,
+                }
+
+                current = next;
             }
         }
     }
@@ -355,11 +406,54 @@ impl OrthodoxPosition {
             let attacks = match piece.kind {
                 PieceKind::King => is_king_attack(square, target),
                 PieceKind::Knight => is_knight_attack(square, target),
+                PieceKind::Rook => self.can_slide_attack(
+                    square,
+                    target,
+                    &[(1, 0), (-1, 0), (0, 1), (0, -1)],
+                ),
+                PieceKind::Bishop => self.can_slide_attack(
+                    square,
+                    target,
+                    &[(1, 1), (1, -1), (-1, 1), (-1, -1)],
+                ),
+                PieceKind::Queen => self.can_slide_attack(
+                    square,
+                    target,
+                    &[
+                        (1, 0),
+                        (-1, 0),
+                        (0, 1),
+                        (0, -1),
+                        (1, 1),
+                        (1, -1),
+                        (-1, 1),
+                        (-1, -1),
+                    ],
+                ),
                 _ => false,
             };
 
             if attacks {
                 return true;
+            }
+        }
+
+        false
+    }
+
+    fn can_slide_attack(&self, from: Square, target: Square, directions: &[(i8, i8)]) -> bool {
+        for &(df, dr) in directions {
+            let mut current = from;
+            while let Some(next) = offset_square(current, df, dr) {
+                if next == target {
+                    return true;
+                }
+
+                if self.board.get(next).is_some() {
+                    break;
+                }
+
+                current = next;
             }
         }
 
@@ -506,5 +600,33 @@ mod tests {
 
         assert!(pseudo.iter().any(|m| m.from == a1));
         assert!(legal.iter().all(|m| m.from != a1));
+    }
+
+    #[test]
+    fn pseudo_legal_rook_moves_cover_rank_and_file() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/8/3R4/8/8/4K3 w - - 0 1")
+            .expect("FEN should parse");
+        let d4 = Square::from_algebraic("d4").expect("valid square");
+
+        let pseudo = position.generate_pseudo_legal_moves();
+        let rook_moves = pseudo.iter().filter(|m| m.from == d4).count();
+
+        assert_eq!(rook_moves, 14);
+    }
+
+    #[test]
+    fn is_in_check_detects_bishop_attack() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/8/1b6/8/8/4K3 w - - 0 1")
+            .expect("FEN should parse");
+
+        assert!(position.is_in_check(Side::White));
+    }
+
+    #[test]
+    fn sliding_attack_is_blocked_by_intermediate_piece() {
+        let position = OrthodoxPosition::from_fen("k3q3/8/8/8/4N3/8/8/4K3 w - - 0 1")
+            .expect("FEN should parse");
+
+        assert!(!position.is_in_check(Side::White));
     }
 }
