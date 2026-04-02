@@ -2,8 +2,8 @@
 // Vitest setup file for Angular
 import { getTestBed } from "@angular/core/testing";
 import {
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting,
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting,
 } from "@angular/platform-browser-dynamic/testing";
 import { webcrypto } from "node:crypto";
 
