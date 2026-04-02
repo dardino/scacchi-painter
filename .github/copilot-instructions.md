@@ -11,23 +11,23 @@ Scacchi Painter is a chess problem composer and solver with multiple deployment 
 The project is organized in workspace folders with distinct purposes:
 
 ```
-sp-gui-angular/          # Main Angular 20+ web application (Azure Static Web Apps)
-├── @sp/                 # Internal Angular libraries (monorepo packages)
-│   ├── chessboard/      # Canvas-based chessboard rendering library
-│   ├── dbmanager/       # Problem database and state management
-│   ├── host-bridge/     # Platform abstraction layer (Web/Tauri/Azure)
-│   └── ui-elements/     # Reusable UI components (Material Design)
-├── api/                 # Azure Functions backend (TypeScript)
-└── popeye/              # Popeye engine integration utilities
+Gui/
+├── sp-gui-angular/       # Main Angular 20+ web application (Azure Static Web Apps)
+│   ├── @sp/              # Internal Angular libraries (monorepo packages)
+│   │   ├── chessboard/   # Canvas-based chessboard rendering library
+│   │   ├── dbmanager/    # Problem database and state management
+│   │   ├── host-bridge/  # Platform abstraction layer (Web/Tauri/Azure)
+│   │   └── ui-elements/  # Reusable UI components (Material Design)
+│   ├── api/              # Azure Functions backend (TypeScript)
+│   └── popeye/           # Popeye engine integration utilities
+├── sp-gui/               # Tauri desktop wrapper (Rust + Angular)
+│   └── src-tauri/        # Rust backend for desktop app
+└── popeye-js/            # Popeye WebAssembly wrapper
 
-sp-gui/                  # Tauri desktop wrapper (Rust + Angular)
-├── src-tauri/           # Rust backend for desktop app
-└── build/               # Angular build output for Tauri
+Core/                     # .NET Core projects (C#)
+CoreJS/                   # Chess engine core library (TypeScript, pnpm)
+graphics/                 # Assets, fonts, SVG/PNG pieces
 
-CoreJS/                  # Chess engine core library (TypeScript, pnpm)
-popeye-js/              # Popeye WebAssembly wrapper
-graphics/               # Assets, fonts, SVG/PNG pieces
-```
 
 ### Platform Abstraction: The Bridge Pattern
 
@@ -59,16 +59,16 @@ Run four terminals simultaneously:
 
 ```powershell
 # Terminal 1: Watch Azure Functions API
-cd sp-gui-angular/api && pnpm run watch
+cd Gui/sp-gui-angular/api && pnpm run watch
 
 # Terminal 2: Start Azure Functions locally
-cd sp-gui-angular/api && func start
+cd Gui/sp-gui-angular/api && func start
 
 # Terminal 3: Angular dev server
-cd sp-gui-angular && pnpm start
+cd Gui/sp-gui-angular && pnpm start
 
 # Terminal 4: Azure Static Web Apps emulator
-cd sp-gui-angular && swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
+cd Gui/sp-gui-angular && swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
 ```
 
 **Important**: Angular serves on `https://localhost:4200` (SSL required for MSAL auth). Azure Functions on `http://localhost:7071`.
@@ -76,13 +76,13 @@ cd sp-gui-angular && swa start https://localhost:4200/ --ssl --api-devserver-url
 ### Tauri Desktop Build
 
 ```powershell
-cd sp-gui
+cd Gui/sp-gui
 pnpm build  # Runs scripts/build.ts: builds Angular + downloads Popeye + bundles Tauri
 ```
 
-The build script (`sp-gui/scripts/build.ts`) orchestrates:
+The build script (`Gui/sp-gui/scripts/build.ts`) orchestrates:
 1. Angular production build with Tauri environment (`build:tauri` → `environment.tauri.ts`)
-2. Popeye executable download to `src-tauri/popeye/`
+2. Popeye executable download to `Gui/sp-gui/src-tauri/popeye/`
 3. Tauri native build (invokes Rust toolchain)
 
 ### Production Deployment
@@ -227,8 +227,8 @@ Local auth state: `getLocalAuthInfo()`/`setLocalAuthInfo()` in `@sp/dbmanager/sr
 
 Popeye is a chess problem solving engine. Integration varies by platform:
 
-**Web**: WebAssembly worker (`popeye-js/`) + Web Worker (`@sp/gui/src/assets/engine/popeye_ww.js`)
-**Tauri**: Native binary execution via Rust command (`src-tauri/src/lib.rs` → `run_popeye` command)
+**Web**: WebAssembly worker (`popeye-js/`) + Web Worker (`Gui/sp-gui-angular/src/assets/engine/popeye_ww.js`)
+**Tauri**: Native binary execution via Rust command (`Gui/sp-gui/src-tauri/src/lib.rs` → `run_popeye` command)
 
 Conversion from Problem model to Popeye format: `popeye/problemToPopeye.ts` generates text input for Popeye.
 
@@ -332,7 +332,7 @@ Use configured paths (in `tsconfig.json`):
 ### Adding a New Component
 
 ```powershell
-# In sp-gui-angular root
+# In Gui/sp-gui-angular root
 ng generate component component-name --standalone
 # Add --project=chessboard|dbmanager|uiElements|hostBridge for library components
 ```
@@ -342,7 +342,7 @@ ng generate component component-name --standalone
 ### Running Tests
 
 ```powershell
-cd sp-gui-angular
+cd Gui/sp-gui-angular
 pnpm test           # Vitest interactive mode
 pnpm test:ci        # Vitest run mode (CI)
 pnpm test:ui        # Vitest UI mode (browser-based)
@@ -354,10 +354,10 @@ pnpm test:ui        # Vitest UI mode (browser-based)
 
 ```powershell
 # Azure Static Web App
-cd sp-gui-angular && pnpm build
+cd Gui/sp-gui-angular && pnpm build
 
 # Tauri Desktop App
-cd sp-gui && pnpm build
+cd Gui/sp-gui && pnpm build
 ```
 
 **Build Tool**: Uses Vite for Angular builds (via `@angular-devkit/build-angular:application` builder), **Dart Sass** for SCSS compilation.
@@ -369,7 +369,7 @@ cd sp-gui && pnpm build
 Scripts fetch data from Popeye repository:
 
 ```powershell
-cd sp-gui-angular
+cd Gui/sp-gui-angular
 pnpm exec vite-node ./scripts/update_fairy_pieces.ts
 pnpm exec vite-node ./scripts/update_popeye_instructions.ts
 ```
@@ -388,7 +388,7 @@ pnpm exec vite-node ./scripts/update_popeye_instructions.ts
 
 - **"Cannot find module @sp/*"**: Check `tsconfig.json` paths and ensure libraries are built
 - **Angular CLI errors**: Verify Node.js >= 20 and pnpm >= 9 (`package.json` engines requirement)
-- **Tauri build errors**: Ensure Rust toolchain is installed and Popeye binary is in `src-tauri/popeye/`
+- **Tauri build errors**: Ensure Rust toolchain is installed and Popeye binary is in `Gui/sp-gui/src-tauri/popeye/`
 - **pnpm install issues**: Clear node_modules and pnpm lock: `rm -rf node_modules pnpm-lock.yaml && pnpm install`
 
 ### Asset Path Issues
@@ -533,6 +533,6 @@ Test targets:
 - `@sp/host-bridge/src/lib/bridge-global.ts` - Platform abstraction interface
 - `@sp/gui/src/app/app-routing-list.ts` - Route definitions
 - `popeye/problemToPopeye.ts` - Popeye format converter
-- `src-tauri/src/lib.rs` - Tauri native commands (Rust)
+- `Gui/sp-gui/src-tauri/src/lib.rs` - Tauri native commands (Rust)
 - `.npmrc` - pnpm configuration
 - `pnpm-lock.yaml` - pnpm lockfile (DO NOT modify manually)

@@ -31,11 +31,11 @@ jobs:
           version: latest
 
       - name: Install dependencies
-        working-directory: ./src/Gui/sp-gui.html/sp-gui-angular
+        working-directory: ./Gui/sp-gui-angular
         run: pnpm install
 
       - name: Build application
-        working-directory: ./src/Gui/sp-gui.html/sp-gui-angular
+        working-directory: ./Gui/sp-gui-angular
         run: pnpm build:Azure
 
       - name: Deploy to Azure Static Web Apps (Production)
@@ -45,8 +45,8 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SEA_080BC3503 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/src/Gui/sp-gui.html/sp-gui-angular/dist/gui/browser"
-          api_location: "/src/Gui/sp-gui.html/sp-gui-angular/api"
+          app_location: "/Gui/sp-gui-angular/dist/gui/browser"
+          api_location: "/Gui/sp-gui-angular/api"
           output_location: ""
           skip_app_build: true
 

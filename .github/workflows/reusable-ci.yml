@@ -6,7 +6,7 @@ on:
       working_directory:
         description: 'Working directory for CI tasks'
         required: false
-        default: './src/Gui/sp-gui.html/sp-gui-angular'
+        default: './Gui/sp-gui-angular'
         type: string
 
 jobs:

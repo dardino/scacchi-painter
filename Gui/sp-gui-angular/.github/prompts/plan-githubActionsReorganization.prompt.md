@@ -6,7 +6,7 @@ Consolida i due workflow attuali (master/nightly) in tre workflow specializzati,
 
 ### 1. Crea workflow riusabile `.github/workflows/reusable-ci.yml`
    - Job: checkout, setup Node LTS, install pnpm, install dipendenze, lint (`pnpm lint`), build (`pnpm build:Azure`), test (`pnpm test:ci`)
-   - Working directory: `./src/Gui/sp-gui.html/sp-gui-angular`
+   - Working directory: `./Gui/sp-gui-angular`
    - Output: segnala successo/fallimento per job downstream
 
 ### 2. Crea workflow `ci-pull-request.yml` per MR verso master
@@ -59,6 +59,6 @@ Consolida i due workflow attuali (master/nightly) in tre workflow specializzati,
 
 ### Azure SWA Configuration
 - API Token: `${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SEA_080BC3503 }}`
-- App Location: `/src/Gui/sp-gui.html/sp-gui-angular/dist/gui/browser`
-- API Location: `/src/Gui/sp-gui.html/sp-gui-angular/api`
+- App Location: `/Gui/sp-gui-angular/dist/gui/browser`
+- API Location: `/Gui/sp-gui-angular/api`
 - Skip App Build: `true` (fatto da GitHub Actions)
