@@ -9,7 +9,7 @@
             },
             "args": [],
             "options": {
-                "cwd": "${workspaceFolder}/src/Gui/sp-web-gui"
+                "cwd": "${workspaceFolder}/Core"
             },
             "label": "build",
             "command": "dotnet build",
@@ -28,7 +28,7 @@
             "isBackground": true,
             "dependsOn": "npm watch (functions)",
             "options": {
-                "cwd": "${workspaceFolder}/src/Gui/sp-gui.html/sp-gui-angular/api"
+                "cwd": "${workspaceFolder}/Gui/sp-gui-angular/api"
             }
         },
         {
@@ -38,7 +38,7 @@
             "dependsOn": "npm clean (functions)",
             "problemMatcher": "$tsc",
             "options": {
-                "cwd": "${workspaceFolder}/src/Gui/sp-gui.html/sp-gui-angular/api"
+                "cwd": "${workspaceFolder}/Gui/sp-gui-angular/api"
             }
         },
         {
@@ -53,7 +53,7 @@
             },
             "isBackground": true,
             "options": {
-                "cwd": "${workspaceFolder}/src/Gui/sp-gui.html/sp-gui-angular/api"
+                "cwd": "${workspaceFolder}/Gui/sp-gui-angular/api"
             }
         },
         {
@@ -61,7 +61,7 @@
             "label": "npm install (functions)",
             "command": "npm install",
             "options": {
-                "cwd": "${workspaceFolder}/src/Gui/sp-gui.html/sp-gui-angular/api"
+                "cwd": "${workspaceFolder}/Gui/sp-gui-angular/api"
             }
         },
         {
@@ -71,7 +71,7 @@
             "dependsOn": "npm build (functions)",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/src/Gui/sp-gui.html/sp-gui-angular/api"
+                "cwd": "${workspaceFolder}/Gui/sp-gui-angular/api"
             }
         },
         {
@@ -80,7 +80,7 @@
             "command": "npm run clean",
             "dependsOn": "npm install (functions)",
             "options": {
-                "cwd": "${workspaceFolder}/src/Gui/sp-gui.html/sp-gui-angular/api"
+                "cwd": "${workspaceFolder}/Gui/sp-gui-angular/api"
             }
         }
     ]

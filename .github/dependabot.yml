@@ -6,6 +6,6 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/src/Gui/sp-gui.html/sp-gui-angular" # Location of package manifests
+    directory: "/Gui/sp-gui-angular" # Location of package manifests
     schedule:
       interval: "weekly"

@@ -13,3 +13,12 @@ or
 [Here (lts)](https://orange-sea-080bc3503.azurestaticapps.net/)
 
 Go to [Roadmap](https://github.com/dardino/scacchi-painter/wiki/RoadMap) to look at the future
+
+## Rust Solver Planning
+
+Internal planning documents for the new Rust-based chess problem solver are available here:
+
+- [Master prompt](./.github/prompts/rust-engine-like-popeye.md)
+- [Milestones index and branch map](./.github/prompts/rust-solver-milestones-index.md)
+- [Execution roadmap](./.github/prompts/rust-solver-roadmap.md)
+- [Milestone prompts](./.github/prompts/)

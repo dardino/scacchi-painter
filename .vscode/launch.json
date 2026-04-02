@@ -10,9 +10,9 @@
             "request": "launch",
             "requireExactSource": true,
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Gui/sp-web-gui/bin/Debug/netcoreapp2.2/sp-web-gui.dll",
+            "program": "${workspaceFolder}/Gui/sp-web-gui/bin/Debug/netcoreapp2.2/sp-web-gui.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/Gui/sp-web-gui",
+            "cwd": "${workspaceFolder}/Gui/sp-web-gui",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -22,7 +22,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/src/Gui/sp-web-gui/Views"
+                "/Views": "${workspaceFolder}/Gui/sp-web-gui/Views"
             }
         },
         {
