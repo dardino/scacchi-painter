@@ -5,6 +5,7 @@ use problem_solver::{solve, SolverConfig};
 use serde::Serialize;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::time::Instant;
 
 #[derive(Debug, Parser)]
 #[command(name = "solver-cli")]
@@ -17,6 +18,8 @@ struct Cli {
     input_file: Option<PathBuf>,
     #[arg(long, value_enum, default_value = "text")]
     format: OutputFormat,
+    #[arg(long)]
+    benchmark_runs: Option<u32>,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -32,12 +35,28 @@ struct CliOutput {
     winning_line: Vec<String>,
 }
 
+#[derive(Debug, Clone, Serialize)]
+struct BenchmarkStats {
+    runs: u32,
+    min_us: u128,
+    avg_us: u128,
+    max_us: u128,
+    total_us: u128,
+}
+
+#[derive(Debug, Serialize)]
+struct SingleRunReport {
+    result: CliOutput,
+    benchmark: Option<BenchmarkStats>,
+}
+
 #[derive(Debug, Serialize)]
 struct CorpusCaseResult {
     file: String,
     solved: bool,
     explored_nodes: u64,
     winning_line_len: usize,
+    benchmark: Option<BenchmarkStats>,
     error: Option<String>,
 }
 
@@ -73,21 +92,68 @@ fn solve_input(input: &str, config: &SolverConfig) -> Result<CliOutput> {
     })
 }
 
-fn format_output(output: &CliOutput, format: OutputFormat) -> Result<String> {
-    let text = match format {
-        OutputFormat::Text => format!(
-            "solved={} explored_nodes={} winning_line_len={}",
-            output.solved,
-            output.explored_nodes,
-            output.winning_line.len()
-        ),
-        OutputFormat::Json => serde_json::to_string(output)?,
+fn benchmark_input(input: &str, config: &SolverConfig, runs: u32) -> Result<(CliOutput, BenchmarkStats)> {
+    if runs == 0 {
+        anyhow::bail!("--benchmark-runs must be greater than 0");
+    }
+
+    let mut result: Option<CliOutput> = None;
+    let mut total_us: u128 = 0;
+    let mut min_us: u128 = u128::MAX;
+    let mut max_us: u128 = 0;
+
+    for _ in 0..runs {
+        let start = Instant::now();
+        let current = solve_input(input, config)?;
+        let elapsed_us = start.elapsed().as_micros();
+
+        total_us = total_us.saturating_add(elapsed_us);
+        min_us = min_us.min(elapsed_us);
+        max_us = max_us.max(elapsed_us);
+        result = Some(current);
+    }
+
+    let avg_us = total_us / runs as u128;
+    let stats = BenchmarkStats {
+        runs,
+        min_us,
+        avg_us,
+        max_us,
+        total_us,
     };
 
-    Ok(text)
+    Ok((result.expect("at least one run should produce a result"), stats))
 }
 
-fn run_corpus(dir: &Path, config: &SolverConfig, format: OutputFormat) -> Result<String> {
+fn format_single_report(report: &SingleRunReport, format: OutputFormat) -> Result<String> {
+    match format {
+        OutputFormat::Json => Ok(serde_json::to_string(report)?),
+        OutputFormat::Text => {
+            let mut text = format!(
+                "solved={} explored_nodes={} winning_line_len={}",
+                report.result.solved,
+                report.result.explored_nodes,
+                report.result.winning_line.len()
+            );
+
+            if let Some(bench) = &report.benchmark {
+                text.push_str(&format!(
+                    " runs={} min_us={} avg_us={} max_us={} total_us={}",
+                    bench.runs, bench.min_us, bench.avg_us, bench.max_us, bench.total_us
+                ));
+            }
+
+            Ok(text)
+        }
+    }
+}
+
+fn run_corpus(
+    dir: &Path,
+    config: &SolverConfig,
+    format: OutputFormat,
+    benchmark_runs: Option<u32>,
+) -> Result<String> {
     let mut paths = Vec::new();
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
@@ -107,27 +173,38 @@ fn run_corpus(dir: &Path, config: &SolverConfig, format: OutputFormat) -> Result
             .to_string();
 
         let case = match fs::read_to_string(&path) {
-            Ok(input) => match solve_input(&input, config) {
-                Ok(out) => CorpusCaseResult {
-                    file,
-                    solved: out.solved,
-                    explored_nodes: out.explored_nodes,
-                    winning_line_len: out.winning_line.len(),
-                    error: None,
-                },
-                Err(err) => CorpusCaseResult {
-                    file,
-                    solved: false,
-                    explored_nodes: 0,
-                    winning_line_len: 0,
-                    error: Some(err.to_string()),
-                },
-            },
+            Ok(input) => {
+                let output = if let Some(runs) = benchmark_runs {
+                    benchmark_input(&input, config, runs).map(|(result, bench)| (result, Some(bench)))
+                } else {
+                    solve_input(&input, config).map(|result| (result, None))
+                };
+
+                match output {
+                    Ok((out, benchmark)) => CorpusCaseResult {
+                        file,
+                        solved: out.solved,
+                        explored_nodes: out.explored_nodes,
+                        winning_line_len: out.winning_line.len(),
+                        benchmark,
+                        error: None,
+                    },
+                    Err(err) => CorpusCaseResult {
+                        file,
+                        solved: false,
+                        explored_nodes: 0,
+                        winning_line_len: 0,
+                        benchmark: None,
+                        error: Some(err.to_string()),
+                    },
+                }
+            }
             Err(err) => CorpusCaseResult {
                 file,
                 solved: false,
                 explored_nodes: 0,
                 winning_line_len: 0,
+                benchmark: None,
                 error: Some(err.to_string()),
             },
         };
@@ -157,10 +234,17 @@ fn run_corpus(dir: &Path, config: &SolverConfig, format: OutputFormat) -> Result
                 if let Some(error) = &case.error {
                     lines.push(format!("{}: error={}", case.file, error));
                 } else {
-                    lines.push(format!(
+                    let mut line = format!(
                         "{}: solved={} explored_nodes={} winning_line_len={}",
                         case.file, case.solved, case.explored_nodes, case.winning_line_len
-                    ));
+                    );
+                    if let Some(bench) = &case.benchmark {
+                        line.push_str(&format!(
+                            " runs={} min_us={} avg_us={} max_us={} total_us={}",
+                            bench.runs, bench.min_us, bench.avg_us, bench.max_us, bench.total_us
+                        ));
+                    }
+                    lines.push(line);
                 }
             }
 
@@ -180,11 +264,27 @@ fn main() -> Result<()> {
 
     let cli = Cli::parse();
     let output = if let Some(corpus_dir) = &cli.corpus_dir {
-        run_corpus(corpus_dir, &SolverConfig::default(), cli.format)?
+        run_corpus(
+            corpus_dir,
+            &SolverConfig::default(),
+            cli.format,
+            cli.benchmark_runs,
+        )?
     } else {
         let input = load_input(&cli)?;
-        let result = solve_input(&input, &SolverConfig::default())?;
-        format_output(&result, cli.format)?
+        let report = if let Some(runs) = cli.benchmark_runs {
+            let (result, benchmark) = benchmark_input(&input, &SolverConfig::default(), runs)?;
+            SingleRunReport {
+                result,
+                benchmark: Some(benchmark),
+            }
+        } else {
+            SingleRunReport {
+                result: solve_input(&input, &SolverConfig::default())?,
+                benchmark: None,
+            }
+        };
+        format_single_report(&report, cli.format)?
     };
 
     println!("{output}");
@@ -200,7 +300,11 @@ mod tests {
     fn text_output_formats_solver_result() {
         let input = "Stipulation: #2\nFEN: 8/8/8/8/8/8/8/8 w - - 0 1";
         let result = solve_input(input, &SolverConfig::default()).expect("valid subset should be accepted");
-        let output = format_output(&result, OutputFormat::Text).expect("text output should format");
+        let report = SingleRunReport {
+            result,
+            benchmark: None,
+        };
+        let output = format_single_report(&report, OutputFormat::Text).expect("text output should format");
 
         assert!(output.starts_with("solved=false explored_nodes="));
         let explored_part = output
@@ -228,7 +332,11 @@ mod tests {
     fn json_output_contains_winning_line_field() {
         let input = "Stipulation: #1\nFEN: k7/2K5/1Q6/8/8/8/8/8 w - - 0 1";
         let result = solve_input(input, &SolverConfig::default()).expect("valid problem should solve");
-        let json = format_output(&result, OutputFormat::Json).expect("json output should format");
+        let report = SingleRunReport {
+            result,
+            benchmark: None,
+        };
+        let json = format_single_report(&report, OutputFormat::Json).expect("json output should format");
 
         assert!(json.contains("\"winning_line\""));
     }
@@ -243,6 +351,7 @@ mod tests {
             input_text: None,
             input_file: Some(path),
             format: OutputFormat::Text,
+            benchmark_runs: None,
         };
 
         let loaded = load_input(&cli).expect("file input should load");
@@ -252,11 +361,27 @@ mod tests {
     #[test]
     fn run_corpus_reports_all_cases() {
         let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("corpus");
-        let output = run_corpus(&dir, &SolverConfig::default(), OutputFormat::Text)
+        let output = run_corpus(&dir, &SolverConfig::default(), OutputFormat::Text, None)
             .expect("corpus should execute");
 
         assert!(output.contains("cases=2"));
         assert!(output.contains("mate_in_1.popeye"));
         assert!(output.contains("no_solution_empty_board.popeye"));
+    }
+
+    #[test]
+    fn benchmark_single_report_includes_runs_in_text() {
+        let input = "Stipulation: #1\nFEN: k7/2K5/1Q6/8/8/8/8/8 w - - 0 1";
+        let (result, bench) = benchmark_input(input, &SolverConfig::default(), 3)
+            .expect("benchmark should execute");
+        let report = SingleRunReport {
+            result,
+            benchmark: Some(bench),
+        };
+        let output = format_single_report(&report, OutputFormat::Text)
+            .expect("text report should format");
+
+        assert!(output.contains("runs=3"));
+        assert!(output.contains("avg_us="));
     }
 }
