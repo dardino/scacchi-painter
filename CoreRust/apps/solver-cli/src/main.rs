@@ -56,6 +56,7 @@ struct CorpusCaseResult {
     solved: bool,
     explored_nodes: u64,
     winning_line_len: usize,
+    winning_line: Vec<String>,
     benchmark: Option<BenchmarkStats>,
     error: Option<String>,
 }
@@ -130,10 +131,11 @@ fn format_single_report(report: &SingleRunReport, format: OutputFormat) -> Resul
         OutputFormat::Json => Ok(serde_json::to_string(report)?),
         OutputFormat::Text => {
             let mut text = format!(
-                "solved={} explored_nodes={} winning_line_len={}",
+                "solved={} explored_nodes={} winning_line_len={} winning_line={}",
                 report.result.solved,
                 report.result.explored_nodes,
-                report.result.winning_line.len()
+                report.result.winning_line.len(),
+                format_winning_line(&report.result.winning_line)
             );
 
             if let Some(bench) = &report.benchmark {
@@ -186,6 +188,7 @@ fn run_corpus(
                         solved: out.solved,
                         explored_nodes: out.explored_nodes,
                         winning_line_len: out.winning_line.len(),
+                        winning_line: out.winning_line,
                         benchmark,
                         error: None,
                     },
@@ -194,6 +197,7 @@ fn run_corpus(
                         solved: false,
                         explored_nodes: 0,
                         winning_line_len: 0,
+                        winning_line: vec![],
                         benchmark: None,
                         error: Some(err.to_string()),
                     },
@@ -204,6 +208,7 @@ fn run_corpus(
                 solved: false,
                 explored_nodes: 0,
                 winning_line_len: 0,
+                winning_line: vec![],
                 benchmark: None,
                 error: Some(err.to_string()),
             },
@@ -235,8 +240,12 @@ fn run_corpus(
                     lines.push(format!("{}: error={}", case.file, error));
                 } else {
                     let mut line = format!(
-                        "{}: solved={} explored_nodes={} winning_line_len={}",
-                        case.file, case.solved, case.explored_nodes, case.winning_line_len
+                        "{}: solved={} explored_nodes={} winning_line_len={} winning_line={}",
+                        case.file,
+                        case.solved,
+                        case.explored_nodes,
+                        case.winning_line_len,
+                        format_winning_line(&case.winning_line)
                     );
                     if let Some(bench) = &case.benchmark {
                         line.push_str(&format!(
@@ -257,6 +266,14 @@ fn is_popeye_file(path: &Path) -> bool {
     path.extension()
         .and_then(|ext| ext.to_str())
         .is_some_and(|ext| ext.eq_ignore_ascii_case("popeye"))
+}
+
+fn format_winning_line(line: &[String]) -> String {
+    if line.is_empty() {
+        "[]".to_string()
+    } else {
+        format!("[{}]", line.join(","))
+    }
 }
 
 fn main() -> Result<()> {
@@ -318,7 +335,8 @@ mod tests {
             .parse::<u64>()
             .expect("node count should be numeric");
         assert!(explored > 0);
-        assert!(output.ends_with("winning_line_len=0"));
+        assert!(output.contains("winning_line_len=0"));
+        assert!(output.ends_with("winning_line=[]"));
     }
 
     #[test]
@@ -367,6 +385,7 @@ mod tests {
         assert!(output.contains("cases=2"));
         assert!(output.contains("mate_in_1.popeye"));
         assert!(output.contains("no_solution_empty_board.popeye"));
+        assert!(output.contains("winning_line=[Qa6#]"));
     }
 
     #[test]
