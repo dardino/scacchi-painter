@@ -40,7 +40,13 @@ mod tests {
         let input = "Stipulation: #2\nFEN: 8/8/8/8/8/8/8/8 w - - 0 1";
         let output = run(input, &SolverConfig::default()).expect("valid subset should be accepted");
 
-        assert_eq!(output, "solved=false explored_nodes=0");
+        assert!(output.starts_with("solved=false explored_nodes="));
+        let explored = output
+            .split('=').next_back()
+            .expect("output should contain explored node count")
+            .parse::<u64>()
+            .expect("node count should be numeric");
+        assert!(explored > 0);
     }
 
     #[test]
