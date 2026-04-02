@@ -55,7 +55,7 @@
         "api/src/dtos/*"
       ],
       "@dardino-chess/core": [
-        "../../../CoreJS/src/main.ts"
+        "../../CoreJS/src/main.ts"
       ],
       "@ph/*": [
         "popeye/*"
