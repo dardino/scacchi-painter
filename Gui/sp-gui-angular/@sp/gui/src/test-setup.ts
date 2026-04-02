@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Vitest setup file for Angular
-import "zone.js";
-import "zone.js/testing";
 import { getTestBed } from "@angular/core/testing";
 import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting,
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting,
 } from "@angular/platform-browser-dynamic/testing";
 import { webcrypto } from "node:crypto";
 
