@@ -20,6 +20,10 @@ fn get_popeye_executable() -> &'static str {
     {
         return "pymacIntel64";
     }
+    #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+    {
+        return "pyLinux64";
+    }
     #[cfg(all(target_os = "windows", target_arch = "x86_64"))]
     {
         return "pywin64.exe";
@@ -28,7 +32,7 @@ fn get_popeye_executable() -> &'static str {
     {
         return "pywinArm64.exe";
     }
-    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    #[cfg(not(any(target_os = "macos", target_os = "windows", target_os = "linux")))]
     {
         return "unknown";
     }
