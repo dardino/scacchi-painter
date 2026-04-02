@@ -101,6 +101,14 @@ pub struct Move {
     pub to: Square,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct CastlingRights {
+    pub white_king_side: bool,
+    pub white_queen_side: bool,
+    pub black_king_side: bool,
+    pub black_queen_side: bool,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Board {
     squares: [Option<Piece>; 64],
@@ -181,6 +189,8 @@ impl Board {
 pub struct OrthodoxPosition {
     pub board: Board,
     pub side_to_move: Side,
+    pub castling_rights: CastlingRights,
+    pub en_passant_target: Option<Square>,
 }
 
 impl OrthodoxPosition {
@@ -197,9 +207,14 @@ impl OrthodoxPosition {
             _ => return Err(CoreError::InvalidFen(input.to_string())),
         };
 
+        let castling_rights = parse_castling_rights(parts.get(2).copied())?;
+        let en_passant_target = parse_en_passant_target(parts.get(3).copied())?;
+
         Ok(Self {
             board,
             side_to_move,
+            castling_rights,
+            en_passant_target,
         })
     }
 
@@ -256,11 +271,53 @@ impl OrthodoxPosition {
 
         let mut board = self.board.clone();
         board.set(mv.from, None);
+        let mut castling_rights = self.castling_rights;
+        let mut en_passant_target = None;
+
+        if moving_piece.kind == PieceKind::Pawn
+            && self.board.get(mv.to).is_none()
+            && mv.from.file != mv.to.file
+            && self.en_passant_target == Some(mv.to)
+        {
+            let captured_rank = match moving_piece.side {
+                Side::White => mv.to.rank.saturating_sub(1),
+                Side::Black => mv.to.rank.saturating_add(1),
+            };
+            let captured_square = Square::new(mv.to.file, captured_rank)?;
+            board.set(captured_square, None);
+        }
+
+        if moving_piece.kind == PieceKind::King && mv.from.file.abs_diff(mv.to.file) == 2 {
+            let (rook_from_file, rook_to_file) = if mv.to.file > mv.from.file {
+                (7_u8, 5_u8)
+            } else {
+                (0_u8, 3_u8)
+            };
+            let rank = mv.from.rank;
+            let rook_from = Square::new(rook_from_file, rank)?;
+            let rook_to = Square::new(rook_to_file, rank)?;
+            let rook = board.get(rook_from);
+            board.set(rook_from, None);
+            board.set(rook_to, rook);
+        }
+
         board.set(mv.to, Some(moving_piece));
+
+        if moving_piece.kind == PieceKind::Pawn && mv.from.rank.abs_diff(mv.to.rank) == 2 {
+            let mid_rank = (mv.from.rank + mv.to.rank) / 2;
+            en_passant_target = Some(Square::new(mv.from.file, mid_rank)?);
+        }
+
+        update_castling_rights_after_move(&mut castling_rights, moving_piece, mv);
+        if let Some(captured) = self.board.get(mv.to) {
+            update_castling_rights_after_capture(&mut castling_rights, captured, mv.to);
+        }
 
         Ok(Self {
             board,
             side_to_move: self.side_to_move.opposite(),
+            castling_rights,
+            en_passant_target,
         })
     }
 
@@ -330,6 +387,94 @@ impl OrthodoxPosition {
                 }
             }
         }
+
+        self.push_castling_moves(from, side, out);
+    }
+
+    fn push_castling_moves(&self, from: Square, side: Side, out: &mut Vec<Move>) {
+        let (rank, king_side_allowed, queen_side_allowed) = match side {
+            Side::White => (
+                0_u8,
+                self.castling_rights.white_king_side,
+                self.castling_rights.white_queen_side,
+            ),
+            Side::Black => (
+                7_u8,
+                self.castling_rights.black_king_side,
+                self.castling_rights.black_queen_side,
+            ),
+        };
+
+        if from != Square::new(4, rank).ok().unwrap_or(from) {
+            return;
+        }
+
+        if self.is_in_check(side) {
+            return;
+        }
+
+        if king_side_allowed {
+            let f = match Square::new(5, rank) {
+                Ok(v) => v,
+                Err(_) => return,
+            };
+            let g = match Square::new(6, rank) {
+                Ok(v) => v,
+                Err(_) => return,
+            };
+            let rook_square = match Square::new(7, rank) {
+                Ok(v) => v,
+                Err(_) => return,
+            };
+
+            let rook_ok = self.board.get(rook_square)
+                == Some(Piece {
+                    side,
+                    kind: PieceKind::Rook,
+                });
+            if rook_ok
+                && self.board.get(f).is_none()
+                && self.board.get(g).is_none()
+                && !self.is_square_attacked(f, side.opposite())
+                && !self.is_square_attacked(g, side.opposite())
+            {
+                out.push(Move { from, to: g });
+            }
+        }
+
+        if queen_side_allowed {
+            let b = match Square::new(1, rank) {
+                Ok(v) => v,
+                Err(_) => return,
+            };
+            let c = match Square::new(2, rank) {
+                Ok(v) => v,
+                Err(_) => return,
+            };
+            let d = match Square::new(3, rank) {
+                Ok(v) => v,
+                Err(_) => return,
+            };
+            let rook_square = match Square::new(0, rank) {
+                Ok(v) => v,
+                Err(_) => return,
+            };
+
+            let rook_ok = self.board.get(rook_square)
+                == Some(Piece {
+                    side,
+                    kind: PieceKind::Rook,
+                });
+            if rook_ok
+                && self.board.get(b).is_none()
+                && self.board.get(c).is_none()
+                && self.board.get(d).is_none()
+                && !self.is_square_attacked(c, side.opposite())
+                && !self.is_square_attacked(d, side.opposite())
+            {
+                out.push(Move { from, to: c });
+            }
+        }
     }
 
     fn push_pawn_moves(&self, from: Square, side: Side, out: &mut Vec<Move>) {
@@ -355,6 +500,12 @@ impl OrthodoxPosition {
             if let Some(target) = offset_square(from, df, forward)
                 && let Some(piece) = self.board.get(target)
                 && piece.side != side
+            {
+                out.push(Move { from, to: target });
+            }
+
+            if let Some(target) = offset_square(from, df, forward)
+                && self.en_passant_target == Some(target)
             {
                 out.push(Move { from, to: target });
             }
@@ -550,6 +701,76 @@ fn piece_from_fen_char(c: char) -> Option<Piece> {
     Some(Piece { side, kind })
 }
 
+fn parse_castling_rights(input: Option<&str>) -> Result<CastlingRights, CoreError> {
+    let mut rights = CastlingRights::default();
+
+    let Some(raw) = input else {
+        return Ok(rights);
+    };
+
+    if raw == "-" {
+        return Ok(rights);
+    }
+
+    for c in raw.chars() {
+        match c {
+            'K' => rights.white_king_side = true,
+            'Q' => rights.white_queen_side = true,
+            'k' => rights.black_king_side = true,
+            'q' => rights.black_queen_side = true,
+            _ => return Err(CoreError::InvalidFen(raw.to_string())),
+        }
+    }
+
+    Ok(rights)
+}
+
+fn parse_en_passant_target(input: Option<&str>) -> Result<Option<Square>, CoreError> {
+    match input {
+        Some("-") | None => Ok(None),
+        Some(value) => Square::from_algebraic(value).map(Some),
+    }
+}
+
+fn update_castling_rights_after_move(rights: &mut CastlingRights, piece: Piece, mv: Move) {
+    if piece.kind == PieceKind::King {
+        match piece.side {
+            Side::White => {
+                rights.white_king_side = false;
+                rights.white_queen_side = false;
+            }
+            Side::Black => {
+                rights.black_king_side = false;
+                rights.black_queen_side = false;
+            }
+        }
+    }
+
+    if piece.kind == PieceKind::Rook {
+        match (piece.side, mv.from.file, mv.from.rank) {
+            (Side::White, 0, 0) => rights.white_queen_side = false,
+            (Side::White, 7, 0) => rights.white_king_side = false,
+            (Side::Black, 0, 7) => rights.black_queen_side = false,
+            (Side::Black, 7, 7) => rights.black_king_side = false,
+            _ => {}
+        }
+    }
+}
+
+fn update_castling_rights_after_capture(rights: &mut CastlingRights, captured: Piece, at: Square) {
+    if captured.kind != PieceKind::Rook {
+        return;
+    }
+
+    match (captured.side, at.file, at.rank) {
+        (Side::White, 0, 0) => rights.white_queen_side = false,
+        (Side::White, 7, 0) => rights.white_king_side = false,
+        (Side::Black, 0, 7) => rights.black_queen_side = false,
+        (Side::Black, 7, 7) => rights.black_king_side = false,
+        _ => {}
+    }
+}
+
 #[derive(Debug, Error)]
 pub enum CoreError {
     #[error("invalid position: {0}")]
@@ -719,5 +940,69 @@ mod tests {
 
         assert!(!position.is_checkmate());
         assert!(position.is_stalemate());
+    }
+
+    #[test]
+    fn king_side_castling_is_generated_when_allowed() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/8/8/8/8/4K2R w K - 0 1")
+            .expect("FEN should parse");
+        let e1 = Square::from_algebraic("e1").expect("valid square");
+        let g1 = Square::from_algebraic("g1").expect("valid square");
+
+        let pseudo = position.generate_pseudo_legal_moves();
+
+        assert!(pseudo.iter().any(|m| m.from == e1 && m.to == g1));
+    }
+
+    #[test]
+    fn castling_move_repositions_rook() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/8/8/8/8/4K2R w K - 0 1")
+            .expect("FEN should parse");
+        let e1 = Square::from_algebraic("e1").expect("valid square");
+        let g1 = Square::from_algebraic("g1").expect("valid square");
+        let f1 = Square::from_algebraic("f1").expect("valid square");
+        let h1 = Square::from_algebraic("h1").expect("valid square");
+
+        let next = position
+            .make_move(Move { from: e1, to: g1 })
+            .expect("castling move should be applicable");
+
+        assert_eq!(next.board.get(g1).map(|p| p.kind), Some(PieceKind::King));
+        assert_eq!(next.board.get(f1).map(|p| p.kind), Some(PieceKind::Rook));
+        assert!(next.board.get(h1).is_none());
+    }
+
+    #[test]
+    fn en_passant_target_is_set_after_double_pawn_push() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/8/8/8/3P4/4K3 w - - 0 1")
+            .expect("FEN should parse");
+        let d2 = Square::from_algebraic("d2").expect("valid square");
+        let d4 = Square::from_algebraic("d4").expect("valid square");
+        let d3 = Square::from_algebraic("d3").expect("valid square");
+
+        let next = position
+            .make_move(Move { from: d2, to: d4 })
+            .expect("double pawn push should be valid");
+
+        assert_eq!(next.en_passant_target, Some(d3));
+    }
+
+    #[test]
+    fn en_passant_capture_is_generated_and_applied() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1")
+            .expect("FEN should parse");
+        let e5 = Square::from_algebraic("e5").expect("valid square");
+        let d6 = Square::from_algebraic("d6").expect("valid square");
+        let d5 = Square::from_algebraic("d5").expect("valid square");
+
+        let legal = position.generate_legal_moves();
+        assert!(legal.iter().any(|m| m.from == e5 && m.to == d6));
+
+        let next = position
+            .make_move(Move { from: e5, to: d6 })
+            .expect("en-passant should be valid");
+
+        assert_eq!(next.board.get(d6).map(|p| p.kind), Some(PieceKind::Pawn));
+        assert!(next.board.get(d5).is_none());
     }
 }
