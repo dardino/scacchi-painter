@@ -226,6 +226,14 @@ impl OrthodoxPosition {
         }
     }
 
+    pub fn is_checkmate(&self) -> bool {
+        self.is_in_check(self.side_to_move) && self.generate_legal_moves().is_empty()
+    }
+
+    pub fn is_stalemate(&self) -> bool {
+        !self.is_in_check(self.side_to_move) && self.generate_legal_moves().is_empty()
+    }
+
     pub fn make_move(&self, mv: Move) -> Result<Self, CoreError> {
         let moving_piece = self
             .board
@@ -276,6 +284,7 @@ impl OrthodoxPosition {
             match piece.kind {
                 PieceKind::King => self.push_king_moves(square, piece.side, &mut moves),
                 PieceKind::Knight => self.push_knight_moves(square, piece.side, &mut moves),
+                PieceKind::Pawn => self.push_pawn_moves(square, piece.side, &mut moves),
                 PieceKind::Rook => self.push_sliding_moves(
                     square,
                     piece.side,
@@ -303,7 +312,6 @@ impl OrthodoxPosition {
                     ],
                     &mut moves,
                 ),
-                _ => {}
             }
         }
 
@@ -320,6 +328,35 @@ impl OrthodoxPosition {
                 if let Some(to) = offset_square(from, df, dr) {
                     self.push_if_target_allowed(from, to, side, out);
                 }
+            }
+        }
+    }
+
+    fn push_pawn_moves(&self, from: Square, side: Side, out: &mut Vec<Move>) {
+        let (forward, start_rank): (i8, u8) = match side {
+            Side::White => (1, 1),
+            Side::Black => (-1, 6),
+        };
+
+        if let Some(one_step) = offset_square(from, 0, forward)
+            && self.board.get(one_step).is_none()
+        {
+            out.push(Move { from, to: one_step });
+
+            if from.rank == start_rank
+                && let Some(two_step) = offset_square(from, 0, forward * 2)
+                && self.board.get(two_step).is_none()
+            {
+                out.push(Move { from, to: two_step });
+            }
+        }
+
+        for df in [-1, 1] {
+            if let Some(target) = offset_square(from, df, forward)
+                && let Some(piece) = self.board.get(target)
+                && piece.side != side
+            {
+                out.push(Move { from, to: target });
             }
         }
     }
@@ -406,6 +443,7 @@ impl OrthodoxPosition {
             let attacks = match piece.kind {
                 PieceKind::King => is_king_attack(square, target),
                 PieceKind::Knight => is_knight_attack(square, target),
+                PieceKind::Pawn => is_pawn_attack(square, target, piece.side),
                 PieceKind::Rook => self.can_slide_attack(
                     square,
                     target,
@@ -430,7 +468,6 @@ impl OrthodoxPosition {
                         (-1, -1),
                     ],
                 ),
-                _ => false,
             };
 
             if attacks {
@@ -481,6 +518,16 @@ fn is_knight_attack(from: Square, to: Square) -> bool {
     let df = (from.file as i8 - to.file as i8).abs();
     let dr = (from.rank as i8 - to.rank as i8).abs();
     (df == 1 && dr == 2) || (df == 2 && dr == 1)
+}
+
+fn is_pawn_attack(from: Square, to: Square, side: Side) -> bool {
+    let dr = to.rank as i8 - from.rank as i8;
+    let df = (to.file as i8 - from.file as i8).abs();
+
+    match side {
+        Side::White => dr == 1 && df == 1,
+        Side::Black => dr == -1 && df == 1,
+    }
 }
 
 fn piece_from_fen_char(c: char) -> Option<Piece> {
@@ -628,5 +675,49 @@ mod tests {
             .expect("FEN should parse");
 
         assert!(!position.is_in_check(Side::White));
+    }
+
+    #[test]
+    fn pseudo_legal_pawn_moves_include_single_and_double_push() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/8/8/8/3P4/4K3 w - - 0 1")
+            .expect("FEN should parse");
+        let d2 = Square::from_algebraic("d2").expect("valid square");
+        let d3 = Square::from_algebraic("d3").expect("valid square");
+        let d4 = Square::from_algebraic("d4").expect("valid square");
+
+        let pseudo = position.generate_pseudo_legal_moves();
+
+        assert!(pseudo.iter().any(|m| m.from == d2 && m.to == d3));
+        assert!(pseudo.iter().any(|m| m.from == d2 && m.to == d4));
+    }
+
+    #[test]
+    fn pseudo_legal_pawn_capture_is_generated_diagonally() {
+        let position = OrthodoxPosition::from_fen("4k3/8/8/8/8/4p3/3P4/4K3 w - - 0 1")
+            .expect("FEN should parse");
+        let d2 = Square::from_algebraic("d2").expect("valid square");
+        let e3 = Square::from_algebraic("e3").expect("valid square");
+
+        let pseudo = position.generate_pseudo_legal_moves();
+
+        assert!(pseudo.iter().any(|m| m.from == d2 && m.to == e3));
+    }
+
+    #[test]
+    fn detects_simple_checkmate_position() {
+        let position = OrthodoxPosition::from_fen("k7/1Q6/2K5/8/8/8/8/8 b - - 0 1")
+            .expect("FEN should parse");
+
+        assert!(position.is_checkmate());
+        assert!(!position.is_stalemate());
+    }
+
+    #[test]
+    fn detects_simple_stalemate_position() {
+        let position = OrthodoxPosition::from_fen("k7/2Q5/2K5/8/8/8/8/8 b - - 0 1")
+            .expect("FEN should parse");
+
+        assert!(!position.is_checkmate());
+        assert!(position.is_stalemate());
     }
 }
