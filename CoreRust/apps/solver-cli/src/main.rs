@@ -12,7 +12,7 @@ struct Cli {
 
 fn run(input: &str, config: &SolverConfig) -> Result<String> {
     let ast = parse_popeye(input)?;
-    let problem = ast_to_problem(ast);
+    let problem = ast_to_problem(ast)?;
     let result = solve(&problem, config)?;
 
     Ok(format!(
@@ -37,8 +37,8 @@ mod tests {
 
     #[test]
     fn run_formats_solver_output_for_mvp_problem() {
-        let output = run("BeginProblem", &SolverConfig::default())
-            .expect("non-empty MVP input should be accepted");
+        let input = "Stipulation: #2\nFEN: 8/8/8/8/8/8/8/8 w - - 0 1";
+        let output = run(input, &SolverConfig::default()).expect("valid subset should be accepted");
 
         assert_eq!(output, "solved=false explored_nodes=0");
     }

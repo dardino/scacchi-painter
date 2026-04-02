@@ -3,8 +3,9 @@ use problem_solver::{solve, SolverConfig, SolverError};
 
 #[test]
 fn parses_maps_and_solves_mvp_problem() {
-    let ast = parse_popeye("BeginProblem").expect("MVP parser should accept non-empty input");
-    let problem = ast_to_problem(ast);
+    let input = "Stipulation #2\nFEN 8/8/8/8/8/8/8/8 w - - 0 1";
+    let ast = parse_popeye(input).expect("MVP parser should accept supported subset");
+    let problem = ast_to_problem(ast).expect("mapping should succeed");
     let result = solve(&problem, &SolverConfig::default()).expect("MVP solver should accept # stipulations");
 
     assert_eq!(problem.stipulation, "#2");
@@ -17,16 +18,19 @@ fn parses_maps_and_solves_mvp_problem() {
 fn empty_input_fails_before_mapping() {
     let result = parse_popeye("\n\t ");
 
-    assert!(matches!(result, Err(ParseError::Unsupported(_))));
+    assert!(matches!(result, Err(ParseError::EmptyInput)));
 }
 
 #[test]
 fn unsupported_stipulation_fails_after_mapping() {
     let ast = PopeyeAst {
-        stipulation: "h#2".to_string(),
-        fen: "8/8/8/8/8/8/8/8 w - - 0 1".to_string(),
+        directives: vec![],
+        diagnostics: vec![],
+        stipulation: Some("h#2".to_string()),
+        fen: Some("8/8/8/8/8/8/8/8 w - - 0 1".to_string()),
+        unsupported_capabilities: vec![],
     };
-    let problem = ast_to_problem(ast);
+    let problem = ast_to_problem(ast).expect("mapping should succeed");
     let result = solve(&problem, &SolverConfig::default());
 
     assert!(matches!(result, Err(SolverError::UnsupportedStipulation(_))));

@@ -60,6 +60,7 @@ mod tests {
         let problem = ProblemDefinition {
             position: Position::from_fen("8/8/8/8/8/8/8/8 w - - 0 1", Side::White),
             stipulation: "h#2".to_string(),
+            unsupported_features: vec![],
         };
 
         let result = solve(&problem, &SolverConfig::default());
@@ -72,6 +73,7 @@ mod tests {
         let problem = ProblemDefinition {
             position: Position::from_fen("8/8/8/8/8/8/8/8 w - - 0 1", Side::White),
             stipulation: "#2".to_string(),
+            unsupported_features: vec![],
         };
 
         let result = solve(&problem, &SolverConfig::default()).expect("# stipulation should be accepted");
