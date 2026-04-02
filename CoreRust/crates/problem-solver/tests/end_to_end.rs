@@ -28,6 +28,7 @@ fn unsupported_stipulation_fails_after_mapping() {
         diagnostics: vec![],
         stipulation: Some("h#2".to_string()),
         fen: Some("8/8/8/8/8/8/8/8 w - - 0 1".to_string()),
+        unsupported_capabilities: vec![],
     };
     let problem = ast_to_problem(ast).expect("mapping should succeed");
     let result = solve(&problem, &SolverConfig::default());

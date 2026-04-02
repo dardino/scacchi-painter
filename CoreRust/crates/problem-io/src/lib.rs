@@ -11,8 +11,20 @@ pub enum DiagnosticLevel {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ParserDiagnostic {
     pub line: usize,
+    pub column: usize,
     pub level: DiagnosticLevel,
     pub message: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum PopeyeCapability {
+    Stipulation,
+    Fen,
+    Conditions,
+    Twins,
+    Pieces,
+    Options,
+    UnknownDirective,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -28,12 +40,14 @@ pub struct PopeyeAst {
     pub diagnostics: Vec<ParserDiagnostic>,
     pub stipulation: Option<String>,
     pub fen: Option<String>,
+    pub unsupported_capabilities: Vec<PopeyeCapability>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnsupportedFeature {
     pub directive: String,
     pub detail: String,
+    pub capability: PopeyeCapability,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -63,6 +77,7 @@ pub fn parse_popeye(input: &str) -> Result<PopeyeAst, ParseError> {
         diagnostics: Vec::new(),
         stipulation: None,
         fen: None,
+        unsupported_capabilities: Vec::new(),
     };
 
     for (idx, raw_line) in input.lines().enumerate() {
@@ -80,6 +95,7 @@ pub fn parse_popeye(input: &str) -> Result<PopeyeAst, ParseError> {
         let Some((raw_key, raw_value)) = split_directive(line) else {
             ast.diagnostics.push(ParserDiagnostic {
                 line: line_no,
+                column: 1,
                 level: DiagnosticLevel::Warning,
                 message: format!("unrecognized line format: {line}"),
             });
@@ -99,12 +115,15 @@ pub fn parse_popeye(input: &str) -> Result<PopeyeAst, ParseError> {
                 ast.directives.push(ParsedDirective::Fen(value));
             }
             _ => {
+                let capability = capability_from_directive(&key);
                 ast.directives.push(ParsedDirective::Unsupported {
                     key: raw_key.to_string(),
                     value: value.clone(),
                 });
+                push_capability_if_missing(&mut ast.unsupported_capabilities, capability);
                 ast.diagnostics.push(ParserDiagnostic {
                     line: line_no,
+                    column: find_column(raw_line, raw_key),
                     level: DiagnosticLevel::Warning,
                     message: format!("unsupported directive: {raw_key}"),
                 });
@@ -129,6 +148,7 @@ pub fn ast_to_problem(ast: PopeyeAst) -> Result<ProblemDefinition, ParseError> {
             ParsedDirective::Unsupported { key, value } => Some(UnsupportedFeature {
                 directive: key.clone(),
                 detail: value.clone(),
+                capability: capability_from_directive(&normalize_key(key)),
             }),
             _ => None,
         })
@@ -173,6 +193,28 @@ fn normalize_key(input: &str) -> String {
     input.trim().to_ascii_lowercase()
 }
 
+fn capability_from_directive(key: &str) -> PopeyeCapability {
+    match key {
+        "stip" | "stipulation" => PopeyeCapability::Stipulation,
+        "fen" => PopeyeCapability::Fen,
+        "condition" | "conditions" => PopeyeCapability::Conditions,
+        "twin" | "twins" => PopeyeCapability::Twins,
+        "pieces" => PopeyeCapability::Pieces,
+        "option" | "options" => PopeyeCapability::Options,
+        _ => PopeyeCapability::UnknownDirective,
+    }
+}
+
+fn push_capability_if_missing(target: &mut Vec<PopeyeCapability>, capability: PopeyeCapability) {
+    if !target.contains(&capability) {
+        target.push(capability);
+    }
+}
+
+fn find_column(raw_line: &str, token: &str) -> usize {
+    raw_line.find(token).map_or(1, |idx| idx + 1)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -205,9 +247,19 @@ EndProblem
             .iter()
             .any(|d| matches!(d, ParsedDirective::Unsupported { key, .. } if key == "Condition")));
         assert!(ast
+            .unsupported_capabilities
+            .contains(&PopeyeCapability::Conditions));
+        assert!(ast
             .diagnostics
             .iter()
             .any(|d| d.message.contains("unsupported directive")));
+        let diag = ast
+            .diagnostics
+            .iter()
+            .find(|d| d.message.contains("Condition"))
+            .expect("unsupported directive diagnostic should exist");
+        assert_eq!(diag.line, 5);
+        assert!(diag.column >= 1);
     }
 
     #[test]
@@ -217,6 +269,7 @@ EndProblem
             diagnostics: vec![],
             stipulation: Some("#3".to_string()),
             fen: Some("4k3/8/8/8/8/8/8/4K3 b - - 0 1".to_string()),
+            unsupported_capabilities: vec![],
         };
 
         let problem = ast_to_problem(ast).expect("mapping should succeed");
@@ -233,9 +286,31 @@ EndProblem
             diagnostics: vec![],
             stipulation: Some("#2".to_string()),
             fen: None,
+            unsupported_capabilities: vec![],
         };
 
         let err = ast_to_problem(ast).expect_err("missing fen must fail");
         assert!(matches!(err, ParseError::MissingRequiredDirective("fen")));
+    }
+
+    #[test]
+    fn ast_to_problem_preserves_unsupported_feature_capabilities() {
+        let ast = PopeyeAst {
+            directives: vec![ParsedDirective::Unsupported {
+                key: "Condition".to_string(),
+                value: "AntiCirce".to_string(),
+            }],
+            diagnostics: vec![],
+            stipulation: Some("#2".to_string()),
+            fen: Some("8/8/8/8/8/8/8/8 w - - 0 1".to_string()),
+            unsupported_capabilities: vec![PopeyeCapability::Conditions],
+        };
+
+        let problem = ast_to_problem(ast).expect("mapping should succeed");
+        assert_eq!(problem.unsupported_features.len(), 1);
+        assert_eq!(
+            problem.unsupported_features[0].capability,
+            PopeyeCapability::Conditions
+        );
     }
 }
