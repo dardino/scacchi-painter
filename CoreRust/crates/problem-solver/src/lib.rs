@@ -37,6 +37,7 @@ trait Stipulation {
 #[derive(Debug, Clone, Copy)]
 struct DirectMate {
     attacker: Side,
+    deterministic: bool,
 }
 
 impl Stipulation for DirectMate {
@@ -56,17 +57,13 @@ impl Stipulation for DirectMate {
             return None;
         }
 
-        let legal_moves = position.generate_legal_moves();
-        if legal_moves.is_empty() {
+        let successors = ordered_successors(position, self.deterministic);
+        if successors.is_empty() {
             return None;
         }
 
         if position.side_to_move == self.attacker {
-            for mv in legal_moves {
-                let Ok(next) = position.make_move(mv) else {
-                    continue;
-                };
-
+            for (mv, next) in successors {
                 if let Some(mut line) = self.search(&next, plies_left.saturating_sub(1), explored_nodes) {
                     line.insert(0, mv);
                     return Some(line);
@@ -77,11 +74,7 @@ impl Stipulation for DirectMate {
         } else {
             let mut first_defender_line: Option<Vec<Move>> = None;
 
-            for mv in legal_moves {
-                let Ok(next) = position.make_move(mv) else {
-                    return None;
-                };
-
+            for (mv, next) in successors {
                 let Some(mut line) = self.search(&next, plies_left.saturating_sub(1), explored_nodes) else {
                     return None;
                 };
@@ -115,6 +108,7 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
 
     let stipulation = DirectMate {
         attacker: position.side_to_move,
+        deterministic: config.deterministic,
     };
 
     let mut explored_nodes = 0;
@@ -140,6 +134,73 @@ fn parse_directmate_moves(input: &str) -> Option<u16> {
     }
 
     Some(moves)
+}
+
+fn ordered_successors(position: &OrthodoxPosition, deterministic: bool) -> Vec<(Move, OrthodoxPosition)> {
+    let mut successors = Vec::new();
+
+    for mv in position.generate_legal_moves() {
+        let Ok(next) = position.make_move(mv) else {
+            continue;
+        };
+
+        let score = move_order_score(position, mv, &next);
+        successors.push((mv, next, score));
+    }
+
+    if deterministic {
+        successors.sort_by(|a, b| {
+            b.2.cmp(&a.2)
+                .then_with(|| a.0.from.file.cmp(&b.0.from.file))
+                .then_with(|| a.0.from.rank.cmp(&b.0.from.rank))
+                .then_with(|| a.0.to.file.cmp(&b.0.to.file))
+                .then_with(|| a.0.to.rank.cmp(&b.0.to.rank))
+        });
+    }
+
+    successors.into_iter().map(|(mv, next, _)| (mv, next)).collect()
+}
+
+fn move_order_score(position: &OrthodoxPosition, mv: Move, next: &OrthodoxPosition) -> i32 {
+    let mut score = 0;
+
+    if next.is_checkmate() {
+        score += 10_000;
+    } else if next.is_in_check(next.side_to_move) {
+        score += 1_000;
+    }
+
+    if is_capture(position, mv) {
+        score += 200;
+    }
+
+    if is_promotion(position, mv) {
+        score += 150;
+    }
+
+    score
+}
+
+fn is_capture(position: &OrthodoxPosition, mv: Move) -> bool {
+    if position.board.get(mv.to).is_some() {
+        return true;
+    }
+
+    let Some(piece) = position.board.get(mv.from) else {
+        return false;
+    };
+
+    piece.kind == PieceKind::Pawn
+        && mv.from.file != mv.to.file
+        && position.en_passant_target == Some(mv.to)
+}
+
+fn is_promotion(position: &OrthodoxPosition, mv: Move) -> bool {
+    let Some(piece) = position.board.get(mv.from) else {
+        return false;
+    };
+
+    piece.kind == PieceKind::Pawn && (mv.to.rank == 7 || mv.to.rank == 0)
 }
 
 /// Converts a sequence of moves starting from `start` into SAN strings.
@@ -332,5 +393,30 @@ mod tests {
             "unexpected first move SAN: {}",
             result.winning_line[0]
         );
+    }
+
+    #[test]
+    fn deterministic_ordering_explores_no_more_than_unsorted() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen("k7/2K5/1Q6/8/8/8/8/8 w - - 0 1", Side::White),
+            stipulation: "#1".to_string(),
+            unsupported_features: vec![],
+        };
+
+        let sorted_cfg = SolverConfig {
+            max_depth: 8,
+            deterministic: true,
+        };
+        let unsorted_cfg = SolverConfig {
+            max_depth: 8,
+            deterministic: false,
+        };
+
+        let sorted = solve(&problem, &sorted_cfg).expect("sorted config should solve");
+        let unsorted = solve(&problem, &unsorted_cfg).expect("unsorted config should solve");
+
+        assert!(sorted.solved);
+        assert!(unsorted.solved);
+        assert!(sorted.explored_nodes <= unsorted.explored_nodes);
     }
 }
