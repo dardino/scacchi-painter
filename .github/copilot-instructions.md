@@ -87,9 +87,12 @@ The build script (`Gui/sp-gui/scripts/build.ts`) orchestrates:
 
 ### Production Deployment
 
-**Azure**: GitHub Actions workflow (`.github/workflows/azure-static-web-apps-orange-sea-080bc3503.yml`) automatically deploys on push to `master` or PRs. Build command: `pnpm build:Azure`.
+**Azure**: 
+- **Nightly**: `.github/workflows/ci-push-master.yml` automatically deploys on push to `master` to Azure Static Web Apps (Nightly environment)
+- **Production**: `.github/workflows/ci-tag.yml` automatically deploys on tag push (e.g., `v*`) to Azure Static Web Apps (Production environment)
+- Build command: `pnpm build:Azure`
 
-**Tauri**: Manual release builds via `pnpm tauri build` (requires Rust installed).
+**Tauri**: Manual release builds via `pnpm tauri build` in `Gui/sp-gui` directory (requires Rust installed).
 
 ## Key Technologies & Patterns
 

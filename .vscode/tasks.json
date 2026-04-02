@@ -9,7 +9,7 @@
             },
             "args": [],
             "options": {
-                "cwd": "${workspaceFolder}/Gui/sp-web-gui"
+                "cwd": "${workspaceFolder}/Core"
             },
             "label": "build",
             "command": "dotnet build",
