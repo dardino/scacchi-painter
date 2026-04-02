@@ -1,4 +1,4 @@
-use chess_core::{OrthodoxPosition, Side};
+use chess_core::{Move, OrthodoxPosition, Side};
 use problem_io::ProblemDefinition;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
@@ -22,15 +22,16 @@ impl Default for SolverConfig {
 pub struct SearchResult {
     pub solved: bool,
     pub explored_nodes: u64,
+    pub winning_line: Vec<String>,
 }
 
 trait Stipulation {
-    fn can_force(
+    fn search(
         &self,
         position: &OrthodoxPosition,
         plies_left: u16,
         explored_nodes: &mut u64,
-    ) -> bool;
+    ) -> Option<Vec<Move>>;
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -39,41 +40,58 @@ struct DirectMate {
 }
 
 impl Stipulation for DirectMate {
-    fn can_force(
+    fn search(
         &self,
         position: &OrthodoxPosition,
         plies_left: u16,
         explored_nodes: &mut u64,
-    ) -> bool {
+    ) -> Option<Vec<Move>> {
         *explored_nodes = explored_nodes.saturating_add(1);
 
         if position.is_checkmate() {
-            return position.side_to_move != self.attacker;
+            return (position.side_to_move != self.attacker).then(Vec::new);
         }
 
         if position.is_stalemate() || plies_left == 0 {
-            return false;
+            return None;
         }
 
         let legal_moves = position.generate_legal_moves();
         if legal_moves.is_empty() {
-            return false;
+            return None;
         }
 
         if position.side_to_move == self.attacker {
-            legal_moves.into_iter().any(|mv| {
-                position
-                    .make_move(mv)
-                    .map(|next| self.can_force(&next, plies_left.saturating_sub(1), explored_nodes))
-                    .unwrap_or(false)
-            })
+            for mv in legal_moves {
+                let Ok(next) = position.make_move(mv) else {
+                    continue;
+                };
+
+                if let Some(mut line) = self.search(&next, plies_left.saturating_sub(1), explored_nodes) {
+                    line.insert(0, mv);
+                    return Some(line);
+                }
+            }
+
+            None
         } else {
-            legal_moves.into_iter().all(|mv| {
-                position
-                    .make_move(mv)
-                    .map(|next| self.can_force(&next, plies_left.saturating_sub(1), explored_nodes))
-                    .unwrap_or(false)
-            })
+            let mut first_defender_line: Option<Vec<Move>> = None;
+
+            for mv in legal_moves {
+                let Ok(next) = position.make_move(mv) else {
+                    return None;
+                };
+
+                let Some(mut line) = self.search(&next, plies_left.saturating_sub(1), explored_nodes) else {
+                    return None;
+                };
+                line.insert(0, mv);
+                if first_defender_line.is_none() {
+                    first_defender_line = Some(line);
+                }
+            }
+
+            first_defender_line
         }
     }
 }
@@ -100,11 +118,18 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
     };
 
     let mut explored_nodes = 0;
-    let solved = stipulation.can_force(&position, plies, &mut explored_nodes);
+    let line_moves = stipulation.search(&position, plies, &mut explored_nodes);
+    let solved = line_moves.is_some();
+    let winning_line = line_moves
+        .unwrap_or_default()
+        .into_iter()
+        .map(format_move)
+        .collect();
 
     Ok(SearchResult {
         solved,
         explored_nodes,
+        winning_line,
     })
 }
 
@@ -117,6 +142,18 @@ fn parse_directmate_moves(input: &str) -> Option<u16> {
 
     Some(moves)
 }
+
+fn format_move(mv: Move) -> String {
+    format!("{}{}", format_square(mv.from), format_square(mv.to))
+}
+
+fn format_square(square: MoveSquareAlias) -> String {
+    let file = (b'a' + square.file) as char;
+    let rank = (b'1' + square.rank) as char;
+    format!("{file}{rank}")
+}
+
+type MoveSquareAlias = chess_core::Square;
 
 #[cfg(test)]
 mod tests {
@@ -156,6 +193,7 @@ mod tests {
 
         assert!(!result.solved);
         assert!(result.explored_nodes > 0);
+        assert!(result.winning_line.is_empty());
     }
 
     #[test]
@@ -171,5 +209,10 @@ mod tests {
 
         assert!(result.solved);
         assert!(result.explored_nodes > 0);
+        assert!(!result.winning_line.is_empty());
+        assert!(
+            ["b6a6", "b6b7", "b6a5", "b6c6", "b6c7", "b6b8", "b6a7", "b6c5"]
+                .contains(&result.winning_line[0].as_str())
+        );
     }
 }

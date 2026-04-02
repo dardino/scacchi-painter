@@ -16,8 +16,10 @@ fn run(input: &str, config: &SolverConfig) -> Result<String> {
     let result = solve(&problem, config)?;
 
     Ok(format!(
-        "solved={} explored_nodes={}",
-        result.solved, result.explored_nodes
+        "solved={} explored_nodes={} winning_line_len={}",
+        result.solved,
+        result.explored_nodes,
+        result.winning_line.len()
     ))
 }
 
@@ -41,12 +43,18 @@ mod tests {
         let output = run(input, &SolverConfig::default()).expect("valid subset should be accepted");
 
         assert!(output.starts_with("solved=false explored_nodes="));
-        let explored = output
-            .split('=').next_back()
-            .expect("output should contain explored node count")
+        let explored_part = output
+            .split_whitespace()
+            .nth(1)
+            .expect("output should contain explored part");
+        let explored = explored_part
+            .split('=')
+            .next_back()
+            .expect("explored part should contain value")
             .parse::<u64>()
             .expect("node count should be numeric");
         assert!(explored > 0);
+        assert!(output.ends_with("winning_line_len=0"));
     }
 
     #[test]

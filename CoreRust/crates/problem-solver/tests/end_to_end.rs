@@ -12,6 +12,7 @@ fn parses_maps_and_solves_mvp_problem() {
     assert_eq!(problem.position.fen, "8/8/8/8/8/8/8/8 w - - 0 1");
     assert!(!result.solved);
     assert!(result.explored_nodes > 0);
+    assert!(result.winning_line.is_empty());
 }
 
 #[test]
