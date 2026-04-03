@@ -32,6 +32,7 @@ pub struct SolverConfig {
     pub max_depth: u16,
     pub deterministic: bool,
     pub max_time_ms: Option<u64>,
+    pub transposition_ttl_generations: Option<u32>,
 }
 
 impl Default for SolverConfig {
@@ -40,6 +41,7 @@ impl Default for SolverConfig {
             max_depth: 8,
             deterministic: true,
             max_time_ms: None,
+            transposition_ttl_generations: Some(1),
         }
     }
 }
@@ -67,7 +69,7 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
     };
 
     let mut explored_nodes = 0;
-    let mut trans_cache = cache::TranspositionCache::new();
+    let mut trans_cache = cache::TranspositionCache::new(config.transposition_ttl_generations);
     let start = Instant::now();
     let deadline = config
         .max_time_ms
@@ -75,6 +77,10 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
 
     let mut line_moves: Option<Vec<chess_core::Move>> = None;
     for depth in 1..=plies {
+        if depth > 1 {
+            trans_cache.advance_generation();
+        }
+
         let timed = stipulation.search_with_deadline(
             &position,
             depth,
@@ -172,11 +178,13 @@ mod tests {
             max_depth: 8,
             deterministic: false,
             max_time_ms: None,
+            transposition_ttl_generations: Some(1),
         };
         let sorted_cfg = SolverConfig {
             max_depth: 8,
             deterministic: true,
             max_time_ms: None,
+            transposition_ttl_generations: Some(1),
         };
         let sorted = solve(&problem, &sorted_cfg).expect("sorted config should solve");
         let unsorted = solve(&problem, &unsorted_cfg).expect("unsorted config should solve");
@@ -196,6 +204,7 @@ mod tests {
             max_depth: 8,
             deterministic: true,
             max_time_ms: Some(0),
+            transposition_ttl_generations: Some(1),
         };
 
         let result = solve(&problem, &config).expect("solver should handle zero time budget");
