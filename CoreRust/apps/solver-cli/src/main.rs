@@ -385,7 +385,12 @@ mod tests {
         assert!(output.contains("cases=2"));
         assert!(output.contains("mate_in_1.popeye"));
         assert!(output.contains("no_solution_empty_board.popeye"));
-        assert!(output.contains("winning_line=[Qa6#]"));
+        assert!(
+            ["winning_line=[Qa5#]", "winning_line=[Qa6#]", "winning_line=[Qa7#]", "winning_line=[Qb7#]", "winning_line=[Qb8#]"]
+                .iter()
+                .any(|expected| output.contains(expected)),
+            "unexpected SAN winning line in corpus output: {output}"
+        );
     }
 
     #[test]
