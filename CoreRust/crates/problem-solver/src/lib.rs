@@ -51,6 +51,19 @@ pub struct SearchResult {
     pub solved: bool,
     pub explored_nodes: u64,
     pub winning_line: Vec<String>,
+    pub solution: Option<SolutionTree>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SolutionTree {
+    pub key_move: String,
+    pub defenses: Vec<DefenseLine>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DefenseLine {
+    pub black_move: String,
+    pub continuation: Vec<String>,
 }
 
 /// Solves a chess problem using the directmate stipulation solver.
@@ -104,12 +117,92 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
         Some(ref moves) => san::format_winning_line_san(&position, moves),
         None => vec![],
     };
+    let solution = match line_moves {
+        Some(ref moves) => build_solution_tree(
+            &position,
+            &stipulation,
+            plies,
+            moves,
+            &mut explored_nodes,
+            &mut trans_cache,
+            deadline,
+        ),
+        None => None,
+    };
 
     Ok(SearchResult {
         solved,
         explored_nodes,
         winning_line,
+        solution,
     })
+}
+
+fn build_solution_tree(
+    position: &OrthodoxPosition,
+    stipulation: &DirectMate,
+    plies: u16,
+    winning_moves: &[chess_core::Move],
+    explored_nodes: &mut u64,
+    trans_cache: &mut cache::TranspositionCache,
+    deadline: Option<Instant>,
+) -> Option<SolutionTree> {
+    let &key_move = winning_moves.first()?;
+    let key_move = san::format_winning_line_san(position, &[key_move]).into_iter().next()?;
+
+    let after_key = position.make_move(winning_moves[0]).ok()?;
+    if after_key.is_checkmate() || plies <= 1 {
+        return Some(SolutionTree {
+            key_move,
+            defenses: vec![],
+        });
+    }
+
+    let mut defenses = Vec::new();
+    let remaining_after_defense = plies.saturating_sub(2);
+    for (defense_move, defense_position) in moves::ordered_successors(&after_key, stipulation.deterministic) {
+        if let Some(limit) = deadline {
+            if Instant::now() >= limit {
+                break;
+            }
+        }
+
+        let continuation_moves = if remaining_after_defense == 0 {
+            Vec::new()
+        } else {
+            let timed = stipulation.search_with_deadline(
+                &defense_position,
+                remaining_after_defense,
+                explored_nodes,
+                trans_cache,
+                deadline,
+            );
+
+            if timed.timed_out {
+                break;
+            }
+
+            timed.winning_line.unwrap_or_default()
+        };
+
+        let mut full_line = Vec::with_capacity(1 + continuation_moves.len());
+        full_line.push(defense_move);
+        full_line.extend(continuation_moves);
+
+        let san_line = san::format_winning_line_san(&after_key, &full_line);
+        if san_line.is_empty() {
+            continue;
+        }
+
+        let black_move = san_line[0].clone();
+        let continuation = san_line.into_iter().skip(1).collect();
+        defenses.push(DefenseLine {
+            black_move,
+            continuation,
+        });
+    }
+
+    Some(SolutionTree { key_move, defenses })
 }
 
 #[cfg(test)]
@@ -146,6 +239,7 @@ mod tests {
         assert!(!result.solved);
         assert!(result.explored_nodes>0);
         assert!(result.winning_line.is_empty());
+        assert!(result.solution.is_none());
     }
 
     #[test]
@@ -159,6 +253,8 @@ mod tests {
         assert!(result.solved);
         assert!(result.explored_nodes>0);
         assert!(!result.winning_line.is_empty());
+        let solution = result.solution.expect("solution tree should be present");
+        assert!(!solution.key_move.is_empty());
         assert!(
             ["Qa5#", "Qa6#", "Qa7#", "Qb7#", "Qb8#"]
                 .contains(&result.winning_line[0].as_str()),
@@ -210,6 +306,7 @@ mod tests {
         let result = solve(&problem, &config).expect("solver should handle zero time budget");
 
         assert!(!result.solved);
+        assert!(result.solution.is_none());
     }
 
     #[test]
@@ -223,6 +320,7 @@ mod tests {
         let result = solve(&problem, &config).expect("transposition table should work");
         assert!(result.explored_nodes>0);
         assert!(result.solved);
+        assert!(result.solution.is_some());
     }
 
     #[test]

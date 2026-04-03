@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::{Parser, ValueEnum};
 use problem_io::{ast_to_problem, parse_popeye};
-use problem_solver::{solve, SolverConfig};
+use problem_solver::{solve, SolutionTree, SolverConfig};
 use serde::Serialize;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -33,6 +33,7 @@ struct CliOutput {
     solved: bool,
     explored_nodes: u64,
     winning_line: Vec<String>,
+    solution: Option<SolutionTree>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -57,6 +58,7 @@ struct CorpusCaseResult {
     explored_nodes: u64,
     winning_line_len: usize,
     winning_line: Vec<String>,
+    solution: Option<SolutionTree>,
     benchmark: Option<BenchmarkStats>,
     error: Option<String>,
 }
@@ -90,6 +92,7 @@ fn solve_input(input: &str, config: &SolverConfig) -> Result<CliOutput> {
         solved: result.solved,
         explored_nodes: result.explored_nodes,
         winning_line: result.winning_line,
+        solution: result.solution,
     })
 }
 
@@ -137,6 +140,14 @@ fn format_single_report(report: &SingleRunReport, format: OutputFormat) -> Resul
                 report.result.winning_line.len(),
                 format_winning_line(&report.result.winning_line)
             );
+
+            if let Some(solution) = &report.result.solution {
+                text.push_str(&format!(
+                    " key_move={} defenses={}",
+                    solution.key_move,
+                    format_defenses(&solution.defenses)
+                ));
+            }
 
             if let Some(bench) = &report.benchmark {
                 text.push_str(&format!(
@@ -189,6 +200,7 @@ fn run_corpus(
                         explored_nodes: out.explored_nodes,
                         winning_line_len: out.winning_line.len(),
                         winning_line: out.winning_line,
+                        solution: out.solution,
                         benchmark,
                         error: None,
                     },
@@ -198,6 +210,7 @@ fn run_corpus(
                         explored_nodes: 0,
                         winning_line_len: 0,
                         winning_line: vec![],
+                        solution: None,
                         benchmark: None,
                         error: Some(err.to_string()),
                     },
@@ -209,6 +222,7 @@ fn run_corpus(
                 explored_nodes: 0,
                 winning_line_len: 0,
                 winning_line: vec![],
+                solution: None,
                 benchmark: None,
                 error: Some(err.to_string()),
             },
@@ -247,6 +261,13 @@ fn run_corpus(
                         case.winning_line_len,
                         format_winning_line(&case.winning_line)
                     );
+                    if let Some(solution) = &case.solution {
+                        line.push_str(&format!(
+                            " key_move={} defenses={}",
+                            solution.key_move,
+                            format_defenses(&solution.defenses)
+                        ));
+                    }
                     if let Some(bench) = &case.benchmark {
                         line.push_str(&format!(
                             " runs={} min_us={} avg_us={} max_us={} total_us={}",
@@ -274,6 +295,25 @@ fn format_winning_line(line: &[String]) -> String {
     } else {
         format!("[{}]", line.join(","))
     }
+}
+
+fn format_defenses(defenses: &[problem_solver::DefenseLine]) -> String {
+    if defenses.is_empty() {
+        return "[]".to_string();
+    }
+
+    let entries: Vec<String> = defenses
+        .iter()
+        .map(|d| {
+            if d.continuation.is_empty() {
+                d.black_move.clone()
+            } else {
+                format!("{} -> {}", d.black_move, d.continuation.join(" "))
+            }
+        })
+        .collect();
+
+    format!("[{}]", entries.join(" | "))
 }
 
 fn main() -> Result<()> {
@@ -357,6 +397,7 @@ mod tests {
         let json = format_single_report(&report, OutputFormat::Json).expect("json output should format");
 
         assert!(json.contains("\"winning_line\""));
+        assert!(json.contains("\"solution\""));
     }
 
     #[test]
