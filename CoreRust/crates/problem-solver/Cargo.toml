@@ -1,0 +1,13 @@
+[package]
+name = "problem-solver"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+chess-core = { path = "../chess-core" }
+problem-io = { path = "../problem-io" }
+serde.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
