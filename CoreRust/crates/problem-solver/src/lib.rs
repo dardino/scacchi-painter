@@ -209,6 +209,7 @@ fn build_solution_tree(
 mod tests {
     use super::*;
     use chess_core::{Position, Side};
+    use std::collections::HashMap;
 
     #[test]
     fn default_config_is_deterministic() {
@@ -334,5 +335,77 @@ mod tests {
         let result = solve(&problem, &config).expect("alpha-beta should work");
         assert!(result.solved);
         assert!(result.explored_nodes<16);
+    }
+
+    #[test]
+    fn solve_finds_expected_mate_in_two_position() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen(
+                "7n/3NR3/1P3p2/1p1kbN1B/1p6/1K6/6b1/1Q6 w - - 0 1",
+                Side::White,
+            ),
+            stipulation: "#2".to_string(),
+            unsupported_features: vec![],
+        };
+
+        let result = solve(&problem, &SolverConfig::default()).expect("#2 position should be evaluated");
+
+        assert!(result.solved);
+        assert_eq!(result.winning_line, vec!["Qf1", "Bxf1", "Bf3#"]);
+
+        let solution = result.solution.expect("solution tree should be present");
+        assert_eq!(solution.key_move, "Qf1");
+
+        let defense_map: HashMap<String, Vec<String>> = solution
+            .defenses
+            .into_iter()
+            .map(|d| (d.black_move, d.continuation))
+            .collect();
+
+        assert_eq!(defense_map.get("Bxf1"), Some(&vec!["Bf3#".to_string()]));
+        assert_eq!(defense_map.get("Bh1"), Some(&vec!["Qxh1#".to_string()]));
+        assert_eq!(defense_map.get("Bh3"), Some(&vec!["Qf3#".to_string()]));
+        assert_eq!(defense_map.get("Be4"), Some(&vec!["Qxb5#".to_string()]));
+        assert_eq!(defense_map.get("Bf3"), Some(&vec!["Qxf3#".to_string()]));
+        assert_eq!(defense_map.get("Ke4"), Some(&vec!["Nxf6#".to_string()]));
+    }
+
+    #[test]
+    fn solve_finds_expected_mate_in_three_position() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen(
+                "b7/2K5/2n5/p1kB1p2/P1p5/3Rp3/2NN4/4B3 w - - 0 1",
+                Side::White,
+            ),
+            stipulation: "#3".to_string(),
+            unsupported_features: vec![],
+        };
+
+        let result = solve(&problem, &SolverConfig::default()).expect("#3 position should be evaluated");
+
+        assert!(result.solved);
+        assert_eq!(result.winning_line, vec!["Be6", "cxd3", "Nb3#"]);
+
+        let solution = result.solution.expect("solution tree should be present");
+        assert_eq!(solution.key_move, "Be6");
+
+        let defense_map: HashMap<String, Vec<String>> = solution
+            .defenses
+            .into_iter()
+            .map(|d| (d.black_move, d.continuation))
+            .collect();
+
+        assert_eq!(
+            defense_map.get("Nd4"),
+            Some(&vec!["Rxd4".to_string(), "exd2".to_string(), "Rxc4#".to_string()])
+        );
+        assert_eq!(
+            defense_map.get("Ne5"),
+            Some(&vec!["Rc3".to_string(), "exd2".to_string(), "Bf2#".to_string()])
+        );
+        assert_eq!(
+            defense_map.get("Ne7"),
+            Some(&vec!["Nb3+".to_string(), "cxb3".to_string(), "Rc3#".to_string()])
+        );
     }
 }

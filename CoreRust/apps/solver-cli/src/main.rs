@@ -435,8 +435,10 @@ mod tests {
         let output = run_corpus(&dir, &SolverConfig::default(), OutputFormat::Text, None)
             .expect("corpus should execute");
 
-        assert!(output.contains("cases=2"));
+        assert!(output.contains("cases=4"));
         assert!(output.contains("mate_in_1.popeye"));
+        assert!(output.contains("mate_in_2_qf1.popeye"));
+        assert!(output.contains("mate_in_3_be6.popeye"));
         assert!(output.contains("no_solution_empty_board.popeye"));
         assert!(
             ["winning_line=[Qa5#]", "winning_line=[Qa6#]", "winning_line=[Qa7#]", "winning_line=[Qb7#]", "winning_line=[Qb8#]"]
@@ -444,6 +446,8 @@ mod tests {
                 .any(|expected| output.contains(expected)),
             "unexpected SAN winning line in corpus output: {output}"
         );
+        assert!(output.contains("winning_line=[Qf1,Bxf1,Bf3#]"));
+        assert!(output.contains("winning_line=[Be6,cxd3,Nb3#]"));
     }
 
     #[test]
