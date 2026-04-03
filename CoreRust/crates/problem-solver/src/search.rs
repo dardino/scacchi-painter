@@ -38,9 +38,7 @@ impl Stipulation for DirectMate {
         explored_nodes: &mut u64,
         cache: &mut TranspositionCache,
     ) -> Option<Vec<Move>> {
-        let mut alpha = false;
-        let mut beta = true;
-        self.search_ab(position, plies_left, explored_nodes, cache, &mut alpha, &mut beta)
+        self.search_ab(position, plies_left, explored_nodes, cache)
     }
 }
 
@@ -53,15 +51,11 @@ impl DirectMate {
         cache: &mut TranspositionCache,
         deadline: Option<Instant>,
     ) -> TimedSearchResult {
-        let mut alpha = false;
-        let mut beta = true;
         match self.search_ab_with_deadline(
             position,
             plies_left,
             explored_nodes,
             cache,
-            &mut alpha,
-            &mut beta,
             deadline,
         ) {
             SearchState::Completed(winning_line) => TimedSearchResult {
@@ -81,13 +75,8 @@ impl DirectMate {
         plies_left: u16,
         explored_nodes: &mut u64,
         cache: &mut TranspositionCache,
-        alpha: &mut bool,
-        beta: &mut bool,
     ) -> Option<Vec<Move>> {
         if let Some(entry) = cache.get(position, plies_left) {
-            if entry.alpha_cut {
-                *alpha = *alpha || entry.solved;
-            }
             return entry.winning_line.clone();
         }
 
@@ -95,9 +84,6 @@ impl DirectMate {
 
         if position.is_checkmate() {
             let result = (position.side_to_move != self.attacker).then(Vec::new);
-            if result.is_some() {
-                *alpha = true;
-            }
             cache.insert(position, plies_left, result.is_some(), result.clone());
             return result;
         }
@@ -115,15 +101,10 @@ impl DirectMate {
 
         if position.side_to_move == self.attacker {
             for (mv, next) in successors {
-                if let Some(mut line) = self.search_ab(&next, plies_left.saturating_sub(1), explored_nodes, cache, alpha, beta) {
+                if let Some(mut line) = self.search_ab(&next, plies_left.saturating_sub(1), explored_nodes, cache) {
                     line.insert(0, mv);
                     cache.insert(position, plies_left, true, Some(line.clone()));
-                    *alpha = true;
                     return Some(line);
-                }
-                if *alpha >= *beta {
-                    cache.insert_with_alpha_cut(position, plies_left, false, None);
-                    return None;
                 }
             }
 
@@ -133,24 +114,18 @@ impl DirectMate {
             let mut first_defender_line: Option<Vec<Move>> = None;
 
             for (mv, next) in successors {
-                let Some(mut line) = self.search_ab(&next, plies_left.saturating_sub(1), explored_nodes, cache, alpha, beta) else {
+                let Some(mut line) = self.search_ab(&next, plies_left.saturating_sub(1), explored_nodes, cache) else {
                     cache.insert(position, plies_left, false, None);
-                    *beta = false;
                     return None;
                 };
                 line.insert(0, mv);
                 if first_defender_line.is_none() {
                     first_defender_line = Some(line);
                 }
-                if !(*alpha >= *beta) {
-                    cache.insert_with_alpha_cut(position, plies_left, false, None);
-                    return None;
-                }
             }
 
             if let Some(ref line) = first_defender_line {
                 cache.insert(position, plies_left, true, Some(line.clone()));
-                *beta = true;
             } else {
                 cache.insert(position, plies_left, false, None);
             }
@@ -165,8 +140,6 @@ impl DirectMate {
         plies_left: u16,
         explored_nodes: &mut u64,
         cache: &mut TranspositionCache,
-        alpha: &mut bool,
-        beta: &mut bool,
         deadline: Option<Instant>,
     ) -> SearchState {
         if let Some(limit) = deadline {
@@ -176,9 +149,6 @@ impl DirectMate {
         }
 
         if let Some(entry) = cache.get(position, plies_left) {
-            if entry.alpha_cut {
-                *alpha = *alpha || entry.solved;
-            }
             return SearchState::Completed(entry.winning_line.clone());
         }
 
@@ -186,9 +156,6 @@ impl DirectMate {
 
         if position.is_checkmate() {
             let result = (position.side_to_move != self.attacker).then(Vec::new);
-            if result.is_some() {
-                *alpha = true;
-            }
             cache.insert(position, plies_left, result.is_some(), result.clone());
             return SearchState::Completed(result);
         }
@@ -211,8 +178,6 @@ impl DirectMate {
                     plies_left.saturating_sub(1),
                     explored_nodes,
                     cache,
-                    alpha,
-                    beta,
                     deadline,
                 );
 
@@ -221,15 +186,9 @@ impl DirectMate {
                     SearchState::Completed(Some(mut line)) => {
                         line.insert(0, mv);
                         cache.insert(position, plies_left, true, Some(line.clone()));
-                        *alpha = true;
                         return SearchState::Completed(Some(line));
                     }
                     SearchState::Completed(None) => {}
-                }
-
-                if *alpha >= *beta {
-                    cache.insert_with_alpha_cut(position, plies_left, false, None);
-                    return SearchState::Completed(None);
                 }
             }
 
@@ -244,8 +203,6 @@ impl DirectMate {
                     plies_left.saturating_sub(1),
                     explored_nodes,
                     cache,
-                    alpha,
-                    beta,
                     deadline,
                 );
 
@@ -254,7 +211,6 @@ impl DirectMate {
                     SearchState::Completed(Some(line)) => line,
                     SearchState::Completed(None) => {
                         cache.insert(position, plies_left, false, None);
-                        *beta = false;
                         return SearchState::Completed(None);
                     }
                 };
@@ -263,16 +219,10 @@ impl DirectMate {
                 if first_defender_line.is_none() {
                     first_defender_line = Some(line);
                 }
-
-                if !(*alpha >= *beta) {
-                    cache.insert_with_alpha_cut(position, plies_left, false, None);
-                    return SearchState::Completed(None);
-                }
             }
 
             if let Some(ref line) = first_defender_line {
                 cache.insert(position, plies_left, true, Some(line.clone()));
-                *beta = true;
             } else {
                 cache.insert(position, plies_left, false, None);
             }

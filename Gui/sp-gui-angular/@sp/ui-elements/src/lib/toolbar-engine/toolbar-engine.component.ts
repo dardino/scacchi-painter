@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output, inject, computed, input } from "@angular/core";
+import { Component, EventEmitter, Output, computed, inject, input } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
+import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 
 export type ViewModes = "txt" | "html" | "both";
@@ -37,14 +38,26 @@ export class ToolbarEngineComponent {
   @Output()
   public toggleEditor = new EventEmitter<ViewModes>();
 
+  @Output()
+  public toggleStreaming = new EventEmitter<void>();
+
+  @Output()
+  public engineChanged = new EventEmitter<Engines>();
+
   isRunning = input<boolean>(false);
   fullLog = input<boolean>(false);
+  solutionCount = input<number>(0);
+  streaming = input<boolean>(true);
   viewMode = input<ViewModes>("both");
+  availableEngines = input<Engines[]>(["Popeye"]);
+  selectedEngine = input<Engines>("Popeye");
 
   isMaxFont = computed(() => this.fontSize() >= 2);
   isMinFont = computed(() => this.fontSize() <= 1);
   logIcon = computed(() => this.fullLog() ? "compress" : "expand");
   fontSize = computed(() => this.preferences.solutionFontSize);
+  streamingIcon = computed(() => this.streaming() ? "wifi_tethering" : "inventory_2");
+  streamingLabel = computed(() => this.streaming() ? "Live" : "Buffered");
   viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode()]?.icon);
 
   start() {
@@ -76,5 +89,17 @@ export class ToolbarEngineComponent {
 
   toggleEditorview() {
     this.toggleEditor.emit(mapViewModeToIcons[this.viewMode()].nextM);
+  }
+
+  toggleStreamingMode() {
+    this.toggleStreaming.emit();
+  }
+
+  onEngineSelectionChange(event: Event) {
+    const select = event.target as HTMLSelectElement | null;
+    if (!select) {
+      return;
+    }
+    this.engineChanged.emit(select.value as Engines);
   }
 }

@@ -1,15 +1,29 @@
 use std::io::BufRead;
 use std::io::BufReader;
-use std::process::{Command, Stdio};
+use std::process::{Child, Command, Stdio};
 use std::ptr::eq;
+use std::sync::{Mutex, OnceLock};
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
+use std::sync::atomic::{AtomicBool, Ordering};
+use problem_io::{parse_popeye, ast_to_problem};
+use problem_solver::{solve_streaming, SolverConfig, StreamDirective};
 // windows
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
 
 // import write_temp_file as module
 mod write_temp_file;
+
+fn running_popeye() -> &'static Mutex<Option<Child>> {
+    static RUNNING_POPEYE: OnceLock<Mutex<Option<Child>>> = OnceLock::new();
+    RUNNING_POPEYE.get_or_init(|| Mutex::new(None))
+}
+
+fn rust_solver_stop_flag() -> &'static AtomicBool {
+    static STOP_FLAG: OnceLock<AtomicBool> = OnceLock::new();
+    STOP_FLAG.get_or_init(|| AtomicBool::new(false))
+}
 
 fn get_popeye_executable() -> &'static str {
     #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
@@ -102,9 +116,14 @@ async fn run_popeye<R: Runtime>(
             return Ok("[E] Failed to run popeye".to_string());
         }
         Ok(mut resp) => {
-            // Read stdout line by line
+            let stdout = resp.stdout.take();
             {
-                let stdout = resp.stdout.as_mut().unwrap();
+                let mut running = running_popeye().lock().unwrap();
+                *running = Some(resp);
+            }
+
+            // Read stdout line by line
+            if let Some(stdout) = stdout {
                 let stdout_reader = BufReader::new(stdout);
                 let stdout_lines = stdout_reader.lines();
 
@@ -122,11 +141,81 @@ async fn run_popeye<R: Runtime>(
                 }
             }
 
-            resp.wait().unwrap();
+            if let Some(mut child) = running_popeye().lock().unwrap().take() {
+                let _ = child.wait();
+            }
 
             return Ok("[I] done".to_string());
         }
     }
+}
+
+#[tauri::command]
+async fn stop_popeye() -> Result<(), String> {
+    let mut running = running_popeye().lock().unwrap();
+    if let Some(child) = running.as_mut() {
+        child.kill().map_err(|e| e.to_string())?;
+        let _ = child.wait();
+    }
+    *running = None;
+    Ok(())
+}
+
+#[tauri::command]
+async fn run_rust_solver<R: Runtime>(
+    window: tauri::Window<R>,
+    input: String,
+) -> Result<String, String> {
+    rust_solver_stop_flag().store(false, Ordering::Relaxed);
+
+    let ast = parse_popeye(&input).map_err(|e| e.to_string())?;
+    let problem = ast_to_problem(ast).map_err(|e| e.to_string())?;
+    let config = SolverConfig::default();
+
+    let mut solution_index = 0usize;
+    let result = solve_streaming(&problem, &config, None, |search_result| {
+        if rust_solver_stop_flag().load(Ordering::Relaxed) {
+            return StreamDirective::Stop;
+        }
+        solution_index += 1;
+        let payload = serde_json::json!({
+            "type": "solution",
+            "index": solution_index,
+            "winning_line": search_result.winning_line,
+            "winning_line_popeye": search_result.winning_line_popeye,
+            "explored_nodes": search_result.explored_nodes,
+        });
+        window.emit("spcore-update", payload.to_string()).ok();
+        StreamDirective::Continue
+    });
+
+    match result {
+        Ok(summary) => {
+            let done = serde_json::json!({
+                "type": "done",
+                "solutions_found": summary.solutions_found,
+                "explored_nodes": summary.explored_nodes,
+                "stopped_early": summary.stopped_early,
+                "timed_out": summary.timed_out,
+            });
+            window.emit("spcore-update", done.to_string()).ok();
+        }
+        Err(e) => {
+            let error = serde_json::json!({
+                "type": "error",
+                "message": e.to_string(),
+            });
+            window.emit("spcore-update", error.to_string()).ok();
+        }
+    }
+
+    Ok("done".to_string())
+}
+
+#[tauri::command]
+async fn stop_rust_solver() -> Result<(), String> {
+    rust_solver_stop_flag().store(true, Ordering::Relaxed);
+    Ok(())
 }
 
 #[tauri::command]
@@ -139,7 +228,7 @@ async fn close_app<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![close_app, run_popeye])
+        .invoke_handler(tauri::generate_handler![close_app, run_popeye, stop_popeye, run_rust_solver, stop_rust_solver])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

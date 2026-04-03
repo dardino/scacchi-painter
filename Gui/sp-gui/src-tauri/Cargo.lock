@@ -436,6 +436,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
+name = "chess-core"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "thiserror 2.0.17",
+]
+
+[[package]]
 name = "chrono"
 version = "0.4.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2637,6 +2645,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
+name = "problem-io"
+version = "0.1.0"
+dependencies = [
+ "chess-core",
+ "serde",
+ "thiserror 2.0.17",
+]
+
+[[package]]
+name = "problem-solver"
+version = "0.1.0"
+dependencies = [
+ "chess-core",
+ "problem-io",
+ "serde",
+ "thiserror 2.0.17",
+ "tracing",
+]
+
+[[package]]
 name = "proc-macro-crate"
 version = "1.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2966,6 +2994,8 @@ dependencies = [
 name = "scacchi-painter-x"
 version = "0.1.0"
 dependencies = [
+ "problem-io",
+ "problem-solver",
  "serde",
  "serde_json",
  "tauri",

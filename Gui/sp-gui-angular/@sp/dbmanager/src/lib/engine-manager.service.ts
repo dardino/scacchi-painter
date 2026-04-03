@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
+import { Engines, SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 import { BehaviorSubject } from "rxjs";
 import { Problem } from "./models";
@@ -26,10 +26,14 @@ export class EngineManagerService {
       throw new Error("unable to solve a null problem!");
     }
     if (this.bridge.supportsEngine(problem.engine)) {
-      this.bridge.startSolve(problem, mode);
+      this.bridge.startSolve(problem, problem.engine, mode);
       return;
     }
     throw new Error(`Engine ${problem.engine} not supported.`);
+  }
+
+  public availableEngines(): Engines[] {
+    return this.bridge.availableEngines();
   }
 
   public stopSolving(): void {
