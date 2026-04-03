@@ -16,6 +16,65 @@ pub fn format_winning_line_san(start: &OrthodoxPosition, line: &[Move]) -> Vec<S
     result
 }
 
+pub fn format_winning_line_popeye(start: &OrthodoxPosition, line: &[Move]) -> Vec<String> {
+    let mut position = start.clone();
+    let mut result = Vec::with_capacity(line.len());
+
+    for (idx, &mv) in line.iter().enumerate() {
+        let Some(piece) = position.board.get(mv.from) else {
+            break;
+        };
+
+        let is_en_passant = piece.kind == PieceKind::Pawn
+            && position.en_passant_target == Some(mv.to)
+            && mv.from.file != mv.to.file;
+        let is_capture = position.board.get(mv.to).is_some() || is_en_passant;
+        let move_type = if is_capture { '*' } else { '-' };
+
+        let piece_prefix = match piece.kind {
+            PieceKind::King => "K",
+            PieceKind::Queen => "Q",
+            PieceKind::Rook => "R",
+            PieceKind::Bishop => "B",
+            PieceKind::Knight => "N",
+            PieceKind::Pawn => "",
+        };
+
+        let mut effects = String::new();
+        if idx == 0 {
+            effects.push('!');
+        }
+
+        let promotion = if piece.kind == PieceKind::Pawn && (mv.to.rank == 7 || mv.to.rank == 0) {
+            "=Q"
+        } else {
+            ""
+        };
+
+        let raw = format!(
+            "{piece_prefix}{}{move_type}{}{promotion}",
+            format_square(mv.from),
+            format_square(mv.to),
+        );
+
+        match position.make_move(mv) {
+            Ok(next) => {
+                if next.is_checkmate() {
+                    effects.push('#');
+                } else if next.is_in_check(next.side_to_move) {
+                    effects.push('+');
+                }
+                position = next;
+            }
+            Err(_) => break,
+        }
+
+        result.push(format!("{raw}{effects}"));
+    }
+
+    result
+}
+
 fn format_move_san(position: &OrthodoxPosition, mv: Move) -> String {
     let Some(piece) = position.board.get(mv.from) else {
         return format_coord(mv);

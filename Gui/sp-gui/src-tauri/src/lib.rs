@@ -182,6 +182,7 @@ async fn run_rust_solver<R: Runtime>(
             "type": "solution",
             "index": solution_index,
             "winning_line": search_result.winning_line,
+            "winning_line_popeye": search_result.winning_line_popeye,
             "explored_nodes": search_result.explored_nodes,
         });
         window.emit("spcore-update", payload.to_string()).ok();

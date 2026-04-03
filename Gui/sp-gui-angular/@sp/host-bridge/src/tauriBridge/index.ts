@@ -39,6 +39,7 @@ class TauriBridge implements BridgeGlobal {
         type: "solution" | "done" | "error";
         index?: number;
         winning_line?: string[];
+        winning_line_popeye?: string[];
         explored_nodes?: number;
         solutions_found?: number;
         stopped_early?: boolean;
@@ -46,9 +47,11 @@ class TauriBridge implements BridgeGlobal {
         message?: string;
       };
       if (msg.type === "solution") {
-        const line = msg.winning_line?.join(" ") ?? "";
-        const raw = `${msg.index}. ${line}`;
-        this.solver$.next({ raw, rowtype: "data", moveTree: [] });
+        const popeyeLine = msg.winning_line_popeye ?? [];
+        const raw = this.formatPopeyeLikeRow(popeyeLine);
+        const mov = parsePopeyeRow(raw, this.currentProblem.startMoveN);
+        const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
+        this.solver$.next({ raw, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
       }
       else if (msg.type === "done") {
         const raw = `SpCore: ${msg.solutions_found} solution(s), ${msg.explored_nodes} nodes${msg.stopped_early ? " (stopped early)" : ""}`;
@@ -63,6 +66,27 @@ class TauriBridge implements BridgeGlobal {
     catch {
       this.solver$.next({ raw: data, rowtype: "log", moveTree: [] });
     }
+  }
+
+  private formatPopeyeLikeRow(plies: string[]): string {
+    if (plies.length === 0) {
+      return "";
+    }
+
+    const startMove = this.currentProblem?.startMoveN ?? 1;
+    if (startMove === 1.5) {
+      // Keep a parse-friendly fallback for black-to-move problems.
+      return `1. ${plies[0]}${plies.length > 1 ? ` ${plies.slice(1).join(" ")}` : ""}`;
+    }
+
+    const chunks: string[] = [];
+    for (let i = 0; i < plies.length; i += 2) {
+      const moveN = Math.floor(i / 2) + 1;
+      const left = plies[i];
+      const right = plies[i + 1];
+      chunks.push(right ? `${moveN}. ${left} ${right}` : `${moveN}. ${left}`);
+    }
+    return chunks.join(" ");
   }
 
   private endSolve(reason: EOF) {

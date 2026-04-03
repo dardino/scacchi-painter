@@ -51,6 +51,7 @@ pub struct SearchResult {
     pub solved: bool,
     pub explored_nodes: u64,
     pub winning_line: Vec<String>,
+    pub winning_line_popeye: Vec<String>,
     pub solution: Option<SolutionTree>,
 }
 
@@ -131,6 +132,10 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
         Some(ref moves) => san::format_winning_line_san(&position, moves),
         None => vec![],
     };
+    let winning_line_popeye = match line_moves {
+        Some(ref moves) => san::format_winning_line_popeye(&position, moves),
+        None => vec![],
+    };
     let solution = match line_moves {
         Some(ref moves) => build_solution_tree(
             &position,
@@ -148,6 +153,7 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
         solved,
         explored_nodes,
         winning_line,
+        winning_line_popeye,
         solution,
     })
 }
@@ -229,6 +235,7 @@ where
         full_line.append(&mut continuation);
 
         let winning_line = san::format_winning_line_san(&position, &full_line);
+        let winning_line_popeye = san::format_winning_line_popeye(&position, &full_line);
         let solution = build_solution_tree(
             &position,
             &stipulation,
@@ -244,6 +251,7 @@ where
             solved: true,
             explored_nodes,
             winning_line,
+            winning_line_popeye,
             solution,
         });
 
