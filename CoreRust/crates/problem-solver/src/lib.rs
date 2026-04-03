@@ -32,6 +32,7 @@ struct TranspositionEntry {
     solved: bool,
     winning_line: Option<Vec<Move>>,
     depth_searched: u16,
+    alpha_cut: bool,
 }
 
 #[derive(Debug)]
@@ -65,6 +66,20 @@ impl TranspositionCache {
                 solved,
                 winning_line,
                 depth_searched: plies_left,
+                alpha_cut: false,
+            },
+        );
+    }
+
+    fn insert_with_alpha_cut(&mut self, position: &OrthodoxPosition, plies_left: u16, solved: bool, winning_line: Option<Vec<Move>>) {
+        let key = position_key(position);
+        self.table.insert(
+            key,
+            TranspositionEntry {
+                solved,
+                winning_line,
+                depth_searched: plies_left,
+                alpha_cut: true,
             },
         );
     }
@@ -168,7 +183,26 @@ impl Stipulation for DirectMate {
         explored_nodes: &mut u64,
         cache: &mut TranspositionCache,
     ) -> Option<Vec<Move>> {
+        let mut alpha = false;
+        let mut beta = true;
+        self.search_ab(position, plies_left, explored_nodes, cache, &mut alpha, &mut beta)
+    }
+}
+
+impl DirectMate {
+    fn search_ab(
+        &self,
+        position: &OrthodoxPosition,
+        plies_left: u16,
+        explored_nodes: &mut u64,
+        cache: &mut TranspositionCache,
+        alpha: &mut bool,
+        beta: &mut bool,
+    ) -> Option<Vec<Move>> {
         if let Some(entry) = cache.get(position, plies_left) {
+            if entry.alpha_cut {
+                *alpha = *alpha || entry.solved;
+            }
             return entry.winning_line.clone();
         }
 
@@ -176,6 +210,9 @@ impl Stipulation for DirectMate {
 
         if position.is_checkmate() {
             let result = (position.side_to_move != self.attacker).then(Vec::new);
+            if result.is_some() {
+                *alpha = true;
+            }
             cache.insert(position, plies_left, result.is_some(), result.clone());
             return result;
         }
@@ -187,15 +224,21 @@ impl Stipulation for DirectMate {
 
         let successors = ordered_successors(position, self.deterministic);
         if successors.is_empty() {
+            cache.insert(position, plies_left, false, None);
             return None;
         }
 
         if position.side_to_move == self.attacker {
             for (mv, next) in successors {
-                if let Some(mut line) = self.search(&next, plies_left.saturating_sub(1), explored_nodes, cache) {
+                if let Some(mut line) = self.search_ab(&next, plies_left.saturating_sub(1), explored_nodes, cache, alpha, beta) {
                     line.insert(0, mv);
                     cache.insert(position, plies_left, true, Some(line.clone()));
+                    *alpha = true;
                     return Some(line);
+                }
+                if *alpha >= *beta {
+                    cache.insert_with_alpha_cut(position, plies_left, false, None);
+                    return None;
                 }
             }
 
@@ -205,18 +248,24 @@ impl Stipulation for DirectMate {
             let mut first_defender_line: Option<Vec<Move>> = None;
 
             for (mv, next) in successors {
-                let Some(mut line) = self.search(&next, plies_left.saturating_sub(1), explored_nodes, cache) else {
+                let Some(mut line) = self.search_ab(&next, plies_left.saturating_sub(1), explored_nodes, cache, alpha, beta) else {
                     cache.insert(position, plies_left, false, None);
+                    *beta = false;
                     return None;
                 };
                 line.insert(0, mv);
                 if first_defender_line.is_none() {
                     first_defender_line = Some(line);
                 }
+                if !(*alpha >= *beta) {
+                    cache.insert_with_alpha_cut(position, plies_left, false, None);
+                    return None;
+                }
             }
 
             if let Some(ref line) = first_defender_line {
                 cache.insert(position, plies_left, true, Some(line.clone()));
+                *beta = true;
             } else {
                 cache.insert(position, plies_left, false, None);
             }
@@ -571,5 +620,20 @@ mod tests {
 
         assert!(result.explored_nodes > 0);
         assert!(result.solved);
+    }
+
+    #[test]
+    fn alpha_beta_pruning_reduces_nodes() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen("k7/2K5/1Q6/8/8/8/8/8 w - - 0 1", Side::White),
+            stipulation: "#2".to_string(),
+            unsupported_features: vec![],
+        };
+
+        let config = SolverConfig::default();
+        let result = solve(&problem, &config).expect("alpha-beta should work");
+
+        assert!(result.solved);
+        assert!(result.explored_nodes < 16);
     }
 }
