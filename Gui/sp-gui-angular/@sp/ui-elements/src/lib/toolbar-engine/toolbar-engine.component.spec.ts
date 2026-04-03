@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ToolbarEngineComponent } from "./toolbar-engine.component";
 
 describe("ToolbarEngineComponent", () => {
@@ -18,5 +18,20 @@ describe("ToolbarEngineComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should emit toggleStreaming when streaming mode is toggled", () => {
+    const emitSpy = vi.spyOn(component.toggleStreaming, "emit");
+
+    component.toggleStreamingMode();
+
+    expect(emitSpy).toHaveBeenCalledOnce();
+  });
+
+  it("should render the current solution count", () => {
+    fixture.componentRef.setInput("solutionCount", 3);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain("Solutions: 3");
   });
 });

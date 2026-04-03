@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 class WebBridge implements BridgeGlobal {
   private problem: Problem;
   private solver$: BehaviorSubject<SolutionRow | EOF>;
+  private solveEnded = true;
   private ww: Worker = new Worker("./assets/engine/popeye_ww.js");
 
   private startWorker() {
@@ -24,6 +25,10 @@ class WebBridge implements BridgeGlobal {
   }
 
   private endSolve(reason: EOF) {
+    if (!this.solver$ || this.solveEnded) {
+      return;
+    }
+    this.solveEnded = true;
     this.solver$.next(reason);
     this.stopWorker();
     setTimeout(() => this.solver$.unsubscribe(), 500);
@@ -80,6 +85,7 @@ class WebBridge implements BridgeGlobal {
       return new Error("Engine not found.");
     }
     this.problem = CurrentProblem;
+    this.solveEnded = false;
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
       {
         raw: `starting engine <${engine}>`,

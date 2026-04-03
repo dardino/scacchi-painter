@@ -1,7 +1,8 @@
 use std::io::BufRead;
 use std::io::BufReader;
-use std::process::{Command, Stdio};
+use std::process::{Child, Command, Stdio};
 use std::ptr::eq;
+use std::sync::{Mutex, OnceLock};
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
 // windows
@@ -10,6 +11,11 @@ use std::os::windows::process::CommandExt;
 
 // import write_temp_file as module
 mod write_temp_file;
+
+fn running_popeye() -> &'static Mutex<Option<Child>> {
+    static RUNNING_POPEYE: OnceLock<Mutex<Option<Child>>> = OnceLock::new();
+    RUNNING_POPEYE.get_or_init(|| Mutex::new(None))
+}
 
 fn get_popeye_executable() -> &'static str {
     #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
@@ -102,9 +108,14 @@ async fn run_popeye<R: Runtime>(
             return Ok("[E] Failed to run popeye".to_string());
         }
         Ok(mut resp) => {
-            // Read stdout line by line
+            let stdout = resp.stdout.take();
             {
-                let stdout = resp.stdout.as_mut().unwrap();
+                let mut running = running_popeye().lock().unwrap();
+                *running = Some(resp);
+            }
+
+            // Read stdout line by line
+            if let Some(stdout) = stdout {
                 let stdout_reader = BufReader::new(stdout);
                 let stdout_lines = stdout_reader.lines();
 
@@ -122,11 +133,24 @@ async fn run_popeye<R: Runtime>(
                 }
             }
 
-            resp.wait().unwrap();
+            if let Some(mut child) = running_popeye().lock().unwrap().take() {
+                let _ = child.wait();
+            }
 
             return Ok("[I] done".to_string());
         }
     }
+}
+
+#[tauri::command]
+async fn stop_popeye() -> Result<(), String> {
+    let mut running = running_popeye().lock().unwrap();
+    if let Some(child) = running.as_mut() {
+        child.kill().map_err(|e| e.to_string())?;
+        let _ = child.wait();
+    }
+    *running = None;
+    Ok(())
 }
 
 #[tauri::command]
@@ -139,7 +163,7 @@ async fn close_app<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![close_app, run_popeye])
+        .invoke_handler(tauri::generate_handler![close_app, run_popeye, stop_popeye])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

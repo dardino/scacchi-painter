@@ -8,6 +8,8 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "../lib/bridge-global";
 
 class TauriBridge implements BridgeGlobal {
+  private solveEnded = true;
+
   constructor() {
     listen("popeye-update", (event: Event<string>) => {
       this.processData(event.payload ?? "");
@@ -24,6 +26,10 @@ class TauriBridge implements BridgeGlobal {
   }
 
   private endSolve(reason: EOF) {
+    if (!this.solver$ || this.solveEnded) {
+      return;
+    }
+    this.solveEnded = true;
     this.solver$.next(reason);
     setTimeout(() => this.solver$.unsubscribe(), 500);
   }
@@ -43,6 +49,9 @@ class TauriBridge implements BridgeGlobal {
   }
 
   stopSolve(): void {
+    invoke("stop_popeye").catch((error) => {
+      console.warn("Failed to stop popeye process", error);
+    });
     this.endSolve({ exitCode: -1, message: "solution stopped!" });
   }
 
@@ -50,6 +59,7 @@ class TauriBridge implements BridgeGlobal {
   private currentProblem: Problem;
   runSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes): Observable<SolutionRow | EOF> | Error {
     this.currentProblem = CurrentProblem;
+    this.solveEnded = false;
     if (engine !== "Popeye") {
       return new Error("Engine not found!");
     }
@@ -77,6 +87,8 @@ class TauriBridge implements BridgeGlobal {
     });
     invoke("run_popeye", { name: problem }).then((result) => {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0 ${result}` });
+    }).catch((error) => {
+      this.endSolve({ exitCode: -1, message: `${error}` });
     });
   }
 

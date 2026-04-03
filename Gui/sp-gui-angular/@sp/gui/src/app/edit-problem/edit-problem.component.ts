@@ -1,4 +1,4 @@
-import { Location, CommonModule } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
@@ -9,8 +9,8 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
 import { HalfMoveInfo } from "@dardino-chess/core";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
-import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
+import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
@@ -22,6 +22,7 @@ import {
   getCanvasRotation,
   notNull,
 } from "@sp/dbmanager/src/public-api";
+import { SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
 import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
@@ -82,12 +83,19 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   solveInProgress = signal(false);
+  solutionCount = signal(0);
   showLog = signal(false);
+  streamSolutions = signal(true);
   viewMode = signal<ViewModes>("html");
+  private pendingSolutionRows: SolutionRow[] = [];
 
   constructor() {
     this.engine.isSolving$.subscribe((state) => {
+      const wasSolving = this.solveInProgress();
       this.solveInProgress.set(state);
+      if (wasSolving && !state) {
+        this.flushBufferedSolutionRows();
+      }
     });
   }
 
@@ -178,6 +186,14 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   toggleLog = () => this.showLog.update(v => !v);
+  toggleStreaming() {
+    const nextValue = !this.streamSolutions();
+    this.streamSolutions.set(nextValue);
+    if (nextValue) {
+      this.flushBufferedSolutionRows();
+    }
+  }
+
   toggleEditor($event: ViewModes) {
     this.viewMode.set($event);
   }
@@ -204,6 +220,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.rows$ubject.next(null);
     this.rows$ubject.next([]);
+    this.solutionCount.set(0);
+    this.pendingSolutionRows = [];
     if (this.current.Problem) {
       this.current.Problem.jsonSolution = [];
       this.current.Problem.htmlSolution = "";
@@ -230,11 +248,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe((msg) => {
       if (msg === null) return;
       if (!this.current.Problem) return;
-      const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
-      this.current.Problem.htmlSolution += this.toHtml([...raw]);
-      this.current.Problem.textSolution += `\n` + raw.join(`\n`);
-      this.current.Problem.jsonSolution.push(...msg.moveTree);
-      this.rows$ubject.next(msg.moveTree);
+      this.trackSolutionCount(msg);
+      if (this.streamSolutions()) {
+        this.appendSolutionMessage(msg);
+      }
+      else {
+        this.pendingSolutionRows.push(msg);
+      }
     });
 
     this.route.params.subscribe((params) => {
@@ -247,6 +267,31 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }, 1);
     });
+  }
+
+  private flushBufferedSolutionRows() {
+    if (this.pendingSolutionRows.length === 0) return;
+
+    const bufferedRows = this.pendingSolutionRows;
+    this.pendingSolutionRows = [];
+    bufferedRows.forEach(msg => this.appendSolutionMessage(msg));
+  }
+
+  private appendSolutionMessage(msg: SolutionRow) {
+    if (!this.current.Problem) return;
+
+    const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
+    this.current.Problem.htmlSolution += this.toHtml([...raw]);
+    this.current.Problem.textSolution += `\n` + raw.join(`\n`);
+    this.current.Problem.jsonSolution.push(...msg.moveTree);
+    this.rows$ubject.next(msg.moveTree);
+  }
+
+  private trackSolutionCount(msg: SolutionRow) {
+    const newSolutions = msg.moveTree.filter(move => move?.isKey).length;
+    if (newSolutions > 0) {
+      this.solutionCount.update(count => count + newSolutions);
+    }
   }
 
   ngOnDestroy(): void {

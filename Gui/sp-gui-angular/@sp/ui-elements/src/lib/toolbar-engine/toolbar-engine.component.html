@@ -26,6 +26,15 @@
     [disabled]="isRunning()"
   ></lib-sp-toolbar-button>
   <lib-sp-toolbar-button
+    (click)="toggleStreamingMode()"
+    [iconText]="streamingIcon()"
+    [iconLabel]="streamingLabel()"
+    [noLabel]="hideLabels()"
+  ></lib-sp-toolbar-button>
+  <span class="solution-counter" [class.live]="streaming()">
+    Solutions: {{ solutionCount() }}
+  </span>
+  <lib-sp-toolbar-button
     (click)="increaseFontSize()"
     iconText="text_increase"
     mat-toolip="Increase text size"

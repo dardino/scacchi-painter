@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { RouterModule } from "@angular/router";
-import { EditProblemComponent } from "./edit-problem.component";
 import { SquareLocation } from "@sp/dbmanager/src/public-api";
+import { EditProblemComponent } from "./edit-problem.component";
 
 describe("EditProblemComponent - Interactive Features", () => {
   let component: EditProblemComponent;
@@ -126,5 +126,15 @@ describe("EditProblemComponent - Interactive Features", () => {
 
   it("should create component", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should toggle streaming mode", () => {
+    expect(component.streamSolutions()).toBe(true);
+
+    component.toggleStreaming();
+    expect(component.streamSolutions()).toBe(false);
+
+    component.toggleStreaming();
+    expect(component.streamSolutions()).toBe(true);
   });
 });
