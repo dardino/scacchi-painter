@@ -25,11 +25,13 @@ pub use search::{DirectMate, Stipulation};
 use chess_core::OrthodoxPosition;
 use problem_io::ProblemDefinition;
 use serde::{Deserialize, Serialize};
+use std::time::{Duration, Instant};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SolverConfig {
     pub max_depth: u16,
     pub deterministic: bool,
+    pub max_time_ms: Option<u64>,
 }
 
 impl Default for SolverConfig {
@@ -37,6 +39,7 @@ impl Default for SolverConfig {
         Self {
             max_depth: 8,
             deterministic: true,
+            max_time_ms: None,
         }
     }
 }
@@ -65,7 +68,31 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
 
     let mut explored_nodes = 0;
     let mut trans_cache = cache::TranspositionCache::new();
-    let line_moves = stipulation.search(&position, plies, &mut explored_nodes, &mut trans_cache);
+    let start = Instant::now();
+    let deadline = config
+        .max_time_ms
+        .map(|ms| start + Duration::from_millis(ms));
+
+    let mut line_moves: Option<Vec<chess_core::Move>> = None;
+    for depth in 1..=plies {
+        let timed = stipulation.search_with_deadline(
+            &position,
+            depth,
+            &mut explored_nodes,
+            &mut trans_cache,
+            deadline,
+        );
+
+        if timed.timed_out {
+            break;
+        }
+
+        if timed.winning_line.is_some() {
+            line_moves = timed.winning_line;
+            break;
+        }
+    }
+
     let solved = line_moves.is_some();
     let winning_line = match line_moves {
         Some(ref moves) => san::format_winning_line_san(&position, moves),
@@ -141,13 +168,39 @@ mod tests {
             stipulation: "#1".to_string(),
             unsupported_features: vec![],
         };
-        let sorted_cfg = SolverConfig { max_depth: 8, deterministic: true };
-        let unsorted_cfg = SolverConfig { max_depth: 8, deterministic: false };
+        let unsorted_cfg = SolverConfig {
+            max_depth: 8,
+            deterministic: false,
+            max_time_ms: None,
+        };
+        let sorted_cfg = SolverConfig {
+            max_depth: 8,
+            deterministic: true,
+            max_time_ms: None,
+        };
         let sorted = solve(&problem, &sorted_cfg).expect("sorted config should solve");
         let unsorted = solve(&problem, &unsorted_cfg).expect("unsorted config should solve");
         assert!(sorted.solved);
         assert!(unsorted.solved);
         assert!(sorted.explored_nodes<=unsorted.explored_nodes);
+    }
+
+    #[test]
+    fn solve_respects_zero_time_limit() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen("k7/2K5/1Q6/8/8/8/8/8 w - - 0 1", Side::White),
+            stipulation: "#2".to_string(),
+            unsupported_features: vec![],
+        };
+        let config = SolverConfig {
+            max_depth: 8,
+            deterministic: true,
+            max_time_ms: Some(0),
+        };
+
+        let result = solve(&problem, &config).expect("solver should handle zero time budget");
+
+        assert!(!result.solved);
     }
 
     #[test]
