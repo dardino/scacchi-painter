@@ -66,6 +66,20 @@ pub struct DefenseLine {
     pub continuation: Vec<String>,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum StreamDirective {
+    Continue,
+    Stop,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StreamingSummary {
+    pub solutions_found: usize,
+    pub explored_nodes: u64,
+    pub stopped_early: bool,
+    pub timed_out: bool,
+}
+
 /// Solves a chess problem using the directmate stipulation solver.
 pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<SearchResult, SolverError> {
     let mate_moves = cache::parse_directmate_moves(&problem.stipulation)
@@ -135,6 +149,122 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
         explored_nodes,
         winning_line,
         solution,
+    })
+}
+
+/// Streams direct-mate solutions one by one as soon as they are found.
+///
+/// The callback is invoked for every found key move with its solution tree.
+/// Returning [`StreamDirective::Stop`] interrupts the search early.
+pub fn solve_streaming<F>(
+    problem: &ProblemDefinition,
+    config: &SolverConfig,
+    max_solutions: Option<usize>,
+    mut on_solution: F,
+) -> Result<StreamingSummary, SolverError>
+where
+    F: FnMut(SearchResult) -> StreamDirective,
+{
+    let mate_moves = cache::parse_directmate_moves(&problem.stipulation)
+        .ok_or_else(|| SolverError::UnsupportedStipulation(problem.stipulation.clone()))?;
+
+    let plies = ((mate_moves as u32).saturating_mul(2).saturating_sub(1)) as u16;
+    let plies = plies.min(config.max_depth.max(1));
+    let position = OrthodoxPosition::from_fen(&problem.position.fen)
+        .map_err(|err| SolverError::InvalidProblemPosition(err.to_string()))?;
+
+    let stipulation = DirectMate {
+        attacker: position.side_to_move,
+        deterministic: config.deterministic,
+    };
+
+    let mut explored_nodes = 0;
+    let mut trans_cache = cache::TranspositionCache::new(config.transposition_ttl_generations);
+    let start = Instant::now();
+    let deadline = config
+        .max_time_ms
+        .map(|ms| start + Duration::from_millis(ms));
+
+    let mut solutions_found: usize = 0;
+    let mut stopped_early = false;
+    let mut timed_out = false;
+
+    for (key_move, after_key) in moves::ordered_successors(&position, config.deterministic) {
+        if let Some(limit) = deadline {
+            if Instant::now() >= limit {
+                timed_out = true;
+                break;
+            }
+        }
+
+        if plies > 1 {
+            trans_cache.advance_generation();
+        }
+
+        let key_continuation = if plies <= 1 {
+            after_key.is_checkmate().then(Vec::new)
+        } else {
+            let timed = stipulation.search_with_deadline(
+                &after_key,
+                plies.saturating_sub(1),
+                &mut explored_nodes,
+                &mut trans_cache,
+                deadline,
+            );
+
+            if timed.timed_out {
+                timed_out = true;
+                break;
+            }
+
+            timed.winning_line
+        };
+
+        let Some(mut continuation) = key_continuation else {
+            continue;
+        };
+
+        let mut full_line = Vec::with_capacity(1 + continuation.len());
+        full_line.push(key_move);
+        full_line.append(&mut continuation);
+
+        let winning_line = san::format_winning_line_san(&position, &full_line);
+        let solution = build_solution_tree(
+            &position,
+            &stipulation,
+            plies,
+            &full_line,
+            &mut explored_nodes,
+            &mut trans_cache,
+            deadline,
+        );
+
+        solutions_found = solutions_found.saturating_add(1);
+        let directive = on_solution(SearchResult {
+            solved: true,
+            explored_nodes,
+            winning_line,
+            solution,
+        });
+
+        if directive == StreamDirective::Stop {
+            stopped_early = true;
+            break;
+        }
+
+        if let Some(max) = max_solutions {
+            if solutions_found >= max {
+                stopped_early = true;
+                break;
+            }
+        }
+    }
+
+    Ok(StreamingSummary {
+        solutions_found,
+        explored_nodes,
+        stopped_early,
+        timed_out,
     })
 }
 
@@ -407,5 +537,26 @@ mod tests {
             defense_map.get("Ne7"),
             Some(&vec!["Nb3+".to_string(), "cxb3".to_string(), "Rc3#".to_string()])
         );
+    }
+
+    #[test]
+    fn solve_streaming_can_stop_after_max_solutions() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen("k7/2K5/1Q6/8/8/8/8/8 w - - 0 1", Side::White),
+            stipulation: "#1".to_string(),
+            unsupported_features: vec![],
+        };
+
+        let mut streamed = Vec::new();
+        let summary = solve_streaming(&problem, &SolverConfig::default(), Some(2), |result| {
+            streamed.push(result.winning_line[0].clone());
+            StreamDirective::Continue
+        })
+        .expect("streaming solve should succeed");
+
+        assert_eq!(summary.solutions_found, 2);
+        assert!(summary.stopped_early);
+        assert!(!summary.timed_out);
+        assert_eq!(streamed.len(), 2);
     }
 }

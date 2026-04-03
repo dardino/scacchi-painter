@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::{Parser, ValueEnum};
 use problem_io::{ast_to_problem, parse_popeye};
-use problem_solver::{solve, SolutionTree, SolverConfig};
+use problem_solver::{solve, solve_streaming, SolutionTree, SolverConfig, StreamDirective, StreamingSummary};
 use serde::Serialize;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -20,6 +20,10 @@ struct Cli {
     format: OutputFormat,
     #[arg(long)]
     benchmark_runs: Option<u32>,
+    #[arg(long)]
+    stream_solutions: bool,
+    #[arg(long)]
+    max_solutions: Option<usize>,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -49,6 +53,11 @@ struct BenchmarkStats {
 struct SingleRunReport {
     result: CliOutput,
     benchmark: Option<BenchmarkStats>,
+}
+
+#[derive(Debug, Serialize)]
+struct StreamingRunReport {
+    summary: StreamingSummary,
 }
 
 #[derive(Debug, Serialize)]
@@ -88,12 +97,35 @@ fn solve_input(input: &str, config: &SolverConfig) -> Result<CliOutput> {
     let problem = ast_to_problem(ast)?;
     let result = solve(&problem, config)?;
 
-    Ok(CliOutput {
+    Ok(cli_output_from_solver_result(result))
+}
+
+fn cli_output_from_solver_result(result: problem_solver::SearchResult) -> CliOutput {
+    CliOutput {
         solved: result.solved,
         explored_nodes: result.explored_nodes,
         winning_line: result.winning_line,
         solution: result.solution,
-    })
+    }
+}
+
+fn stream_input_solutions<F>(
+    input: &str,
+    config: &SolverConfig,
+    max_solutions: Option<usize>,
+    mut on_solution: F,
+) -> Result<StreamingSummary>
+where
+    F: FnMut(CliOutput) -> StreamDirective,
+{
+    let ast = parse_popeye(input)?;
+    let problem = ast_to_problem(ast)?;
+
+    let summary = solve_streaming(&problem, config, max_solutions, |result| {
+        on_solution(cli_output_from_solver_result(result))
+    })?;
+
+    Ok(summary)
 }
 
 fn benchmark_input(input: &str, config: &SolverConfig, runs: u32) -> Result<(CliOutput, BenchmarkStats)> {
@@ -155,6 +187,21 @@ fn format_single_report(report: &SingleRunReport, format: OutputFormat) -> Resul
 
             Ok(text)
         }
+    }
+}
+
+fn format_streaming_summary(summary: &StreamingSummary, format: OutputFormat) -> Result<String> {
+    match format {
+        OutputFormat::Json => Ok(serde_json::to_string(&StreamingRunReport {
+            summary: summary.clone(),
+        })?),
+        OutputFormat::Text => Ok(format!(
+            "streaming_summary: solutions_found={} explored_nodes={} stopped_early={} timed_out={}",
+            summary.solutions_found,
+            summary.explored_nodes,
+            summary.stopped_early,
+            summary.timed_out
+        )),
     }
 }
 
@@ -332,6 +379,14 @@ fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
     let cli = Cli::parse();
+    if cli.stream_solutions && cli.benchmark_runs.is_some() {
+        anyhow::bail!("--stream-solutions cannot be combined with --benchmark-runs");
+    }
+
+    if cli.stream_solutions && cli.corpus_dir.is_some() {
+        anyhow::bail!("--stream-solutions is supported only for single input mode");
+    }
+
     let output = if let Some(corpus_dir) = &cli.corpus_dir {
         run_corpus(
             corpus_dir,
@@ -341,19 +396,53 @@ fn main() -> Result<()> {
         )?
     } else {
         let input = load_input(&cli)?;
-        let report = if let Some(runs) = cli.benchmark_runs {
-            let (result, benchmark) = benchmark_input(&input, &SolverConfig::default(), runs)?;
-            SingleRunReport {
-                result,
-                benchmark: Some(benchmark),
-            }
+
+        if cli.stream_solutions {
+            let mut index: usize = 0;
+            let summary = stream_input_solutions(
+                &input,
+                &SolverConfig::default(),
+                cli.max_solutions,
+                |result| {
+                    index = index.saturating_add(1);
+                    match cli.format {
+                        OutputFormat::Text => {
+                            println!("solution #{}", index);
+                            let single = SingleRunReport {
+                                result,
+                                benchmark: None,
+                            };
+                            match format_single_report(&single, OutputFormat::Text) {
+                                Ok(text) => println!("{text}"),
+                                Err(err) => eprintln!("format error: {err}"),
+                            }
+                        }
+                        OutputFormat::Json => match serde_json::to_string(&result) {
+                            Ok(json) => println!("{json}"),
+                            Err(err) => eprintln!("serialization error: {err}"),
+                        },
+                    }
+
+                    StreamDirective::Continue
+                },
+            )?;
+
+            format_streaming_summary(&summary, cli.format)?
         } else {
-            SingleRunReport {
-                result: solve_input(&input, &SolverConfig::default())?,
-                benchmark: None,
-            }
-        };
-        format_single_report(&report, cli.format)?
+            let report = if let Some(runs) = cli.benchmark_runs {
+                let (result, benchmark) = benchmark_input(&input, &SolverConfig::default(), runs)?;
+                SingleRunReport {
+                    result,
+                    benchmark: Some(benchmark),
+                }
+            } else {
+                SingleRunReport {
+                    result: solve_input(&input, &SolverConfig::default())?,
+                    benchmark: None,
+                }
+            };
+            format_single_report(&report, cli.format)?
+        }
     };
 
     println!("{output}");
@@ -423,6 +512,8 @@ mod tests {
             input_file: Some(path),
             format: OutputFormat::Text,
             benchmark_runs: None,
+            stream_solutions: false,
+            max_solutions: None,
         };
 
         let loaded = load_input(&cli).expect("file input should load");
@@ -480,5 +571,26 @@ mod tests {
 
         assert!(output.contains("solution:"));
         assert!(output.contains("1. "));
+    }
+
+    #[test]
+    fn stream_input_stops_at_max_solutions() {
+        let input = "Stipulation: #1\nFEN: k7/2K5/1Q6/8/8/8/8/8 w - - 0 1";
+        let mut seen = Vec::new();
+
+        let summary = stream_input_solutions(
+            input,
+            &SolverConfig::default(),
+            Some(2),
+            |result| {
+                seen.push(result.winning_line[0].clone());
+                StreamDirective::Continue
+            },
+        )
+        .expect("streaming should succeed");
+
+        assert_eq!(summary.solutions_found, 2);
+        assert!(summary.stopped_early);
+        assert_eq!(seen.len(), 2);
     }
 }
