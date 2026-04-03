@@ -142,11 +142,8 @@ fn format_single_report(report: &SingleRunReport, format: OutputFormat) -> Resul
             );
 
             if let Some(solution) = &report.result.solution {
-                text.push_str(&format!(
-                    " key_move={} defenses={}",
-                    solution.key_move,
-                    format_defenses(&solution.defenses)
-                ));
+                text.push('\n');
+                text.push_str(&format_solution_numbered(solution));
             }
 
             if let Some(bench) = &report.benchmark {
@@ -261,13 +258,6 @@ fn run_corpus(
                         case.winning_line_len,
                         format_winning_line(&case.winning_line)
                     );
-                    if let Some(solution) = &case.solution {
-                        line.push_str(&format!(
-                            " key_move={} defenses={}",
-                            solution.key_move,
-                            format_defenses(&solution.defenses)
-                        ));
-                    }
                     if let Some(bench) = &case.benchmark {
                         line.push_str(&format!(
                             " runs={} min_us={} avg_us={} max_us={} total_us={}",
@@ -275,6 +265,13 @@ fn run_corpus(
                         ));
                     }
                     lines.push(line);
+
+                    if let Some(solution) = &case.solution {
+                        let numbered = format_solution_numbered(solution);
+                        for solution_line in numbered.lines() {
+                            lines.push(format!("  {solution_line}"));
+                        }
+                    }
                 }
             }
 
@@ -297,23 +294,38 @@ fn format_winning_line(line: &[String]) -> String {
     }
 }
 
-fn format_defenses(defenses: &[problem_solver::DefenseLine]) -> String {
-    if defenses.is_empty() {
-        return "[]".to_string();
+fn format_solution_numbered(solution: &SolutionTree) -> String {
+    let mut lines = vec!["solution:".to_string(), format!("1. {}", solution.key_move)];
+
+    for defense in &solution.defenses {
+        let continuation = format_numbered_sequence(2, true, &defense.continuation);
+        if continuation.is_empty() {
+            lines.push(format!("1... {}", defense.black_move));
+        } else {
+            lines.push(format!("1... {} {}", defense.black_move, continuation));
+        }
     }
 
-    let entries: Vec<String> = defenses
-        .iter()
-        .map(|d| {
-            if d.continuation.is_empty() {
-                d.black_move.clone()
-            } else {
-                format!("{} -> {}", d.black_move, d.continuation.join(" "))
-            }
-        })
-        .collect();
+    lines.join("\n")
+}
 
-    format!("[{}]", entries.join(" | "))
+fn format_numbered_sequence(start_fullmove: u32, white_to_move: bool, san_moves: &[String]) -> String {
+    let mut parts = Vec::new();
+    let mut fullmove = start_fullmove;
+    let mut white_turn = white_to_move;
+
+    for san in san_moves {
+        if white_turn {
+            parts.push(format!("{fullmove}. {san}"));
+            white_turn = false;
+        } else {
+            parts.push(format!("{fullmove}... {san}"));
+            white_turn = true;
+            fullmove = fullmove.saturating_add(1);
+        }
+    }
+
+    parts.join(" ")
 }
 
 fn main() -> Result<()> {
@@ -448,5 +460,21 @@ mod tests {
 
         assert!(output.contains("runs=3"));
         assert!(output.contains("avg_us="));
+    }
+
+    #[test]
+    fn text_output_uses_numbered_solution_format() {
+        let input = "Stipulation: #1\nFEN: k7/2K5/1Q6/8/8/8/8/8 w - - 0 1";
+        let result = solve_input(input, &SolverConfig::default()).expect("valid problem should solve");
+        let report = SingleRunReport {
+            result,
+            benchmark: None,
+        };
+
+        let output = format_single_report(&report, OutputFormat::Text)
+            .expect("text output should format");
+
+        assert!(output.contains("solution:"));
+        assert!(output.contains("1. "));
     }
 }
