@@ -1,7 +1,7 @@
 import { parsePopeyeRow } from "@ph/moveParser";
 import { problemToPopeye } from "@ph/problemToPopeye";
 import { Problem } from "@sp/dbmanager/src/lib/models";
-import { BridgeGlobal, EOF, SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
+import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
 
 class WebBridge implements BridgeGlobal {
@@ -60,8 +60,12 @@ class WebBridge implements BridgeGlobal {
     this.solver$.next({ exitCode: -1, message: e.data });
   };
 
-  supportsEngine(engine: string): boolean {
+  supportsEngine(engine: Engines): boolean {
     return engine === "Popeye";
+  }
+
+  availableEngines(): Engines[] {
+    return ["Popeye"];
   }
 
   openFile(): File | PromiseLike<File | null> | null {
@@ -78,7 +82,7 @@ class WebBridge implements BridgeGlobal {
 
   runSolve(
     CurrentProblem: Problem,
-    engine: string,
+    engine: Engines,
     mode: SolveModes,
   ): Observable<SolutionRow | EOF> | Error {
     if (engine !== "Popeye") {

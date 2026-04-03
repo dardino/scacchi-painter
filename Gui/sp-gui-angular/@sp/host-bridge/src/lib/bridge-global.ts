@@ -13,6 +13,7 @@ export interface BridgeGlobal {
     mode: SolveModes
   ): Observable<SolutionRow | EOF> | Error;
   supportsEngine(engine: Engines): boolean;
+  availableEngines(): Engines[];
 }
 
 export interface EOF {

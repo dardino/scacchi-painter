@@ -137,4 +137,12 @@ describe("EditProblemComponent - Interactive Features", () => {
     component.toggleStreaming();
     expect(component.streamSolutions()).toBe(true);
   });
+
+  it("should update selected engine on engine change", () => {
+    component.availableEngines = ["Popeye", "SpCore"];
+
+    component.onEngineChange("SpCore");
+
+    expect(component.selectedEngine()).toBe("SpCore");
+  });
 });

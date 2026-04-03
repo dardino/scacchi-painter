@@ -34,4 +34,24 @@ describe("ToolbarEngineComponent", () => {
 
     expect(fixture.nativeElement.textContent).toContain("Solutions: 3");
   });
+
+  it("should emit engineChanged when selection changes", () => {
+    const emitSpy = vi.spyOn(component.engineChanged, "emit");
+    const select = fixture.nativeElement.querySelector("select") as HTMLSelectElement;
+
+    select.value = "Popeye";
+    select.dispatchEvent(new Event("change"));
+
+    expect(emitSpy).toHaveBeenCalledWith("Popeye");
+  });
+
+  it("should render provided engines in select", () => {
+    fixture.componentRef.setInput("availableEngines", ["Popeye", "SpCore"]);
+    fixture.componentRef.setInput("selectedEngine", "SpCore");
+    fixture.detectChanges();
+
+    const options = Array.from(fixture.nativeElement.querySelectorAll("option")) as HTMLOptionElement[];
+    expect(options.map(o => o.value)).toEqual(["Popeye", "SpCore"]);
+    expect((fixture.nativeElement.querySelector("select") as HTMLSelectElement).value).toBe("SpCore");
+  });
 });

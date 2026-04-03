@@ -1,4 +1,17 @@
 <mat-toolbar-row class="lib-toolbar">
+  <label class="engine-select-wrap">
+    <span class="engine-select-label">Engine</span>
+    <select
+      class="engine-select"
+      [value]="selectedEngine()"
+      [disabled]="isRunning()"
+      (change)="onEngineSelectionChange($event)"
+    >
+      @for (engine of availableEngines(); track engine) {
+        <option [value]="engine" [selected]="engine === selectedEngine()">{{ engine }}</option>
+      }
+    </select>
+  </label>
   @if (!isRunning()) {
     <lib-sp-toolbar-button
       (click)="start()"

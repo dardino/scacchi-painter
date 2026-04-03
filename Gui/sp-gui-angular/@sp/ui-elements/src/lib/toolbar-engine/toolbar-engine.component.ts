@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, computed, inject, input } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
+import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 
 export type ViewModes = "txt" | "html" | "both";
@@ -40,11 +41,16 @@ export class ToolbarEngineComponent {
   @Output()
   public toggleStreaming = new EventEmitter<void>();
 
+  @Output()
+  public engineChanged = new EventEmitter<Engines>();
+
   isRunning = input<boolean>(false);
   fullLog = input<boolean>(false);
   solutionCount = input<number>(0);
   streaming = input<boolean>(true);
   viewMode = input<ViewModes>("both");
+  availableEngines = input<Engines[]>(["Popeye"]);
+  selectedEngine = input<Engines>("Popeye");
 
   isMaxFont = computed(() => this.fontSize() >= 2);
   isMinFont = computed(() => this.fontSize() <= 1);
@@ -87,5 +93,13 @@ export class ToolbarEngineComponent {
 
   toggleStreamingMode() {
     this.toggleStreaming.emit();
+  }
+
+  onEngineSelectionChange(event: Event) {
+    const select = event.target as HTMLSelectElement | null;
+    if (!select) {
+      return;
+    }
+    this.engineChanged.emit(select.value as Engines);
   }
 }

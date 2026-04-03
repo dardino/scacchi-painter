@@ -22,7 +22,7 @@ import {
   getCanvasRotation,
   notNull,
 } from "@sp/dbmanager/src/public-api";
-import { SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
+import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
 import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
@@ -86,10 +86,15 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   solutionCount = signal(0);
   showLog = signal(false);
   streamSolutions = signal(true);
+  availableEngines: Engines[] = [];
+  selectedEngine = signal<Engines>("Popeye");
   viewMode = signal<ViewModes>("html");
   private pendingSolutionRows: SolutionRow[] = [];
 
   constructor() {
+    this.availableEngines = this.engine.availableEngines();
+    this.selectedEngine.set(this.availableEngines[0] ?? "Popeye");
+
     this.engine.isSolving$.subscribe((state) => {
       const wasSolving = this.solveInProgress();
       this.solveInProgress.set(state);
@@ -198,6 +203,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.viewMode.set($event);
   }
 
+  onEngineChange(engine: Engines) {
+    if (!this.availableEngines.includes(engine)) {
+      return;
+    }
+    this.selectedEngine.set(engine);
+    if (this.current.Problem) {
+      this.current.Problem.engine = engine;
+    }
+  }
+
   switchBoardType() {
     this.boardType.update(current => current === "HTML" ? "canvas" : "HTML");
     this.resetActions();
@@ -223,6 +238,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.solutionCount.set(0);
     this.pendingSolutionRows = [];
     if (this.current.Problem) {
+      this.current.Problem.engine = this.selectedEngine();
       this.current.Problem.jsonSolution = [];
       this.current.Problem.htmlSolution = "";
       this.current.Problem.textSolution = "";
@@ -264,6 +280,17 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         else {
           this.dbManager.GotoIndex(+params.id);
+        }
+        const problemEngine = this.current.Problem?.engine;
+        if (problemEngine && this.availableEngines.includes(problemEngine)) {
+          this.selectedEngine.set(problemEngine);
+        }
+        else {
+          const fallbackEngine = this.availableEngines[0] ?? "Popeye";
+          this.selectedEngine.set(fallbackEngine);
+          if (this.current.Problem) {
+            this.current.Problem.engine = fallbackEngine;
+          }
         }
       }, 1);
     });

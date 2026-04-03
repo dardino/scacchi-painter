@@ -50,12 +50,19 @@ export class HostBridgeService {
     return window.Bridge?.supportsEngine(engine);
   }
 
-  startSolve(CurrentProblem: Problem, mode: SolveModes): Error | undefined {
+  availableEngines(): Engines[] {
+    if (!window.Bridge) {
+      return ["Popeye"];
+    }
+    return window.Bridge.availableEngines();
+  }
+
+  startSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes): Error | undefined {
     if (this.subscription != null) {
       console.warn("[WARN] -> Solver already started!");
       return new Error("Solver already started!");
     }
-    const obs = window.Bridge?.runSolve(CurrentProblem, "Popeye", mode);
+    const obs = window.Bridge?.runSolve(CurrentProblem, engine, mode);
     if (!obs) return new Error("Engine not found!");
     if (obs instanceof Error) return obs;
 

@@ -9,10 +9,18 @@ import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "../lib/brid
 
 class TauriBridge implements BridgeGlobal {
   private solveEnded = true;
+  private currentEngine: Engines = "Popeye";
 
   constructor() {
     listen("popeye-update", (event: Event<string>) => {
-      this.processData(event.payload ?? "");
+      if (this.currentEngine === "Popeye") {
+        this.processData(event.payload ?? "");
+      }
+    });
+    listen("spcore-update", (event: Event<string>) => {
+      if (this.currentEngine === "SpCore") {
+        this.processSpCoreData(event.payload ?? "");
+      }
     });
   }
 
@@ -22,6 +30,38 @@ class TauriBridge implements BridgeGlobal {
     this.solver$.next({ raw: data, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
     if (data.indexOf("solution finished") > -1) {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
+    }
+  }
+
+  private processSpCoreData(data: string) {
+    try {
+      const msg = JSON.parse(data) as {
+        type: "solution" | "done" | "error";
+        index?: number;
+        winning_line?: string[];
+        explored_nodes?: number;
+        solutions_found?: number;
+        stopped_early?: boolean;
+        timed_out?: boolean;
+        message?: string;
+      };
+      if (msg.type === "solution") {
+        const line = msg.winning_line?.join(" ") ?? "";
+        const raw = `${msg.index}. ${line}`;
+        this.solver$.next({ raw, rowtype: "data", moveTree: [] });
+      }
+      else if (msg.type === "done") {
+        const raw = `SpCore: ${msg.solutions_found} solution(s), ${msg.explored_nodes} nodes${msg.stopped_early ? " (stopped early)" : ""}`;
+        this.solver$.next({ raw, rowtype: "log", moveTree: [] });
+        this.solver$.next({ raw: "solution finished", rowtype: "log", moveTree: [] });
+        this.endSolve({ exitCode: 0, message: "program exited with code: 0" });
+      }
+      else if (msg.type === "error") {
+        this.endSolve({ exitCode: -1, message: msg.message ?? "SpCore error" });
+      }
+    }
+    catch {
+      this.solver$.next({ raw: data, rowtype: "log", moveTree: [] });
     }
   }
 
@@ -49,9 +89,16 @@ class TauriBridge implements BridgeGlobal {
   }
 
   stopSolve(): void {
-    invoke("stop_popeye").catch((error) => {
-      console.warn("Failed to stop popeye process", error);
-    });
+    if (this.currentEngine === "Popeye") {
+      invoke("stop_popeye").catch((error) => {
+        console.warn("Failed to stop popeye process", error);
+      });
+    }
+    else {
+      invoke("stop_rust_solver").catch((error) => {
+        console.warn("Failed to stop rust solver", error);
+      });
+    }
     this.endSolve({ exitCode: -1, message: "solution stopped!" });
   }
 
@@ -60,9 +107,7 @@ class TauriBridge implements BridgeGlobal {
   runSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes): Observable<SolutionRow | EOF> | Error {
     this.currentProblem = CurrentProblem;
     this.solveEnded = false;
-    if (engine !== "Popeye") {
-      return new Error("Engine not found!");
-    }
+    this.currentEngine = engine;
 
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
       {
@@ -73,7 +118,15 @@ class TauriBridge implements BridgeGlobal {
     );
 
     const problem = problemToPopeye(CurrentProblem, mode).join("\n");
-    this.startSolve(problem);
+    if (engine === "Popeye") {
+      this.startSolve(problem);
+    }
+    else if (engine === "SpCore") {
+      this.startRustSolve(problem);
+    }
+    else {
+      return new Error(`Engine not found: ${engine}`);
+    }
 
     return this.solver$.asObservable();
   }
@@ -92,8 +145,20 @@ class TauriBridge implements BridgeGlobal {
     });
   }
 
+  private startRustSolve(problem: string) {
+    invoke("run_rust_solver", { input: problem }).then(() => {
+      this.endSolve({ exitCode: 0, message: "program exited with code: 0" });
+    }).catch((error) => {
+      this.endSolve({ exitCode: -1, message: `${error}` });
+    });
+  }
+
   supportsEngine(engine: Engines): boolean {
-    return engine === "Popeye";
+    return engine === "Popeye" || engine === "SpCore";
+  }
+
+  availableEngines(): Engines[] {
+    return ["Popeye", "SpCore"];
   }
 }
 
