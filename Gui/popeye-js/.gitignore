@@ -1,4 +1,3 @@
-.yarn/*
-!.yarn/*.*
-!.yarn/releases
-!.yarn/plugins
+node_modules/
+.pnpm-store/
+pnpm-debug.log*

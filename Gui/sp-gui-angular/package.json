@@ -1,6 +1,6 @@
 {
   "name": "sp-gui-angular",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "engines": {
     "node": ">=20"
   },
@@ -94,5 +94,5 @@
     "vite-node": "^5.2.0",
     "vitest": "^4.0.15"
   },
-  "packageManager": "pnpm@10.15.1"
+  "packageManager": "pnpm@10.33.0"
 }
