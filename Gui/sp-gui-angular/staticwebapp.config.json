@@ -36,6 +36,9 @@
   "globalHeaders": {
     "content-security-policy": "img-src 'self' data:; default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none';"
   },
+  "platform": {
+    "apiRuntime": "node:20"
+  },
   "navigationFallback": {
     "rewrite": "index.html",
     "exclude": [
