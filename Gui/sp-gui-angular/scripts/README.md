@@ -2,7 +2,7 @@
 
 ## How to exectute
 
-run `yarn vite-node ./scripts/*scriptname*` from sp-ui-angular root folder
+run `pnpm vite-node ./scripts/*scriptname*` from sp-ui-angular root folder
 
 ## available Scripts
 

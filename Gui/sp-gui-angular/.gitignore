@@ -38,7 +38,7 @@ speed-measure-plugin*.json
 /coverage
 /libpeerconnection.log
 npm-debug.log
-yarn-error.log
+pnpm-debug.log*
 testem.log
 /typings
 
@@ -46,11 +46,6 @@ testem.log
 .DS_Store
 Thumbs.db
 log.txt
-
-# yarn 2
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
 
 #scripts
 scripts/*.txt

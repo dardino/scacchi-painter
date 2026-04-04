@@ -6,18 +6,18 @@
   "private": true,
   "devDependencies": {
     "@types/eslint": "9.6.1",
-    "concat": "3.0.0",
-    "eslint": "9.31.0",
-    "google-closure-compiler": "20250716.0.0",
-    "serve": "14.2.4",
-    "typescript": "5.8.3"
+    "concat": "1.0.3",
+    "eslint": "10.2.0",
+    "google-closure-compiler": "20260401.0.0",
+    "serve": "14.2.6",
+    "typescript": "6.0.2"
   },
   "scripts": {
-    "compile": "yarn tsc -p ./src/tsconfig.json",
+    "compile": "tsc -p ./src/tsconfig.json && mv ./out/main.js ./out/popeye_ww.tmp",
     "minify": "google-closure-compiler out/popeye_ww.tmp --js_output_file out/popeye_ww.min.tmp",
     "concat": "concat -o ./out/popeye_ww.js ./out/popeye_ww.min.tmp ./src/py.js",
     "clear": "rm -rf out/*.tmp",
-    "build": "yarn compile && yarn minify && yarn concat && yarn clear"
+    "build": "pnpm run compile && pnpm run minify && pnpm run concat && pnpm run clear"
   },
-  "packageManager": "yarn@3.3.1"
+  "packageManager": "pnpm@10.33.0"
 }

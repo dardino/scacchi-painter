@@ -31,7 +31,7 @@
     {
       "name": "Run SCRIPT in debug",
       "console": "integratedTerminal",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": [
         "vite-node",
         "${input:scriptFile}"
