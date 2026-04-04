@@ -1,5 +1,30 @@
 # Release Notes
 
+## Version 0.2.0
+
+### New Solver Foundations And Better Analysis Workflow
+
+This release introduces the new Rust solver workspace and connects more of that solving pipeline to the application flow.
+
+**What's New:**
+
+- ♟️ **New solver core** - Added a Rust workspace with dedicated crates for chess rules, problem parsing, solving, and CLI tooling
+- 📖 **Richer solution output** - Winning lines now support SAN-style formatting and improved textual reports
+- 🚀 **Better search performance** - Added alpha-beta pruning, transposition-table caching, TTL handling, and iterative deepening in the solver stack
+- 🎛️ **Improved GUI solving workflow** - The editor now supports engine selection, streaming updates while solving, live solution counts, and max-solution reporting
+- 🖥️ **Desktop integration updates** - Tauri integration and CI packaging were improved for cross-platform desktop builds
+- ✅ **Stronger validation** - Added end-to-end integration tests for chess positions and the streaming pipeline
+
+**What changes for you:**
+
+- You get earlier feedback while solutions are being generated
+- Solution output is clearer and closer to standard chess notation
+- The project has a stronger foundation for future solver and desktop releases
+
+**Compatibility:**
+
+- Existing problem files remain compatible
+
 ## Version 0.1.1
 
 **Bug fix release**: Fixed critical chessboard rendering issue and improved signal-based reactivity.

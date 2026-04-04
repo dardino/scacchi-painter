@@ -1,6 +1,6 @@
 [package]
 name = "scacchi-painter-x"
-version = "0.1.0"
+version = "0.2.0"
 description = "Scacchi Painter X"
 authors = ["Gabriele Brunori"]
 edition = "2021"

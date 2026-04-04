@@ -1,5 +1,16 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.2.0
+
+**Feature release**: introduces the Rust solver workspace, richer solving workflows, and the first end-to-end platform integration updates for desktop and web builds.
+
+- [CoreRust] **New Rust solver workspace**: added `chess-core`, `problem-io`, `problem-solver`, and `solver-cli` crates with a modular architecture for future engine evolution
+- [CoreRust] **Orthodox solving foundations**: implemented legal move generation, castling, en passant, mate/stalemate detection, and Popeye-like input parsing for directmate problems
+- [CoreRust] **Stronger solver output**: added winning line extraction, SAN notation, richer text reports, alpha-beta pruning, transposition-table caching with TTL, and iterative deepening support
+- [sp-gui-angular] **Engine workflow improvements**: added engine selection, streaming solution updates, solution count tracking, and max-solution reporting in the editor toolbar
+- [sp-gui / Tauri] **Desktop integration updates**: improved SpCore handling in the Tauri bridge and aligned CI/build assets for multi-platform desktop packaging
+- [tests] **Expanded validation**: added end-to-end integration tests for chess positions and the streaming pipeline
+
 ## 0.1.1
 
 **Bug fix release**: Fixed critical chessboard rendering issue and improved signal-based reactivity.
