@@ -5,14 +5,39 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   ci:
     uses: ./.github/workflows/reusable-ci.yml
 
-  deploy_production:
+  build_tauri:
     needs: ci
-    runs-on: ubuntu-22.04
-    name: Deploy to Production
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux
+            os: ubuntu-22.04
+            artifact_name: tauri-linux
+            artifact_paths: |
+              Gui/sp-gui/src-tauri/target/release/bundle/**/*.AppImage
+              Gui/sp-gui/src-tauri/target/release/bundle/**/*.deb
+              Gui/sp-gui/src-tauri/target/release/bundle/**/*.rpm
+          - name: windows
+            os: windows-2022
+            artifact_name: tauri-windows
+            artifact_paths: |
+              Gui/sp-gui/src-tauri/target/release/bundle/**/*.exe
+              Gui/sp-gui/src-tauri/target/release/bundle/**/*.msi
+          - name: macos
+            os: macos-14
+            artifact_name: tauri-macos
+            artifact_paths: |
+              Gui/sp-gui/src-tauri/target/release/bundle/**/*.dmg
+    runs-on: ${{ matrix.os }}
+    name: Build Tauri (${{ matrix.name }})
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,15 +53,57 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: latest
+          version: 10.15.1
 
-      - name: Install dependencies
-        working-directory: ./Gui/sp-gui-angular
-        run: pnpm install
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Build application
+      - name: Install Linux system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential curl file libayatana-appindicator3-dev librsvg2-dev libssl-dev libwebkit2gtk-4.1-dev libxdo-dev patchelf wget
+
+      - name: Install Angular dependencies
         working-directory: ./Gui/sp-gui-angular
-        run: pnpm build:Azure
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Tauri dependencies
+        working-directory: ./Gui/sp-gui
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Tauri desktop app
+        working-directory: ./Gui/sp-gui
+        run: pnpm tauri build
+
+      - name: Upload Tauri bundles
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_paths }}
+          if-no-files-found: error
+
+  deploy_production:
+    needs: ci
+    runs-on: ubuntu-22.04
+    name: Deploy to Production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Download web deploy artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-deploy
+          path: ./deploy/web
+
+      - name: Download api deploy artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: api-deploy
+          path: ./deploy/api
 
       - name: Deploy to Azure Static Web Apps (Production)
         id: builddeploy
@@ -45,10 +112,11 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SEA_080BC3503 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/Gui/sp-gui-angular/dist/gui/browser"
-          api_location: "/Gui/sp-gui-angular/api"
+          app_location: "/deploy/web"
+          api_location: "/deploy/api"
           output_location: ""
           skip_app_build: true
+          skip_api_build: true
 
   create_release_notes:
     needs: deploy_production
@@ -83,3 +151,33 @@ jobs:
           $NEW_LINE"
             gh release create "${{ steps.tag_version.outputs.version }}" --title "Release ${{ steps.tag_version.outputs.version }}" --notes "$RELEASE_BODY" --draft=false
           fi
+
+  upload_tauri_assets:
+    needs:
+      - build_tauri
+      - create_release_notes
+    runs-on: ubuntu-22.04
+    name: Upload Tauri Release Assets
+    steps:
+      - name: Download Tauri artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tauri-*
+          merge-multiple: true
+          path: ./release-assets
+
+      - name: Get tag version
+        id: tag_version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Upload assets to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! find ./release-assets -type f | grep -q .; then
+            echo "No Tauri assets found in ./release-assets" >&2
+            exit 1
+          fi
+          find ./release-assets -type f -print0 | while IFS= read -r -d '' asset; do
+            gh release upload "${{ steps.tag_version.outputs.version }}" "$asset" --clobber
+          done

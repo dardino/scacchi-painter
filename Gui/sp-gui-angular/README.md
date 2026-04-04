@@ -32,17 +32,27 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## To run the app in local
 
-exec in three different terminals:
+The standard entry point is now the root command:
 
 ```sh
-#terminal 1
-cd api && npm run watch
-#terminal 2
-cd api && func start
+cd ../..
+pnpm dev
+```
 
-#terminal 3
-yarn start
+This starts the full local web stack with one command.
+Required tools in `PATH`: `pnpm`, `func`, `swa`.
 
-#terminal 4
-swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
+If you need to run the processes manually, use four different terminals:
+
+```sh
+# terminal 1
+cd Gui/sp-gui-angular/api && pnpm run watch
+# terminal 2
+cd Gui/sp-gui-angular/api && func start
+
+# terminal 3
+cd Gui/sp-gui-angular && pnpm start
+
+# terminal 4
+cd Gui/sp-gui-angular && swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
 ```

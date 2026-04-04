@@ -1,0 +1,21 @@
+{
+  "name": "scacchi-painter-root",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.15.1",
+  "scripts": {
+    "dev": "node ./scripts/dev-runner.mjs",
+    "dev:web": "node ./scripts/dev-runner.mjs web",
+    "dev:api": "node ./scripts/dev-runner.mjs api",
+    "dev:angular": "node ./scripts/dev-runner.mjs angular",
+    "dev:swa": "node ./scripts/dev-runner.mjs swa",
+    "build:web": "pnpm --dir Gui/sp-gui-angular build:Azure",
+    "test:web": "pnpm --dir Gui/sp-gui-angular test:ci",
+    "lint:web": "pnpm --dir Gui/sp-gui-angular lint",
+    "build:corejs": "pnpm --dir CoreJS build",
+    "test:corejs": "pnpm --dir CoreJS test",
+    "build:tauri": "pnpm --dir Gui/sp-gui build"
+  }
+}

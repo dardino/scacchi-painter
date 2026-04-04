@@ -48,6 +48,14 @@ const toPopeyePiece = (a: Piece): string =>
     a.traverse[3],
   ].join("");
 
+const getSpCoreSideToMove = (problem: Problem): "w" | "b" =>
+  problem.startMoveN === 1.5 ? "b" : "w";
+
+const toSpCoreFen = (problem: Problem): string => {
+  const boardFen = problem.getCurrentFen().split(" [", 1)[0];
+  return `${boardFen} ${getSpCoreSideToMove(problem)} - - 0 1`;
+};
+
 export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   const rows: string[] = [];
 
@@ -95,4 +103,11 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
 
   rows.push(`EndProblem`);
   return rows;
+}
+
+export function problemToSpCore(problem: Problem): string[] {
+  return [
+    `Stipulation ${problem.stipulation.completeStipulationDesc}`,
+    `FEN ${toSpCoreFen(problem)}`,
+  ];
 }
