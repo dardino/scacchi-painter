@@ -135,6 +135,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           NEW_LINE="Live at: https://orange-sea-080bc3503.azurestaticapps.net/"
+          TAURI_ASSETS="Tauri desktop assets attached to this release:\n- Linux AppImage\n- Linux Debian package (.deb)\n- Linux RPM package (.rpm)\n- Windows installer (.exe)\n- Windows installer (.msi)\n- macOS bundle (.dmg)"
           
           # Check if release exists
           if gh release view "${{ steps.tag_version.outputs.version }}" &>/dev/null; then
@@ -142,13 +143,17 @@ jobs:
             CURRENT_BODY=$(gh release view "${{ steps.tag_version.outputs.version }}" --json body -q .body)
             UPDATED_BODY="$CURRENT_BODY
 
-          $NEW_LINE"
+          $NEW_LINE
+
+          $TAURI_ASSETS"
             gh release edit "${{ steps.tag_version.outputs.version }}" --notes "$UPDATED_BODY"
           else
             # Release doesn't exist - create new one
             RELEASE_BODY="Release ${{ steps.tag_version.outputs.version }}
 
-          $NEW_LINE"
+          $NEW_LINE
+
+          $TAURI_ASSETS"
             gh release create "${{ steps.tag_version.outputs.version }}" --title "Release ${{ steps.tag_version.outputs.version }}" --notes "$RELEASE_BODY" --draft=false
           fi
 
@@ -159,6 +164,9 @@ jobs:
     runs-on: ubuntu-22.04
     name: Upload Tauri Release Assets
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download Tauri artifacts
         uses: actions/download-artifact@v4
         with:
@@ -179,5 +187,81 @@ jobs:
             exit 1
           fi
           find ./release-assets -type f -print0 | while IFS= read -r -d '' asset; do
-            gh release upload "${{ steps.tag_version.outputs.version }}" "$asset" --clobber
+            gh release upload "${{ steps.tag_version.outputs.version }}" "$asset" --clobber --repo "${{ github.repository }}"
           done
+
+      - name: Update release notes with asset links
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TAG_VERSION: ${{ steps.tag_version.outputs.version }}
+        run: |
+          current_body=$(gh release view "${{ steps.tag_version.outputs.version }}" --json body -q .body)
+          CURRENT_BODY="$current_body" python3 - <<'PY'
+          import os
+          import re
+          import json
+          import subprocess
+
+          def asset_label(name: str) -> str:
+            lower = name.lower()
+            if lower.endswith(".appimage"):
+              return "Linux AppImage"
+            if lower.endswith(".deb"):
+              return "Linux Debian package (.deb)"
+            if lower.endswith(".rpm"):
+              return "Linux RPM package (.rpm)"
+            if lower.endswith(".exe"):
+              return "Windows installer (.exe)"
+            if lower.endswith(".msi"):
+              return "Windows installer (.msi)"
+            if lower.endswith(".dmg"):
+              return "macOS disk image (.dmg)"
+            return name
+
+          release_json = subprocess.run(
+            [
+              "gh",
+              "api",
+                f"repos/{os.environ['GITHUB_REPOSITORY']}/releases/tags/{os.environ['TAG_VERSION']}",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+          ).stdout
+          assets = json.loads(release_json).get("assets", [])
+          asset_lines = "\n".join(
+            f"- [{asset_label(asset['name'])}]({asset['browser_download_url']})"
+            for asset in assets
+          )
+
+          body = os.environ["CURRENT_BODY"]
+          replacement = "Tauri desktop assets attached to this release:\n"
+          if asset_lines:
+              replacement += asset_lines + "\n"
+
+          updated_body = re.sub(
+              r"\nTauri desktop assets attached to this release:\n.*\Z",
+              "\n" + replacement,
+              body,
+              flags=re.S,
+          )
+          if updated_body == body:
+              updated_body = body.rstrip() + "\n\n" + replacement
+
+          subprocess.run(
+              [
+                  "gh",
+                  "release",
+                  "edit",
+                  "${{ steps.tag_version.outputs.version }}",
+                  "--notes-file",
+                  "-",
+                  "--repo",
+                  "${{ github.repository }}",
+              ],
+              input=updated_body,
+              text=True,
+              check=True,
+          )
+          PY
