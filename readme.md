@@ -4,6 +4,39 @@
 
 A new cross-platform engine and gui for chess problem composers
 
+## Developer Quick Start
+
+The standard local entry point is now a single root command:
+
+```sh
+pnpm dev
+```
+
+Required tools in `PATH`: `pnpm`, `func`, `swa`.
+
+This starts the local web development stack:
+
+- Azure Functions TypeScript watch
+- Azure Functions host
+- Angular dev server on `https://localhost:4200`
+- Azure Static Web Apps emulator
+
+Useful root shortcuts:
+
+```sh
+pnpm dev:api
+pnpm dev:angular
+pnpm dev:swa
+pnpm build:web
+pnpm test:web
+pnpm lint:web
+pnpm build:corejs
+pnpm test:corejs
+pnpm build:tauri
+```
+
+In VS Code you can run the `dev: full web stack` task from the workspace root.
+
 A running and usable online preview is available
 
 [Here (pre-release)](https://orange-sea-080bc3503-release.westeurope.azurestaticapps.net/)

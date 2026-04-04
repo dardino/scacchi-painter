@@ -12,7 +12,7 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-22.04
-    name: Build, Test, and Lint
+    name: Build, Test, and Package
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ inputs.working_directory }}
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run linting
         working-directory: ${{ inputs.working_directory }}
@@ -45,3 +45,41 @@ jobs:
       - name: Run tests
         working-directory: ${{ inputs.working_directory }}
         run: pnpm test:ci
+
+      - name: Install Azure Functions dependencies
+        working-directory: ./Gui/sp-gui-angular/api
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Azure Functions
+        working-directory: ./Gui/sp-gui-angular/api
+        run: pnpm build
+
+      - name: Prune Azure Functions dev dependencies
+        working-directory: ./Gui/sp-gui-angular/api
+        run: pnpm prune --prod
+
+      - name: Prepare deploy artifacts
+        run: |
+          rm -rf ./deploy
+          mkdir -p ./deploy/web ./deploy/api
+          cp -R ./Gui/sp-gui-angular/dist/gui/browser/. ./deploy/web/
+          cp ./Gui/sp-gui-angular/staticwebapp.config.json ./deploy/web/staticwebapp.config.json
+          cp ./Gui/sp-gui-angular/api/host.json ./deploy/api/host.json
+          cp ./Gui/sp-gui-angular/api/package.json ./deploy/api/package.json
+          cp ./Gui/sp-gui-angular/api/pnpm-lock.yaml ./deploy/api/pnpm-lock.yaml
+          cp -R ./Gui/sp-gui-angular/api/dist ./deploy/api/dist
+          cp -R ./Gui/sp-gui-angular/api/node_modules ./deploy/api/node_modules
+
+      - name: Upload web deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-deploy
+          path: ./deploy/web
+          if-no-files-found: error
+
+      - name: Upload api deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-deploy
+          path: ./deploy/api
+          if-no-files-found: error

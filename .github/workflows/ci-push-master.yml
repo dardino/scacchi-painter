@@ -19,24 +19,17 @@ jobs:
         with:
           submodules: true
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Download web deploy artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: lts/*
-          check-latest: true
+          name: web-deploy
+          path: ./deploy/web
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Download api deploy artifact
+        uses: actions/download-artifact@v4
         with:
-          version: latest
-
-      - name: Install dependencies
-        working-directory: ./Gui/sp-gui-angular
-        run: pnpm install
-
-      - name: Build application
-        working-directory: ./Gui/sp-gui-angular
-        run: pnpm build:Azure
+          name: api-deploy
+          path: ./deploy/api
 
       - name: Deploy to Azure Static Web Apps (Nightly)
         id: builddeploy
@@ -45,8 +38,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SEA_080BC3503 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/Gui/sp-gui-angular/dist/gui/browser"
-          api_location: "/Gui/sp-gui-angular/api"
+          app_location: "/deploy/web"
+          api_location: "/deploy/api"
           output_location: ""
           skip_app_build: true
+          skip_api_build: true
           deployment_environment: "nightly"
