@@ -6,7 +6,7 @@
   "private": true,
   "devDependencies": {
     "@types/eslint": "9.6.1",
-    "concat": "1.0.3",
+    "concat": "3.0.0",
     "eslint": "10.2.0",
     "google-closure-compiler": "20260401.0.0",
     "serve": "14.2.6",

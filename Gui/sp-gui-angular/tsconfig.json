@@ -1,8 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "rootDir": "../..",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
@@ -18,6 +18,7 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "strictPropertyInitialization": false,
+    "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "useDefineForClassFields": false,
     "target": "ES2022",
@@ -31,33 +32,33 @@
     ],
     "paths": {
       "chessboard": [
-        "./dist/chessboard/chessboard",
-        "./dist/chessboard"
+        "dist/chessboard/chessboard",
+        "dist/chessboard"
       ],
       "dbmanager": [
-        "./dist/dbmanager/dbmanager",
-        "./dist/dbmanager"
+        "dist/dbmanager/dbmanager",
+        "dist/dbmanager"
       ],
       "ui-elements": [
-        "./dist/ui-elements/ui-elements",
-        "./dist/ui-elements"
+        "dist/ui-elements/ui-elements",
+        "dist/ui-elements"
       ],
       "host-bridge": [
-        "./dist/host-bridge/host-bridge",
-        "./dist/host-bridge"
+        "dist/host-bridge/host-bridge",
+        "dist/host-bridge"
       ],
       "rft-parser": [
-        "./dist/rft-parser/rft-parser",
-        "./dist/rft-parser"
+        "dist/rft-parser/rft-parser",
+        "dist/rft-parser"
       ],
       "@dtos/*": [
-        "./api/src/dtos/*"
+        "api/src/dtos/*"
       ],
       "@dardino-chess/core": [
         "../../CoreJS/src/main.ts"
       ],
       "@ph/*": [
-        "./popeye/*"
+        "popeye/*"
       ]
     }
   },

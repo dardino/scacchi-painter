@@ -12,8 +12,8 @@ importers:
         specifier: 9.6.1
         version: 9.6.1
       concat:
-        specifier: 1.0.3
-        version: 1.0.3
+        specifier: 3.0.0
+        version: 3.0.0
       eslint:
         specifier: 10.2.0
         version: 10.2.0
@@ -226,8 +226,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  concat@1.0.3:
-    resolution: {integrity: sha512-f/ZaH1aLe64qHgTILdldbvyfGiGF4uzeo9IuXUloIOLQzFmIPloy9QbZadNsuVv0j5qbKQvQb/H/UYf2UsKTpw==}
+  concat@3.0.0:
+    resolution: {integrity: sha512-+fe0wAeRyeGHwWOu7Zmv84A2tUyFPeXFQsuEe09nms3t7VssFrQP29EG5e2ZuD3rQdwW9eggdUH2W/IU9gfpUQ==}
     engines: {node: '>=6'}
     hasBin: true
 
@@ -870,7 +870,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  concat@1.0.3:
+  concat@3.0.0:
     dependencies:
       commander: 2.20.3
 
