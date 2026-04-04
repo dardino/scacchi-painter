@@ -182,13 +182,14 @@ function shutdown(code, source) {
 
   shuttingDown = true;
   exitCode = code;
+  process.exitCode = exitCode;
   if (source) {
     process.stderr.write(`Stopping dev runner after ${source}.\n`);
   }
 
   terminateChildren("SIGTERM");
   setTimeout(() => terminateChildren("SIGKILL"), 1_500).unref();
-  setTimeout(() => process.exit(exitCode), 1_700).unref();
+  setTimeout(() => process.exit(exitCode), 1_700);
 }
 
 function terminateChildren(signal) {

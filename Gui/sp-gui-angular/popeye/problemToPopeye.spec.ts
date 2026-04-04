@@ -1,5 +1,5 @@
 import { Problem } from "@sp/dbmanager/src/lib/models";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { problemToSpCore } from "./problemToPopeye";
 
 describe("problemToSpCore", () => {

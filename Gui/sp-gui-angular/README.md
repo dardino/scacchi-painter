@@ -45,14 +45,14 @@ Required tools in `PATH`: `pnpm`, `func`, `swa`.
 If you need to run the processes manually, use four different terminals:
 
 ```sh
-#terminal 1
-cd api && pnpm run watch
-#terminal 2
-cd api && func start
+# terminal 1
+cd Gui/sp-gui-angular/api && pnpm run watch
+# terminal 2
+cd Gui/sp-gui-angular/api && func start
 
-#terminal 3
-pnpm start
+# terminal 3
+cd Gui/sp-gui-angular && pnpm start
 
-#terminal 4
-swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
+# terminal 4
+cd Gui/sp-gui-angular && swa start https://localhost:4200/ --ssl --api-devserver-url http://localhost:7071
 ```
