@@ -1,11 +1,12 @@
 // When using the Tauri API npm package:
 import { parsePopeyeRow } from "@ph/moveParser";
-import { problemToPopeye } from "@ph/problemToPopeye";
+import { problemToPopeye, problemToSpCore } from "@ph/problemToPopeye";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { invoke } from "@tauri-apps/api/core";
 import { Event, listen } from "@tauri-apps/api/event";
 import { BehaviorSubject, Observable } from "rxjs";
 import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "../lib/bridge-global";
+import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "../lib/spcore-support";
 
 class TauriBridge implements BridgeGlobal {
   private solveEnded = true;
@@ -141,11 +142,21 @@ class TauriBridge implements BridgeGlobal {
       },
     );
 
-    const problem = problemToPopeye(CurrentProblem, mode).join("\n");
+    const problem = engine === "SpCore"
+      ? problemToSpCore(CurrentProblem).join("\n")
+      : problemToPopeye(CurrentProblem, mode).join("\n");
     if (engine === "Popeye") {
       this.startSolve(problem);
     }
     else if (engine === "SpCore") {
+      const unsupported = getSpCoreUnsupportedFeatures(CurrentProblem, mode);
+      if (unsupported.length > 0) {
+        this.endSolve({
+          exitCode: -1,
+          message: formatSpCoreUnsupportedMessage(unsupported),
+        });
+        return this.solver$.asObservable();
+      }
       this.startRustSolve(problem);
     }
     else {
