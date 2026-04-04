@@ -5,7 +5,29 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/Gui/sp-gui-angular" # Location of package manifests
+  - package-ecosystem: "npm"
+    directories:
+      - "/Gui/sp-gui-angular"
+      - "/Gui/sp-gui-angular/api"
+      - "/Gui/sp-gui"
+      - "/CoreJS"
+      - "/Gui/popeye-js"
+    target-branch: "gui-integration"
+    open-pull-requests-limit: 1
+    pull-request-branch-name:
+      separator: "-"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Rome"
+    groups:
+      node-dependencies:
+        patterns:
+          - "*"
+    labels:
+      - "dependencies"
+      - "javascript"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
