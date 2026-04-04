@@ -1,7 +1,10 @@
 use anyhow::Result;
-use clap::{Parser, ValueEnum};
+use clap::{ArgAction, Parser, ValueEnum};
 use problem_io::{ast_to_problem, parse_popeye};
-use problem_solver::{solve, solve_streaming, SolutionTree, SolverConfig, StreamDirective, StreamingSummary};
+use problem_solver::{
+    solve, solve_streaming, SolutionTree, SolverConfig, StreamDirective, StreamingSummary,
+    TryClassification, TryLine,
+};
 use serde::Serialize;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -24,6 +27,10 @@ struct Cli {
     stream_solutions: bool,
     #[arg(long)]
     max_solutions: Option<usize>,
+    #[arg(long = "refutations-try", num_args = 0..=1, default_missing_value = "1")]
+    refutations_try: Option<usize>,
+    #[arg(long = "show-all-defenses", alias = "showAllDefenses", action = ArgAction::SetTrue)]
+    show_all_defenses: bool,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -90,6 +97,14 @@ fn load_input(cli: &Cli) -> Result<String> {
     }
 
     anyhow::bail!("either --input-text or --input-file must be provided")
+}
+
+fn solver_config_from_cli(cli: &Cli) -> SolverConfig {
+    SolverConfig {
+        refutations_try: cli.refutations_try,
+        show_all_defenses: cli.show_all_defenses,
+        ..SolverConfig::default()
+    }
 }
 
 fn solve_input(input: &str, config: &SolverConfig) -> Result<CliOutput> {
@@ -353,7 +368,59 @@ fn format_solution_numbered(solution: &SolutionTree) -> String {
         }
     }
 
+    if let Some(tries) = &solution.tries {
+        for try_line in tries {
+            lines.push(format_try_line(try_line));
+        }
+    }
+
     lines.join("\n")
+}
+
+fn format_try_line(try_line: &TryLine) -> String {
+    let mut header = format!("1. {} ?", try_line.try_move);
+    let threats = &try_line.threat_moves;
+
+    if !threats.is_empty() {
+        let numbered_threats = threats
+            .iter()
+            .map(|mv| format!("2. {}", mv))
+            .collect::<Vec<_>>()
+            .join(", ");
+        header.push_str(&format!(" threats: {}", numbered_threats));
+    } else {
+        header.push_str(&format!(" {}.", try_kind_label(&try_line.classification)));
+    }
+
+    let mut lines = vec![header];
+
+    for threat in &try_line.threats {
+        let continuation = format_numbered_sequence(2, true, &threat.continuation);
+        if continuation.is_empty() {
+            lines.push(format!("    1... {}", threat.black_move));
+        } else {
+            lines.push(format!("    1... {} {}", threat.black_move, continuation));
+        }
+    }
+
+    if !try_line.refutations.is_empty() {
+        let refutations = try_line
+            .refutations
+            .iter()
+            .map(|mv| format!("{}!", mv))
+            .collect::<Vec<_>>()
+            .join(", ");
+        lines.push(format!("  but: {}", refutations));
+    }
+
+    lines.join("\n")
+}
+
+fn try_kind_label(classification: &TryClassification) -> &'static str {
+    match classification {
+        TryClassification::Threat => "threat",
+        TryClassification::Zugzwang => "zugzwang",
+    }
 }
 
 fn format_numbered_sequence(start_fullmove: u32, white_to_move: bool, san_moves: &[String]) -> String {
@@ -379,6 +446,7 @@ fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
     let cli = Cli::parse();
+    let config = solver_config_from_cli(&cli);
     if cli.stream_solutions && cli.benchmark_runs.is_some() {
         anyhow::bail!("--stream-solutions cannot be combined with --benchmark-runs");
     }
@@ -390,7 +458,7 @@ fn main() -> Result<()> {
     let output = if let Some(corpus_dir) = &cli.corpus_dir {
         run_corpus(
             corpus_dir,
-            &SolverConfig::default(),
+            &config,
             cli.format,
             cli.benchmark_runs,
         )?
@@ -401,7 +469,7 @@ fn main() -> Result<()> {
             let mut index: usize = 0;
             let summary = stream_input_solutions(
                 &input,
-                &SolverConfig::default(),
+                &config,
                 cli.max_solutions,
                 |result| {
                     index = index.saturating_add(1);
@@ -430,14 +498,14 @@ fn main() -> Result<()> {
             format_streaming_summary(&summary, cli.format)?
         } else {
             let report = if let Some(runs) = cli.benchmark_runs {
-                let (result, benchmark) = benchmark_input(&input, &SolverConfig::default(), runs)?;
+                let (result, benchmark) = benchmark_input(&input, &config, runs)?;
                 SingleRunReport {
                     result,
                     benchmark: Some(benchmark),
                 }
             } else {
                 SingleRunReport {
-                    result: solve_input(&input, &SolverConfig::default())?,
+                    result: solve_input(&input, &config)?,
                     benchmark: None,
                 }
             };
@@ -514,10 +582,75 @@ mod tests {
             benchmark_runs: None,
             stream_solutions: false,
             max_solutions: None,
+            refutations_try: None,
+            show_all_defenses: false,
         };
 
         let loaded = load_input(&cli).expect("file input should load");
         assert!(loaded.contains("Stipulation"));
+    }
+
+    #[test]
+    fn cli_parses_refutations_try_variants() {
+        let omitted = Cli::try_parse_from(["solver-cli", "-i", "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1"])
+            .expect("parse should succeed");
+        assert_eq!(omitted.refutations_try, None);
+
+        let bare = Cli::try_parse_from([
+            "solver-cli",
+            "-i",
+            "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
+            "--refutations-try",
+        ])
+        .expect("parse should succeed");
+        assert_eq!(bare.refutations_try, Some(1));
+
+        let explicit_zero = Cli::try_parse_from([
+            "solver-cli",
+            "-i",
+            "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
+            "--refutations-try=0",
+        ])
+        .expect("parse should succeed");
+        assert_eq!(explicit_zero.refutations_try, Some(0));
+
+        let explicit_two = Cli::try_parse_from([
+            "solver-cli",
+            "-i",
+            "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
+            "--refutations-try=2",
+        ])
+        .expect("parse should succeed");
+        assert_eq!(explicit_two.refutations_try, Some(2));
+
+        let show_all_defenses = Cli::try_parse_from([
+            "solver-cli",
+            "-i",
+            "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
+            "--show-all-defenses",
+        ])
+        .expect("parse should succeed");
+        assert!(show_all_defenses.show_all_defenses);
+    }
+
+    #[test]
+    fn text_output_can_show_refutations_when_enabled() {
+        let input = "Stipulation: #2\nFEN: 8/8/6p1/5p2/5p2/5k1P/1nB4P/4RK2 w - - 0 1";
+        let config = SolverConfig {
+            refutations_try: Some(2),
+            show_all_defenses: false,
+            ..SolverConfig::default()
+        };
+
+        let result = solve_input(input, &config).expect("valid problem should solve");
+        let report = SingleRunReport {
+            result,
+            benchmark: None,
+        };
+        let output = format_single_report(&report, OutputFormat::Text).expect("text output should format");
+
+        assert!(output.contains("solution:"));
+        assert!(output.contains("threats:"));
     }
 
     #[test]

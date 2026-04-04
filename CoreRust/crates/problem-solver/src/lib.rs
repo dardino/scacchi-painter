@@ -25,6 +25,7 @@ pub use search::{DirectMate, Stipulation};
 use chess_core::OrthodoxPosition;
 use problem_io::ProblemDefinition;
 use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
 use std::time::{Duration, Instant};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,6 +34,8 @@ pub struct SolverConfig {
     pub deterministic: bool,
     pub max_time_ms: Option<u64>,
     pub transposition_ttl_generations: Option<u32>,
+    pub refutations_try: Option<usize>,
+    pub show_all_defenses: bool,
 }
 
 impl Default for SolverConfig {
@@ -42,6 +45,8 @@ impl Default for SolverConfig {
             deterministic: true,
             max_time_ms: None,
             transposition_ttl_generations: Some(1),
+            refutations_try: None,
+            show_all_defenses: false,
         }
     }
 }
@@ -59,12 +64,30 @@ pub struct SearchResult {
 pub struct SolutionTree {
     pub key_move: String,
     pub defenses: Vec<DefenseLine>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tries: Option<Vec<TryLine>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DefenseLine {
     pub black_move: String,
     pub continuation: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TryClassification {
+    Threat,
+    Zugzwang,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TryLine {
+    pub try_move: String,
+    pub classification: TryClassification,
+    pub threat_moves: Vec<String>,
+    pub threats: Vec<DefenseLine>,
+    pub refutations: Vec<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -142,6 +165,8 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
             &stipulation,
             plies,
             moves,
+            config.refutations_try,
+            config.show_all_defenses,
             &mut explored_nodes,
             &mut trans_cache,
             deadline,
@@ -241,6 +266,8 @@ where
             &stipulation,
             plies,
             &full_line,
+            config.refutations_try,
+            config.show_all_defenses,
             &mut explored_nodes,
             &mut trans_cache,
             deadline,
@@ -281,6 +308,8 @@ fn build_solution_tree(
     stipulation: &DirectMate,
     plies: u16,
     winning_moves: &[chess_core::Move],
+    refutations_try: Option<usize>,
+    show_all_defenses: bool,
     explored_nodes: &mut u64,
     trans_cache: &mut cache::TranspositionCache,
     deadline: Option<Instant>,
@@ -293,6 +322,7 @@ fn build_solution_tree(
         return Some(SolutionTree {
             key_move,
             defenses: vec![],
+            tries: None,
         });
     }
 
@@ -340,7 +370,273 @@ fn build_solution_tree(
         });
     }
 
-    Some(SolutionTree { key_move, defenses })
+    let tries = if refutations_try.unwrap_or(0) > 0 {
+        collect_try_lines(
+            position,
+            stipulation,
+            plies,
+            winning_moves[0],
+            refutations_try.unwrap_or(0),
+            show_all_defenses,
+            explored_nodes,
+            trans_cache,
+            deadline,
+        )
+    } else {
+        None
+    };
+
+    Some(SolutionTree {
+        key_move,
+        defenses,
+        tries,
+    })
+}
+
+fn collect_try_lines(
+    position: &OrthodoxPosition,
+    stipulation: &DirectMate,
+    plies: u16,
+    winning_move: chess_core::Move,
+    refutations_try: usize,
+    show_all_defenses: bool,
+    explored_nodes: &mut u64,
+    trans_cache: &mut cache::TranspositionCache,
+    deadline: Option<Instant>,
+) -> Option<Vec<TryLine>> {
+    let mut try_lines = Vec::new();
+
+    for (candidate_move, after_try) in moves::ordered_successors(position, stipulation.deterministic) {
+        if candidate_move == winning_move {
+            continue;
+        }
+
+        if let Some(limit) = deadline {
+            if Instant::now() >= limit {
+                break;
+            }
+        }
+
+        let timed = if plies <= 1 {
+            None
+        } else {
+            let timed = stipulation.search_with_deadline(
+                &after_try,
+                plies.saturating_sub(1),
+                explored_nodes,
+                trans_cache,
+                deadline,
+            );
+
+            if timed.timed_out {
+                break;
+            }
+
+            timed.winning_line
+        };
+
+        if timed.is_some() {
+            continue;
+        }
+
+        let Some(try_line) = analyze_try_line(
+            position,
+            &after_try,
+            candidate_move,
+            stipulation,
+            plies,
+            show_all_defenses,
+            explored_nodes,
+            trans_cache,
+            deadline,
+        ) else {
+            continue;
+        };
+
+        if try_line.refutations.len() <= refutations_try {
+            try_lines.push(try_line);
+        }
+    }
+
+    if try_lines.is_empty() {
+        None
+    } else {
+        Some(try_lines)
+    }
+}
+
+fn analyze_try_line(
+    position: &OrthodoxPosition,
+    after_try: &OrthodoxPosition,
+    candidate_move: chess_core::Move,
+    stipulation: &DirectMate,
+    plies: u16,
+    show_all_defenses: bool,
+    explored_nodes: &mut u64,
+    trans_cache: &mut cache::TranspositionCache,
+    deadline: Option<Instant>,
+) -> Option<TryLine> {
+    let try_move = san::format_winning_line_san(position, &[candidate_move])
+        .into_iter()
+        .next()?;
+
+    let remaining_after_defense = plies.saturating_sub(2);
+    let mut threats = Vec::new();
+    let mut refutations = Vec::new();
+    let threat_moves = collect_try_threat_moves(
+        after_try,
+        stipulation,
+        remaining_after_defense,
+        explored_nodes,
+        trans_cache,
+        deadline,
+    )
+    .unwrap_or_default();
+
+    for (defense_move, defense_position) in moves::ordered_successors(after_try, stipulation.deterministic) {
+        if let Some(limit) = deadline {
+            if Instant::now() >= limit {
+                break;
+            }
+        }
+
+        let continuation_moves = if remaining_after_defense == 0 {
+            Vec::new()
+        } else {
+            let timed = stipulation.search_with_deadline(
+                &defense_position,
+                remaining_after_defense,
+                explored_nodes,
+                trans_cache,
+                deadline,
+            );
+
+            if timed.timed_out {
+                break;
+            }
+
+            timed.winning_line.unwrap_or_default()
+        };
+
+        let mut full_line = Vec::with_capacity(1 + continuation_moves.len());
+        full_line.push(defense_move);
+        full_line.extend(continuation_moves);
+
+        let san_line = san::format_winning_line_san(after_try, &full_line);
+        if san_line.is_empty() {
+            continue;
+        }
+
+        let black_move = san_line[0].clone();
+        let continuation = san_line.into_iter().skip(1).collect::<Vec<_>>();
+
+        if continuation.is_empty() {
+            refutations.push(black_move);
+        } else {
+            threats.push(DefenseLine {
+                black_move,
+                continuation,
+            });
+        }
+    }
+
+    if !show_all_defenses {
+        threats = dedupe_defense_lines(threats);
+    }
+
+    let classification = if threat_moves.is_empty() {
+        TryClassification::Zugzwang
+    } else {
+        TryClassification::Threat
+    };
+
+    Some(TryLine {
+        try_move,
+        classification,
+        threat_moves,
+        threats,
+        refutations,
+    })
+}
+
+fn dedupe_defense_lines(defenses: Vec<DefenseLine>) -> Vec<DefenseLine> {
+    let mut seen = HashSet::new();
+    let mut deduped = Vec::new();
+
+    for defense in defenses {
+        if seen.insert(defense.continuation.clone()) {
+            deduped.push(defense);
+        }
+    }
+
+    deduped
+}
+
+fn collect_try_threat_moves(
+    after_try: &OrthodoxPosition,
+    stipulation: &DirectMate,
+    remaining_plies: u16,
+    explored_nodes: &mut u64,
+    trans_cache: &mut cache::TranspositionCache,
+    deadline: Option<Instant>,
+) -> Option<Vec<String>> {
+    if remaining_plies == 0 {
+        return None;
+    }
+
+    let mut threat_position = after_try.clone();
+    threat_position.side_to_move = stipulation.attacker;
+
+    let mut threat_moves = Vec::new();
+    for (key_move, after_key) in moves::ordered_successors(&threat_position, stipulation.deterministic) {
+        if let Some(limit) = deadline {
+            if Instant::now() >= limit {
+                break;
+            }
+        }
+
+        let key_continuation = if remaining_plies <= 1 {
+            after_key.is_checkmate().then(Vec::new)
+        } else {
+            let timed = stipulation.search_with_deadline(
+                &after_key,
+                remaining_plies.saturating_sub(1),
+                explored_nodes,
+                trans_cache,
+                deadline,
+            );
+
+            if timed.timed_out {
+                break;
+            }
+
+            timed.winning_line
+        };
+
+        let Some(mut continuation) = key_continuation else {
+            continue;
+        };
+
+        let mut full_line = Vec::with_capacity(1 + continuation.len());
+        full_line.push(key_move);
+        full_line.append(&mut continuation);
+
+        let san_line = san::format_winning_line_san(&threat_position, &full_line);
+        if san_line.is_empty() {
+            continue;
+        }
+
+        let threat_san = san_line.join(" ");
+        if !threat_moves.contains(&threat_san) {
+            threat_moves.push(threat_san);
+        }
+    }
+
+    if threat_moves.is_empty() {
+        None
+    } else {
+        Some(threat_moves)
+    }
 }
 
 #[cfg(test)]
@@ -414,12 +710,16 @@ mod tests {
             deterministic: false,
             max_time_ms: None,
             transposition_ttl_generations: Some(1),
+            refutations_try: None,
+            show_all_defenses: false,
         };
         let sorted_cfg = SolverConfig {
             max_depth: 8,
             deterministic: true,
             max_time_ms: None,
             transposition_ttl_generations: Some(1),
+            refutations_try: None,
+            show_all_defenses: false,
         };
         let sorted = solve(&problem, &sorted_cfg).expect("sorted config should solve");
         let unsorted = solve(&problem, &unsorted_cfg).expect("unsorted config should solve");
@@ -440,6 +740,8 @@ mod tests {
             deterministic: true,
             max_time_ms: Some(0),
             transposition_ttl_generations: Some(1),
+            refutations_try: None,
+            show_all_defenses: false,
         };
 
         let result = solve(&problem, &config).expect("solver should handle zero time budget");
@@ -545,6 +847,86 @@ mod tests {
             defense_map.get("Ne7"),
             Some(&vec!["Nb3+".to_string(), "cxb3".to_string(), "Rc3#".to_string()])
         );
+    }
+
+    #[test]
+    fn solve_collects_try_lines_when_refutations_try_is_enabled() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen(
+                "8/8/6p1/5p2/5p2/5k1P/1nB4P/4RK2 w - - 0 1",
+                Side::White,
+            ),
+            stipulation: "#2".to_string(),
+            unsupported_features: vec![],
+        };
+
+        let config_one = SolverConfig {
+            refutations_try: Some(1),
+            ..SolverConfig::default()
+        };
+        let config_two = SolverConfig {
+            refutations_try: Some(2),
+            ..SolverConfig::default()
+        };
+
+        let result_one = solve(&problem, &config_one).expect("solver should handle refutations_try=1");
+        let result_two = solve(&problem, &config_two).expect("solver should handle refutations_try=2");
+
+        let tries_one = result_one
+            .solution
+            .as_ref()
+            .and_then(|solution| solution.tries.as_ref())
+            .expect("tries should be collected for refutations_try=1");
+        let tries_two = result_two
+            .solution
+            .as_ref()
+            .and_then(|solution| solution.tries.as_ref())
+            .expect("tries should be collected for refutations_try=2");
+
+        assert!(!tries_one.is_empty());
+        assert!(tries_two.len() >= tries_one.len());
+    }
+
+    #[test]
+    fn solve_filters_duplicate_defenses_unless_show_all_defenses_is_enabled() {
+        let problem = ProblemDefinition {
+            position: Position::from_fen(
+                "8/8/6p1/5p2/5p2/5k1P/1nB4P/4RK2 w - - 0 1",
+                Side::White,
+            ),
+            stipulation: "#2".to_string(),
+            unsupported_features: vec![],
+        };
+
+        let filtered = SolverConfig {
+            refutations_try: Some(2),
+            show_all_defenses: false,
+            ..SolverConfig::default()
+        };
+        let unfiltered = SolverConfig {
+            refutations_try: Some(2),
+            show_all_defenses: true,
+            ..SolverConfig::default()
+        };
+
+        let filtered_result = solve(&problem, &filtered).expect("solver should succeed");
+        let unfiltered_result = solve(&problem, &unfiltered).expect("solver should succeed");
+
+        let filtered_bxf5 = filtered_result
+            .solution
+            .as_ref()
+            .and_then(|solution| solution.tries.as_ref())
+            .and_then(|tries| tries.iter().find(|try_line| try_line.try_move == "Bxf5"))
+            .expect("Bxf5 try should be present");
+        let unfiltered_bxf5 = unfiltered_result
+            .solution
+            .as_ref()
+            .and_then(|solution| solution.tries.as_ref())
+            .and_then(|tries| tries.iter().find(|try_line| try_line.try_move == "Bxf5"))
+            .expect("Bxf5 try should be present");
+
+        assert_eq!(filtered_bxf5.threats.len(), 1);
+        assert!(unfiltered_bxf5.threats.len() > filtered_bxf5.threats.len());
     }
 
     #[test]

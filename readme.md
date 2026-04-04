@@ -55,3 +55,9 @@ Internal planning documents for the new Rust-based chess problem solver are avai
 - [Milestones index and branch map](./.github/prompts/rust-solver-milestones-index.md)
 - [Execution roadmap](./.github/prompts/rust-solver-roadmap.md)
 - [Milestone prompts](./.github/prompts/)
+
+The Rust CLI reference is documented here:
+
+- [solver-cli README](./CoreRust/apps/solver-cli/README.md)
+- [Published CLI docs](./docs/solver-cli.md)
+- [Published page](https://dardino.github.io/scacchi-painter/)

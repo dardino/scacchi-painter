@@ -125,6 +125,12 @@ Current public role:
 2. invokes the shared parser and solver contracts
 3. prints formatted solver output
 
+CLI reference:
+
+1. [solver-cli README](apps/solver-cli/README.md)
+2. [Published CLI docs](../docs/solver-cli.md)
+3. [Published page](https://dardino.github.io/scacchi-painter/)
+
 Constraint:
 
 1. must stay a thin adapter above reusable library crates
