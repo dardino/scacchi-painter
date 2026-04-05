@@ -14,13 +14,13 @@ import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
-  CurrentProblemService,
-  DbmanagerService,
-  EngineManagerService,
-  IPiece,
-  SquareLocation,
-  getCanvasRotation,
-  notNull,
+    CurrentProblemService,
+    DbmanagerService,
+    EngineManagerService,
+    IPiece,
+    SquareLocation,
+    getCanvasRotation,
+    notNull,
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
@@ -34,6 +34,7 @@ import { AuthorDialogComponent } from "../author-dialog/author-dialog.component"
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
+import { SolveEngineDialogComponent, type SolveEngineDialogResult } from "../solve-engine-dialog/solve-engine-dialog.component";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 
 @Component({
@@ -203,14 +204,32 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.viewMode.set($event);
   }
 
-  onEngineChange(engine: Engines) {
-    if (!this.availableEngines.includes(engine)) {
-      return;
-    }
-    this.selectedEngine.set(engine);
-    if (this.current.Problem) {
-      this.current.Problem.engine = engine;
-    }
+  openSolveEngineDialog() {
+    const dialogRef = this.dialog.open<SolveEngineDialogComponent, {
+      availableEngines: Engines[];
+      engine: Engines;
+      engineConfig: SolveEngineDialogResult["engineConfig"] | null;
+    }, SolveEngineDialogResult | null>(
+      SolveEngineDialogComponent,
+      {
+        width: "45rem",
+        maxWidth: "95vw",
+        data: {
+          availableEngines: this.availableEngines,
+          engine: this.selectedEngine(),
+          engineConfig: this.current.Problem?.engineConfig ?? null,
+        },
+      },
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == null) return;
+      this.selectedEngine.set(result.engine);
+      if (this.current.Problem) {
+        this.current.Problem.engine = result.engine;
+        this.current.Problem.engineConfig = result.engineConfig;
+      }
+    });
   }
 
   switchBoardType() {

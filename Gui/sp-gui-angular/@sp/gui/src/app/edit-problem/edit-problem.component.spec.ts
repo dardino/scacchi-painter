@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { RouterModule } from "@angular/router";
 import { SquareLocation } from "@sp/dbmanager/src/public-api";
+import { of } from "rxjs";
 import { EditProblemComponent } from "./edit-problem.component";
 
 describe("EditProblemComponent - Interactive Features", () => {
@@ -17,6 +19,12 @@ describe("EditProblemComponent - Interactive Features", () => {
       imports: [EditProblemComponent, RouterModule.forRoot([])],
       providers: [
         { provide: MatSnackBar, useValue: { open: vi.fn(), dismiss: vi.fn() } },
+        {
+          provide: MatDialog,
+          useValue: {
+            open: vi.fn().mockReturnValue({ afterClosed: () => of(null) }),
+          },
+        },
       ],
     }).compileComponents();
 
@@ -138,11 +146,11 @@ describe("EditProblemComponent - Interactive Features", () => {
     expect(component.streamSolutions()).toBe(true);
   });
 
-  it("should update selected engine on engine change", () => {
-    component.availableEngines = ["Popeye", "SpCore"];
+  it("should open the engine settings dialog", () => {
+    const dialog = TestBed.inject(MatDialog);
 
-    component.onEngineChange("SpCore");
+    component.openSolveEngineDialog();
 
-    expect(component.selectedEngine()).toBe("SpCore");
+    expect(dialog.open).toHaveBeenCalledOnce();
   });
 });

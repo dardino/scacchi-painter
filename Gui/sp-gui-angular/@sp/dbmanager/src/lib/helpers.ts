@@ -1,12 +1,13 @@
 import {
-  BoardFile,
-  BoardRank,
-  Colors,
-  Figurine,
-  Rotations,
+    BoardFile,
+    BoardRank,
+    Colors,
+    Figurine,
+    Rotations,
 } from "canvas-chessboard/modules/es2018/canvasChessBoard";
 
 import { Base64 } from "./base64";
+import type { EngineConfiguration } from "./models/engine";
 
 export type XMLProblemTypesKeys
   = | "Direct"
@@ -99,6 +100,7 @@ export interface IProblem {
   authors: Partial<Author>[];
   pieces: Partial<IPiece>[] | null;
   twins: Partial<ITwins> | null;
+  engineConfig?: EngineConfiguration | null;
   conditions: string[];
   tags: string[];
   snapshots: Record<string | number, string>;

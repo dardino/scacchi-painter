@@ -135,3 +135,27 @@ export const EngineOptions = {
     help: "applicable if the goal doesn't lead to immobility (e.g. z, x): the play ends if the wrong side reaches the goal.",
   },
 } as const;
+
+export type EngineOptionKey = keyof typeof EngineOptions;
+export type EngineConfiguration = Partial<Record<EngineOptionKey, string[]>>;
+
+export const createDefaultPopeyeEngineConfiguration = (): EngineConfiguration => ({
+  NoBoard: [],
+  Try: [],
+  SetPlay: [],
+  Variation: [],
+});
+
+export const cloneEngineConfiguration = (
+  config?: EngineConfiguration | null,
+): EngineConfiguration | null => {
+  if (config == null) {
+    return null;
+  }
+
+  const cloned: EngineConfiguration = {};
+  (Object.entries(config) as [EngineOptionKey, string[] | undefined][]).forEach(([key, values]) => {
+    cloned[key] = [...(values ?? [])];
+  });
+  return cloned;
+};
