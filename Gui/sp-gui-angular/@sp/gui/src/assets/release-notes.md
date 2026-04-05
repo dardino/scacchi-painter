@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.2.2-dev
+
+Development snapshot after the 0.2.1 release.
+
 ## Version 0.2.0
 
 ### New Solver Foundations And Better Analysis Workflow
