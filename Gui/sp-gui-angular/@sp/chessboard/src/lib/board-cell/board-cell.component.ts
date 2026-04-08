@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
-import { Component, input, computed } from "@angular/core";
+import { Component, computed, input } from "@angular/core";
 import {
   GetSquareColor,
   IPiece,
@@ -8,7 +8,7 @@ import {
   getCanvasColor,
   getFigurine,
 } from "@sp/dbmanager/src/public-api";
-import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+import Presets from "canvas-chessboard/presets";
 
 @Component({
   selector: "lib-board-cell",
@@ -38,7 +38,7 @@ export class BoardCellComponent {
   piecechar = computed(() => {
     if (!this.piece()) return "";
     const color = getCanvasColor(this.piece()!.color);
-    const pieces = GetConfig()[color];
+    const pieces = Presets.ScacchiPainter[color];
     const fig = getFigurine(this.piece()!.appearance);
     if (fig == null) return "";
     return pieces[fig];

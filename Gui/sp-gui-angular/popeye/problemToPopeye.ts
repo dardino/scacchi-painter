@@ -1,5 +1,5 @@
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
-import { createDefaultPopeyeEngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
+import { SpCoreEngineOptionKey, SpCoreEngineOptions, createDefaultPopeyeEngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
 import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/public-api";
 import { SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 
@@ -109,8 +109,26 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
 }
 
 export function problemToSpCore(problem: Problem): string[] {
-  return [
+  const sourceConfig = problem.engineConfigurationsByEngine?.SpCore
+    ?? (problem.engine === "SpCore" ? problem.engineConfig : null)
+    ?? {};
+
+  const supportedOptionKeys = Object.keys(SpCoreEngineOptions) as SpCoreEngineOptionKey[];
+  const optionRows = supportedOptionKeys
+    .filter(optionKey => optionKey in sourceConfig)
+    .map((optionKey) => {
+      const values = sourceConfig[optionKey];
+      return values != null && values.length > 0 ? `${optionKey} ${values.join(" ")}` : optionKey;
+    });
+
+  const rows = [
     `Stipulation ${problem.stipulation.completeStipulationDesc}`,
     `FEN ${toSpCoreFen(problem)}`,
   ];
+
+  if (optionRows.length > 0) {
+    rows.push(`Option ${optionRows.join(" ")}`);
+  }
+
+  return rows;
 }

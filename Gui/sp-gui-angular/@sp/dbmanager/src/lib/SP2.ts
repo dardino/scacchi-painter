@@ -1,6 +1,6 @@
 import {
   Figurine,
-} from "canvas-chessboard/modules/es2018/canvasChessBoard";
+} from "canvas-chessboard";
 import { Base64 } from "./base64";
 import {
   Columns,

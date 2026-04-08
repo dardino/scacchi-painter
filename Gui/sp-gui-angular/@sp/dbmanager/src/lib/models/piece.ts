@@ -1,4 +1,4 @@
-import { Piece as BP } from "canvas-chessboard/modules/es2018/canvasChessBoard";
+import { Piece as BP } from "canvas-chessboard";
 
 import {
   Columns,

@@ -7,21 +7,32 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/materia
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { EngineConfiguration, EngineOptionKey, EngineOptions, cloneEngineConfiguration, createDefaultPopeyeEngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
+import {
+  EngineConfiguration,
+  EngineConfigurationsByEngine,
+  EngineOptionKey,
+  EngineOptionMeta,
+  EngineOptionsByEngine,
+  cloneEngineConfiguration,
+  cloneEngineConfigurationsByEngine,
+  createDefaultPopeyeEngineConfiguration,
+} from "@sp/dbmanager/src/lib/models/engine";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 
 export interface SolveEngineDialogData {
   availableEngines: Engines[];
   engine: Engines;
   engineConfig: EngineConfiguration | null;
+  engineConfigurationsByEngine: EngineConfigurationsByEngine | null;
 }
 
 export interface SolveEngineDialogResult {
   engine: Engines;
   engineConfig: EngineConfiguration;
+  engineConfigurationsByEngine: EngineConfigurationsByEngine;
 }
 
-type EngineOptionMeta = (typeof EngineOptions)[EngineOptionKey];
+type EngineOptionState = { enabled: boolean; values: string[] };
 
 @Component({
   selector: "app-solve-engine-dialog",
@@ -46,12 +57,24 @@ export class SolveEngineDialogComponent {
   availableEngines: Engines[] = this.data.availableEngines.length > 0 ? [...new Set(this.data.availableEngines)] as Engines[] : ["Popeye"];
   selectedEngine: Engines = this.availableEngines.includes(this.data.engine) ? this.data.engine : this.availableEngines[0] ?? "Popeye";
 
-  engineOptionEntries = Object.entries(EngineOptions) as [EngineOptionKey, EngineOptionMeta][];
+  engineConfigurationsByEngine: EngineConfigurationsByEngine = this.buildEngineConfigurationsByEngine();
+  optionStateByEngine: Partial<Record<Engines, Record<string, EngineOptionState>>> = this.buildOptionStateByEngine();
 
-  optionState = this.buildOptionState();
+  get selectedEngineOptions(): Record<string, EngineOptionMeta> {
+    return EngineOptionsByEngine[this.selectedEngine] ?? {};
+  }
 
-  get isPopeye() {
-    return this.selectedEngine === "Popeye";
+  get engineOptionEntries(): [EngineOptionKey, EngineOptionMeta][] {
+    return (Object.entries(this.selectedEngineOptions) as [EngineOptionKey, EngineOptionMeta][])
+      .sort(([a], [b]) => a.localeCompare(b));
+  }
+
+  get optionState(): Record<string, EngineOptionState> {
+    return this.optionStateByEngine[this.selectedEngine] ?? {};
+  }
+
+  get hasEngineOptions(): boolean {
+    return this.engineOptionEntries.length > 0;
   }
 
   clickCancel() {
@@ -59,9 +82,16 @@ export class SolveEngineDialogComponent {
   }
 
   clickSave() {
+    this.availableEngines.forEach((engine) => {
+      this.engineConfigurationsByEngine[engine] = this.buildEngineConfigurationForEngine(engine);
+    });
+
+    const selectedEngineConfiguration = this.getConfigForEngine(this.selectedEngine);
+
     this.dialogRef.close({
       engine: this.selectedEngine,
-      engineConfig: this.isPopeye ? this.buildEngineConfiguration() : {},
+      engineConfig: selectedEngineConfiguration,
+      engineConfigurationsByEngine: cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {},
     });
   }
 
@@ -69,26 +99,88 @@ export class SolveEngineDialogComponent {
     return Array.from({ length: count }, (_, index) => index);
   }
 
-  private buildOptionState() {
-    const baseConfig = this.data.engineConfig ?? createDefaultPopeyeEngineConfiguration();
-    const state = {} as Record<EngineOptionKey, { enabled: boolean; values: string[] }>;
+  setOptionEnabled(optionKey: EngineOptionKey, enabled: boolean) {
+    const optionMeta = this.selectedEngineOptions[optionKey];
+    if (!optionMeta) {
+      return;
+    }
 
-    this.engineOptionEntries.forEach(([key, meta]) => {
-      const currentValues = baseConfig[key] ?? [];
-      state[key] = {
-        enabled: key in baseConfig,
-        values: [...currentValues, ...Array(Math.max(0, meta.argsCount - currentValues.length)).fill("")].slice(0, meta.argsCount),
+    const currentState = this.optionState;
+    if (enabled) {
+      const existingValues = currentState[optionKey]?.values ?? [];
+      currentState[optionKey] = {
+        enabled: true,
+        values: [...existingValues, ...Array(Math.max(0, optionMeta.argsCount - existingValues.length)).fill("")].slice(0, optionMeta.argsCount),
       };
-    });
+      return;
+    }
 
-    return state;
+    delete currentState[optionKey];
   }
 
-  private buildEngineConfiguration(): EngineConfiguration {
-    const config: EngineConfiguration = {};
+  setOptionArgValue(optionKey: EngineOptionKey, argIndex: number, value: string) {
+    const optionMeta = this.selectedEngineOptions[optionKey];
+    if (!optionMeta) {
+      return;
+    }
 
-    this.engineOptionEntries.forEach(([key, meta]) => {
-      const current = this.optionState[key];
+    const currentState = this.optionState;
+    if (!currentState[optionKey]) {
+      this.setOptionEnabled(optionKey, true);
+    }
+
+    const values = currentState[optionKey]?.values ?? Array(optionMeta.argsCount).fill("");
+    values[argIndex] = value;
+    currentState[optionKey] = {
+      enabled: true,
+      values,
+    };
+  }
+
+  private buildEngineConfigurationsByEngine(): EngineConfigurationsByEngine {
+    const persistedConfigs = cloneEngineConfigurationsByEngine(this.data.engineConfigurationsByEngine) ?? {};
+    if (persistedConfigs.Popeye == null) {
+      persistedConfigs.Popeye = cloneEngineConfiguration(this.data.engineConfig)
+        ?? createDefaultPopeyeEngineConfiguration();
+    }
+
+    return persistedConfigs;
+  }
+
+  private buildOptionStateByEngine(): Partial<Record<Engines, Record<string, EngineOptionState>>> {
+    const stateByEngine: Partial<Record<Engines, Record<string, EngineOptionState>>> = {};
+
+    (Object.keys(EngineOptionsByEngine) as Engines[]).forEach((engine) => {
+      const optionsMeta = EngineOptionsByEngine[engine] ?? {};
+      const baseConfig = this.engineConfigurationsByEngine[engine]
+        ?? (engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {});
+      const state: Record<string, EngineOptionState> = {};
+
+      (Object.entries(optionsMeta) as [EngineOptionKey, EngineOptionMeta][]).forEach(([key, meta]) => {
+        const currentValues = baseConfig[key] ?? [];
+        if (!(key in baseConfig)) {
+          return;
+        }
+
+        state[key] = {
+          enabled: true,
+          values: [...currentValues, ...Array(Math.max(0, meta.argsCount - currentValues.length)).fill("")].slice(0, meta.argsCount),
+        };
+      });
+
+      stateByEngine[engine] = state;
+    });
+
+    return stateByEngine;
+  }
+
+  private buildEngineConfigurationForEngine(engine: Engines): EngineConfiguration {
+    const config: EngineConfiguration = {};
+    const optionsMeta = EngineOptionsByEngine[engine] ?? {};
+    const engineState = this.optionStateByEngine[engine] ?? {};
+
+    (Object.entries(optionsMeta) as [EngineOptionKey, EngineOptionMeta][]).forEach(([key, meta]) => {
+      const current = engineState[key];
       if (!current?.enabled) {
         return;
       }
@@ -97,5 +189,14 @@ export class SolveEngineDialogComponent {
     });
 
     return cloneEngineConfiguration(config) ?? {};
+  }
+
+  private getConfigForEngine(engine: Engines): EngineConfiguration {
+    const config = this.engineConfigurationsByEngine[engine];
+    if (config != null) {
+      return cloneEngineConfiguration(config) ?? {};
+    }
+
+    return engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {};
   }
 }

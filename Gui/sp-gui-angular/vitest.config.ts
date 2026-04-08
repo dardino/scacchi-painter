@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vitest/config";
 import angular from "@analogjs/vite-plugin-angular";
 import path from "path";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [
@@ -14,7 +14,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["@sp/gui/src/test-setup.ts"],
     include: ["**/*.spec.ts"],
-    exclude: ["node_modules", "dist", ".angular"],
+    exclude: ["**/node_modules/**", "dist", ".angular"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],

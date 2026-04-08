@@ -11,42 +11,53 @@
     </mat-select>
   </mat-form-field>
 
-  @if (isPopeye) {
+  @if (hasEngineOptions) {
     <section class="options-panel">
       <div class="options-header">
-        <h2>Popeye options</h2>
+        <h2>{{ selectedEngine }} options</h2>
         <p>Enable the options you want to write into the solve input.</p>
       </div>
 
-      <div class="options-grid">
+      <div class="options-list">
         @for (option of engineOptionEntries; track option[0]) {
-          <div class="option-card">
-            <mat-checkbox [(ngModel)]="optionState[option[0]].enabled">
-              {{ option[0] }}
-            </mat-checkbox>
+          <div class="option-row">
+            <div class="option-toggle">
+              <mat-checkbox
+                [ngModel]="optionState[option[0]]?.enabled ?? false"
+                (ngModelChange)="setOptionEnabled(option[0], $event)"
+              >
+                {{ option[0] }}
+              </mat-checkbox>
+            </div>
 
-            @if (option[1].argsCount > 0) {
-              <div class="option-args">
-                @for (argIndex of optionIndexes(option[1].argsCount); track argIndex) {
-                  <mat-form-field appearance="outline">
-                    <mat-label>Arg {{ argIndex + 1 }}</mat-label>
-                    <input matInput [(ngModel)]="optionState[option[0]].values[argIndex]" [disabled]="!optionState[option[0]].enabled" />
-                  </mat-form-field>
-                }
-              </div>
-            }
+            <div class="option-details">
+              @if (option[1].argsCount > 0 && (optionState[option[0]]?.enabled ?? false)) {
+                <div class="option-args">
+                  @for (argIndex of optionIndexes(option[1].argsCount); track argIndex) {
+                    <mat-form-field appearance="outline">
+                      <mat-label>Arg {{ argIndex + 1 }}</mat-label>
+                      <input
+                        matInput
+                        [ngModel]="optionState[option[0]]?.values?.[argIndex] ?? ''"
+                        (ngModelChange)="setOptionArgValue(option[0], argIndex, $event)"
+                      />
+                    </mat-form-field>
+                  }
+                </div>
+              }
 
-            <p class="help-text">{{ option[1].help }}</p>
+              <p class="help-text">{{ option[1].help }}</p>
+            </div>
           </div>
         }
       </div>
     </section>
   }
-  @if (!isPopeye) {
+  @if (!hasEngineOptions) {
     <p class="muted-note">No additional configuration is available for this engine.</p>
   }
 </div>
 <div mat-dialog-actions align="end">
   <button mat-button (click)="clickCancel()">Cancel</button>
-  <button mat-button color="primary" (click)="clickSave()" cdkFocusInitial>Save</button>
+  <button mat-flat-button color="primary" (click)="clickSave()" cdkFocusInitial>Save</button>
 </div>

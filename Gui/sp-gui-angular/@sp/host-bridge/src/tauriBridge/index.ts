@@ -2,11 +2,18 @@
 import { parsePopeyeRow } from "@ph/moveParser";
 import { problemToPopeye, problemToSpCore } from "@ph/problemToPopeye";
 import { Problem } from "@sp/dbmanager/src/lib/models";
+import { EngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
 import { invoke } from "@tauri-apps/api/core";
 import { Event, listen } from "@tauri-apps/api/event";
 import { BehaviorSubject, Observable } from "rxjs";
 import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "../lib/bridge-global";
 import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "../lib/spcore-support";
+
+type RustSolverOptions = {
+  maxSolutions?: number;
+  refutationsTry?: number;
+  showAllDefenses: boolean;
+};
 
 class TauriBridge implements BridgeGlobal {
   private solveEnded = true;
@@ -157,7 +164,7 @@ class TauriBridge implements BridgeGlobal {
         });
         return this.solver$.asObservable();
       }
-      this.startRustSolve(problem);
+      this.startRustSolve(problem, this.getSpCoreSolverOptions(CurrentProblem.engineConfig));
     }
     else {
       return new Error(`Engine not found: ${engine}`);
@@ -180,8 +187,22 @@ class TauriBridge implements BridgeGlobal {
     });
   }
 
-  private startRustSolve(problem: string) {
-    invoke("run_rust_solver", { input: problem }).then(() => {
+  private getSpCoreSolverOptions(config: EngineConfiguration | null | undefined): RustSolverOptions {
+    const maxSolutionsRaw = config?.MaxSolutions?.[0]?.trim();
+    const refutationsTryRaw = config?.RefutationsTry?.[0]?.trim();
+
+    const maxSolutions = maxSolutionsRaw != null && maxSolutionsRaw !== "" ? Number.parseInt(maxSolutionsRaw, 10) : undefined;
+    const refutationsTry = refutationsTryRaw != null && refutationsTryRaw !== "" ? Number.parseInt(refutationsTryRaw, 10) : undefined;
+
+    return {
+      maxSolutions: Number.isFinite(maxSolutions) && maxSolutions != null && maxSolutions > 0 ? maxSolutions : undefined,
+      refutationsTry: Number.isFinite(refutationsTry) && refutationsTry != null && refutationsTry >= 0 ? refutationsTry : undefined,
+      showAllDefenses: "ShowAllDefenses" in (config ?? {}),
+    };
+  }
+
+  private startRustSolve(problem: string, options: RustSolverOptions) {
+    invoke("run_rust_solver", { input: problem, options }).then(() => {
       this.endSolve({ exitCode: 0, message: "program exited with code: 0" });
     }).catch((error) => {
       this.endSolve({ exitCode: -1, message: `${error}` });

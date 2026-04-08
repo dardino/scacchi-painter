@@ -7,20 +7,21 @@ import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
-import { HalfMoveInfo } from "@dardino-chess/core";
+import type { HalfMoveInfo } from "@dardino-chess/core";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
+import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
-    CurrentProblemService,
-    DbmanagerService,
-    EngineManagerService,
-    IPiece,
-    SquareLocation,
-    getCanvasRotation,
-    notNull,
+  CurrentProblemService,
+  DbmanagerService,
+  EngineManagerService,
+  IPiece,
+  SquareLocation,
+  getCanvasRotation,
+  notNull,
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
@@ -209,15 +210,15 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       availableEngines: Engines[];
       engine: Engines;
       engineConfig: SolveEngineDialogResult["engineConfig"] | null;
+      engineConfigurationsByEngine: SolveEngineDialogResult["engineConfigurationsByEngine"] | null;
     }, SolveEngineDialogResult | null>(
       SolveEngineDialogComponent,
       {
-        width: "45rem",
-        maxWidth: "95vw",
         data: {
           availableEngines: this.availableEngines,
           engine: this.selectedEngine(),
           engineConfig: this.current.Problem?.engineConfig ?? null,
+          engineConfigurationsByEngine: this.current.Problem?.engineConfigurationsByEngine ?? null,
         },
       },
     );
@@ -227,7 +228,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.selectedEngine.set(result.engine);
       if (this.current.Problem) {
         this.current.Problem.engine = result.engine;
-        this.current.Problem.engineConfig = result.engineConfig;
+        this.current.Problem.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(result.engineConfigurationsByEngine) ?? {};
+        this.current.Problem.engineConfig = cloneEngineConfiguration(result.engineConfig) ?? {};
       }
     });
   }

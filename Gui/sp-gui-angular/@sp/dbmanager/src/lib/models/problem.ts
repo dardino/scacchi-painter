@@ -1,26 +1,28 @@
-import { HalfMoveInfo } from "@dardino-chess/core";
+import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
 import {
-  Columns,
-  GetLocationFromIndex,
-  GetSolutionFromElement,
-  GetSquareIndex,
-  IProblem,
-  SquareLocation,
-  Traverse,
-  convertToRtf,
-  createXmlElement,
-  fenToChessBoard,
-  notEmpty,
-  notNull,
+    Columns,
+    GetLocationFromIndex,
+    GetSolutionFromElement,
+    GetSquareIndex,
+    IProblem,
+    SquareLocation,
+    Traverse,
+    convertToRtf,
+    createXmlElement,
+    fenToChessBoard,
+    notEmpty,
+    notNull,
 } from "../helpers";
 import { Author } from "./author";
 import {
-  cloneEngineConfiguration,
-  createDefaultPopeyeEngineConfiguration,
-  type EngineConfiguration,
+    cloneEngineConfiguration,
+    cloneEngineConfigurationsByEngine,
+    createDefaultPopeyeEngineConfiguration,
+    type EngineConfiguration,
+    type EngineConfigurationsByEngine,
 } from "./engine";
 import { Piece } from "./piece";
 import { Stipulation } from "./stipulation";
@@ -38,6 +40,9 @@ export class Problem implements IProblem {
   public source = "";
   public engine: Engines = "Popeye";
   public engineConfig: EngineConfiguration | null = createDefaultPopeyeEngineConfiguration();
+  public engineConfigurationsByEngine: EngineConfigurationsByEngine = {
+    Popeye: createDefaultPopeyeEngineConfiguration(),
+  };
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
@@ -133,7 +138,19 @@ export class Problem implements IProblem {
         ? Stipulation.fromJson(a.stipulation ?? {})
         : Stipulation.fromJson({});
     b.twins = a.twins ? Twins.fromJson(a.twins) : Twins.fromJson({});
-    b.engineConfig = cloneEngineConfiguration(a.engineConfig);
+    b.engine = a.engine ?? "Popeye";
+    const perEngineConfig = cloneEngineConfigurationsByEngine(a.engineConfigurationsByEngine) ?? {};
+    const legacyEngineConfig = cloneEngineConfiguration(a.engineConfig);
+    if (legacyEngineConfig != null && perEngineConfig.Popeye == null) {
+      perEngineConfig.Popeye = legacyEngineConfig;
+    }
+    b.engineConfigurationsByEngine = perEngineConfig;
+
+    const selectedEngineConfig = b.engineConfigurationsByEngine[b.engine];
+    b.engineConfig = cloneEngineConfiguration(
+      selectedEngineConfig
+      ?? (b.engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {}),
+    );
     b.htmlSolution = a.htmlSolution ?? "";
     b.date = a.date ? a.date : new Date().toISOString();
     b.personalID = a.personalID ? a.personalID : "";
@@ -152,8 +169,15 @@ export class Problem implements IProblem {
     if (this.pieces.length > 0) {
       json.pieces = this.pieces.map(p => p.toJson());
     }
+    json.engine = this.engine;
+    if (this.engineConfig != null) {
+      this.engineConfigurationsByEngine[this.engine] = cloneEngineConfiguration(this.engineConfig) ?? {};
+    }
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
+    if (this.engineConfigurationsByEngine != null) {
+      json.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
+    }
     if (this.engineConfig != null) json.engineConfig = cloneEngineConfiguration(this.engineConfig) ?? {};
     if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
     if (this.textSolution) json.textSolution = this.textSolution;

@@ -6,6 +6,7 @@ use std::sync::{Mutex, OnceLock};
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
 use std::sync::atomic::{AtomicBool, Ordering};
+use serde::Deserialize;
 use problem_io::{parse_popeye, ast_to_problem};
 use problem_solver::{solve_streaming, SolverConfig, StreamDirective};
 // windows
@@ -23,6 +24,14 @@ fn running_popeye() -> &'static Mutex<Option<Child>> {
 fn rust_solver_stop_flag() -> &'static AtomicBool {
     static STOP_FLAG: OnceLock<AtomicBool> = OnceLock::new();
     STOP_FLAG.get_or_init(|| AtomicBool::new(false))
+}
+
+#[derive(Debug, Clone, Deserialize, Default)]
+#[serde(default, rename_all = "camelCase")]
+struct RustSolverOptionsInput {
+    max_solutions: Option<usize>,
+    refutations_try: Option<usize>,
+    show_all_defenses: bool,
 }
 
 fn get_popeye_executable() -> &'static str {
@@ -165,15 +174,21 @@ async fn stop_popeye() -> Result<(), String> {
 async fn run_rust_solver<R: Runtime>(
     window: tauri::Window<R>,
     input: String,
+    options: Option<RustSolverOptionsInput>,
 ) -> Result<String, String> {
     rust_solver_stop_flag().store(false, Ordering::Relaxed);
 
     let ast = parse_popeye(&input).map_err(|e| e.to_string())?;
     let problem = ast_to_problem(ast).map_err(|e| e.to_string())?;
-    let config = SolverConfig::default();
+    let options = options.unwrap_or_default();
+    let config = SolverConfig {
+        refutations_try: options.refutations_try,
+        show_all_defenses: options.show_all_defenses,
+        ..SolverConfig::default()
+    };
 
     let mut solution_index = 0usize;
-    let result = solve_streaming(&problem, &config, None, |search_result| {
+    let result = solve_streaming(&problem, &config, options.max_solutions, |search_result| {
         if rust_solver_stop_flag().load(Ordering::Relaxed) {
             return StreamDirective::Stop;
         }

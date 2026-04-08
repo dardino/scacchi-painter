@@ -1,9 +1,11 @@
 packages:
   - 'Gui/sp-gui-angular'
+  - 'Gui/sp-gui-angular/api'
   - 'Gui/sp-gui-angular/@sp/chessboard'
   - 'Gui/sp-gui-angular/@sp/dbmanager'
   - 'Gui/sp-gui-angular/@sp/host-bridge'
   - 'Gui/sp-gui-angular/@sp/ui-elements'
+  - 'Gui/popeye-js'
   - 'Gui/sp-gui'
   - 'CoreJS'
 

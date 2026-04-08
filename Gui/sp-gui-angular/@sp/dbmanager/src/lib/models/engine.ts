@@ -1,4 +1,11 @@
-export const EngineOptions = {
+import type { Engines } from "@sp/host-bridge/src/lib/bridge-global";
+
+export type EngineOptionMeta = {
+  argsCount: number;
+  help: string;
+};
+
+export const PopeyeEngineOptions = {
   Try: { argsCount: 0, help: "calculate if a move is a try." },
   Defence: {
     argsCount: 0,
@@ -136,8 +143,34 @@ export const EngineOptions = {
   },
 } as const;
 
-export type EngineOptionKey = keyof typeof EngineOptions;
+export const SpCoreEngineOptions = {
+  MaxSolutions: {
+    argsCount: 1,
+    help: "Stop the search after this number of solutions.",
+  },
+  RefutationsTry: {
+    argsCount: 1,
+    help: "Enable try/refutation analysis. Use 1 by default, higher values for deeper refutations.",
+  },
+  ShowAllDefenses: {
+    argsCount: 0,
+    help: "Show every defensive continuation instead of collapsing identical continuations.",
+  },
+} as const;
+
+export const EngineOptionsByEngine = {
+  Popeye: PopeyeEngineOptions,
+  SpCore: SpCoreEngineOptions,
+} as const satisfies Record<Engines, Record<string, EngineOptionMeta>>;
+
+// Backward-compatible alias for existing Popeye-specific usages.
+export const EngineOptions = PopeyeEngineOptions;
+
+export type PopeyeEngineOptionKey = keyof typeof PopeyeEngineOptions;
+export type SpCoreEngineOptionKey = keyof typeof SpCoreEngineOptions;
+export type EngineOptionKey = PopeyeEngineOptionKey | SpCoreEngineOptionKey;
 export type EngineConfiguration = Partial<Record<EngineOptionKey, string[]>>;
+export type EngineConfigurationsByEngine = Partial<Record<Engines, EngineConfiguration>>;
 
 export const createDefaultPopeyeEngineConfiguration = (): EngineConfiguration => ({
   NoBoard: [],
@@ -157,5 +190,23 @@ export const cloneEngineConfiguration = (
   (Object.entries(config) as [EngineOptionKey, string[] | undefined][]).forEach(([key, values]) => {
     cloned[key] = [...(values ?? [])];
   });
+  return cloned;
+};
+
+export const cloneEngineConfigurationsByEngine = (
+  configByEngine?: EngineConfigurationsByEngine | null,
+): EngineConfigurationsByEngine | null => {
+  if (configByEngine == null) {
+    return null;
+  }
+
+  const cloned: EngineConfigurationsByEngine = {};
+  (Object.entries(configByEngine) as [Engines, EngineConfiguration | undefined][]).forEach(([engine, config]) => {
+    const engineConfig = cloneEngineConfiguration(config);
+    if (engineConfig != null) {
+      cloned[engine] = engineConfig;
+    }
+  });
+
   return cloned;
 };
