@@ -53,11 +53,6 @@
     "rxjs": "^7.8.1",
     "tslib": "^2.6.0"
   },
-  "pnpm": {
-    "overrides": {
-      "prosemirror-model": "1.21.0"
-    }
-  },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "^2.2.0",
     "@angular-devkit/architect": "^0.2100.4",
