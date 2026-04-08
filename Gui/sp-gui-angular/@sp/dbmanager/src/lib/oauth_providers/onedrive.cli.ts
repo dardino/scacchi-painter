@@ -105,16 +105,21 @@ class OneDriveCliProvider {
 
   // This function can be removed if you do not need to support IE
   static async getTokenRedirect(request: PopupRequest | SilentRequest, _accountInfo?: AccountInfo) {
-    return await this.#getMSALObj().acquireTokenSilent(request).catch(async (error) => {
+    const activeAccount = this.#getMSALObj().getActiveAccount();
+    const silentRequest: SilentRequest = {
+      ...request,
+      account: activeAccount ?? undefined,
+    };
+    return await this.#getMSALObj().acquireTokenSilent(silentRequest).catch(async (error) => {
       console.warn("silent token acquisition fails.");
-      if (error instanceof InteractionRequiredAuthError) {
-        // fallback to interaction when silent call fails
+      if (error instanceof InteractionRequiredAuthError || error.errorCode === "no_account_error") {
+        // fallback to interaction when silent call fails or no account is set
         console.warn("acquiring token using redirect");
         setLocalAuthInfo({
           redirect: "onedrive",
           return_url: location.pathname + location.hash,
         });
-        this.#getMSALObj().acquireTokenRedirect(request);
+        return this.#getMSALObj().acquireTokenRedirect(request);
       }
       else {
         console.error(error);
