@@ -241,6 +241,7 @@ async fn run_rust_solver<R: Runtime>(
                 "explored_nodes": summary.explored_nodes,
                 "stopped_early": summary.stopped_early,
                 "timed_out": summary.timed_out,
+                            "elapsed_ms": summary.elapsed_ms,
             });
             window.emit("spcore-update", done.to_string()).ok();
         }

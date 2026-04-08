@@ -56,6 +56,7 @@ class TauriBridge implements BridgeGlobal {
         message?: string;
         try_move?: string;
         refutations?: string[];
+        elapsed_ms?: number;
       };
       if (msg.type === "solution") {
         const popeyeLine = msg.winning_line_popeye ?? [];
@@ -78,6 +79,9 @@ class TauriBridge implements BridgeGlobal {
       else if (msg.type === "done") {
         const raw = `SpCore: ${msg.solutions_found} solution(s), ${msg.explored_nodes} nodes${msg.stopped_early ? " (stopped early)" : ""}`;
         this.solver$.next({ raw, rowtype: "log", moveTree: [] });
+                if (msg.elapsed_ms !== undefined) {
+                  this.solver$.next({ raw: `Time: ${msg.elapsed_ms}ms`, rowtype: "log", moveTree: [] });
+                }
         this.solver$.next({ raw: "solution finished", rowtype: "log", moveTree: [] });
         this.endSolve({ exitCode: 0, message: "program exited with code: 0" });
       }

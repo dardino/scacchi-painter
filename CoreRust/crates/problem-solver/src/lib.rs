@@ -105,6 +105,7 @@ pub struct StreamingSummary {
     pub stopped_early: bool,
     pub timed_out: bool,
     pub tries: Vec<TryLine>,
+    pub elapsed_ms: u128,
 }
 
 /// Solves a chess problem using the directmate stipulation solver.
@@ -337,6 +338,7 @@ where
         stopped_early,
         timed_out,
         tries,
+        elapsed_ms: start.elapsed().as_millis(),
     })
 }
 

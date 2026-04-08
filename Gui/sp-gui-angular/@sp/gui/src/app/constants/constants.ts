@@ -1,5 +1,22 @@
 export const istructionRegExp = new RegExp(
-  `^(Popeye|BeginProblem|Pieces|White|Black|Stipulation|Option|Twin|EndProblem|Condition|SetPlay|Executing|solution finished|Starting popeye|try play).*$`,
+  `^(${[
+    "Popeye",
+    "BeginProblem",
+    "Pieces",
+    "White",
+    "Black",
+    "Stipulation",
+    "Option",
+    "Twin",
+    "EndProblem",
+    "Condition",
+    "SetPlay",
+    "Executing",
+    "solution finished",
+    "Starting popeye",
+    "try play",
+    "SpCore",
+  ].join("|")}).*$`,
 );
 export const outlogRegExp = new RegExp(
   `^(${[
