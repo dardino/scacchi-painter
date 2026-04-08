@@ -1,5 +1,6 @@
 import { CommonModule, Location } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
@@ -71,13 +72,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private snackBar = inject(MatSnackBar);
   private chessanim = inject(ChessboardAnimationService);
 
-  // Signal di versione per forzare il re-render quando il Problem cambia internamente
-  private problemVersion = signal(0);
+  private readonly currentProblemSignal = toSignal(this.dbManager.CurrentProblem$, { initialValue: null });
+  private boardRenderVersion = signal(0);
 
   public problem = computed(() => {
-    // Traccia la versione per far ri-eseguire questo computed
-    this.problemVersion();
-    return this.current?.Problem?.clone() ?? null;
+    this.boardRenderVersion();
+    return this.currentProblemSignal()?.clone() ?? null;
   });
 
   public get engineEnabled() {
@@ -294,26 +294,30 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    this.route.params.subscribe((params) => {
-      setTimeout(() => {
-        if (this.dbManager.All.length === 0) {
-          this.dbManager.Reload(+params.id);
+    this.route.params.subscribe(async (params) => {
+      const problemId = Number.parseInt(params.id, 10);
+      if (!Number.isFinite(problemId)) {
+        return;
+      }
+
+      if (this.dbManager.All.length === 0) {
+        await this.dbManager.Reload(problemId);
+      }
+      else {
+        await this.dbManager.GotoIndex(problemId);
+      }
+
+      const problemEngine = this.current.Problem?.engine;
+      if (problemEngine && this.availableEngines.includes(problemEngine)) {
+        this.selectedEngine.set(problemEngine);
+      }
+      else {
+        const fallbackEngine = this.availableEngines[0] ?? "Popeye";
+        this.selectedEngine.set(fallbackEngine);
+        if (this.current.Problem) {
+          this.current.Problem.engine = fallbackEngine;
         }
-        else {
-          this.dbManager.GotoIndex(+params.id);
-        }
-        const problemEngine = this.current.Problem?.engine;
-        if (problemEngine && this.availableEngines.includes(problemEngine)) {
-          this.selectedEngine.set(problemEngine);
-        }
-        else {
-          const fallbackEngine = this.availableEngines[0] ?? "Popeye";
-          this.selectedEngine.set(fallbackEngine);
-          if (this.current.Problem) {
-            this.current.Problem.engine = fallbackEngine;
-          }
-        }
-      }, 1);
+      }
     });
   }
 
@@ -492,8 +496,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private notifyProblemChanged() {
-    // Incrementa la versione per forzare il re-render della chessboard
-    this.problemVersion.update(v => v + 1);
+    // Force board input refresh when the current problem is mutated in place.
+    this.boardRenderVersion.update(v => v + 1);
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {
