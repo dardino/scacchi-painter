@@ -11,8 +11,9 @@ import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "..
 
 type RustSolverOptions = {
   maxSolutions?: number;
-  refutationsTry?: number;
+  refutationsCount?: number;
   showAllDefenses: boolean;
+  showAttempts: boolean;
 };
 
 class TauriBridge implements BridgeGlobal {
@@ -44,7 +45,7 @@ class TauriBridge implements BridgeGlobal {
   private processSpCoreData(data: string) {
     try {
       const msg = JSON.parse(data) as {
-        type: "solution" | "done" | "error";
+        type: "solution" | "done" | "error" | "try";
         index?: number;
         winning_line?: string[];
         winning_line_popeye?: string[];
@@ -53,6 +54,8 @@ class TauriBridge implements BridgeGlobal {
         stopped_early?: boolean;
         timed_out?: boolean;
         message?: string;
+        try_move?: string;
+        refutations?: string[];
       };
       if (msg.type === "solution") {
         const popeyeLine = msg.winning_line_popeye ?? [];
@@ -60,6 +63,17 @@ class TauriBridge implements BridgeGlobal {
         const mov = parsePopeyeRow(raw, this.currentProblem.startMoveN);
         const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
         this.solver$.next({ raw, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
+      }
+      else if (msg.type === "try") {
+        const tryMove = msg.try_move ?? "";
+        this.solver$.next({ raw: `   1.${tryMove} ?`, rowtype: "log", moveTree: [] });
+        if (msg.refutations && msg.refutations.length > 0) {
+          this.solver$.next({ raw: `    but`, rowtype: "log", moveTree: [] });
+          for (const ref of msg.refutations) {
+            this.solver$.next({ raw: `      1...${ref} !`, rowtype: "log", moveTree: [] });
+          }
+        }
+        this.solver$.next({ raw: ``, rowtype: "log", moveTree: [] });
       }
       else if (msg.type === "done") {
         const raw = `SpCore: ${msg.solutions_found} solution(s), ${msg.explored_nodes} nodes${msg.stopped_early ? " (stopped early)" : ""}`;
@@ -189,15 +203,22 @@ class TauriBridge implements BridgeGlobal {
 
   private getSpCoreSolverOptions(config: EngineConfiguration | null | undefined): RustSolverOptions {
     const maxSolutionsRaw = config?.MaxSolutions?.[0]?.trim();
-    const refutationsTryRaw = config?.RefutationsTry?.[0]?.trim();
+    const refutationsCountRaw = config?.RefutationsCount?.[0]?.trim();
+    const showAttempts = "ShowAttempts" in (config ?? {});
 
     const maxSolutions = maxSolutionsRaw != null && maxSolutionsRaw !== "" ? Number.parseInt(maxSolutionsRaw, 10) : undefined;
-    const refutationsTry = refutationsTryRaw != null && refutationsTryRaw !== "" ? Number.parseInt(refutationsTryRaw, 10) : undefined;
+    const explicitRefutationsCount = refutationsCountRaw != null && refutationsCountRaw !== "" ? Number.parseInt(refutationsCountRaw, 10) : undefined;
+    const refutationsCount = showAttempts
+      ? (Number.isFinite(explicitRefutationsCount) && explicitRefutationsCount != null && explicitRefutationsCount >= 1
+          ? explicitRefutationsCount
+          : 1) // defaulting to 1 if showAttempts is true
+      : undefined;
 
     return {
       maxSolutions: Number.isFinite(maxSolutions) && maxSolutions != null && maxSolutions > 0 ? maxSolutions : undefined,
-      refutationsTry: Number.isFinite(refutationsTry) && refutationsTry != null && refutationsTry >= 0 ? refutationsTry : undefined,
+      refutationsCount,
       showAllDefenses: "ShowAllDefenses" in (config ?? {}),
+      showAttempts,
     };
   }
 

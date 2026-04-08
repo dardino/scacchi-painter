@@ -32,7 +32,7 @@ describe("problemToSpCore", () => {
     problem.engine = "SpCore";
     problem.engineConfig = {
       MaxSolutions: ["3"],
-      RefutationsTry: ["2"],
+      RefutationsCount: ["2"],
       ShowAllDefenses: [],
     };
 
@@ -41,7 +41,7 @@ describe("problemToSpCore", () => {
     expect(rows).toEqual([
       "Stipulation #2",
       "FEN 8/8/8/8/8/8/8/4K3 w - - 0 1",
-      "Option MaxSolutions 3 RefutationsTry 2 ShowAllDefenses",
+      "Option MaxSolutions 3 RefutationsCount 2 ShowAllDefenses",
     ]);
   });
 });

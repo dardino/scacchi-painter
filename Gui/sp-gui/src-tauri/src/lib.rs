@@ -30,8 +30,9 @@ fn rust_solver_stop_flag() -> &'static AtomicBool {
 #[serde(default, rename_all = "camelCase")]
 struct RustSolverOptionsInput {
     max_solutions: Option<usize>,
-    refutations_try: Option<usize>,
+    refutations_count: Option<usize>,
     show_all_defenses: bool,
+    show_attempts: bool,
 }
 
 fn get_popeye_executable() -> &'static str {
@@ -181,9 +182,28 @@ async fn run_rust_solver<R: Runtime>(
     let ast = parse_popeye(&input).map_err(|e| e.to_string())?;
     let problem = ast_to_problem(ast).map_err(|e| e.to_string())?;
     let options = options.unwrap_or_default();
+    
+    let effective_refutations_try = if options.show_attempts {
+        let count = options.refutations_count.unwrap_or(1);
+        if count >= 1 {
+            Some(count)
+        } else {
+            eprintln!("[WARN] refutations-count value ({}) is less than 1 and will be ignored. Using default value of 1.", count);
+            Some(1)
+        }
+    } else {
+        if let Some(rc) = options.refutations_count {
+            if rc >= 1 {
+                eprintln!("[WARN] refutations-count value ({}) will be ignored because show_attempts is not enabled.", rc);
+            }
+        }
+        None
+    };
+    
     let config = SolverConfig {
-        refutations_try: options.refutations_try,
+        refutations_try: effective_refutations_try,
         show_all_defenses: options.show_all_defenses,
+        show_attempts: options.show_attempts,
         ..SolverConfig::default()
     };
 
@@ -206,6 +226,15 @@ async fn run_rust_solver<R: Runtime>(
 
     match result {
         Ok(summary) => {
+            for (idx, try_line) in summary.tries.iter().enumerate() {
+                let try_event = serde_json::json!({
+                    "type": "try",
+                    "index": idx + 1,
+                    "try_move": try_line.try_move,
+                    "refutations": try_line.refutations,
+                });
+                window.emit("spcore-update", try_event.to_string()).ok();
+            }
             let done = serde_json::json!({
                 "type": "done",
                 "solutions_found": summary.solutions_found,

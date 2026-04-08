@@ -144,13 +144,17 @@ export const PopeyeEngineOptions = {
 } as const;
 
 export const SpCoreEngineOptions = {
+  ShowAttempts: {
+    argsCount: 0,
+    help: "Show attempts (tries) and their refutations in the solver output.",
+  },
   MaxSolutions: {
     argsCount: 1,
     help: "Stop the search after this number of solutions.",
   },
-  RefutationsTry: {
+  RefutationsCount: {
     argsCount: 1,
-    help: "Enable try/refutation analysis. Use 1 by default, higher values for deeper refutations.",
+    help: "Refutations count threshold for try analysis. Valid only when ShowAttempts is enabled.",
   },
   ShowAllDefenses: {
     argsCount: 0,
@@ -177,6 +181,10 @@ export const createDefaultPopeyeEngineConfiguration = (): EngineConfiguration =>
   Try: [],
   SetPlay: [],
   Variation: [],
+});
+
+export const createDefaultSpCoreEngineConfiguration = (): EngineConfiguration => ({
+  ShowAttempts: [],
 });
 
 export const cloneEngineConfiguration = (

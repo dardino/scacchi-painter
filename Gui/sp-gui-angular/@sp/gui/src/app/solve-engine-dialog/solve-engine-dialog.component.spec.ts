@@ -42,14 +42,16 @@ describe("SolveEngineDialogComponent", () => {
   });
 
   it("shows SpCore options when SpCore engine is selected", () => {
-    createComponent({ engine: "SpCore" });
+    const component = createComponent({ engine: "SpCore" });
 
     const root = fixture.nativeElement as HTMLElement;
     expect(root.textContent).toContain("SpCore options");
+    expect(root.textContent).toContain("ShowAttempts");
     expect(root.textContent).toContain("MaxSolutions");
-    expect(root.textContent).toContain("RefutationsTry");
+    expect(root.textContent).toContain("RefutationsCount");
     expect(root.textContent).toContain("ShowAllDefenses");
     expect(root.textContent).not.toContain("NoBoard");
+    expect(component.optionState.ShowAttempts?.enabled).toBeTruthy();
   });
 
   it("shows argument inputs for enabled options with args", () => {

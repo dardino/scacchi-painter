@@ -8,14 +8,15 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import {
-  EngineConfiguration,
-  EngineConfigurationsByEngine,
-  EngineOptionKey,
-  EngineOptionMeta,
-  EngineOptionsByEngine,
-  cloneEngineConfiguration,
-  cloneEngineConfigurationsByEngine,
-  createDefaultPopeyeEngineConfiguration,
+    EngineConfiguration,
+    EngineConfigurationsByEngine,
+    EngineOptionKey,
+    EngineOptionMeta,
+    EngineOptionsByEngine,
+    cloneEngineConfiguration,
+    cloneEngineConfigurationsByEngine,
+    createDefaultPopeyeEngineConfiguration,
+    createDefaultSpCoreEngineConfiguration,
 } from "@sp/dbmanager/src/lib/models/engine";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 
@@ -143,6 +144,9 @@ export class SolveEngineDialogComponent {
       persistedConfigs.Popeye = cloneEngineConfiguration(this.data.engineConfig)
         ?? createDefaultPopeyeEngineConfiguration();
     }
+    if (persistedConfigs.SpCore == null) {
+      persistedConfigs.SpCore = createDefaultSpCoreEngineConfiguration();
+    }
 
     return persistedConfigs;
   }
@@ -153,7 +157,11 @@ export class SolveEngineDialogComponent {
     (Object.keys(EngineOptionsByEngine) as Engines[]).forEach((engine) => {
       const optionsMeta = EngineOptionsByEngine[engine] ?? {};
       const baseConfig = this.engineConfigurationsByEngine[engine]
-        ?? (engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {});
+        ?? (engine === "Popeye"
+          ? createDefaultPopeyeEngineConfiguration()
+          : engine === "SpCore"
+            ? createDefaultSpCoreEngineConfiguration()
+            : {});
       const state: Record<string, EngineOptionState> = {};
 
       (Object.entries(optionsMeta) as [EngineOptionKey, EngineOptionMeta][]).forEach(([key, meta]) => {
@@ -197,6 +205,14 @@ export class SolveEngineDialogComponent {
       return cloneEngineConfiguration(config) ?? {};
     }
 
-    return engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {};
+    if (engine === "Popeye") {
+      return createDefaultPopeyeEngineConfiguration();
+    }
+
+    if (engine === "SpCore") {
+      return createDefaultSpCoreEngineConfiguration();
+    }
+
+    return {};
   }
 }
