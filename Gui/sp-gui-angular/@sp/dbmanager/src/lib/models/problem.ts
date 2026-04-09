@@ -140,9 +140,18 @@ export class Problem implements IProblem {
     b.twins = a.twins ? Twins.fromJson(a.twins) : Twins.fromJson({});
     b.engine = a.engine ?? "Popeye";
     const perEngineConfig = cloneEngineConfigurationsByEngine(a.engineConfigurationsByEngine) ?? {};
+
+    // Reuse native Popeye options for Popeye ASM unless explicitly overridden.
+    if (perEngineConfig["Popeye (ASM)"] == null && perEngineConfig.Popeye != null) {
+      perEngineConfig["Popeye (ASM)"] = cloneEngineConfiguration(perEngineConfig.Popeye) ?? {};
+    }
+
     const legacyEngineConfig = cloneEngineConfiguration(a.engineConfig);
     if (legacyEngineConfig != null && perEngineConfig.Popeye == null) {
       perEngineConfig.Popeye = legacyEngineConfig;
+      if (perEngineConfig["Popeye (ASM)"] == null) {
+        perEngineConfig["Popeye (ASM)"] = cloneEngineConfiguration(legacyEngineConfig) ?? {};
+      }
     }
     b.engineConfigurationsByEngine = perEngineConfig;
 

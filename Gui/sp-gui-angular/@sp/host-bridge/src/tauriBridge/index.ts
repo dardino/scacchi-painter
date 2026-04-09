@@ -6,7 +6,16 @@ import { EngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
 import { invoke } from "@tauri-apps/api/core";
 import { Event, listen } from "@tauri-apps/api/event";
 import { BehaviorSubject, Observable } from "rxjs";
-import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "../lib/bridge-global";
+import {
+  AsmPopeyeEngine,
+  BridgeGlobal,
+  Engines,
+  EOF,
+  NativePopeyeEngine,
+  SolutionRow,
+  SolveModes,
+  SpCoreEngine,
+} from "../lib/bridge-global";
 import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "../lib/spcore-support";
 
 type RustSolverOptions = {
@@ -28,19 +37,36 @@ type SpCoreSolution = {
 
 class TauriBridge implements BridgeGlobal {
   private solveEnded = true;
-  private currentEngine: Engines = "Popeye";
+  private currentEngine: Engines = AsmPopeyeEngine;
+  private ww: Worker | null = null;
+  private hostEngines: Engines[] = [SpCoreEngine];
 
   constructor() {
+    this.refreshAvailableEnginesFromHost();
+
     listen("popeye-update", (event: Event<string>) => {
-      if (this.currentEngine === "Popeye") {
+      if (this.currentEngine === NativePopeyeEngine) {
         this.processData(event.payload ?? "");
       }
     });
     listen("spcore-update", (event: Event<string>) => {
-      if (this.currentEngine === "SpCore") {
+      if (this.currentEngine === SpCoreEngine) {
         this.processSpCoreData(event.payload ?? "");
       }
     });
+  }
+
+  private refreshAvailableEnginesFromHost() {
+    invoke<string[]>("available_engines")
+      .then((engines) => {
+        const accepted = engines.filter((engine): engine is Engines => {
+          return engine === NativePopeyeEngine || engine === SpCoreEngine;
+        });
+        this.hostEngines = accepted;
+      })
+      .catch((error) => {
+        console.warn("Failed to retrieve engines from tauri host", error);
+      });
   }
 
   private processData(data: string) {
@@ -142,7 +168,7 @@ class TauriBridge implements BridgeGlobal {
     return threat
       .trim()
       .split(/\s+/)
-      .map((move) => this.normalizeThreatMove(move))
+      .map(move => this.normalizeThreatMove(move))
       .join(" ");
   }
 
@@ -239,7 +265,54 @@ class TauriBridge implements BridgeGlobal {
     }
     this.solveEnded = true;
     this.solver$.next(reason);
+    this.stopAsmWorker();
     setTimeout(() => this.solver$.unsubscribe(), 500);
+  }
+
+  private startAsmWorker() {
+    this.ww = new Worker("./assets/engine/popeye_ww.js");
+    this.ww.addEventListener("error", this.asmError);
+    this.ww.addEventListener("message", this.asmMessage);
+    this.ww.addEventListener("messageerror", this.asmMessageError);
+  }
+
+  private stopAsmWorker() {
+    if (!this.ww) {
+      return;
+    }
+    this.ww.removeEventListener("error", this.asmError);
+    this.ww.removeEventListener("message", this.asmMessage);
+    this.ww.removeEventListener("messageerror", this.asmMessageError);
+    this.ww.terminate();
+    this.ww = null;
+  }
+
+  private asmError = (ev: ErrorEvent) => {
+    this.endSolve({ exitCode: -1, message: ev.message });
+  };
+
+  private asmMessage = (e: MessageEvent<string>) => {
+    this.processData(e.data);
+  };
+
+  private asmMessageError = (e: MessageEvent<string>) => {
+    this.endSolve({ exitCode: -1, message: String(e.data) });
+  };
+
+  private startAsmSolve(problem: string) {
+    problem.split("\n").forEach((row) => {
+      setTimeout(() => {
+        this.solver$.next({ raw: row, rowtype: "log", moveTree: [] });
+      }, 1);
+    });
+
+    this.stopAsmWorker();
+    this.startAsmWorker();
+    this.ww?.postMessage({ problem });
+  }
+
+  private supportedEngines(): Engines[] {
+    return [AsmPopeyeEngine, ...this.hostEngines.filter(engine => engine !== AsmPopeyeEngine)];
   }
 
   openFile(): File | PromiseLike<File | null> | null {
@@ -257,12 +330,12 @@ class TauriBridge implements BridgeGlobal {
   }
 
   stopSolve(): void {
-    if (this.currentEngine === "Popeye") {
+    if (this.currentEngine === NativePopeyeEngine) {
       invoke("stop_popeye").catch((error) => {
         console.warn("Failed to stop popeye process", error);
       });
     }
-    else {
+    else if (this.currentEngine === SpCoreEngine) {
       invoke("stop_rust_solver").catch((error) => {
         console.warn("Failed to stop rust solver", error);
       });
@@ -273,25 +346,32 @@ class TauriBridge implements BridgeGlobal {
   private solver$: BehaviorSubject<SolutionRow | EOF>;
   private currentProblem: Problem;
   runSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes): Observable<SolutionRow | EOF> | Error {
+    if (!this.supportsEngine(engine)) {
+      return new Error(`Engine not found: ${engine}`);
+    }
+
     this.currentProblem = CurrentProblem;
     this.solveEnded = false;
     this.currentEngine = engine;
 
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
       {
-        raw: `starting engine <${engine}>`,
+        raw: `starting engine <${this.currentEngine}>`,
         rowtype: "log",
         moveTree: [],
       },
     );
 
-    const problem = engine === "SpCore"
+    const problem = engine === SpCoreEngine
       ? problemToSpCore(CurrentProblem).join("\n")
       : problemToPopeye(CurrentProblem, mode).join("\n");
-    if (engine === "Popeye") {
+    if (this.currentEngine === NativePopeyeEngine) {
       this.startSolve(problem);
     }
-    else if (engine === "SpCore") {
+    else if (this.currentEngine === AsmPopeyeEngine) {
+      this.startAsmSolve(problem);
+    }
+    else if (this.currentEngine === SpCoreEngine) {
       const unsupported = getSpCoreUnsupportedFeatures(CurrentProblem, mode);
       if (unsupported.length > 0) {
         this.endSolve({
@@ -353,11 +433,11 @@ class TauriBridge implements BridgeGlobal {
   }
 
   supportsEngine(engine: Engines): boolean {
-    return engine === "Popeye" || engine === "SpCore";
+    return this.supportedEngines().includes(engine);
   }
 
   availableEngines(): Engines[] {
-    return ["Popeye", "SpCore"];
+    return this.supportedEngines();
   }
 }
 

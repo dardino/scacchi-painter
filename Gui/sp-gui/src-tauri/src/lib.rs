@@ -1,7 +1,6 @@
 use std::io::BufRead;
 use std::io::BufReader;
 use std::process::{Child, Command, Stdio};
-use std::ptr::eq;
 use std::sync::{Mutex, OnceLock};
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
@@ -66,6 +65,15 @@ fn get_popeye_executable() -> &'static str {
     }
 }
 
+#[tauri::command]
+fn available_engines() -> Vec<String> {
+    let mut engines = vec!["SpCore".to_string()];
+    if get_popeye_executable() != "unknown" {
+        engines.insert(0, "Popeye".to_string());
+    }
+    engines
+}
+
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 async fn run_popeye<R: Runtime>(
@@ -89,7 +97,7 @@ async fn run_popeye<R: Runtime>(
     }
 
     let exe = get_popeye_executable();
-    if eq(exe, "unknown") {
+    if exe == "unknown" {
         return Ok("[E] Unknown platform or architecture".to_string());
     }
 
@@ -276,7 +284,14 @@ async fn close_app<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![close_app, run_popeye, stop_popeye, run_rust_solver, stop_rust_solver])
+        .invoke_handler(tauri::generate_handler![
+            close_app,
+            available_engines,
+            run_popeye,
+            stop_popeye,
+            run_rust_solver,
+            stop_rust_solver
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

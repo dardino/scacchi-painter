@@ -9,6 +9,7 @@
     "dev:web": "pnpm --dir Gui/sp-gui-angular start",
     "dev:web:insecure": "pnpm --dir Gui/sp-gui-angular startinsecure",
     "dev:tauri": "pnpm --dir Gui/sp-gui tauri dev",
+    "dev:tauri:ios": "pnpm --dir Gui/sp-gui tauri ios dev",
     "build:web": "pnpm --dir Gui/sp-gui-angular build:Azure",
     "test:web": "pnpm --dir Gui/sp-gui-angular test:ci",
     "lint:web": "pnpm --dir Gui/sp-gui-angular lint",

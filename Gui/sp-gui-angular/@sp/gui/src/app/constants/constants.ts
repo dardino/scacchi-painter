@@ -1,6 +1,7 @@
 export const istructionRegExp = new RegExp(
   `^(${[
     "Popeye",
+    "Popeye \\(ASM\\)",
     "BeginProblem",
     "Pieces",
     "White",
@@ -25,6 +26,7 @@ export const outlogRegExp = new RegExp(
     "\\[E\\]",
     "Execute",
     "Popeye",
+    "Popeye \\(ASM\\)",
     "starting engine",
     "Engine process",
     "program exited",

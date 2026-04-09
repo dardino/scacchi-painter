@@ -8,17 +8,17 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import {
-    EngineConfiguration,
-    EngineConfigurationsByEngine,
-    EngineOptionKey,
-    EngineOptionMeta,
-    EngineOptionsByEngine,
-    cloneEngineConfiguration,
-    cloneEngineConfigurationsByEngine,
-    createDefaultPopeyeEngineConfiguration,
-    createDefaultSpCoreEngineConfiguration,
+  EngineConfiguration,
+  EngineConfigurationsByEngine,
+  EngineOptionKey,
+  EngineOptionMeta,
+  EngineOptionsByEngine,
+  cloneEngineConfiguration,
+  cloneEngineConfigurationsByEngine,
+  createDefaultPopeyeEngineConfiguration,
+  createDefaultSpCoreEngineConfiguration,
 } from "@sp/dbmanager/src/lib/models/engine";
-import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
+import { AsmPopeyeEngine, Engines, NativePopeyeEngine } from "@sp/host-bridge/src/lib/bridge-global";
 
 export interface SolveEngineDialogData {
   availableEngines: Engines[];
@@ -55,8 +55,8 @@ export class SolveEngineDialogComponent {
   dialogRef = inject<MatDialogRef<SolveEngineDialogComponent, SolveEngineDialogResult | null>>(MatDialogRef);
   data = inject<SolveEngineDialogData>(MAT_DIALOG_DATA);
 
-  availableEngines: Engines[] = this.data.availableEngines.length > 0 ? [...new Set(this.data.availableEngines)] as Engines[] : ["Popeye"];
-  selectedEngine: Engines = this.availableEngines.includes(this.data.engine) ? this.data.engine : this.availableEngines[0] ?? "Popeye";
+  availableEngines: Engines[] = this.data.availableEngines.length > 0 ? [...new Set(this.data.availableEngines)] as Engines[] : [AsmPopeyeEngine];
+  selectedEngine: Engines = this.availableEngines.includes(this.data.engine) ? this.data.engine : this.availableEngines[0] ?? AsmPopeyeEngine;
 
   engineConfigurationsByEngine: EngineConfigurationsByEngine = this.buildEngineConfigurationsByEngine();
   optionStateByEngine: Partial<Record<Engines, Record<string, EngineOptionState>>> = this.buildOptionStateByEngine();
@@ -140,8 +140,17 @@ export class SolveEngineDialogComponent {
 
   private buildEngineConfigurationsByEngine(): EngineConfigurationsByEngine {
     const persistedConfigs = cloneEngineConfigurationsByEngine(this.data.engineConfigurationsByEngine) ?? {};
+
+    if (persistedConfigs[AsmPopeyeEngine] == null && persistedConfigs[NativePopeyeEngine] != null) {
+      persistedConfigs[AsmPopeyeEngine] = cloneEngineConfiguration(persistedConfigs[NativePopeyeEngine]) ?? {};
+    }
+
     if (persistedConfigs.Popeye == null) {
       persistedConfigs.Popeye = cloneEngineConfiguration(this.data.engineConfig)
+        ?? createDefaultPopeyeEngineConfiguration();
+    }
+    if (persistedConfigs[AsmPopeyeEngine] == null) {
+      persistedConfigs[AsmPopeyeEngine] = cloneEngineConfiguration(persistedConfigs.Popeye)
         ?? createDefaultPopeyeEngineConfiguration();
     }
     if (persistedConfigs.SpCore == null) {
@@ -206,6 +215,10 @@ export class SolveEngineDialogComponent {
     }
 
     if (engine === "Popeye") {
+      return createDefaultPopeyeEngineConfiguration();
+    }
+
+    if (engine === AsmPopeyeEngine) {
       return createDefaultPopeyeEngineConfiguration();
     }
 

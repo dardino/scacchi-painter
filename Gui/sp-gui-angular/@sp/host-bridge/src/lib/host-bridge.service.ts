@@ -1,7 +1,7 @@
 import { ApplicationRef, inject, Injectable } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Subject, Subscription } from "rxjs";
-import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "./bridge-global";
+import { AsmPopeyeEngine, BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "./bridge-global";
 
 declare global {
   interface HandledFile {
@@ -52,7 +52,7 @@ export class HostBridgeService {
 
   availableEngines(): Engines[] {
     if (!window.Bridge) {
-      return ["Popeye"];
+      return [AsmPopeyeEngine];
     }
     return window.Bridge.availableEngines();
   }

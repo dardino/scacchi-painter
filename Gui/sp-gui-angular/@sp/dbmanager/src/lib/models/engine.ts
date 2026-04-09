@@ -164,6 +164,7 @@ export const SpCoreEngineOptions = {
 
 export const EngineOptionsByEngine = {
   Popeye: PopeyeEngineOptions,
+  "Popeye (ASM)": PopeyeEngineOptions,
   SpCore: SpCoreEngineOptions,
 } as const satisfies Record<Engines, Record<string, EngineOptionMeta>>;
 
