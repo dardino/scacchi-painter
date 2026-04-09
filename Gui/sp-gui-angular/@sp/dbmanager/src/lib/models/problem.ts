@@ -180,14 +180,27 @@ export class Problem implements IProblem {
       json.pieces = this.pieces.map(p => p.toJson());
     }
     json.engine = this.engine;
+
+    // Prepare a cloned copy of engine configurations to serialize without
+    // mutating the instance's internal state. If `engineConfig` is present
+    // ensure the selected engine entry reflects the current `engineConfig`
+    // in the cloned copy only.
+    let clonedEngineConfigurations: EngineConfigurationsByEngine | undefined =
+      cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
+
     if (this.engineConfig != null) {
-      this.engineConfigurationsByEngine[this.engine] = cloneEngineConfiguration(this.engineConfig) ?? {};
+      const cloned = cloneEngineConfiguration(this.engineConfig) ?? {};
+      clonedEngineConfigurations = clonedEngineConfigurations ?? {};
+      // assign into the cloned copy only (do not mutate `this.engineConfigurationsByEngine`)
+      clonedEngineConfigurations[this.engine] = cloned;
     }
+
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
-    if (this.engineConfigurationsByEngine != null) {
-      json.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
+    if (clonedEngineConfigurations != null && Object.keys(clonedEngineConfigurations).length > 0) {
+      json.engineConfigurationsByEngine = clonedEngineConfigurations;
     }
+
     if (this.engineConfig != null) json.engineConfig = cloneEngineConfiguration(this.engineConfig) ?? {};
     if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
     if (this.textSolution) json.textSolution = this.textSolution;
