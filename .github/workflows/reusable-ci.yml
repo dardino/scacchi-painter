@@ -30,9 +30,15 @@ jobs:
         with:
           version: 10.33.0
 
+      - name: Install workspace dependencies (root)
+        run: pnpm install --frozen-lockfile
+
       - name: Install dependencies
         working-directory: ${{ inputs.working_directory }}
         run: pnpm install --frozen-lockfile
+
+      - name: Build CoreJS
+        run: pnpm --dir CoreJS build
 
       - name: Run linting
         working-directory: ${{ inputs.working_directory }}

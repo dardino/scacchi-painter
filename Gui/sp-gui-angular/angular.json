@@ -39,7 +39,7 @@
               "@sp/gui/src/manifest.webmanifest"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "@angular/material/prebuilt-themes/purple-green.css",
               "./custom-theme.scss",
               "@sp/gui/src/styles.scss"
             ],

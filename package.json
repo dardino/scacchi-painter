@@ -13,6 +13,7 @@
     "build:web": "pnpm --dir Gui/sp-gui-angular build:Azure",
     "test:web": "pnpm --dir Gui/sp-gui-angular test:ci",
     "lint:web": "pnpm --dir Gui/sp-gui-angular lint",
+    "dev:corejs": "pnpm --dir CoreJS watch",
     "build:corejs": "pnpm --dir CoreJS build",
     "test:corejs": "pnpm --dir CoreJS test",
     "build:tauri": "pnpm --dir Gui/sp-gui tauri build",
