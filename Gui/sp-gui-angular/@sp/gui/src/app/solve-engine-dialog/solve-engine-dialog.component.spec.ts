@@ -71,7 +71,7 @@ describe("SolveEngineDialogComponent", () => {
     expect(component.optionState.MaxSolutions?.enabled).toBeTruthy();
     expect(component.optionState.MaxSolutions?.values[0]).toBe("3");
 
-    const input = root.querySelector('input[matinput]') as HTMLInputElement | null;
+    const input = root.querySelector("input[matinput]") as HTMLInputElement | null;
     expect(input).toBeTruthy();
   });
 });

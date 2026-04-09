@@ -15,6 +15,8 @@ describe("HostBridgeService", () => {
     saveFile: ReturnType<typeof vi.fn>;
   };
 
+  type TestProblem = { engine: string; [key: string]: unknown };
+
   beforeEach(() => {
     TestBed.configureTestingModule({});
 
@@ -36,13 +38,13 @@ describe("HostBridgeService", () => {
   });
 
   it("releases solve lock when receiving unsupported-style EOF payload", () => {
-    const stream = new Subject<any>();
+    const stream = new Subject<unknown>();
     bridge.runSolve.mockReturnValue(stream.asObservable());
 
     const solveStates: boolean[] = [];
     service.solveInProgress$.subscribe(state => solveStates.push(state));
 
-    const problem = { engine: "SpCore" } as any;
+    const problem: TestProblem = { engine: "SpCore" };
     service.startSolve(problem, "SpCore", "try");
 
     stream.next({ message: "SpCore does not support try mode" });
@@ -55,13 +57,13 @@ describe("HostBridgeService", () => {
   });
 
   it("releases solve lock when stream completes without explicit EOF", () => {
-    const stream = new Subject<any>();
+    const stream = new Subject<unknown>();
     bridge.runSolve.mockReturnValue(stream.asObservable());
 
     const solveStates: boolean[] = [];
     service.solveInProgress$.subscribe(state => solveStates.push(state));
 
-    const problem = { engine: "Popeye" } as any;
+    const problem: TestProblem = { engine: "Popeye" };
     service.startSolve(problem, "Popeye", "start");
     stream.complete();
 
@@ -73,7 +75,7 @@ describe("HostBridgeService", () => {
   });
 
   it("releases solve lock when EOF is emitted synchronously on subscribe", () => {
-    const stream = new BehaviorSubject<any>({
+    const stream = new BehaviorSubject<unknown>({
       exitCode: -1,
       message: "SpCore does not support this problem yet. Unsupported feature: try mode.",
     });
@@ -82,7 +84,7 @@ describe("HostBridgeService", () => {
     const solveStates: boolean[] = [];
     service.solveInProgress$.subscribe(state => solveStates.push(state));
 
-    const problem = { engine: "SpCore" } as any;
+    const problem: TestProblem = { engine: "SpCore" };
     const firstStartError = service.startSolve(problem, "SpCore", "try");
     const secondStartError = service.startSolve(problem, "SpCore", "start");
 

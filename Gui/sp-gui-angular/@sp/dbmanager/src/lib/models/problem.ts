@@ -3,26 +3,26 @@ import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
 import {
-    Columns,
-    GetLocationFromIndex,
-    GetSolutionFromElement,
-    GetSquareIndex,
-    IProblem,
-    SquareLocation,
-    Traverse,
-    convertToRtf,
-    createXmlElement,
-    fenToChessBoard,
-    notEmpty,
-    notNull,
+  Columns,
+  GetLocationFromIndex,
+  GetSolutionFromElement,
+  GetSquareIndex,
+  IProblem,
+  SquareLocation,
+  Traverse,
+  convertToRtf,
+  createXmlElement,
+  fenToChessBoard,
+  notEmpty,
+  notNull,
 } from "../helpers";
 import { Author } from "./author";
 import {
-    cloneEngineConfiguration,
-    cloneEngineConfigurationsByEngine,
-    createDefaultPopeyeEngineConfiguration,
-    type EngineConfiguration,
-    type EngineConfigurationsByEngine,
+  cloneEngineConfiguration,
+  cloneEngineConfigurationsByEngine,
+  createDefaultPopeyeEngineConfiguration,
+  type EngineConfiguration,
+  type EngineConfigurationsByEngine,
 } from "./engine";
 import { Piece } from "./piece";
 import { Stipulation } from "./stipulation";
@@ -43,6 +43,7 @@ export class Problem implements IProblem {
   public engineConfigurationsByEngine: EngineConfigurationsByEngine = {
     Popeye: createDefaultPopeyeEngineConfiguration(),
   };
+
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});

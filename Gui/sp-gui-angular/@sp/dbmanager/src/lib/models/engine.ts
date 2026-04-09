@@ -163,9 +163,9 @@ export const SpCoreEngineOptions = {
 } as const;
 
 export const EngineOptionsByEngine = {
-  Popeye: PopeyeEngineOptions,
+  "Popeye": PopeyeEngineOptions,
   "Popeye (ASM)": PopeyeEngineOptions,
-  SpCore: SpCoreEngineOptions,
+  "SpCore": SpCoreEngineOptions,
 } as const satisfies Record<Engines, Record<string, EngineOptionMeta>>;
 
 // Backward-compatible alias for existing Popeye-specific usages.
