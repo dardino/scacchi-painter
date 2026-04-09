@@ -1,5 +1,17 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.2.1
+
+**Bug fix and infrastructure release**: build pipeline hardening, solver-cli improvements, and migration of `popeye-js` from Yarn to pnpm.
+
+- [ci] **Tag release workflow overhauled**: `ci-tag.yml` extended to publish multi-platform Tauri binaries (Linux AppImage/deb/rpm, Windows MSI/NSIS, macOS DMG) and upload them as GitHub Release assets
+- [ci] **New `publish-docs.yml` workflow**: automatically publishes the Rust solver documentation to GitHub Pages on every push to `master`
+- [CoreRust] **solver-cli expanded**: richer CLI output (JSON mode, tries, threats, refutations), corpus-based regression runner, and improved FEN/Popeye input parsing
+- [CoreRust] **problem-solver hardened**: alpha-beta pruning improvements, transposition-table fixes, and stronger winning-line extraction
+- [popeye-js] **Migrated from Yarn to pnpm**: removed Yarn 3 artefacts and aligned package manager with the rest of the monorepo
+- [docs] **New documentation site**: added `docs/` folder with Jekyll configuration and pages for the solver CLI, release flow, and post-release sync procedures
+- [build] **Fix build failures**: restored `tsconfig.json` `baseUrl` and pinned `concat@3.0.0` to resolve Angular build errors introduced in 0.2.0
+
 ## 0.2.0
 
 **Feature release**: introduces the Rust solver workspace, richer solving workflows, and the first end-to-end platform integration updates for desktop and web builds.
