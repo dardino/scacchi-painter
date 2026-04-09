@@ -1,11 +1,11 @@
 use std::io::BufRead;
 use std::io::BufReader;
 use std::process::{Child, Command, Stdio};
-use std::ptr::eq;
 use std::sync::{Mutex, OnceLock};
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
 use std::sync::atomic::{AtomicBool, Ordering};
+use serde::Deserialize;
 use problem_io::{parse_popeye, ast_to_problem};
 use problem_solver::{solve_streaming, SolverConfig, StreamDirective};
 // windows
@@ -23,6 +23,15 @@ fn running_popeye() -> &'static Mutex<Option<Child>> {
 fn rust_solver_stop_flag() -> &'static AtomicBool {
     static STOP_FLAG: OnceLock<AtomicBool> = OnceLock::new();
     STOP_FLAG.get_or_init(|| AtomicBool::new(false))
+}
+
+#[derive(Debug, Clone, Deserialize, Default)]
+#[serde(default, rename_all = "camelCase")]
+struct RustSolverOptionsInput {
+    max_solutions: Option<usize>,
+    refutations_count: Option<usize>,
+    show_all_defenses: bool,
+    show_attempts: bool,
 }
 
 fn get_popeye_executable() -> &'static str {
@@ -56,6 +65,15 @@ fn get_popeye_executable() -> &'static str {
     }
 }
 
+#[tauri::command]
+fn available_engines() -> Vec<String> {
+    let mut engines = vec!["SpCore".to_string()];
+    if get_popeye_executable() != "unknown" {
+        engines.insert(0, "Popeye".to_string());
+    }
+    engines
+}
+
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 async fn run_popeye<R: Runtime>(
@@ -79,7 +97,7 @@ async fn run_popeye<R: Runtime>(
     }
 
     let exe = get_popeye_executable();
-    if eq(exe, "unknown") {
+    if exe == "unknown" {
         return Ok("[E] Unknown platform or architecture".to_string());
     }
 
@@ -165,15 +183,40 @@ async fn stop_popeye() -> Result<(), String> {
 async fn run_rust_solver<R: Runtime>(
     window: tauri::Window<R>,
     input: String,
+    options: Option<RustSolverOptionsInput>,
 ) -> Result<String, String> {
     rust_solver_stop_flag().store(false, Ordering::Relaxed);
 
     let ast = parse_popeye(&input).map_err(|e| e.to_string())?;
     let problem = ast_to_problem(ast).map_err(|e| e.to_string())?;
-    let config = SolverConfig::default();
+    let options = options.unwrap_or_default();
+    
+    let effective_refutations_try = if options.show_attempts {
+        let count = options.refutations_count.unwrap_or(1);
+        if count >= 1 {
+            Some(count)
+        } else {
+            eprintln!("[WARN] refutations-count value ({}) is less than 1 and will be ignored. Using default value of 1.", count);
+            Some(1)
+        }
+    } else {
+        if let Some(rc) = options.refutations_count {
+            if rc >= 1 {
+                eprintln!("[WARN] refutations-count value ({}) will be ignored because show_attempts is not enabled.", rc);
+            }
+        }
+        None
+    };
+    
+    let config = SolverConfig {
+        refutations_try: effective_refutations_try,
+        show_all_defenses: options.show_all_defenses,
+        show_attempts: options.show_attempts,
+        ..SolverConfig::default()
+    };
 
     let mut solution_index = 0usize;
-    let result = solve_streaming(&problem, &config, None, |search_result| {
+    let result = solve_streaming(&problem, &config, options.max_solutions, |search_result| {
         if rust_solver_stop_flag().load(Ordering::Relaxed) {
             return StreamDirective::Stop;
         }
@@ -184,6 +227,7 @@ async fn run_rust_solver<R: Runtime>(
             "winning_line": search_result.winning_line,
             "winning_line_popeye": search_result.winning_line_popeye,
             "explored_nodes": search_result.explored_nodes,
+            "solution": search_result.solution,
         });
         window.emit("spcore-update", payload.to_string()).ok();
         StreamDirective::Continue
@@ -191,12 +235,24 @@ async fn run_rust_solver<R: Runtime>(
 
     match result {
         Ok(summary) => {
+            for (idx, try_line) in summary.tries.iter().enumerate() {
+                let try_event = serde_json::json!({
+                    "type": "try",
+                    "index": idx + 1,
+                    "try_move": try_line.try_move,
+                    "threat_moves": try_line.threat_moves,
+                    "threats": try_line.threats,
+                    "refutations": try_line.refutations,
+                });
+                window.emit("spcore-update", try_event.to_string()).ok();
+            }
             let done = serde_json::json!({
                 "type": "done",
                 "solutions_found": summary.solutions_found,
                 "explored_nodes": summary.explored_nodes,
                 "stopped_early": summary.stopped_early,
                 "timed_out": summary.timed_out,
+                            "elapsed_ms": summary.elapsed_ms,
             });
             window.emit("spcore-update", done.to_string()).ok();
         }
@@ -228,7 +284,14 @@ async fn close_app<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![close_app, run_popeye, stop_popeye, run_rust_solver, stop_rust_solver])
+        .invoke_handler(tauri::generate_handler![
+            close_app,
+            available_engines,
+            run_popeye,
+            stop_popeye,
+            run_rust_solver,
+            stop_rust_solver
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

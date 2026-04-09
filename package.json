@@ -6,16 +6,36 @@
   },
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "node ./scripts/dev-runner.mjs",
-    "dev:web": "node ./scripts/dev-runner.mjs web",
-    "dev:api": "node ./scripts/dev-runner.mjs api",
-    "dev:angular": "node ./scripts/dev-runner.mjs angular",
-    "dev:swa": "node ./scripts/dev-runner.mjs swa",
+    "dev:web": "pnpm --dir Gui/sp-gui-angular start",
+    "dev:web:insecure": "pnpm --dir Gui/sp-gui-angular startinsecure",
+    "dev:tauri": "pnpm --dir Gui/sp-gui tauri dev",
+    "dev:tauri:ios": "pnpm --dir Gui/sp-gui tauri ios dev",
     "build:web": "pnpm --dir Gui/sp-gui-angular build:Azure",
     "test:web": "pnpm --dir Gui/sp-gui-angular test:ci",
     "lint:web": "pnpm --dir Gui/sp-gui-angular lint",
     "build:corejs": "pnpm --dir CoreJS build",
     "test:corejs": "pnpm --dir CoreJS test",
-    "build:tauri": "pnpm --dir Gui/sp-gui build"
+    "build:tauri": "pnpm --dir Gui/sp-gui tauri build",
+    "build:all": "pnpm build:web && pnpm build:corejs && pnpm build:tauri && cd Core && dotnet build"
+  },
+  "pnpm": {
+    "overrides": {
+      "prosemirror-model": "1.21.0"
+    },
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "lmdb",
+      "msgpackr-extract",
+      "optipng-bin",
+      "sharp",
+      "unrs-resolver",
+      "zopflipng-bin"
+    ],
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "dependencies": {
+    "eslint": "^10.2.0"
   }
 }

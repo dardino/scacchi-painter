@@ -36,6 +36,7 @@ pub struct SolverConfig {
     pub transposition_ttl_generations: Option<u32>,
     pub refutations_try: Option<usize>,
     pub show_all_defenses: bool,
+    pub show_attempts: bool,
 }
 
 impl Default for SolverConfig {
@@ -47,6 +48,7 @@ impl Default for SolverConfig {
             transposition_ttl_generations: Some(1),
             refutations_try: None,
             show_all_defenses: false,
+            show_attempts: false,
         }
     }
 }
@@ -102,6 +104,8 @@ pub struct StreamingSummary {
     pub explored_nodes: u64,
     pub stopped_early: bool,
     pub timed_out: bool,
+    pub tries: Vec<TryLine>,
+    pub elapsed_ms: u128,
 }
 
 /// Solves a chess problem using the directmate stipulation solver.
@@ -160,17 +164,24 @@ pub fn solve(problem: &ProblemDefinition, config: &SolverConfig) -> Result<Searc
         None => vec![],
     };
     let solution = match line_moves {
-        Some(ref moves) => build_solution_tree(
-            &position,
-            &stipulation,
-            plies,
-            moves,
-            config.refutations_try,
-            config.show_all_defenses,
-            &mut explored_nodes,
-            &mut trans_cache,
-            deadline,
-        ),
+        Some(ref moves) => {
+            let effective_refutations_try = if config.show_attempts {
+                Some(config.refutations_try.unwrap_or(1))
+            } else {
+                None
+            };
+            build_solution_tree(
+                &position,
+                &stipulation,
+                plies,
+                moves,
+                effective_refutations_try,
+                config.show_all_defenses,
+                &mut explored_nodes,
+                &mut trans_cache,
+                deadline,
+            )
+        }
         None => None,
     };
 
@@ -209,6 +220,13 @@ where
         deterministic: config.deterministic,
     };
 
+    // Calculate effective refutations_try based on show_attempts
+    let effective_refutations_try = if config.show_attempts {
+        Some(config.refutations_try.unwrap_or(1))
+    } else {
+        None
+    };
+
     let mut explored_nodes = 0;
     let mut trans_cache = cache::TranspositionCache::new(config.transposition_ttl_generations);
     let start = Instant::now();
@@ -219,6 +237,7 @@ where
     let mut solutions_found: usize = 0;
     let mut stopped_early = false;
     let mut timed_out = false;
+    let mut tries = Vec::new();
 
     for (key_move, after_key) in moves::ordered_successors(&position, config.deterministic) {
         if let Some(limit) = deadline {
@@ -252,6 +271,24 @@ where
         };
 
         let Some(mut continuation) = key_continuation else {
+            // Not a solution: collect as try if show_attempts is enabled
+            if let Some(refutations_try) = effective_refutations_try {
+                if let Some(try_line) = analyze_try_line(
+                    &position,
+                    &after_key,
+                    key_move,
+                    &stipulation,
+                    plies,
+                    config.show_all_defenses,
+                    &mut explored_nodes,
+                    &mut trans_cache,
+                    deadline,
+                ) {
+                    if try_line.refutations.len() <= refutations_try {
+                        tries.push(try_line);
+                    }
+                }
+            }
             continue;
         };
 
@@ -300,6 +337,8 @@ where
         explored_nodes,
         stopped_early,
         timed_out,
+        tries,
+        elapsed_ms: start.elapsed().as_millis(),
     })
 }
 
@@ -572,6 +611,8 @@ fn dedupe_defense_lines(defenses: Vec<DefenseLine>) -> Vec<DefenseLine> {
     deduped
 }
 
+/// Like `collect_try_lines` but used when there is **no** solution: all
+/// candidate white moves are evaluated as potential tries (nothing to skip).
 fn collect_try_threat_moves(
     after_try: &OrthodoxPosition,
     stipulation: &DirectMate,
@@ -712,6 +753,7 @@ mod tests {
             transposition_ttl_generations: Some(1),
             refutations_try: None,
             show_all_defenses: false,
+            show_attempts: false,
         };
         let sorted_cfg = SolverConfig {
             max_depth: 8,
@@ -720,6 +762,7 @@ mod tests {
             transposition_ttl_generations: Some(1),
             refutations_try: None,
             show_all_defenses: false,
+            show_attempts: false,
         };
         let sorted = solve(&problem, &sorted_cfg).expect("sorted config should solve");
         let unsorted = solve(&problem, &unsorted_cfg).expect("unsorted config should solve");
@@ -742,6 +785,7 @@ mod tests {
             transposition_ttl_generations: Some(1),
             refutations_try: None,
             show_all_defenses: false,
+            show_attempts: false,
         };
 
         let result = solve(&problem, &config).expect("solver should handle zero time budget");
@@ -862,10 +906,12 @@ mod tests {
 
         let config_one = SolverConfig {
             refutations_try: Some(1),
+            show_attempts: true,
             ..SolverConfig::default()
         };
         let config_two = SolverConfig {
             refutations_try: Some(2),
+            show_attempts: true,
             ..SolverConfig::default()
         };
 
@@ -901,11 +947,13 @@ mod tests {
         let filtered = SolverConfig {
             refutations_try: Some(2),
             show_all_defenses: false,
+            show_attempts: true,
             ..SolverConfig::default()
         };
         let unfiltered = SolverConfig {
             refutations_try: Some(2),
             show_all_defenses: true,
+            show_attempts: true,
             ..SolverConfig::default()
         };
 

@@ -18,7 +18,7 @@ export async function listtournament(_request: HttpRequest, _context: Invocation
     tournamentList.push({
       title: entity.title,
       sections: JSON.parse(entity.sections),
-      id: entity.rowKey,
+      id: entity.rowKey ?? "",
       submissionDeadline: entity.submissionDeadline,
     });
   }

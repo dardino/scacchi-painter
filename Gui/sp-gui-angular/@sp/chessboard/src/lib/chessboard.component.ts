@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, inject, signal, input, effect } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
@@ -13,8 +13,8 @@ import {
 import {
   Piece as BP,
   CanvasChessBoard,
-} from "canvas-chessboard/modules/es2018/canvasChessBoard";
-import { GetConfig } from "canvas-chessboard/modules/es2018/presets/scacchipainter";
+} from "canvas-chessboard";
+import presets from "canvas-chessboard/presets";
 import { Subscription } from "rxjs";
 import { BoardCellComponent } from "./board-cell/board-cell.component";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
@@ -158,7 +158,7 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
         this.canvas.nativeElement,
         this.settings,
       );
-      const cfg = GetConfig();
+      const cfg = presets.ScacchiPainter;
       cfg.fontSize = 1;
       this.canvasBoard.AddFontConfig("ScacchiPainter", cfg);
       this.canvasBoard.SetFont("ScacchiPainter");

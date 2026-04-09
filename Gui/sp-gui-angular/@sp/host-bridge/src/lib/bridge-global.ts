@@ -1,7 +1,13 @@
 import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Observable } from "rxjs";
 import type { Problem } from "../../../dbmanager/src/lib/models/problem";
-export type Engines = "Popeye" | "SpCore";
+
+export const NativePopeyeEngine = "Popeye" as const;
+export const AsmPopeyeEngine = "Popeye (ASM)" as const;
+export const SpCoreEngine = "SpCore" as const;
+
+export type Engines = typeof NativePopeyeEngine | typeof AsmPopeyeEngine | typeof SpCoreEngine;
+
 export interface BridgeGlobal {
   openFile(): File | PromiseLike<File | null> | null;
   saveFile(content: File): string | Promise<string>;

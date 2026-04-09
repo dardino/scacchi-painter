@@ -1,7 +1,15 @@
 import { parsePopeyeRow } from "@ph/moveParser";
 import { problemToPopeye } from "@ph/problemToPopeye";
 import { Problem } from "@sp/dbmanager/src/lib/models";
-import { BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
+import {
+  AsmPopeyeEngine,
+  BridgeGlobal,
+  Engines,
+  EOF,
+  NativePopeyeEngine,
+  SolutionRow,
+  SolveModes,
+} from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
 
 class WebBridge implements BridgeGlobal {
@@ -60,12 +68,17 @@ class WebBridge implements BridgeGlobal {
     this.solver$.next({ exitCode: -1, message: e.data });
   };
 
+  private normalizeEngine(engine: Engines): Engines {
+    return engine === NativePopeyeEngine ? AsmPopeyeEngine : engine;
+  }
+
   supportsEngine(engine: Engines): boolean {
-    return engine === "Popeye";
+    const normalized = this.normalizeEngine(engine);
+    return normalized === AsmPopeyeEngine;
   }
 
   availableEngines(): Engines[] {
-    return ["Popeye"];
+    return [AsmPopeyeEngine];
   }
 
   openFile(): File | PromiseLike<File | null> | null {
@@ -85,14 +98,15 @@ class WebBridge implements BridgeGlobal {
     engine: Engines,
     mode: SolveModes,
   ): Observable<SolutionRow | EOF> | Error {
-    if (engine !== "Popeye") {
+    const normalizedEngine = this.normalizeEngine(engine);
+    if (normalizedEngine !== AsmPopeyeEngine) {
       return new Error("Engine not found.");
     }
     this.problem = CurrentProblem;
     this.solveEnded = false;
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
       {
-        raw: `starting engine <${engine}>`,
+        raw: `starting engine <${normalizedEngine}>`,
         rowtype: "log",
         moveTree: [],
       },

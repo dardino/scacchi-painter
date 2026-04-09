@@ -1,4 +1,5 @@
-import { Component, Input, inject, computed } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
@@ -23,8 +24,8 @@ export class ToolbarDbComponent {
   @Input() boardType: "canvas" | "HTML";
   @Input() hideLabels?: boolean;
 
-  currentIndex = computed(() => this.db.CurrentIndex);
-  totalCount = computed(() => this.db.Count);
+  currentIndex = toSignal(this.db.CurrentIndex$, { initialValue: this.db.CurrentIndex });
+  totalCount = toSignal(this.db.Count$, { initialValue: this.db.Count });
 
   canGoPrev() {
     return this.currentIndex() > 1;
@@ -38,24 +39,39 @@ export class ToolbarDbComponent {
     this.router.navigate([`/list`], { fragment: `${this.currentIndex()}` });
   }
 
-  goToPrev() {
-    if (this.canGoPrev()) {
-      this.router.navigate(["/edit", this.currentIndex() - 1]);
+  async goToPrev() {
+    if (!this.canGoPrev()) {
+      return;
     }
+
+    const targetIndex = this.currentIndex() - 1;
+    await this.db.GotoIndex(targetIndex);
+    await this.router.navigate(["/edit", targetIndex]);
   }
 
-  goToNext() {
-    if (this.canGoNext()) {
-      this.router.navigate(["/edit", this.currentIndex() + 1]);
+  async goToNext() {
+    if (!this.canGoNext()) {
+      return;
     }
+
+    const targetIndex = this.currentIndex() + 1;
+    await this.db.GotoIndex(targetIndex);
+    await this.router.navigate(["/edit", targetIndex]);
   }
 
-  goToFirst() {
-    this.router.navigate(["/edit", 1]);
+  async goToFirst() {
+    await this.db.GotoIndex(1);
+    await this.router.navigate(["/edit", 1]);
   }
 
-  goToLast() {
-    this.router.navigate(["/edit", this.totalCount()]);
+  async goToLast() {
+    const targetIndex = this.totalCount();
+    if (targetIndex < 1) {
+      return;
+    }
+
+    await this.db.GotoIndex(targetIndex);
+    await this.router.navigate(["/edit", targetIndex]);
   }
 
   save() {

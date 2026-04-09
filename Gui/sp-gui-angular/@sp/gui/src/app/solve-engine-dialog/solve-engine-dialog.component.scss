@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+
+.dialog-content {
+  display: grid;
+  gap: 1rem;
+  min-width: min(52rem, calc(100vw - 2rem));
+}
+
+.intro,
+.muted-note,
+.help-text {
+  margin: 0;
+}
+
+.engine-field {
+  width: 16rem;
+}
+
+.options-panel {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.options-header h2 {
+  margin: 0;
+}
+
+.options-list {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.option-row {
+  display: grid;
+  grid-template-columns: minmax(11rem, 14rem) minmax(0, 1fr);
+  gap: 0.875rem;
+  align-items: start;
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0.5rem;
+}
+
+.option-details {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.option-args {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+}
+
+.option-args mat-form-field {
+  width: 100%;
+}
+
+@media (max-width: 52rem) {
+  .option-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

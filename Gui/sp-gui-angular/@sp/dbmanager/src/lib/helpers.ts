@@ -4,9 +4,11 @@ import {
   Colors,
   Figurine,
   Rotations,
-} from "canvas-chessboard/modules/es2018/canvasChessBoard";
+} from "canvas-chessboard";
 
+import type { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { Base64 } from "./base64";
+import type { EngineConfiguration, EngineConfigurationsByEngine } from "./models/engine";
 
 export type XMLProblemTypesKeys
   = | "Direct"
@@ -88,6 +90,7 @@ export interface IStipulation {
 }
 
 export interface IProblem {
+  engine?: Engines;
   stipulation: Partial<IStipulation>;
   htmlSolution: string;
   textSolution: string;
@@ -99,6 +102,8 @@ export interface IProblem {
   authors: Partial<Author>[];
   pieces: Partial<IPiece>[] | null;
   twins: Partial<ITwins> | null;
+  engineConfig?: EngineConfiguration | null;
+  engineConfigurationsByEngine?: EngineConfigurationsByEngine | null;
   conditions: string[];
   tags: string[];
   snapshots: Record<string | number, string>;

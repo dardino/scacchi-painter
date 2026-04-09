@@ -27,10 +27,12 @@ struct Cli {
     stream_solutions: bool,
     #[arg(long)]
     max_solutions: Option<usize>,
-    #[arg(long = "refutations-try", num_args = 0..=1, default_missing_value = "1")]
-    refutations_try: Option<usize>,
+    #[arg(long = "refutations-count", num_args = 0..=1, default_missing_value = "1")]
+    refutations_count: Option<usize>,
     #[arg(long = "show-all-defenses", alias = "showAllDefenses", action = ArgAction::SetTrue)]
     show_all_defenses: bool,
+    #[arg(long = "show-attempts", alias = "showAttempts", action = ArgAction::SetTrue)]
+    show_attempts: bool,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -100,9 +102,27 @@ fn load_input(cli: &Cli) -> Result<String> {
 }
 
 fn solver_config_from_cli(cli: &Cli) -> SolverConfig {
+    let effective_refutations_try = if cli.show_attempts {
+        let count = cli.refutations_count.unwrap_or(1);
+        if count >= 1 {
+            Some(count)
+        } else {
+            eprintln!("[WARN] --refutations-count value ({}) is less than 1 and will be ignored. Using default value of 1.", count);
+            Some(1)
+        }
+    } else {
+        if let Some(rc) = cli.refutations_count {
+            if rc >= 1 {
+                eprintln!("[WARN] --refutations-count value ({}) will be ignored because --show-attempts is not enabled.", rc);
+            }
+        }
+        None
+    };
+
     SolverConfig {
-        refutations_try: cli.refutations_try,
+        refutations_try: effective_refutations_try,
         show_all_defenses: cli.show_all_defenses,
+        show_attempts: cli.show_attempts,
         ..SolverConfig::default()
     }
 }
@@ -582,8 +602,9 @@ mod tests {
             benchmark_runs: None,
             stream_solutions: false,
             max_solutions: None,
-            refutations_try: None,
+            refutations_count: None,
             show_all_defenses: false,
+            show_attempts: false,
         };
 
         let loaded = load_input(&cli).expect("file input should load");
@@ -591,37 +612,37 @@ mod tests {
     }
 
     #[test]
-    fn cli_parses_refutations_try_variants() {
+    fn cli_parses_refutations_count_variants() {
         let omitted = Cli::try_parse_from(["solver-cli", "-i", "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1"])
             .expect("parse should succeed");
-        assert_eq!(omitted.refutations_try, None);
+        assert_eq!(omitted.refutations_count, None);
 
         let bare = Cli::try_parse_from([
             "solver-cli",
             "-i",
             "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
-            "--refutations-try",
+            "--refutations-count",
         ])
         .expect("parse should succeed");
-        assert_eq!(bare.refutations_try, Some(1));
+        assert_eq!(bare.refutations_count, Some(1));
 
         let explicit_zero = Cli::try_parse_from([
             "solver-cli",
             "-i",
             "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
-            "--refutations-try=0",
+            "--refutations-count=0",
         ])
         .expect("parse should succeed");
-        assert_eq!(explicit_zero.refutations_try, Some(0));
+        assert_eq!(explicit_zero.refutations_count, Some(0));
 
         let explicit_two = Cli::try_parse_from([
             "solver-cli",
             "-i",
             "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
-            "--refutations-try=2",
+            "--refutations-count=2",
         ])
         .expect("parse should succeed");
-        assert_eq!(explicit_two.refutations_try, Some(2));
+        assert_eq!(explicit_two.refutations_count, Some(2));
 
         let show_all_defenses = Cli::try_parse_from([
             "solver-cli",
@@ -634,11 +655,28 @@ mod tests {
     }
 
     #[test]
+    fn cli_ignores_refutations_count_without_show_attempts() {
+        let warned = Cli::try_parse_from([
+            "solver-cli",
+            "-i",
+            "Stipulation #1\nFEN 8/8/8/8/8/8/8/8 w - - 0 1",
+            "--refutations-count=2",
+        ])
+        .expect("parse should succeed");
+        // Value is parsed but should be ignored by solver_config_from_cli
+        assert_eq!(warned.refutations_count, Some(2));
+        assert!(!warned.show_attempts);
+        let config = solver_config_from_cli(&warned);
+        assert_eq!(config.refutations_try, None); // Should be None since show_attempts is false
+    }
+
+    #[test]
     fn text_output_can_show_refutations_when_enabled() {
         let input = "Stipulation: #2\nFEN: 8/8/6p1/5p2/5p2/5k1P/1nB4P/4RK2 w - - 0 1";
         let config = SolverConfig {
             refutations_try: Some(2),
             show_all_defenses: false,
+            show_attempts: true,
             ..SolverConfig::default()
         };
 

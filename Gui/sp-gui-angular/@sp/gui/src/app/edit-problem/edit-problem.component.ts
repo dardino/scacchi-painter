@@ -1,5 +1,6 @@
 import { CommonModule, Location } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
@@ -7,11 +8,12 @@ import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
-import { HalfMoveInfo } from "@dardino-chess/core";
+import type { HalfMoveInfo } from "@dardino-chess/core";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
+import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
   CurrentProblemService,
@@ -34,6 +36,7 @@ import { AuthorDialogComponent } from "../author-dialog/author-dialog.component"
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
+import { SolveEngineDialogComponent, type SolveEngineDialogResult } from "../solve-engine-dialog/solve-engine-dialog.component";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 
 @Component({
@@ -69,13 +72,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private snackBar = inject(MatSnackBar);
   private chessanim = inject(ChessboardAnimationService);
 
-  // Signal di versione per forzare il re-render quando il Problem cambia internamente
-  private problemVersion = signal(0);
+  private readonly currentProblemSignal = toSignal(this.dbManager.CurrentProblem$, { initialValue: null });
+  private boardRenderVersion = signal(0);
 
   public problem = computed(() => {
-    // Traccia la versione per far ri-eseguire questo computed
-    this.problemVersion();
-    return this.current?.Problem?.clone() ?? null;
+    this.boardRenderVersion();
+    return this.currentProblemSignal()?.clone() ?? null;
   });
 
   public get engineEnabled() {
@@ -203,14 +205,33 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.viewMode.set($event);
   }
 
-  onEngineChange(engine: Engines) {
-    if (!this.availableEngines.includes(engine)) {
-      return;
-    }
-    this.selectedEngine.set(engine);
-    if (this.current.Problem) {
-      this.current.Problem.engine = engine;
-    }
+  openSolveEngineDialog() {
+    const dialogRef = this.dialog.open<SolveEngineDialogComponent, {
+      availableEngines: Engines[];
+      engine: Engines;
+      engineConfig: SolveEngineDialogResult["engineConfig"] | null;
+      engineConfigurationsByEngine: SolveEngineDialogResult["engineConfigurationsByEngine"] | null;
+    }, SolveEngineDialogResult | null>(
+      SolveEngineDialogComponent,
+      {
+        data: {
+          availableEngines: this.availableEngines,
+          engine: this.selectedEngine(),
+          engineConfig: this.current.Problem?.engineConfig ?? null,
+          engineConfigurationsByEngine: this.current.Problem?.engineConfigurationsByEngine ?? null,
+        },
+      },
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == null) return;
+      this.selectedEngine.set(result.engine);
+      if (this.current.Problem) {
+        this.current.Problem.engine = result.engine;
+        this.current.Problem.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(result.engineConfigurationsByEngine) ?? {};
+        this.current.Problem.engineConfig = cloneEngineConfiguration(result.engineConfig) ?? {};
+      }
+    });
   }
 
   switchBoardType() {
@@ -273,26 +294,30 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    this.route.params.subscribe((params) => {
-      setTimeout(() => {
-        if (this.dbManager.All.length === 0) {
-          this.dbManager.Reload(+params.id);
+    this.route.params.subscribe(async (params) => {
+      const problemId = Number.parseInt(params.id, 10);
+      if (!Number.isFinite(problemId)) {
+        return;
+      }
+
+      if (this.dbManager.All.length === 0) {
+        await this.dbManager.Reload(problemId);
+      }
+      else {
+        await this.dbManager.GotoIndex(problemId);
+      }
+
+      const problemEngine = this.current.Problem?.engine;
+      if (problemEngine && this.availableEngines.includes(problemEngine)) {
+        this.selectedEngine.set(problemEngine);
+      }
+      else {
+        const fallbackEngine = this.availableEngines[0] ?? "Popeye";
+        this.selectedEngine.set(fallbackEngine);
+        if (this.current.Problem) {
+          this.current.Problem.engine = fallbackEngine;
         }
-        else {
-          this.dbManager.GotoIndex(+params.id);
-        }
-        const problemEngine = this.current.Problem?.engine;
-        if (problemEngine && this.availableEngines.includes(problemEngine)) {
-          this.selectedEngine.set(problemEngine);
-        }
-        else {
-          const fallbackEngine = this.availableEngines[0] ?? "Popeye";
-          this.selectedEngine.set(fallbackEngine);
-          if (this.current.Problem) {
-            this.current.Problem.engine = fallbackEngine;
-          }
-        }
-      }, 1);
+      }
     });
   }
 
@@ -471,8 +496,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private notifyProblemChanged() {
-    // Incrementa la versione per forzare il re-render della chessboard
-    this.problemVersion.update(v => v + 1);
+    // Force board input refresh when the current problem is mutated in place.
+    this.boardRenderVersion.update(v => v + 1);
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {

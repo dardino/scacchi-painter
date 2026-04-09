@@ -1,0 +1,63 @@
+<h1 mat-dialog-title>Solver settings</h1>
+<div mat-dialog-content class="dialog-content">
+  <p class="intro">Choose the solver engine and configure the options for the selected engine.</p>
+
+  <mat-form-field appearance="outline" color="accent" class="engine-field">
+    <mat-label>Engine</mat-label>
+    <mat-select [(ngModel)]="selectedEngine">
+      @for (engine of availableEngines; track engine) {
+        <mat-option [value]="engine">{{ engine }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (hasEngineOptions) {
+    <section class="options-panel">
+      <div class="options-header">
+        <h2>{{ selectedEngine }} options</h2>
+        <p>Enable the options you want to write into the solve input.</p>
+      </div>
+
+      <div class="options-list">
+        @for (option of engineOptionEntries; track option[0]) {
+          <div class="option-row">
+            <div class="option-toggle">
+              <mat-checkbox
+                [ngModel]="optionState[option[0]]?.enabled ?? false"
+                (ngModelChange)="setOptionEnabled(option[0], $event)"
+              >
+                {{ option[0] }}
+              </mat-checkbox>
+            </div>
+
+            <div class="option-details">
+              @if (option[1].argsCount > 0 && (optionState[option[0]]?.enabled ?? false)) {
+                <div class="option-args">
+                  @for (argIndex of optionIndexes(option[1].argsCount); track argIndex) {
+                    <mat-form-field appearance="outline">
+                      <mat-label>Arg {{ argIndex + 1 }}</mat-label>
+                      <input
+                        matInput
+                        [ngModel]="optionState[option[0]]?.values?.[argIndex] ?? ''"
+                        (ngModelChange)="setOptionArgValue(option[0], argIndex, $event)"
+                      />
+                    </mat-form-field>
+                  }
+                </div>
+              }
+
+              <p class="help-text">{{ option[1].help }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+  @if (!hasEngineOptions) {
+    <p class="muted-note">No additional configuration is available for this engine.</p>
+  }
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="clickCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="clickSave()" cdkFocusInitial>Save</button>
+</div>
