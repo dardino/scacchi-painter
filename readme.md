@@ -4,6 +4,23 @@
 
 A new cross-platform engine and gui for chess problem composers
 
+## Latest Changes (0.2.2)
+
+The 0.2.2 release introduces:
+
+- dedicated engine configuration dialog in the problem editor
+- support for `Popeye (ASM)` as a selectable engine option
+- richer solver summaries with elapsed time and attempts metadata
+- updated solver option handling based on refutations count
+- stronger Tauri <-> Rust payloads with explicit solution/threat data
+- signal-first reactive state updates in DB manager flows
+- auth/token fallback hardening for no-account scenarios
+
+Release documentation:
+
+- GUI changelog: [Gui/sp-gui-angular/CHANGELOG.md](Gui/sp-gui-angular/CHANGELOG.md)
+- In-app release notes source: [Gui/sp-gui-angular/@sp/gui/src/assets/release-notes.md](Gui/sp-gui-angular/@sp/gui/src/assets/release-notes.md)
+
 ## Developer Quick Start
 
 The standard local entry point is now a single root command:

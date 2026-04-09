@@ -1,5 +1,17 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.2.2
+
+**Feature release**: new engine configuration UX, richer solver telemetry, stronger Tauri/Rust message payloads, and internal migration hardening.
+
+- [sp-gui-angular] **Engine configuration dialog**: added a dedicated solve engine configuration flow in the problem editor and refactored engine handling to centralize behavior
+- [sp-gui-angular] **New engine target: Popeye (ASM)**: introduced support for the new engine option and aligned related configuration and toolbar logic
+- [solver] **Richer solving feedback**: switched solver options to refutations count, added attempts reporting, and exposed elapsed-time tracking in solver summaries
+- [sp-gui-angular] **Reactive DB manager state**: refactored current index, current file, and count tracking to signal-based reactive state with corresponding component updates
+- [sp-gui-angular] **Auth resilience improvements**: enhanced token acquisition fallback logic, including explicit handling for "no account" scenarios
+- [sp-gui / Tauri + CoreRust] **Bridge message expansion**: extended Tauri bridge and Rust solver integration to carry solution and threat data in message payloads
+- [tooling] **Test/runtime and workspace alignment**: completed migration updates around Vitest configs, dependency refresh, workspace setup, and Rust toolchain pin (`rustc 1.88.0`)
+
 ## 0.2.1
 
 **Bug fix and infrastructure release**: build pipeline hardening, solver-cli improvements, and migration of `popeye-js` from Yarn to pnpm.

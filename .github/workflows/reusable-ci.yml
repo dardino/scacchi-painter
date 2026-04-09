@@ -30,9 +30,11 @@ jobs:
         with:
           version: 10.33.0
 
-      - name: Install dependencies
-        working-directory: ${{ inputs.working_directory }}
+      - name: Install workspace dependencies (root)
         run: pnpm install --frozen-lockfile
+        
+      - name: Build CoreJS
+        run: pnpm --dir CoreJS build
 
       - name: Run linting
         working-directory: ${{ inputs.working_directory }}
@@ -68,7 +70,6 @@ jobs:
           cp "$WEB_ROOT"/staticwebapp.config.json ./deploy/web/staticwebapp.config.json
           cp "$WEB_ROOT"/api/host.json ./deploy/api/host.json
           cp "$WEB_ROOT"/api/package.json ./deploy/api/package.json
-          cp "$WEB_ROOT"/api/pnpm-lock.yaml ./deploy/api/pnpm-lock.yaml
           cp -R "$WEB_ROOT"/api/dist ./deploy/api/dist
           cp -R "$WEB_ROOT"/api/node_modules ./deploy/api/node_modules
 

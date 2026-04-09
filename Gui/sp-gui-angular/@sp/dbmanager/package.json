@@ -1,12 +1,13 @@
 {
   "name": "dbmanager",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "peerDependencies": {
     "@angular/common": "^21.0.0",
     "@angular/core": "^21.0.0",
-    "canvas-chessboard": "^0.0.14"
+    "canvas-chessboard": "^0.0.19"
   },
   "dependencies": {
+    "@dardino-chess/core": "workspace:*",
     "tslib": "^2.0.0"
   }
 }

@@ -1,4 +1,5 @@
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
+import { SpCoreEngineOptionKey, SpCoreEngineOptions, createDefaultPopeyeEngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
 import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/public-api";
 import { SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 
@@ -59,7 +60,10 @@ const toSpCoreFen = (problem: Problem): string => {
 export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   const rows: string[] = [];
 
-  const extraOptions: string[] = [];
+  const configuredOptions = problem.engineConfig ?? createDefaultPopeyeEngineConfiguration();
+  const extraOptions: string[] = Object.entries(configuredOptions).map(([key, values]) => {
+    return values != null && values.length > 0 ? `${key} ${values.join(" ")}` : key;
+  });
 
   // BeginProblem
   rows.push("BeginProblem");
@@ -88,8 +92,7 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   );
 
   // Options
-  extraOptions.push(...["NoBoard", "Try", "Set", "Variation"]);
-  rows.push(`Option ${extraOptions.join(" ")}`);
+  rows.push(`Option${extraOptions.length > 0 ? ` ${extraOptions.join(" ")}` : ""}`);
 
   // Twins
   problem.twins.TwinList.forEach((t) => {
@@ -106,8 +109,26 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
 }
 
 export function problemToSpCore(problem: Problem): string[] {
-  return [
+  const sourceConfig = problem.engineConfigurationsByEngine?.SpCore
+    ?? (problem.engine === "SpCore" ? problem.engineConfig : null)
+    ?? {};
+
+  const supportedOptionKeys = Object.keys(SpCoreEngineOptions) as SpCoreEngineOptionKey[];
+  const optionRows = supportedOptionKeys
+    .filter(optionKey => optionKey in sourceConfig)
+    .map((optionKey) => {
+      const values = sourceConfig[optionKey];
+      return values != null && values.length > 0 ? `${optionKey} ${values.join(" ")}` : optionKey;
+    });
+
+  const rows = [
     `Stipulation ${problem.stipulation.completeStipulationDesc}`,
     `FEN ${toSpCoreFen(problem)}`,
   ];
+
+  if (optionRows.length > 0) {
+    rows.push(`Option ${optionRows.join(" ")}`);
+  }
+
+  return rows;
 }

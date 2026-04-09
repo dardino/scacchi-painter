@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { beforeEach, describe, expect, it } from "vitest";
 import { SpSolutionMoveComponent } from "./sp-solution-move.component";
-import { HalfMoveInfo } from "@dardino-chess/core";
+import type { HalfMoveInfo } from "@dardino-chess/core";
 
 describe("SpSolutionMoveComponent", () => {
   let component: SpSolutionMoveComponent;

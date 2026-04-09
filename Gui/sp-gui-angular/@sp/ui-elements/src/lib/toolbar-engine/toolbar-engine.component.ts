@@ -42,14 +42,13 @@ export class ToolbarEngineComponent {
   public toggleStreaming = new EventEmitter<void>();
 
   @Output()
-  public engineChanged = new EventEmitter<Engines>();
+  public openEngineSettings = new EventEmitter<void>();
 
   isRunning = input<boolean>(false);
   fullLog = input<boolean>(false);
   solutionCount = input<number>(0);
   streaming = input<boolean>(true);
   viewMode = input<ViewModes>("both");
-  availableEngines = input<Engines[]>(["Popeye"]);
   selectedEngine = input<Engines>("Popeye");
 
   isMaxFont = computed(() => this.fontSize() >= 2);
@@ -95,11 +94,7 @@ export class ToolbarEngineComponent {
     this.toggleStreaming.emit();
   }
 
-  onEngineSelectionChange(event: Event) {
-    const select = event.target as HTMLSelectElement | null;
-    if (!select) {
-      return;
-    }
-    this.engineChanged.emit(select.value as Engines);
+  openEngineSettingsDialog() {
+    this.openEngineSettings.emit();
   }
 }

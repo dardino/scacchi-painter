@@ -26,6 +26,9 @@ export class DbmanagerService {
   private currentIndex = 1;
   private currentFile: FolderSelected | null = null;
   private workInProgress = signal(false);
+  private currentIndexState$ = new BehaviorSubject<number>(this.currentIndex);
+  private currentFileState$ = new BehaviorSubject<FolderSelected | null>(this.currentFile);
+  private countState$ = new BehaviorSubject<number>(0);
 
   // #region public Properties
   public All: Problem[] = [];
@@ -41,8 +44,16 @@ export class DbmanagerService {
     return this.currentIndex;
   }
 
+  get CurrentIndex$() {
+    return this.currentIndexState$.asObservable();
+  }
+
   get Count() {
     return this.All.length;
+  }
+
+  get Count$() {
+    return this.countState$.asObservable();
   }
 
   private currentProblem$ = new BehaviorSubject<Problem | null>(null);
@@ -54,6 +65,10 @@ export class DbmanagerService {
 
   get CurrentFile(): Readonly<FolderSelected | null> {
     return this.currentFile;
+  }
+
+  get CurrentFile$() {
+    return this.currentFileState$.asObservable();
   }
   // #endregion
 
@@ -183,6 +198,7 @@ export class DbmanagerService {
 
   SetFileMeta(meta: Omit<FileSelected, "file">) {
     this.currentFile = { ...meta };
+    this.currentFileState$.next(this.currentFile);
   }
   // #endregion PUBLIC LOADS
 
@@ -300,6 +316,7 @@ export class DbmanagerService {
       const obj = JSON.parse(jsonString) as IDbSpX;
       this.All = obj.problems.map(p => Problem.fromJson(p));
       this.currentIndex = obj.lastIndex ?? 1;
+      this.syncDbState();
       return null;
     }
     catch (err) {
@@ -320,6 +337,7 @@ export class DbmanagerService {
         xmlDoc.documentElement.getAttribute("lastIndex") ?? "1",
         10,
       );
+      this.syncDbState();
       return null;
     }
     catch (ex) {
@@ -370,12 +388,20 @@ export class DbmanagerService {
       return this.reset();
     }
     const newP = this.All[realIndex];
+    this.syncDbState();
     this.currentProblem$.next(newP);
   }
 
   private reset() {
     this.currentIndex = 1;
+    this.syncDbState();
     this.currentProblem$.next(null);
+  }
+
+  private syncDbState() {
+    this.currentIndexState$.next(this.currentIndex);
+    this.currentFileState$.next(this.currentFile);
+    this.countState$.next(this.All.length);
   }
 
   private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {

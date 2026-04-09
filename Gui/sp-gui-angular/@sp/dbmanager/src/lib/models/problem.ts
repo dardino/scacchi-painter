@@ -1,4 +1,4 @@
-import { HalfMoveInfo } from "@dardino-chess/core";
+import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Base64 } from "../base64";
@@ -17,6 +17,13 @@ import {
   notNull,
 } from "../helpers";
 import { Author } from "./author";
+import {
+  cloneEngineConfiguration,
+  cloneEngineConfigurationsByEngine,
+  createDefaultPopeyeEngineConfiguration,
+  type EngineConfiguration,
+  type EngineConfigurationsByEngine,
+} from "./engine";
 import { Piece } from "./piece";
 import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
@@ -32,6 +39,11 @@ export class Problem implements IProblem {
   public prizeDescription = "";
   public source = "";
   public engine: Engines = "Popeye";
+  public engineConfig: EngineConfiguration | null = createDefaultPopeyeEngineConfiguration();
+  public engineConfigurationsByEngine: EngineConfigurationsByEngine = {
+    Popeye: createDefaultPopeyeEngineConfiguration(),
+  };
+
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
@@ -127,6 +139,28 @@ export class Problem implements IProblem {
         ? Stipulation.fromJson(a.stipulation ?? {})
         : Stipulation.fromJson({});
     b.twins = a.twins ? Twins.fromJson(a.twins) : Twins.fromJson({});
+    b.engine = a.engine ?? "Popeye";
+    const perEngineConfig = cloneEngineConfigurationsByEngine(a.engineConfigurationsByEngine) ?? {};
+
+    // Reuse native Popeye options for Popeye ASM unless explicitly overridden.
+    if (perEngineConfig["Popeye (ASM)"] == null && perEngineConfig.Popeye != null) {
+      perEngineConfig["Popeye (ASM)"] = cloneEngineConfiguration(perEngineConfig.Popeye) ?? {};
+    }
+
+    const legacyEngineConfig = cloneEngineConfiguration(a.engineConfig);
+    if (legacyEngineConfig != null && perEngineConfig.Popeye == null) {
+      perEngineConfig.Popeye = legacyEngineConfig;
+      if (perEngineConfig["Popeye (ASM)"] == null) {
+        perEngineConfig["Popeye (ASM)"] = cloneEngineConfiguration(legacyEngineConfig) ?? {};
+      }
+    }
+    b.engineConfigurationsByEngine = perEngineConfig;
+
+    const selectedEngineConfig = b.engineConfigurationsByEngine[b.engine];
+    b.engineConfig = cloneEngineConfiguration(
+      selectedEngineConfig
+      ?? (b.engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {}),
+    );
     b.htmlSolution = a.htmlSolution ?? "";
     b.date = a.date ? a.date : new Date().toISOString();
     b.personalID = a.personalID ? a.personalID : "";
@@ -145,8 +179,29 @@ export class Problem implements IProblem {
     if (this.pieces.length > 0) {
       json.pieces = this.pieces.map(p => p.toJson());
     }
+    json.engine = this.engine;
+
+    // Prepare a cloned copy of engine configurations to serialize without
+    // mutating the instance's internal state. If `engineConfig` is present
+    // ensure the selected engine entry reflects the current `engineConfig`
+    // in the cloned copy only.
+    let clonedEngineConfigurations: EngineConfigurationsByEngine | undefined
+      = cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
+
+    if (this.engineConfig != null) {
+      const cloned = cloneEngineConfiguration(this.engineConfig) ?? {};
+      clonedEngineConfigurations = clonedEngineConfigurations ?? {};
+      // assign into the cloned copy only (do not mutate `this.engineConfigurationsByEngine`)
+      clonedEngineConfigurations[this.engine] = cloned;
+    }
+
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
+    if (clonedEngineConfigurations != null && Object.keys(clonedEngineConfigurations).length > 0) {
+      json.engineConfigurationsByEngine = clonedEngineConfigurations;
+    }
+
+    if (this.engineConfig != null) json.engineConfig = cloneEngineConfiguration(this.engineConfig) ?? {};
     if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
     if (this.textSolution) json.textSolution = this.textSolution;
     if (this.date) json.date = this.date;
