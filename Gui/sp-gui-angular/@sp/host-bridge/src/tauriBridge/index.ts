@@ -16,6 +16,16 @@ type RustSolverOptions = {
   showAttempts: boolean;
 };
 
+type SpCoreDefense = {
+  black_move: string;
+  continuation: string[];
+};
+
+type SpCoreSolution = {
+  key_move: string;
+  defenses: SpCoreDefense[];
+};
+
 class TauriBridge implements BridgeGlobal {
   private solveEnded = true;
   private currentEngine: Engines = "Popeye";
@@ -49,39 +59,40 @@ class TauriBridge implements BridgeGlobal {
         index?: number;
         winning_line?: string[];
         winning_line_popeye?: string[];
+        solution?: SpCoreSolution;
         explored_nodes?: number;
         solutions_found?: number;
         stopped_early?: boolean;
         timed_out?: boolean;
         message?: string;
         try_move?: string;
+        threat_moves?: string[];
+        threats?: SpCoreDefense[];
         refutations?: string[];
         elapsed_ms?: number;
       };
       if (msg.type === "solution") {
-        const popeyeLine = msg.winning_line_popeye ?? [];
-        const raw = this.formatPopeyeLikeRow(popeyeLine);
-        const mov = parsePopeyeRow(raw, this.currentProblem.startMoveN);
-        const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
-        this.solver$.next({ raw, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
+        if (msg.solution) {
+          this.emitSpCoreSolution(msg.solution);
+        }
+        else {
+          this.solver$.next({ raw: "", rowtype: "log", moveTree: [] });
+          const popeyeLine = msg.winning_line_popeye ?? [];
+          const raw = this.formatPopeyeLikeRow(popeyeLine);
+          const mov = parsePopeyeRow(raw, this.currentProblem.startMoveN);
+          const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
+          this.solver$.next({ raw, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
+        }
       }
       else if (msg.type === "try") {
-        const tryMove = msg.try_move ?? "";
-        this.solver$.next({ raw: `   1.${tryMove} ?`, rowtype: "log", moveTree: [] });
-        if (msg.refutations && msg.refutations.length > 0) {
-          this.solver$.next({ raw: `    but`, rowtype: "log", moveTree: [] });
-          for (const ref of msg.refutations) {
-            this.solver$.next({ raw: `      1...${ref} !`, rowtype: "log", moveTree: [] });
-          }
-        }
-        this.solver$.next({ raw: ``, rowtype: "log", moveTree: [] });
+        this.emitSpCoreTry(msg);
       }
       else if (msg.type === "done") {
         const raw = `SpCore: ${msg.solutions_found} solution(s), ${msg.explored_nodes} nodes${msg.stopped_early ? " (stopped early)" : ""}`;
         this.solver$.next({ raw, rowtype: "log", moveTree: [] });
-                if (msg.elapsed_ms !== undefined) {
-                  this.solver$.next({ raw: `Time: ${msg.elapsed_ms}ms`, rowtype: "log", moveTree: [] });
-                }
+        if (msg.elapsed_ms !== undefined) {
+          this.solver$.next({ raw: `Time: ${msg.elapsed_ms}ms`, rowtype: "log", moveTree: [] });
+        }
         this.solver$.next({ raw: "solution finished", rowtype: "log", moveTree: [] });
         this.endSolve({ exitCode: 0, message: "program exited with code: 0" });
       }
@@ -113,6 +124,113 @@ class TauriBridge implements BridgeGlobal {
       chunks.push(right ? `${moveN}. ${left} ${right}` : `${moveN}. ${left}`);
     }
     return chunks.join(" ");
+  }
+
+  private continuationToThreat(continuation: string[]): string | undefined {
+    return continuation.length > 0 ? continuation.join(" ") : undefined;
+  }
+
+  private normalizeThreatMove(move: string): string {
+    return move
+      .replace(/[+#?!]/g, "")
+      .replace(/[x*]/g, "")
+      .trim()
+      .toLowerCase();
+  }
+
+  private normalizeThreatSequence(threat: string): string {
+    return threat
+      .trim()
+      .split(/\s+/)
+      .map((move) => this.normalizeThreatMove(move))
+      .join(" ");
+  }
+
+  private equivalentThreat(defenseThreat: string | undefined, primaryThreat: string | undefined): boolean {
+    if (!defenseThreat || !primaryThreat) {
+      return false;
+    }
+
+    const normalizedDefense = this.normalizeThreatSequence(defenseThreat);
+    const normalizedPrimary = this.normalizeThreatSequence(primaryThreat);
+    if (normalizedDefense === normalizedPrimary) {
+      return true;
+    }
+
+    const defenseFirstPly = normalizedDefense.split(" ")[0];
+    const primaryFirstPly = normalizedPrimary.split(" ")[0];
+    return defenseFirstPly.length > 0 && defenseFirstPly === primaryFirstPly;
+  }
+
+  private formatDefenseLine(blackMove: string, continuation: string[]): string {
+    const second = continuation.length > 0 ? `2.${continuation.join(" ")}` : "";
+    return second.length > 0 ? `    1... ${blackMove} ${second}` : `    1... ${blackMove}`;
+  }
+
+  private emitSpCoreSolution(solution: SpCoreSolution) {
+    this.solver$.next({ raw: "", rowtype: "log", moveTree: [] });
+
+    const threatCounts = new Map<string, number>();
+    for (const defense of solution.defenses) {
+      const threat = this.continuationToThreat(defense.continuation);
+      if (!threat) {
+        continue;
+      }
+      threatCounts.set(threat, (threatCounts.get(threat) ?? 0) + 1);
+    }
+
+    let primaryThreat: string | undefined;
+    let maxCount = -1;
+    for (const [threat, count] of threatCounts) {
+      if (count > maxCount) {
+        maxCount = count;
+        primaryThreat = threat;
+      }
+    }
+
+    const header = primaryThreat
+      ? `1. ${solution.key_move} ! (threat: 2. ${primaryThreat})`
+      : `1. ${solution.key_move} !`;
+    this.solver$.next({ raw: header, rowtype: "log", moveTree: [] });
+
+    for (const defense of solution.defenses) {
+      const defenseThreat = this.continuationToThreat(defense.continuation);
+      if (this.equivalentThreat(defenseThreat, primaryThreat)) {
+        continue;
+      }
+      this.solver$.next({ raw: this.formatDefenseLine(defense.black_move, defense.continuation), rowtype: "log", moveTree: [] });
+    }
+  }
+
+  private emitSpCoreTry(msg: {
+    try_move?: string;
+    threat_moves?: string[];
+    threats?: SpCoreDefense[];
+    refutations?: string[];
+  }) {
+    this.solver$.next({ raw: "", rowtype: "log", moveTree: [] });
+
+    const tryMove = msg.try_move ?? "";
+    const primaryThreat = msg.threat_moves?.[0];
+    const header = primaryThreat
+      ? `1. ${tryMove} ? (threat: 2. ${primaryThreat})`
+      : `1. ${tryMove} ?`;
+    this.solver$.next({ raw: header, rowtype: "log", moveTree: [] });
+
+    for (const defense of msg.threats ?? []) {
+      const defenseThreat = this.continuationToThreat(defense.continuation);
+      if (this.equivalentThreat(defenseThreat, primaryThreat)) {
+        continue;
+      }
+      this.solver$.next({ raw: this.formatDefenseLine(defense.black_move, defense.continuation), rowtype: "log", moveTree: [] });
+    }
+
+    if ((msg.refutations?.length ?? 0) > 0) {
+      this.solver$.next({ raw: "but:", rowtype: "log", moveTree: [] });
+      for (const ref of msg.refutations ?? []) {
+        this.solver$.next({ raw: `    1... ${ref} !`, rowtype: "log", moveTree: [] });
+      }
+    }
   }
 
   private endSolve(reason: EOF) {

@@ -219,6 +219,7 @@ async fn run_rust_solver<R: Runtime>(
             "winning_line": search_result.winning_line,
             "winning_line_popeye": search_result.winning_line_popeye,
             "explored_nodes": search_result.explored_nodes,
+            "solution": search_result.solution,
         });
         window.emit("spcore-update", payload.to_string()).ok();
         StreamDirective::Continue
@@ -231,6 +232,8 @@ async fn run_rust_solver<R: Runtime>(
                     "type": "try",
                     "index": idx + 1,
                     "try_move": try_line.try_move,
+                    "threat_moves": try_line.threat_moves,
+                    "threats": try_line.threats,
                     "refutations": try_line.refutations,
                 });
                 window.emit("spcore-update", try_event.to_string()).ok();
