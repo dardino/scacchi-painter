@@ -185,8 +185,8 @@ export class Problem implements IProblem {
     // mutating the instance's internal state. If `engineConfig` is present
     // ensure the selected engine entry reflects the current `engineConfig`
     // in the cloned copy only.
-    let clonedEngineConfigurations: EngineConfigurationsByEngine | undefined =
-      cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
+    let clonedEngineConfigurations: EngineConfigurationsByEngine | undefined
+      = cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
 
     if (this.engineConfig != null) {
       const cloned = cloneEngineConfiguration(this.engineConfig) ?? {};
