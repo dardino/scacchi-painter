@@ -4,9 +4,9 @@
 
 A new cross-platform engine and gui for chess problem composers
 
-## Latest Changes (0.2.2-dev)
+## Latest Changes (0.2.2)
 
-Compared to `develop`, the current `0.2.2-dev` branch introduces:
+The 0.2.2 release introduces:
 
 - dedicated engine configuration dialog in the problem editor
 - support for `Popeye (ASM)` as a selectable engine option

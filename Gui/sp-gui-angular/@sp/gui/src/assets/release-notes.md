@@ -1,8 +1,8 @@
 # Release Notes
 
-## Version 0.2.2-dev
+## Version 0.2.2
 
-Development snapshot after the 0.2.1 release.
+Release 0.2.2.
 
 ### Better Engine Configuration And Richer Solver Feedback
 

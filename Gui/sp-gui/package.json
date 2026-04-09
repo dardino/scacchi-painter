@@ -1,6 +1,6 @@
 {
   "name": "sp-gui",
-  "version": "0.2.2-dev",
+  "version": "0.2.2",
   "scripts": {
     "build": "pnpm vite-node ./scripts/build.ts",
     "icons": "pnpm tauricon ./src-tauri/logo.svg",

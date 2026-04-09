@@ -1,6 +1,6 @@
 {
   "name": "@dardino-chess/core",
-  "version": "0.2.2-dev",
+  "version": "0.2.2",
   "description": "",
   "main": "./dist/main.js",
   "types": "./src/main.ts",

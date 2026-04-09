@@ -1,6 +1,6 @@
 {
   "name": "sp-gui-angular",
-  "version": "0.2.2-dev",
+  "version": "0.2.2",
   "engines": {
     "node": ">=20"
   },
