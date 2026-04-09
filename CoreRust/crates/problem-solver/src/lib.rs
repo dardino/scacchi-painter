@@ -222,7 +222,11 @@ where
 
     // Calculate effective refutations_try based on show_attempts
     let effective_refutations_try = if config.show_attempts {
-        Some(config.refutations_try.unwrap_or(1))
+        match config.refutations_try {
+            Some(n) if n > 0 => Some(n),
+            Some(_) => None,
+            None => Some(1),
+        }
     } else {
         None
     };
@@ -272,7 +276,7 @@ where
 
         let Some(mut continuation) = key_continuation else {
             // Not a solution: collect as try if show_attempts is enabled
-            if let Some(refutations_try) = effective_refutations_try {
+            if let Some(refutations_try) = effective_refutations_try.filter(|n| *n > 0) {
                 if let Some(try_line) = analyze_try_line(
                     &position,
                     &after_key,
@@ -303,7 +307,7 @@ where
             &stipulation,
             plies,
             &full_line,
-            config.refutations_try,
+            effective_refutations_try,
             config.show_all_defenses,
             &mut explored_nodes,
             &mut trans_cache,
