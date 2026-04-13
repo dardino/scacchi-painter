@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { BB_BLACK, BB_WHITE, getBBfromSquare } from "../../main";
 import { BlackPawnNotation, PawnMoveGenerator, StartingBlackPawnBitboard, StartingWhitePawnBitboard, WhitePawnNotation } from "./pawn";
 

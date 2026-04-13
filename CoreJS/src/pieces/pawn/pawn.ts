@@ -1,16 +1,17 @@
+import {
+  AllPawnBitboard,
+  BOARD_MASK,
+  FILE_A,
+  FILE_H,
+  StartingBlackPawnBitboard,
+  StartingWhitePawnBitboard,
+} from "../../bitboards/bitboard.constants";
 import { BB_BLACK, BB_WHITE, Bitboard, getBBfromSquare } from "../../main";
 import { SquareNames } from "../../moves/move.types";
 import { PieceMoveGenerator } from "../piece.types";
 
 export const BlackPawnNotation = "p"; // Notation for black Pawn
 export const WhitePawnNotation = "P"; // Notation for white Pawn
-
-export const StartingWhitePawnBitboard: Bitboard = 0x000000000000FF00n; // White pawns on the second rank
-export const StartingBlackPawnBitboard: Bitboard = 0x00FF000000000000n; // Black pawns on the seventh rank
-export const AllPawnBitboard: Bitboard = StartingWhitePawnBitboard | StartingBlackPawnBitboard; // Combined bitboard of all pawns
-const FILE_A = 0x0101010101010101n;
-const FILE_H = 0x8080808080808080n;
-const BOARD_MASK = 0xFFFFFFFFFFFFFFFFn;
 
 const getPawnsInStartingPosition = (bitboard: Bitboard, color: "w" | "b"): Bitboard => {
   return color === "w"
@@ -68,3 +69,6 @@ export const PawnMoveGenerator: PieceMoveGenerator = (bbs, color, lastMove) => {
 
   return pawnsMoves | captureMoves;
 };
+
+// Re-export starting pawn bitboards so external modules can still import them from this file
+export { AllPawnBitboard, StartingBlackPawnBitboard, StartingWhitePawnBitboard };

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { describe, expect, it } from "vitest";
 import { getBBfromSquare } from "../bitboards/bitboard.helpers";
 import { Files, Ranks } from "../main";
 import { Piece, PieceArray } from "../pieces/piece.types";

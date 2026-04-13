@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 const rows = [
   `   1...d5-d6`,
   `   1.Re1-b1 ? threat:`,
