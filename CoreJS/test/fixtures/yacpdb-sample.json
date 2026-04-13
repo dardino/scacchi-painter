@@ -1,0 +1,205 @@
+{
+  "count": 20,
+  "problems": [
+    {
+      "id": "4",
+      "stipulation": "#2",
+      "fen": "7n/3NR3/1P3p2/1p1kbN1B/1p6/1K6/6b1/1Q6 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 7n/3NR3/1P3p2/1p1kbN1B/1p6/1K6/6b1/1Q6 w - - 0 1\n",
+      "title": [
+        "Abbott, Joseph William"
+      ],
+      "yacpdb_solution": "1.Qb1-f1 ! threat:\n        2.Qf1*g2 #\n    1...Bg2*f1\n        2.Bh5-f3 #\n    1...Bg2-h1\n        2.Qf1*h1 #\n    1...Bg2-h3\n        2.Bh5-f3 #\n        2.Qf1-f3 #\n    1...Bg2-e4\n        2.Qf1*b5 #\n    1...Bg2-f3\n        2.Bh5*f3 #\n        2.Qf1*f3 #\n    1...Kd5-e4\n        2.Sd7*f6 #"
+    },
+    {
+      "id": "5",
+      "stipulation": "#2",
+      "fen": "3R4/4K3/5p2/5p2/8/3BkNQ1/8/8 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 3R4/4K3/5p2/5p2/8/3BkNQ1/8/8 w - - 0 1\n",
+      "title": [
+        "Abbott, Joseph William"
+      ],
+      "yacpdb_solution": "1.Bd3-e4 ! zugzwang.\n    1...Ke3-e2\n        2.Qg3-e1 #\n    1...Ke3*e4\n        2.Sf3-d2 #\n    1...f5-f4\n        2.Qg3-e1 #\n    1...f5*e4\n        2.Sf3-g1 #"
+    },
+    {
+      "id": "6",
+      "stipulation": "#2",
+      "fen": "3K4/4B3/3Rp3/8/4pk2/1Qp1Np2/2p2P2/2R5 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 3K4/4B3/3Rp3/8/4pk2/1Qp1Np2/2p2P2/2R5 w - - 0 1\n",
+      "title": [
+        "Abbott, Joseph William"
+      ],
+      "yacpdb_solution": "1.Rd6-d7 ! zugzwang.\n    1...Kf4-e5\n        2.Qb3-b8 #\n    1...e6-e5\n        2.Qb3-f7 #"
+    },
+    {
+      "id": "9",
+      "stipulation": "#2",
+      "fen": "6r1/5Q2/1n1p2pB/4k2b/3b3r/8/1NBRp2N/1K2R3 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 6r1/5Q2/1n1p2pB/4k2b/3b3r/8/1NBRp2N/1K2R3 w - - 0 1\n",
+      "title": [
+        "Abbott, Joseph William"
+      ],
+      "yacpdb_solution": "1.Rd2-d1 ! {display-departure-file} zugzwang.\n    1...Bd4*b2 {(Bd~)}\n        2.Qf7-e7 #\n    1...Rh4*h2 {(Rh~)}\n        2.Bh6-f4 #\n    1...Rh4-e4\n        2.Sb2-d3 #\n    1...Rh4-g4\n        2.Sh2-f3 #\n    1...Bh5-f3\n        2.Sh2*f3 #\n    1...Bh5-g4\n        2.Bh6-f4 #\n    1...Sb6-a4 {(Sb~)}\n        2.Sb2-c4 #\n    1...d6-d5\n        2.Qf7-e7 #\n    1...g6-g5\n        2.Qf7-f5 #\n    1...Rg8-g7 {(Rg~)}\n        2.Bh6*g7 #"
+    },
+    {
+      "id": "10",
+      "stipulation": "#2",
+      "fen": "8/1Rp5/K3P3/2B2Q2/n1kP4/P3r3/P3PN2/1N2bB2 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 8/1Rp5/K3P3/2B2Q2/n1kP4/P3r3/P3PN2/1N2bB2 w - - 0 1\n",
+      "title": [
+        "Abdurahmanović, Fadil"
+      ],
+      "yacpdb_solution": "1.Sf2-d1 ! threat:\n       2.Sd1*e3 #\n   1...Re3-d3\n       2.e2*d3 #\n   1...Re3-e4 {Rg3,Rh3}\n       2.e2-e3 #\n   1...Re3-e5\n       2.e2-e4 #\n   1...Re3-f3\n       2.e2*f3 #\n   1...Be1-d2 {Bf2}\n       2.Sb1*d2 #\n   1...Re3*a3\n       2.Sb1*a3 #\n   1...Re3-b3\n       2.a2*b3 #\n   1...Re3-c3\n       2.Rb7-b4 #\n   1...Re3*e6 +\n       2.Qf5*e6 #\n   1...Sa4*c5 +\n       2.Qf5*c5 #"
+    },
+    {
+      "id": "12",
+      "stipulation": "#2",
+      "fen": "3KN3/2B2R2/6n1/8/4k2n/4p3/4B3/3R4 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 3KN3/2B2R2/6n1/8/4k2n/4p3/4B3/3R4 w - - 0 1\n",
+      "title": [
+        "Abdurahmanović, Fadil"
+      ],
+      "yacpdb_solution": "1.Rf7-f1 ? threat:\n      2.Se8-f6 # \n but 1...Sh4-f3 ! {(2.Bxf3?)}\n\n1.Bc7-h2 ? threat:\n      2.Se8-d6 #\n but 1...Sg6-f4 ! {(2.Rxf4?)}\n\n1.Rd1-d7 ? {display-departure-file} threat:\n      2.Be2-d3 #\n but 1...Sg6-e5 ! {(2.Sd6?)}\n\n1.Bc7-b8 ! zugzwang.\n   1...Sh4-f3\n       2.Be2*f3 #\n   1...Sh4-g2\n       2.Be2-f3 #\n   1...Sh4-f5\n       2.Se8-f6 #\n   1...Sg6-e5\n       2.Se8-d6 #\n   1...Sg6-f4\n       2.Rf7*f4 #\n   1...Sg6-h8 {(Sf8, Se7)}\n       2.Rf7-f4 #"
+    },
+    {
+      "id": "13",
+      "stipulation": "#2",
+      "fen": "5B2/3p1n2/R2p4/1P1NRBQ1/1KPkrb2/1p6/2Pp1Pn1/4r3 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 5B2/3p1n2/R2p4/1P1NRBQ1/1KPkrb2/1p6/2Pp1Pn1/4r3 w - - 0 1\n",
+      "title": [
+        "Abdurahmanović, Fadil"
+      ],
+      "yacpdb_solution": "1.Sd5-c3 ?     but\n    1...Re4*e5 !\n\n  1.Sd5-f6 ?     but\n    1...Kd4*e5 !\n\n 1.Sd5-e7 ?     but\n    1...d6*e5 !\n\n 1.Sd5-b6 ?    but\n    1...Sf7*e5 !\n\n  1.Sd5-e3 ? threat:\n  but\n    1...Bf4*e5 !\n\n 1.Sd5-c7 ! threat:\n        2.Re5-d5 #\n    1...Re4*e5\n        2.c2-c3 #\n    1...Kd4*e5\n        2.Bf8-g7 #\n    1...d6*e5\n        2.Bf8-c5 #\n    1...Sf7*e5\n        2.Ra6*d6 #\n    1...Bf4*e5\n        2.Qg5*d2 #\n    1...Sg2-e3\n        2.Re5*e4 #"
+    },
+    {
+      "id": "14",
+      "stipulation": "#2",
+      "fen": "rqr5/1B1N3p/2n1p2K/b2P4/RB1Nkn1R/1P6/2P2PP1/1Q6 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: rqr5/1B1N3p/2n1p2K/b2P4/RB1Nkn1R/1P6/2P2PP1/1Q6 w - - 0 1\n",
+      "title": [
+        "Abdurahmanović, Fadil"
+      ],
+      "yacpdb_solution": "1.Bb4-c5 ? threat:\n     2.c2-c4 #\n   1...Sc6-b4 2.Qb1-e1 #\n   1...Sc6*d4 2.c2-c3 #\n   1...Sc6-e5 2.Sd7-f6 #\nbut 1...Ba5-c3 !\n\n1.Sd4-e2 ! threat:\n       2.c2-c4 #\n   1...Ke4-f5\n       2.Se2-g3 #\n   1...Sc6*b4\n       2.c2-c3 #\n   1...Sc6-d4\n       2.Se2-g3 #\n   1...Sc6-e5\n       2.Rh4*f4 #"
+    },
+    {
+      "id": "17",
+      "stipulation": "#2",
+      "fen": "8/3k1P2/1K3B2/3B4/8/8/8/8 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 8/3k1P2/1K3B2/3B4/8/8/8/8 w - - 0 1\n",
+      "title": [
+        "Abragam, David"
+      ],
+      "yacpdb_solution": "a) \n   1.f7-f8=R ! Kd7-d6\n          2.Rf8-d8 #\nb) wKb6-->b5  \n   1.f7-f8=Q ! Kd7-c7\n          2.Qf8-d8 #"
+    },
+    {
+      "id": "18",
+      "stipulation": "#2",
+      "fen": "2B5/8/4pN1K/R1B1qkP1/4p3/7p/5P1P/4Q3 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 2B5/8/4pN1K/R1B1qkP1/4p3/7p/5P1P/4Q3 w - - 0 1\n",
+      "title": [
+        "Abraham, J. D."
+      ],
+      "yacpdb_solution": "1.Bc5-e3 ! zugzwang.\n   1...Qe5*a5\n       2.Qe1*a5 #\n   1...Qe5-b5\n       2.Ra5*b5 #\n   1...Qe5-c5\n       2.Ra5*c5 #\n   1...Qe5-d5\n       2.Ra5*d5 #"
+    },
+    {
+      "id": "19",
+      "stipulation": "#2",
+      "fen": "5Q2/8/8/8/8/5p2/2N1Np2/2K2k2 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 5Q2/8/8/8/8/5p2/2N1Np2/2K2k2 w - - 0 1\n",
+      "title": [
+        "Achbar, Selim"
+      ],
+      "yacpdb_solution": "1.Qf8-a8 ?? zugzwang.\n   1...Kf1*e2 2.Qa8-a6 #\n   1...f3*e2 2.Qa8-h1 #\nbut 1...Kf1-g2 !\n\n1.Qf8-g8 ?? zugzwang.\n   1...Kf1*e2 2.Qg8-c4 #\nbut 1...f3*e2 !\n\n1.Qf8-h8 ?? zugzwang.\n   1...Kf1-g2 2.Sc2-e3 #\n   1...f3*e2 2.Qh8-h1 #\nbut 1...Kf1*e2 !\n\n1.Qf8-h6 ! zugzwang.\n   1...Kf1-g2\n       2.Sc2-e3 #\n   1...Kf1*e2\n       2.Qh6-a6 #\n   1...f3*e2\n       2.Qh6-h1 #"
+    },
+    {
+      "id": "20",
+      "stipulation": "#2",
+      "fen": "8/8/1R6/2p5/8/2Bk1NRN/3P4/K6B w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 8/8/1R6/2p5/8/2Bk1NRN/3P4/K6B w - - 0 1\n",
+      "title": [
+        "Achbar, Selim"
+      ],
+      "yacpdb_solution": "1.Rb6-b1 ! zugzwang.\n   1...Kd3-c2\n       2.Sf3-e1 #\n   1...Kd3-e2\n       2.Sf3-g1 #\n   1...Kd3-e4\n       2.Sf3-h4 #\n   1...Kd3-c4\n       2.Sf3-e5 #\n   1...c5-c4\n       2.Sf3-d4 #"
+    },
+    {
+      "id": "23",
+      "stipulation": "#2",
+      "fen": "8/8/8/p7/kPr4R/N1P5/2P5/1K5Q w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 8/8/8/p7/kPr4R/N1P5/2P5/1K5Q w - - 0 1\n",
+      "title": [
+        "Myers, Arthur C."
+      ],
+      "yacpdb_solution": "1.Qh1-d5 ! threat:\n       2.Qd5*a5 #\n   1...Rc4*b4 +\n       2.Qd5-b3 #\n   1...Rc4-c5\n       2.Qd5-b3 #\n   1...a5*b4\n       2.Qd5-a8 #"
+    },
+    {
+      "id": "72",
+      "stipulation": "#2",
+      "fen": "3Rb3/B4NpB/4N1n1/3P1P1R/1r2kP2/1p1np3/8/3Q2K1 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 3Rb3/B4NpB/4N1n1/3P1P1R/1r2kP2/1p1np3/8/3Q2K1 w - - 0 1\n",
+      "title": [
+        "Адабашев, Марк Иванович"
+      ],
+      "yacpdb_solution": "1.Kg1-h2 ! threat:\n        2.Qd1-h1 #\n    1...Sd3-b2 {(Sd~)}\n        2.Sf7-d6 # !\n    1...Sd3*f4 {display-departure-file}\n        2.Se6-c5 #\n    1...Sg6-e5 {display-departure-file}\n        2.Sf7-g5 # ! {display-departure-file}\n    1...Sg6*f4 {display-departure-file}\n        2.Se6-g5 # {display-departure-file}\n    1...Sg6-h4\n        2.Sf7-g5 # {display-departure-file}\n    1...Pe3-e2 \n        2.Qd1*e2 #"
+    },
+    {
+      "id": "75",
+      "stipulation": "#2",
+      "fen": "7Q/3B4/1B3R2/3pk3/1Nr1P2r/2n5/5nq1/K2R4 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 7Q/3B4/1B3R2/3pk3/1Nr1P2r/2n5/5nq1/K2R4 w - - 0 1\n",
+      "title": [
+        "Адабашев, Марк Иванович"
+      ],
+      "yacpdb_solution": "1.Bb6-e3 ! threat:\n       2.Rf6-e6 #\n   1...Ke5*e4\n       2.Qh8-e8 #\n   1...Qg2*e4\n       2.Rf6-h6 #\n   1...Rc4*e4 {display-departure-file}\n       2.Sb4-c6 #\n   1...Rh4*e4 {display-departure-file}\n       2.Rf6-g6 #\n   1...Sc3*e4 {display-departure-file}\n       2.Rd1*d5 #\n   1...Sf2*e4 {display-departure-file}\n       2.Sb4-d3 #\n   1...d5*e4\n       2.Rf6-f5 #"
+    },
+    {
+      "id": "89",
+      "stipulation": "#2",
+      "fen": "8/5n2/4N3/8/4R2P/4P1Pk/4bP2/6K1 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 8/5n2/4N3/8/4R2P/4P1Pk/4bP2/6K1 w - - 0 1\n",
+      "title": [
+        "Адабашев, Марк Иванович"
+      ],
+      "yacpdb_solution": "1.h4-h5 ! threat:\n       2.Re4-h4 #\n   1...Be2-g4\n       2.Se6-f4 #"
+    },
+    {
+      "id": "94",
+      "stipulation": "#2",
+      "fen": "8/8/8/2pK1N2/4B1b1/4p1p1/2PpkP2/3R1R1n w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 8/8/8/2pK1N2/4B1b1/4p1p1/2PpkP2/3R1R1n w - - 0 1\n",
+      "title": [
+        "Балановський, Валентин"
+      ],
+      "yacpdb_solution": "1.f2*g3 ?? threat: \n       2.Be4-d3 #\n   1...c5-c4 2.Sf5-d4 #\n   1...Bg4-f3 {(Bxf5)} 2.Be4*f3 #\nbut 1...Sh1-f2 !\n\n1.f2-f3 ?? threat:\n      2.Be4-d3 #\n   1...c5-c4 2.Sf5-d4 #\n   1...Sh1-f2 2.Sf5*g3 #\n   1...Bg4*f3 2.Be4*f3 #\nbut 1...Bg4*f5 !\n\n1.f2-f4 ! threat:\n       2.Be4-d3 #\n   1...c5-c4\n       2.Sf5-d4 #\n   1...Sh1-f2\n       2.Sf5*g3 #\n   1...Bg4-f3\n       2.Be4*f3 #\n   1...Bg4*f5\n       2.Be4-f3 #"
+    },
+    {
+      "id": "95",
+      "stipulation": "#2",
+      "fen": "rN3K2/5bB1/P3pP2/3pk3/1Q6/2P3N1/8/8 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: rN3K2/5bB1/P3pP2/3pk3/1Q6/2P3N1/8/8 w - - 0 1\n",
+      "title": [
+        "Adams, W. G."
+      ],
+      "yacpdb_solution": "1.Bg7-h8 ! zugzwang.\n   1...d5-d4\n       2.Qb4*d4 #\n   1...Bf7-h5 {(B~)}\n       2.f6-f7 #\n   1...Ra8*a6\n       2.Sb8-d7 #\n   1...Ra8-a7\n       2.Sb8-c6 #\n   1...Ra8*b8 +\n       2.Qb4*b8 #\n\n1.a6-a7 ! {(Cook)} zugzwang.\n   1...d5-d4\n       2.Qb4*d4 #\n   1...Bf7-h5 {(B~)}\n       2.f6-f7 #\n   1...Ra8*a7\n       2.Sb8-c6 #\n   1...Ra8*b8 +\n       2.a7*b8=Q #\n       2.a7*b8=B #\n       2.Qb4*b8 #"
+    },
+    {
+      "id": "96",
+      "stipulation": "#2",
+      "fen": "5b2/B4K2/bpR1B3/N3k3/1P6/5PP1/8/8 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: 5b2/B4K2/bpR1B3/N3k3/1P6/5PP1/8/8 w - - 0 1\n",
+      "title": [
+        "Adda, J."
+      ],
+      "yacpdb_solution": "1.Rc6-d6 ! threat:\n       2.Rd6-d5 #\n   1...Ke5*d6\n       2.Ba7-b8 # {(Model mate)}\n   1...Ba6-c4\n       2.Sa5*c4 #\n   1...Ba6-b7\n       2.Sa5-c4 #\n   1...Bf8*d6\n       2.Sa5-c6 #"
+    },
+    {
+      "id": "97",
+      "stipulation": "#2",
+      "fen": "B5b1/4R3/2n5/N4p2/pN1kpP2/Bp6/1P2P3/2R1K3 w - - 0 1",
+      "popeye": "Stipulation: #2\nFEN: B5b1/4R3/2n5/N4p2/pN1kpP2/Bp6/1P2P3/2R1K3 w - - 0 1\n",
+      "title": [
+        "Addison, W."
+      ],
+      "yacpdb_solution": "1.Sb4*c6 + ??\n   1...Kd4-d5 \n      2.Rc1-d1 #\n      2.Re7-e5 #\nbut 1...Kd4-e3 !\n\n1.Ke1-d2 ?? threat: \n      2.e2-e3 #\n      2.Sa5*c6 #\n   1...Bg8-d5 {(S~)} \n      2.e2-e3 #\n   1...Bg8-c4 2.Rc1*c4 #\nbut 1...e4-e3 + !\n\n1.Rc1-c3 ?? threat:\n      2.Sa5*c6 #\n      2.e2-e3 #\n   1...Bg8-d5 {(S~)} \n      2.e2-e3 #\n   1...e4-e3 2.Sa5*c6 #\nbut 1...Bg8-c4 !\n\n1.Sb4-d5 ! threat:\n       2.Rc1-d1 #\n   1...Sc6*a5\n       2.Ba3-c5 #\n   1...Sc6-e5\n       2.Ba3-c5 #\n   1...Sc6-b4\n       2.Rc1-c4 #\n   1...Bg8*d5\n       2.Ba3-c5 #"
+    }
+  ]
+}
