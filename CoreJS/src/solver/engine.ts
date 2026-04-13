@@ -1,7 +1,7 @@
-import { parseFEN } from "./parse";
-import { ProblemInput, SolverOptions, SolverResult, stipulationToMaxDepth, DEFAULT_SOLVER_OPTIONS } from "./types";
-import { MoveGeneratorMap } from "../pieces/piece.helpers";
 import { Bitboard } from "../board/board.types";
+import { MoveGeneratorMap } from "../pieces/piece.helpers";
+import { parseFEN } from "./parse";
+import { DEFAULT_SOLVER_OPTIONS, ProblemInput, SolverOptions, SolverResult } from "./types";
 
 function indexToSquare(idx: number): string {
   const file = String.fromCharCode(97 + (idx % 8));
