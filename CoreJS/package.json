@@ -17,7 +17,8 @@
     "fetch-yacpdb": "pnpm tsx ./scripts/fetch_yacpdb_sample.ts",
     "gen-attack-tables": "pnpm tsx ./scripts/generate_attack_tables.ts",
     "run-solver-fixture": "pnpm tsx ./scripts/run-solver-fixture.ts",
-    "build-worker": "pnpm esbuild ./scripts/worker-search.ts --outfile=dist/scripts/worker-search.js --bundle --platform=node --target=node22"
+    "build-worker": "pnpm esbuild ./scripts/worker-search.ts --outfile=dist/scripts/worker-search.js --bundle --platform=node --target=node18",
+    "test:browser": "pnpm vitest run test/browser/puppeteer.spec.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +33,7 @@
     "globals": "^17.4.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
+    "puppeteer": "^20.7.4",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.34.0",
     "vitest": "^4.0.15"

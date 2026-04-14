@@ -100,7 +100,8 @@
     "types": [
       "node",
       "vitest/globals"
-    ]
+    ],
+    "outDir": "../dist/test"
   },
   "include": [
     "src"
