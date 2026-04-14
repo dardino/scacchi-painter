@@ -6,7 +6,9 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
   // to avoid bundling Node builtins (child_process, fs, etc.).
   const isNode = typeof window === 'undefined' && typeof process !== 'undefined';
   if (isNode) {
-    const { solve: engineSolve } = await import('../engine.node');
+    // Use a non-literal specifier so bundlers don't resolve the Node-only module for browser builds
+    const enginePath = '../' + 'engine.node';
+    const { solve: engineSolve } = await import(enginePath as any);
     return engineSolve(problem, opts);
   }
 
