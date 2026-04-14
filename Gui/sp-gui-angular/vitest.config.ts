@@ -10,7 +10,6 @@ export default defineConfig({
     }),
   ],
   test: {
-    globals: true,
     environment: "jsdom",
     setupFiles: ["@sp/gui/src/test-setup.ts"],
     include: ["**/*.spec.ts"],
@@ -41,6 +40,7 @@ export default defineConfig({
       { find: /^@sp\/ui-elements\/src\/lib\/registerIcons$/, replacement: path.resolve(__dirname, "./@sp/ui-elements/src/lib/registerIcons.ts") },
       { find: /^@sp\/ui-elements\/src\/lib\/markdown\.pipe$/, replacement: path.resolve(__dirname, "./@sp/ui-elements/src/lib/markdown.pipe.ts") },
       { find: /^@sp\/ui-elements\/src\/lib\/dbsource\/dbsource\.component$/, replacement: path.resolve(__dirname, "./@sp/ui-elements/src/lib/dbsource/dbsource.component.ts") },
+      { find: /^@sp\/host-bridge\/src\/lib\/bridge-global$/, replacement: path.resolve(__dirname, "./@sp/host-bridge/src/lib/bridge-global.ts") },
 
       // Public API mappings
       { find: "@sp/chessboard/src/public-api", replacement: path.resolve(__dirname, "./@sp/chessboard/src/public-api.ts") },

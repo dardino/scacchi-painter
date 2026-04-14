@@ -4,16 +4,21 @@
   "description": "",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
-  "browser": "./dist/browser.js",
+  "browser": "./dist/browser.mjs",
   "exports": {
     ".": {
       "types": "./dist/main.d.ts",
-      "browser": "./dist/browser.js",
-      "default": "./dist/main.js"
+      "import": "./dist/main.mjs",
+      "require": "./dist/main.mjs"
+    },
+    "./browser": {
+      "types": "./dist/browser-entry.d.ts",
+      "import": "./dist/browser.mjs",
+      "require": "./dist/browser.mjs"
     }
   },
   "scripts": {
-    "build": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --minify --platform=node --target=node18 && pnpm esbuild ./src/browser-entry.ts --outfile=dist/browser.js --bundle --minify --platform=browser --external:child_process --external:fs --external:os --external:path && pnpm tsc -p tsconfig.lib.json --emitDeclarationOnly",
+    "build": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --minify --platform=node --target=node18 && pnpm esbuild ./src/browser-entry.ts --outfile=dist/browser.mjs --bundle --minify --format=esm --platform=browser --target=es2020 --external:child_process --external:fs --external:os --external:path && pnpm tsc -p tsconfig.lib.json --emitDeclarationOnly",
     "watch": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --watch",
     "test": "pnpm vitest run",
     "fetch-yacpdb": "pnpm tsx ./scripts/fetch_yacpdb_sample.ts",

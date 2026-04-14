@@ -15,6 +15,9 @@ import {
   SolutionRow,
   SolveModes,
   SpCoreEngine,
+  SpCoreEngineLabel,
+  SpCoreJsEngine,
+  SpCoreJsEngineLabel,
 } from "../lib/bridge-global";
 import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "../lib/spcore-support";
 
@@ -39,7 +42,7 @@ class TauriBridge implements BridgeGlobal {
   private solveEnded = true;
   private currentEngine: Engines = AsmPopeyeEngine;
   private ww: Worker | null = null;
-  private hostEngines: Engines[] = [SpCoreEngine];
+  private hostEngines: Engines[] = [NativePopeyeEngine, SpCoreEngine];
 
   constructor() {
     this.refreshAvailableEnginesFromHost();
@@ -114,7 +117,7 @@ class TauriBridge implements BridgeGlobal {
         this.emitSpCoreTry(msg);
       }
       else if (msg.type === "done") {
-        const raw = `SpCore: ${msg.solutions_found} solution(s), ${msg.explored_nodes} nodes${msg.stopped_early ? " (stopped early)" : ""}`;
+        const raw = `${SpCoreEngineLabel}: ${msg.solutions_found} solution(s), ${msg.explored_nodes} nodes${msg.stopped_early ? " (stopped early)" : ""}`;
         this.solver$.next({ raw, rowtype: "log", moveTree: [] });
         if (msg.elapsed_ms !== undefined) {
           this.solver$.next({ raw: `Time: ${msg.elapsed_ms}ms`, rowtype: "log", moveTree: [] });
@@ -312,7 +315,7 @@ class TauriBridge implements BridgeGlobal {
   }
 
   private supportedEngines(): Engines[] {
-    return [AsmPopeyeEngine, ...this.hostEngines.filter(engine => engine !== AsmPopeyeEngine)];
+    return [NativePopeyeEngine, AsmPopeyeEngine, ...this.hostEngines.filter(engine => engine !== NativePopeyeEngine && engine !== AsmPopeyeEngine), SpCoreJsEngine];
   }
 
   openFile(): File | PromiseLike<File | null> | null {
@@ -356,7 +359,7 @@ class TauriBridge implements BridgeGlobal {
 
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
       {
-        raw: `starting engine <${this.currentEngine}>`,
+        raw: `starting engine <${this.currentEngine === SpCoreEngine ? SpCoreEngineLabel : this.currentEngine === SpCoreJsEngine ? SpCoreJsEngineLabel : this.currentEngine}>`,
         rowtype: "log",
         moveTree: [],
       },
@@ -381,6 +384,9 @@ class TauriBridge implements BridgeGlobal {
         return this.solver$.asObservable();
       }
       this.startRustSolve(problem, this.getSpCoreSolverOptions(CurrentProblem.engineConfig));
+    }
+    else if (this.currentEngine === SpCoreJsEngine) {
+      this.startJsSolve(CurrentProblem, mode);
     }
     else {
       return new Error(`Engine not found: ${engine}`);
@@ -430,6 +436,44 @@ class TauriBridge implements BridgeGlobal {
     }).catch((error) => {
       this.endSolve({ exitCode: -1, message: `${error}` });
     });
+  }
+
+  private startJsSolve(problem: Problem, mode: SolveModes) {
+    const currentProblem = problem;
+    void (async () => {
+      try {
+        const coreModule = await import("@dardino-chess/core");
+        const solve = coreModule.solve
+          ?? ("default" in coreModule && typeof coreModule.default === "object" ? (coreModule.default as { solve?: unknown }).solve : undefined);
+
+        if (typeof solve !== "function") {
+          throw new Error("Unable to resolve CoreJS solve() export from @dardino-chess/core.");
+        }
+
+        const side = currentProblem.startMoveN === 1.5 ? "b" : "w";
+        const baseFen = currentProblem.getCurrentFen().split(" [", 1)[0];
+        const fen = `${baseFen} ${side} - - 0 1`;
+        const input = {
+          id: String(currentProblem.personalID ?? Math.random().toString(36).slice(2)),
+          fen,
+          stipulation: currentProblem.stipulation?.completeStipulationDesc ?? undefined,
+          popeye: problemToPopeye(currentProblem, mode).join("\n"),
+        };
+
+        const res = await solve(input, undefined);
+        const donePayload = JSON.stringify({
+          type: "done",
+          elapsed_ms: res.timeMs,
+          solutions_found: res.solved ? 1 : 0,
+          winning_line_popeye: res.bestLine ?? [],
+        });
+
+        this.processSpCoreData(donePayload);
+      }
+      catch (error) {
+        this.endSolve({ exitCode: -1, message: error instanceof Error ? error.message : String(error) });
+      }
+    })();
   }
 
   supportsEngine(engine: Engines): boolean {

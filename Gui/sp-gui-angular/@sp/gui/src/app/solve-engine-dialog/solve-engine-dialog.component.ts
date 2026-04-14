@@ -18,7 +18,15 @@ import {
   createDefaultPopeyeEngineConfiguration,
   createDefaultSpCoreEngineConfiguration,
 } from "@sp/dbmanager/src/lib/models/engine";
-import { AsmPopeyeEngine, Engines, NativePopeyeEngine } from "@sp/host-bridge/src/lib/bridge-global";
+import {
+  AsmPopeyeEngine,
+  Engines,
+  NativePopeyeEngine,
+  SpCoreEngine,
+  SpCoreEngineLabel,
+  SpCoreJsEngine,
+  SpCoreJsEngineLabel,
+} from "@sp/host-bridge/src/lib/bridge-global";
 
 export interface SolveEngineDialogData {
   availableEngines: Engines[];
@@ -76,6 +84,16 @@ export class SolveEngineDialogComponent {
 
   get hasEngineOptions(): boolean {
     return this.engineOptionEntries.length > 0;
+  }
+
+  engineLabel(engine: Engines): string {
+    if (engine === SpCoreEngine) {
+      return SpCoreEngineLabel;
+    }
+    if (engine === SpCoreJsEngine) {
+      return SpCoreJsEngineLabel;
+    }
+    return engine;
   }
 
   clickCancel() {
@@ -153,8 +171,12 @@ export class SolveEngineDialogComponent {
       persistedConfigs[AsmPopeyeEngine] = cloneEngineConfiguration(persistedConfigs.Popeye)
         ?? createDefaultPopeyeEngineConfiguration();
     }
-    if (persistedConfigs.SpCore == null) {
-      persistedConfigs.SpCore = createDefaultSpCoreEngineConfiguration();
+    if (persistedConfigs[SpCoreEngine] == null) {
+      persistedConfigs[SpCoreEngine] = createDefaultSpCoreEngineConfiguration();
+    }
+    if (persistedConfigs[SpCoreJsEngine] == null) {
+      persistedConfigs[SpCoreJsEngine] = cloneEngineConfiguration(persistedConfigs[SpCoreEngine])
+        ?? createDefaultSpCoreEngineConfiguration();
     }
 
     return persistedConfigs;
@@ -168,7 +190,7 @@ export class SolveEngineDialogComponent {
       const baseConfig = this.engineConfigurationsByEngine[engine]
         ?? (engine === "Popeye"
           ? createDefaultPopeyeEngineConfiguration()
-          : engine === "SpCore"
+          : engine === SpCoreEngine || engine === SpCoreJsEngine
             ? createDefaultSpCoreEngineConfiguration()
             : {});
       const state: Record<string, EngineOptionState> = {};
@@ -222,7 +244,7 @@ export class SolveEngineDialogComponent {
       return createDefaultPopeyeEngineConfiguration();
     }
 
-    if (engine === "SpCore") {
+    if (engine === SpCoreEngine || engine === SpCoreJsEngine) {
       return createDefaultSpCoreEngineConfiguration();
     }
 

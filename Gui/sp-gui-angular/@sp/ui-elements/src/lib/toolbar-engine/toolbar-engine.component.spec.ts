@@ -43,10 +43,11 @@ describe("ToolbarEngineComponent", () => {
     expect(fixture.nativeElement.textContent).toContain("Solutions: 3");
   });
 
-  it("should render the selected engine label on the settings button", () => {
-    fixture.componentRef.setInput("selectedEngine", "SpCore");
+  it("should render the selected engine label next to solutions", () => {
+    fixture.componentRef.setInput("selectedEngine", "SpCoreJs");
+    fixture.componentRef.setInput("solutionCount", 1);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain("SpCore");
+    expect(fixture.nativeElement.textContent).toContain("Solutions: 1 - SP-Engine (JS)");
   });
 });

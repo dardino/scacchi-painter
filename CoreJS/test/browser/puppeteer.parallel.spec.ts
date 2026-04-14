@@ -3,6 +3,7 @@ import fs from 'fs/promises';
 import http from 'http';
 import path from 'path';
 import puppeteer from 'puppeteer';
+import { describe, it } from 'vitest';
 
 const BUNDLE_DIR = path.resolve(process.cwd(), 'dist-test-browser-parallel');
 

@@ -2,10 +2,11 @@
 // Vitest setup file for Angular
 import { getTestBed } from "@angular/core/testing";
 import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting,
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting,
 } from "@angular/platform-browser-dynamic/testing";
 import { webcrypto } from "node:crypto";
+import { afterEach } from "vitest";
 
 // Polyfill crypto for MSAL browser in jsdom environment
 if (typeof global.crypto === "undefined") {
@@ -29,6 +30,11 @@ getTestBed().initTestEnvironment(
     teardown: { destroyAfterEach: true },
   },
 );
+
+afterEach(() => {
+  // With Vitest globals disabled, reset TestBed explicitly between tests.
+  getTestBed().resetTestingModule();
+});
 
 // Helper function to check if an error is related to icon loading
 function isIconError(value: any): boolean {

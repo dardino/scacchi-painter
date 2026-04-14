@@ -5,8 +5,21 @@ import type { Problem } from "../../../dbmanager/src/lib/models/problem";
 export const NativePopeyeEngine = "Popeye" as const;
 export const AsmPopeyeEngine = "Popeye (ASM)" as const;
 export const SpCoreEngine = "SpCore" as const;
+export const SpCoreJsEngine = "SpCoreJs" as const;
+export const SpCoreEngineLabel = "SP-Engine (Rust)" as const;
+export const SpCoreJsEngineLabel = "SP-Engine (JS)" as const;
 
-export type Engines = typeof NativePopeyeEngine | typeof AsmPopeyeEngine | typeof SpCoreEngine;
+export type Engines = typeof NativePopeyeEngine | typeof AsmPopeyeEngine | typeof SpCoreEngine | typeof SpCoreJsEngine;
+
+export function getEngineLabel(engine: Engines): string {
+  if (engine === SpCoreEngine) {
+    return SpCoreEngineLabel;
+  }
+  if (engine === SpCoreJsEngine) {
+    return SpCoreJsEngineLabel;
+  }
+  return engine;
+}
 
 export interface BridgeGlobal {
   openFile(): File | PromiseLike<File | null> | null;

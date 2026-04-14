@@ -1,3 +1,4 @@
+import { type SolverOptions } from "@dardino-chess/core";
 import { parsePopeyeRow } from "@ph/moveParser";
 import { problemToPopeye } from "@ph/problemToPopeye";
 import { Problem } from "@sp/dbmanager/src/lib/models";
@@ -9,7 +10,8 @@ import {
   NativePopeyeEngine,
   SolutionRow,
   SolveModes,
-  SpCoreEngine,
+  SpCoreJsEngine,
+  SpCoreJsEngineLabel,
 } from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
 
@@ -75,14 +77,11 @@ class WebBridge implements BridgeGlobal {
 
   supportsEngine(engine: Engines): boolean {
     const normalized = this.normalizeEngine(engine);
-    // Web bridge supports the Asm Popeye worker and a browser-spcore engine
-    return normalized === AsmPopeyeEngine || normalized === SpCoreEngine;
+    return normalized === AsmPopeyeEngine || normalized === SpCoreJsEngine;
   }
 
   availableEngines(): Engines[] {
-    // Expose both the bundled Popeye worker and the in-browser SpCore engine
-    // (SpCore will be resolved dynamically when runSolve is invoked).
-    return [AsmPopeyeEngine, SpCoreEngine];
+    return [AsmPopeyeEngine, SpCoreJsEngine];
   }
 
   openFile(): File | PromiseLike<File | null> | null {
@@ -103,7 +102,6 @@ class WebBridge implements BridgeGlobal {
     mode: SolveModes,
   ): Observable<SolutionRow | EOF> | Error {
     const normalizedEngine = this.normalizeEngine(engine);
-    // Handle Asm-based Popeye in worker (existing behavior)
     if (normalizedEngine === AsmPopeyeEngine) {
       this.problem = CurrentProblem;
       this.solveEnded = false;
@@ -122,13 +120,12 @@ class WebBridge implements BridgeGlobal {
       return this.solver$.asObservable();
     }
 
-    // Handle in-browser SpCore engine backed by the TS Core (CoreJS)
-    if (normalizedEngine === SpCoreEngine) {
+    if (normalizedEngine === SpCoreJsEngine) {
       this.problem = CurrentProblem;
       this.solveEnded = false;
       this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
         {
-          raw: `starting engine <${normalizedEngine}>`,
+          raw: `starting engine <${SpCoreJsEngineLabel}>`,
           rowtype: "log",
           moveTree: [],
         },
@@ -137,7 +134,23 @@ class WebBridge implements BridgeGlobal {
       (async () => {
         try {
           // dynamic import so bundler includes CoreJS only when used
-          const core = await import("@dardino-chess/core");
+          const coreModule = await import("@dardino-chess/core/browser");
+          const maybeDefault = "default" in coreModule ? coreModule.default : undefined;
+          const maybeModuleExports = "module.exports" in coreModule
+            ? (coreModule as Record<string, unknown>)["module.exports"]
+            : undefined;
+          const solve = coreModule.solve
+            ?? (typeof maybeDefault === "function" ? maybeDefault : undefined)
+            ?? (typeof maybeDefault === "object" && maybeDefault !== null
+              ? (maybeDefault as { solve?: unknown }).solve
+              : undefined)
+            ?? (typeof maybeModuleExports === "object" && maybeModuleExports !== null
+              ? (maybeModuleExports as { solve?: unknown }).solve
+              : undefined);
+
+          if (typeof solve !== "function") {
+            throw new Error(`Unable to resolve CoreJS solve() export from @dardino-chess/core. keys=${Object.keys(coreModule).join(",")}`);
+          }
 
           // build ProblemInput expected by CoreJS
           const side = this.problem.startMoveN === 1.5 ? "b" : "w";
@@ -150,8 +163,8 @@ class WebBridge implements BridgeGlobal {
             popeye: problemToPopeye(this.problem, mode).join("\n"),
           };
 
-          const opts = undefined as any; // could be wired from engine config later
-          const res = await core.solve(input, opts);
+          const opts = {} as SolverOptions; // could be wired from engine config later
+          const res = await solve(input, opts);
 
           // Emit a SpCore-like JSON message so existing UI parsers can handle it
           const donePayload = JSON.stringify({
@@ -167,7 +180,7 @@ class WebBridge implements BridgeGlobal {
           this.solver$.next({ raw: "solution finished", rowtype: "log", moveTree: [] });
           this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
         }
-        catch (err: any) {
+        catch (err) {
           if (err instanceof Error) {
             this.solver$.next({ raw: String(err?.message || err), rowtype: "log", moveTree: [] });
             this.endSolve({ exitCode: -1, message: String(err?.message || err) });

@@ -2,7 +2,7 @@
   <lib-sp-toolbar-button
     (click)="openEngineSettingsDialog()"
     iconText="settings"
-    [iconLabel]="`Engine: ${selectedEngine()}`"
+    [iconLabel]="`Engine: ${selectedEngineLabel()}`"
     [noLabel]="hideLabels()"
     [disabled]="isRunning()"
   ></lib-sp-toolbar-button>
@@ -39,7 +39,7 @@
     [noLabel]="hideLabels()"
   ></lib-sp-toolbar-button>
   <span class="solution-counter" [class.live]="streaming()">
-    Solutions: {{ solutionCount() }}
+    Solutions: {{ solutionCount() }} - {{ selectedEngineLabel() }}
   </span>
   <lib-sp-toolbar-button
     (click)="increaseFontSize()"

@@ -5,7 +5,7 @@ import { SolveEngineDialogComponent, SolveEngineDialogData } from "./solve-engin
 
 function createDialogData(overrides?: Partial<SolveEngineDialogData>): SolveEngineDialogData {
   return {
-    availableEngines: ["Popeye", "SpCore"],
+    availableEngines: ["Popeye", "SpCore", "SpCoreJs"],
     engine: "Popeye",
     engineConfig: null,
     engineConfigurationsByEngine: null,
@@ -45,7 +45,7 @@ describe("SolveEngineDialogComponent", () => {
     const component = createComponent({ engine: "SpCore" });
 
     const root = fixture.nativeElement as HTMLElement;
-    expect(root.textContent).toContain("SpCore options");
+    expect(root.textContent).toContain("SP-Engine (Rust) options");
     expect(root.textContent).toContain("ShowAttempts");
     expect(root.textContent).toContain("MaxSolutions");
     expect(root.textContent).toContain("RefutationsCount");
@@ -56,16 +56,16 @@ describe("SolveEngineDialogComponent", () => {
 
   it("shows argument inputs for enabled options with args", () => {
     const component = createComponent({
-      engine: "SpCore",
+      engine: "SpCoreJs",
       engineConfigurationsByEngine: {
-        SpCore: {
+        SpCoreJs: {
           MaxSolutions: ["3"],
         },
       },
     });
 
     const root = fixture.nativeElement as HTMLElement;
-    expect(root.textContent).toContain("SpCore options");
+    expect(root.textContent).toContain("SP-Engine (JS) options");
     expect(root.textContent).toContain("Arg 1");
 
     expect(component.optionState.MaxSolutions?.enabled).toBeTruthy();

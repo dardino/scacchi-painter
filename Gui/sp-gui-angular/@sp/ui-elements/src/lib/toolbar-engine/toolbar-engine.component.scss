@@ -34,11 +34,12 @@
 .solution-counter {
   display: inline-flex;
   align-items: center;
-  min-width: 6.5rem;
+  min-width: 12rem;
   margin: 0 0.5rem;
   font-size: 0.85rem;
   font-weight: 600;
   opacity: 0.85;
+  white-space: nowrap;
 }
 
 .solution-counter.live {

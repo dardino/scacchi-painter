@@ -17,6 +17,9 @@ export const istructionRegExp = new RegExp(
     "Starting popeye",
     "try play",
     "SpCore",
+    "SpCoreJs",
+    "SP-Engine \\(Rust\\)",
+    "SP-Engine \\(JS\\)",
   ].join("|")}).*$`,
 );
 export const outlogRegExp = new RegExp(

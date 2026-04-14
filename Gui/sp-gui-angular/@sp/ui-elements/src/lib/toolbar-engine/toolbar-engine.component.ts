@@ -1,7 +1,13 @@
 import { Component, EventEmitter, Output, computed, inject, input } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
-import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
+import {
+  Engines,
+  SpCoreEngine,
+  SpCoreEngineLabel,
+  SpCoreJsEngine,
+  SpCoreJsEngineLabel,
+} from "@sp/host-bridge/src/lib/bridge-global";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 
 export type ViewModes = "txt" | "html" | "both";
@@ -58,6 +64,16 @@ export class ToolbarEngineComponent {
   streamingIcon = computed(() => this.streaming() ? "wifi_tethering" : "inventory_2");
   streamingLabel = computed(() => this.streaming() ? "Live" : "Buffered");
   viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode()]?.icon);
+  selectedEngineLabel = computed(() => {
+    const engine = this.selectedEngine();
+    if (engine === SpCoreEngine) {
+      return SpCoreEngineLabel;
+    }
+    if (engine === SpCoreJsEngine) {
+      return SpCoreJsEngineLabel;
+    }
+    return engine;
+  });
 
   start() {
     console.warn("[LOG] -> try to start process...");

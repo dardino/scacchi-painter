@@ -6,7 +6,7 @@
     <mat-label>Engine</mat-label>
     <mat-select [(ngModel)]="selectedEngine">
       @for (engine of availableEngines; track engine) {
-        <mat-option [value]="engine">{{ engine }}</mat-option>
+        <mat-option [value]="engine">{{ engineLabel(engine) }}</mat-option>
       }
     </mat-select>
   </mat-form-field>
@@ -14,7 +14,7 @@
   @if (hasEngineOptions) {
     <section class="options-panel">
       <div class="options-header">
-        <h2>{{ selectedEngine }} options</h2>
+        <h2>{{ engineLabel(selectedEngine) }} options</h2>
         <p>Enable the options you want to write into the solve input.</p>
       </div>
 
