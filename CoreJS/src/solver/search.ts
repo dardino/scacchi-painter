@@ -1,5 +1,7 @@
 import { BB_BLACK, BB_WHITE, Bitboard, BitboardMap } from '../board/board.types';
 import { MoveGeneratorMap } from '../pieces/piece.helpers';
+import { TT } from './tt';
+import { computeZobristKey } from './zobrist';
 
 const INF = 1_000_000;
 
@@ -110,15 +112,15 @@ function findKingSquare(bbs: BitboardMap, color: 'w'|'b'): number | null {
   const idxs = bitboardToIndexes(bb);
   return idxs.length ? idxs[0] : null;
 }
+const PIECE_VALUES: Record<string, number> = { 'P': 100, 'N': 320, 'B': 330, 'R': 500, 'Q': 900, 'K': 20000 };
 
 function evaluate(bbs: BitboardMap): number {
-  const values: Record<string, number> = { 'P': 100, 'N': 320, 'B': 330, 'R': 500, 'Q': 900, 'K': 20000 };
   let score = 0;
   for (const [k, v] of bbs.entries()) {
     if (!k) continue;
     if (!/^[A-Za-z]$/.test(k)) continue;
     const cnt = bitboardToIndexes(v as Bitboard).length;
-    const base = values[k.toUpperCase()] || 0;
+    const base = PIECE_VALUES[k.toUpperCase()] || 0;
     if (k === k.toUpperCase()) score += base * cnt;
     else score -= base * cnt;
   }
@@ -131,6 +133,10 @@ export async function search(bbs: BitboardMap, color: 'w'|'b', maxDepth: number,
   let abort = false;
 
   function timeUp() { return Date.now() - start > timeLimitMs; }
+
+  // heuristics
+  const killerMoves: Map<number, string[]> = new Map(); // depth -> [killer1, killer2]
+  const history: Map<string, number> = new Map();
 
   function legalMoves(position: BitboardMap, side: 'w'|'b') {
     const pseudo = generatePseudoMoves(position, side);
@@ -145,11 +151,63 @@ export async function search(bbs: BitboardMap, color: 'w'|'b', maxDepth: number,
     return legal;
   }
 
+  function quiescence(position: BitboardMap, alpha: number, beta: number, side: 'w'|'b'): number {
+    if (abort) return 0;
+    if (timeUp()) { abort = true; return 0; }
+    nodes++;
+    let stand = evaluate(position) * (side === 'w' ? 1 : -1);
+    if (stand >= beta) return stand;
+    if (alpha < stand) alpha = stand;
+    let caps = generatePseudoMoves(position, side).filter(mv => !!findPieceAt(position, mv.to));
+    if (caps.length === 0) return stand;
+    // MVV-LVA ordering for captures
+    caps.sort((a, b) => {
+      const aVictim = findPieceAt(position, a.to);
+      const bVictim = findPieceAt(position, b.to);
+      const aVal = (aVictim ? PIECE_VALUES[aVictim.toUpperCase()] : 0) - (PIECE_VALUES[a.pieceKey.toUpperCase()] || 0);
+      const bVal = (bVictim ? PIECE_VALUES[bVictim.toUpperCase()] : 0) - (PIECE_VALUES[b.pieceKey.toUpperCase()] || 0);
+      return bVal - aVal;
+    });
+    for (const mv of caps) {
+      const info = applyMove(position, mv);
+      const score = -quiescence(position, -beta, -alpha, side === 'w' ? 'b' : 'w');
+      undoMove(position, mv, info);
+      if (abort) return 0;
+      if (score >= beta) return score;
+      if (score > alpha) alpha = score;
+    }
+    return alpha;
+  }
+
+  function scoreMove(position: BitboardMap, mv: Move, depth: number): number {
+    let s = 0;
+    const mvStr = `${mv.pieceKey}-${indexToSquare(mv.from)}-${indexToSquare(mv.to)}`;
+    const captured = findPieceAt(position, mv.to);
+    if (captured) {
+      const victimVal = PIECE_VALUES[captured.toUpperCase()] || 0;
+      const attackerVal = PIECE_VALUES[mv.pieceKey.toUpperCase()] || 0;
+      s += 100000 + (victimVal * 100 - attackerVal);
+    }
+    const killers = killerMoves.get(depth);
+    if (killers && killers.includes(mvStr)) s += 5000;
+    s += history.get(mvStr) || 0;
+    return s;
+  }
+
   function negamax(position: BitboardMap, depth: number, alpha: number, beta: number, side: 'w'|'b'): number {
     if (abort) return 0;
     if (timeUp()) { abort = true; return 0; }
     nodes++;
-    if (depth === 0) return evaluate(position) * (side === 'w' ? 1 : -1);
+    const key = computeZobristKey(position, side);
+    const ttEntry = TT.probe(key);
+    const alphaOrig = alpha;
+    if (ttEntry && ttEntry.depth >= depth) {
+      if (ttEntry.flag === 'EXACT') return ttEntry.score;
+      if (ttEntry.flag === 'LOWER') alpha = Math.max(alpha, ttEntry.score);
+      else if (ttEntry.flag === 'UPPER') beta = Math.min(beta, ttEntry.score);
+      if (alpha >= beta) return ttEntry.score;
+    }
+    if (depth === 0) return quiescence(position, alpha, beta, side);
 
     const moves = legalMoves(position, side);
     if (moves.length === 0) {
@@ -159,16 +217,38 @@ export async function search(bbs: BitboardMap, color: 'w'|'b', maxDepth: number,
       return 0; // stalemate
     }
 
+    // move ordering
+    moves.sort((a, b) => scoreMove(position, b, depth) - scoreMove(position, a, depth));
+
     let best = -INF;
+    let bestMoveStr: string | undefined;
     for (const mv of moves) {
       const info = applyMove(position, mv);
       const val = -negamax(position, depth - 1, -beta, -alpha, side === 'w' ? 'b' : 'w');
       undoMove(position, mv, info);
       if (abort) return 0;
-      if (val > best) best = val;
+      const mvStr = `${mv.pieceKey}-${indexToSquare(mv.from)}-${indexToSquare(mv.to)}`;
+      if (val > best) { best = val; bestMoveStr = mvStr; }
       if (val > alpha) alpha = val;
-      if (alpha >= beta) break;
+      if (alpha >= beta) {
+        // killer & history update for non-captures that cause cutoffs
+        if (!findPieceAt(position, mv.to)) {
+          const arr = killerMoves.get(depth) || [];
+          if (arr[0] !== mvStr) { arr.unshift(mvStr); if (arr.length > 2) arr.length = 2; killerMoves.set(depth, arr); }
+          const hist = history.get(mvStr) || 0; history.set(mvStr, hist + depth * depth);
+        }
+        break;
+      }
     }
+
+    // store in TT
+    try {
+      const flag: 'EXACT' | 'LOWER' | 'UPPER' = best <= alphaOrig ? 'UPPER' : (best >= beta ? 'LOWER' : 'EXACT');
+      TT.store(key, { key, depth, score: best, flag, best: bestMoveStr });
+    } catch (e) {
+      // ignore
+    }
+
     return best;
   }
 
@@ -179,6 +259,7 @@ export async function search(bbs: BitboardMap, color: 'w'|'b', maxDepth: number,
   for (let depth = 1; depth <= maxDepth; depth++) {
     if (timeUp()) break;
     const moves = legalMoves(bbs, color);
+    moves.sort((a, b) => scoreMove(bbs, b, depth) - scoreMove(bbs, a, depth));
     let localBestScore = -INF;
     let localBestMove: Move | null = null;
     for (const mv of moves) {
