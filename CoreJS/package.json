@@ -14,9 +14,9 @@
     "build": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --minify && pnpm tsc -p tsconfig.json --emitDeclarationOnly",
     "watch": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --watch",
     "test": "pnpm vitest run",
-    "fetch-yacpdb": "tsx ./scripts/fetch_yacpdb_sample.ts",
-    "gen-attack-tables": "tsx ./scripts/generate_attack_tables.ts",
-    "run-solver-fixture": "tsx ./scripts/run-solver-fixture.ts"
+    "fetch-yacpdb": "pnpm tsx ./scripts/fetch_yacpdb_sample.ts",
+    "gen-attack-tables": "pnpm tsx ./scripts/generate_attack_tables.ts",
+    "run-solver-fixture": "pnpm tsx ./scripts/run-solver-fixture.ts"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +30,7 @@
     "eslint": "^10.2.0",
     "globals": "^17.4.0",
     "ts-node": "^10.9.2",
-    "tsx": "^3.12.7",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.34.0",
     "vitest": "^4.0.15"

@@ -1,9 +1,8 @@
 import { Bitboard } from "../board/board.types";
-import { MoveGeneratorMap } from "../pieces/piece.helpers";
 import { parseFEN } from "./parse";
 import { parsePopeye } from "./popeye";
-import { DEFAULT_SOLVER_OPTIONS, ProblemInput, SolverOptions, SolverResult, stipulationToMaxDepth } from "./types";
 import { search } from "./search";
+import { DEFAULT_SOLVER_OPTIONS, ProblemInput, SolverOptions, SolverResult, stipulationToMaxDepth } from "./types";
 
 function indexToSquare(idx: number): string {
   const file = String.fromCharCode(97 + (idx % 8));

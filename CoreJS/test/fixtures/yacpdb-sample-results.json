@@ -1,0 +1,445 @@
+{
+  "generatedAt": "2026-04-14T06:00:02.621Z",
+  "results": [
+    {
+      "id": "4",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 1915,
+      "nodes": 73371,
+      "bestLine": [
+        "Q-b1-f1"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "Q-b1-f1"
+        ],
+        "nodes": 73371,
+        "timeMs": 1915,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "5",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 326,
+      "nodes": 20072,
+      "bestLine": [
+        "B-d3-f5"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "B-d3-f5"
+        ],
+        "nodes": 20072,
+        "timeMs": 326,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "6",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 373,
+      "nodes": 23843,
+      "bestLine": [
+        "R-c1-c2"
+      ],
+      "score": 2450,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "R-c1-c2"
+        ],
+        "nodes": 23843,
+        "timeMs": 373,
+        "score": 2450,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "9",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 123,
+      "nodes": 6030,
+      "bestLine": [
+        "Q-f7-g8"
+      ],
+      "score": 1100,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "Q-f7-g8"
+        ],
+        "nodes": 6030,
+        "timeMs": 123,
+        "score": 1100,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "10",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 2135,
+      "nodes": 79831,
+      "bestLine": [
+        "N-f2-d1"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "N-f2-d1"
+        ],
+        "nodes": 79831,
+        "timeMs": 2135,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "12",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 667,
+      "nodes": 26731,
+      "bestLine": [
+        "B-c7-h2"
+      ],
+      "score": 1880,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "B-c7-h2"
+        ],
+        "nodes": 26731,
+        "timeMs": 667,
+        "score": 1880,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "13",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 1257,
+      "nodes": 60383,
+      "bestLine": [
+        "R-e5-e4"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "R-e5-e4"
+        ],
+        "nodes": 60383,
+        "timeMs": 1257,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "14",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 1450,
+      "nodes": 64212,
+      "bestLine": [
+        "R-a4-a8"
+      ],
+      "score": 550,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "R-a4-a8"
+        ],
+        "nodes": 64212,
+        "timeMs": 1450,
+        "score": 550,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "17",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 62,
+      "nodes": 5724,
+      "bestLine": [
+        "K-b6-a5"
+      ],
+      "score": 760,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "K-b6-a5"
+        ],
+        "nodes": 5724,
+        "timeMs": 62,
+        "score": 760,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "18",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 1126,
+      "nodes": 41380,
+      "bestLine": [
+        "B-c8-e5"
+      ],
+      "score": 2480,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "B-c8-e5"
+        ],
+        "nodes": 41380,
+        "timeMs": 1126,
+        "score": 2480,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "19",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 4,
+      "nodes": 399,
+      "bestLine": [
+        "N-e2-f4"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "N-e2-f4"
+        ],
+        "nodes": 399,
+        "timeMs": 4,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "20",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 374,
+      "nodes": 19229,
+      "bestLine": [
+        "R-b6-b1"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "R-b6-b1"
+        ],
+        "nodes": 19229,
+        "timeMs": 374,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "23",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 27,
+      "nodes": 2087,
+      "bestLine": [
+        "R-h4-h8"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "R-h4-h8"
+        ],
+        "nodes": 2087,
+        "timeMs": 27,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "72",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 200,
+      "nodes": 9333,
+      "bestLine": [
+        "Q-d1-h1"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "Q-d1-h1"
+        ],
+        "nodes": 9333,
+        "timeMs": 200,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "75",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 6642,
+      "nodes": 266925,
+      "bestLine": [
+        "R-f6-e6"
+      ],
+      "score": 340,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "R-f6-e6"
+        ],
+        "nodes": 266925,
+        "timeMs": 6642,
+        "score": 340,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "89",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 209,
+      "nodes": 10852,
+      "bestLine": [
+        "P-h4-h5"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "P-h4-h5"
+        ],
+        "nodes": 10852,
+        "timeMs": 209,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "94",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 830,
+      "nodes": 45099,
+      "bestLine": [
+        "P-f2-f4"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "P-f2-f4"
+        ],
+        "nodes": 45099,
+        "timeMs": 830,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "95",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 43,
+      "nodes": 1673,
+      "bestLine": [
+        "K-f8-e7"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "K-f8-e7"
+        ],
+        "nodes": 1673,
+        "timeMs": 43,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    },
+    {
+      "id": "96",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 509,
+      "nodes": 24179,
+      "bestLine": [
+        "K-f7-f8"
+      ],
+      "score": 1450,
+      "mateIn": null,
+      "raw": {
+        "bestLine": [
+          "K-f7-f8"
+        ],
+        "nodes": 24179,
+        "timeMs": 509,
+        "score": 1450,
+        "mateIn": null,
+        "aborted": false
+      }
+    },
+    {
+      "id": "97",
+      "solved": true,
+      "depthSearched": 4,
+      "timeMs": 499,
+      "nodes": 24715,
+      "bestLine": [
+        "N-a5-c6"
+      ],
+      "score": 999997,
+      "mateIn": 2,
+      "raw": {
+        "bestLine": [
+          "N-a5-c6"
+        ],
+        "nodes": 24715,
+        "timeMs": 499,
+        "score": 999997,
+        "mateIn": 2,
+        "aborted": false
+      }
+    }
+  ]
+}
