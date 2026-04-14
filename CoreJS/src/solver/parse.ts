@@ -75,4 +75,4 @@ export function parseFEN(fen: string | ProblemInput): ParseResult {
   };
 }
 
-export default parseFEN;
+// No default export — `parseFEN` is a named export

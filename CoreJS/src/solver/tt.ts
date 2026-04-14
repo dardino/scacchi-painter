@@ -44,4 +44,4 @@ class TranspositionTable {
 
 export const TT = new TranspositionTable();
 
-export default TT;
+// No default export — use named `TT` export

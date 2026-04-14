@@ -47,4 +47,4 @@ export function computeZobristKey(bbs: BitboardMap, sideToMove: 'w' | 'b'): bigi
   return key & MASK64;
 }
 
-export default { computeZobristKey };
+// No default export — use named exports only

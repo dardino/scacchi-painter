@@ -1,13 +1,14 @@
+/// <reference types="node" />
 import { spawn } from 'child_process';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { Bitboard } from "../board/board.types";
-import { MoveGeneratorMap } from '../pieces/piece.helpers';
-import { parseFEN } from "./parse";
-import { parsePopeye } from "./popeye";
-import { search } from "./search";
-import { DEFAULT_SOLVER_OPTIONS, ProblemInput, SolverOptions, SolverResult, stipulationToMaxDepth } from "./types";
+import { Bitboard } from "./board/board.types";
+import { MoveGeneratorMap } from './pieces/piece.helpers';
+import { parseFEN } from "./solver/parse";
+import { parsePopeye } from "./solver/popeye";
+import { search } from "./solver/search";
+import { DEFAULT_SOLVER_OPTIONS, ProblemInput, SolverOptions, SolverResult, stipulationToMaxDepth } from "./solver/types";
 
 function indexToSquare(idx: number): string {
   const file = String.fromCharCode(97 + (idx % 8));
@@ -23,17 +24,11 @@ function bitboardToIndexes(bb: Bitboard): number[] {
   return out;
 }
 
-/**
- * Very small reference solver engine: builds pseudo-legal moves for the side to move
- * and returns the first found move as the "best line". This is intentionally
- * minimal and will be expanded with full search and legality checks later.
- */
 export async function solve(problem: ProblemInput, opts?: SolverOptions): Promise<SolverResult> {
   const start = Date.now();
   const mergedOpts = { ...DEFAULT_SOLVER_OPTIONS, ...(opts || {}) };
 
   try {
-    // If a Popeye snippet is provided, prefer its FEN/stipulation when missing
     const popeyeInfo = problem.popeye ? parsePopeye(problem) : {};
     const mergedProblem: ProblemInput = { ...problem };
     if (popeyeInfo.fen && !mergedProblem.fen) mergedProblem.fen = popeyeInfo.fen as string;
@@ -45,12 +40,10 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
 
     const maxDepthUsed = mergedOpts.maxDepth ?? stipulationToMaxDepth(mergedProblem.stipulation);
 
-    // If threads > 1, perform root-splitting by dispatching per-root-move worker tasks.
     const cpuCount = Math.max(1, os.cpus()?.length || 1);
     const requestedThreads = mergedOpts.threads ?? 1;
     const threads = Math.max(1, Math.min(requestedThreads, cpuCount));
     if (threads > 1) {
-      // local helpers (small copies to avoid heavy refactor)
       function BIT(i: number) { return 1n << BigInt(i); }
       function bitboardToIndexes(bb: Bitboard): number[] {
         const out: number[] = [];
@@ -73,8 +66,8 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
         for (const [k, v] of bbsMap.entries()) {
           if (!k) continue;
           if (!/^[A-Za-z]$/.test(k)) continue;
-          if (k === k.toUpperCase()) whiteOcc |= v as bigint;
-          else blackOcc |= v as bigint;
+          if (k === k.toUpperCase()) whiteOcc |= v as unknown as bigint;
+          else blackOcc |= v as unknown as bigint;
         }
         bbsMap.set('#white#', whiteOcc as unknown as bigint);
         bbsMap.set('#black#', blackOcc as unknown as bigint);
@@ -112,24 +105,20 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
             for (const d of destIdxs) moves.push({ pieceKey: k, from: src, to: d });
           }
         }
-        // filter legal by making moves and testing king-in-check
         const legal: Array<{ pieceKey: string; from: number; to: number }> = [];
         for (const mv of moves) {
           const info = applyMoveLocal(bbsMap, mv);
-          // find king square for side
           const kingKey = side === 'w' ? 'K' : 'k';
           const kingBB = bbsMap.get(kingKey) as bigint || 0n;
           const ks = bitboardToIndexes(kingBB as Bitboard);
           const kingSq = ks.length ? ks[0] : null;
           const inCheck = kingSq !== null ? (() => {
-            // isSquareAttacked
             for (const gen of MoveGeneratorMap.values()) {
               const attacks = gen(bbsMap as any, side === 'w' ? 'b' : 'w');
               if ((attacks & (1n << BigInt(kingSq as number))) !== 0n) return true;
             }
             return false;
           })() : false;
-          // undo
           if (info.capturedKey) bbsMap.set(info.capturedKey, info.oldCapturedBB as bigint);
           bbsMap.set(info.pieceKey, info.oldPieceBB as bigint);
           recomputeOccupanciesLocal(bbsMap);
@@ -140,7 +129,6 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
 
       const rootMoves = generateLegalMovesLocal(bbs as any, color as 'w'|'b');
       if (rootMoves.length === 0) {
-        // nothing to do — fallback to single-threaded search
         const s = await search(bbs, color as 'w'|'b', maxDepthUsed, mergedOpts.timeLimitMs ?? 30_000);
         const res: SolverResult = {
           id: problem.id,
@@ -156,14 +144,12 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
         return res;
       }
 
-      // concurrency pool using persistent worker CLI processes (scripts/worker-search.ts)
       const queue = rootMoves.slice();
       const results: Array<any> = [];
       const workers = Math.min(threads, queue.length);
 
       const workerPath = path.resolve(process.cwd(), 'scripts', 'worker-search.ts');
 
-      // serialize bitboards to strings once
       const ser: Record<string,string> = {};
       for (const [k, v] of (bbs as Map<string, bigint>).entries()) ser[k] = (v as bigint).toString();
 
@@ -223,13 +209,11 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
             results.push({ mv, error: (err as any)?.message || String(err) });
           }
         }
-        // tell worker to exit and close stdin
         try { cp.stdin.write(JSON.stringify({ cmd: 'exit' }) + '\n'); cp.stdin.end(); } catch (e) {}
       })());
 
       await Promise.all(workerLoops);
 
-      // choose best move from results
       let bestScore = -Infinity;
       let bestEntry: any = undefined;
       let totalNodes = 0;
@@ -264,7 +248,6 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
       return outRes;
     }
 
-    // delegate to search implementation (iterative deepening + negamax) when threads <= 1
     const s = await search(bbs, color as 'w'|'b', maxDepthUsed, mergedOpts.timeLimitMs ?? 30_000);
     const res: SolverResult = {
       id: problem.id,
@@ -292,4 +275,4 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
   }
 }
 
-export default { solve };
+// No default export — use named exports only

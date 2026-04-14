@@ -9,6 +9,7 @@ import {
   NativePopeyeEngine,
   SolutionRow,
   SolveModes,
+  SpCoreEngine,
 } from "@sp/host-bridge/src/lib/bridge-global";
 import { BehaviorSubject, Observable } from "rxjs";
 
@@ -136,38 +137,45 @@ class WebBridge implements BridgeGlobal {
       (async () => {
         try {
           // dynamic import so bundler includes CoreJS only when used
-          const core = await import('@dardino-chess/core');
+          const core = await import("@dardino-chess/core");
 
           // build ProblemInput expected by CoreJS
-          const side = this.problem.startMoveN === 1.5 ? 'b' : 'w';
-          const baseFen = this.problem.getCurrentFen().split(' [', 1)[0];
+          const side = this.problem.startMoveN === 1.5 ? "b" : "w";
+          const baseFen = this.problem.getCurrentFen().split(" [", 1)[0];
           const fen = `${baseFen} ${side} - - 0 1`;
           const input = {
-            id: String((this.problem as any).personalID ?? Math.random().toString(36).slice(2)),
+            id: String((this.problem).personalID ?? Math.random().toString(36).slice(2)),
             fen,
             stipulation: this.problem.stipulation?.completeStipulationDesc ?? undefined,
-            popeye: problemToPopeye(this.problem, mode).join('\n'),
-          } as any;
+            popeye: problemToPopeye(this.problem, mode).join("\n"),
+          };
 
           const opts = undefined as any; // could be wired from engine config later
           const res = await core.solve(input, opts);
 
           // Emit a SpCore-like JSON message so existing UI parsers can handle it
           const donePayload = JSON.stringify({
-            type: 'done',
+            type: "done",
             elapsed_ms: res.timeMs,
             solutions_found: res.solved ? 1 : 0,
             winning_line_popeye: res.bestLine ?? [],
           });
 
-          this.solver$.next({ raw: donePayload, rowtype: 'log', moveTree: [] });
+          this.solver$.next({ raw: donePayload, rowtype: "log", moveTree: [] });
           // give consumers a small log message with time
-          this.solver$.next({ raw: `Time: ${res.timeMs}ms`, rowtype: 'log', moveTree: [] });
-          this.solver$.next({ raw: 'solution finished', rowtype: 'log', moveTree: [] });
+          this.solver$.next({ raw: `Time: ${res.timeMs}ms`, rowtype: "log", moveTree: [] });
+          this.solver$.next({ raw: "solution finished", rowtype: "log", moveTree: [] });
           this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
-        } catch (err: any) {
-          this.solver$.next({ raw: String(err?.message || err), rowtype: 'log', moveTree: [] });
-          this.endSolve({ exitCode: -1, message: String(err?.message || err) });
+        }
+        catch (err: any) {
+          if (err instanceof Error) {
+            this.solver$.next({ raw: String(err?.message || err), rowtype: "log", moveTree: [] });
+            this.endSolve({ exitCode: -1, message: String(err?.message || err) });
+          }
+          else {
+            this.solver$.next({ raw: String(err), rowtype: "log", moveTree: [] });
+            this.endSolve({ exitCode: -1, message: String(err) });
+          }
         }
       })();
 

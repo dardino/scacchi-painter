@@ -23,4 +23,4 @@ export function parsePopeye(snippet: string | ProblemInput): PopeyeParse {
   return { fen, stipulation: stip, raw: text };
 }
 
-export default parsePopeye;
+// No default export — `parsePopeye` is a named export

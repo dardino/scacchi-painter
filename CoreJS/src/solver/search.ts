@@ -281,4 +281,4 @@ export async function search(bbs: BitboardMap, color: 'w'|'b', maxDepth: number,
   return { bestLine, nodes, timeMs, score: bestScore, mateIn: Math.abs(bestScore) > INF/2 ? Math.round((INF - Math.abs(bestScore))/2) : null, aborted: abort };
 }
 
-export default { search };
+// No default export — use named `search` export

@@ -1,20 +1,10 @@
-import { ProblemInput, SolverOptions, SolverResult } from "./types";
+import { parseFEN } from './solver/parse';
+import { parsePopeye } from './solver/popeye';
+import { search } from './solver/search';
+import { ProblemInput, SolverOptions, SolverResult } from './solver/types';
 
 export async function solve(problem: ProblemInput, opts?: SolverOptions): Promise<SolverResult> {
-  // Use the Node-specific engine when running under Node.js (server/CLI).
-  // For browser builds, dynamically import only the pure-TS search implementation
-  // to avoid bundling Node builtins (child_process, fs, etc.).
-  const isNode = typeof window === 'undefined' && typeof process !== 'undefined';
-  if (isNode) {
-    const { solve: engineSolve } = await import('../engine.node');
-    return engineSolve(problem, opts);
-  }
-
-  // Browser-friendly fallback: parse FEN and call the in-memory `search` implementation.
-  const { parseFEN } = await import('./parse');
-  const { search } = await import('./search');
-
-  const popeyeInfo = problem.popeye ? await (await import('./popeye')).parsePopeye(problem) : {} as any;
+  const popeyeInfo = problem.popeye ? parsePopeye(problem) : {} as any;
   const mergedProblem: any = { ...problem };
   if (popeyeInfo.fen && !mergedProblem.fen) mergedProblem.fen = popeyeInfo.fen as string;
   if (popeyeInfo.stipulation && !mergedProblem.stipulation) mergedProblem.stipulation = popeyeInfo.stipulation as string;

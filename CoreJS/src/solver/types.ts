@@ -69,4 +69,4 @@ export const DEFAULT_SOLVER_OPTIONS: SolverOptions = {
   verbose: false,
 };
 
-export default {} as const;
+// No default export — types are all named exports
