@@ -74,11 +74,14 @@ class WebBridge implements BridgeGlobal {
 
   supportsEngine(engine: Engines): boolean {
     const normalized = this.normalizeEngine(engine);
-    return normalized === AsmPopeyeEngine;
+    // Web bridge supports the Asm Popeye worker and a browser-spcore engine
+    return normalized === AsmPopeyeEngine || normalized === SpCoreEngine;
   }
 
   availableEngines(): Engines[] {
-    return [AsmPopeyeEngine];
+    // Expose both the bundled Popeye worker and the in-browser SpCore engine
+    // (SpCore will be resolved dynamically when runSolve is invoked).
+    return [AsmPopeyeEngine, SpCoreEngine];
   }
 
   openFile(): File | PromiseLike<File | null> | null {
@@ -99,24 +102,79 @@ class WebBridge implements BridgeGlobal {
     mode: SolveModes,
   ): Observable<SolutionRow | EOF> | Error {
     const normalizedEngine = this.normalizeEngine(engine);
-    if (normalizedEngine !== AsmPopeyeEngine) {
-      return new Error("Engine not found.");
+    // Handle Asm-based Popeye in worker (existing behavior)
+    if (normalizedEngine === AsmPopeyeEngine) {
+      this.problem = CurrentProblem;
+      this.solveEnded = false;
+      this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
+        {
+          raw: `starting engine <${normalizedEngine}>`,
+          rowtype: "log",
+          moveTree: [],
+        },
+      );
+
+      const problem = problemToPopeye(CurrentProblem, mode).join("\n");
+      this.startSolve(problem);
+      this.ww.postMessage({ problem });
+
+      return this.solver$.asObservable();
     }
-    this.problem = CurrentProblem;
-    this.solveEnded = false;
-    this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
-      {
-        raw: `starting engine <${normalizedEngine}>`,
-        rowtype: "log",
-        moveTree: [],
-      },
-    );
 
-    const problem = problemToPopeye(CurrentProblem, mode).join("\n");
-    this.startSolve(problem);
-    this.ww.postMessage({ problem });
+    // Handle in-browser SpCore engine backed by the TS Core (CoreJS)
+    if (normalizedEngine === SpCoreEngine) {
+      this.problem = CurrentProblem;
+      this.solveEnded = false;
+      this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
+        {
+          raw: `starting engine <${normalizedEngine}>`,
+          rowtype: "log",
+          moveTree: [],
+        },
+      );
 
-    return this.solver$.asObservable();
+      (async () => {
+        try {
+          // dynamic import so bundler includes CoreJS only when used
+          const core = await import('@dardino-chess/core');
+
+          // build ProblemInput expected by CoreJS
+          const side = this.problem.startMoveN === 1.5 ? 'b' : 'w';
+          const baseFen = this.problem.getCurrentFen().split(' [', 1)[0];
+          const fen = `${baseFen} ${side} - - 0 1`;
+          const input = {
+            id: String((this.problem as any).personalID ?? Math.random().toString(36).slice(2)),
+            fen,
+            stipulation: this.problem.stipulation?.completeStipulationDesc ?? undefined,
+            popeye: problemToPopeye(this.problem, mode).join('\n'),
+          } as any;
+
+          const opts = undefined as any; // could be wired from engine config later
+          const res = await core.solve(input, opts);
+
+          // Emit a SpCore-like JSON message so existing UI parsers can handle it
+          const donePayload = JSON.stringify({
+            type: 'done',
+            elapsed_ms: res.timeMs,
+            solutions_found: res.solved ? 1 : 0,
+            winning_line_popeye: res.bestLine ?? [],
+          });
+
+          this.solver$.next({ raw: donePayload, rowtype: 'log', moveTree: [] });
+          // give consumers a small log message with time
+          this.solver$.next({ raw: `Time: ${res.timeMs}ms`, rowtype: 'log', moveTree: [] });
+          this.solver$.next({ raw: 'solution finished', rowtype: 'log', moveTree: [] });
+          this.endSolve({ exitCode: 0, message: `program exited with code: 0` });
+        } catch (err: any) {
+          this.solver$.next({ raw: String(err?.message || err), rowtype: 'log', moveTree: [] });
+          this.endSolve({ exitCode: -1, message: String(err?.message || err) });
+        }
+      })();
+
+      return this.solver$.asObservable();
+    }
+
+    return new Error("Engine not found.");
   }
 }
 
