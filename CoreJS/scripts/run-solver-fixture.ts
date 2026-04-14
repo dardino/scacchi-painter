@@ -1,5 +1,5 @@
 #!/usr/bin/env -S tsx
-import { readFile, writeFile, mkdir } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { solve } from '../src/solver';
 import { ProblemInput } from '../src/solver/types';
@@ -14,6 +14,7 @@ const inPath = (argv.in as string) || './test/fixtures/yacpdb-sample.json';
 const outPath = (argv.out as string) || './test/fixtures/yacpdb-sample-results.json';
 const maxDepthArg = argv.maxDepth ? Number(argv.maxDepth) : undefined;
 const timeLimitMs = argv.timeLimitMs ? Number(argv.timeLimitMs) : 30_000;
+const threadsArg = argv.threads ? Number(argv.threads) : undefined;
 
 async function main() {
   const inFull = path.resolve(process.cwd(), inPath);
@@ -24,7 +25,7 @@ async function main() {
   const results: any[] = [];
   for (const p of problems) {
     try {
-      const res = await solve(p, { maxDepth: maxDepthArg, timeLimitMs });
+      const res = await solve(p, { maxDepth: maxDepthArg, timeLimitMs, threads: threadsArg });
       results.push(res);
       console.log(`id=${p.id} nodes=${res.nodes} time=${res.timeMs}ms best=${res.bestLine?.[0] ?? '-'} `);
     } catch (err) {
