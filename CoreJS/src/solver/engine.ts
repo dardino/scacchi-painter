@@ -1,7 +1,8 @@
 import { Bitboard } from "../board/board.types";
 import { MoveGeneratorMap } from "../pieces/piece.helpers";
 import { parseFEN } from "./parse";
-import { DEFAULT_SOLVER_OPTIONS, ProblemInput, SolverOptions, SolverResult } from "./types";
+import { parsePopeye } from "./popeye";
+import { DEFAULT_SOLVER_OPTIONS, ProblemInput, SolverOptions, SolverResult, stipulationToMaxDepth } from "./types";
 
 function indexToSquare(idx: number): string {
   const file = String.fromCharCode(97 + (idx % 8));
@@ -27,9 +28,17 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
   const mergedOpts = { ...DEFAULT_SOLVER_OPTIONS, ...(opts || {}) };
 
   try {
-    const parsed = parseFEN(problem);
+    // If a Popeye snippet is provided, prefer its FEN/stipulation when missing
+    const popeyeInfo = problem.popeye ? parsePopeye(problem) : {};
+    const mergedProblem: ProblemInput = { ...problem };
+    if (popeyeInfo.fen && !mergedProblem.fen) mergedProblem.fen = popeyeInfo.fen as string;
+    if (popeyeInfo.stipulation && !mergedProblem.stipulation) mergedProblem.stipulation = popeyeInfo.stipulation as string;
+
+    const parsed = parseFEN(mergedProblem);
     const bbs = parsed.bitboards;
     const color = parsed.sideToMove;
+
+    const maxDepthUsed = mergedOpts.maxDepth ?? stipulationToMaxDepth(mergedProblem.stipulation);
 
     // collect piece notations for the side to move (single-letter piece keys)
     const pieceKeys: string[] = [];
@@ -67,13 +76,13 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
     const result: SolverResult = {
       id: problem.id,
       solved: false,
-      depthSearched: moves.length > 0 ? 1 : 0,
+      depthSearched: maxDepthUsed ?? (moves.length > 0 ? 1 : 0),
       timeMs,
       nodes: moves.length,
       bestLine: moves.length > 0 ? [moves[0]] : undefined,
       score: undefined,
       mateIn: null,
-      raw: { moves: moves.slice(0, 200) },
+      raw: { moves: moves.slice(0, 200), maxDepthUsed },
     };
 
     return result;
