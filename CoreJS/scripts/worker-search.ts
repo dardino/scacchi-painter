@@ -47,36 +47,40 @@ function applyMoveToMap(bbs: Map<string, bigint>, mv: Move) {
   return { pieceKey, oldPieceBB, capturedKey: oldCapturedKey, oldCapturedBB };
 }
 
-async function readStdin(): Promise<string> {
-  const chunks: Buffer[] = [];
-  return new Promise((resolve, reject) => {
-    process.stdin.on('data', c => chunks.push(Buffer.from(c)));
-    process.stdin.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
-    process.stdin.on('error', reject);
-  });
-}
+import readline from 'readline';
 
-async function main() {
-  const raw = await readStdin();
-  if (!raw) { console.error('no input'); process.exit(2); }
-  const inp = JSON.parse(raw);
-  const { bbs: bbsObj, move, color, maxDepth, timeLimitMs } = inp as { bbs: Record<string,string>, move: Move, color: 'w'|'b', maxDepth: number, timeLimitMs: number };
+// Persistent worker: read newline-delimited JSON requests from stdin and
+// respond with newline-delimited JSON responses. Each request must include
+// an `id` field so responses can be correlated.
 
-  const bbs = new Map<string, bigint>();
-  for (const k of Object.keys(bbsObj)) bbs.set(k, BigInt(bbsObj[k]));
+const rl = readline.createInterface({ input: process.stdin, terminal: false });
 
-  // apply the root move
-  applyMoveToMap(bbs, move);
+rl.on('line', async (line) => {
+  if (!line || !line.trim()) return;
+  try {
+    const req = JSON.parse(line);
+    if (req && req.cmd === 'exit') {
+      process.exit(0);
+      return;
+    }
+    const { id, bbs: bbsObj, move, color, maxDepth, timeLimitMs } = req as any;
+    const bbs = new Map<string, bigint>();
+    for (const k of Object.keys(bbsObj || {})) bbs.set(k, BigInt(bbsObj[k]));
 
-  const nextSide = color === 'w' ? 'b' : 'w';
-  const childDepth = Math.max(0, (maxDepth || 0) - 1);
+    // apply the root move
+    applyMoveToMap(bbs, move as Move);
 
-  const res = await search(bbs, nextSide, childDepth, timeLimitMs || 30000);
+    const nextSide = color === 'w' ? 'b' : 'w';
+    const childDepth = Math.max(0, (maxDepth || 0) - 1);
 
-  const moveStr = `${move.pieceKey}-${String.fromCharCode(97 + (move.from % 8))}-${Math.floor(move.from / 8) + 1}-${move.to}`;
-  // Output result as JSON to stdout
-  const out = { move, result: res };
-  console.log(JSON.stringify(out));
-}
+    const res = await search(bbs, nextSide, childDepth, timeLimitMs || 30000);
 
-main().catch(err => { console.error(err?.message || err); process.exit(1); });
+    const out = { id, result: res };
+    process.stdout.write(JSON.stringify(out) + '\n');
+  } catch (e: any) {
+    // emit error line; parent should handle parse/processing errors
+    try { process.stderr.write(String(e?.message || e) + '\n'); } catch {}
+  }
+});
+
+process.stdin.on('end', () => process.exit(0));

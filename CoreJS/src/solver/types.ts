@@ -22,6 +22,8 @@ export type SolverOptions = {
   timeLimitMs?: number;
   /** Number of worker threads to use (root-splitting). 1 = single-thread */
   threads?: number;
+  /** When true, use precompiled Node worker JS instead of running with tsx */
+  useCompiledWorkers?: boolean;
   /** Limit on visited nodes (optional) */
   nodesLimit?: number;
   verbose?: boolean;
@@ -62,6 +64,7 @@ export const DEFAULT_SOLVER_OPTIONS: SolverOptions = {
   maxDepth: undefined,
   timeLimitMs: 30_000,
   threads: 1,
+  useCompiledWorkers: false,
   nodesLimit: undefined,
   verbose: false,
 };

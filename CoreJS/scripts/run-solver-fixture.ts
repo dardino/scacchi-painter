@@ -15,6 +15,7 @@ const outPath = (argv.out as string) || './test/fixtures/yacpdb-sample-results.j
 const maxDepthArg = argv.maxDepth ? Number(argv.maxDepth) : undefined;
 const timeLimitMs = argv.timeLimitMs ? Number(argv.timeLimitMs) : 30_000;
 const threadsArg = argv.threads ? Number(argv.threads) : undefined;
+const useCompiledWorkersArg = argv.useCompiledWorkers === 'true' || argv.useCompiledWorkers === true || false;
 
 async function main() {
   const inFull = path.resolve(process.cwd(), inPath);
@@ -25,7 +26,7 @@ async function main() {
   const results: any[] = [];
   for (const p of problems) {
     try {
-      const res = await solve(p, { maxDepth: maxDepthArg, timeLimitMs, threads: threadsArg });
+      const res = await solve(p, { maxDepth: maxDepthArg, timeLimitMs, threads: threadsArg, useCompiledWorkers: useCompiledWorkersArg });
       results.push(res);
       console.log(`id=${p.id} nodes=${res.nodes} time=${res.timeMs}ms best=${res.bestLine?.[0] ?? '-'} `);
     } catch (err) {

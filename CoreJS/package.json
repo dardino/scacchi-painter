@@ -16,7 +16,8 @@
     "test": "pnpm vitest run",
     "fetch-yacpdb": "pnpm tsx ./scripts/fetch_yacpdb_sample.ts",
     "gen-attack-tables": "pnpm tsx ./scripts/generate_attack_tables.ts",
-    "run-solver-fixture": "pnpm tsx ./scripts/run-solver-fixture.ts"
+    "run-solver-fixture": "pnpm tsx ./scripts/run-solver-fixture.ts",
+    "build-worker": "pnpm esbuild ./scripts/worker-search.ts --outfile=dist/scripts/worker-search.js --bundle --platform=node --target=node22"
   },
   "keywords": [],
   "author": "",

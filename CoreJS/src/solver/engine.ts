@@ -1,4 +1,6 @@
 import { spawn } from 'child_process';
+import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { Bitboard } from "../board/board.types";
 import { MoveGeneratorMap } from '../pieces/piece.helpers';
@@ -44,7 +46,9 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
     const maxDepthUsed = mergedOpts.maxDepth ?? stipulationToMaxDepth(mergedProblem.stipulation);
 
     // If threads > 1, perform root-splitting by dispatching per-root-move worker tasks.
-    const threads = mergedOpts.threads || 1;
+    const cpuCount = Math.max(1, os.cpus()?.length || 1);
+    const requestedThreads = mergedOpts.threads ?? 1;
+    const threads = Math.max(1, Math.min(requestedThreads, cpuCount));
     if (threads > 1) {
       // local helpers (small copies to avoid heavy refactor)
       function BIT(i: number) { return 1n << BigInt(i); }
@@ -152,42 +156,76 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
         return res;
       }
 
-      // concurrency pool using external worker CLI (scripts/worker-search.ts)
+      // concurrency pool using persistent worker CLI processes (scripts/worker-search.ts)
       const queue = rootMoves.slice();
       const results: Array<any> = [];
       const workers = Math.min(threads, queue.length);
 
-      async function runWorkerTask(mv: { pieceKey: string; from: number; to: number }) {
-        return new Promise<any>((resolve, reject) => {
-          const workerPath = path.resolve(process.cwd(), 'scripts', 'worker-search.ts');
-          const cp = spawn('pnpm', ['tsx', workerPath], { stdio: ['pipe', 'pipe', 'inherit'] });
-          let out = '';
-          cp.stdout.setEncoding('utf8');
-          cp.stdout.on('data', c => out += c);
-          cp.on('close', code => {
-            if (code !== 0) { reject(new Error('worker exited ' + code)); return; }
-            try { const parsed = JSON.parse(out); resolve(parsed); } catch (e) { reject(e); }
-          });
-          // serialize bitboards to strings
-          const ser: Record<string,string> = {};
-          for (const [k, v] of (bbs as Map<string, bigint>).entries()) ser[k] = (v as bigint).toString();
-          const payload = { bbs: ser, move: mv, color, maxDepth: maxDepthUsed, timeLimitMs: mergedOpts.timeLimitMs };
-          cp.stdin.write(JSON.stringify(payload));
-          cp.stdin.end();
+      const workerPath = path.resolve(process.cwd(), 'scripts', 'worker-search.ts');
+
+      // serialize bitboards to strings once
+      const ser: Record<string,string> = {};
+      for (const [k, v] of (bbs as Map<string, bigint>).entries()) ser[k] = (v as bigint).toString();
+
+      const cpList: any[] = [];
+      type PendingEntry = { resolve: (v:any)=>void; start: number };
+      const pending: Map<string, PendingEntry> = new Map();
+      let nextReqId = 1;
+      const workerStartupTimes: number[] = new Array(workers).fill(0);
+      const requestTimes: number[] = [];
+
+      const useCompiled = Boolean(mergedOpts.useCompiledWorkers);
+      const compiledPath = path.resolve(process.cwd(), 'dist', 'scripts', 'worker-search.js');
+      const canUseCompiled = useCompiled && fs.existsSync(compiledPath);
+
+      for (let i = 0; i < workers; i++) {
+        const spawnStart = Date.now();
+        const cp = canUseCompiled ? spawn('node', [compiledPath], { stdio: ['pipe', 'pipe', 'inherit'] }) : spawn('pnpm', ['tsx', workerPath], { stdio: ['pipe', 'pipe', 'inherit'] });
+        cp.on('spawn', () => { workerStartupTimes[i] = Date.now() - spawnStart; });
+        cp.stdout.setEncoding('utf8');
+        let buf = '';
+        cp.stdout.on('data', (chunk: string) => {
+          buf += chunk;
+          let idx: number;
+          while ((idx = buf.indexOf('\n')) >= 0) {
+            const line = buf.slice(0, idx);
+            buf = buf.slice(idx + 1);
+            if (!line.trim()) continue;
+            try {
+              const parsed = JSON.parse(line);
+              const entry = pending.get(String(parsed.id));
+              if (entry) {
+                pending.delete(String(parsed.id));
+                const dur = Date.now() - entry.start;
+                requestTimes.push(dur);
+                entry.resolve(parsed);
+              }
+            } catch (e) {
+              // ignore parse errors
+            }
+          }
         });
+        cpList.push(cp);
       }
 
-      const workerLoops = new Array(workers).fill(0).map(async () => {
+      const workerLoops = cpList.map((cp) => (async () => {
         while (queue.length) {
-          const mv = queue.shift()!;
+          const mv = queue.shift();
+          if (!mv) break;
+          const reqId = String(nextReqId++);
+          const payload = { id: reqId, bbs: ser, move: mv, color, maxDepth: maxDepthUsed, timeLimitMs: mergedOpts.timeLimitMs };
+          const p: Promise<any> = new Promise((resolve) => { pending.set(reqId, { resolve, start: Date.now() }); });
           try {
-            const r = await runWorkerTask(mv);
-            results.push({ mv, r });
+            cp.stdin.write(JSON.stringify(payload) + '\n');
+            const parsed = await p;
+            results.push({ mv, r: parsed });
           } catch (err) {
             results.push({ mv, error: (err as any)?.message || String(err) });
           }
         }
-      });
+        // tell worker to exit and close stdin
+        try { cp.stdin.write(JSON.stringify({ cmd: 'exit' }) + '\n'); cp.stdin.end(); } catch (e) {}
+      })());
 
       await Promise.all(workerLoops);
 
@@ -205,6 +243,13 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
 
       const timeMs = Date.now() - start;
       const bestLine = bestEntry ? [ `${bestEntry.mv.pieceKey}-${String.fromCharCode(97 + (bestEntry.mv.from % 8))}${Math.floor(bestEntry.mv.from/8)+1}-${indexToSquare(bestEntry.mv.to)}` , ...(bestEntry.child.bestLine || []) ] : [];
+      const instrumentation = {
+        workerStartupMs: workerStartupTimes,
+        requestMs: requestTimes,
+        avgRequestMs: requestTimes.length ? Math.round(requestTimes.reduce((a,b)=>a+b,0)/requestTimes.length) : 0,
+        usedCompiledWorkers: canUseCompiled,
+      };
+
       const outRes: SolverResult = {
         id: problem.id,
         solved: !!bestLine && bestLine.length > 0,
@@ -214,7 +259,7 @@ export async function solve(problem: ProblemInput, opts?: SolverOptions): Promis
         bestLine,
         score: Number.isFinite(bestScore) ? bestScore : undefined,
         mateIn: null,
-        raw: { parallelResults: results }
+        raw: { parallelResults: results, instrumentation }
       };
       return outRes;
     }
