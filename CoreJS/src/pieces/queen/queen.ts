@@ -3,12 +3,11 @@ import { queenAttacksFrom } from "../../bitboards/sliding.attacks";
 import { BB_BLACK, BB_WHITE } from "../../main";
 import { PieceMoveGenerator } from "../piece.types";
 
-export const BlackQueenNotation = "q";
-export const WhiteQueenNotation = "Q";
+const BlackQueenNotation = "q";
+const WhiteQueenNotation = "Q";
 
 // rook/bishop attacks implemented in bitboards/sliding.attacks.ts
-
-export const QueenMoveGenerator: PieceMoveGenerator = (bbs, color) => {
+const QueenMoveGenerator: PieceMoveGenerator<"Q"> = (bbs, color) => {
   const queens = bbs.get(color === "w" ? WhiteQueenNotation : BlackQueenNotation) || 0n;
   if (queens === 0n) return 0n;
 
@@ -25,3 +24,6 @@ export const QueenMoveGenerator: PieceMoveGenerator = (bbs, color) => {
   const sameColor = color === "w" ? (bbs.get(BB_WHITE) || 0n) : (bbs.get(BB_BLACK) || 0n);
   return attacks & (~sameColor) & BOARD_MASK;
 };
+QueenMoveGenerator.pieceW = WhiteQueenNotation;
+QueenMoveGenerator.pieceB = BlackQueenNotation;
+export { QueenMoveGenerator };

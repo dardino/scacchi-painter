@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { BB_BLACK, BB_WHITE, getBBfromSquare } from "../../main";
-import { BlackRookNotation, RookMoveGenerator, WhiteRookNotation } from "./rook";
+import { BB_BLACK, BB_WHITE, getBBfromSquare, SquareNames } from "../../main";
+import { RookMoveGenerator } from "./rook";
 
 type Bitboard = bigint;
 
 describe("RookMoveGenerator", () => {
   const makeBbs = (whiteRooks: Bitboard, blackRooks: Bitboard, whitePieces: Bitboard = 0n, blackPieces: Bitboard = 0n) =>
     new Map([
-      [WhiteRookNotation, whiteRooks],
-      [BlackRookNotation, blackRooks],
+      [RookMoveGenerator.pieceW, whiteRooks],
+      [RookMoveGenerator.pieceB, blackRooks],
       [BB_WHITE, whitePieces],
       [BB_BLACK, blackPieces],
     ]);
@@ -17,7 +17,7 @@ describe("RookMoveGenerator", () => {
     const e4 = getBBfromSquare("e4");
     const bbs = makeBbs(e4, 0n);
     const moves = RookMoveGenerator(bbs, "w");
-    const expected = [
+    const expected = ([
       "e1",
       "e2",
       "e3",
@@ -32,7 +32,7 @@ describe("RookMoveGenerator", () => {
       "f4",
       "g4",
       "h4",
-    ].map(getBBfromSquare).reduce((a, b) => a | b, 0n as Bitboard);
+    ] as SquareNames[]).map(getBBfromSquare).reduce((a, b) => a | b, 0n);
     expect(moves & expected).toBe(expected);
   });
 
@@ -59,7 +59,8 @@ describe("RookMoveGenerator", () => {
 
   it("handles corner squares (a1)", () => {
     const a1 = getBBfromSquare("a1");
-    const expected = ["b1", "c1", "d1", "e1", "f1", "g1", "h1", "a2", "a3", "a4", "a5", "a6", "a7", "a8"].map(getBBfromSquare).reduce((a, b) => a | b, 0n as Bitboard);
+    const expected = SquareNames("b1", "c1", "d1", "e1", "f1", "g1", "h1", "a2", "a3", "a4", "a5", "a6", "a7", "a8")
+      .map(getBBfromSquare).reduce((a, b) => a | b, 0n as Bitboard);
     const bbs = makeBbs(a1, 0n);
     const moves = RookMoveGenerator(bbs, "w");
     expect(moves & expected).toBe(expected);

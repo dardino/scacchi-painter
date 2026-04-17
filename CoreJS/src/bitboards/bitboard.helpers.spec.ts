@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it } from "vitest";
-import { getBBfromSquare } from "../bitboards/bitboard.helpers";
-import { Files, Ranks } from "../main";
+import { getBBfromSquare, RecomputeOccupancies } from "../bitboards/bitboard.helpers";
+import { BB_BLACK, BB_WHITE, BitboardMap, Files, Ranks } from "../main";
 import { Piece, PieceArray } from "../pieces/piece.types";
 import { countBits, GetBitboardFromIndex, GetBitboardMapFromPieces, GetIndexFromLocation, GetLocationFromIndex } from "./bitboard.helpers";
 
@@ -201,5 +201,115 @@ describe("getBBfromSquare", () => {
 
   it("throws error for completely invalid square", () => {
     expect(() => getBBfromSquare("z0" as any)).toThrow("Invalid square name: z0");
+  });
+});
+
+describe("RecomputeOccupancies", () => {
+  it("should set both occupancies to 0 for an empty bitboard map", () => {
+    const bbs: BitboardMap = new Map();
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(0n);
+    expect(bbs.get(BB_BLACK)).toBe(0n);
+  });
+
+  it("should correctly compute white occupancy with single white piece", () => {
+    const bbs: BitboardMap = new Map();
+    const whitePawnBB = GetBitboardFromIndex(8); // a2
+    bbs.set("P", whitePawnBB);
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(whitePawnBB);
+    expect(bbs.get(BB_BLACK)).toBe(0n);
+  });
+
+  it("should correctly compute black occupancy with single black piece", () => {
+    const bbs: BitboardMap = new Map();
+    const blackPawnBB = GetBitboardFromIndex(48); // a7
+    bbs.set("p", blackPawnBB);
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(0n);
+    expect(bbs.get(BB_BLACK)).toBe(blackPawnBB);
+  });
+
+  it("should correctly compute occupancies with multiple white pieces", () => {
+    const bbs: BitboardMap = new Map();
+    const whitePawnBB = GetBitboardFromIndex(8); // a2
+    const whiteKnightBB = GetBitboardFromIndex(1); // b1
+    bbs.set("P", whitePawnBB);
+    bbs.set("N", whiteKnightBB);
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(whitePawnBB | whiteKnightBB);
+    expect(bbs.get(BB_BLACK)).toBe(0n);
+  });
+
+  it("should correctly compute occupancies with multiple black pieces", () => {
+    const bbs: BitboardMap = new Map();
+    const blackPawnBB = GetBitboardFromIndex(48); // a7
+    const blackKnightBB = GetBitboardFromIndex(62); // g8
+    bbs.set("p", blackPawnBB);
+    bbs.set("n", blackKnightBB);
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(0n);
+    expect(bbs.get(BB_BLACK)).toBe(blackPawnBB | blackKnightBB);
+  });
+
+  it("should correctly compute occupancies with mixed white and black pieces", () => {
+    const bbs: BitboardMap = new Map();
+    const whitePawnBB = GetBitboardFromIndex(8); // a2
+    const whiteKingBB = GetBitboardFromIndex(4); // e1
+    const blackPawnBB = GetBitboardFromIndex(48); // a7
+    const blackQueenBB = GetBitboardFromIndex(59); // d8
+    bbs.set("P", whitePawnBB);
+    bbs.set("K", whiteKingBB);
+    bbs.set("p", blackPawnBB);
+    bbs.set("q", blackQueenBB);
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(whitePawnBB | whiteKingBB);
+    expect(bbs.get(BB_BLACK)).toBe(blackPawnBB | blackQueenBB);
+  });
+
+  it("should overwrite previous occupancy values", () => {
+    const bbs: BitboardMap = new Map();
+    const whitePawnBB = GetBitboardFromIndex(8); // a2
+    bbs.set("P", whitePawnBB);
+    bbs.set(BB_WHITE, GetBitboardFromIndex(0)); // Old value
+    bbs.set(BB_BLACK, GetBitboardFromIndex(63)); // Old value
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(whitePawnBB);
+    expect(bbs.get(BB_BLACK)).toBe(0n);
+  });
+
+  it("should ignore non-valid piece keys in the bitboard map", () => {
+    const bbs: BitboardMap = new Map();
+    const whitePawnBB = GetBitboardFromIndex(8); // a2
+    bbs.set("P", whitePawnBB);
+    bbs.set(BB_WHITE, 0n); // Should be ignored as it's not a valid piece key
+    bbs.set("invalid", GetBitboardFromIndex(32)); // Should be ignored
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(whitePawnBB);
+    expect(bbs.get(BB_BLACK)).toBe(0n);
+  });
+
+  it("should handle all piece types correctly", () => {
+    const bbs: BitboardMap = new Map();
+    const whitePieces = ["P", "N", "B", "R", "Q", "K"];
+    const blackPieces = ["p", "n", "b", "r", "q", "k"];
+    let whiteExpected = 0n;
+    let blackExpected = 0n;
+    
+    whitePieces.forEach((piece, idx) => {
+      const bb = GetBitboardFromIndex(idx);
+      bbs.set(piece, bb);
+      whiteExpected |= bb;
+    });
+    
+    blackPieces.forEach((piece, idx) => {
+      const bb = GetBitboardFromIndex(32 + idx);
+      bbs.set(piece, bb);
+      blackExpected |= bb;
+    });
+    
+    RecomputeOccupancies(bbs);
+    expect(bbs.get(BB_WHITE)).toBe(whiteExpected);
+    expect(bbs.get(BB_BLACK)).toBe(blackExpected);
   });
 });

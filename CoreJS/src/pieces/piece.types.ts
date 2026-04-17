@@ -8,5 +8,8 @@ export interface Piece {
 }
 
 export type PieceArray = Piece[];
-export type PieceMoveGenerator = (bitboards: BitboardMap, color: "w" | "b", lastMove?: string) => Bitboard;
-export type PieceMoveGeneratorMap = Map<string, PieceMoveGenerator>;
+export type PieceMoveGenerator<W extends Uppercase<string>> = { 
+  pieceW: W, 
+  pieceB: Lowercase<W> 
+} & ((bitboards: BitboardMap, color: "w" | "b", lastMove?: string) => Bitboard);
+export type PieceMoveGeneratorMap = Map<string, PieceMoveGenerator<Uppercase<string>>>;

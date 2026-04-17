@@ -1,3 +1,6 @@
+import { BitboardToIndexes } from '../bitboards/bitboard.helpers';
+import { BitboardMap, VaildBBMapKey } from '../board/board.types';
+
 // Simple deterministic 64-bit RNG for generating Zobrist keys
 let _zr_seed = 123456789n;
 const MASK64 = (1n << 64n) - 1n;
@@ -24,23 +27,26 @@ for (const p of PIECE_KEYS) {
 
 export const sideRandom = nextRand64();
 
-export function bitboardToIndexes(bb: bigint): number[] {
-  const out: number[] = [];
-  for (let i = 0; i < 64; i++) if (((bb >> BigInt(i)) & 1n) === 1n) out.push(i);
-  return out;
-}
-
-import { BitboardMap } from '../board/board.types';
-
+/**
+ * Computes the Zobrist hash key for the given board state represented by the BitboardMap and the side to move.
+ * The Zobrist key is a 64-bit integer that uniquely represents the position of pieces on the board and the player to move.
+ * It is computed by XORing random values assigned to each piece on each square,
+ * as well as a random value for the side to move.
+ * @param bbs The BitboardMap representing the current board state, where keys are piece identifiers
+ * (e.g., 'P', 'N', 'B', 'R', 'Q', 'K' for white pieces and lowercase for black pieces)
+ * and values are bitboards indicating the positions of those pieces on the board.
+ * @param sideToMove A string indicating which player's turn it is ('w' for white, 'b' for black).
+ * This affects the Zobrist key by XORing a specific random value if it's black's turn.
+ * @returns The Zobrist hash key as a bigint.
+ */
 export function computeZobristKey(bbs: BitboardMap, sideToMove: 'w' | 'b'): bigint {
   let key = 0n;
   for (const [k, v] of bbs.entries()) {
-    if (!k) continue;
-    if (!/^[A-Za-z]$/.test(k)) continue; // skip occupancy keys
+    if (!VaildBBMapKey(k)) continue; // skip occupancy keys
     const arr = pieceRandoms[k];
     if (!arr) continue;
     const bb = v as bigint;
-    const idxs = bitboardToIndexes(bb);
+    const idxs = BitboardToIndexes(bb);
     for (const idx of idxs) key ^= arr[idx];
   }
   if (sideToMove === 'b') key ^= sideRandom;

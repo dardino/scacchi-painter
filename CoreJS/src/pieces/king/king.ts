@@ -2,14 +2,12 @@ import { BOARD_MASK, FILE_A, FILE_H } from "../../bitboards/bitboard.constants";
 import { BB_BLACK, BB_WHITE } from "../../main";
 import { PieceMoveGenerator } from "../piece.types";
 
-export const BlackKingNotation = "k";
-export const WhiteKingNotation = "K";
+const BlackKingNotation = "k";
+const WhiteKingNotation = "K";
 
-export const KingMoveGenerator: PieceMoveGenerator = (bbs, color) => {
+const KingMoveGenerator: PieceMoveGenerator<"K"> = (bbs, color) => {
   const kingBB = bbs.get(color === "w" ? WhiteKingNotation : BlackKingNotation) || 0n;
   if (kingBB === 0n) return 0n;
-
-  const occupied = (bbs.get(BB_WHITE) || 0n) | (bbs.get(BB_BLACK) || 0n);
 
   // Generate all adjacent squares while avoiding file wrap-around
   const east = (kingBB & ~FILE_H) << 1n;
@@ -29,3 +27,6 @@ export const KingMoveGenerator: PieceMoveGenerator = (bbs, color) => {
 };
 
 // Named export only; avoid default exports per project conventions
+KingMoveGenerator.pieceW = WhiteKingNotation;
+KingMoveGenerator.pieceB = BlackKingNotation;
+export { KingMoveGenerator };

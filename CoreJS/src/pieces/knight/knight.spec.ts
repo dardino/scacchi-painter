@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { BB_BLACK, BB_WHITE, getBBfromSquare } from "../../main";
-import { BlackKnightNotation, KnightMoveGenerator, WhiteKnightNotation } from "./knight";
+import { BB_BLACK, BB_WHITE, getBBfromSquare, SquareNames } from "../../main";
+import { KnightMoveGenerator } from "./knight";
 
 type Bitboard = bigint;
 
 describe("KnightMoveGenerator", () => {
   const makeBbs = (whiteKnights: Bitboard, blackKnights: Bitboard, whitePieces: Bitboard = 0n, blackPieces: Bitboard = 0n) =>
     new Map([
-      [WhiteKnightNotation, whiteKnights],
-      [BlackKnightNotation, blackKnights],
+      [KnightMoveGenerator.pieceW, whiteKnights],
+      [KnightMoveGenerator.pieceB, blackKnights],
       [BB_WHITE, whitePieces],
       [BB_BLACK, blackPieces],
     ]);
@@ -17,7 +17,8 @@ describe("KnightMoveGenerator", () => {
     const e4 = getBBfromSquare("e4");
     const bbs = makeBbs(e4, 0n);
     const moves = KnightMoveGenerator(bbs, "w");
-    const expectedSquares = ["d6", "f6", "c5", "g5", "c3", "g3", "d2", "f2"].map(getBBfromSquare).reduce((a, b) => a | b, 0n as Bitboard);
+    const expectedSquares: Bitboard = SquareNames("d6", "f6", "c5", "g5", "c3", "g3", "d2", "f2")
+      .map(getBBfromSquare).reduce((a, b) => a | b, 0n);
     expect(moves & expectedSquares).toBe(expectedSquares);
   });
 

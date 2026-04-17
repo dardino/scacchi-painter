@@ -2,10 +2,10 @@ import { BOARD_MASK, FILE_A, FILE_B, FILE_G, FILE_H } from "../../bitboards/bitb
 import { BB_BLACK, BB_WHITE } from "../../main";
 import { PieceMoveGenerator } from "../piece.types";
 
-export const BlackKnightNotation = "n";
-export const WhiteKnightNotation = "N";
+const BlackKnightNotation = "n";
+const WhiteKnightNotation = "N";
 
-export const KnightMoveGenerator: PieceMoveGenerator = (bbs, color) => {
+const KnightMoveGenerator: PieceMoveGenerator<"N"> = (bbs, color) => {
   const knights = bbs.get(color === "w" ? WhiteKnightNotation : BlackKnightNotation) || 0n;
   if (knights === 0n) return 0n;
 
@@ -30,3 +30,6 @@ export const KnightMoveGenerator: PieceMoveGenerator = (bbs, color) => {
 
   return moves & (~sameColor) & BOARD_MASK;
 };
+KnightMoveGenerator.pieceW = WhiteKnightNotation;
+KnightMoveGenerator.pieceB = BlackKnightNotation;
+export { KnightMoveGenerator };

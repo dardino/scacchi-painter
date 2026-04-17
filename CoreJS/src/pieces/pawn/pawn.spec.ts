@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { BB_BLACK, BB_WHITE, getBBfromSquare } from "../../main";
-import { BlackPawnNotation, PawnMoveGenerator, StartingBlackPawnBitboard, StartingWhitePawnBitboard, WhitePawnNotation } from "./pawn";
+import { PawnMoveGenerator, StartingBlackPawnBitboard, StartingWhitePawnBitboard } from "./pawn";
 
 type Bitboard = bigint;
 
 describe("PawnMoveGenerator", () => {
   const makeBbs = (whitePawns: Bitboard, blackPawns: Bitboard, whitePieces: Bitboard = 0n, blackPieces: Bitboard = 0n) =>
     new Map([
-      [WhitePawnNotation, whitePawns],
-      [BlackPawnNotation, blackPawns],
+      [PawnMoveGenerator.pieceW, whitePawns],
+      [PawnMoveGenerator.pieceB, blackPawns],
       [BB_WHITE, whitePieces],
       [BB_BLACK, blackPieces],
     ]);
