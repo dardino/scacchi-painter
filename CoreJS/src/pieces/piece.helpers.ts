@@ -6,11 +6,21 @@ import { PieceMoveGenerator, PieceMoveGeneratorMap } from "./piece.types";
 import { QueenMoveGenerator } from "./queen/queen";
 import { RookMoveGenerator } from "./rook/rook";
 
-export const MoveGeneratorMap: PieceMoveGeneratorMap = new Map<string, PieceMoveGenerator>();
+const PieceKeys = [
+  BishopMoveGenerator.pieceW,
+  KingMoveGenerator.pieceW,
+  KnightMoveGenerator.pieceW,
+  PawnMoveGenerator.pieceW,
+  QueenMoveGenerator.pieceW,
+  RookMoveGenerator.pieceW,
+];
 
-MoveGeneratorMap.set("p", PawnMoveGenerator);
-MoveGeneratorMap.set("k", KingMoveGenerator);
-MoveGeneratorMap.set("n", KnightMoveGenerator);
-MoveGeneratorMap.set("r", RookMoveGenerator);
-MoveGeneratorMap.set("b", BishopMoveGenerator);
-MoveGeneratorMap.set("q", QueenMoveGenerator);
+export type PieceKeys = typeof PieceKeys[number];
+export const MoveGeneratorMap: PieceMoveGeneratorMap = new Map<PieceKeys, PieceMoveGenerator<Uppercase<string>>>();
+
+MoveGeneratorMap.set(PawnMoveGenerator.pieceW, PawnMoveGenerator);
+MoveGeneratorMap.set(KingMoveGenerator.pieceW, KingMoveGenerator);
+MoveGeneratorMap.set(KnightMoveGenerator.pieceW, KnightMoveGenerator);
+MoveGeneratorMap.set(RookMoveGenerator.pieceW, RookMoveGenerator);
+MoveGeneratorMap.set(BishopMoveGenerator.pieceW, BishopMoveGenerator);
+MoveGeneratorMap.set(QueenMoveGenerator.pieceW, QueenMoveGenerator);

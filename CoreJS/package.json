@@ -18,7 +18,9 @@
     }
   },
   "scripts": {
-    "build": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --minify --platform=node --target=node18 && pnpm esbuild ./src/browser-entry.ts --outfile=dist/browser.mjs --bundle --minify --format=esm --platform=browser --target=es2020 --external:child_process --external:fs --external:os --external:path && pnpm tsc -p tsconfig.lib.json --emitDeclarationOnly",
+    "build:node": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --minify --platform=node --target=node18",
+    "build:browser": "pnpm esbuild ./src/browser-entry.ts --outfile=dist/browser.mjs --bundle --minify --format=esm --platform=browser --target=es2020 --external:child_process --external:fs --external:os --external:path",
+    "build": "pnpm run build:node && pnpm run build:browser && pnpm tsc -p tsconfig.lib.json --emitDeclarationOnly",
     "watch": "pnpm esbuild ./src/main.ts --outdir=dist --bundle --watch",
     "test": "pnpm vitest run",
     "fetch-yacpdb": "pnpm tsx ./scripts/fetch_yacpdb_sample.ts",

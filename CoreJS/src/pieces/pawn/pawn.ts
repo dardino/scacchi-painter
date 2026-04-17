@@ -10,8 +10,8 @@ import { BB_BLACK, BB_WHITE, Bitboard, getBBfromSquare } from "../../main";
 import { SquareNames } from "../../moves/move.types";
 import { PieceMoveGenerator } from "../piece.types";
 
-export const BlackPawnNotation = "p"; // Notation for black Pawn
-export const WhitePawnNotation = "P"; // Notation for white Pawn
+const BlackPawnNotation = "p"; // Notation for black Pawn
+const WhitePawnNotation = "P"; // Notation for white Pawn
 
 const getPawnsInStartingPosition = (bitboard: Bitboard, color: "w" | "b"): Bitboard => {
   return color === "w"
@@ -19,7 +19,7 @@ const getPawnsInStartingPosition = (bitboard: Bitboard, color: "w" | "b"): Bitbo
     : StartingBlackPawnBitboard & bitboard;
 };
 
-export const PawnMoveGenerator: PieceMoveGenerator = (bbs, color, lastMove) => {
+const PawnMoveGenerator: PieceMoveGenerator<"P"> = (bbs, color, lastMove) => {
   const pawnsBitboard = bbs.get(color === "w" ? WhitePawnNotation : BlackPawnNotation) || 0n;
   const pawnsInStartingPosition = getPawnsInStartingPosition(pawnsBitboard, color);
 
@@ -70,5 +70,7 @@ export const PawnMoveGenerator: PieceMoveGenerator = (bbs, color, lastMove) => {
   return pawnsMoves | captureMoves;
 };
 
+PawnMoveGenerator.pieceW = WhitePawnNotation;
+PawnMoveGenerator.pieceB = BlackPawnNotation;
 // Re-export starting pawn bitboards so external modules can still import them from this file
-export { AllPawnBitboard, StartingBlackPawnBitboard, StartingWhitePawnBitboard };
+export { AllPawnBitboard, PawnMoveGenerator, StartingBlackPawnBitboard, StartingWhitePawnBitboard };

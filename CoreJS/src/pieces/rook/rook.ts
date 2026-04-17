@@ -3,12 +3,11 @@ import { rookAttacksFrom } from "../../bitboards/sliding.attacks";
 import { BB_BLACK, BB_WHITE } from "../../main";
 import { PieceMoveGenerator } from "../piece.types";
 
-export const BlackRookNotation = "r";
-export const WhiteRookNotation = "R";
+const BlackRookNotation = "r";
+const WhiteRookNotation = "R";
 
 // rookAttacksFrom implemented in bitboards/sliding.attacks.ts
-
-export const RookMoveGenerator: PieceMoveGenerator = (bbs, color) => {
+const RookMoveGenerator: PieceMoveGenerator<"R"> = (bbs, color) => {
   const rooks = bbs.get(color === "w" ? WhiteRookNotation : BlackRookNotation) || 0n;
   if (rooks === 0n) return 0n;
 
@@ -25,3 +24,6 @@ export const RookMoveGenerator: PieceMoveGenerator = (bbs, color) => {
   const sameColor = color === "w" ? (bbs.get(BB_WHITE) || 0n) : (bbs.get(BB_BLACK) || 0n);
   return attacks & (~sameColor) & BOARD_MASK;
 };
+RookMoveGenerator.pieceW = WhiteRookNotation;
+RookMoveGenerator.pieceB = BlackRookNotation;
+export { RookMoveGenerator };

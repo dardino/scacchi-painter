@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { BB_BLACK, BB_WHITE, getBBfromSquare } from "../../main";
-import { BlackQueenNotation, QueenMoveGenerator, WhiteQueenNotation } from "./queen";
+import { BB_BLACK, BB_WHITE, getBBfromSquare, SquareNames } from "../../main";
+import { QueenMoveGenerator } from "./queen";
 
 type Bitboard = bigint;
 
 describe("QueenMoveGenerator", () => {
   const makeBbs = (whiteQueens: Bitboard, blackQueens: Bitboard, whitePieces: Bitboard = 0n, blackPieces: Bitboard = 0n) =>
     new Map([
-      [WhiteQueenNotation, whiteQueens],
-      [BlackQueenNotation, blackQueens],
+      [QueenMoveGenerator.pieceW, whiteQueens],
+      [QueenMoveGenerator.pieceB, blackQueens],
       [BB_WHITE, whitePieces],
       [BB_BLACK, blackPieces],
     ]);
@@ -17,7 +17,7 @@ describe("QueenMoveGenerator", () => {
     const d4 = getBBfromSquare("d4");
     const bbs = makeBbs(d4, 0n);
     const moves = QueenMoveGenerator(bbs, "w");
-    const expected = [
+    const expected = SquareNames(
       // rook-like
       "d1",
       "d2",
@@ -47,7 +47,7 @@ describe("QueenMoveGenerator", () => {
       "c3",
       "b2",
       "a1",
-    ].map(getBBfromSquare).reduce((a, b) => a | b, 0n as Bitboard);
+    ).map(getBBfromSquare).reduce((a, b) => a | b, 0n);
     expect(moves & expected).toBe(expected);
   });
 

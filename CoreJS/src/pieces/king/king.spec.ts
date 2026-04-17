@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { BB_BLACK, BB_WHITE, getBBfromSquare, SquareNames } from "../../main";
-import { BlackKingNotation, KingMoveGenerator, WhiteKingNotation } from "./king";
+import { KingMoveGenerator } from "./king";
 
 type Bitboard = bigint;
 
 describe("KingMoveGenerator", () => {
   const makeBbs = (whiteKings: Bitboard, blackKings: Bitboard, whitePieces: Bitboard = 0n, blackPieces: Bitboard = 0n) =>
     new Map([
-      [WhiteKingNotation, whiteKings],
-      [BlackKingNotation, blackKings],
+      [KingMoveGenerator.pieceW, whiteKings],
+      [KingMoveGenerator.pieceB, blackKings],
       [BB_WHITE, whitePieces],
       [BB_BLACK, blackPieces],
     ]);
@@ -17,9 +17,9 @@ describe("KingMoveGenerator", () => {
     const e4 = getBBfromSquare("e4");
     const bbs = makeBbs(e4, 0n);
     const moves = KingMoveGenerator(bbs, "w");
-    const expectedSquares = ([
+    const expectedSquares: Bitboard = SquareNames(
       "d3", "d4", "d5", "e3", "e5", "f3", "f4", "f5"
-    ] as SquareNames[]).map(getBBfromSquare).reduce((a, b) => a | b, 0n as Bitboard);
+    ).map(getBBfromSquare).reduce((a, b) => a | b, 0n);
     expect(moves & expectedSquares).toBe(expectedSquares);
   });
 

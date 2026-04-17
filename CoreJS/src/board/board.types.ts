@@ -31,3 +31,8 @@ export const BB_BLACK = "#black#";
 export const BB_NEUTRAL = "#neutral#";
 
 export type BitboardMap = Map<string, Bitboard>;
+
+const charRegex = /^[A-Za-z]$/;
+export function VaildBBMapKey(k: string | null | undefined): k is string {
+  return typeof k === 'string' && charRegex.test(k);
+}
