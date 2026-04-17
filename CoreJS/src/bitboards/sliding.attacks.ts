@@ -16,18 +16,21 @@ function bitScanForward(lsb: bigint): number {
   return DEBRUIJN_INDEX[idx];
 }
 
-export const rookAttacksFrom = (start: bigint, occ: bigint): bigint => {
-  if (start === 0n) return 0n;
-  const sq = bitScanForward(start);
-  const mask = RookMasks[sq];
-  const bits = RookBits[sq];
+function attacksFrom(start: bigint, occ: bigint, mask: bigint, bits: number[], base: number) {
   let occSub = occ & mask;
   let idx = 0;
   for (let i = 0; i < bits.length; i++) {
     if ((occSub & BIT(bits[i])) !== 0n) idx |= (1 << i);
   }
-  const base = RookOffsets[sq];
-  return RookAttacks[base + idx];
+  return base + idx;
+}
+
+export const rookAttacksFrom = (start: bigint, occ: bigint): bigint => {
+  if (start === 0n) return 0n;
+  const sq = bitScanForward(start);
+  const mask = RookMasks[sq];
+  const bits = RookBits[sq];
+  return RookAttacks[attacksFrom(start, occ, mask, bits, RookOffsets[sq])];
 };
 
 export const bishopAttacksFrom = (start: bigint, occ: bigint): bigint => {
@@ -35,14 +38,8 @@ export const bishopAttacksFrom = (start: bigint, occ: bigint): bigint => {
   const sq = bitScanForward(start);
   const mask = BishopMasks[sq];
   const bits = BishopBits[sq];
-  let occSub = occ & mask;
-  let idx = 0;
-  for (let i = 0; i < bits.length; i++) {
-    if ((occSub & BIT(bits[i])) !== 0n) idx |= (1 << i);
-  }
-  const base = BishopOffsets[sq];
-  return BishopAttacks[base + idx];
-};
+  return BishopAttacks[attacksFrom(start, occ, mask, bits, BishopOffsets[sq])];
+ };
 
 export const queenAttacksFrom = (start: bigint, occ: bigint): bigint =>
   rookAttacksFrom(start, occ) | bishopAttacksFrom(start, occ);
