@@ -16,13 +16,13 @@ import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
-  CurrentProblemService,
-  DbmanagerService,
-  EngineManagerService,
-  IPiece,
-  SquareLocation,
-  getCanvasRotation,
-  notNull,
+    CurrentProblemService,
+    DbmanagerService,
+    EngineManagerService,
+    IPiece,
+    SquareLocation,
+    getCanvasRotation,
+    notNull,
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
@@ -87,22 +87,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   solveInProgress = signal(false);
   solutionCount = signal(0);
   showLog = signal(false);
-  streamSolutions = signal(true);
   availableEngines: Engines[] = [];
   selectedEngine = signal<Engines>("Popeye");
   viewMode = signal<ViewModes>("html");
-  private pendingSolutionRows: SolutionRow[] = [];
 
   constructor() {
     this.availableEngines = this.engine.availableEngines();
     this.selectedEngine.set(this.availableEngines[0] ?? "Popeye");
 
     this.engine.isSolving$.subscribe((state) => {
-      const wasSolving = this.solveInProgress();
       this.solveInProgress.set(state);
-      if (wasSolving && !state) {
-        this.flushBufferedSolutionRows();
-      }
     });
   }
 
@@ -193,13 +187,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   toggleLog = () => this.showLog.update(v => !v);
-  toggleStreaming() {
-    const nextValue = !this.streamSolutions();
-    this.streamSolutions.set(nextValue);
-    if (nextValue) {
-      this.flushBufferedSolutionRows();
-    }
-  }
 
   toggleEditor($event: ViewModes) {
     this.viewMode.set($event);
@@ -257,7 +244,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.rows$ubject.next(null);
     this.rows$ubject.next([]);
     this.solutionCount.set(0);
-    this.pendingSolutionRows = [];
     if (this.current.Problem) {
       this.current.Problem.engine = this.selectedEngine();
       this.current.Problem.jsonSolution = [];
@@ -286,12 +272,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       if (msg === null) return;
       if (!this.current.Problem) return;
       this.trackSolutionCount(msg);
-      if (this.streamSolutions()) {
-        this.appendSolutionMessage(msg);
-      }
-      else {
-        this.pendingSolutionRows.push(msg);
-      }
+      this.appendSolutionMessage(msg);
     });
 
     this.route.params.subscribe(async (params) => {
@@ -319,14 +300,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     });
-  }
-
-  private flushBufferedSolutionRows() {
-    if (this.pendingSolutionRows.length === 0) return;
-
-    const bufferedRows = this.pendingSolutionRows;
-    this.pendingSolutionRows = [];
-    bufferedRows.forEach(msg => this.appendSolutionMessage(msg));
   }
 
   private appendSolutionMessage(msg: SolutionRow) {

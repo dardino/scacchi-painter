@@ -136,14 +136,9 @@ describe("EditProblemComponent - Interactive Features", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should toggle streaming mode", () => {
-    expect(component.streamSolutions()).toBe(true);
-
-    component.toggleStreaming();
-    expect(component.streamSolutions()).toBe(false);
-
-    component.toggleStreaming();
-    expect(component.streamSolutions()).toBe(true);
+  it("should keep live updates enabled without a buffered toggle", () => {
+    expect((component as { toggleStreaming?: unknown }).toggleStreaming).toBeUndefined();
+    expect((component as { streamSolutions?: unknown }).streamSolutions).toBeUndefined();
   });
 
   it("should open the engine settings dialog", () => {

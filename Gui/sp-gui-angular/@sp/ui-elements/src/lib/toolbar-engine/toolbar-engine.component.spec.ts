@@ -20,12 +20,11 @@ describe("ToolbarEngineComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should emit toggleStreaming when streaming mode is toggled", () => {
-    const emitSpy = vi.spyOn(component.toggleStreaming, "emit");
+  it("should not render a buffered/live toggle button", () => {
+    const text = fixture.nativeElement.textContent;
 
-    component.toggleStreamingMode();
-
-    expect(emitSpy).toHaveBeenCalledOnce();
+    expect(text).not.toContain("Buffered");
+    expect(text).not.toContain("Live");
   });
 
   it("should emit openEngineSettings when settings are opened", () => {
@@ -34,13 +33,6 @@ describe("ToolbarEngineComponent", () => {
     component.openEngineSettingsDialog();
 
     expect(emitSpy).toHaveBeenCalledOnce();
-  });
-
-  it("should render the current solution count", () => {
-    fixture.componentRef.setInput("solutionCount", 3);
-    fixture.detectChanges();
-
-    expect(fixture.nativeElement.textContent).toContain("Solutions: 3");
   });
 
   it("should render the selected engine label on the settings button", () => {

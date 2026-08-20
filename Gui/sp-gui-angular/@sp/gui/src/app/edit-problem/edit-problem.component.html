@@ -41,10 +41,8 @@
               @if (engineEnabled) {
                 <lib-toolbar-engine [fullLog]="showLog()" [viewMode]="viewMode()"
                   (startSolve)="startSolve($event)" (stopSolve)="stopSolve()" (toggleLog)="toggleLog()"
-                  (toggleEditor)="toggleEditor($event)" (toggleStreaming)="toggleStreaming()"
-                  (openEngineSettings)="openSolveEngineDialog()"
-                  [isRunning]="solveInProgress()" [solutionCount]="solutionCount()" [streaming]="streamSolutions()"
-                  [selectedEngine]="selectedEngine()"
+                  (toggleEditor)="toggleEditor($event)" (openEngineSettings)="openSolveEngineDialog()"
+                  [isRunning]="solveInProgress()" [selectedEngine]="selectedEngine()"
                 [hideLabels]="true"></lib-toolbar-engine>
               }
             </mat-toolbar>

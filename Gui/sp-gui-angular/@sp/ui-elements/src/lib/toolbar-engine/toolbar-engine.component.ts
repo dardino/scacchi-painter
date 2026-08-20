@@ -39,15 +39,10 @@ export class ToolbarEngineComponent {
   public toggleEditor = new EventEmitter<ViewModes>();
 
   @Output()
-  public toggleStreaming = new EventEmitter<void>();
-
-  @Output()
   public openEngineSettings = new EventEmitter<void>();
 
   isRunning = input<boolean>(false);
   fullLog = input<boolean>(false);
-  solutionCount = input<number>(0);
-  streaming = input<boolean>(true);
   viewMode = input<ViewModes>("both");
   selectedEngine = input<Engines>("Popeye");
 
@@ -55,8 +50,6 @@ export class ToolbarEngineComponent {
   isMinFont = computed(() => this.fontSize() <= 1);
   logIcon = computed(() => this.fullLog() ? "compress" : "expand");
   fontSize = computed(() => this.preferences.solutionFontSize);
-  streamingIcon = computed(() => this.streaming() ? "wifi_tethering" : "inventory_2");
-  streamingLabel = computed(() => this.streaming() ? "Live" : "Buffered");
   viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode()]?.icon);
 
   start() {
@@ -88,10 +81,6 @@ export class ToolbarEngineComponent {
 
   toggleEditorview() {
     this.toggleEditor.emit(mapViewModeToIcons[this.viewMode()].nextM);
-  }
-
-  toggleStreamingMode() {
-    this.toggleStreaming.emit();
   }
 
   openEngineSettingsDialog() {
