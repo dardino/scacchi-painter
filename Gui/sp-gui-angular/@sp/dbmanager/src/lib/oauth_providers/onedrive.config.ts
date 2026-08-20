@@ -39,7 +39,13 @@ export const MSAL_CONFIG: Configuration = {
   },
 };
 
-const scopes = ["email", "Files.ReadWrite", "openid", "profile", "User.Read"];
+const scopes = [
+  "email",
+  "Files.ReadWrite.All",
+  "openid",
+  "profile",
+  "User.Read",
+];
 
 export const REQUESTS = {
   LOGIN: {

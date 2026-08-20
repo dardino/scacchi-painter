@@ -8,8 +8,8 @@ import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-an
 import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
 import { RoutesList } from "./app/app-routing-list";
 import { AppComponent } from "./app/app.component";
+import { polyfillBridge } from "./bridges/web/web.bridge";
 import { environment } from "./environments/environment";
-import { polyfillBridge } from "./webbridge";
 
 if (environment.production) {
   enableProdMode();

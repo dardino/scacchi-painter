@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Client } from "@microsoft/microsoft-graph-client";
-import type { Drive, DriveItem } from "@microsoft/microsoft-graph-types";
+import type { DriveItem } from "@microsoft/microsoft-graph-types";
 import {
   FileService,
   FolderItemInfo,
@@ -33,43 +33,24 @@ export class OneDriveService implements FileService {
       },
     });
 
-    if (type === "root") {
-      const aw: { value?: Drive[] } = await client.api("/drives").get();
+    const urlToCall = type === "root" ? "/me/drive/root/children" : `/me/drive/items/${itemId}/children`;
+
+    try {
+      const aw = await client.api(urlToCall).get() as { value?: DriveItem[] };
+      console.log("🚀 ~ OneDriveService ~ enumContent ~ aw:", aw);
       return (aw.value ?? []).map<FolderItemInfo>(dir => ({
-        fullPath: `${dir.parentReference?.path ?? "/drives/root:"}/${
-          dir.description || dir.name || dir.driveType || dir.id || "Personal"
+        fullPath: `${dir.parentReference?.path ?? "/me/drive/root/children"}/${
+          dir.description || dir.name || dir.id || "Personal"
         }`,
         id: dir.id ?? "",
-        itemName: dir.description || dir.name || dir.driveType || dir.id || "Personal",
-        type: "drive",
+        itemName: dir.description || dir.name || dir.id || "Personal",
+        type: dir.folder ? "folder" : dir.file ? "file" : "root",
       }));
     }
-
-    if (type === "drive") {
-      const aw: { value?: DriveItem[] } = await client
-        .api("/drives/" + itemId + "/root/children")
-        .get();
-      return (aw.value ?? []).map<FolderItemInfo>(dir => ({
-        fullPath: `${dir.parentReference?.path ?? "/drives/root:"}/${dir.name ?? dir.id}`,
-        id: dir.id ?? "",
-        itemName: dir.name ?? dir.id ?? "????",
-        type: "folder",
-      }));
+    catch (err) {
+      console.error("Error fetching drives:", err);
+      return [];
     }
-
-    if (type === "folder") {
-      const aw: { value?: DriveItem[] } = await client
-        .api("/drive/items/" + itemId + "/children")
-        .get();
-      return (aw.value ?? []).map<FolderItemInfo>(dir => ({
-        fullPath: `${dir.parentReference?.path ?? ""}/${dir.name ?? dir.id}`,
-        id: dir.id ?? "",
-        itemName: dir.name ?? dir.id ?? "????",
-        type: dir.file ? "file" : "folder",
-      }));
-    }
-
-    return [];
   }
 
   async getFileContent(item: FolderItemInfo): Promise<File> {

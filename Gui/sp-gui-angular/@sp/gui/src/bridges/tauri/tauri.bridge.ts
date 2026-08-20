@@ -15,8 +15,8 @@ import {
   SolutionRow,
   SolveModes,
   SpCoreEngine,
-} from "../lib/bridge-global";
-import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "../lib/spcore-support";
+} from "../../../../host-bridge/src/lib/bridge-global";
+import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "../../../../host-bridge/src/lib/spcore-support";
 
 type RustSolverOptions = {
   maxSolutions?: number;
