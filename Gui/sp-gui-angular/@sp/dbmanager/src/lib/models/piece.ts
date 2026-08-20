@@ -1,4 +1,4 @@
-import { Piece as BP } from "canvas-chessboard";
+import { PieceInfo as BP } from "@dardino/chess-board";
 
 import {
   Columns,
@@ -79,11 +79,11 @@ export class Piece implements IPiece {
 
   public ConvertToCanvasPiece(): BP {
     return {
-      figurine: getFigurine(this.appearance),
+      type: getFigurine(this.appearance) ?? "q",
       color: getCanvasColor(this.color),
-      loc: getCanvasLocation(this.column, this.traverse),
-      rot: getCanvasRotation(this.rotation),
-    } as BP;
+      rotation: getCanvasRotation(this.rotation),
+      square: getCanvasLocation(this.column, this.traverse),
+    } satisfies BP;
   }
 
   public SetLocation(

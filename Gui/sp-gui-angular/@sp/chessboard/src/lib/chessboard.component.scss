@@ -5,7 +5,10 @@
   width: 100%;
   margin: 0 auto;
 }
-
+.chess-board {
+  position: absolute;
+  inset: 0;
+}
 .chessboard-image {
   position: relative;
   padding-top: 100%;

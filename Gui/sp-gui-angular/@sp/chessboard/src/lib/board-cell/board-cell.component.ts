@@ -5,10 +5,8 @@ import {
   GetSquareColor,
   IPiece,
   SquareLocation,
-  getCanvasColor,
   getFigurine,
 } from "@sp/dbmanager/src/public-api";
-import Presets from "canvas-chessboard/presets";
 
 @Component({
   selector: "lib-board-cell",
@@ -37,11 +35,9 @@ export class BoardCellComponent {
 
   piecechar = computed(() => {
     if (!this.piece()) return "";
-    const color = getCanvasColor(this.piece()!.color);
-    const pieces = Presets.ScacchiPainter[color];
     const fig = getFigurine(this.piece()!.appearance);
     if (fig == null) return "";
-    return pieces[fig];
+    return fig;
   });
 
   figurine = computed(() => this.piece()?.appearance.toLowerCase() ?? "");

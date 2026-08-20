@@ -1,7 +1,12 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
+import { AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import "@dardino/chess-board";
+import {
+  ChessBoard as CanvasChessBoard,
+  ChessPieceRotation,
+} from "@dardino/chess-board";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
@@ -10,20 +15,14 @@ import {
   SquareLocation,
   Traverse,
 } from "@sp/dbmanager/src/public-api";
-import {
-  Piece as BP,
-  CanvasChessBoard,
-} from "canvas-chessboard";
-import presets from "canvas-chessboard/presets";
 import { Subscription } from "rxjs";
-import { BoardCellComponent } from "./board-cell/board-cell.component";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
-
 @Component({
   selector: "lib-chessboard",
   templateUrl: "chessboard.component.html",
-  imports: [CommonModule, DragDropModule, BoardCellComponent],
+  imports: [CommonModule, DragDropModule],
   standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrls: ["chessboard.component.scss"],
 })
 export class ChessboardComponent
@@ -34,8 +33,8 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Output() focusOut = new EventEmitter<void>();
   @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
-  @Input() smallBoard: boolean;
-  @Input() cursor: { figurine: string | null; rotation: number | null } | null;
+  @Input() smallBoard = false;
+  @Input() cursor: { figurine: string | null; rotation: ChessPieceRotation | null } | null;
 
   position = input<Problem | null>(null);
 
@@ -77,7 +76,10 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   cells = computed(() => this.uiCells());
 
-  fen = computed(() => this.position()?.getCurrentFen());
+  fen = computed(() => {
+    return this.position()?.getCurrentFen();
+  });
+
   pieceCounter = computed(() => this.position()?.getPieceCounter());
   twins = computed(() => this.position()?.twins.TwinList.map((t: Twin) => t.toString()) ?? []);
   viewDiagram = computed(() => {
@@ -154,15 +156,7 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
       && changes.boardType.currentValue === "canvas"
       && this.canvas
     ) {
-      this.canvasBoard = new CanvasChessBoard(
-        this.canvas.nativeElement,
-        this.settings,
-      );
-      const cfg = presets.ScacchiPainter;
-      cfg.fontSize = 1;
-      this.canvasBoard.AddFontConfig("ScacchiPainter", cfg);
-      this.canvasBoard.SetFont("ScacchiPainter");
-      this.updateBoard();
+      // Initialize chessboard
     }
     else if (changes.boardType?.currentValue !== "canvas") {
       this.canvasBoard = null;
@@ -196,15 +190,6 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
         }
         cells[index].piece = piece;
       }
-    }
-    if (this.canvasBoard && pp) {
-      const mappedPieces: BP[] = pp.map((p: Piece) => p.ConvertToCanvasPiece());
-      const bps = mappedPieces.filter(notNull);
-      this.canvasBoard.SetPieces(bps);
-    }
-
-    if (this.BoardType === "canvas" && this.canvasBoard) {
-      this.canvasBoard.Redraw();
     }
   }
 
@@ -289,7 +274,6 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     }
   }
 }
-const notNull = <T>(v: T | null): v is T => v != null;
 
 export declare type SimpleChanges2<T> = { [P in keyof T]?: SimpleChange<T[P]> };
 export declare class SimpleChange<T> {
@@ -308,7 +292,7 @@ interface UiCell {
 const getPieceIcon = (
   figurine: string,
   cellSize: number,
-  rot: number | null,
+  rot: ChessPieceRotation | null,
 ) => {
   const canvas = document.createElement("canvas");
   canvas.width = cellSize;
@@ -326,7 +310,7 @@ const getPieceIcon = (
   if (rot != null) {
     const center = Math.floor(cellSize / 2);
     ctx.translate(center, center);
-    ctx.rotate(rot * (Math.PI / 180));
+    ctx.rotate(parseInt(rot) * (Math.PI / 180));
     ctx.translate(-center, -center);
   }
 

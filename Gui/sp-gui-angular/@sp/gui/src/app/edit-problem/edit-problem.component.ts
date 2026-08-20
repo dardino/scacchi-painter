@@ -9,6 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
 import type { HalfMoveInfo } from "@dardino-chess/core";
+import { ChessPieceRotation } from "@dardino/chess-board";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
@@ -16,13 +17,13 @@ import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import {
-    CurrentProblemService,
-    DbmanagerService,
-    EngineManagerService,
-    IPiece,
-    SquareLocation,
-    getCanvasRotation,
-    notNull,
+  CurrentProblemService,
+  DbmanagerService,
+  EngineManagerService,
+  IPiece,
+  SquareLocation,
+  getCanvasRotation,
+  notNull,
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
@@ -140,12 +141,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   pieceToAdd = signal<string | null>(null);
-  rotationToAdd = signal<number | null>(null);
+  rotationToAdd = signal<ChessPieceRotation | null>(null);
   pieceToMove = signal<Piece | null>(null);
 
   private actualCursor: {
     figurine: string | null;
-    rotation: number | null;
+    rotation: ChessPieceRotation | null;
   } = {
     figurine: null,
     rotation: null,
@@ -153,7 +154,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   boardCursor = computed<{
     figurine: string | null;
-    rotation: number | null;
+    rotation: ChessPieceRotation | null;
   } | null>(() => {
     const editModeValue = this.editMode();
     const editModeCursor = (editModeValue === "remove" ? "X" : null);

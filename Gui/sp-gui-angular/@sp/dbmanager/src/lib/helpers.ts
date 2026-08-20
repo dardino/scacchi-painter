@@ -1,10 +1,8 @@
 import {
-  BoardFile,
-  BoardRank,
-  Colors,
-  Figurine,
-  Rotations,
-} from "canvas-chessboard";
+  ChessPieceColor as Colors,
+  ChessPieceType as Figurine,
+  ChessPieceRotation as Rotations,
+} from "@dardino/chess-board";
 
 import type { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { Base64 } from "./base64";
@@ -210,7 +208,8 @@ export const Traverse = [
 export type Traverse = typeof Traverse[number];
 export const PieceColors = ["White", "Black", "Neutral"] as const;
 export type PieceColors = typeof PieceColors[number];
-
+export type BoardFile = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h`;
+export type BoardRank = `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8`;
 export type SquareColors = "black" | "white";
 
 export const GetSquareColor = (
@@ -281,58 +280,55 @@ export type SP2PieceName
     | "HorseTower"
     | "HorseBishop";
 
-export const getCanvasRotation = (rotation: PieceRotation) => {
+export const getCanvasRotation = (rotation: PieceRotation): Rotations => {
   switch (rotation) {
     case "NoRotation":
-      return Rotations.NoRotation;
+      return "0";
     case "Clockwise45":
-      return Rotations.TopRight;
+      return "45";
     case "Clockwise90":
-      return Rotations.Right;
+      return "90";
     case "Clockwise135":
-      return Rotations.BottomRight;
+      return "135";
     case "UpsideDown":
-      return Rotations.UpsideDown;
+      return "180";
     case "Counterclockwise135":
-      return Rotations.BottomLeft;
+      return "225";
     case "Counterclockwise90":
-      return Rotations.Left;
+      return "270";
     case "Counterclockwise45":
-      return Rotations.TopLeft;
+      return "315";
     default:
-      return Rotations.NoRotation;
+      return "0";
   }
 };
 
-export const getCanvasLocation = (x: Columns, y: Traverse) => {
+export const getCanvasLocation = (x: Columns, y: Traverse): `${BoardFile}${BoardRank}` => {
   if (typeof x !== "string" || typeof y !== "string") {
-    return { col: BoardFile.A, row: BoardRank.R1 };
+    return "a1";
   }
-  return {
-    col: getBoardFile(x),
-    row: getBoardRank(y),
-  };
+  return `${getBoardFile(x)}${getBoardRank(y)}`;
 };
 export const getBoardFile = (x: string | Columns): BoardFile => {
   if (typeof x === "number") x = Columns[x];
-  x = x.substr(3, 1); // extract col from "ColA";
-  return BoardFile[x as keyof typeof BoardFile];
+  x = x.substr(3, 1).toLowerCase(); // extract col from "ColA";
+  return x as BoardFile;
 };
 export const getBoardRank = (y: string | Traverse): BoardRank => {
   if (typeof y === "number") y = Traverse[y];
   y = y.substr(3, 1); // extract row from "Row8";
-  return BoardRank[`R${y}` as keyof typeof BoardRank];
+  return y as BoardRank;
 };
 
 export const getCanvasColor = (c: PieceColors): Colors => {
   switch (c) {
     case "Black":
-      return "black";
+      return "b";
     case "Neutral":
-      return "neutral";
+      return "n";
     case "White":
     default:
-      return "white";
+      return "w";
   }
 };
 
