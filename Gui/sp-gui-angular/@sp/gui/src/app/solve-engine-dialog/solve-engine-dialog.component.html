@@ -23,7 +23,7 @@
           <div class="option-row">
             <div class="option-toggle">
               <mat-checkbox
-                [ngModel]="optionState[option[0]]?.enabled ?? false"
+                [ngModel]="optionState[option[0]]?.enabled"
                 (ngModelChange)="setOptionEnabled(option[0], $event)"
               >
                 {{ option[0] }}
@@ -31,14 +31,14 @@
             </div>
 
             <div class="option-details">
-              @if (option[1].argsCount > 0 && (optionState[option[0]]?.enabled ?? false)) {
+              @if (option[1].argsCount > 0 && (optionState[option[0]]?.enabled)) {
                 <div class="option-args">
                   @for (argIndex of optionIndexes(option[1].argsCount); track argIndex) {
                     <mat-form-field appearance="outline">
                       <mat-label>Arg {{ argIndex + 1 }}</mat-label>
                       <input
                         matInput
-                        [ngModel]="optionState[option[0]]?.values?.[argIndex] ?? ''"
+                        [ngModel]="optionState[option[0]]?.values[argIndex]"
                         (ngModelChange)="setOptionArgValue(option[0], argIndex, $event)"
                       />
                     </mat-form-field>
