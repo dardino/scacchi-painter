@@ -1,6 +1,6 @@
 import {
-  Figurine,
-} from "canvas-chessboard";
+  ChessPieceType,
+} from "@dardino/chess-board";
 import { Base64 } from "./base64";
 import {
   Columns,
@@ -15,8 +15,8 @@ import {
   notNull,
 } from "./helpers";
 
-const invertMap = <K extends string, V extends string>(
-  o: Record<K, V>,
+const invertMap = <T extends Record<string, string>, K extends (keyof T & string), V extends T[K] & string>(
+  o: T,
 ): Record<V, K> => {
   const keys = Object.keys(o) as K[];
   return keys.reduce(
@@ -36,6 +36,9 @@ const mapAppearance = {
   Queen: "q",
   Rock: "r",
   /* @deprecated */ Rook: "r",
+  Circle: "c",
+  Square: "s",
+  Cross: "x",
 } as const;
 
 const mapAppearanceRe = invertMap(mapAppearance);
@@ -261,14 +264,14 @@ export class SP2 {
   }
 
   // Piece type
-  static getAppearance(f: Element): Figurine | "" {
+  static getAppearance(f: Element): ChessPieceType | "" {
     const pieceName = f.getAttribute("Type") as SP2PieceName;
     return mapAppearance[pieceName] ?? "";
   }
 
-  static setAppearance(el: Element, f: Figurine | ""): void {
+  static setAppearance(el: Element, f: ChessPieceType | ""): void {
     if (f === "") return;
-    let tp = mapAppearanceRe[f];
+    let tp = mapAppearanceRe[f as keyof typeof mapAppearanceRe] ?? "Pawn";
     if (tp === "Rook") tp = "Rock"; // retrocompatibility
     el.setAttribute("Type", tp);
   }

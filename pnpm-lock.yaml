@@ -154,8 +154,8 @@ importers:
         specifier: workspace:*
         version: link:../../CoreJS
       '@dardino/chess-board':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.1.2
+        version: 0.1.2
       '@microsoft/microsoft-graph-client':
         specifier: ^3.0.5
         version: 3.0.7(@azure/msal-browser@5.19.0)
@@ -319,9 +319,6 @@ importers:
       '@dardino-chess/core':
         specifier: workspace:*
         version: link:../../../../CoreJS
-      canvas-chessboard:
-        specifier: ^0.0.19
-        version: 0.0.19
       tslib:
         specifier: ^2.0.0
         version: 2.8.1
@@ -1362,8 +1359,8 @@ packages:
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
 
-  '@dardino/chess-board@0.1.1':
-    resolution: {integrity: sha512-bVsFIih/IJclgwSfy4c9P5LuAYICWdj2dIe57acVfBgIZNMINVPLF3T0fKbsF7ssmXYLd8BcdSgIuaDsFNK7gw==}
+  '@dardino/chess-board@0.1.2':
+    resolution: {integrity: sha512-BJTn/zB3HbqSHjJOED5+bsqhY2kelEHj0k4LhvLUgB2HhIRsAAW4gBrwoVM4gsJuttdxO8QDONtjY7O0T2HqHA==}
 
   '@discoveryjs/json-ext@1.1.0':
     resolution: {integrity: sha512-Xc3VhU02wqZ1HvHRJUwL09HkZSTvidqY5Ya0NXBSYOxAp+Ln9dcJr9fySI+CkONzP3PekQo9WdzCv0PGER/mOA==}
@@ -4508,9 +4505,6 @@ packages:
 
   caniuse-lite@1.0.30001809:
     resolution: {integrity: sha512-xxWVywk6a6Arlk+hymeycyn/VgqEfLDxupvhH/xiY5SJ/18kmi9o6MiO320DCUzypORHLtvh0I4i04tUhCNHNQ==}
-
-  canvas-chessboard@0.0.19:
-    resolution: {integrity: sha512-o7baQauWNpePNBZFZHejugpRHmiv5Oi6hwxaVcsrmMV93ZZV1pWVqrMPtqqJscv3RETp4OUvKuPPO8AqIW0IXQ==}
 
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
@@ -10492,7 +10486,7 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
-  '@dardino/chess-board@0.1.1': {}
+  '@dardino/chess-board@0.1.2': {}
 
   '@discoveryjs/json-ext@1.1.0': {}
 
@@ -13340,8 +13334,6 @@ snapshots:
   caniuse-lite@1.0.30001787: {}
 
   caniuse-lite@1.0.30001809: {}
-
-  canvas-chessboard@0.0.19: {}
 
   caseless@0.12.0: {}
 

@@ -4,7 +4,6 @@ import {
   Columns,
   createXmlElement,
   getCanvasColor,
-  getCanvasLocation,
   getCanvasRotation,
   getFigurine,
   getRotationSymbol,
@@ -82,7 +81,6 @@ export class Piece implements IPiece {
       type: getFigurine(this.appearance) ?? "q",
       color: getCanvasColor(this.color),
       rotation: getCanvasRotation(this.rotation),
-      square: getCanvasLocation(this.column, this.traverse),
     } satisfies BP;
   }
 

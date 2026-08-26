@@ -1,7 +1,7 @@
 import {
-  ChessPieceColor as Colors,
-  ChessPieceType as Figurine,
-  ChessPieceRotation as Rotations,
+  ChessPieceColor,
+  ChessPieceRotation,
+  ChessPieceType,
 } from "@dardino/chess-board";
 
 import type { Engines } from "@sp/host-bridge/src/lib/bridge-global";
@@ -166,7 +166,7 @@ export interface Author {
 }
 
 export interface IPiece {
-  appearance: Figurine | "";
+  appearance: ChessPieceType | "";
   fairyCode: { code: string; params: string[] }[];
   color: PieceColors;
   column: Columns;
@@ -280,7 +280,7 @@ export type SP2PieceName
     | "HorseTower"
     | "HorseBishop";
 
-export const getCanvasRotation = (rotation: PieceRotation): Rotations => {
+export const getCanvasRotation = (rotation: PieceRotation): ChessPieceRotation => {
   switch (rotation) {
     case "NoRotation":
       return "0";
@@ -320,7 +320,7 @@ export const getBoardRank = (y: string | Traverse): BoardRank => {
   return y as BoardRank;
 };
 
-export const getCanvasColor = (c: PieceColors): Colors => {
+export const getCanvasColor = (c: PieceColors): ChessPieceColor => {
   switch (c) {
     case "Black":
       return "b";
@@ -332,7 +332,7 @@ export const getCanvasColor = (c: PieceColors): Colors => {
   }
 };
 
-export const getFigurine = (appearance?: string): Figurine | null => {
+export const getFigurine = (appearance?: string): ChessPieceType | null => {
   switch (appearance) {
     case "K":
     case "k":
@@ -564,7 +564,7 @@ export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
       continue;
     }
     const isNeutral = c.startsWith("*");
-    const pieceName = (isNeutral ? c.substring(1, 2) : c.substring(0, 1)) as Figurine;
+    const pieceName = (isNeutral ? c.substring(1, 2) : c.substring(0, 1)) as ChessPieceType;
     const pieceRotation = c.substring(1, 3) as RotationsCodes;
     let rotation: PieceRotation = "NoRotation";
     let fairy: string | null = null;
