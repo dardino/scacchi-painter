@@ -1,6 +1,6 @@
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { SpCoreEngineOptionKey, SpCoreEngineOptions, createDefaultPopeyeEngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
-import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/public-api";
+import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/SPX";
 import { SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 
 export const popeyeTwinMapper: Record<

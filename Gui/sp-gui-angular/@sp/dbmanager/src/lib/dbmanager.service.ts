@@ -2,9 +2,10 @@ import { Injectable, inject, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { BehaviorSubject } from "rxjs";
-import { IProblem, prettifyXml } from "./helpers";
+import { prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "./providers";
+import { IProblem } from "./SPX";
 
 interface IDbSpX {
   lastIndex: number;

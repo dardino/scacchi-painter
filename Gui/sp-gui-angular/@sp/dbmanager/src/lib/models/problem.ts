@@ -1,15 +1,13 @@
 import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
+import { Columns, IProblem, Traverse } from "../SPX";
 import { Base64 } from "../base64";
 import {
-  Columns,
   GetLocationFromIndex,
   GetSolutionFromElement,
   GetSquareIndex,
-  IProblem,
   SquareLocation,
-  Traverse,
   convertToRtf,
   createXmlElement,
   fenToChessBoard,

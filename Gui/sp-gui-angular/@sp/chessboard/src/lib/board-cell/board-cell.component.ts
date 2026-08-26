@@ -1,9 +1,9 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
 import { Component, computed, input } from "@angular/core";
+import { IPiece } from "@sp/dbmanager/src/lib/SPX";
 import {
   GetSquareColor,
-  IPiece,
   SquareLocation,
   getFigurine,
 } from "@sp/dbmanager/src/public-api";

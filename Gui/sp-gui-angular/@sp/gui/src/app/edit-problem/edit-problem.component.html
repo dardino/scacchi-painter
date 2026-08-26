@@ -1,19 +1,19 @@
 <div class="workboard" #workboard>
   <section id="toolbar">
     <mat-toolbar class="toolbar-row" color="secondary">
-      <lib-toolbar-edit (switchBoardType)="switchBoardType()" (editCommand)="editCommand($event)" [editMode]="editMode()"
-      (editModeChanged)="editModeChanged($event)"></lib-toolbar-edit>
+      <lib-toolbar-edit (editCommand)="editCommand($event)" [editMode]="editMode()"
+        (editModeChanged)="editModeChanged($event)"></lib-toolbar-edit>
     </mat-toolbar>
   </section>
   <section id="chessboard" #panelleft>
     <div class="chessboard-workarea">
-      <lib-chessboard class="lib-chessboard" [position]="problem()" [boardType]="boardType()"
-        [cursor]="boardCursor()"
+      <lib-chessboard class="lib-chessboard" [position]="problem()" [cursor]="boardCursor()"
         (cellMiddleClick)="clickOnCell($event, 'middle')" (contextOnCell)="onTriggerContextMenu($event)"
         (currentCellChanged)="currentCellChange($event)" (cellClick)="clickOnCell($event, 'left')"
-      (focusOut)="boardBlur()"></lib-chessboard>
+        (focusOut)="boardBlur()"></lib-chessboard>
       <section id="pieceselector">
-        <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)" [current]="pieceToAdd()"></lib-piece-selector>
+        <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)"
+          [current]="pieceToAdd()"></lib-piece-selector>
       </section>
     </div>
   </section>
@@ -30,25 +30,24 @@
           </button>
         </div>
         @if (activeTab() === 0) {
-          <div class="tab-content">
-            <lib-problem-info (openTwin)="openTwinDialog($event)" (deleteTwin)="deleteTwin($event)"
-              (addCondition)="openConditionDialog()" (deleteCondition)="deleteCondition($event)"
+        <div class="tab-content">
+          <lib-problem-info (openTwin)="openTwinDialog($event)" (deleteTwin)="deleteTwin($event)"
+            (addCondition)="openConditionDialog()" (deleteCondition)="deleteCondition($event)"
             (openAuthor)="openAuthorDialog($event)" (deleteAuthor)="deleteAuthor($event)"></lib-problem-info>
-          </div>
+        </div>
         }
         @if (activeTab() === 1) {
-          <div class="tab-content">
-            <mat-toolbar class="toolbar-row" color="secondary">
-              @if (engineEnabled) {
-                <lib-toolbar-engine [fullLog]="showLog()" [viewMode]="viewMode()"
-                  (startSolve)="startSolve($event)" (stopSolve)="stopSolve()" (toggleLog)="toggleLog()"
-                  (toggleEditor)="toggleEditor($event)" (openEngineSettings)="openSolveEngineDialog()"
-                  [isRunning]="solveInProgress()" [selectedEngine]="selectedEngine()"
-                [hideLabels]="true"></lib-toolbar-engine>
-              }
-            </mat-toolbar>
-            <lib-sp-solution-desc [viewMode]="viewMode()" [showLog]="showLog()"></lib-sp-solution-desc>
-          </div>
+        <div class="tab-content">
+          <mat-toolbar class="toolbar-row" color="secondary">
+            @if (engineEnabled) {
+            <lib-toolbar-engine [fullLog]="showLog()" [viewMode]="viewMode()" (startSolve)="startSolve($event)"
+              (stopSolve)="stopSolve()" (toggleLog)="toggleLog()" (toggleEditor)="toggleEditor($event)"
+              (openEngineSettings)="openSolveEngineDialog()" [isRunning]="solveInProgress()"
+              [selectedEngine]="selectedEngine()" [hideLabels]="true"></lib-toolbar-engine>
+            }
+          </mat-toolbar>
+          <lib-sp-solution-desc [viewMode]="viewMode()" [showLog]="showLog()"></lib-sp-solution-desc>
+        </div>
         }
       </div>
     </section>

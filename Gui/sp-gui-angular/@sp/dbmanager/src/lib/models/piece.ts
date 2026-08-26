@@ -1,19 +1,16 @@
 import { PieceInfo as BP } from "@dardino/chess-board";
 
 import {
-  Columns,
   createXmlElement,
   getCanvasColor,
   getCanvasRotation,
   getFigurine,
   getRotationSymbol,
-  IPiece,
   notationCasingByColor,
-  PieceColors,
   SquareLocation,
-  Traverse,
 } from "../helpers";
 import { SP2 } from "../SP2";
+import { Columns, IPiece, PieceColors, Traverse } from "../SPX";
 
 export class Piece implements IPiece {
   public appearance: IPiece["appearance"] | "";

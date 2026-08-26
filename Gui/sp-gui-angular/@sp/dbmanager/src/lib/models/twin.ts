@@ -1,11 +1,8 @@
 import { popeyeTwinMapper } from "@ph/problemToPopeye";
 import {
-  ITwin,
-  TwinModes,
-  TwinModesKeys,
-  TwinTypesKeys,
   createXmlElement,
 } from "../helpers";
+import { ITwin, TwinModes, TwinModesKeys, TwinTypesKeys } from "../SPX";
 
 export class Twin implements ITwin {
   TwinType: TwinTypesKeys;

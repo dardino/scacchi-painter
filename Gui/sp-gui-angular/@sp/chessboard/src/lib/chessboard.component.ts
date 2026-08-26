@@ -1,19 +1,21 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import "@dardino/chess-board";
 import {
-  ChessBoard as CanvasChessBoard,
+  CellClickEventDetail,
+  ChessBoard,
   ChessPieceRotation,
+  FenChangeEventDetail,
 } from "@dardino/chess-board";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { Columns, Traverse } from "@sp/dbmanager/src/lib/SPX";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
   SquareLocation,
-  Traverse,
 } from "@sp/dbmanager/src/public-api";
 import { Subscription } from "rxjs";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
@@ -26,37 +28,26 @@ import { Animations, ChessboardAnimationService } from "./chessboard-animation.s
   styleUrls: ["chessboard.component.scss"],
 })
 export class ChessboardComponent
-implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+implements OnInit, OnChanges, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private animationService = inject(ChessboardAnimationService);
 
   @Output() focusOut = new EventEmitter<void>();
-  @Input() boardType: "canvas" | "HTML";
   @Input() hideInfo: boolean;
   @Input() smallBoard = false;
   @Input() cursor: { figurine: string | null; rotation: ChessPieceRotation | null } | null;
 
   position = input<Problem | null>(null);
 
-  get BoardType() {
-    return this.boardType ? this.boardType : "HTML";
-  }
-
   getTraverse(location: SquareLocation) {
     return 8 - Traverse.indexOf(location.traverse);
   }
 
-  @ViewChild("canvas", { static: true })
-  canvas: ElementRef;
-
-  @ViewChild("container", { static: true })
-  chessboard: ElementRef<HTMLDivElement>;
+  @ViewChild("chessboard", { static: true })
+  chessboard: ElementRef<ChessBoard>;
 
   @ViewChild("cbHtml")
   cbHtml: ElementRef<HTMLDivElement>;
-
-  @ViewChild("container", { static: true })
-  cbImage: ElementRef;
 
   @Output()
   currentCellChanged = new EventEmitter<SquareLocation | null>();
@@ -76,9 +67,18 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   cells = computed(() => this.uiCells());
 
+  get cellSize() {
+    return (this.chessboard?.nativeElement?.clientWidth ?? 256) / 8;
+  }
+
   fen = computed(() => {
     return this.position()?.getCurrentFen();
   });
+
+  fenChanged($event: CustomEvent<FenChangeEventDetail>) {
+    const newFen = $event.detail.fen;
+    alert(`Fen changed to: ${newFen}`);
+  }
 
   pieceCounter = computed(() => this.position()?.getPieceCounter());
   twins = computed(() => this.position()?.twins.TwinList.map((t: Twin) => t.toString()) ?? []);
@@ -98,9 +98,6 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     CELLCOLORS: ["#fff", "#ddd"],
     PIECECOLORS: ["#fff", "#333"],
   };
-
-  private canvasBoard: CanvasChessBoard | null;
-  private cellSize = 32;
 
   animationSub: Subscription;
   constructor() {
@@ -134,32 +131,21 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-    if (changes.cursor && this.cbImage) {
+    if (changes.cursor && this.cbHtml) {
       if (changes.cursor.currentValue?.figurine != null) {
         const dataURL = getPieceIcon(
           changes.cursor.currentValue?.figurine ?? "q",
           this.cellSize,
           changes.cursor.currentValue?.rotation ?? null,
         );
-        (this.cbImage
+        (this.cbHtml
           .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
           this.cellSize / 2,
         )} ${Math.floor(this.cellSize / 2)}, auto`;
       }
       else {
-        (this.cbImage.nativeElement as HTMLDivElement).style.cursor = "unset";
+        (this.cbHtml.nativeElement as HTMLDivElement).style.cursor = "unset";
       }
-    }
-    if (
-      changes.boardType
-      && !changes.boardType.isFirstChange()
-      && changes.boardType.currentValue === "canvas"
-      && this.canvas
-    ) {
-      // Initialize chessboard
-    }
-    else if (changes.boardType?.currentValue !== "canvas") {
-      this.canvasBoard = null;
     }
   }
 
@@ -212,10 +198,27 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     }
   }
 
-  onCellClick(cell: UiCell) {
-    this.cellClick.emit({ ...cell.location });
+  #toCellLocation(detail: CellClickEventDetail): SquareLocation {
+    return {
+      column: `Col${detail.square[0]}` as Columns,
+      traverse: `Row${detail.square[1]}` as Traverse,
+    };
+  }
+
+  #getPieceAtLocation(location: SquareLocation): Piece | null {
+    return this.position()?.GetPieceAt(location.column, location.traverse) ?? null;
+  }
+
+  onCellClick($event: CustomEvent<CellClickEventDetail>) {
+    $event.stopImmediatePropagation();
+    $event.preventDefault();
+
+    const location = this.#toCellLocation($event.detail);
+    const piece = this.#getPieceAtLocation(location);
+
+    this.cellClick.emit({ ...location });
     const current = this.currentCell();
-    if (cell !== current) this.currentCell.set(cell);
+    if (location !== current?.location) this.currentCell.set({ location, piece });
     else this.currentCell.set(null);
     this.currentCellChanged.emit(
       this.currentCell() ? { ...this.currentCell()!.location } : null,
@@ -239,19 +242,6 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
       duration: 1000,
     });
   }
-
-  ngAfterViewInit() {
-    // Create an observer instance linked to the callback function
-    window.addEventListener("resize", this.sizeMutated);
-    setTimeout(() => {
-      this.sizeMutated();
-    }, 0);
-  }
-
-  private sizeMutated = () => {
-    this.cellSize
-      = (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
-  };
 
   cellInfo(cell: UiCell) {
     return `${(cell.piece?.ToLongDescription() ?? "")} ${cell.location.column.slice(-1).toLowerCase()}${cell.location.traverse.slice(-1)}`;

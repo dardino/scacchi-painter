@@ -28,17 +28,11 @@ export type EditCommand
   ],
 })
 export class ToolbarEditComponent {
-  @Output() switchBoardType = new EventEmitter<void>();
-
   @Output() editCommand = new EventEmitter<EditCommand>();
   @Output() editModeChanged = new EventEmitter<EditModes>();
 
   @Input()
   editMode: EditModes = "select";
-
-  switchBT() {
-    this.switchBoardType.emit();
-  }
 
   modeChange($event: EditModes) {
     this.editModeChanged.emit($event);

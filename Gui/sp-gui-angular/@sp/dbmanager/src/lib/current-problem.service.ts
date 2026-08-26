@@ -1,19 +1,19 @@
 import { Injectable, inject } from "@angular/core";
 import { DbmanagerService } from "./dbmanager.service";
+import { SquareLocation } from "./helpers";
+import { Author, Piece, Problem } from "./models";
+import { FairyPiecesCodes } from "./models/fairesDB";
+import { Twin } from "./models/twin";
 import {
   Columns,
   EndingTypes,
   IProblem,
   PieceRotation,
   ProblemTypes,
-  SquareLocation,
   Traverse,
   TwinModes,
   TwinTypesKeys,
-} from "./helpers";
-import { Author, Piece, Problem } from "./models";
-import { FairyPiecesCodes } from "./models/fairesDB";
-import { Twin } from "./models/twin";
+} from "./SPX";
 import { TwinTypesConfigs } from "./twinTypes";
 
 @Injectable({

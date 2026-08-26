@@ -1,8 +1,11 @@
 <div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
-  <div class="chessboard-image" #cbImage [ngClass]="{customCursor: cursor}">
+  <div class="chessboard-image" #cbHtml [ngClass]="{customCursor: cursor}">
     <chess-board
+      #chessboard
       [attr.hide-labels]="smallBoard"
       [attr.fen]="fen()"
+      (cellClick)="onCellClick($event)"
+      (fenChange)="fenChanged($event)"
       class="chess-board"
     ></chess-board>
   </div>

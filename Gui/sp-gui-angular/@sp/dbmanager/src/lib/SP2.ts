@@ -3,18 +3,49 @@ import {
 } from "@dardino/chess-board";
 import { Base64 } from "./base64";
 import {
-  Columns,
-  PieceColors,
-  PieceRotation,
   SP2PieceName,
-  Traverse,
-  XMLProblemTypesKeys,
-  XMLStipulationTypes,
   createXmlElement,
   notEmpty,
   notNull,
 } from "./helpers";
 
+import { Columns, EndingTypes, PieceColors, PieceRotation, ProblemTypes, Traverse } from "./SPX";
+
+export type XMLProblemTypesKeys
+  = | "Direct"
+    | "Help"
+    | "Self"
+    | "HelpSelf"
+    | "Custom";
+
+export type XMLStipulationTypes = "Mate" | "Stalemate" | "Custom";
+
+export const getProblemType = (
+  original: XMLProblemTypesKeys | null = "Direct",
+): ProblemTypes => {
+  switch (original) {
+    case "Direct":
+      return "-";
+    case "Help":
+      return "H";
+    case "HelpSelf":
+      return "HS";
+    case "Self":
+      return "S";
+    default:
+      return "-";
+  }
+};
+export const getEndingType = (original: XMLStipulationTypes): EndingTypes => {
+  switch (original) {
+    case "Mate":
+      return "#";
+    case "Stalemate":
+      return "=";
+    default:
+      return "#";
+  }
+};
 const invertMap = <T extends Record<string, string>, K extends (keyof T & string), V extends T[K] & string>(
   o: T,
 ): Record<V, K> => {

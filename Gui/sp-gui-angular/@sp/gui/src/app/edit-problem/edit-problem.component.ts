@@ -16,11 +16,11 @@ import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { IPiece } from "@sp/dbmanager/src/lib/SPX";
 import {
   CurrentProblemService,
   DbmanagerService,
   EngineManagerService,
-  IPiece,
   SquareLocation,
   getCanvasRotation,
   notNull,
@@ -108,7 +108,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscribe: Subscription;
 
   public editMode = signal<EditModes>("select");
-  public boardType = signal<"HTML" | "canvas">("HTML");
   public rows$ubject = new BehaviorSubject<HalfMoveInfo[] | null>(null);
   menuX = signal(0);
   menuY = signal(0);
@@ -220,11 +219,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         this.current.Problem.engineConfig = cloneEngineConfiguration(result.engineConfig) ?? {};
       }
     });
-  }
-
-  switchBoardType() {
-    this.boardType.update(current => current === "HTML" ? "canvas" : "HTML");
-    this.resetActions();
   }
 
   onTriggerContextMenu(data: { event: MouseEvent; location: SquareLocation }) {

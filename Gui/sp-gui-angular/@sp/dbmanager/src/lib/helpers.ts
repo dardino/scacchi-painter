@@ -4,176 +4,8 @@ import {
   ChessPieceType,
 } from "@dardino/chess-board";
 
-import type { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { Base64 } from "./base64";
-import type { EngineConfiguration, EngineConfigurationsByEngine } from "./models/engine";
-
-export type XMLProblemTypesKeys
-  = | "Direct"
-    | "Help"
-    | "Self"
-    | "HelpSelf"
-    | "Custom";
-
-export const ProblemTypeCodes = {
-  "-": "Direct",
-  "H": "Help",
-  "S": "Self",
-  "HS": "HelpSelf",
-  "R": "Reflex",
-  "HR": "HelpReflex",
-} as const;
-
-export const EndingTypeCodes = {
-  "#": "Mate (#)",
-  "=": "Stalemate (=)",
-  "+": "Check (+)",
-  "%": "Gain Piece (%)",
-  "~": "(~)",
-  "##": "Double mate (##)",
-  "==": "Double stalemate (==)",
-  "#=": "(#=)",
-  "!=": "(!=)",
-  "!#": "(!#)",
-  "00": "(00)",
-  "ep": "(ep)",
-  "Zxy": "(Zxy)",
-  "x": "(x)",
-  "##!": "(##!)",
-  "ct": "(ct)",
-  "<>": "(&lt;>)",
-  "ctr": "(ctr)",
-  "<>r": "(&lt;>r)",
-  "c81": "(c81)",
-} as const;
-
-export type XMLStipulationTypes = "Mate" | "Stalemate" | "Custom";
-
-export type ProblemTypes = keyof typeof ProblemTypeCodes;
-export const getProblemType = (
-  original: XMLProblemTypesKeys | null = "Direct",
-): ProblemTypes => {
-  switch (original) {
-    case "Direct":
-      return "-";
-    case "Help":
-      return "H";
-    case "HelpSelf":
-      return "HS";
-    case "Self":
-      return "S";
-    default:
-      return "-";
-  }
-};
-export type EndingTypes = keyof typeof EndingTypeCodes;
-export const getEndingType = (original: XMLStipulationTypes): EndingTypes => {
-  switch (original) {
-    case "Mate":
-      return "#";
-    case "Stalemate":
-      return "=";
-    default:
-      return "#";
-  }
-};
-
-export interface IStipulation {
-  problemType: ProblemTypes;
-  stipulationType: EndingTypes;
-  maximum: boolean;
-  serie: boolean;
-  moves: number;
-  completeStipulationDesc: string;
-}
-
-export interface IProblem {
-  engine?: Engines;
-  stipulation: Partial<IStipulation>;
-  htmlSolution: string;
-  textSolution: string;
-  date: string;
-  prizeRank: number;
-  personalID: string;
-  prizeDescription: string;
-  source: string;
-  authors: Partial<Author>[];
-  pieces: Partial<IPiece>[] | null;
-  twins: Partial<ITwins> | null;
-  engineConfig?: EngineConfiguration | null;
-  engineConfigurationsByEngine?: EngineConfigurationsByEngine | null;
-  conditions: string[];
-  tags: string[];
-  snapshots: Record<string | number, string>;
-}
-
-export enum SequenceTypes {
-  Normal = "Normal",
-}
-export const TwinTypes = [
-  "Custom",
-  "Diagram", // no values
-  "MovePiece", // 2 values
-  "RemovePiece", // 1 value
-  "AddPiece", // 2 values
-  "Substitute", // 3 values
-  "SwapPieces", // 2 values
-  "Rotation90", // no value
-  "Rotation180", // no value
-  "Rotation270", // no value
-  "TraslateNormal", // 2 value
-  "TraslateToroidal", // 2 value
-  "Mirror", // 1 value
-  "MirrorHorizontal",
-  "MirrorVertical",
-  "ChangeProblemType", // 2 value
-  "Duplex", // no value
-  "AfterKey", // no value
-  "SwapColors", // no value
-  "Stipulation", // 1 value
-  "Condition", // no value
-] as const;
-
-export type TwinTypesKeys = typeof TwinTypes[number];
-export enum TwinModes {
-  Normal = "Normal",
-  Combined = "Combined",
-}
-export type TwinModesKeys = keyof typeof TwinModes;
-
-export interface ITwins {
-  TwinSequenceTypes?: SequenceTypes;
-  TwinList?: ITwin[];
-}
-
-export interface ITwin {
-  TwinType: TwinTypesKeys;
-  TwinModes: TwinModes;
-  ValueA: string;
-  ValueB: string;
-  ValueC: string;
-}
-
-export interface Author {
-  nameAndSurname: string;
-  address: string;
-  city: string;
-  phone: string;
-  zipCode: string;
-  stateOrProvince: string;
-  country: string;
-  language: string;
-}
-
-export interface IPiece {
-  appearance: ChessPieceType | "";
-  fairyCode: { code: string; params: string[] }[];
-  color: PieceColors;
-  column: Columns;
-  traverse: Traverse;
-  rotation: PieceRotation;
-  fairyAttribute: string;
-}
+import { Columns, IPiece, IProblem, PieceColors, PieceRotation, Traverse } from "./SPX";
 
 export interface ProblemDb {
   version: string;
@@ -183,31 +15,7 @@ export interface ProblemDb {
 }
 
 export const FairyAttributes = ["None"] as const;
-export const Columns = [
-  "ColA",
-  "ColB",
-  "ColC",
-  "ColD",
-  "ColE",
-  "ColF",
-  "ColG",
-  "ColH",
-] as const;
-export type Columns = typeof Columns[number];
 
-export const Traverse = [
-  "Row8",
-  "Row7",
-  "Row6",
-  "Row5",
-  "Row4",
-  "Row3",
-  "Row2",
-  "Row1",
-] as const;
-export type Traverse = typeof Traverse[number];
-export const PieceColors = ["White", "Black", "Neutral"] as const;
-export type PieceColors = typeof PieceColors[number];
 export type BoardFile = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h`;
 export type BoardRank = `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8`;
 export type SquareColors = "black" | "white";
@@ -255,18 +63,6 @@ export const GetLocationFromIndex = (index: number): SquareLocation => ({
   column: Columns[index % 8],
   traverse: Traverse[Math.floor(index / 8)],
 });
-
-export const PieceRotation = [
-  "NoRotation",
-  "Clockwise45",
-  "Clockwise90",
-  "Clockwise135",
-  "UpsideDown",
-  "Counterclockwise135",
-  "Counterclockwise90",
-  "Counterclockwise45",
-] as const;
-export type PieceRotation = typeof PieceRotation[number];
 
 export type SP2PieceName
   = | "King"

@@ -12,11 +12,11 @@ import {
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/SPX";
 import {
   TwinTypeItem,
   TwinTypesConfigs,
 } from "@sp/dbmanager/src/lib/twinTypes";
-import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/public-api";
 import { Observable, map, startWith } from "rxjs";
 
 @Component({
