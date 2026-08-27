@@ -1,7 +1,7 @@
 import {
-  ChessPieceColor,
-  ChessPieceRotation,
-  ChessPieceType,
+  type ChessPieceColor,
+  type ChessPieceRotation,
+  type ChessPieceType,
 } from "@dardino/chess-board";
 
 import { Base64 } from "./base64";

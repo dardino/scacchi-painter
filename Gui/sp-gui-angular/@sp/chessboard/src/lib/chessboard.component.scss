@@ -1,21 +1,24 @@
 @use "../../../mediaquery" as mq;
+@use "@dardino/chess-board/css";
 
 :host {
   display: block;
   width: 100%;
   margin: 0 auto;
 }
+
 .chess-board {
   position: absolute;
   inset: 0;
 }
+
 .chessboard-image {
   position: relative;
   padding-top: 100%;
   width: 100%;
 
-  > .chessboard,
-  > canvas {
+  >.chessboard,
+  >canvas {
     position: absolute;
     top: 0;
     right: 0;
@@ -140,7 +143,7 @@
   justify-content: center;
   background-color: $bgc;
 
-  > span {
+  >span {
     color: $fgc;
     font-size: 3.3cqw;
     text-transform: uppercase;

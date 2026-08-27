@@ -1,34 +1,28 @@
 <div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
   <div class="chessboard-image" #cbHtml [ngClass]="{customCursor: cursor}">
-    <chess-board
-      #chessboard
-      [attr.hide-labels]="smallBoard"
-      [attr.fen]="fen()"
-      (cellClick)="onCellClick($event)"
-      (fenChange)="fenChanged($event)"
-      class="chess-board"
-    ></chess-board>
+    <chess-board #chessboard [attr.hide-labels]="smallBoard" [attr.fen]="fen()" auto-select-on-click
+      (cellClick)="onCellClick($event)" (fenChange)="fenChanged($event)" class="chess-board"></chess-board>
   </div>
   @if (!hideInfo) {
-    <div class="short-info">
-      <span class="stipulation">{{stipulationDesc()}}</span>
-      <span class="twins">
-        <ol>
-          @if (viewDiagram()) {
-            <li>Diagram</li>
-          }
-          @for (t of twins(); track $index) {
-            <li>{{ t }}</li>
-          }
-        </ol>
-      </span>
-      <span class="piececounter">{{ pieceCounter() }}</span>
-    </div>
+  <div class="short-info">
+    <span class="stipulation">{{stipulationDesc()}}</span>
+    <span class="twins">
+      <ol>
+        @if (viewDiagram()) {
+        <li>Diagram</li>
+        }
+        @for (t of twins(); track $index) {
+        <li>{{ t }}</li>
+        }
+      </ol>
+    </span>
+    <span class="piececounter">{{ pieceCounter() }}</span>
+  </div>
   }
   @if (!hideInfo) {
-    <div class="fen" tabindex="0" (click)="copyFen()" (keydown.enter)="copyFen()">
-      <span>FEN:</span>
-      <span>{{ fen() }}</span>
-    </div>
+  <div class="fen" tabindex="0" (click)="copyFen()" (keydown.enter)="copyFen()">
+    <span>FEN:</span>
+    <span>{{ fen() }}</span>
+  </div>
   }
 </div>

@@ -37,7 +37,6 @@ export class OneDriveService implements FileService {
 
     try {
       const aw = await client.api(urlToCall).get() as { value?: DriveItem[] };
-      console.log("🚀 ~ OneDriveService ~ enumContent ~ aw:", aw);
       return (aw.value ?? []).map<FolderItemInfo>(dir => ({
         fullPath: `${dir.parentReference?.path ?? "/me/drive/root/children"}/${
           dir.description || dir.name || dir.id || "Personal"

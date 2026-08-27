@@ -9,7 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
 import type { HalfMoveInfo } from "@dardino-chess/core";
-import { ChessPieceRotation } from "@dardino/chess-board";
+import { type ChessPieceRotation } from "@dardino/chess-board";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";

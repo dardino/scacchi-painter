@@ -1,4 +1,4 @@
-import { ChessPieceType } from "@dardino/chess-board";
+import { type ChessPieceType } from "@dardino/chess-board";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { EngineConfiguration, EngineConfigurationsByEngine } from "./models/engine";
 

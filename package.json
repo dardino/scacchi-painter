@@ -19,23 +19,6 @@
     "build:tauri": "pnpm --dir Gui/sp-gui tauri build",
     "build:all": "pnpm build:web && pnpm build:corejs && pnpm build:tauri && cd Core && dotnet build"
   },
-  "pnpm": {
-    "overrides": {
-      "prosemirror-model": "1.21.0"
-    },
-    "ignoredBuiltDependencies": [
-      "@parcel/watcher",
-      "lmdb",
-      "msgpackr-extract",
-      "optipng-bin",
-      "sharp",
-      "unrs-resolver",
-      "zopflipng-bin"
-    ],
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
-  },
   "dependencies": {
     "eslint": "^10.2.0"
   }

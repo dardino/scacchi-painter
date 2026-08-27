@@ -1,5 +1,5 @@
 import {
-  ChessPieceType,
+  type ChessPieceType,
 } from "@dardino/chess-board";
 import { Base64 } from "./base64";
 import {

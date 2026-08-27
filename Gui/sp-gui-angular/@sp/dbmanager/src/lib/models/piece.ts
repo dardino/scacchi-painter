@@ -1,4 +1,4 @@
-import { PieceInfo as BP } from "@dardino/chess-board";
+import { type PieceInfo as BP } from "@dardino/chess-board";
 
 import {
   createXmlElement,

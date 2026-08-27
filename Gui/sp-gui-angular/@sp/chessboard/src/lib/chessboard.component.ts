@@ -2,12 +2,11 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
 import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import "@dardino/chess-board";
 import {
-  CellClickEventDetail,
-  ChessBoard,
-  ChessPieceRotation,
-  FenChangeEventDetail,
+  type CellClickEventDetail,
+  type ChessBoard,
+  type ChessPieceRotation,
+  type FenChangeEventDetail,
 } from "@dardino/chess-board";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
@@ -19,6 +18,26 @@ import {
 } from "@sp/dbmanager/src/public-api";
 import { Subscription } from "rxjs";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
+
+const convertFen = (fen: string | null | undefined) => {
+  if (!fen) return "";
+  if (fen.split(" ")[0].includes(":") || fen.split(" ").pop()?.startsWith("[")) {
+    // OLD FFEN format, convert to new format
+
+    // Implement any conversion logic here if needed
+    return fen.replace(/\w:1/g, match => "*:0.5" + match[0])
+      .replace(/\w:2/g, match => "*1" + match[0])
+      .replace(/\w:3/g, match => "*1.5" + match[0])
+      .replace(/\w:4/g, match => "*2" + match[0])
+      .replace(/\w:5/g, match => "*2.5" + match[0])
+      .replace(/\w:6/g, match => "*3" + match[0])
+      .replace(/\w:7/g, match => "*3.5" + match[0])
+      .replace(/[[,](\w*)(\w\d)/g, "$2:$1:,")
+      .replace(/,]/g, "");
+  }
+  return fen;
+};
+
 @Component({
   selector: "lib-chessboard",
   templateUrl: "chessboard.component.html",
@@ -72,7 +91,8 @@ implements OnInit, OnChanges, OnDestroy {
   }
 
   fen = computed(() => {
-    return this.position()?.getCurrentFen();
+    // TODO: remove getCurrentFen and create Helpers function to convert Problem to FEN
+    return convertFen(this.position()?.getCurrentFen());
   });
 
   fenChanged($event: CustomEvent<FenChangeEventDetail>) {
