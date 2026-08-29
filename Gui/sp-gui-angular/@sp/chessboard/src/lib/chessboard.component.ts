@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, computed, effect, inject, input, output, signal, viewChild } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   type CellClickEventDetail,
@@ -10,33 +10,16 @@ import {
 } from "@dardino/chess-board";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { Columns, Traverse } from "@sp/dbmanager/src/lib/SPX";
+import { Columns, IProblem, Traverse } from "@sp/dbmanager/src/lib/SPX";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
   SquareLocation,
+  getFFenFromPosition,
+  updatePositionFromFen,
 } from "@sp/dbmanager/src/public-api";
 import { Subscription } from "rxjs";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
-
-const convertFen = (fen: string | null | undefined) => {
-  if (!fen) return "";
-  if (fen.split(" ")[0].includes(":") || fen.split(" ").pop()?.startsWith("[")) {
-    // OLD FFEN format, convert to new format
-
-    // Implement any conversion logic here if needed
-    return fen.replace(/\w:1/g, match => "*:0.5" + match[0])
-      .replace(/\w:2/g, match => "*1" + match[0])
-      .replace(/\w:3/g, match => "*1.5" + match[0])
-      .replace(/\w:4/g, match => "*2" + match[0])
-      .replace(/\w:5/g, match => "*2.5" + match[0])
-      .replace(/\w:6/g, match => "*3" + match[0])
-      .replace(/\w:7/g, match => "*3.5" + match[0])
-      .replace(/[[,](\w*)(\w\d)/g, "$2:$1:,")
-      .replace(/,]/g, "");
-  }
-  return fen;
-};
 
 @Component({
   selector: "lib-chessboard",
@@ -51,34 +34,24 @@ implements OnInit, OnChanges, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private animationService = inject(ChessboardAnimationService);
 
-  @Output() focusOut = new EventEmitter<void>();
-  @Input() hideInfo: boolean;
-  @Input() smallBoard = false;
-  @Input() cursor: { figurine: string | null; rotation: ChessPieceRotation | null } | null;
-
+  hideInfo = input<boolean>(false);
+  smallBoard = input<boolean>(false);
+  cursor = input<{ figurine: string | null; rotation: ChessPieceRotation | null } | null>(null);
   position = input<Problem | null>(null);
 
   getTraverse(location: SquareLocation) {
     return 8 - Traverse.indexOf(location.traverse);
   }
 
-  @ViewChild("chessboard", { static: true })
-  chessboard: ElementRef<ChessBoard>;
+  chessboard = viewChild<ChessBoard>("chessboard");
+  cbHtml = viewChild<HTMLDivElement>("cbHtml");
 
-  @ViewChild("cbHtml")
-  cbHtml: ElementRef<HTMLDivElement>;
-
-  @Output()
-  currentCellChanged = new EventEmitter<SquareLocation | null>();
-
-  @Output()
-  cellClick = new EventEmitter<SquareLocation>();
-
-  @Output()
-  cellMiddleClick = new EventEmitter<SquareLocation>();
-
-  @Output()
-  contextOnCell = new EventEmitter<{ event: MouseEvent; location: SquareLocation }>();
+  focusOut = output<void>();
+  currentCellChanged = output<SquareLocation | null>();
+  positionChanged = output<IProblem>();
+  cellClick = output<SquareLocation>();
+  cellMiddleClick = output<SquareLocation>();
+  contextOnCell = output<{ event: MouseEvent; location: SquareLocation }>();
 
   currentCell = signal<UiCell | null>(null);
   private lastHash = signal<string | undefined>(undefined);
@@ -86,18 +59,18 @@ implements OnInit, OnChanges, OnDestroy {
 
   cells = computed(() => this.uiCells());
 
-  get cellSize() {
-    return (this.chessboard?.nativeElement?.clientWidth ?? 256) / 8;
-  }
+  cellSize = computed(() => (this.chessboard()?.clientWidth ?? 256) / 8);
 
   fen = computed(() => {
     // TODO: remove getCurrentFen and create Helpers function to convert Problem to FEN
-    return convertFen(this.position()?.getCurrentFen());
+    return getFFenFromPosition(this.position());
   });
 
-  fenChanged($event: CustomEvent<FenChangeEventDetail>) {
+  internalFenChanged($event: CustomEvent<FenChangeEventDetail>) {
     const newFen = $event.detail.fen;
-    alert(`Fen changed to: ${newFen}`);
+    const position = updatePositionFromFen(newFen, this.position() ?? undefined);
+    this.positionChanged.emit(position);
+    return position;
   }
 
   pieceCounter = computed(() => this.position()?.getPieceCounter());
@@ -108,16 +81,6 @@ implements OnInit, OnChanges, OnDestroy {
   });
 
   stipulationDesc = computed(() => this.position()?.stipulation.completeStipulationDesc ?? "");
-
-  private settings: {
-    CELLCOLORS: [string, string];
-    PIECECOLORS: [string, string];
-    BORDER_SIZE: number;
-  } = {
-    BORDER_SIZE: 1,
-    CELLCOLORS: ["#fff", "#ddd"],
-    PIECECOLORS: ["#fff", "#333"],
-  };
 
   animationSub: Subscription;
   constructor() {
@@ -150,21 +113,21 @@ implements OnInit, OnChanges, OnDestroy {
     this.updateBoard();
   }
 
-  ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-    if (changes.cursor && this.cbHtml) {
-      if (changes.cursor.currentValue?.figurine != null) {
+  ngOnChanges(changes: SimpleChanges<ChessboardComponent>): void {
+    const cbHtml = this.cbHtml();
+    if (changes.cursor?.currentValue && cbHtml) {
+      if (changes.cursor.currentValue.figurine != null) {
         const dataURL = getPieceIcon(
-          changes.cursor.currentValue?.figurine ?? "q",
-          this.cellSize,
-          changes.cursor.currentValue?.rotation ?? null,
+          changes.cursor.currentValue.figurine ?? "q",
+          this.cellSize(),
+          changes.cursor.currentValue.rotation ?? null,
         );
-        (this.cbHtml
-          .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
-          this.cellSize / 2,
-        )} ${Math.floor(this.cellSize / 2)}, auto`;
+        (cbHtml as unknown as ElementRef<HTMLDivElement>).nativeElement.style.cursor = `url(${dataURL}) ${Math.floor(
+          this.cellSize() / 2,
+        )} ${Math.floor(this.cellSize() / 2)}, auto`;
       }
       else {
-        (this.cbHtml.nativeElement as HTMLDivElement).style.cursor = "unset";
+        (cbHtml as unknown as ElementRef<HTMLDivElement>).nativeElement.style.cursor = "unset";
       }
     }
   }
@@ -220,7 +183,7 @@ implements OnInit, OnChanges, OnDestroy {
 
   #toCellLocation(detail: CellClickEventDetail): SquareLocation {
     return {
-      column: `Col${detail.square[0]}` as Columns,
+      column: `Col${detail.square[0].toUpperCase()}` as Columns,
       traverse: `Row${detail.square[1]}` as Traverse,
     };
   }
@@ -274,10 +237,10 @@ implements OnInit, OnChanges, OnDestroy {
   #animate(animation: Animations) {
     switch (animation) {
       case "rotateLeft":
-        this.cbHtml.nativeElement.classList.add("rotateLeft");
+        this.cbHtml()?.classList.add("rotateLeft");
         break;
       case "rotateRight":
-        this.cbHtml.nativeElement.classList.add("rotateRight");
+        this.cbHtml()?.classList.add("rotateRight");
         break;
       default:
         break;
@@ -285,7 +248,6 @@ implements OnInit, OnChanges, OnDestroy {
   }
 }
 
-export declare type SimpleChanges2<T> = { [P in keyof T]?: SimpleChange<T[P]> };
 export declare class SimpleChange<T> {
   previousValue: T;
   currentValue: T;

@@ -142,7 +142,7 @@ export class OpenFileComponent implements OnInit {
     if (!fileInfo) return;
     const error = await this.db.Load(fileInfo);
     if (!error) {
-      this.router.navigate([`/edit/${this.db.CurrentIndex}`]);
+      this.router.navigate([`/edit/${this.db.CurrentIndex()}`]);
     }
   }
 

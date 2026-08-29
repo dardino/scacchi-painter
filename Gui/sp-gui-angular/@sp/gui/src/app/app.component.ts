@@ -44,8 +44,8 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
   private iconRegistry = inject(AllMatIconRegistryService); // Force instantiation to register icons
 
-  private currentProblem = toSignal(this.db.CurrentProblem$, { initialValue: null });
-  private currentFile = toSignal(this.db.CurrentFile$, { initialValue: this.db.CurrentFile });
+  private currentProblem = this.db.CurrentProblem;
+  private currentFile = this.db.CurrentFile;
   private currentRoutePath = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -66,13 +66,18 @@ export class AppComponent implements OnInit {
 
   title = "Scacchi Painter";
   chessBoardMode: "edit" | "view" = "view";
-  fsWip = this.db.wip$;
+  fsWip = this.db.wip;
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
 
   ngOnInit(): void {
-    this.db.Reload();
+    this.db.Reload().then(() => {
+      const problem = this.currentProblem();
+      if (problem == null && this.currentRoutePath() !== RoutesList.home.path) {
+        this.router.navigate([RoutesList.home.path]);
+      }
+    });
   }
 
   async closeMe() {

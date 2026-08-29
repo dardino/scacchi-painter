@@ -49,10 +49,10 @@ export class ProblemDefinitionsComponent {
   @Output()
   public deleteTwin = new EventEmitter<Twin>();
 
-  completeDesc = computed(() => this.current.Problem?.stipulation.completeStipulationDesc);
+  completeDesc = computed(() => this.current.Problem()?.stipulation.completeStipulationDesc);
 
   get authors(): Author[] {
-    return this.current.Problem?.authors ?? [];
+    return this.current.Problem()?.authors ?? [];
   }
 
   set authors(v: Author[]) {
@@ -60,7 +60,7 @@ export class ProblemDefinitionsComponent {
   }
 
   get twins(): Twin[] {
-    return this.current.Problem?.twins.TwinList ?? [];
+    return this.current.Problem()?.twins.TwinList ?? [];
   }
 
   set twins(v: Twin[]) {
@@ -68,7 +68,7 @@ export class ProblemDefinitionsComponent {
   }
 
   get conditions(): string[] {
-    return this.current.Problem?.conditions ?? [];
+    return this.current.Problem()?.conditions ?? [];
   }
 
   set conditions(v: string[]) {
@@ -76,7 +76,7 @@ export class ProblemDefinitionsComponent {
   }
 
   get problemType(): ProblemTypes {
-    return this.current.Problem?.stipulation.problemType ?? "-";
+    return this.current.Problem()?.stipulation.problemType ?? "-";
   }
 
   set problemType(v: ProblemTypes) {
@@ -84,7 +84,7 @@ export class ProblemDefinitionsComponent {
   }
 
   get leadsTo(): EndingTypes {
-    return this.current.Problem?.stipulation.stipulationType ?? "#";
+    return this.current.Problem()?.stipulation.stipulationType ?? "#";
   }
 
   set leadsTo(v: EndingTypes) {
@@ -92,12 +92,12 @@ export class ProblemDefinitionsComponent {
   }
 
   get moves(): string {
-    return (this.current.Problem?.stipulation.moves ?? 2).toString();
+    return (this.current.Problem()?.stipulation.moves ?? 2).toString();
   }
 
   set moves(v: string) {
     const moves = parseFloat(v.replace(",", "."));
-    this.current.SetStipulationMoves(!isNaN(moves) ? moves : this.current.Problem?.stipulation.moves ?? 2);
+    this.current.SetStipulationMoves(!isNaN(moves) ? moves : this.current.Problem()?.stipulation.moves ?? 2);
   }
 
   public twinCanBeDeleted(twin: Twin) {
@@ -106,7 +106,7 @@ export class ProblemDefinitionsComponent {
 
   public isDragDisabledForTwin = (twin: Twin): boolean => {
     const length = this.twins?.length ?? 0;
-    const hasDiagram = this.current?.Problem?.twins?.HasDiagram === true;
+    const hasDiagram = this.current.Problem()?.twins?.HasDiagram === true;
     const tooFewElements = length < 2;
     const tooFewElementsWDiagram = (hasDiagram && length <= 2);
     const isDiagram = twin.TwinType === "Diagram";

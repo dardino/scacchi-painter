@@ -1,4 +1,4 @@
-import { Component, inject, Input, computed } from "@angular/core";
+import { Component, computed, inject, Input } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
@@ -57,13 +57,13 @@ export class SpSolutionDescComponent {
   @Input()
   viewMode: ViewModes = "html";
 
-  firstMove = computed(() => this.problem.Problem?.startMoveN ?? 1);
-  totalMoves = computed(() => this.problem.Problem?.stipulation.moves ?? 2);
+  firstMove = computed(() => this.problem.Problem()?.startMoveN ?? 1);
+  totalMoves = computed(() => this.problem.Problem()?.stipulation.moves ?? 2);
   solutionFontSize = computed(() => `${Math.max(this.preferences.solutionFontSize, 1)}rem`);
-  rows = computed(() => this.problem.Problem?.jsonSolution ?? []);
+  rows = computed(() => this.problem.Problem()?.jsonSolution ?? []);
 
   get solution() {
-    return this.problem.textSolution ?? "";
+    return this.problem.textSolution() ?? "";
   }
 
   set solution(txt: string) {
@@ -71,7 +71,7 @@ export class SpSolutionDescComponent {
   }
 
   get solutionHtml() {
-    const changedText = this.problem.htmlSolution ?? "";
+    const changedText = this.problem.htmlSolution() ?? "";
     return changedText;
   }
 

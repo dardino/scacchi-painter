@@ -28,9 +28,34 @@ body {
   background-attachment: local;
 
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto auto 1fr;
   grid-template-rows: auto auto auto auto auto 1fr;
-  grid-template-areas: "menu header" "toolbar1 toolbar1" "toolbar2 toolbar2" "side main" "side main" "side main";
+  grid-template-areas: "header header header"
+    "toolbar toolbar toolbar"
+    "side vsplit main"
+    ". vsplit main";
+}
+
+@media screen and (max-width: mq.$smallScreen) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas: "header"
+      "toolbar"
+      "side"
+      "main";
+  }
+}
+
+@media screen and (max-height: mq.$smallScreen) and (orientation: landscape) {
+  body {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas: "header header"
+      "side toolbar"
+      "side main"
+      ". main";
+  }
 }
 
 .dark-theme {

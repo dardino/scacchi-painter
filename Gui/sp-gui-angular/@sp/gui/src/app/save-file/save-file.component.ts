@@ -104,8 +104,8 @@ export class SaveFileComponent implements OnInit {
 
   ngOnInit(): void {
     const urlhash = location.hash;
-    this.selectedFile = this.db.CurrentFile ?? this.selectedFile;
-    this.currentFolder = this.db.CurrentFile ?? this.selectedFile;
+    this.selectedFile = this.db.CurrentFile() ?? this.selectedFile;
+    this.currentFolder = this.db.CurrentFile() ?? this.selectedFile;
     if (urlhash === "#dropbox") {
       setTimeout(() => {
         this.toDropbox();

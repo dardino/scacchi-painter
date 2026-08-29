@@ -52,6 +52,7 @@ export class LocalDriveService implements FileService {
       this.#fileHandle = fileHandle;
 
       const filecontent = await this.#fileHandle.getFile();
+
       return filecontent;
     }
     catch (err) {

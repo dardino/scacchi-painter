@@ -2,6 +2,10 @@
 @use "@dardino/chess-board/css";
 
 :host {
+  --cb-chess-light-square: var(--cell-white-color);
+  --cb-chess-dark-square: var(--cell-black-color);
+  --cb-chess-border-color: #666;
+  --cb-chess-label-color: #555;
   display: block;
   width: 100%;
   margin: 0 auto;

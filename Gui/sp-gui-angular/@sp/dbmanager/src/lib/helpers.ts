@@ -1,11 +1,15 @@
 import {
+  FenPosition,
+  getEmptyBoardFen,
+  parseFen,
+  positionToFen,
   type ChessPieceColor,
   type ChessPieceRotation,
   type ChessPieceType,
 } from "@dardino/chess-board";
 
 import { Base64 } from "./base64";
-import { Columns, IPiece, IProblem, PieceColors, PieceRotation, Traverse } from "./SPX";
+import { Columns, IPiece, IProblem, IStipulation, PieceColors, PieceRotation, Traverse } from "./SPX";
 
 export interface ProblemDb {
   version: string;
@@ -128,6 +132,18 @@ export const getCanvasColor = (c: PieceColors): ChessPieceColor => {
   }
 };
 
+export const getPieceColor = (c: ChessPieceColor): PieceColors => {
+  switch (c) {
+    case "b":
+      return "Black";
+    case "n":
+      return "Neutral";
+    case "w":
+    default:
+      return "White";
+  }
+};
+
 export const getFigurine = (appearance?: string): ChessPieceType | null => {
   switch (appearance) {
     case "K":
@@ -174,6 +190,8 @@ const mapRotations = {
   [PieceRotation[6]]: ":6",
   [PieceRotation[7]]: ":7",
 } as const;
+export const getRotationSymbol = (rotation: IPiece["rotation"]): string =>
+  mapRotations[rotation];
 
 const RotationsCodes = [
   "+ ",
@@ -198,8 +216,18 @@ const RotationsCodeMap: Record<RotationsCodes, PieceRotation> = {
   "-\\": "Counterclockwise45",
 };
 
-export const getRotationSymbol = (rotation: IPiece["rotation"]): string =>
-  mapRotations[rotation];
+const RotationsAngleMap: Record<ChessPieceRotation, PieceRotation> = {
+  0: "NoRotation",
+  45: "Clockwise45",
+  90: "Clockwise90",
+  135: "Clockwise135",
+  180: "UpsideDown",
+  225: "Counterclockwise135",
+  270: "Counterclockwise90",
+  315: "Counterclockwise45",
+};
+export const getRotationFromAngle = (rotation: ChessPieceRotation): IPiece["rotation"] =>
+  RotationsAngleMap[rotation];
 
 /*
 <SP_Item
@@ -567,4 +595,90 @@ export const notationCasingByColor: Record<PieceColors, (piecename: string) => s
   White: (txt: string) => txt.toUpperCase(),
   Black: (txt: string) => txt.toLowerCase(),
   Neutral: (txt: string) => `*${txt.toUpperCase()}`,
+};
+
+export function updatePositionFromFen(ffen: string, currentPosition?: IProblem): IProblem {
+  const position = parseFen(ffen);
+  return {
+    authors: [...currentPosition?.authors ?? []],
+    conditions: [...currentPosition?.conditions ?? []],
+    date: currentPosition?.date ?? new Date().toISOString(),
+    engine: currentPosition?.engine,
+    engineConfig: currentPosition?.engineConfig,
+    engineConfigurationsByEngine: currentPosition?.engineConfigurationsByEngine,
+    htmlSolution: currentPosition?.htmlSolution ?? "",
+    textSolution: currentPosition?.textSolution ?? "",
+    personalID: currentPosition?.personalID ?? "",
+    pieces: position?.pieces.map(p => ({
+      appearance: p.type,
+      color: getPieceColor(p.color),
+      column: `Col${p.square[0].toUpperCase()}` as Columns,
+      traverse: `Row${p.square[1]}` as Traverse,
+      fairyAttribute: p.fairyCondition ?? "",
+      fairyCode: p.fairyName ? [{ code: p.fairyName, params: [] }] : [],
+      rotation: getRotationFromAngle(p.rotation ?? "0"),
+    } satisfies IPiece)) ?? [],
+    prizeDescription: currentPosition?.prizeDescription ?? "",
+    prizeRank: currentPosition?.prizeRank ?? 0,
+    source: currentPosition?.source ?? "",
+    stipulation: { ...currentPosition?.stipulation },
+    tags: [...currentPosition?.tags ?? []],
+    snapshots: { ...currentPosition?.snapshots },
+    twins: { ...currentPosition?.twins },
+  } satisfies IProblem;
+}
+
+export function getStartingColor(stipulation: Partial<IStipulation>): "w" | "b" {
+  const possibile = { "1": "w", "-1": "b" } as const;
+  let start: 1 | -1 = 1;
+  // help (mate or stalemate) starts with black, all other stipulations start with white
+  if (stipulation.problemType === "H") start = start * -1;
+  // if total moves is odd, starting color is opposite of the one defined by the stipulation
+  if (stipulation.moves && stipulation.moves % 2 === 1) start = start * -1;
+  return possibile[start.toString() as "1" | "-1"];
+}
+
+export function getFFenFromPosition(position?: IProblem | null): string {
+  if (!position) return getEmptyBoardFen();
+  const pos: FenPosition = {
+    activeColor: getStartingColor(position.stipulation),
+    castlingRights: "KQkq",
+    enPassantTarget: "-",
+    fullmoveNumber: 1,
+    halfmoveClock: 0,
+    pieces: position.pieces?.map(p => ({
+      square: getCanvasLocation(p.column ?? "ColA", p.traverse ?? "Row1"),
+      type: p.appearance || "p",
+      color: getCanvasColor(p.color ?? "White"),
+      rotation: getCanvasRotation(p.rotation ?? "NoRotation") === "0" ? undefined : getCanvasRotation(p.rotation ?? "NoRotation"),
+      fairyCondition: p.fairyAttribute === "None" ? undefined : (p.fairyAttribute ?? ""),
+      fairyName: p.fairyCode?.[0]?.code ?? "",
+    })) ?? [],
+  };
+  const fen = positionToFen(pos);
+  return fen;
+}
+
+/**
+ * Converts a SP2 FEN string to a new format if it is in the old FFEN format.
+ * @param fen
+ * @returns
+ */
+export const convertFen = (fen: string | null | undefined) => {
+  if (!fen) return "";
+  if (fen.split(" ")[0].includes(":") || fen.split(" ").pop()?.startsWith("[")) {
+    // OLD FFEN format, convert to new format
+
+    // Implement any conversion logic here if needed
+    return fen.replace(/\w:1/g, match => "*:0.5" + match[0])
+      .replace(/\w:2/g, match => "*1" + match[0])
+      .replace(/\w:3/g, match => "*1.5" + match[0])
+      .replace(/\w:4/g, match => "*2" + match[0])
+      .replace(/\w:5/g, match => "*2.5" + match[0])
+      .replace(/\w:6/g, match => "*3" + match[0])
+      .replace(/\w:7/g, match => "*3.5" + match[0])
+      .replace(/[[,](\w*)(\w\d)/g, "$2:$1:,")
+      .replace(/,]/g, "");
+  }
+  return fen;
 };

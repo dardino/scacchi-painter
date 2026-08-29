@@ -1,5 +1,4 @@
 import { Component, Input, inject } from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
@@ -24,8 +23,8 @@ export class ToolbarDbComponent {
   @Input() boardType: "canvas" | "HTML";
   @Input() hideLabels?: boolean;
 
-  currentIndex = toSignal(this.db.CurrentIndex$, { initialValue: this.db.CurrentIndex });
-  totalCount = toSignal(this.db.Count$, { initialValue: this.db.Count });
+  currentIndex = this.db.CurrentIndex;
+  totalCount = this.db.Count;
 
   canGoPrev() {
     return this.currentIndex() > 1;

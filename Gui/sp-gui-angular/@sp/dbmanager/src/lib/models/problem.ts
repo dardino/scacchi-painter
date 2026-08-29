@@ -255,17 +255,19 @@ export class Problem implements IProblem {
     return item;
   }
 
-  saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
+  saveSnapshot(snapshotId?: keyof IProblem["snapshots"]): string | number {
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
       const newKey = this.getNextId(this.currentSnapshotId);
       this.snapshots[newKey] = snap;
       this.currentSnapshotId = newKey;
+      return newKey;
     }
     else {
       this.snapshots[snapshotId] = snap;
       this.currentSnapshotId = snapshotId;
+      return snapshotId;
     }
   }
 

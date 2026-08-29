@@ -16,14 +16,11 @@ overrides:
   "prosemirror-model": "1.21.0"
   "chess-board": "link:../chess-board"
 
-ignoredBuiltDependencies:
-  - "@parcel/watcher"
-  - "lmdb"
-  - "msgpackr-extract"
-  - "optipng-bin"
-  - "sharp"
-  - "unrs-resolver"
-  - "zopflipng-bin"
-
-onlyBuiltDependencies:
-  - "esbuild"
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  lmdb: false
+  msgpackr-extract: false
+  optipng-bin: false
+  sharp: false
+  zopflipng-bin: false

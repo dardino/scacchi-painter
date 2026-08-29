@@ -8,17 +8,17 @@
   <section id="chessboard" #panelleft>
     <div class="chessboard-workarea">
       <lib-chessboard class="lib-chessboard" [position]="problem()" [cursor]="boardCursor()"
-        (cellMiddleClick)="clickOnCell($event, 'middle')" (contextOnCell)="onTriggerContextMenu($event)"
-        (currentCellChanged)="currentCellChange($event)" (cellClick)="clickOnCell($event, 'left')"
-        (focusOut)="boardBlur()"></lib-chessboard>
+        (positionChanged)="onChessboardPositionChanged($event)" (cellMiddleClick)="clickOnCell($event, 'middle')"
+        (contextOnCell)="onTriggerContextMenu($event)" (currentCellChanged)="currentCellChange($event)"
+        (cellClick)="clickOnCell($event, 'left')" (focusOut)="boardBlur()"></lib-chessboard>
       <section id="pieceselector">
         <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)"
           [current]="pieceToAdd()"></lib-piece-selector>
       </section>
     </div>
   </section>
+  <div #verticalSplitter (mousedown)="startResize($event)" class="vertical-splitter"></div>
   <div id="info">
-    <div #verticalSplitter (mousedown)="startResize($event)" class="vertical-splitter"></div>
     <section>
       <div class="custom-tabs">
         <div class="tab-header">

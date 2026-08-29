@@ -9,8 +9,7 @@
 }
 
 .main-app-toolbar {
-  grid-row: 1;
-  grid-column: span 2;
+  grid-area: header;
   position: sticky;
   top: 0;
   z-index: 2;

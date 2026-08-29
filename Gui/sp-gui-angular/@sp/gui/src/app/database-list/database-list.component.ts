@@ -49,7 +49,7 @@ export class DatabaseListComponent implements OnInit {
   itemSize = computed(() => Math.round(this.dbItemContainer?.[0]?.nativeElement?.getBoundingClientRect().height ?? 256));
 
   ngOnInit(): void {
-    if (this.db.All.length < 1) {
+    if (this.db.All().length < 1) {
       this.router.navigate(["/openfile"]);
     }
     setTimeout(() => this.scrollToIndex(), 100);
@@ -75,7 +75,7 @@ export class DatabaseListComponent implements OnInit {
 
   async createNewPosition() {
     const createdIndex = await this.db.addBlankPosition();
-    this.router.navigate(["edit", createdIndex]);
+    this.router.navigate(["edit", createdIndex()]);
   }
 
   async deleteItem(dbIndex: number) {
@@ -94,8 +94,8 @@ export class DatabaseListComponent implements OnInit {
 }
 
 export class MyDataSource extends DataSource<ProblemRef | undefined> {
-  private originalDataSource: ProblemRef[];
-  private filteredDataSource: ProblemRef[];
+  private originalDataSource = signal<ProblemRef[]>([]);
+  private filteredDataSource = signal<ProblemRef[]>([]);
   private get items$() {
     return this.itemsSubject.asObservable();
   }
@@ -117,7 +117,7 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   }
 
   getPositionalIndexFromId(dbIndex: number): number {
-    return this.originalDataSource.findIndex(pr => pr.dbIndex === dbIndex);
+    return this.originalDataSource().findIndex(pr => pr.dbIndex === dbIndex);
   }
 
   public async deleteProblemByDbIndex(dbIndex: number) {
@@ -126,23 +126,23 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
   }
 
   private async reload() {
-    const items = this.db.All;
-    this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex: dbIndex + 1, problem }));
+    const items = this.db.All();
+    this.originalDataSource.set(items.map((problem, dbIndex) => ({ dbIndex: dbIndex + 1, problem })));
     this.filter("");
   }
 
   public async filter(text: string) {
-    this.filteredDataSource = this.originalDataSource.slice();
+    this.filteredDataSource.set(this.originalDataSource());
     if (text.trim() !== "") {
-      this.filteredDataSource = this.filteredDataSource.filter(filterByText(text));
+      this.filteredDataSource.set(this.filteredDataSource().filter(filterByText(text)));
     }
     this.sortDescByDate();
-    this.filteredDataSource.unshift({ dbIndex: -1, problem: null });
-    this.itemsSubject.next(this.filteredDataSource);
+    this.filteredDataSource.set([{ dbIndex: -1, problem: null }, ...this.filteredDataSource()]);
+    this.itemsSubject.next(this.filteredDataSource());
   }
 
   private async sortDescByDate() {
-    this.filteredDataSource.reverse();
+    this.filteredDataSource.set(this.filteredDataSource().reverse());
   }
 }
 
