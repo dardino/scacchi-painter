@@ -1,5 +1,5 @@
 import { CommonModule, Location } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from "@angular/core";
+import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
@@ -7,7 +7,6 @@ import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
-import type { HalfMoveInfo } from "@dardino-chess/core";
 import { type ChessPieceRotation } from "@dardino/chess-board";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
@@ -30,7 +29,6 @@ import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolb
 import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
-import { BehaviorSubject, Subscription, skip } from "rxjs";
 import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
@@ -83,23 +81,30 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedEngine = signal<Engines>("Popeye");
   viewMode = signal<ViewModes>("html");
 
+  effects: EffectRef[] = [];
   constructor() {
     this.availableEngines = this.engine.availableEngines();
     this.selectedEngine.set(this.availableEngines[0] ?? "Popeye");
 
-    this.engine.isSolving$.subscribe((state) => {
-      this.solveInProgress.set(state);
-    });
+    this.effects.push(effect(() => {
+      const isSolving = this.engine.isSolving() ?? false;
+      this.solveInProgress.set(isSolving);
+    }));
+    this.effects.push(effect(() => {
+      const newSolutionRow = this.engine.solution();
+      if (newSolutionRow === null) return;
+      queueMicrotask(() => {
+        this.appendSolutionMessage(newSolutionRow);
+      });
+    }));
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
   @ViewChild("panelleft") panelleft: ElementRef<HTMLDivElement>;
   @ViewChild("workboard") workboard: ElementRef<HTMLDivElement>;
 
-  private subscribe: Subscription;
-
   public editMode = signal<EditModes>("select");
-  public rows$ubject = new BehaviorSubject<HalfMoveInfo[] | null>(null);
+
   menuX = signal(0);
   menuY = signal(0);
   contextOnCell = signal<SquareLocation | null>(null);
@@ -224,45 +229,36 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   startSolve(mode: "start" | "try") {
+    this.resetActions();
     if (!this.problem()) {
       console.warn("[WARN] -> No problem selected!");
       return;
     }
-    this.rows$ubject.next(null);
-    this.rows$ubject.next([]);
+
     this.solutionCount.set(0);
-    const prob = this.problem();
+    const prob = this.problem()?.clone();
     if (prob) {
       prob.engine = this.selectedEngine();
       prob.jsonSolution = [];
       prob.htmlSolution = "";
       prob.textSolution = "";
+      this.problem.update(() => prob);
       this.engine.startSolving(prob, mode);
     }
-    this.resetActions();
   }
 
   stopSolve() {
-    this.engine.stopSolving();
     this.resetActions();
+    this.engine.stopSolving();
   }
 
   goBack() {
-    this.location.back();
     this.resetActions();
+    this.location.back();
   }
 
   // #region NG Component life cycle
   ngOnInit(): void {
-    this.subscribe = this.engine.solution$.pipe(
-      skip(1), // skip first execution to avoid the reset of text at load
-    ).subscribe((msg) => {
-      if (msg === null) return;
-      if (!this.current.Problem()) return;
-      this.trackSolutionCount(msg);
-      this.appendSolutionMessage(msg);
-    });
-
     this.route.params.subscribe(async (params) => {
       const problemId = Number.parseInt(params.id, 10);
       if (!Number.isFinite(problemId)) {
@@ -286,33 +282,25 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private appendSolutionMessage(msg: SolutionRow) {
-    const problem = this.current.Problem();
-    if (!problem) return;
-
+    const newProblem = this.current.Problem()?.clone();
+    if (!newProblem) return;
     const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
-    problem.htmlSolution += this.toHtml([...raw]);
-    problem.textSolution += `\n` + raw.join(`\n`);
-    problem.jsonSolution.push(...msg.moveTree);
-    this.rows$ubject.next(msg.moveTree);
-  }
-
-  private trackSolutionCount(msg: SolutionRow) {
-    const newSolutions = msg.moveTree.filter(move => move?.isKey).length;
-    if (newSolutions > 0) {
-      this.solutionCount.update(count => count + newSolutions);
-    }
+    newProblem.htmlSolution += this.toHtml([...raw]);
+    newProblem.textSolution += raw.join(`\n`);
+    newProblem.jsonSolution.push(...msg.moveTree);
+    this.current.Problem.update(() => newProblem);
   }
 
   ngOnDestroy(): void {
     this.endResize();
     this.resetActions();
-    this.rows$ubject.complete();
-    this.rows$ubject.unsubscribe();
-    this.subscribe.unsubscribe();
+    this.effects.forEach(e => e.destroy());
+    this.effects = [];
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
+      document.adoptedStyleSheets = [new CSSStyleSheet()];
       this.applyPreferences();
     });
   }
@@ -333,15 +321,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   private applyPreferences() {
-    let adoptedStyleSheet = document.adoptedStyleSheets.at(0);
+    const adoptedStyleSheet = document.adoptedStyleSheets.at(0);
     if (!adoptedStyleSheet) {
-      adoptedStyleSheet = new CSSStyleSheet();
-      document.adoptedStyleSheets = [adoptedStyleSheet];
+      return;
     }
     adoptedStyleSheet.replace(`:root {
       --edit-window-width: ${this.preferences.editWindowWidth}px;
     }`);
-    window.dispatchEvent(new Event("resize"));
   }
 
   startResize($event: MouseEvent) {
@@ -456,7 +442,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   boardBlur() {
-    // no op
+    this.resetActions();
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {

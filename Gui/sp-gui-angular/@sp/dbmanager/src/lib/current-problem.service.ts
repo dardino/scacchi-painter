@@ -335,26 +335,20 @@ export class CurrentProblemService {
   }
 
   UpdateSnapshot() {
-    this.Problem.update((problem) => {
-      if (!problem) return problem;
-      const newProblem = problem.clone();
-      newProblem.saveSnapshot(newProblem.currentSnapshotId);
-      this.dbManager.CurrentProblem.set(newProblem);
-      this.dbManager.SaveTemporary();
-      return newProblem;
-    });
+    const newProblem = this.Problem()?.clone();
+    if (!newProblem) return;
+    newProblem.saveSnapshot(newProblem.currentSnapshotId);
+    this.dbManager.CurrentProblem.set(newProblem);
+    this.dbManager.SaveTemporary();
   }
 
   Snapshot(): string | number {
     let snapshotId: string | number = "";
-    this.Problem.update((problem) => {
-      if (!problem) return problem;
-      const newProblem = problem.clone();
-      snapshotId = newProblem.saveSnapshot();
-      this.dbManager.CurrentProblem.set(newProblem);
-      this.dbManager.SaveTemporary();
-      return newProblem;
-    });
+    const newProblem = this.Problem()?.clone();
+    if (!newProblem) return snapshotId;
+    snapshotId = newProblem.saveSnapshot();
+    this.dbManager.CurrentProblem.set(newProblem); // calls detectionChanges on the current problem, so that the snapshot is saved with the current state of the problem
+    this.dbManager.SaveTemporary(); // updates also the localStorage with the new snapshot
     return snapshotId;
   }
 

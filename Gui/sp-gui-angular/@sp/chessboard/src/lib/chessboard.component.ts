@@ -106,7 +106,6 @@ implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     // Later, you can stop observing
     this.animationSub.unsubscribe();
-    // window.removeEventListener("resize", this.sizeMutated);
   }
 
   ngOnInit() {

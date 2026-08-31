@@ -202,11 +202,19 @@ export class DbmanagerService {
   }
 
   private async saveToLocalStorage() {
-    if (!this.currentFile) return;
+    this.All.update((all) => {
+      const currentProblem = this.CurrentProblem();
+      const currentIndex = this.currentIndex();
+      if (currentProblem && currentIndex > 0 && currentIndex <= all.length) {
+        all[currentIndex - 1] = currentProblem;
+      }
+      return all.slice();
+    });
     const jsonObj = this.toJSON();
     const text = JSON.stringify(jsonObj);
     localStorage.setItem("spdb", text);
-    localStorage.setItem("spdb_info", JSON.stringify(this.currentFile));
+    if (!this.currentFile()) return;
+    localStorage.setItem("spdb_info", JSON.stringify(this.currentFile()));
   }
 
   private toJSON(): IDbSpX {
@@ -262,6 +270,7 @@ export class DbmanagerService {
   }
 
   public async Save() {
+    await this.saveToLocalStorage();
     const file = await this.GetFileContent();
     const fs = this.fileService;
     const cf = this.currentFile();
