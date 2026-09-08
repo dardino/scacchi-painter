@@ -2,6 +2,7 @@ import {
   FenPosition,
   getEmptyBoardFen,
   parseFen,
+  PiecesOnBoard,
   positionToFen,
   type ChessPieceColor,
   type ChessPieceRotation,
@@ -609,15 +610,18 @@ export function updatePositionFromFen(ffen: string, currentPosition?: IProblem):
     htmlSolution: currentPosition?.htmlSolution ?? "",
     textSolution: currentPosition?.textSolution ?? "",
     personalID: currentPosition?.personalID ?? "",
-    pieces: position?.pieces.map(p => ({
-      appearance: p.type,
-      color: getPieceColor(p.color),
-      column: `Col${p.square[0].toUpperCase()}` as Columns,
-      traverse: `Row${p.square[1]}` as Traverse,
-      fairyAttribute: p.fairyCondition ?? "",
-      fairyCode: p.fairyName ? [{ code: p.fairyName, params: [] }] : [],
-      rotation: getRotationFromAngle(p.rotation ?? "0"),
-    } satisfies IPiece)) ?? [],
+    pieces: Object.entries(position?.pieces ?? {}).map(([square, p]) => {
+      if (!p) return null;
+      return ({
+        appearance: p.type,
+        color: getPieceColor(p.color),
+        column: `Col${square[0].toUpperCase()}` as Columns,
+        traverse: `Row${square[1]}` as Traverse,
+        fairyAttribute: p.fairyCondition ?? "",
+        fairyCode: p.fairyName ? [{ code: p.fairyName, params: [] }] : [],
+        rotation: getRotationFromAngle(p.rotation ?? "0"),
+      } satisfies IPiece);
+    }).filter(p => p !== null) ?? [],
     prizeDescription: currentPosition?.prizeDescription ?? "",
     prizeRank: currentPosition?.prizeRank ?? 0,
     source: currentPosition?.source ?? "",
@@ -646,14 +650,18 @@ export function getFFenFromPosition(position?: IProblem | null): string {
     enPassantTarget: "-",
     fullmoveNumber: 1,
     halfmoveClock: 0,
-    pieces: position.pieces?.map(p => ({
-      square: getCanvasLocation(p.column ?? "ColA", p.traverse ?? "Row1"),
-      type: p.appearance || "p",
-      color: getCanvasColor(p.color ?? "White"),
-      rotation: getCanvasRotation(p.rotation ?? "NoRotation") === "0" ? undefined : getCanvasRotation(p.rotation ?? "NoRotation"),
-      fairyCondition: p.fairyAttribute === "None" ? undefined : (p.fairyAttribute ?? ""),
-      fairyName: p.fairyCode?.[0]?.code ?? "",
-    })) ?? [],
+    boardSize: { height: 8, width: 8 },
+    pieces: position.pieces?.reduce((aggr: PiecesOnBoard, p) => {
+      const square = getCanvasLocation(p.column ?? "ColA", p.traverse ?? "Row1");
+      aggr[square] = {
+        type: p.appearance || "p",
+        color: getCanvasColor(p.color ?? "White"),
+        rotation: getCanvasRotation(p.rotation ?? "NoRotation") === "0" ? undefined : getCanvasRotation(p.rotation ?? "NoRotation"),
+        fairyCondition: p.fairyAttribute === "None" ? undefined : (p.fairyAttribute ?? ""),
+        fairyName: p.fairyCode?.[0]?.code ?? "",
+      };
+      return aggr;
+    }, {}) ?? {},
   };
   const fen = positionToFen(pos);
   return fen;

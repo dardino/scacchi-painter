@@ -2,7 +2,7 @@
   <div class="chessboard-image" #cbHtml [ngClass]="{customCursor: cursor}">
     <chess-board #chessboard [attr.hide-labels]="smallBoard()" [attr.ignore-fen-active-color]="true"
       [attr.disable-piece-selection]="true" [disabled]="smallBoard()" [attr.fen]="fen()" auto-select-piece-on-click
-      (cellClick)="onCellClick($event)" (fenChange)="internalFenChanged($event)" class="chess-board"></chess-board>
+      (cellMainClick)="onCellClick($event)" (fenChange)="internalFenChanged($event)" class="chess-board"></chess-board>
   </div>
   @if (!hideInfo()) {
   <div class="short-info">

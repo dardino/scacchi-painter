@@ -49,8 +49,7 @@ implements OnInit, OnChanges, OnDestroy {
   focusOut = output<void>();
   currentCellChanged = output<SquareLocation | null>();
   positionChanged = output<IProblem>();
-  cellClick = output<SquareLocation>();
-  cellMiddleClick = output<SquareLocation>();
+  clickOnCell = output<{ location: SquareLocation; button: "left" | "middle" }>();
   contextOnCell = output<{ event: MouseEvent; location: SquareLocation }>();
 
   currentCell = signal<UiCell | null>(null);
@@ -167,7 +166,7 @@ implements OnInit, OnChanges, OnDestroy {
       $event.preventDefault();
       $event.stopImmediatePropagation();
       $event.stopPropagation();
-      this.cellMiddleClick.emit({ ...cell.location });
+      this.clickOnCell.emit({ location: { ...cell.location }, button: "middle" });
     }
   }
 
@@ -192,13 +191,10 @@ implements OnInit, OnChanges, OnDestroy {
   }
 
   onCellClick($event: CustomEvent<CellClickEventDetail>) {
-    $event.stopImmediatePropagation();
-    $event.preventDefault();
-
     const location = this.#toCellLocation($event.detail);
     const piece = this.#getPieceAtLocation(location);
 
-    this.cellClick.emit({ ...location });
+    this.clickOnCell.emit({ location: { ...location }, button: "left" });
     const current = this.currentCell();
     if (location !== current?.location) this.currentCell.set({ location, piece });
     else this.currentCell.set(null);
