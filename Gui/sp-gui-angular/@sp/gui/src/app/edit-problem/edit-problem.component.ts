@@ -6,7 +6,7 @@ import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
-import { ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
+import { FairySquare, ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
@@ -18,6 +18,7 @@ import {
   CurrentProblemService,
   EngineManagerService,
   SquareLocation,
+  getCanvasLocation,
   getCanvasRotation,
   notNull,
 } from "@sp/dbmanager/src/public-api";
@@ -53,19 +54,20 @@ import { PreferencesService } from "../services/preferences.service";
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   activeTab = signal(0);
 
-  private current = inject(CurrentProblemService);
-  private location = inject(Location);
-  private route = inject(ActivatedRoute);
-  private engine = inject(EngineManagerService);
-  private dialogService = inject(DialogService);
-  private preferences = inject(PreferencesService);
-  private snackBar = inject(MatSnackBar);
-  private chessanim = inject(ChessboardAnimationService);
+  #current = inject(CurrentProblemService);
+  #location = inject(Location);
+  #route = inject(ActivatedRoute);
+  #engine = inject(EngineManagerService);
+  #dialogService = inject(DialogService);
+  #preferences = inject(PreferencesService);
+  #snackBar = inject(MatSnackBar);
+  #chessanim = inject(ChessboardAnimationService);
+  #selectedPieceSquare = signal<FairySquare | null>(null);
 
-  public get problem() { return this.current.Problem; }
-
+  public selectedPieceSquare = this.#selectedPieceSquare.asReadonly();
+  public problem = this.#current.Problem;
   public get engineEnabled() {
-    return this.engine?.supportsSolve === true;
+    return this.#engine?.supportsSolve === true;
   }
 
   solveInProgress = signal(false);
@@ -77,15 +79,15 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   effects: EffectRef[] = [];
   constructor() {
-    this.availableEngines = this.engine.availableEngines();
+    this.availableEngines = this.#engine.availableEngines();
     this.selectedEngine.set(this.availableEngines[0] ?? "Popeye");
 
     this.effects.push(effect(() => {
-      const isSolving = this.engine.isSolving() ?? false;
+      const isSolving = this.#engine.isSolving() ?? false;
       this.solveInProgress.set(isSolving);
     }));
     this.effects.push(effect(() => {
-      const newSolutionRow = this.engine.solution();
+      const newSolutionRow = this.#engine.solution();
       if (newSolutionRow === null) return;
       queueMicrotask(() => {
         this.appendSolutionMessage(newSolutionRow);
@@ -108,23 +110,23 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private leaveTimeout?: ReturnType<typeof setTimeout>;
 
   private commandMapper: Record<EditCommand, () => void> = {
-    flipH: () => this.current.FlipBoard("y"),
-    flipV: () => this.current.FlipBoard("x"),
+    flipH: () => this.#current.FlipBoard("y"),
+    flipV: () => this.#current.FlipBoard("x"),
     rotateL: () => {
-      this.chessanim.animate("rotateLeft");
-      this.current.RotateBoard("left");
+      this.#chessanim.animate("rotateLeft");
+      this.#current.RotateBoard("left");
     },
     rotateR: () => {
-      this.chessanim.animate("rotateRight");
-      this.current.RotateBoard("right");
+      this.#chessanim.animate("rotateRight");
+      this.#current.RotateBoard("right");
     },
-    moveU: () => this.current.ShiftBoard("-y"),
-    moveD: () => this.current.ShiftBoard("y"),
-    moveL: () => this.current.ShiftBoard("-x"),
-    moveR: () => this.current.ShiftBoard("x"),
-    resetPosition: () => this.current.Reload(), // reload current snapshot
-    updatePosition: () => this.current.UpdateSnapshot(), // update current snapshot
-    clearBoard: () => this.current.ClearBoard(),
+    moveU: () => this.#current.ShiftBoard("-y"),
+    moveD: () => this.#current.ShiftBoard("y"),
+    moveL: () => this.#current.ShiftBoard("-x"),
+    moveR: () => this.#current.ShiftBoard("x"),
+    resetPosition: () => this.#current.Reload(), // reload current snapshot
+    updatePosition: () => this.#current.UpdateSnapshot(), // update current snapshot
+    clearBoard: () => this.#current.ClearBoard(),
     copyToClipboard: () => this.onCopy(),
     pasteFromClipboard: async () => {
       const text = await navigator.clipboard.readText();
@@ -186,15 +188,15 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openSolveEngineDialog() {
-    this.dialogService.solverEngineSettings({
+    this.#dialogService.solverEngineSettings({
       availableEngines: this.availableEngines,
       engine: this.selectedEngine(),
-      engineConfig: this.current.Problem()?.engineConfig ?? null,
-      engineConfigurationsByEngine: this.current.Problem()?.engineConfigurationsByEngine ?? null,
+      engineConfig: this.#current.Problem()?.engineConfig ?? null,
+      engineConfigurationsByEngine: this.#current.Problem()?.engineConfigurationsByEngine ?? null,
     }).subscribe((result) => {
       if (result == null) return;
       this.selectedEngine.set(result.engine);
-      const problem = this.current.Problem();
+      const problem = this.#current.Problem();
       if (problem) {
         problem.engine = result.engine;
         problem.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(result.engineConfigurationsByEngine) ?? {};
@@ -233,38 +235,38 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       prob.jsonSolution = [];
       prob.htmlSolution = "";
       prob.textSolution = "";
-      this.current.SetProblem(() => prob);
-      this.engine.startSolving(prob, mode);
+      this.#current.SetProblem(() => prob);
+      this.#engine.startSolving(prob, mode);
     }
   }
 
   stopSolve() {
     this.resetActions();
-    this.engine.stopSolving();
+    this.#engine.stopSolving();
   }
 
   goBack() {
     this.resetActions();
-    this.location.back();
+    this.#location.back();
   }
 
   // #region NG Component life cycle
   ngOnInit(): void {
-    this.route.params.subscribe(async (params) => {
+    this.#route.params.subscribe(async (params) => {
       const problemId = Number.parseInt(params.id, 10);
       if (!Number.isFinite(problemId)) {
         return;
       }
-      this.current.ReloadFromDbManager(problemId);
+      this.#current.ReloadFromDbManager(problemId);
 
-      const problemEngine = this.current.Problem()?.engine;
+      const problemEngine = this.#current.Problem()?.engine;
       if (problemEngine && this.availableEngines.includes(problemEngine)) {
         this.selectedEngine.set(problemEngine);
       }
       else {
         const fallbackEngine = this.availableEngines[0] ?? "Popeye";
         this.selectedEngine.set(fallbackEngine);
-        const problem = this.current.Problem();
+        const problem = this.#current.Problem();
         if (problem) {
           problem.engine = fallbackEngine;
         }
@@ -273,13 +275,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private appendSolutionMessage(msg: SolutionRow) {
-    const newProblem = this.current.Problem()?.clone();
+    const newProblem = this.#current.Problem()?.clone();
     if (!newProblem) return;
     const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
     newProblem.htmlSolution += this.toHtml([...raw]);
     newProblem.textSolution += raw.join(`\n`);
     newProblem.jsonSolution.push(...msg.moveTree);
-    this.current.SetProblem(() => newProblem);
+    this.#current.SetProblem(() => newProblem);
   }
 
   ngOnDestroy(): void {
@@ -305,8 +307,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     const delta = $event.x - this.resizing.x;
     const editWindowWidth = this.resizing.initialW + delta;
-    if (this.preferences.editWindowWidth !== editWindowWidth) {
-      this.preferences.editWindowWidth = editWindowWidth;
+    if (this.#preferences.editWindowWidth !== editWindowWidth) {
+      this.#preferences.editWindowWidth = editWindowWidth;
       this.applyPreferences();
     }
   };
@@ -317,7 +319,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     adoptedStyleSheet.replace(`:root {
-      --edit-window-width: ${this.preferences.editWindowWidth}px;
+      --edit-window-width: ${this.#preferences.editWindowWidth}px;
     }`);
   }
 
@@ -373,14 +375,14 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   onChessboardPositionChanged($event: IProblemV4 | null) {
     this.resetActions();
     if ($event == null) return;
-    this.current.PasteJson($event);
+    this.#current.PasteJson($event);
   }
 
   clickOnCell($event: SquareLocation, button: "left" | "middle", modifiers: ModifierKeys) {
     const editModeValue = this.editMode();
     const pieceToMoveValue = this.pieceToMove();
     if (button === "middle") {
-      this.current.RemovePieceAt($event);
+      this.#current.RemovePieceAt($event);
       this.editMode.set("select");
       this.resetActions();
       return;
@@ -391,7 +393,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     if (editModeValue === "remove") {
-      this.current.RemovePieceAt($event);
+      this.#current.RemovePieceAt($event);
       this.resetActions();
       return;
     }
@@ -407,7 +409,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if (editModeValue === "move") {
       if (pieceToMoveValue == null) {
         this.prepareMovePiece(
-          this.current.Problem()?.GetPieceAt($event.column, $event.traverse),
+          this.#current.Problem()?.GetPieceAt($event.column, $event.traverse),
         );
       }
       else {
@@ -416,7 +418,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     if (editModeValue === "select") {
-      const piece = this.current.Problem()?.GetPieceAt(
+      const piece = this.#current.Problem()?.GetPieceAt(
         $event.column,
         $event.traverse,
       );
@@ -447,12 +449,15 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
             ? "Black"
             : "Neutral",
     }) as Piece;
-    this.current.AddPieceAt(loc, p);
+    this.#current.AddPieceAt(loc, p);
   }
 
   private prepareMovePiece(p: Piece | undefined) {
     if (!p) return;
     this.pieceToMove.set(p);
+    const loc = p.GetLocation();
+    const fairySquare = getCanvasLocation(loc.column, loc.traverse);
+    this.#selectedPieceSquare.set(fairySquare);
   }
 
   private completeMove(loc: SquareLocation, modifiers: ModifierKeys) {
@@ -467,10 +472,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
           : "White";
     }
     if (modifiers.shiftKey) {
-      this.current.AddPieceAt(loc, pieceToMoveValue);
+      this.#current.AddPieceAt(loc, pieceToMoveValue);
     }
     else {
-      this.current.MovePiece(from, loc, "replace");
+      this.#current.MovePiece(from, loc, "replace");
     }
     this.editMode.set("select");
     this.resetActions();
@@ -483,6 +488,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     this.pieceToAdd.set(null);
     this.pieceToMove.set(null);
+    this.#selectedPieceSquare.set(null);
   }
 
   private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {
@@ -490,42 +496,42 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openTwinDialog($event: Twin | null): void {
-    this.dialogService.twinDialog(Twin.fromJson($event?.toJson() ?? {})).subscribe((result) => {
+    this.#dialogService.twinDialog(Twin.fromJson($event?.toJson() ?? {})).subscribe((result) => {
       if (result == null) return;
-      this.current.AddTwin(result);
+      this.#current.AddTwin(result);
     });
   }
 
   openConditionDialog(): void {
-    this.dialogService.fairyConditions().subscribe((result) => {
-      this.current.AddCondition(result);
+    this.#dialogService.fairyConditions().subscribe((result) => {
+      this.#current.AddCondition(result);
     });
   }
 
   openAuthorDialog($event: Author | null): void {
-    this.dialogService.authors($event).subscribe((result) => {
+    this.#dialogService.authors($event).subscribe((result) => {
       if (!result) return;
-      this.current.AddOrUpdateAuthor(result);
+      this.#current.AddOrUpdateAuthor(result);
     });
   }
 
   deleteCondition($event: string) {
-    this.current.RemoveCondition($event);
+    this.#current.RemoveCondition($event);
   }
 
   deleteTwin($event: Twin) {
-    this.current.RemoveTwin($event);
+    this.#current.RemoveTwin($event);
   }
 
   deleteAuthor($event: Author) {
-    const modal = this.dialogService.confirmDialog({
+    const modal = this.#dialogService.confirmDialog({
       cancelText: "No!",
       confirmText: "Yes! Remove Author!",
       message: `Are you sure you want to remove the author ${$event.nameAndSurname} (${$event.AuthorID})? This operation cannot be undone!`,
       title: "Remove Author Confirm",
     }).subscribe((res) => {
       if (res === true) {
-        this.current.RemoveAuthor($event);
+        this.#current.RemoveAuthor($event);
       }
       modal.unsubscribe();
     });
@@ -554,12 +560,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       $event.preventDefault();
     }
     try {
-      const json = this.current.GetJSONString() ?? "";
+      const json = this.#current.GetJSONString() ?? "";
       navigator.clipboard.writeText(json);
-      this.snackBar.open("Position saved to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
+      this.#snackBar.open("Position saved to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
     }
     catch (err) {
-      this.snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
+      this.#snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
     }
   };
 
@@ -578,10 +584,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       // TODO: [#170] check if text is a FEN, in this case use the method `this.current.PasteFEN`
       try {
         const probJSON = JSON.parse(text);
-        this.current.PasteJson(probJSON);
+        this.#current.PasteJson(probJSON);
       }
       catch (err) {
-        this.snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
+        this.#snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
       }
     }
   };
@@ -590,7 +596,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   ctxDeletePiece() {
     const cell = this.contextOnCell;
     if (cell) {
-      this.current.RemovePieceAt(cell);
+      this.#current.RemovePieceAt(cell);
     }
   }
 
@@ -603,22 +609,22 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ctxRemoveFairyInfo() {
     if (!this.contextOnCell) return;
-    this.current.RemoveFairyInfoAt(this.contextOnCell);
+    this.#current.RemoveFairyInfoAt(this.contextOnCell);
   }
 
   openFairyInfoDialog(cell: SquareLocation): void {
-    const originalPiece = this.current.Problem()?.GetPieceAt(cell.column, cell.traverse) ?? null;
+    const originalPiece = this.#current.Problem()?.GetPieceAt(cell.column, cell.traverse) ?? null;
     // Implementation for opening the fairy info dialog
-    this.dialogService.fairypieceDialog({
+    this.#dialogService.fairypieceDialog({
       cell,
       originalPiece,
     }).subscribe((result) => {
       if (!result || !result.updatedPiece) return;
       if (!result.updatedPiece.fairyCode && result.updatedPiece.fairyAttributes.length === 0) {
-        this.current.RemoveFairyInfoAt(cell);
+        this.#current.RemoveFairyInfoAt(cell);
       }
       else {
-        this.current.SetAsFairyPiece(
+        this.#current.SetAsFairyPiece(
           cell,
           result.updatedPiece.fairyAttributes ?? [],
           result.updatedPiece.fairyCode ?? null,

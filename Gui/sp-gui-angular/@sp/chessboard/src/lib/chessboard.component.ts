@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, computed, effect, inject, input, output, signal, viewChild } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
+  FairySquare,
   type CellClickEventDetail,
   type ChessBoard,
   type ChessPieceRotation,
@@ -38,6 +39,7 @@ implements OnInit, OnChanges, OnDestroy {
   smallBoard = input<boolean>(false);
   cursor = input<{ figurine: string | null; rotation: ChessPieceRotation | null } | null>(null);
   position = input<Problem | null>(null);
+  selectedPieceSquare = input<FairySquare | null>(null);
 
   getTraverse(location: SquareLocation) {
     return 8 - Traverse.indexOf(location.traverse);
@@ -102,12 +104,14 @@ implements OnInit, OnChanges, OnDestroy {
         this.lastHash.set(pos?.currentHash);
         this.updateBoard();
       }
+      const selectedPieceSquare = this.selectedPieceSquare();
+      if (selectedPieceSquare) {
+        this.chessboard()?.nativeElement.selectPiece(selectedPieceSquare);
+      }
+      else {
+        this.chessboard()?.nativeElement.unselectPiece();
+      }
     });
-  }
-
-  onSelectCell($event: Event) {
-    // eslint-disable-next-line no-console
-    console.log($event);
   }
 
   ngOnDestroy(): void {
@@ -165,37 +169,6 @@ implements OnInit, OnChanges, OnDestroy {
         }
         cells[index].piece = piece;
       }
-    }
-  }
-
-  onMouseUp(cell: UiCell, $event: MouseEvent) {
-    const haskeymod = $event.ctrlKey
-      || $event.altKey
-      || $event.metaKey
-      || $event.shiftKey;
-    if ($event.button === 1 && !haskeymod) {
-      $event.preventDefault();
-      $event.stopImmediatePropagation();
-      $event.stopPropagation();
-      this.clickOnCell.emit({
-        location: { ...cell.location },
-        button: "middle",
-        modifiers: {
-          ctrlKey: $event.ctrlKey,
-          altKey: $event.altKey,
-          metaKey: $event.metaKey,
-          shiftKey: $event.shiftKey,
-        },
-      });
-    }
-  }
-
-  onMouseDown(_cell: UiCell, $event: MouseEvent) {
-    const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
-    if ($event.button === 1 && !haskeymod) {
-      $event.preventDefault();
-      $event.stopImmediatePropagation();
-      $event.stopPropagation();
     }
   }
 

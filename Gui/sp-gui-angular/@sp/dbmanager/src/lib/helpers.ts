@@ -105,9 +105,9 @@ export const getCanvasRotation = (rotation: PieceRotation): ChessPieceRotation =
   }
 };
 
-export const getCanvasLocation = (x: Columns, y: Traverse): `${BoardFile}${BoardRank}` => {
-  if (typeof x !== "string" || typeof y !== "string") {
-    return "a1";
+export const getCanvasLocation = (x: Columns, y: Traverse): `${BoardFile}${BoardRank}` | null => {
+  if (!x || !y) {
+    return null;
   }
   return `${getBoardFile(x)}${getBoardRank(y)}`;
 };
@@ -645,8 +645,6 @@ export function getStartingColor(stipulation: Partial<IStipulation>): "w" | "b" 
 }
 
 export function getFFenFromPosition(position?: IProblemV4 | null): string {
-  const d5 = position?.pieces?.find(p => p.traverse === "Row5" && p.column === "ColD");
-  console.log("🚀 ~ getFFenFromPosition ~ position:", d5?.fairyAttributes);
   if (!position) return getEmptyBoardFen();
   const pos: FenPosition = {
     activeColor: getStartingColor(position.stipulation),
@@ -657,6 +655,7 @@ export function getFFenFromPosition(position?: IProblemV4 | null): string {
     boardSize: { height: 8, width: 8 },
     pieces: position.pieces?.reduce((aggr: PiecesOnBoard, p) => {
       const square = getCanvasLocation(p.column ?? "ColA", p.traverse ?? "Row1");
+      if (!square) return aggr;
       aggr[square] = {
         type: p.appearance || "p",
         color: getCanvasColor(p.color ?? "White"),
