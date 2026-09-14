@@ -245,7 +245,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       prob.jsonSolution = [];
       prob.htmlSolution = "";
       prob.textSolution = "";
-      this.problem.update(() => prob);
+      this.current.SetProblem(() => prob);
       this.engine.startSolving(prob, mode);
     }
   }
@@ -291,7 +291,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     newProblem.htmlSolution += this.toHtml([...raw]);
     newProblem.textSolution += raw.join(`\n`);
     newProblem.jsonSolution.push(...msg.moveTree);
-    this.current.Problem.update(() => newProblem);
+    this.current.SetProblem(() => newProblem);
   }
 
   ngOnDestroy(): void {

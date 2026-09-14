@@ -66,7 +66,7 @@ export class SpSolutionDescComponent {
   }
 
   set solutionText(txt: string) {
-    // this.current.SetTextSolution(txt);
+    this.current.SetTextSolution(txt);
   }
 
   #solutionHtml = computed(() => this.current.Problem()?.htmlSolution ?? "");
@@ -75,7 +75,7 @@ export class SpSolutionDescComponent {
   }
 
   set solutionHtml(text: string) {
-    // this.current.SetHTMLSolution(text);
+    this.current.SetHTMLSolution(text);
   }
 
   getClass(item: string) {

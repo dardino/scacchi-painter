@@ -408,6 +408,14 @@ export class CurrentProblemService {
     });
   }
 
+  SetProblem(cb: (problem: Problem) => Problem) {
+    this.#problem.update((problem) => {
+      if (!problem) return problem;
+      const newProblem = cb(problem.clone());
+      return this.syncCurrentProblem(newProblem);
+    });
+  }
+
   async ReloadFromDbManager(problemId: number) {
     if (this.#dbManager.All().length === 0) {
       await this.#dbManager.Reload(problemId);
