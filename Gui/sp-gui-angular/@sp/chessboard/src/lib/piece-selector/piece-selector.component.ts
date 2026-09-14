@@ -2,6 +2,8 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
+import { StandardPiecesList } from "@dardino/chess-board";
+
 @Component({
   selector: "lib-piece-selector",
   templateUrl: "./piece-selector.component.html",
@@ -15,6 +17,9 @@ export class PieceSelectorComponent {
 
   @Output()
   selectedPieceChanged = new EventEmitter<string | null>();
+
+  standardPieces = StandardPiecesList;
+  colors = ["w", "b", "n"];
 
   constructor() {}
 

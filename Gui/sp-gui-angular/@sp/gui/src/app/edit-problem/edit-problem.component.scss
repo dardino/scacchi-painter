@@ -52,7 +52,8 @@
   box-sizing: border-box;
   width: min(max(20rem, var(--edit-window-width)), calc(100vw - 20rem));
   position: sticky;
-  top: mq.$maintoolbarH + 4rem;
+  top: mq.$maintoolbarH;
+  container-type: size;
 
   @media (max-width: mq.$smallScreen) and (orientation: portrait) {
     position: static;
@@ -63,6 +64,12 @@
     top: 0;
     width: mq.$boardwidthSM;
   }
+
+  @media (min-width: (mq.$smallScreen + 1)) and (orientation: landscape) {
+    top: mq.$maintoolbarH * 2;
+    z-index: 2;
+  }
+
 
   .chessboard-workarea {
     z-index: 20;
