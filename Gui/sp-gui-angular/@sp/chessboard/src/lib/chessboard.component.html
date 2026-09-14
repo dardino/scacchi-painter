@@ -1,5 +1,5 @@
-<div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
-  <div class="chessboard-image" #cbHtml [ngClass]="{customCursor: cursor}">
+<div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()" #cbHtml>
+  <div class="chessboard-image">
     <chess-board #chessboard [attr.hide-labels]="smallBoard()" [attr.ignore-fen-active-color]="true"
       [attr.disable-piece-selection]="true" [disabled]="smallBoard()" [attr.fen]="fen()" auto-select-piece-on-click
       (cellMainClick)="onCellClick($event)" (fenChange)="internalFenChanged($event)" class="chess-board"></chess-board>
@@ -23,7 +23,7 @@
   @if (!hideInfo()) {
   <div class="fen" tabindex="0" (click)="copyFen()" (keydown.enter)="copyFen()">
     <span>FEN:</span>
-    <span>{{ fen() }}</span>
+    <span>{{ fen().split(" ")[0] }}</span>
   </div>
   }
 </div>

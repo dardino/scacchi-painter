@@ -7,7 +7,7 @@ import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
-import { type ChessPieceRotation } from "@dardino/chess-board";
+import { ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
@@ -117,10 +117,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     flipH: () => this.current.FlipBoard("y"),
     flipV: () => this.current.FlipBoard("x"),
     rotateL: () => {
-      this.current.RotateBoard("left");
       this.chessanim.animate("rotateLeft");
+      this.current.RotateBoard("left");
     },
-    rotateR: () => this.current.RotateBoard("right"),
+    rotateR: () => {
+      this.chessanim.animate("rotateRight");
+      this.current.RotateBoard("right");
+    },
     moveU: () => this.current.ShiftBoard("-y"),
     moveD: () => this.current.ShiftBoard("y"),
     moveL: () => this.current.ShiftBoard("-x"),
@@ -385,7 +388,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.current.PasteJson($event);
   }
 
-  clickOnCell($event: SquareLocation, button: "left" | "middle") {
+  clickOnCell($event: SquareLocation, button: "left" | "middle", modifiers: ModifierKeys) {
     const editModeValue = this.editMode();
     const pieceToMoveValue = this.pieceToMove();
     if (button === "middle") {
@@ -407,6 +410,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const pieceToAddValue = this.pieceToAdd();
     if (editModeValue === "add" && pieceToAddValue != null) {
       this.addPiece(pieceToAddValue, $event);
+      this.resetActions();
       return;
     }
     if (editModeValue === "add" && pieceToAddValue == null) {
@@ -419,7 +423,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         );
       }
       else {
-        this.completeMove($event);
+        this.completeMove($event, modifiers);
       }
       return;
     }
@@ -463,11 +467,23 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.pieceToMove.set(p);
   }
 
-  private completeMove(loc: SquareLocation) {
-    const pieceToMoveValue = this.pieceToMove();
+  private completeMove(loc: SquareLocation, modifiers: ModifierKeys) {
+    const pieceToMoveValue = Piece.fromPartial(this.pieceToMove()?.toJson());
     if (!pieceToMoveValue) return;
     const from = pieceToMoveValue.GetLocation();
-    this.current.MovePiece(from, loc, "replace");
+    if (modifiers.altKey) {
+      // Change piece color:
+      pieceToMoveValue.color
+        = pieceToMoveValue.color === "White"
+          ? "Black"
+          : "White";
+    }
+    if (modifiers.shiftKey) {
+      this.current.AddPieceAt(loc, pieceToMoveValue);
+    }
+    else {
+      this.current.MovePiece(from, loc, "replace");
+    }
     this.editMode.set("select");
     this.resetActions();
   }

@@ -20,69 +20,76 @@ import { TwinTypesConfigs } from "./twinTypes";
   providedIn: "root",
 })
 export class CurrentProblemService {
-  private dbManager = inject(DbmanagerService);
+  #dbManager = inject(DbmanagerService);
   // Createa signal that holds the current problem, initialized with a clone of the current problem from the DbmanagerService
   // to save the current problem in the service, we need to update the DbmanagerService.CurrentProblem signal with the current problem when we save it
-  Problem = signal<Problem | null>(null);
+  #problem = signal<Problem | null>(null);
+  public Problem = this.#problem.asReadonly();
 
   constructor() {
     effect(() => {
-      this.Problem.set(this.dbManager.CurrentProblem()?.clone() ?? null);
+      this.#problem.set(this.#dbManager.CurrentProblem()?.clone() ?? null);
     });
   }
 
+  private syncCurrentProblem(problem: Problem | null): Problem | null {
+    const synced = problem?.clone() ?? Problem.fromJson({});
+    this.#dbManager.CurrentProblem.set(synced);
+    return synced;
+  }
+
+  private ensureProblem(problem: Problem | null): Problem {
+    return problem ?? Problem.fromJson({});
+  }
+
   PasteFEN(fen: string) {
-    this.Problem.update((old) => {
-      if (!old) return Problem.fromFen(fen);
-      updatePositionFromFen(fen, old);
-      return old.clone();
+    this.#problem.update((old) => {
+      const next = this.ensureProblem(old);
+      updatePositionFromFen(fen, next);
+      return this.syncCurrentProblem(next);
     });
   }
 
   PasteJson(json: Partial<IProblem>) {
-    this.Problem.update((old) => {
-      if (!old) return Problem.fromJson(json); // if there is no current problem, create a new one from the json
-      const newProblem = old.clone();
-      Problem.applyJson(json, newProblem);
-      return newProblem;
+    this.#problem.update((old) => {
+      const next = this.ensureProblem(old);
+      Problem.applyJson(json, next);
+      return this.syncCurrentProblem(next);
     });
   }
 
   GetJSONString(): string | null {
-    const prob = this.Problem();
+    const prob = this.#problem();
     if (!prob) return null;
     return JSON.stringify(prob.toJson());
   }
 
   SetPublicationDate(val: Date) {
-    this.Problem.update((old) => {
-      if (!old) return old;
-      const newProblem = old.clone();
+    this.#problem.update((old) => {
+      const newProblem = this.ensureProblem(old).clone();
       newProblem.date = val.toISOString();
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
-  textSolution = computed(() => this.Problem()?.textSolution ?? "");
-  htmlSolution = computed(() => this.Problem()?.htmlSolution ?? "");
+  textSolution = computed(() => this.#problem()?.textSolution ?? "");
+  htmlSolution = computed(() => this.#problem()?.htmlSolution ?? "");
 
   SetStipulationMoves(v: number) {
-    this.Problem.update((old) => {
-      if (!old) return old;
-      const newProblem = old.clone();
+    this.#problem.update((old) => {
+      const newProblem = this.ensureProblem(old).clone();
       newProblem.stipulation.moves = v;
       CurrentProblemService.recalcStipulationDesc(newProblem);
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   AddTwin(twindesc: string | Twin) {
-    this.Problem.update((prob) => {
-      if (!prob) return prob;
-      const newProblem = prob.clone();
+    this.#problem.update((prob) => {
+      const newProblem = this.ensureProblem(prob).clone();
       if (typeof twindesc === "string") {
         const [twintype, ...twinargs] = twindesc.split(" ");
-        if (TwinTypesConfigs[twintype as TwinTypesKeys] == null) return newProblem;
+        if (TwinTypesConfigs[twintype as TwinTypesKeys] == null) return this.syncCurrentProblem(newProblem);
         twindesc = Twin.fromJson({
           TwinType: twintype as TwinTypesKeys,
           TwinModes: TwinModes.Normal,
@@ -91,84 +98,84 @@ export class CurrentProblemService {
           ValueC: twinargs[2],
         });
       }
-      if (newProblem.twins.HasDiagram && twindesc.TwinType === "Diagram") return newProblem; // only ONE Diagram can be accepted
+      if (newProblem.twins.HasDiagram && twindesc.TwinType === "Diagram") return this.syncCurrentProblem(newProblem); // only ONE Diagram can be accepted
       newProblem.twins.TwinList.push(twindesc);
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetStipulationType(v: EndingTypes) {
-    this.Problem.update((old) => {
+    this.#problem.update((old) => {
       if (!old) return old;
       const newProblem = old.clone();
       newProblem.stipulation.stipulationType = v;
       CurrentProblemService.recalcStipulationDesc(newProblem);
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetProblemType(v: ProblemTypes) {
-    this.Problem.update((old) => {
+    this.#problem.update((old) => {
       if (!old) return old;
       const newProblem = old.clone();
       newProblem.stipulation.problemType = v;
       CurrentProblemService.recalcStipulationDesc(newProblem);
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetConditions(v: string[]) {
-    this.Problem.update((old) => {
+    this.#problem.update((old) => {
       if (!old) return old;
       const newProblem = old.clone();
       newProblem.conditions = v;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetTwins(v: Twin[]) {
-    this.Problem.update((old) => {
+    this.#problem.update((old) => {
       if (!old) return old;
       const newProblem = old.clone();
       newProblem.twins.TwinList = v;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetAuthors(v: Author[]) {
-    this.Problem.update((old) => {
+    this.#problem.update((old) => {
       if (!old) return old;
       const newProblem = old.clone();
       newProblem.authors = v;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   AddCondition(result: string | undefined) {
     if (typeof result === "string" && result.length > 0) {
-      this.Problem.update((old) => {
+      this.#problem.update((old) => {
         if (!old) return old;
         const newProblem = old.clone();
         newProblem.conditions.push(result);
-        return newProblem;
+        return this.syncCurrentProblem(newProblem);
       });
     }
   }
 
   RemoveCondition(cond: string | undefined) {
     if (typeof cond === "string" && cond.length > 0) {
-      this.Problem.update((old) => {
+      this.#problem.update((old) => {
         if (!old) return old;
         const index = old.conditions.indexOf(cond);
         const newProblem = old.clone();
         if (index > -1) newProblem.conditions.splice(index, 1);
-        return newProblem;
+        return this.syncCurrentProblem(newProblem);
       });
     }
   }
 
   RemoveTwin($event: Twin) {
-    this.Problem.update((prob) => {
+    this.#problem.update((prob) => {
       if (!prob) return prob;
       const newProblem = prob.clone();
       const original = newProblem.twins.TwinList.find(f => (
@@ -182,23 +189,23 @@ export class CurrentProblemService {
         const ix = newProblem.twins.TwinList.indexOf(original);
         if (ix > -1) newProblem.twins.TwinList.splice(ix, 1);
       }
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   AddPieceAt(location: SquareLocation, piece: Piece) {
-    this.Problem.update((problem) => {
-      if (!problem) return problem;
-      CurrentProblemService.addPieceAt(problem, location, piece);
-      return problem.clone();
+    this.#problem.update((problem) => {
+      const current = this.ensureProblem(problem);
+      CurrentProblemService.addPieceAt(current, location, piece);
+      return this.syncCurrentProblem(current);
     });
   }
 
   RemovePieceAt(location: SquareLocation) {
-    this.Problem.update((problem) => {
-      if (!problem) return problem;
-      CurrentProblemService.removePieceAt(problem, location);
-      return problem.clone();
+    this.#problem.update((problem) => {
+      const current = this.ensureProblem(problem);
+      CurrentProblemService.removePieceAt(current, location);
+      return this.syncCurrentProblem(current);
     });
   }
 
@@ -207,56 +214,56 @@ export class CurrentProblemService {
     to: SquareLocation,
     mode: "swap" | "replace" = "replace",
   ) {
-    this.Problem.update((problem) => {
-      if (!problem) return problem;
-      if (from.column === to.column && from.traverse === to.traverse) return problem;
-      if (mode === "swap") CurrentProblemService.swapPieces(problem, from, to);
-      if (mode === "replace") CurrentProblemService.movePiece(problem, from, to);
-      return problem.clone();
+    this.#problem.update((problem) => {
+      const current = this.ensureProblem(problem);
+      if (from.column === to.column && from.traverse === to.traverse) return this.syncCurrentProblem(current);
+      if (mode === "swap") CurrentProblemService.swapPieces(current, from, to);
+      if (mode === "replace") CurrentProblemService.movePiece(current, from, to);
+      return this.syncCurrentProblem(current);
     });
   }
 
   RotatePiece(location: SquareLocation, angle: PieceRotation) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       const p = newProblem.GetPieceAt(location.column, location.traverse);
       if (p) p.rotation = angle;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetPieceFairyAttribute(location: SquareLocation, attribute: string) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       const p = newProblem.GetPieceAt(location.column, location.traverse);
       if (p) p.fairyAttribute = attribute;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetCellFairyAttribute(location: SquareLocation, attribute: string) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       newProblem.setCellFairyAttribute(location, attribute);
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetAsFairyPiece(location: SquareLocation, fairyCode: FairyPiecesCodes) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       const p = newProblem.GetPieceAt(location.column, location.traverse);
       if (p) p.fairyCode = [{ code: fairyCode, params: [] }];
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   RotateBoard(angle: "left" | "right") {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
 
@@ -276,12 +283,12 @@ export class CurrentProblemService {
           ],
         });
       });
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   FlipBoard(axis: "x" | "y") {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       newProblem.pieces.forEach((p) => {
@@ -294,12 +301,12 @@ export class CurrentProblemService {
               : Traverse[7 - Traverse.indexOf(p.traverse)],
         });
       });
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   ShiftBoard(axis: "x" | "y" | "-x" | "-y") {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       newProblem.pieces.slice().forEach((p) => {
@@ -313,65 +320,65 @@ export class CurrentProblemService {
           CurrentProblemService.setPieceLocation(p, { traverse: newRow, column: newCol });
         }
       });
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   ClearBoard() {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       newProblem.pieces.length = 0;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   Reload(snapshotID?: keyof IProblem["snapshots"]) {
-    this.Problem.update(() => {
-      const newProblem = this.dbManager.CurrentProblem()?.clone() ?? null;
+    this.#problem.update(() => {
+      const newProblem = this.#dbManager.CurrentProblem()?.clone() ?? null;
       newProblem?.loadSnapshot(snapshotID, true);
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   UpdateSnapshot() {
-    const newProblem = this.Problem()?.clone();
+    const newProblem = this.#problem()?.clone();
     if (!newProblem) return;
     newProblem.saveSnapshot(newProblem.currentSnapshotId);
-    this.dbManager.CurrentProblem.set(newProblem);
-    this.dbManager.SaveTemporary();
+    this.#dbManager.CurrentProblem.set(newProblem);
+    this.#dbManager.SaveTemporary();
   }
 
   Snapshot(): string | number {
     let snapshotId: string | number = "";
-    const newProblem = this.Problem()?.clone();
+    const newProblem = this.#problem()?.clone();
     if (!newProblem) return snapshotId;
     snapshotId = newProblem.saveSnapshot();
-    this.dbManager.CurrentProblem.set(newProblem); // calls detectionChanges on the current problem, so that the snapshot is saved with the current state of the problem
-    this.dbManager.SaveTemporary(); // updates also the localStorage with the new snapshot
+    this.#dbManager.CurrentProblem.set(newProblem); // calls detectionChanges on the current problem, so that the snapshot is saved with the current state of the problem
+    this.#dbManager.SaveTemporary(); // updates also the localStorage with the new snapshot
     return snapshotId;
   }
 
   SetTextSolution(sol: string) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       newProblem.textSolution = sol;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   SetHTMLSolution(html: string) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       newProblem.htmlSolution = html;
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   AddOrUpdateAuthor(result: Author) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       if (result.AuthorID < 0) {
@@ -387,27 +394,27 @@ export class CurrentProblemService {
           real.updateFrom(result);
         }
       }
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   RemoveAuthor($event: Author) {
-    this.Problem.update((problem) => {
+    this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
       const real = newProblem.authors.findIndex(au => au.AuthorID === $event.AuthorID);
       if (real >= 0) newProblem.authors.splice(real, 1);
-      return newProblem;
+      return this.syncCurrentProblem(newProblem);
     });
   }
 
   async ReloadFromDbManager(problemId: number) {
-    if (this.dbManager.All().length === 0) {
-      await this.dbManager.Reload(problemId);
+    if (this.#dbManager.All().length === 0) {
+      await this.#dbManager.Reload(problemId);
     }
     else {
-      await this.dbManager.GotoIndex(problemId);
-      this.Problem.set(this.dbManager.CurrentProblem()?.clone() ?? null);
+      await this.#dbManager.GotoIndex(problemId);
+      this.#problem.set(this.#dbManager.CurrentProblem()?.clone() ?? null);
     }
   }
 

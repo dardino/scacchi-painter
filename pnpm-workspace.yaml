@@ -17,10 +17,13 @@ overrides:
   "chess-board": "link:../chess-board"
 
 allowBuilds:
-  '@parcel/watcher': true
+  "@parcel/watcher": true
   esbuild: true
   lmdb: false
   msgpackr-extract: false
   optipng-bin: false
   sharp: false
   zopflipng-bin: false
+
+minimumReleaseAgeExclude:
+  - "@dardino/chess-board@0.1.7"

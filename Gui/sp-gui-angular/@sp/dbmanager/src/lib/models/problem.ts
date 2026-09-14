@@ -355,7 +355,7 @@ export class Problem implements IProblem {
       }
       rows.push(row);
     }
-    return rows.join("/") + " w KQkq - 0 1 " + this.getFairiesFen();
+    return (rows.join("/") + this.getFairiesFen()).trim();
   }
 
   private getFairiesFen(): string {

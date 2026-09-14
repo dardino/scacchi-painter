@@ -6,6 +6,7 @@
   --cb-chess-dark-square: var(--cell-black-color);
   --cb-chess-border-color: #666;
   --cb-chess-label-color: #555;
+  --animation-duration: 0.5s;
   display: block;
   width: 100%;
   margin: 0 auto;
@@ -55,12 +56,12 @@
 }
 
 /* Stile per il div */
-.rotatingToRight {
-  animation: rotateToRight 1s normal ease-in-out;
+.rotateRight {
+  animation: rotateToRight var(--animation-duration) normal ease-in-out;
 }
 
-.rotatingToLeft {
-  animation: rotateToRight 3s normal ease-in-out;
+.rotateLeft {
+  animation: rotateToLeft var(--animation-duration) normal ease-in-out;
 }
 
 .clickable {
@@ -174,6 +175,6 @@
   }
 
   to {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
   }
 }

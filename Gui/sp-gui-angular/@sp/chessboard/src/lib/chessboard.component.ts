@@ -43,13 +43,23 @@ implements OnInit, OnChanges, OnDestroy {
     return 8 - Traverse.indexOf(location.traverse);
   }
 
-  chessboard = viewChild<ChessBoard>("chessboard");
-  cbHtml = viewChild<HTMLDivElement>("cbHtml");
+  chessboard = viewChild<ElementRef<ChessBoard>>("chessboard");
+  cbHtml = viewChild<ElementRef<HTMLDivElement>>("cbHtml");
 
   focusOut = output<void>();
   currentCellChanged = output<SquareLocation | null>();
   positionChanged = output<IProblem>();
-  clickOnCell = output<{ location: SquareLocation; button: "left" | "middle" }>();
+  clickOnCell = output<{
+    location: SquareLocation;
+    button: "left" | "middle";
+    modifiers: {
+      ctrlKey: boolean;
+      altKey: boolean;
+      metaKey: boolean;
+      shiftKey: boolean;
+    };
+  }>();
+
   contextOnCell = output<{ event: MouseEvent; location: SquareLocation }>();
 
   currentCell = signal<UiCell | null>(null);
@@ -58,10 +68,9 @@ implements OnInit, OnChanges, OnDestroy {
 
   cells = computed(() => this.uiCells());
 
-  cellSize = computed(() => (this.chessboard()?.clientWidth ?? 256) / 8);
+  cellSize = computed(() => (this.chessboard()?.nativeElement.clientWidth ?? 256) / 8);
 
   fen = computed(() => {
-    // TODO: remove getCurrentFen and create Helpers function to convert Problem to FEN
     return getFFenFromPosition(this.position());
   });
 
@@ -84,7 +93,6 @@ implements OnInit, OnChanges, OnDestroy {
   animationSub: Subscription;
   constructor() {
     const animationService = this.animationService;
-
     this.animationSub = animationService.onAnimate.subscribe(this.#animate);
 
     // Watch position changes and update board
@@ -161,12 +169,24 @@ implements OnInit, OnChanges, OnDestroy {
   }
 
   onMouseUp(cell: UiCell, $event: MouseEvent) {
-    const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
+    const haskeymod = $event.ctrlKey
+      || $event.altKey
+      || $event.metaKey
+      || $event.shiftKey;
     if ($event.button === 1 && !haskeymod) {
       $event.preventDefault();
       $event.stopImmediatePropagation();
       $event.stopPropagation();
-      this.clickOnCell.emit({ location: { ...cell.location }, button: "middle" });
+      this.clickOnCell.emit({
+        location: { ...cell.location },
+        button: "middle",
+        modifiers: {
+          ctrlKey: $event.ctrlKey,
+          altKey: $event.altKey,
+          metaKey: $event.metaKey,
+          shiftKey: $event.shiftKey,
+        },
+      });
     }
   }
 
@@ -194,7 +214,16 @@ implements OnInit, OnChanges, OnDestroy {
     const location = this.#toCellLocation($event.detail);
     const piece = this.#getPieceAtLocation(location);
 
-    this.clickOnCell.emit({ location: { ...location }, button: "left" });
+    this.clickOnCell.emit({
+      location: { ...location },
+      button: "left",
+      modifiers: {
+        ctrlKey: $event.detail.modifiers.ctrlKey,
+        altKey: $event.detail.modifiers.altKey,
+        metaKey: $event.detail.modifiers.metaKey,
+        shiftKey: $event.detail.modifiers.shiftKey,
+      },
+    });
     const current = this.currentCell();
     if (location !== current?.location) this.currentCell.set({ location, piece });
     else this.currentCell.set(null);
@@ -229,18 +258,37 @@ implements OnInit, OnChanges, OnDestroy {
     this.contextOnCell.emit({ event: $event, location: cell.location });
   }
 
-  #animate(animation: Animations) {
+  #stopAnimation = (animation: Animations) => {
     switch (animation) {
       case "rotateLeft":
-        this.cbHtml()?.classList.add("rotateLeft");
+        this.chessboard()?.nativeElement.classList.remove("rotateLeft");
         break;
       case "rotateRight":
-        this.cbHtml()?.classList.add("rotateRight");
+        this.chessboard()?.nativeElement.classList.remove("rotateRight");
         break;
       default:
         break;
     }
-  }
+  };
+
+  #animate = (animation: Animations) => {
+    const chessboardElement = this.chessboard()?.nativeElement;
+    if (!chessboardElement) return;
+    switch (animation) {
+      case "rotateLeft":
+        chessboardElement.classList.add("rotateLeft");
+        setTimeout(() => this.#stopAnimation("rotateLeft"),
+          parseFloat(getComputedStyle(chessboardElement).getPropertyValue("--animation-duration")) * 1000);
+        break;
+      case "rotateRight":
+        chessboardElement.classList.add("rotateRight");
+        setTimeout(() => this.#stopAnimation("rotateRight"),
+          parseFloat(getComputedStyle(chessboardElement).getPropertyValue("--animation-duration")) * 1000);
+        break;
+      default:
+        break;
+    }
+  };
 }
 
 export declare class SimpleChange<T> {

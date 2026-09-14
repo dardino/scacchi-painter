@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ITwins, SequenceTypes, TwinModes } from "../helpers";
+import { ITwins, SequenceTypes, TwinModes } from "../SPX";
 import { Twin } from "./twin";
 import { Twins } from "./twins";
 

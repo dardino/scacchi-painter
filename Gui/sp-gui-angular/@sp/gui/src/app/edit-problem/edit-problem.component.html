@@ -9,7 +9,8 @@
     <div class="chessboard-workarea">
       <lib-chessboard class="lib-chessboard" [position]="problem()" [cursor]="boardCursor()"
         (positionChanged)="onChessboardPositionChanged($event)" (contextOnCell)="onTriggerContextMenu($event)"
-        (currentCellChanged)="currentCellChange($event)" (clickOnCell)="clickOnCell($event.location, $event.button)"
+        (currentCellChanged)="currentCellChange($event)"
+        (clickOnCell)="clickOnCell($event.location, $event.button, $event.modifiers)"
         (focusOut)="boardBlur()"></lib-chessboard>
       <section id="pieceselector">
         <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)"

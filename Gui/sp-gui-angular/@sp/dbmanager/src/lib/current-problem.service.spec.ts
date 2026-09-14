@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TestBed } from "@angular/core/testing";
 
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { Injectable, Signal, signal } from "@angular/core";
 import { FileSelected, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CurrentProblemService } from "./current-problem.service";
-import { DbmanagerService } from "./dbmanager.service";
-import { IPiece } from "./helpers";
+import { DbmanagerService, IDbManagerService } from "./dbmanager.service";
 import { Piece, Problem } from "./models";
 import { SquareLocations } from "./models/locations";
+import { IPiece } from "./SPX";
 
 @Injectable({
   providedIn: "root",
@@ -48,9 +48,17 @@ class MockHostBridgeService {
 
 @Injectable({ providedIn: "root" })
 class MockDbmanagerService {
-  public All: Problem[];
+  private all = signal<Problem[]>([]);
+  get All() {
+    return this.all();
+  }
+
+  set All(value: Problem[]) {
+    this.all.set(value);
+  }
+
   get wip$(): Signal<boolean> {
-    return signal(false).asReadonly();
+    return signal(false);
   }
 
   get FileName(): string | undefined {
@@ -65,17 +73,13 @@ class MockDbmanagerService {
     throw new Error("Method not implemented.");
   }
 
-  private currentProblem$ = new BehaviorSubject(Problem.fromJson({}));
-  get CurrentProblem() {
-    return this.currentProblem$.getValue();
-  }
-
-  set CurrentProblem(val: Problem) {
-    this.currentProblem$.next(val);
-  }
+  public CurrentProblem = signal<Problem | null>(null);
 
   get CurrentProblem$(): Observable<Problem | null> {
-    return this.currentProblem$.asObservable();
+    return new Observable((subscriber) => {
+      subscriber.next(this.CurrentProblem());
+      return () => undefined;
+    });
   }
 
   get Pieces(): Piece[] {
@@ -150,7 +154,7 @@ const BlackRook: Partial<IPiece> = {
 
 describe("CurrentProblemService", () => {
   let service: CurrentProblemService;
-  const dbmanager: MockDbmanagerService = new MockDbmanagerService();
+  const dbmanager: IDbManagerService = new MockDbmanagerService();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -163,100 +167,100 @@ describe("CurrentProblemService", () => {
   });
 
   afterEach(() => {
-    dbmanager.CurrentProblem = Problem.fromJson({});
+    dbmanager.CurrentProblem.set(null);
   });
 
   it("should be created", () => {
     expect(service).toBeTruthy();
   });
-  it("Add Piece At", () => {
+  it("Add Piece At", async () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
-    let fen = dbmanager.CurrentProblem?.getCurrentFen();
+    let fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q7");
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteKing));
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/K7");
-    expect(dbmanager.CurrentProblem?.pieces.length).toEqual(1);
+    expect(dbmanager.CurrentProblem()?.pieces.length).toEqual(1);
   });
 
   it("Add 2 pieces", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteKing));
-    const fen = dbmanager.CurrentProblem?.getCurrentFen();
+    const fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/1K6/Q7");
   });
 
   it("Remove Piece At", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
-    expect(dbmanager.CurrentProblem?.pieces.length).toEqual(1);
+    expect(dbmanager.CurrentProblem()?.pieces.length).toEqual(1);
     service.RemovePieceAt(SquareLocations.a1);
-    const fen = dbmanager.CurrentProblem?.getCurrentFen();
+    const fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/8");
-    expect(dbmanager.CurrentProblem?.pieces.length).toEqual(0);
+    expect(dbmanager.CurrentProblem()?.pieces.length).toEqual(0);
   });
 
   it("Move Piece", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
-    let fen = dbmanager.CurrentProblem?.getCurrentFen();
+    let fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q7");
 
     service.MovePiece(SquareLocations.a1, SquareLocations.a2);
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/Q7/8");
   });
 
   it("Move Piece [swap]", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteKing));
-    let fen = dbmanager.CurrentProblem?.getCurrentFen();
+    let fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/1K6/Q7");
 
     service.MovePiece(SquareLocations.a1, SquareLocations.b2, "swap");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/1Q6/K7");
   });
 
   it("Move Piece [replace]", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteKing));
-    let fen = dbmanager.CurrentProblem?.getCurrentFen();
+    let fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/1K6/Q7");
 
     service.MovePiece(SquareLocations.a1, SquareLocations.b2, "replace");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/1Q6/8");
-    expect(dbmanager.CurrentProblem?.pieces.length).toEqual(1);
+    expect(dbmanager.CurrentProblem()?.pieces.length).toEqual(1);
   });
 
   it("RotatePiece", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
 
     service.RotatePiece(SquareLocations.a1, "Clockwise45");
-    let fen = dbmanager.CurrentProblem?.getCurrentFen();
+    let fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q:17");
 
     service.RotatePiece(SquareLocations.a1, "Clockwise90");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q:27");
 
     service.RotatePiece(SquareLocations.a1, "Clockwise135");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q:37");
 
     service.RotatePiece(SquareLocations.a1, "UpsideDown");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q:47");
 
     service.RotatePiece(SquareLocations.a1, "Counterclockwise135");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q:57");
 
     service.RotatePiece(SquareLocations.a1, "Counterclockwise90");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q:67");
 
     service.RotatePiece(SquareLocations.a1, "Counterclockwise45");
-    fen = dbmanager.CurrentProblem?.getCurrentFen();
+    fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/8/Q:77");
   });
 
@@ -266,26 +270,26 @@ describe("CurrentProblemService", () => {
 
     service.SetAsFairyPiece(SquareLocations.a1, "gn");
     service.SetAsFairyPiece(SquareLocations.b2, "le");
-    const fen = dbmanager.CurrentProblem?.getCurrentFen();
+    const fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/1r6/Q7 [GNa1,LEb2]");
   });
   describe("RotateBoard [Right]", () => {
     it("a1 -> a8", () => {
       service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
       service.RotateBoard("right");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("Q7/8/8/8/8/8/8/8");
     });
     it("a2 -> b8", () => {
       service.AddPieceAt(SquareLocations.a2, Piece.fromJson(WhiteQueen));
       service.RotateBoard("right");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("1Q6/8/8/8/8/8/8/8");
     });
     it("h5 -> e1", () => {
       service.AddPieceAt(SquareLocations.h5, Piece.fromJson(WhiteQueen));
       service.RotateBoard("right");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("8/8/8/8/8/8/8/4Q3");
     });
   });
@@ -293,19 +297,19 @@ describe("CurrentProblemService", () => {
     it("a1 -> h1", () => {
       service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
       service.RotateBoard("left");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("8/8/8/8/8/8/8/7Q");
     });
     it("b2 -> b7", () => {
       service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteQueen));
       service.RotateBoard("left");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("8/8/8/8/8/8/6Q1/8");
     });
     it("h5 -> d8", () => {
       service.AddPieceAt(SquareLocations.h5, Piece.fromJson(WhiteQueen));
       service.RotateBoard("left");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("3Q4/8/8/8/8/8/8/8");
     });
   });
@@ -320,11 +324,11 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.g4, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
-      expect(dbmanager.CurrentProblem?.getCurrentFen()).toBe(
+      expect(dbmanager.CurrentProblem()?.getCurrentFen()).toBe(
         "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7",
       );
       service.FlipBoard("x");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("Q7/Q7/Q7/4QQQ1/8/8/5Q2/7Q");
     });
     it("Y", () => {
@@ -336,11 +340,11 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.g4, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
-      expect(dbmanager.CurrentProblem?.getCurrentFen()).toBe(
+      expect(dbmanager.CurrentProblem()?.getCurrentFen()).toBe(
         "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7",
       );
       service.FlipBoard("y");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("Q7/2Q5/8/8/1QQQ4/7Q/7Q/7Q");
     });
   });
@@ -357,10 +361,10 @@ describe("CurrentProblemService", () => {
     });
 
     it("clear", () => {
-      let fen = dbmanager.CurrentProblem?.getCurrentFen();
+      let fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).not.toBe("8/8/8/8/8/8/8/8");
       service.ClearBoard();
-      fen = dbmanager.CurrentProblem?.getCurrentFen();
+      fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("8/8/8/8/8/8/8/8");
     });
   });
@@ -378,22 +382,22 @@ describe("CurrentProblemService", () => {
 
     it("X", () => {
       service.ShiftBoard("x");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6");
     });
     it("-X", () => {
       service.ShiftBoard("-x");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8");
     });
     it("Y", () => {
       service.ShiftBoard("y");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6");
     });
     it("-Y", () => {
       service.ShiftBoard("-y");
-      const fen = dbmanager.CurrentProblem?.getCurrentFen();
+      const fen = dbmanager.CurrentProblem()?.getCurrentFen();
       expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8");
     });
   });
