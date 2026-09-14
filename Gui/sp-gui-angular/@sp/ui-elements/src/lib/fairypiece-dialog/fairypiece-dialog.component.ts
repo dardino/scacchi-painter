@@ -6,18 +6,18 @@ import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { FairyPiecesCodes, FairyPiecesDB } from "@sp/dbmanager/src/lib/models/fairesDB";
-import { IPiece } from "@sp/dbmanager/src/lib/SPX";
+import { FairyPieceAttributesDB, FairyPiecesCodes, FairyPiecesDB } from "@sp/dbmanager/src/lib/models/fairesDB";
+import { IPieceV4 } from "@sp/dbmanager/src/lib/SPX.v4";
 import { SquareLocation } from "@sp/dbmanager/src/public-api";
 
 export interface FairypieceDialogInput {
   cell: SquareLocation;
-  originalPiece: IPiece | null;
+  originalPiece: IPieceV4 | null;
 }
 export type FairypieceDialogResponse = {
-  updatedPiece: IPiece | null;
+  updatedPiece: IPieceV4 | null;
   cell: SquareLocation;
-  originalPiece: IPiece | null;
+  originalPiece: IPieceV4 | null;
 } | null;
 
 @Component({
@@ -37,34 +37,36 @@ export type FairypieceDialogResponse = {
 export class FairypieceDialogComponent {
   data = inject<FairypieceDialogInput>(MAT_DIALOG_DATA);
 
-  fairyTypes = Object.entries(FairyPiecesDB).map(([code, description]) => ({ code, description }));
+  allFairyTypes = Object.entries(FairyPiecesDB).map(([code, description]) => ({ code, description }));
+  allFairyAttributes = FairyPieceAttributesDB;
 
-  selectedFairyType = signal<FairyPiecesCodes | null>(null);
+  selectedFairyCode = signal<FairyPiecesCodes | null>(null);
+  selectedFairyAttribute = signal<string | null>(null);
 
   constructor() {
-    this.selectedFairyType.set(this.data.originalPiece?.fairyCode?.[0]?.code ?? null);
+    this.selectedFairyCode.set(this.data.originalPiece?.fairyCode ?? null);
+    this.selectedFairyAttribute.set(this.data.originalPiece?.fairyAttributes?.[0] ?? null);
   }
 
-  getUpdatedPiece(): FairypieceDialogResponse {
-    const selectedFairyType = this.selectedFairyType();
-    if (!selectedFairyType) return null;
+  getUpdatedPiece(mode: "apply" | "remove"): FairypieceDialogResponse {
+    const selectedFairyCode = mode === "apply" ? this.selectedFairyCode() : null;
+    const selectedFairyAttribute = mode === "apply" ? this.selectedFairyAttribute() : null;
+    const fairyCode = selectedFairyCode ?? null;
     return {
-      updatedPiece: this.data.originalPiece
-        ? {
-            ...this.data.originalPiece,
-            fairyCode: [{
-              code: selectedFairyType, params: [],
-            }],
-          }
-        : {
-          fairyCode: [{ code: selectedFairyType, params: [] }],
-          appearance: "q",
-          color: "White",
-          column: this.data.cell.column,
-          fairyAttribute: "",
-          rotation: "UpsideDown",
-          traverse: this.data.cell.traverse,
-        } satisfies IPiece,
+      updatedPiece: {
+        // default values for a new piece
+        appearance: "q",
+        color: "White",
+        column: this.data.cell.column,
+        rotation: "UpsideDown",
+        traverse: this.data.cell.traverse,
+        // spread the original piece properties after the default values to override them if they exist
+        ...this.data.originalPiece,
+        // apply the selected fairy piece attributes and codes
+        fairyAttributes: selectedFairyAttribute ? [selectedFairyAttribute] : [],
+        fairyCode: fairyCode,
+        fairyParams: [],
+      } satisfies IPieceV4,
       cell: this.data.cell,
       originalPiece: this.data.originalPiece,
     };

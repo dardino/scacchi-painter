@@ -11,13 +11,13 @@ import {
 
 import { Base64 } from "./base64";
 import { FairyPiecesCodes } from "./models/fairesDB";
-import { Columns, IPiece, IProblem, IStipulation, PieceColors, PieceRotation, Traverse } from "./SPX";
+import { Columns, IPieceV4, IProblemV4, IStipulation, PieceColors, PieceRotation, Traverse } from "./SPX.v4";
 
 export interface ProblemDb {
   version: string;
   name: string;
   lastIndex: number;
-  problems: IProblem[];
+  problems: IProblemV4[];
 }
 
 export const FairyAttributes = ["None"] as const;
@@ -192,7 +192,7 @@ const mapRotations = {
   [PieceRotation[6]]: ":6",
   [PieceRotation[7]]: ":7",
 } as const;
-export const getRotationSymbol = (rotation: IPiece["rotation"]): string =>
+export const getRotationSymbol = (rotation: IPieceV4["rotation"]): string =>
   mapRotations[rotation];
 
 const RotationsCodes = [
@@ -228,7 +228,7 @@ const RotationsAngleMap: Record<ChessPieceRotation, PieceRotation> = {
   270: "Counterclockwise90",
   315: "Counterclockwise45",
 };
-export const getRotationFromAngle = (rotation: ChessPieceRotation): IPiece["rotation"] =>
+export const getRotationFromAngle = (rotation: ChessPieceRotation): IPieceV4["rotation"] =>
   RotationsAngleMap[rotation];
 
 /*
@@ -377,11 +377,11 @@ export const getPiecesString = (row: string): string[] => {
   return piecesStrings;
 };
 
-export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
+export const rowToPieces = (row1: string): (Partial<IPieceV4> | null)[] => {
   const fairies = /\{[a-z]*\}/.exec(row1);
   const piecesStrings = getPiecesString(row1);
 
-  const pieces: (Partial<IPiece> | null)[] = [];
+  const pieces: (Partial<IPieceV4> | null)[] = [];
   let f = 0;
   for (const c of piecesStrings) {
     // empty cell
@@ -403,7 +403,7 @@ export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
     }
 
     // TODO: in fen we haven't params for fairies?
-    const fairyCode = fairy?.replace(/[{}]/g, "").split("+").map(fp => ({ code: fp, params: [] })) as { code: FairyPiecesCodes; params: string[] }[];
+    const fairyCode = fairy?.replace(/[{}]/g, "") as FairyPiecesCodes;
     const nonNeutralColor = pieceName.toLowerCase() !== pieceName ? "White" : "Black";
     const color = isNeutral ? "Neutral" : nonNeutralColor;
 
@@ -422,7 +422,7 @@ export const fenToChessBoard = (original: string) => {
   const [fen] = original.split(" ");
   const fenrows = fen.split("/");
   const pieces = fenrows.map(f => rowToPieces(f));
-  const cells = pieces.reduce<(Partial<IPiece> | null)[]>(
+  const cells = pieces.reduce<(Partial<IPieceV4> | null)[]>(
     (a, b) => a.concat(b),
     [],
   );
@@ -599,7 +599,7 @@ export const notationCasingByColor: Record<PieceColors, (piecename: string) => s
   Neutral: (txt: string) => `*${txt.toUpperCase()}`,
 };
 
-export function updatePositionFromFen(ffen: string, currentPosition?: IProblem): IProblem {
+export function updatePositionFromFen(ffen: string, currentPosition?: IProblemV4): IProblemV4 {
   const position = parseFen(ffen);
   return {
     authors: [...currentPosition?.authors ?? []],
@@ -618,10 +618,11 @@ export function updatePositionFromFen(ffen: string, currentPosition?: IProblem):
         color: getPieceColor(p.color),
         column: `Col${square[0].toUpperCase()}` as Columns,
         traverse: `Row${square[1]}` as Traverse,
-        fairyAttribute: p.fairyCondition ?? "",
-        fairyCode: p.fairyName ? [{ code: p.fairyName as FairyPiecesCodes, params: [] }] : [],
+        fairyAttributes: p.fairyCondition ? [p.fairyCondition] : [],
+        fairyCode: p.fairyName as FairyPiecesCodes ?? null,
+        fairyParams: p.fairyName ? [] : [],
         rotation: getRotationFromAngle(p.rotation ?? "0"),
-      } satisfies IPiece);
+      } satisfies IPieceV4);
     }).filter(p => p !== null) ?? [],
     prizeDescription: currentPosition?.prizeDescription ?? "",
     prizeRank: currentPosition?.prizeRank ?? 0,
@@ -630,7 +631,7 @@ export function updatePositionFromFen(ffen: string, currentPosition?: IProblem):
     tags: [...currentPosition?.tags ?? []],
     snapshots: { ...currentPosition?.snapshots },
     twins: { ...currentPosition?.twins },
-  } satisfies IProblem;
+  } satisfies IProblemV4;
 }
 
 export function getStartingColor(stipulation: Partial<IStipulation>): "w" | "b" {
@@ -643,7 +644,9 @@ export function getStartingColor(stipulation: Partial<IStipulation>): "w" | "b" 
   return possibile[start.toString() as "1" | "-1"];
 }
 
-export function getFFenFromPosition(position?: IProblem | null): string {
+export function getFFenFromPosition(position?: IProblemV4 | null): string {
+  const d5 = position?.pieces?.find(p => p.traverse === "Row5" && p.column === "ColD");
+  console.log("🚀 ~ getFFenFromPosition ~ position:", d5?.fairyAttributes);
   if (!position) return getEmptyBoardFen();
   const pos: FenPosition = {
     activeColor: getStartingColor(position.stipulation),
@@ -658,8 +661,8 @@ export function getFFenFromPosition(position?: IProblem | null): string {
         type: p.appearance || "p",
         color: getCanvasColor(p.color ?? "White"),
         rotation: getCanvasRotation(p.rotation ?? "NoRotation") === "0" ? undefined : getCanvasRotation(p.rotation ?? "NoRotation"),
-        fairyCondition: p.fairyAttribute === "None" ? undefined : (p.fairyAttribute ?? ""),
-        fairyName: p.fairyCode?.[0]?.code ?? "",
+        fairyCondition: p.fairyAttributes?.[0] === "None" ? undefined : (p.fairyAttributes?.[0] ?? ""),
+        fairyName: p.fairyCode ?? "",
       };
       return aggr;
     }, {}) ?? {},

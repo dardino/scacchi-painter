@@ -116,7 +116,7 @@ describe("EditProblemComponent - Interactive Features", () => {
       const location: SquareLocation = { column: "ColA", traverse: "Row1" };
       component.editMode.set("select");
 
-      component.clickOnCell(location, "left");
+      component.clickOnCell(location, "left", { altKey: false, ctrlKey: false, shiftKey: false, metaKey: false });
 
       expect(component.editMode()).toBe("select");
     });
@@ -126,7 +126,7 @@ describe("EditProblemComponent - Interactive Features", () => {
       component.editMode.set("add");
       component.pieceToAdd.set("wPa");
 
-      component.clickOnCell(location, "middle");
+      component.clickOnCell(location, "middle", { altKey: false, ctrlKey: false, shiftKey: false, metaKey: false });
 
       expect(component.editMode()).toBe("select");
     });

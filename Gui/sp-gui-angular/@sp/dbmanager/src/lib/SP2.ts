@@ -9,7 +9,7 @@ import {
   notNull,
 } from "./helpers";
 
-import { Columns, EndingTypes, PieceColors, PieceRotation, ProblemTypes, Traverse } from "./SPX";
+import { Columns, EndingTypes, PieceColors, PieceRotation, ProblemTypes, Traverse } from "./SPX.v4";
 import { FairyPiecesCodes } from "./models/fairesDB";
 
 export type XMLProblemTypesKeys
@@ -213,28 +213,27 @@ export class SP2 {
 
   static setFairyCode(
     el: Element,
-    fairyCode: { code: FairyPiecesCodes; params: string[] }[],
+    fairyCode: FairyPiecesCodes | null,
+    params: string[],
   ) {
     if (fairyCode == null) return;
-    fairyCode.forEach((fc) => {
-      const fel = createXmlElement("FairyType");
-      fel.setAttribute("code", fc.code); // retrocompatibility
-      fc.params.forEach((p, i) => {
-        const felParm = createXmlElement("Param");
-        felParm.setAttribute("id", i.toFixed(0));
-        felParm.setAttribute("value", p);
-        fel.appendChild(felParm);
-      });
-      el.appendChild(fel);
+    const fel = createXmlElement("FairyType");
+    fel.setAttribute("code", fairyCode); // retrocompatibility
+    params.forEach((p, i) => {
+      const felParm = createXmlElement("Param");
+      felParm.setAttribute("id", i.toFixed(0));
+      felParm.setAttribute("value", p);
+      fel.appendChild(felParm);
     });
+    el.appendChild(fel);
   }
 
-  static getFairyAttribute(f: Element): string {
-    return f.getAttribute("FairyAttribute") ?? "";
+  static getFairyAttribute(f: Element): string[] {
+    return (f.getAttribute("FairyAttribute") ?? "").split(",").filter(notNull);
   }
 
-  static setFairyAttribute(el: Element, fairyAttribute: string) {
-    el.setAttribute("FairyAttribute", fairyAttribute);
+  static setFairyAttribute(el: Element, fairyAttribute: string[]) {
+    el.setAttribute("FairyAttribute", fairyAttribute.join(","));
   }
 
   // Piece rotation

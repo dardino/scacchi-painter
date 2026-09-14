@@ -1,20 +1,15 @@
-import { computed, inject, Injectable, signal, WritableSignal } from "@angular/core";
+import { computed, inject, Injectable, Signal, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "./providers";
-import { IProblem } from "./SPX";
+import { convertProblemV3ToV4, IDbSpX_V3, isV3 } from "./SPX.v3";
+import { IDbSpX_V4, isV4 } from "./SPX.v4";
 
 export interface IDbManagerService {
-  CurrentProblem: WritableSignal<Problem | null>;
-}
-
-interface IDbSpX {
-  lastIndex: number;
-  name: string;
-  problems: Partial<IProblem>[];
-  version: 3;
+  CurrentProblem: Signal<Problem | null>;
+  SetCurrentProblem(problem: Problem | null): Promise<void>;
 }
 
 @Injectable({
@@ -39,7 +34,8 @@ export class DbmanagerService implements IDbManagerService {
   CurrentIndex = computed(() => this.#currentIndex());
   Count = computed(() => this.All().length);
 
-  CurrentProblem = signal<Problem | null>(null);
+  #currentProblem = signal<Problem | null>(null);
+  CurrentProblem: Signal<Problem | null> = this.#currentProblem.asReadonly();
   Pieces = computed(() => this.CurrentProblem()?.pieces ?? []);
 
   get CurrentFile() {
@@ -221,12 +217,12 @@ export class DbmanagerService implements IDbManagerService {
     localStorage.setItem("spdb_info", JSON.stringify(this.#currentFile()));
   }
 
-  private toJSON(): IDbSpX {
+  private toJSON(): IDbSpX_V4 {
     return {
       lastIndex: this.#currentIndex(),
       problems: this.All().map(p => p.toJson()),
       name: "Scacchi Painter X Database",
-      version: 3,
+      version: 4,
     };
   }
 
@@ -260,6 +256,10 @@ export class DbmanagerService implements IDbManagerService {
   private async download(file: File): Promise<void> {
     const fileSaver = await import("file-saver");
     fileSaver.saveAs(file, this.FileName());
+  }
+
+  public async SetCurrentProblem(problem: Problem | null) {
+    this.#currentProblem.set(problem?.clone() ?? null);
   }
 
   public async SaveTemporary() {
@@ -315,7 +315,17 @@ export class DbmanagerService implements IDbManagerService {
 
   private async loadFromJson(jsonString: string): Promise<Error | null> {
     try {
-      const obj = JSON.parse(jsonString) as IDbSpX;
+      let obj = JSON.parse(jsonString) as IDbSpX_V4 | IDbSpX_V3;
+      if (!isV3(obj) && !isV4(obj))
+        throw new Error("Unsupported file version!");
+      // get the current file version
+
+      if (isV3(obj)) obj = {
+        ...obj,
+        problems: obj.problems.map(p => convertProblemV3ToV4(p)),
+        version: 4,
+      } as IDbSpX_V4;
+
       this.All.set(obj.problems.map(p => Problem.fromJson(p)));
       this.#currentIndex.set(obj.lastIndex ?? 1);
       return null;
@@ -388,12 +398,12 @@ export class DbmanagerService implements IDbManagerService {
       return this.reset();
     }
     const newP = this.All()[realIndex];
-    this.CurrentProblem.set(newP);
+    this.SetCurrentProblem(newP);
   }
 
   private reset() {
     this.#currentIndex.set(1);
-    this.CurrentProblem.set(null);
+    this.SetCurrentProblem(null);
   }
 
   private async getDbFile(type: "sp2" | "sp3" = "sp3"): Promise<File> {

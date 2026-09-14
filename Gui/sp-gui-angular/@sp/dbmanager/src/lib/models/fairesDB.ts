@@ -491,3 +491,25 @@ export const isTraditionalCondition = (v: unknown): v is TraditionalConditionsNa
 
 export type TraditionalConditionsNames = keyof typeof TraditionalConditions;
 export const TraditionalConditionsNames: TraditionalConditionsNames[] = Object.keys(TraditionalConditions) as TraditionalConditionsNames[];
+
+export const FairyPieceAttributesDB = [
+  "Chameleon",
+  "Jigger",
+  "Kamikaze",
+  "Paralysing",
+  "Royal",
+  "Volage",
+  "Functionary",
+  "HalfNeutral",
+  "HurdleColourChanging", // (only for hoppers !)
+  "Protean",
+  "Magic",
+  "Uncapturable",
+  "FrischAuf",
+  "Anda",
+  "AndaInverse",
+  "Bul",
+  "Dob",
+  "AliceA",
+  "AliceB",
+];

@@ -10,7 +10,7 @@ import {
 } from "@dardino/chess-board";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { Columns, IProblem, Traverse } from "@sp/dbmanager/src/lib/SPX";
+import { Columns, IProblemV4, Traverse } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
@@ -48,7 +48,7 @@ implements OnInit, OnChanges, OnDestroy {
 
   focusOut = output<void>();
   currentCellChanged = output<SquareLocation | null>();
-  positionChanged = output<IProblem>();
+  positionChanged = output<IProblemV4>();
   clickOnCell = output<{
     location: SquareLocation;
     button: "left" | "middle";

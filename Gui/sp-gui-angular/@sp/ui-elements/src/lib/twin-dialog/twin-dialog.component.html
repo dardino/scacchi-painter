@@ -1,42 +1,34 @@
 <h1 mat-dialog-title>Add Twin to problem</h1>
 <div mat-dialog-content>
   <h3>Choose the twin type then add the twin parameters</h3>
-  <mat-form-field color="accent" appearance="outline" class="input-condition">
+  <mat-form-field color="accent" appearance="outline">
     <mat-label>Pick one</mat-label>
-    <input type="text"
-      placeholder="Pick one"
-      matInput
-      (ngModelChange)="pickTwinType($event)"
-      [formControl]="myControl"
-      [matAutocomplete]="auto"
-      [value]="newTwinType"
-    />
+    <input type="text" placeholder="Pick one" matInput (ngModelChange)="pickTwinType($event)" [formControl]="myControl"
+      [matAutocomplete]="auto" [value]="newTwinType" />
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
       @for (option of filteredTwinTypes | async; track $index) {
-        <mat-option [value]="option.keyword">{{option.keyword}}</mat-option>
+      <mat-option [value]="option.keyword">{{option.keyword}}</mat-option>
       }
     </mat-autocomplete>
   </mat-form-field>
   <p>{{twinModelDesc?.title}}</p>
   @if (newTwinType !== '' && twinModelDesc) {
-    <div class="arguments">
-      @for (arg of twinModelDesc.parameters; track $index) {
-        <div class="argument">
-          <mat-form-field>
-            <mat-label>{{arg.description}}</mat-label>
-            <input type="text" matInput
-            [placeholder]="arg.description"
-            [matAutocomplete]="auto"
-            [(ngModel)]="argValues[$index]" >
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-              @for (option of arg.values; track $index) {
-                <mat-option [value]="option">{{option}}</mat-option>
-              }
-            </mat-autocomplete>
-              </mat-form-field>
-        </div>
-      }
+  <div class="arguments">
+    @for (arg of twinModelDesc.parameters; track $index) {
+    <div class="argument">
+      <mat-form-field>
+        <mat-label>{{arg.description}}</mat-label>
+        <input type="text" matInput [placeholder]="arg.description" [matAutocomplete]="auto"
+          [(ngModel)]="argValues[$index]">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          @for (option of arg.values; track $index) {
+          <mat-option [value]="option">{{option}}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
     </div>
+    }
+  </div>
   }
   <code>{{commandText}}</code>
 </div>

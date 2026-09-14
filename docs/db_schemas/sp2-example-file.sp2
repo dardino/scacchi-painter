@@ -1,0 +1,1773 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ScacchiPainterDatabase version="0.1.0.3" name="Scacchi Painter 2 Database" lastIndex="4">
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="H#" PersonalID="1" PrizeDescription="Premio" Source="S.Ambrogio 2009" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Guida Marco</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="g1" ValueB="f1" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>CmEpIERpYWdyYW0KCiAKIDEuIFI1YzYgIER4ZTMKICAgIDIuIFR4YTYgIERkMiMKIApiKSBBYmcxLT5mMQoKIAogMS4gQWQ4ICBEeGM0CiAgICAyLiBBYjYgIERjMyMKCgpDb21tZW50byBkZWwgZ2l1ZGljZSAoQS4gR2Fyb2ZhbG8pOgoKRScgcG9jbyBiZWxsbyBjaGUgaW4gQSkgbGEgRG9ubmEgYmlhbmNhIGNhdHR1cmkgdW4gcGVkb25lIG5lcm8sIG1lbnRyZSBpbiBCKSBjYXR0dXJpIHVuIHBlenpvLgpBIHBhcnRlIHF1ZXN0byBpbCBsYXZvcm8g6CBlY2NlbGxlbnRlOiBsJ0FnMSBoYSBpbCBjb21waXRvIGRpIGNvbnRyb2xsYXJlIGEgdHVybm8gbGUgY2FzZSBiNiBlZCBhNiwgZG92ZSBzaSBhdXRvYmxvY2NhIC0gY29uIHR1cm5vICJpbnZlcnNvIiAtIHVuIHBlenpvIG5lcm8gY2hlIGluaXppYWxtZW50ZSBmYSBwYXJ0ZSBkaSB1bmEgc2VtaS1pbmNoaW9kYXR1cmEu</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENlbnR1cnkgR290aGljO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGxhbmcxMDQwXGYwXGZzMjBccGFyDQphKSBEaWFncmFtXHBhcg0KXHBhcg0KIFxwYXINCiAxLiBSNWM2ICBEeGUzXHBhcg0KICAgIDIuIFR4YTYgIERkMiNccGFyDQogXHBhcg0KYikgQWJnMS0+ZjFccGFyDQpccGFyDQogXHBhcg0KIDEuIEFkOCAgRHhjNFxwYXINCiAgICAyLiBBYjYgIERjMyNccGFyDQpccGFyDQpccGFyDQpDb21tZW50byBkZWwgZ2l1ZGljZSAoQS4gR2Fyb2ZhbG8pOlxwYXINClxwYXINCkUnIHBvY28gYmVsbG8gY2hlIGluIEEpIGxhIERvbm5hIGJpYW5jYSBjYXR0dXJpIHVuIHBlZG9uZSBuZXJvLCBtZW50cmUgaW4gQikgY2F0dHVyaSB1biBwZXp6by5ccGFyDQpBIHBhcnRlIHF1ZXN0byBpbCBsYXZvcm8gXCdlOCBlY2NlbGxlbnRlOiBsJ0FnMSBoYSBpbCBjb21waXRvIGRpIGNvbnRyb2xsYXJlIGEgdHVybm8gbGUgY2FzZSBiNiBlZCBhNiwgZG92ZSBzaSBhdXRvYmxvY2NhIC0gY29uIHR1cm5vICJpbnZlcnNvIiAtIHVuIHBlenpvIG5lcm8gY2hlIGluaXppYWxtZW50ZSBmYSBwYXJ0ZSBkaSB1bmEgc2VtaS1pbmNoaW9kYXR1cmEuXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="2" PrizeDescription="Premio" Source="La Carbonara - 2010" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address>2010-03-23</Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="Black" Column="ColG" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColE" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColD" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColH" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>VGVtYSBkZWwgdG9ybmVvOiBDYXR0dXJhIGRpIHVuIHBlenpvIGJpYW5jbyBwZXIgY29uc2VudGlyZSBjb24gbGEgbW9zc2Egc3VjY2Vzc2l2YSBkaSBhcHJpcmUgdW5hIGxpbmVhIGJpYW5jYSBjaGUgcG9zc2EgZXNzZXJlIHBlcmNvcnNhIHBlciBkYXJlIGlsIG1hdHRvIG8gcGVyIGNvbnRyb2xsYXJlIHVuYSBjYXNhIG5lbCBtYXR0by4KCg0KIDEuIEF4ZjQgIERoMg0KICAgIDIuIEFkMiAgQWQ2Iw0KDQogMS4gVHhmNCAgRGg0DQogICAgMi4gVGY3ICBUYzQjDQogClF1ZXN0YSDoIGxhIHZlcnNpb25lIGNvcnJldHRhIGRhbCBHaXVkaWNlIChBLiBHYXJvZmFsbykKY2hlIGlvIHByZWZlcmlzY28uCgpSYWRkb3BwaW8gZGVsIHRlbWEuCg==</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="3" PrizeDescription="Premio Speciale" Source="Attila Benedek Memorial 2010 - 2011" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColF" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColG" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColB" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="Rotation90" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="Rotation180" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="Rotation270" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>DQphKSBEaWFncmFtDQogDQogMS4gUmQ3ICBUZ2MxDQogICAgMi4gZTYgIFQxYzcjDQogDQpiKSBSb3RhdGlvbiA5MA0KIA0KIDEuIFJlNSAgVHhhNw0KICAgIDIuIGY0ICBUYTUjDQogDQpjKSBSb3RhdGlvbiAxODANCiANCiAxLiBSYzQgIFRiNQ0KICAgIDIuIGQzICBUZjQjDQogDQpkKSBSb3RhdGlvbiAyNzANCiANCiAxLiBSYjYgIFR4YTcNCiAgICAyLiBjNSAgVDN4YTYjDQo=</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Direct" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="#" PersonalID="7" PrizeDescription="Premio" Source="Giubileo Mariani 2010" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="White" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>DQogDQpUZW50YXRpdm86IDEuIENlZjY/IFsyLiBUZTQjXQ0KIDEuIC4uLiBUYzQgW2FdICAyLiBDZDcgW0FdICMNCiAgTWEgMS4gLi4uIEFmMyBbYl0gISANCiANClRlbnRhdGl2bzogMS4gQ2YyPyBbMi4gVGU0I10NCiAxLiAuLi4gQWYzIFtiXSAgMi4gQ3hkMyBbQl0gIw0KICBNYSAxLiAuLi4gVGM0IFthXSAhIA0KIA0KU29sdXppb25lOiAxLiBDZDIhIFsyLiBUZTQjXQ0KIDEuIC4uLiBUYzQgW2FdICAyLiBDeGM0IFtDXSAjDQogMS4gLi4uIEFmMyBbYl0gIDIuIEN4ZjMgW0RdICMNCgoKR2l1ZGl6aW8gZGVsIGdpdWRpY2U6CgpNYXR0aSBzb25vIGNhbWJpYXRpIGRvcG8gbGUgZGlmZXNlIGEgZSBiLCBsZSBxdWFsaSBhIGxvcm8gdm9sdGEsIGEgdHVybm8sCnN2ZW50YW5vIGkgdGVudGF0aXZpLiBNb2x0byBncmFkZXZvbGUgZWQgZWNvbm9taWNvLgo=</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="3" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="4" CompleteStipulationDesc="HS#" PersonalID="4" PrizeDescription="Lode" Source="S.Ambrogio TT2" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>AGOSTINI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>BRUNORI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColD" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColC" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColG" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CgogIDEuUmEzLWE2IGUyLWUxPVMgICAyLktiNC1hNSBTZTEqYzIgICAzLlNlNS1mMyArIFJkOCpkNSAjCgogIDEuUmEzLWgzIFFnMS1hMSAgIDIuS2I0LWIzIGUyLWUxPUIgICAzLlNlNS1kNyArIEJnMipkNSAjCgo=</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnM1MVxwYXINClxwYXINClxpMFxmczUzICAgMS5SYTMtYTYgZTItZTE9UyAgIDIuS2I0LWE1IFNlMSpjMiAgIDMuU2U1LWYzICsgUmQ4KmQ1ICNccGFyDQpccGFyDQogIDEuUmEzLWgzIFFnMS1hMSAgIDIuS2I0LWIzIGUyLWUxPUIgICAzLlNlNS1kNyArIEJnMipkNSAjXHBhcg0KXGlcZnM1MVxwYXINClxwYXINCn0NCg==</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="3" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="HS#" PersonalID="5" PrizeDescription="Menzione Onorevole" Source="S.Ambrogio TT2" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>BRUNORI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>GUIDA</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>SIMONI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColG" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColH" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="e5" ValueB="e1" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>DQphKSANCg0KICAxLktlNS1mNSBCYzQtYTYgICAyLktmNS1nNCBCYTYtYzggICAzLlJnMi1nMyArIFJkNypkNSAjIA0KDQpiKSB3S2U1LS0+ZTENCg0KICAxLktlMS1kMiBSZDctZDYgICAyLktkMi1jMyBSZDYtYzYgICAzLlJnMi1kMiArIEJjNCpkNSAjIA0KDQoNCg0KDQo=</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="4" CompleteStipulationDesc="H#" PersonalID="6" PrizeDescription="Lode" Source="S.Ambrogio 2010 TT1" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>AGOSTINI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>BRUNORI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColA" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>DQoNCg0KIDEuIFJkNSAgVHhiNQ0KICAgIDIuIEFjNSAgQ2UzIw0KDQoNCiAxLiBSZjYgIEF4ZDQNCiAgICAyLiBUZTUgIFR4YTYjDQog</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Direct" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="0" CompleteStipulationDesc="#" PersonalID="7 (329)" PrizeDescription="Lode" Source="Stefan Ditrich Jubilee 60 2010" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Agostini Valerio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Horse" Color="White" Column="ColD" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColC" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>DQoNCg0KDQoNCkdpb2NvIGFwcGFyZW50ZToNCiAxLiAuLi4gQ2IgfiBbYV0gIDIuIEFmOCBbQV0gIw0KIDEuIC4uLiBDZDYgW2JdICAgMi4gQWQ0IFtCXSAjDQogMS4gLi4uIFJjNCBbY10gICAyLiBUZHhjMyBbQ10gIw0KIA0KDQogDQpTb2x1emlvbmU6IDEuIFRkNiEgWzIuIFRjNiNdDQogMS4gLi4uIENiIH4gW2FdICAgIDIuIENiNyBbRF0gIw0KIDEuIC4uLiBDeGQ2IFtiXSAgIDIuIGQ0IFtFXSAjDQogMS4gLi4uIFJjNCBbY10gICAgIDIuIFRoeGMzIFtGXSAjDQogMS4gLi4uIFJ4ZDYgW2RdICAgMi4gQWY4IFtBXSAjDQogDQoNCg0K</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="3" Date="2011-12-08T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="HS#" PersonalID="63" PrizeDescription="Menzione Onorevole" Source="TT2 S.Ambrogio 2011" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Agostini Valerio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="Black" Column="ColF" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColB" Traverse="Row4" Rotation="UpsideDown" FairyAttribute="None">
+        <FairyType code="gn" />
+      </Piece>
+      <Piece Type="Bishop" Color="Black" Column="ColF" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="f7" ValueB="h6" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>DQoNCmEpIERpYWdyYW0NCg0KICAxLmM2KmQ3IEJmMi1lMSAgIDIuZDctZDg9R04gQmUxKmI0ICAgMy5CZjQtZDYgKyBCYjQqZDYgIyANCg0KYikgd1BmNy0tPmg2DQoNCiAgMS5jNi1jNyBCZjItZzMgICAyLmM3LWM4PUdOIEJnMypmNCAgIDMuR05iNC1jNyArIEJmNCpjNyAjIA0KDQo=</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="3" Date="2011-12-08T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="H#" PersonalID="65" PrizeDescription="Premio" Source="TT1 S.Ambrogio 2011" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Agostini Valerio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Guida Marco</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="Black" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColG" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColE" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColD" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CgogIDEuS2Y0LWYzIFJjMSpjNiAoQSkgICAyLktmMy1lMiBSYzYtZTYgICAzLlFlNC1mMyBCYTQqYjUoQikgIyAKCiAgMS5LZjQtZzUgQmE0KmI1IChCKSAgMi5LZzUtZzYgQmI1LWQzICAgMy5SZjUtZzUgUmMxKmM2KEEpICMgCgo=</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="2" Date="2011-12-08T23:00:00Z" Maximum="false" Serie="false" PrizeRank="3" CompleteStipulationDesc="HS#" PersonalID="66" PrizeDescription="Lode" Source="TT2 S AMBROGIO 2011" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>BRUNORI Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>CASSANO Roberto</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColH" Traverse="Row6" Rotation="UpsideDown" FairyAttribute="None">
+        <FairyType code="gn" />
+      </Piece>
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColC" Traverse="Row4" Rotation="UpsideDown" FairyAttribute="None">
+        <FairyType code="gn" />
+      </Piece>
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColF" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="f8" ValueB="a7" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>QmVnaW5Qcm9ibGVtDQpQaWVjZXMNCldoaXRlIGduaDYgUGI1IFJmMSBSYzEgUGQ1IEtjNiANCkJsYWNrIEtlMyBnbmM0IFBmMyBSaDcgUGU0IEJmOCANCk5ldXRyYWwgDQpTdGlwdWxhdGlvbiBIUyMyDQpPcHRpb24gVHJ5IE5vQm9hcmQgVmFyaWF0aW9ucyBTZXRQbGF5DQpUd2luIE1vdmUgZjggYTcNCkVuZFByb2JsZW0NCkV4ZWN1dGUgY29tbWFuZDogd2luZSBweXdpbjMyLmV4ZSB0bXAgDQpQb3BleWUgV2luZG93cy0zMkJpdCB2NC41OSAoNDUwOCBNQikNCg0KYSkgDQoNCg0KICAxLlRmMS1lMSArIFJlMy1kMiAgIDIuR05oNi1lNSArIEdOYzQqZTUgIyANCg0KYikgYkFmOC0tPmE3DQoNCg0KICAxLlRjMS1kMSBSZTMtZTIgICAyLkdOaDYtZjUgKyBHTmM0KmY1ICMgDQoNCnNvbHV0aW9uIGZpbmlzaGVkLiBUaW1lID0gMC4wNjAgcw0KDQoNCg0K</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2011-12-08T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="H#" PersonalID="69" PrizeDescription="Premio" Source="Quick Tournament S.Ambrogio 2011" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Marco Guida</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColB" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>DQoNCiAgMS5CZDUtZjMgQmY0KmQ2ICAgMi5CZjMtZTIgQmQ2LWM1IChCZDU/KSAjIAoNCiAgMS5RZDYtZTUgU2UzKmQ1ICAgMi5RZTUtZTIgU2Q1LWI2IChTZDY/KSMgDQoNCg0KDQoNCg==</Solution>
+    <SolutionRtf></SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="5" CompleteStipulationDesc="H#" PersonalID="27" PrizeDescription="Menzione Onorevole" Source="Springaren - Manne Persson MT" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>AGOSTINI Valerio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>BRUNORI Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="Black" Column="ColB" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColH" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Autoblocchi" />
+    </Tags>
+    <Solution>DQoNCiAgMS5TYzYqZTUgQmYxKmgzICAgMi5TZTUtZjMgQmgzLWY1ICMgCg0KICAxLlJlNiplNSBTZTMqYzQgICAyLlJlNS1mNSBTYzQtZDIgIyAKDQogIDEuQmI4KmU1IEJmMS1lMiAgIDIuQmU1LWY0IFNkMy1jNSAjIA0K</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzMKe1xmb250dGJse1xmMFxmbmlsXGZjaGFyc2V0MCBMaWJlcmF0aW9uIE1vbm87fX0Ke1wqXGdlbmVyYXRvciBNb25vIFJpY2hUZXh0Qm94O31ccGFyZFxmMFxmczIyIA0KXHBhcgoNClxwYXIKICAxLlNjNiplNSBCZjEqaDMgICAyLlNlNS1mMyBCaDMtZjUgIyAKXHBhcgoNClxwYXIKICAxLlJlNiplNSBTZTMqYzQgICAyLlJlNS1mNSBTYzQtZDIgIyAKXHBhcgoNClxwYXIKICAxLkJiOCplNSBCZjEtZTIgICAyLkJlNS1mNCBTZDMtYzUgIyANClxwYXIKfQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2011-07-01T22:00:00Z" Maximum="false" Serie="false" PrizeRank="5" CompleteStipulationDesc="H#" PersonalID="45" PrizeDescription="Menzione Onorevole" Source="17th Ty Meeting of Solidarity 2011" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Valerio Agostini</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="White" Column="ColB" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColC" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColA" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="b3" ValueB="g4" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>DQoNCmEpIA0KDQogIDEuLi5SYzEtYjEgICAyLmQ1KmM0IEJhMSpiMiAjIA0KDQogIDEuS2MzKmM0IFNiMy1kNCAgIDIuUmIyLWIxIFJjMSpjMiAjIA0KDQpiKSB3U2IzLS0+ZzQNCg0KICAxLi4uU2c0LWUzICAgMi5kNS1kNCBSYzEqYzIgIyANCg0KICAxLktjMy1kNCBTZzQtZjIgICAyLlNjMi1lMyBCYTEqYjIgIyANCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzMKe1xmb250dGJse1xmMFxmbmlsXGZjaGFyc2V0MCBMaWJlcmF0aW9uIE1vbm87fX0Ke1wqXGdlbmVyYXRvciBNb25vIFJpY2hUZXh0Qm94O31ccGFyZFxmMFxmczIwXGkgDQpccGFyClxmczIyXGkwIA0KXHBhcgphKSANClxwYXIKDQpccGFyCiAgMS4uLlJjMS1iMSAgIDIuZDUqYzQgQmExKmIyICMgDQpccGFyCg0KXHBhcgogIDEuS2MzKmM0IFNiMy1kNCAgIDIuUmIyLWIxIFJjMSpjMiAjIA0KXHBhcgoNClxwYXIKYikgd1NiMy0tPmc0DQpccGFyCg0KXHBhcgogIDEuLi5TZzQtZTMgICAyLmQ1LWQ0IFJjMSpjMiAjIA0KXHBhcgoNClxwYXIKICAxLktjMy1kNCBTZzQtZjIgICAyLlNjMi1lMyBCYTEqYjIgIyANClxwYXIKfQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2012-12-04T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="117" PrizeDescription="Menzione Onorevole" Source="Sant'Ambrogio 2012 - TT Fairies" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Agostini Valerio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="Black" Column="ColG" Traverse="Row2" Rotation="UpsideDown" FairyAttribute="None">
+        <FairyType code="cg" />
+      </Piece>
+      <Piece Type="Rock" Color="Black" Column="ColG" Traverse="Row3" Rotation="UpsideDown" FairyAttribute="None">
+        <FairyType code="cg" />
+      </Piece>
+      <Piece Type="King" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColF" Traverse="Row6" Rotation="UpsideDown" FairyAttribute="None">
+        <FairyType code="cg" />
+      </Piece>
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="contre grasshopper" />
+    </Tags>
+    <Solution>CiAgMS5DR2cyLWQ1IENHZjYtYzYgKyAgIDIuQ0dkNS1iNyBDR2M2LWE4ICMgCgogIDEuQ0dnMy1kMyBDR2Y2LWMzICsgICAyLkNHZDMtYjMgQ0djMy1hMyAjIAoK</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENvbnNvbGFzO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMxOFxwYXINClxpMFxmczIwICAgMS5DR2cyLWQ1IENHZjYtYzYgKyAgIDIuQ0dkNS1iNyBDR2M2LWE4ICMgXHBhcg0KXHBhcg0KICAxLkNHZzMtZDMgQ0dmNi1jMyArICAgMi5DR2QzLWIzIENHYzMtYTMgIyBccGFyDQpcaVxmczE4XHBhcg0KXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="2" Date="2012-12-06T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="HS#" PersonalID="118" PrizeDescription="Premio" Source="Sant'Ambrogio 2012 - Quick Tournament" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Marco Guida</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Queen" Color="Black" Column="ColF" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColG" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColC" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColH" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColH" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColA" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="RemovePiece" ValueA="e3" ValueB="" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions>
+      <Condition Value="PWC" />
+    </Conditions>
+    <Tags>
+      <Tag Value="PWC" />
+    </Tags>
+    <Solution>CmEpIAoKICAxLlJoNC1kNCBTYjMqZDQgWyt3UmIzXSAgIDIuUmIzLWIxICsgUWY4LWYxICMgCgpiKSAgLXdQZTMKCiAgMS5CYzctYTUgU2IzKmE1IFsrd0JiM10gICAyLkJiMypkNSBbK2JQYjNdICsgUWY4LWYzICMgCgoKMm5kIFByaXplIEcuQnJ1bm9yaSAmIE0uR3VpZGE6IGFub3RoZXIgZXhjZWxsZW50IHN0cmF0ZWd5IHdpdGggbmljZSBleGNoYW5nZSBvZiAKZnVuY3Rpb24gYmV0d2VlbiB0aGUgdGhlbWF0aWMgd2hpdGUgcGllY2VzIGFuZCB2ZXJ5IHNwZWN0YWN1bGFyIGFuZCBzcGVjaWZpYyBQV0MgCm1hdGVzLg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGYwXGZzMjBccGFyDQphKSBccGFyDQpccGFyDQpcYiAgIDEuUmg0LWQ0IFNiMypkNCBbK3dSYjNdICAgMi5SYjMtYjEgKyBRZjgtZjEgIyBccGFyDQpcYjBccGFyDQpiKSAgLXdQZTNccGFyDQpccGFyDQpcYiAgIDEuQmM3LWE1IFNiMyphNSBbK3dCYjNdICAgMi5CYjMqZDUgWytiUGIzXSArIFFmOC1mMyAjIFxwYXINClxiMFxpXGZzMThccGFyDQpccGFyDQpcaTAgMm5kIFByaXplIEcuQnJ1bm9yaSAmIE0uR3VpZGE6IGFub3RoZXIgZXhjZWxsZW50IHN0cmF0ZWd5IHdpdGggbmljZSBleGNoYW5nZSBvZiBccGFyDQpmdW5jdGlvbiBiZXR3ZWVuIHRoZSB0aGVtYXRpYyB3aGl0ZSBwaWVjZXMgYW5kIHZlcnkgc3BlY3RhY3VsYXIgYW5kIHNwZWNpZmljIFBXQyBccGFyDQptYXRlcy5caVxwYXINCn0NCg==</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Direct" Moves="2" Date="2012-12-12T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="#" PersonalID="119" PrizeDescription="Menzione Onorevole" Source="Sant'Ambrogio 2012 - TT" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Valerio Agostini</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="Black" Column="ColA" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColF" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColH" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Reversal" />
+      <Tag Value="Schiffmann" />
+    </Tags>
+    <Solution>CiAgMS5CYjQtZDYgPyB0aHJlYXQ6CiAgICAgICAgICAyLlNjNC1lMyAjIAogICAgICAxLi4uUWY3KmQ1IAogICAgICAgICAgMi5TYTUtYjMgIyAKICAgICAgMS4uLkJhOCpkNSAKICAgICAgICAgIDIuU2E1LWIzICMgCiAgICBidXQKICAgICAgMS4uLmMzLWMyICAhCgogIDEuU2M0LWUzICEgdGhyZWF0OgogICAgICAgICAgMi5CYjQtZDYgIyAKICAgICAgMS4uLmMzLWMyIAogICAgICAgICAgMi5RZzEtYTEgIyAKICAgICAgMS4uLktkNC1lNSAKICAgICAgICAgIDIuQmI0KmMzICMgCiAgICAgIDEuLi5RZjcqZDUgCiAgICAgICAgICAyLlFnMS1nNyAjIAogICAgICAxLi4uQmE4KmQ1IAogICAgICAgICAgMi5TYTUtYzYgIyAK</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENvbnNvbGFzO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMxOFxwYXINClxpMFxmczIwICAgMS5CYjQtZDYgPyB0aHJlYXQ6XHBhcg0KICAgICAgICAgIDIuU2M0LWUzICMgXHBhcg0KICAgICAgMS4uLlFmNypkNSBccGFyDQogICAgICAgICAgMi5TYTUtYjMgIyBccGFyDQogICAgICAxLi4uQmE4KmQ1IFxwYXINCiAgICAgICAgICAyLlNhNS1iMyAjIFxwYXINClxpXGZzMTggICAgIGJ1dFxwYXINClxpMFxmczIwICAgICAgIDEuLi5jMy1jMiAgIVxwYXINClxpXGZzMThccGFyDQpcaTBcZnMyMCAgIDEuU2M0LWUzICEgdGhyZWF0OlxwYXINCiAgICAgICAgICAyLkJiNC1kNiAjIFxwYXINCiAgICAgIDEuLi5jMy1jMiBccGFyDQogICAgICAgICAgMi5RZzEtYTEgIyBccGFyDQogICAgICAxLi4uS2Q0LWU1IFxwYXINCiAgICAgICAgICAyLkJiNCpjMyAjIFxwYXINCiAgICAgIDEuLi5RZjcqZDUgXHBhcg0KICAgICAgICAgIDIuUWcxLWc3ICMgXHBhcg0KICAgICAgMS4uLkJhOCpkNSBccGFyDQogICAgICAgICAgMi5TYTUtYzYgIyBccGFyDQpccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="2" Date="2012-12-12T23:00:00Z" Maximum="false" Serie="false" PrizeRank="3" CompleteStipulationDesc="HS#" PersonalID="121" PrizeDescription="Premio" Source="Sant'Ambrogio 2012 - Quick Tournament" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="Black" Column="ColA" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColH" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="AddPiece" ValueA="b" ValueB="bg6" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions>
+      <Condition Value="PWC" />
+    </Conditions>
+    <Tags>
+      <Tag Value="PWC" />
+    </Tags>
+    <Solution>CmEpIAoKICAxLlFhMy1kNiBSZzYqZzUgWyt3Qmc2XSAgIDIuQmc2LWU0ICsgUmc1LWQ1ICMgCgpiKSBiQmc2IAoKICAxLlFhMy1hNiBCZzYqaDUgWyt3Umc2XSAgIDIuUmc2LWc4ICsgQmg1LWU4ICMgCgozcmQgUHJpemUgRy5CcnVub3JpOiBjcmVhdGlvbiBvZiBkaWZmZXJlbnQgYmxhY2sgYmF0dGVyaWVzIGZyb20gcGlubmVkIHdoaXRlIHBpZWNlcyBpbiAKYm90aCBwaGFzZXM7IHRoZSBwaW4gbWF0ZXMgZW5waGFzaXplIHRoZSBmYWlyeSBzdHJhdGVneSBhbmQgdGhlIGV4Y2hhbmdlIG9mIGZ1bmN0aW9uIApvZiBibGFjayBhbmQgd2hpdGUgcGllY2VzLg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENvbnNvbGFzO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMxOFxwYXINCmEpIFxwYXINClxwYXINClxpMFxmczIwICAgMS5RYTMtZDYgUmc2Kmc1IFsrd0JnNl0gICAyLkJnNi1lNCArIFJnNS1kNSAjIFxwYXINClxpXGZzMThccGFyDQpiKSBiQmc2IFxwYXINClxwYXINClxpMFxmczIwICAgMS5RYTMtYTYgQmc2Kmg1IFsrd1JnNl0gICAyLlJnNi1nOCArIEJoNS1lOCAjIFxwYXINClxwYXINClxpXGZzMTggM3JkIFByaXplIEcuQnJ1bm9yaTogY3JlYXRpb24gb2YgZGlmZmVyZW50IGJsYWNrIGJhdHRlcmllcyBmcm9tIHBpbm5lZCB3aGl0ZSBwaWVjZXMgaW4gXHBhcg0KYm90aCBwaGFzZXM7IHRoZSBwaW4gbWF0ZXMgZW5waGFzaXplIHRoZSBmYWlyeSBzdHJhdGVneSBhbmQgdGhlIGV4Y2hhbmdlIG9mIGZ1bmN0aW9uIFxwYXINCm9mIGJsYWNrIGFuZCB3aGl0ZSBwaWVjZXMuXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="H#" PersonalID="5 (V 310)" PrizeDescription="Premio" Source="The Problemist 2010" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Agostini Valerio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Garofalo Antonio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="Black" Column="ColB" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColH" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColE" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColF" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColB" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CgoKICAxLlJoNipkNiBRaDgtZDggICAyLlJkNipkMyBSZDcqZDMgIyAKCiAgMS5TZjcqZDYgUWg4LWc4ICAgMi5TZDYqZTQgU2QyKmU0ICMgCgogIDEuQmI4KmQ2IFFoOC1mOCAgIDIuQmQ2KmI0IEJlNypiNCAjIAoKCgo=</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxpXGYwXGZzMjBccGFyDQpcaTBcZnMyMlxwYXINClxwYXINCiAgMS5SaDYqZDYgUWg4LWQ4ICAgMi5SZDYqZDMgUmQ3KmQzICMgXHBhcg0KXHBhcg0KICAxLlNmNypkNiBRaDgtZzggICAyLlNkNiplNCBTZDIqZTQgIyBccGFyDQpccGFyDQogIDEuQmI4KmQ2IFFoOC1mOCAgIDIuQmQ2KmI0IEJlNypiNCAjIFxwYXINClxwYXINClxwYXINClxwYXINClxwYXINCn0NCg==</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="3" Date="2011-01-15T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="H#" PersonalID="40" PrizeDescription="Lode" Source="StrateGems 2011 - Vol.14 - Ottobre/Dicembre - SG56/H1661" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Valerio AGOSTINI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Gabriele BRUNORI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Antonio GAROFALO</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CgoKICAxLkJlMi1iNSBCZzQtaDUgICAyLkJiNS1kNyBCaDUtZTggICAzLkJkNy1mNSBCZTgtYzYgIyAKCgogIDEuUmE3LWQ3IFJmMy1mMSAgIDIuUmQ3LWQzIFJmMS1kMSAgIDMuUmQzLWUzIFJkMS1kNCAjIAoKCihIMTY2MSkgQW4gZWNvbm9taWNhbCBkaWFnb25hbC9vcnRob2dvbmFsIHNldHRpbmcgd2l0aCB3aGl0ZSBhbWJ1c2ggcGxheQ==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxpXGYwXGZzMjBccGFyDQpcaTBcZnMyMlxwYXINClxwYXINCiAgMS5CZTItYjUgQmc0LWg1ICAgMi5CYjUtZDcgQmg1LWU4ICAgMy5CZDctZjUgQmU4LWM2ICMgXHBhcg0KXHBhcg0KXHBhcg0KICAxLlJhNy1kNyBSZjMtZjEgICAyLlJkNy1kMyBSZjEtZDEgICAzLlJkMy1lMyBSZDEtZDQgIyBccGFyDQpcaVxmczIwXHBhcg0KXHBhcg0KKEgxNjYxKSBBbiBlY29ub21pY2FsIGRpYWdvbmFsL29ydGhvZ29uYWwgc2V0dGluZyB3aXRoIHdoaXRlIGFtYnVzaCBwbGF5XHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="0" CompleteStipulationDesc="H#" PersonalID="31" PrizeDescription="Lode" Source="Antonio Garofalo Jubilee" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>BRUNORI Gabriele</NameAndSurname>
+        <Address>nov. 2010</Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColE" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="a4" ValueB="f8" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>CgphKSAKCgogIDEuQmQ1LWc4IFNkNipjNCAgIDIuUmM3LWY3IFNjNC1kMiAjIAoKYikgd1JhNC0tPmY4CgoKICAxLlJjNy1hNyBTZDYqZjUgICAyLkJkNS1iNyBTZjUtaDYgIyAK</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxpXGYwXGZzMjBccGFyDQpcaTBcZnMyMlxwYXINCmEpIFxwYXINClxwYXINClxwYXINCiAgMS5CZDUtZzggU2Q2KmM0ICAgMi5SYzctZjcgU2M0LWQyICMgXHBhcg0KXHBhcg0KYikgd1JhNC0tPmY4XHBhcg0KXHBhcg0KXHBhcg0KICAxLlJjNy1hNyBTZDYqZjUgICAyLkJkNS1iNyBTZjUtaDYgIyBccGFyDQpccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2012-02-12T23:00:00Z" Maximum="false" Serie="false" PrizeRank="5" CompleteStipulationDesc="H#" PersonalID="74" PrizeDescription="Menzione Onorevole" Source="Antonio Garofalo 60 Jubilee Tourney" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Horse" Color="White" Column="ColA" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColE" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Interferenza" />
+      <Tag Value="Canne d'organo" />
+    </Tags>
+    <Solution>CiAgMS5CYjItYzMgUmI0LWQ0ICAgMi5SZDItZDMgKyBTZzUtZjMgIyAKCiAgMS5CZTItZDMgUmI0LWM0ICAgMi5SYzItYzMgU2c1LWU0ICMg</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIERlamFWdSBTYW5zO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGYwXGZzMjJccGFyDQogIDEuQmIyLWMzIFJiNC1kNCAgIDIuUmQyLWQzICsgU2c1LWYzICMgXHBhcg0KXHBhcg0KICAxLkJlMi1kMyBSYjQtYzQgICAyLlJjMi1jMyBTZzUtZTQgIyBccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2010-12-16T23:00:00Z" Maximum="false" Serie="false" PrizeRank="2" CompleteStipulationDesc="H#" PersonalID="32" PrizeDescription="Lode" Source="Giubileo Parrinello" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Valerio AGOSTINI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Gabriele BRUNORI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColB" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColB" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColE" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColF" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColE" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="d8" ValueB="f5" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="d8" ValueB="d4" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>CmEpIERpYWdyYW0KCiAKIDEuIFRoOCAoU2NoaW9kYXR1cmEgZGlyLiBkaSBDKSBDZDUgIChTY2hpb2RhIGluZC4gZGkgQSBbZSBub24gQl0pCiAgICAyLiBUZTggIFRkNiMgKG1hdHRvIG1vZGVsbG8pCiAKYikgUm5kOC0+ZjUKCiAKIDEuIEFoNSAoU2NoaW9kYXR1cmEgZGlyLiBkaSBBKSBUYjYgKFNjaGlvZGEgaW5kLiBCIFtlIG5vbiBDXSkKICAgIDIuIEFnNCAgQWU0IwogCmMpIFJuZDgtPmQ0CgogCiAxLiBUYzggKFNjaGlvZGF0dXJhIGRpci4gZGkgQikgQWYzIChTY2hpb2RhIGluZC4gQyBbZSBub24gQV0pCiAgICAyLiBUYzUgIENlMiMKIA==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxsYW5nMTAzM1xpXGYwXGZzMjBccGFyDQphKSBEaWFncmFtXHBhcg0KXHBhcg0KIFxwYXINCiAxLiBUaDggKFNjaGlvZGF0dXJhIGRpci4gZGkgQykgQ2Q1ICAoU2NoaW9kYSBpbmQuIGRpIEEgW2Ugbm9uIEJdKVxwYXINCiAgICAyLiBUZTggIFRkNiMgKG1hdHRvIG1vZGVsbG8pXHBhcg0KIFxwYXINCmIpIFJuZDgtPmY1XHBhcg0KXHBhcg0KIFxwYXINCiAxLiBBaDUgKFNjaGlvZGF0dXJhIGRpci4gZGkgQSkgVGI2IChTY2hpb2RhIGluZC4gQiBbZSBub24gQ10pXHBhcg0KICAgIDIuIEFnNCAgQWU0I1xwYXINCiBccGFyDQpjKSBSbmQ4LT5kNFxwYXINClxwYXINCiBccGFyDQogMS4gVGM4IChTY2hpb2RhdHVyYSBkaXIuIGRpIEIpIEFmMyAoU2NoaW9kYSBpbmQuIEMgW2Ugbm9uIEFdKVxwYXINCiAgICAyLiBUYzUgIENlMiNccGFyDQogXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Direct" Moves="2" Date="2013-12-04T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="#" PersonalID="135" PrizeDescription="Place" Source="TT#2 - S.Ambrogio 2013" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Mario Parrinello</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Enzo Minerva</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColC" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColE" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CiAgMS5nNC1nNSA/IHRocmVhdDoKICAgICAgICAgIDIuUmg0LWQ0ICMgCiAgICAgIDEuLi5SYTctZDcgKGEpCiAgICAgICAgICAyLkJoNypmNSAjIFtBXQogICAgYnV0CiAgICAgIDEuLi5lNy1lNSAgIQoKICAxLmc0KmY1ICEgdGhyZWF0OgogICAgICAgICAgMi5SaDQtZDQgIyAKICAgICAgMS4uLlJhNy1kNyAoYSkKICAgICAgICAgIDIuZjUtZjYgIyBbQl0KICAgICAgMS4uLmU3LWU1IAogICAgICAgICAgMi5mNSplNiBlcC4gIyAKCkNhbWJpbyBkaSBtYXR0bwpQcmVzYSBlbiBwYXNzYW50CkNvcnJlemlvbmUgQmlhbmNh</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENlbnR1cnkgR290aGljO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGYwXGZzMjlccGFyDQpcYlxmczI2ICAgMS5nNC1nNSA/IHRocmVhdDpccGFyDQogICAgICAgICAgMi5SaDQtZDQgIyBccGFyDQogICAgICAxLi4uUmE3LWQ3IChhKVxwYXINCiAgICAgICAgICAyLkJoNypmNSAjIFtBXVxwYXINCiAgICBidXRccGFyDQogICAgICAxLi4uZTctZTUgICFccGFyDQpccGFyDQogIDEuZzQqZjUgISB0aHJlYXQ6XHBhcg0KICAgICAgICAgIDIuUmg0LWQ0ICMgXHBhcg0KICAgICAgMS4uLlJhNy1kNyAoYSlccGFyDQogICAgICAgICAgMi5mNS1mNiAjIFtCXVxwYXINCiAgICAgIDEuLi5lNy1lNSBccGFyDQogICAgICAgICAgMi5mNSplNiBlcC4gI1xiMFxpXGZzMjcgIFxwYXINClxpMFxmczI5XHBhcg0KQ2FtYmlvIGRpIG1hdHRvXHBhcg0KUHJlc2EgZW4gcGFzc2FudFxwYXINCkNvcnJlemlvbmUgQmlhbmNhXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="3" Date="2013-12-05T23:00:00Z" Maximum="false" Serie="false" PrizeRank="4" CompleteStipulationDesc="H#" PersonalID="136" PrizeDescription="Lode" Source="TTH#3 S.Ambrogio" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="White" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColH" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColC" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CgogIDEuUWY0LWI0IFJoNipnNiAgIDIuQmgyLWY0IFJnNi1iNiAgIDMuQmY0LWg2IEJoNS1mNyAjCgogIDEuUWY0LWM0IEJoNSpnNiAgIDIuU2gzLWY0IEJnNi1mNyAgIDMuU2Y0LWg1IFJoNi1iNiAjCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENlbnR1cnkgR290aGljO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMyN1xwYXINClxwYXINClxiXGkwXGZzMjkgICAxLlFmNC1iNCBSaDYqZzYgICAyLkJoMi1mNCBSZzYtYjYgICAzLkJmNC1oNiBCaDUtZjcgI1xwYXINClxwYXINCiAgMS5RZjQtYzQgQmg1Kmc2ICAgMi5TaDMtZjQgQmc2LWY3ICAgMy5TZjQtaDUgUmg2LWI2ICNccGFyDQpcYjBcaVxmczI3XHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="3" Date="2013-12-05T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="137" PrizeDescription="Price" Source="TT - S.Ambrogio - F.Simoni" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Parrinello Mario</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColA" Traverse="Row5" Rotation="Clockwise90" FairyAttribute="None">
+        <FairyType code="gn" />
+      </Piece>
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColF" Traverse="Row6" Rotation="Clockwise90" FairyAttribute="None">
+        <FairyType code="gn" />
+      </Piece>
+      <Piece Type="Queen" Color="Black" Column="ColC" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColD" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Gnu" />
+      <Tag Value="Schiodature" />
+      <Tag Value="Aperture di linea" />
+    </Tags>
+    <Solution>CgogIDEuR05mNipkNSBSYzctZjcgICAyLkdOZDUtYTYgUmQ2LWQyICAgMy5TZjUtZzMgR05hNS1jNCAjCgogIDEuR05mNipjNSBSZDYtZjYgICAyLkdOYzUtYTYgUmM3LWMyICAgMy5TZjUtZTMgR05hNS1kNCAjCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENlbnR1cnkgR290aGljO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMyN1xwYXINClxwYXINClxiXGkwXGZzMjkgICAxLkdOZjYqZDUgUmM3LWY3ICAgMi5HTmQ1LWE2IFJkNi1kMiAgIDMuU2Y1LWczIEdOYTUtYzQgI1xwYXINClxwYXINCiAgMS5HTmY2KmM1IFJkNi1mNiAgIDIuR05jNS1hNiBSYzctYzIgICAzLlNmNS1lMyBHTmE1LWQ0ICNccGFyDQpcYjBcaVxmczI3XHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="2.5" Date="2013-12-05T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="HS#" PersonalID="138" PrizeDescription="Place" Source="QTT S.Ambrogio 2013" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Guida Marco</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColF" Traverse="Row7" Rotation="Clockwise90" FairyAttribute="None">
+        <FairyType code="eh" />
+      </Piece>
+      <Piece Type="Queen" Color="Black" Column="ColH" Traverse="Row4" Rotation="Clockwise90" FairyAttribute="None">
+        <FairyType code="eh" />
+      </Piece>
+      <Piece Type="Rock" Color="White" Column="ColB" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CgogIDEuLi5FSGg0Kmc0ICAgMi5FSGY3LWg1IEVIZzQtZzEgICAzLkVIaDUtZjMgKyBFSGcxLWUzICMKCiAgMS4uLkVIaDQqZTcgICAyLkVIZjctZjggRUhlNy1hNyAgIDMuRUhmOCpkNiArIEVIYTctYzUgIwoK</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENlbnR1cnkgR290aGljO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMyN1xwYXINClxwYXINClxiXGkwXGZzMjkgICAxLi4uRUhoNCpnNCAgIDIuRUhmNy1oNSBFSGc0LWcxICAgMy5FSGg1LWYzICsgRUhnMS1lMyAjXHBhcg0KXHBhcg0KICAxLi4uRUhoNCplNyAgIDIuRUhmNy1mOCBFSGU3LWE3ICAgMy5FSGY4KmQ2ICsgRUhhNy1jNSAjXHBhcg0KXGIwXGlcZnMyN1xwYXINClxwYXINCn0NCg==</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2012-03-22T23:00:00Z" Maximum="false" Serie="false" PrizeRank="7" CompleteStipulationDesc="H#" PersonalID="79" PrizeDescription="Menzione Onorevole" Source="Original for AG60JT (Antonio Garofalo 60 Jubilee Tourney)" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Agostini Valerio</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Brunori Gabriele</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColE" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColA" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColA" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="c4" ValueB="c6" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Tags>
+      <Tag Value="Interferenza" />
+    </Tags>
+    <Solution>CmEpCgogIDEuQmExLWMzIEJmNC1lMyArICAgMi5LZjUtZTQgQmUzLWQyICMKCmIpIHdLYzQtLT5jNgoKICAxLkJhMS1iMiBCZjQtZTUgKyAgIDIuS2Y1LWU2IEJlNS1jMyAjCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMxOFxwYXINCmEpXHBhcg0KXHBhcg0KXGkwXGZzMjAgICAxLkJhMS1jMyBCZjQtZTMgKyAgIDIuS2Y1LWU0IEJlMy1kMiAjXHBhcg0KXGlcZnMxOFxwYXINCmIpIHdLYzQtLT5jNlxwYXINClxwYXINClxpMFxmczIwICAgMS5CYTEtYjIgQmY0LWU1ICsgICAyLktmNS1lNiBCZTUtYzMgI1xwYXINClxpXGZzMThccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2012-02-12T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="73" PrizeDescription="Menzione Onorevole" Source="Orbit 2012 n.54 / 3388" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="White" Column="ColA" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColB" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColF" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColE" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="MovePiece" ValueA="c2" ValueB="g4" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Tags>
+      <Tag Value="Batteria Mascherate" />
+      <Tag Value="Interferenza" />
+      <Tag Value="Echo Diagonale/Ortogonale" />
+      <Tag Value="Scacco evitato preventivamente" />
+      <Tag Value="Inchiodature" />
+    </Tags>
+    <Solution>CgphKSAKCiAgMS5RYjctYzcgQmQ0LWY2ICAgMi5RYzctZjQgU2Q1LWU3ICMgCgpiKSB3UGMyLS0+ZzQKCiAgMS5SYjQtYjMgU2Q1LWY0ICAgMi5SYjMtZjMgQmQ0LWMzICMgCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxpXGYwXGZzMjBccGFyDQpcaTBcZnMyMlxwYXINCmEpIFxwYXINClxwYXINCiAgMS5RYjctYzcgQmQ0LWY2ICAgMi5RYzctZjQgU2Q1LWU3ICMgXHBhcg0KXHBhcg0KYikgd1BjMi0tPmc0XHBhcg0KXHBhcg0KICAxLlJiNC1iMyBTZDUtZjQgICAyLlJiMy1mMyBCZDQtYzMgIyBccGFyDQpccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="3" Date="2011-06-01T22:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="88" PrizeDescription="Menzione onorevole" Source="2° Mini-TOUR  2012" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="White" Column="ColD" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Miniatura" />
+    </Tags>
+    <Solution>CiAgMS5LZTUtZDYgUmE1LWE3ICAgMi5LZDYtYzYgQmQ4LWE1ICAgMy5kNy1kNiBSYTctYzcgIwoKICAxLktlNS1kNCBSYTUtYzUgICAyLkJkNS1lNCBSYzUtYzMgICAzLmQ3LWQ1IEJkOC1mNiAjCgpjb21tZW50byBkZWwgZ2l1ZGljZToKVW4gZ2lvaWVsbG8gbWluaWF0dXJhbGUsIGNvbiBzb2x1emlvbmkgYmVuIGRldGVybWluYXRlIGRhbCBwYXNzbyBzZW1wbGljZSBvIGRvcHBpbyBkZWwgUGVkb25lIGQ3IGUgZGVsIGNhbWJpYW1lbnRvIGRpIHJ1b2xpIHRyYSBsZSBmaWd1cmUgYmlhbmNoZTsgc29sYW1lbnRlIGlsIFJlIHZpbmNlbnRlIHJpbWFuZSBzcGV0dGF0b3JlIGRlbCBnaW9jbyBkb3ZlIGludmVjZSBpbCByZXN0byDoIHR1dHRvIG5lY2Vzc2FyaW8gKGlsIFBhNCwgYXR0aXZvIG5lbGxhIHByaW1hIHNvbHV6aW9uZSwg6CAcY29va3N0b3BwZXIdIG5lbGxhIHNlY29uZGEpLg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxmMFxmczI5XHBhcg0KICAxLktlNS1kNiBSYTUtYTcgICAyLktkNi1jNiBCZDgtYTUgICAzLmQ3LWQ2IFJhNy1jNyAjXHBhcg0KXHBhcg0KICAxLktlNS1kNCBSYTUtYzUgICAyLkJkNS1lNCBSYzUtYzMgICAzLmQ3LWQ1IEJkOC1mNiAjXHBhcg0KXHBhcg0KY29tbWVudG8gZGVsIGdpdWRpY2U6XHBhcg0KVW4gZ2lvaWVsbG8gbWluaWF0dXJhbGUsIGNvbiBzb2x1emlvbmkgYmVuIGRldGVybWluYXRlIGRhbCBwYXNzbyBzZW1wbGljZSBvIGRvcHBpbyBkZWwgUGVkb25lIGQ3IGUgZGVsIGNhbWJpYW1lbnRvIGRpIHJ1b2xpIHRyYSBsZSBmaWd1cmUgYmlhbmNoZTsgc29sYW1lbnRlIGlsIFJlIHZpbmNlbnRlIHJpbWFuZSBzcGV0dGF0b3JlIGRlbCBnaW9jbyBkb3ZlIGludmVjZSBpbCByZXN0byBcJ2U4IHR1dHRvIG5lY2Vzc2FyaW8gKGlsIFBhNCwgYXR0aXZvIG5lbGxhIHByaW1hIHNvbHV6aW9uZSwgXCdlOCBcbGRibHF1b3RlIGNvb2tzdG9wcGVyXHJkYmxxdW90ZSAgbmVsbGEgc2Vjb25kYSkuXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="2.5" Date="2015-01-07T23:00:00Z" Maximum="false" Serie="false" PrizeRank="0" CompleteStipulationDesc="HS#" PersonalID="144" PrizeDescription="Lode" Source="Memorial Tourney 120 Arnoldo Ellerman" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Valerio Agostini</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="White" Column="ColB" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColB" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColG" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColG" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColB" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="f1" ValueB="h3" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>QmVnaW5Qcm9ibGVtClBpZWNlcwpXaGl0ZSBRYjcgUGE2IEthNSBQYTQgUmU0IFNmMSAKQmxhY2sgQmQ4IFJjNyBQZDcgU2I2IEtmMyBRZzQgUGUyIFBnMiBSYjEgClN0aXB1bGF0aW9uIEhTIzMKT3B0aW9uIFRyeSBOb0JvYXJkIFZhcmlhdGlvbnMgV2hpdGVUb1BsYXkKVHdpbiBNb3ZlIGYxIGgzCkVuZFByb2JsZW0KRXhlY3V0ZSBjb21tYW5kOiBweXdpbjMyLmV4ZSB0bXAKUG9wZXllIFdpbmRvd3MtMzJCaXQgdjQuNjMgKDEyMTEgTUIpCgphKQoKICAxLi4uU2I2LWQ1ICAgMi5RYjcqYzcgUWc0LWg1ICAgMy5SZTQtZjQgKyBTZDUqZjQgIwoKYikgd1NmMS0tPmgzCgogIDEuLi5SYzctYzMgICAyLlFiNypiNiBlMi1lMT1CICAgMy5SZTQtZTMgKyBSYzMqZTMgIwoKc29sdXRpb24gZmluaXNoZWQuIFRpbWUgPSAyLjc5MyBzCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMxOCBCZWdpblByb2JsZW1ccGFyDQpQaWVjZXNccGFyDQpXaGl0ZSBRYjcgUGE2IEthNSBQYTQgUmU0IFNmMSBccGFyDQpCbGFjayBCZDggUmM3IFBkNyBTYjYgS2YzIFFnNCBQZTIgUGcyIFJiMSBccGFyDQpTdGlwdWxhdGlvbiBIUyMzXHBhcg0KT3B0aW9uIFRyeSBOb0JvYXJkIFZhcmlhdGlvbnMgV2hpdGVUb1BsYXlccGFyDQpUd2luIE1vdmUgZjEgaDNccGFyDQpFbmRQcm9ibGVtXHBhcg0KRXhlY3V0ZSBjb21tYW5kOiBweXdpbjMyLmV4ZSB0bXBccGFyDQpQb3BleWUgV2luZG93cy0zMkJpdCB2NC42MyAoMTIxMSBNQilccGFyDQpccGFyDQphKVxwYXINClxwYXINClxpMFxmczIwICAgMS4uLlNiNi1kNSAgIDIuUWI3KmM3IFFnNC1oNSAgIDMuUmU0LWY0ICsgU2Q1KmY0ICNccGFyDQpcaVxmczE4XHBhcg0KYikgd1NmMS0tPmgzXHBhcg0KXHBhcg0KXGkwXGZzMjAgICAxLi4uUmM3LWMzICAgMi5RYjcqYjYgZTItZTE9QiAgIDMuUmU0LWUzICsgUmMzKmUzICNccGFyDQpcaVxmczE4XHBhcg0Kc29sdXRpb24gZmluaXNoZWQuIFRpbWUgPSAyLjc5MyBzXHBhcg0KXGkwXGZzMjBccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2012-08-19T22:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="100" PrizeDescription="Best Problem 2013" Source="3007 - Best Problem 2013" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColG" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColG" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Echo Diagonale/Ortogonale" />
+      <Tag Value="Batterie" />
+      <Tag Value="Interferenza" />
+      <Tag Value="Inversioni di ruoli" />
+      <Tag Value="Anti-duale" />
+    </Tags>
+    <Solution>CgogIDEuS2QyLWQzIFNjNi1kNCAgIDIuUmcyLWQyICgyLkJmNC1kMj8pIFNmNS1nNyAjIAoKICAxLktkMi1jMyBTZjUtZDQgICAyLkJmNC1kMiAoMi5SZzItZDI/KSBTYzYtZDggIyAKCgoKQ29tbWVudG8gZGVsIGdpdWRpY2U6CgpVbiBsYXZvcm8gbW9sdG8gZmluZSBpbiBjdWkgZHVlIGJhdHRlcmllIGJpYW5jaGUgc2kgYXByb25vIGluCnN1Y2Nlc3Npb25lLCBzY2FtYmlhbmRvc2kgbGUgZnVuemlvbmkgZGkgYmF0dGVyaWEgZGlyZXR0YSBvCmluZGlyZXR0YSBuZWxsZSBkdWUgc29sdXppb25pLiBMZSBwcmltZSBtb3NzZSBiaWFuY2hlIHNvbm8KZ2lvY2F0ZSBkYWkgZHVlIGNhdmFsbGkgbmVsbGEgc3Rlc3NhIGNhc2E6IGNp8iBjb3N0aXR1aXNjZSB1bgphcHByZXp6YWJpbGUgbW90aXZvIGRpIHVuaW9uZSwgbm9uIHVuYSBtZXJhIHJpcGV0aXppb25lLCBwZXJjaOkKbG8gc2NvcG8g6CBjb250cm9sbGFyZSBjYXNlIGRpc3RpbnRlLiBBc3NhaSBlbGVnYW50ZSBpbCBtYXR0byBmaW5hbGUKZGkgYmF0dGVyaWEgY29uIG9zdHJ1emlvbmUgcHVyYSBkZWwgcGV6em8gbW9iaWxlIGFsbGEgVGc4LCBjaGUKdmllbmUgc2ZydXR0YXRhIGluIGR1ZSBkaXZlcnNlIGRpcmV6aW9uaS4gRWNjZWxsZW50aSBsGWVjb25vbWlhIGUgbGEKcmVjaXByb2NpdOAuIA==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxmMFxmczIyXHBhcg0KXHBhcg0KICAxLktkMi1kMyBTYzYtZDQgICAyLlJnMi1kMiAoMi5CZjQtZDI/KSBTZjUtZzcgIyBccGFyDQpccGFyDQogIDEuS2QyLWMzIFNmNS1kNCAgIDIuQmY0LWQyICgyLlJnMi1kMj8pIFNjNi1kOCAjIFxwYXINClxwYXINClxwYXINClxwYXINCkNvbW1lbnRvIGRlbCBnaXVkaWNlOlxwYXINClxwYXINClVuIGxhdm9ybyBtb2x0byBmaW5lIGluIGN1aSBkdWUgYmF0dGVyaWUgYmlhbmNoZSBzaSBhcHJvbm8gaW5ccGFyDQpzdWNjZXNzaW9uZSwgc2NhbWJpYW5kb3NpIGxlIGZ1bnppb25pIGRpIGJhdHRlcmlhIGRpcmV0dGEgb1xwYXINCmluZGlyZXR0YSBuZWxsZSBkdWUgc29sdXppb25pLiBMZSBwcmltZSBtb3NzZSBiaWFuY2hlIHNvbm9ccGFyDQpnaW9jYXRlIGRhaSBkdWUgY2F2YWxsaSBuZWxsYSBzdGVzc2EgY2FzYTogY2lcJ2YyIGNvc3RpdHVpc2NlIHVuXHBhcg0KYXBwcmV6emFiaWxlIG1vdGl2byBkaSB1bmlvbmUsIG5vbiB1bmEgbWVyYSByaXBldGl6aW9uZSwgcGVyY2hcJ2U5XHBhcg0KbG8gc2NvcG8gXCdlOCBjb250cm9sbGFyZSBjYXNlIGRpc3RpbnRlLiBBc3NhaSBlbGVnYW50ZSBpbCBtYXR0byBmaW5hbGVccGFyDQpkaSBiYXR0ZXJpYSBjb24gb3N0cnV6aW9uZSBwdXJhIGRlbCBwZXp6byBtb2JpbGUgYWxsYSBUZzgsIGNoZVxwYXINCnZpZW5lIHNmcnV0dGF0YSBpbiBkdWUgZGl2ZXJzZSBkaXJlemlvbmkuIEVjY2VsbGVudGkgbFxycXVvdGUgZWNvbm9taWEgZSBsYVxwYXINCnJlY2lwcm9jaXRcJ2UwLiBccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2015-02-17T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="148" PrizeDescription="Posto" Source="GP 2015 - 03" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="Black" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColG" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColH" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="MovePiece" ValueA="d6" ValueB="b5" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Tags>
+      <Tag Value="Inchiodature" />
+      <Tag Value="Interferenze" />
+      <Tag Value="Aperture di linea" />
+      <Tag Value="Matti lungo le linee di inchiodatura" />
+      <Tag Value="Autoblocchi" />
+      <Tag Value="Meredith" />
+    </Tags>
+    <CellDecorators>
+      <Decorator Type="ForeColor" Column="ColD" Traverse="Row5" Value="Teal" />
+      <Decorator Type="BorderSize" Column="ColD" Traverse="Row5" Value="3" />
+      <Decorator Type="BorderStyle" Column="ColD" Traverse="Row5" Value="Solid" />
+    </CellDecorators>
+    <Solution>CmEpIAoKICAxLlJnNi1nNyAoSW50ZXJmZXJlbnphIHByZXZlbnRpdmEpIFJlMi1kMiAgIDIuQmYxLWI1IChBdXRvYmxvY2NvKSBCZjYtZDQgIwoKYikgYlBkNi0tPmI1ICAKCiAgMS5CZjEtZzIgKEludGVyZmVyZW56YSBwcmV2ZW50aXZhKSBCZjYtZTUgICAyLlJnNi1iNiAoQXV0b2Jsb2NjbykgUmUyLWMyICMKCk5vdGU6Ck1vdmltZW50aSBsdW5nbyBsZSBsaW5lZSBkaSBpbmNoaW9kYXR1cmEKTWF0dGkgbHVuZ28gbGUgbGluZWUgZGkgaW5jaGlvZGF0dXJhCkludGVyZmVyZW56ZQpJbnRlcmZlcmVuemUgcHJldmVudGl2ZQpJbnRlcmVzc2FudGUgbm90YXJlIGNvbWUgbGEgY29sbGFib3JhemlvbmUgdHJhIG5lcm8gZSBiaWFuY28g6CBvYmJsaWdhdGEgZGFsbGUgbmVjZXNzYXJpZSBhcGVydHVyZSBkaSBsaW5lYSBkZWwgYmlhbmNvCgpCMSBpbnRlcmZlcmVuemEgcHJldmVudGl2YSAoZSBOT04gc2NoaW9kYXR1cmEhKQpXMSBjb250cm9sbG8gZGlyZXR0bwpCMiBhdXRvYmxvY2NvClcyIG1hdHRvCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIERlbmdYaWFuO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGYwXGZzMjRccGFyDQphKSBccGFyDQpccGFyDQogIDEuXGIgUmc2XGIwIC1nNyAoSW50ZXJmZXJlbnphIHByZXZlbnRpdmEpIFJlMi1kMiAgIDIuXGIgQmYxXGIwIC1iNSAoQXV0b2Jsb2NjbykgQmY2LWQ0ICNccGFyDQpccGFyDQpiKSBiUGQ2LS0+YjUgIFxwYXINClxwYXINCiAgMS5cYiBCZjFcYjAgLWcyIChJbnRlcmZlcmVuemEgcHJldmVudGl2YSkgQmY2LWU1ICAgMi5cYiBSZzZcYjAgLWI2IChBdXRvYmxvY2NvKSBSZTItYzIgI1xwYXINClxwYXINCk5vdGU6XHBhcg0KTW92aW1lbnRpIGx1bmdvIGxlIGxpbmVlIGRpIGluY2hpb2RhdHVyYVxwYXINCk1hdHRpIGx1bmdvIGxlIGxpbmVlIGRpIGluY2hpb2RhdHVyYVxwYXINCkludGVyZmVyZW56ZVxwYXINCkludGVyZmVyZW56ZSBwcmV2ZW50aXZlXHBhcg0KSW50ZXJlc3NhbnRlIG5vdGFyZSBjb21lIGxhIGNvbGxhYm9yYXppb25lIHRyYSBuZXJvIGUgYmlhbmNvIFwnZTggb2JibGlnYXRhIGRhbGxlIG5lY2Vzc2FyaWUgYXBlcnR1cmUgZGkgbGluZWEgZGVsIGJpYW5jb1xwYXINClxwYXINCkIxIGludGVyZmVyZW56YSBwcmV2ZW50aXZhIChlIE5PTiBzY2hpb2RhdHVyYSEpXHBhcg0KVzEgY29udHJvbGxvIGRpcmV0dG9ccGFyDQpCMiBhdXRvYmxvY2NvXHBhcg0KVzIgbWF0dG9ccGFyDQpccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="2.5" Date="2011-01-08T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="HS#" PersonalID="39" PrizeDescription="Lode" Source="Best Problems 2011 - BP059 - (prob. n. 2698)" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele BRUNORI</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Mario PARRINELLO</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColH" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColC" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="AddPiece" ValueA="white S f6" ValueB="" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Solution>QmVnaW5Qcm9ibGVtClBpZWNlcwpXaGl0ZSBCaDcgUGU0IFBkNCBSZDcgUmY2IEtoMyBTYTMgUGIyIApCbGFjayBSaDggQmM4IFFlNSBQZTMgUGYzIEtkMyBTZjEgClN0aXB1bGF0aW9uIEhTIzMKT3B0aW9uIFRyeSBOb0JvYXJkIFZhcmlhdGlvbnMgU2V0UGxheSBXaGl0ZVRvUGxheQpUd2luIEFkZCB3aGl0ZSBTIGY2CkVuZFByb2JsZW0KRXhlY3V0ZSBjb21tYW5kOiB3aW5lIHB5d2luMzIuZXhlIHRtcCAKUG9wZXllIFdpbmRvd3MtMzJCaXQgdjQuNTUgKDkwMSBNQikKCmEpIAoKCiAgMS4uLlFlNSplNCAgIDIuUmY2LWc2IFFlNCpkNCAgIDMuUmc2LWcyICsgUmg4Kmg3ICMgCgpiKSB3U2Y2IAoKCiAgMS4uLlFlNSpkNCAgIDIuU2Y2LWQ1IFFkNCplNCAgIDMuU2Q1LWMzICsgQmM4KmQ3ICMgCgpzb2x1dGlvbiBmaW5pc2hlZC4gVGltZSA9IDEuMDAwIHMKCgoKCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIExpYmVyYXRpb24gTW9ubzt9fQ0KXHZpZXdraW5kNFx1YzFccGFyZFxpXGYwXGZzMjAgQmVnaW5Qcm9ibGVtXHBhcg0KUGllY2VzXHBhcg0KV2hpdGUgQmg3IFBlNCBQZDQgUmQ3IFJmNiBLaDMgU2EzIFBiMiBccGFyDQpCbGFjayBSaDggQmM4IFFlNSBQZTMgUGYzIEtkMyBTZjEgXHBhcg0KU3RpcHVsYXRpb24gSFMjM1xwYXINCk9wdGlvbiBUcnkgTm9Cb2FyZCBWYXJpYXRpb25zIFNldFBsYXkgV2hpdGVUb1BsYXlccGFyDQpUd2luIEFkZCB3aGl0ZSBTIGY2XHBhcg0KRW5kUHJvYmxlbVxwYXINCkV4ZWN1dGUgY29tbWFuZDogd2luZSBweXdpbjMyLmV4ZSB0bXAgXHBhcg0KUG9wZXllIFdpbmRvd3MtMzJCaXQgdjQuNTUgKDkwMSBNQilccGFyDQpcaTBcZnMyMlxwYXINCmEpIFxwYXINClxwYXINClxwYXINCiAgMS4uLlFlNSplNCAgIDIuUmY2LWc2IFFlNCpkNCAgIDMuUmc2LWcyICsgUmg4Kmg3ICMgXHBhcg0KXHBhcg0KYikgd1NmNiBccGFyDQpccGFyDQpccGFyDQogIDEuLi5RZTUqZDQgICAyLlNmNi1kNSBRZDQqZTQgICAzLlNkNS1jMyArIEJjOCpkNyAjIFxwYXINClxwYXINClxpXGZzMjAgc29sdXRpb24gZmluaXNoZWQuIFRpbWUgPSAxLjAwMCBzXHBhcg0KXGkwXGZzMjJccGFyDQpccGFyDQpccGFyDQpccGFyDQpccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="HelpSelf" Moves="3" Date="2012-05-14T22:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="HS#" PersonalID="81" PrizeDescription="Premio" Source="Best Problem 2012 (prob. n.2969)" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="King" Color="Black" Column="ColH" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal">
+      <Twin TwinType="Diagram" ValueA="" ValueB="" ValueC="" TwinModes="Normal" />
+      <Twin TwinType="MovePiece" ValueA="d4" ValueB="a2" ValueC="" TwinModes="Normal" />
+    </Twins>
+    <Conditions />
+    <Tags>
+      <Tag Value="Inchiodature" />
+      <Tag Value="Inversioni di ruoli" />
+      <Tag Value="Echo Diagonale/Ortogonale" />
+    </Tags>
+    <Solution>CgphKSBEaWFncmFtCgogIDEuUmYxLWY0IFJlMy1lNiAgIDIuQmQ3LWU4IEJkNipjNSAgIDMuUmY0LWc0ICsgUWEzKmMxICMgCgpiKSBiU2Q0LS0+YTIKCiAgMS5CZDctZTYgQmQ2LWY0ICAgMi5SZjEtZzEgUmUzKmQzICAgMy5CZTYtZjcgKyBRYTMqYTYgIyAKCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwMzN7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIERlamFWdSBTYW5zO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGYwXGZzMjJccGFyDQpccGFyDQphKSBEaWFncmFtXHBhcg0KXHBhcg0KICAxLlJmMS1mNCBSZTMtZTYgICAyLkJkNy1lOCBCZDYqYzUgICAzLlJmNC1nNCArIFFhMypjMSAjIFxwYXINClxwYXINCmIpIGJTZDQtLT5hMlxwYXINClxwYXINCiAgMS5CZDctZTYgQmQ2LWY0ICAgMi5SZjEtZzEgUmUzKmQzICAgMy5CZTYtZjcgKyBRYTMqYTYgIyBccGFyDQpccGFyDQpccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Direct" Moves="3" Date="2016-01-26T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="#" PersonalID="162" PrizeDescription="Premio" Source="Best Problems 077 n.3506" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Valerio Agostini</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColE" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColC" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColB" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Inversione dei matti" />
+    </Tags>
+    <Solution>CgogICAxLkJiMS1kMyA/IHRocmVhdDogKHgpCiAgICAgICAgICAyLlJjMS1jNCAjICAgIChBKQogICAgICAxLi4uZDctZDUKICAgICAgICAgIDIuU2E2LWM3IHRocmVhdDogKHkpCiAgICAgICAgICAgICAgICAgIDMuU2M3LWI1ICMgKEIpCiAgICAgICAgICAgICAgICAgIDMuU2M3LWU2ICMgKEMpCiAgICAgICAgICAgICAgMi4uLmQ1KmU0CiAgICAgICAgICAgICAgICAgIDMuUmMxLWM0ICMgIChBKQogICAgICAgICAgICAgIDIuLi5TYzYtZDgKICAgICAgICAgICAgICAgICAgMy5TYzctYjUgIyAoQikKICAgICAgICAgICAgICAyLi4uU2M2LWE3CiAgICAgICAgICAgICAgICAgIDMuU2M3LWU2ICMgKEMpCiAgICBidXQKICAgICAgMS4uLlNjNi1hNSAhCgoKICAgMS5TYTYtYzcgISB0aHJlYXQ6IChZKQogICAgICAgICAgMi5TYzctYjUgIyAoQikKICAgICAgMS4uLlNjNi1hNwogICAgICAgICAgMi5CYjEtZDMgdGhyZWF0OiAoeCkKICAgICAgICAgICAgICAgICAgMy5SYzEtYzQgIyAoQSkKICAgICAgICAgICAgICAyLi4uZDctZDUKICAgICAgICAgICAgICAgICAgMy5TYzctZTYgIyAoQykK</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIERlbmdYaWFuO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGYwXGZzMjZccGFyDQpccGFyDQogICAxLkJiMS1kMyA/IHRocmVhdDogKHgpXHBhcg0KICAgICAgICAgIDIuUmMxLWM0ICMgICAgKEEpXHBhcg0KICAgICAgMS4uLmQ3LWQ1XHBhcg0KICAgICAgICAgIDIuU2E2LWM3IHRocmVhdDogKHkpXHBhcg0KICAgICAgICAgICAgICAgICAgMy5TYzctYjUgIyAoQilccGFyDQogICAgICAgICAgICAgICAgICAzLlNjNy1lNiAjIChDKVxwYXINCiAgICAgICAgICAgICAgMi4uLmQ1KmU0XHBhcg0KICAgICAgICAgICAgICAgICAgMy5SYzEtYzQgIyAgKEEpXHBhcg0KICAgICAgICAgICAgICAyLi4uU2M2LWQ4XHBhcg0KICAgICAgICAgICAgICAgICAgMy5TYzctYjUgIyAoQilccGFyDQogICAgICAgICAgICAgIDIuLi5TYzYtYTdccGFyDQogICAgICAgICAgICAgICAgICAzLlNjNy1lNiAjIChDKVxwYXINCiAgICBidXRccGFyDQogICAgICAxLi4uU2M2LWE1ICFccGFyDQpccGFyDQpccGFyDQogICAxLlNhNi1jNyAhIHRocmVhdDogKFkpXHBhcg0KICAgICAgICAgIDIuU2M3LWI1ICMgKEIpXHBhcg0KICAgICAgMS4uLlNjNi1hN1xwYXINCiAgICAgICAgICAyLkJiMS1kMyB0aHJlYXQ6ICh4KVxwYXINCiAgICAgICAgICAgICAgICAgIDMuUmMxLWM0ICMgKEEpXHBhcg0KICAgICAgICAgICAgICAyLi4uZDctZDVccGFyDQogICAgICAgICAgICAgICAgICAzLlNjNy1lNiAjIChDKVxwYXINClxwYXINCn0NCg==</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2" Date="2016-01-27T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="164" PrizeDescription="Premio" Source="Tetragon 1" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColD" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColC" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColH" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="Black" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColE" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColC" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Zilaji" />
+      <Tag Value="Interferenze" />
+      <Tag Value="Matti Modello" />
+    </Tags>
+    <Solution>CiAgMS5LZDQtZTUgUmYxLWY0ICAgMi5SZDIqZDUgU2UzKmM0ICMKCiAgMS5LZDQtZTQgQmc1LWY2ICAgMi5CYzUqZTMgU2Q1LWMzICMKCg==</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIFNlZ29lIFVJO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMzMFxwYXINClxpMFxmczMyICAgMS5LZDQtZTUgUmYxLWY0ICAgXGIgMi5SZDIqZDVcYjAgIFNlMypjNCAjXHBhcg0KXHBhcg0KICAxLktkNC1lNCBCZzUtZjYgICBcYiAyLkJjNSplMyBcYjAgU2Q1LWMzICNccGFyDQpcaVxmczMwXHBhcg0KXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2.5" Date="2014-12-07T23:00:00Z" Maximum="false" Serie="false" PrizeRank="1" CompleteStipulationDesc="H#" PersonalID="141" PrizeDescription="Premio" Source="Agostini  60° Jubilee" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Rock" Color="Black" Column="ColF" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="Black" Column="ColD" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Horse" Color="White" Column="ColB" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="Black" Column="ColC" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Bishop" Color="White" Column="ColG" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColA" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColA" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColE" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColB" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColE" Traverse="Row2" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Tags>
+      <Tag Value="Batterie" />
+      <Tag Value="Distruzione di batterie" />
+    </Tags>
+    <Solution>CmEpCiAgMS4uLkJnNS1oNCBbQV0gIDIuUWQ0KmY0IFthXSBCaDQtZTEgICAzLlJjNS1mNSBiMy1iNCAjIFtCXQpiKQogIDEuLi5SYTMtYTEgW0JdICAyLlFkNC1kMyBbYV0gUmExLWYxICAgMy5SYzUtZTUgZjQtZjUgIyAgW0FdCgpCYXR0ZXJpZToKICAgW0FdID0gQmc1LGY0CiAgIFtCXSA9IFJhMyxiMwogICBbYV0gPSBRZDQsVGI1CgpOb3RlOgpMYSBiYXR0ZXJpYSBuZXJhIOggbW90aXZhdGEgaW4gcXVhbnRvIGltcGVkaXNjZSBpbnZlcnNpb25pIGRpIG1vc3NlIG5lcmUuCkxlIGJhdHRlcmllIGJpYW5jaGUgc29ubyBvdnZpYW1lbnRlIG1vdGl2YXRlIGluIHF1YW50byBzaSBpbnZlcnRvbm8gbmVsbGUgZHVlIHNvbHV6aW9uaSBpIHJ1b2xpIGRlbGxlIHN0ZXNzZTogaW4gYSkgbGEgYmF0dGVyaWEgZGkgYWxmaWVyZSB2aWVuZSBkZW1vbGl0YSBwZXIgcG90ZXIgbWV0dGVyZSBpbiBmdW56aW9uZSBsYSBiYXR0ZXJpYSBCIG1lbnRyZSBpbiBiKSBpIHJ1b2xpIHNpIGludmVydG9ubwppbm9sdHJlIGkgbWF0dGkgc29ubyB0dXR0aSBtYXR0aSBtb2RlbGxvLgpsJ29tb2dlbmVpdOAgc3RhIGFuY2hlIG5lbGxlIGludGVyZmVyZW56ZSBjaGUgc2kgY3JlYW5vIGluIHF1YW50bzoKYSkgbGEgQjIgaW50ZXJmZXJpc2NlIEJoNyBtZW50cmUgbGEgVzMgb2x0cmUgY2hlIGRhcmUgbWF0dG8gaW50ZXJmZXJpc2NlIEJkNgpiKSBsYSBCMiBpbnRlcmZlcmlzY2UgQmQ2IG1lbnRyZSBsYSBXMyBvbHRyZSBjaGUgZGFyZSBtYXR0byBpbnRlcmZlcmlzY2UgUmY4</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIE1pY3Jvc29mdCBTYW5zIFNlcmlmO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGJcZjBcZnMyNlxwYXINCmEpXHBhcg0KICAxLi4uQmc1LWg0IFtBXSAgMi5RZDQqZjQgW2FdIEJoNC1lMSAgIDMuUmM1LWY1IGIzLWI0ICMgW0JdXHBhcg0KYilccGFyDQogIDEuLi5SYTMtYTEgW0JdICAyLlFkNC1kMyBbYV0gUmExLWYxICAgMy5SYzUtZTUgZjQtZjUgIyAgW0FdXHBhcg0KXHBhcg0KQmF0dGVyaWU6XHBhcg0KICAgW0FdID0gQmc1LGY0XHBhcg0KICAgW0JdID0gUmEzLGIzXHBhcg0KICAgW2FdID0gUWQ0LFRiNVxwYXINClxwYXINCk5vdGU6XHBhcg0KTGEgYmF0dGVyaWEgbmVyYSBcJ2U4IG1vdGl2YXRhIGluIHF1YW50byBpbXBlZGlzY2UgaW52ZXJzaW9uaSBkaSBtb3NzZSBuZXJlLlxwYXINCkxlIGJhdHRlcmllIGJpYW5jaGUgc29ubyBvdnZpYW1lbnRlIG1vdGl2YXRlIGluIHF1YW50byBzaSBpbnZlcnRvbm8gbmVsbGUgZHVlIHNvbHV6aW9uaSBpIHJ1b2xpIGRlbGxlIHN0ZXNzZTogaW4gYSkgbGEgYmF0dGVyaWEgZGkgYWxmaWVyZSB2aWVuZSBkZW1vbGl0YSBwZXIgcG90ZXIgbWV0dGVyZSBpbiBmdW56aW9uZSBsYSBiYXR0ZXJpYSBCIG1lbnRyZSBpbiBiKSBpIHJ1b2xpIHNpIGludmVydG9ub1xwYXINCmlub2x0cmUgaSBtYXR0aSBzb25vIHR1dHRpIG1hdHRpIG1vZGVsbG8uXHBhcg0KbCdvbW9nZW5laXRcJ2UwIHN0YSBhbmNoZSBuZWxsZSBpbnRlcmZlcmVuemUgY2hlIHNpIGNyZWFubyBpbiBxdWFudG86XHBhcg0KYSkgbGEgQjIgaW50ZXJmZXJpc2NlIEJoNyBtZW50cmUgbGEgVzMgb2x0cmUgY2hlIGRhcmUgbWF0dG8gaW50ZXJmZXJpc2NlIEJkNlxwYXINCmIpIGxhIEIyIGludGVyZmVyaXNjZSBCZDYgbWVudHJlIGxhIFczIG9sdHJlIGNoZSBkYXJlIG1hdHRvIGludGVyZmVyaXNjZSBSZjhccGFyDQp9DQo=</SolutionRtf>
+  </SP_Item>
+  <SP_Item ProblemType="Help" Moves="2.5" Date="2014-03-02T23:00:00Z" Maximum="false" Serie="false" PrizeRank="0" CompleteStipulationDesc="H#" PersonalID="143" PrizeDescription="Premio Speciale" Source="Valerio Agostini 60° Jubilee" Stipulation="Mate">
+    <Authors>
+      <Author>
+        <NameAndSurname>Gabriele Brunori</NameAndSurname>
+        <Address></Address>
+        <City></City>
+        <Phone></Phone>
+        <ZipCode></ZipCode>
+        <StateOrProvince></StateOrProvince>
+        <Country></Country>
+        <Language>it-IT</Language>
+      </Author>
+    </Authors>
+    <Pieces>
+      <Piece Type="Bishop" Color="White" Column="ColF" Traverse="Row1" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColF" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColD" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Rock" Color="White" Column="ColH" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="Black" Column="ColA" Traverse="Row6" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColA" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Queen" Color="Black" Column="ColF" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="King" Color="White" Column="ColA" Traverse="Row8" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColF" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row4" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="White" Column="ColH" Traverse="Row3" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColH" Traverse="Row7" Rotation="NoRotation" FairyAttribute="None" />
+      <Piece Type="Pawn" Color="Black" Column="ColD" Traverse="Row5" Rotation="NoRotation" FairyAttribute="None" />
+    </Pieces>
+    <Twins TwinSequenceTypes="Normal" />
+    <Conditions />
+    <Solution>CiAgMS4uLkJmMS1nMiAgIDIuUWYzKmY2IEJnMipkNSAgIDMuUWY2LWI2IEJkNS1jNCAjCgogIDEuLi5SaDYtaDUgICAyLlFmMypkMyBSaDUqZDUgICAzLlFkMy1iNSBSZDUtZDYgIwo=</Solution>
+    <SolutionRtf>e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcZGVmZjBcZGVmbGFuZzEwNDB7XGZvbnR0Ymx7XGYwXGZuaWxcZmNoYXJzZXQwIENlbnR1cnkgR290aGljO319DQpcdmlld2tpbmQ0XHVjMVxwYXJkXGlcZjBcZnMzMFxwYXINClxpMFxmczMyICAgMS4uLkJmMS1nMiAgIDIuUWYzKmY2IEJnMipkNSAgIDMuUWY2LWI2IEJkNS1jNCAjXHBhcg0KXHBhcg0KICAxLi4uUmg2LWg1ICAgMi5RZjMqZDMgUmg1KmQ1ICAgMy5RZDMtYjUgUmQ1LWQ2ICNccGFyDQpcaVxmczMwXHBhcg0KfQ0K</SolutionRtf>
+  </SP_Item>
+</ScacchiPainterDatabase>

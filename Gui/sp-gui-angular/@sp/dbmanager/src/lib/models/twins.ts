@@ -1,5 +1,5 @@
 import { createXmlElement } from "../helpers";
-import { ITwins, SequenceTypes, TwinModes } from "../SPX";
+import { ITwins, SequenceTypes, TwinModes } from "../SPX.v4";
 import { Twin } from "./twin";
 
 export class Twins implements ITwins {

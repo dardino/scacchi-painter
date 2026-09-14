@@ -12,7 +12,7 @@ import {
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/SPX";
+import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   TwinTypeItem,
   TwinTypesConfigs,

@@ -103,14 +103,15 @@ export const PieceRotation = [
 ] as const;
 export type PieceRotation = typeof PieceRotation[number];
 
-export interface IPiece {
+export interface IPieceV4 {
   appearance: ChessPieceType | "";
-  fairyCode: { code: FairyPiecesCodes; params: string[] }[];
   color: PieceColors;
   column: Columns;
   traverse: Traverse;
   rotation: PieceRotation;
-  fairyAttribute: string;
+  fairyCode: FairyPiecesCodes | null;
+  fairyParams: string[];
+  fairyAttributes: string[];
 }
 // #endregion
 
@@ -164,7 +165,7 @@ export interface ITwins {
 }
 // #endregion
 
-export interface IProblem {
+export interface IProblemV4 {
   engine?: Engines;
   stipulation: Partial<IStipulation>;
   htmlSolution: string;
@@ -175,11 +176,22 @@ export interface IProblem {
   prizeDescription: string;
   source: string;
   authors: Partial<Author>[];
-  pieces: Partial<IPiece>[] | null;
+  pieces: Partial<IPieceV4>[] | null;
   twins: Partial<ITwins> | null;
   engineConfig?: EngineConfiguration | null;
   engineConfigurationsByEngine?: EngineConfigurationsByEngine | null;
   conditions: string[];
   tags: string[];
   snapshots: Record<string | number, string>;
+}
+
+export interface IDbSpX_V4 {
+  lastIndex: number;
+  name: string;
+  problems: Partial<IProblemV4>[];
+  version: 4;
+}
+
+export function isV4(obj: unknown): obj is IDbSpX_V4 {
+  return "version" in (obj as Record<string, unknown>) && (obj as Record<string, unknown>).version === 4;
 }

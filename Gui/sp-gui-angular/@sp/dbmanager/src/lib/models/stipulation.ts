@@ -1,5 +1,5 @@
 import { getEndingType, getProblemType, XMLProblemTypesKeys, XMLStipulationTypes } from "../SP2";
-import { EndingTypes, IStipulation, ProblemTypes } from "../SPX";
+import { EndingTypes, IStipulation, ProblemTypes } from "../SPX.v4";
 
 export class Stipulation implements IStipulation {
   problemType: ProblemTypes = "-";

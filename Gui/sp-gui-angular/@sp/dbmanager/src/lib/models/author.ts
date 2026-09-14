@@ -1,5 +1,5 @@
 import { createXmlElement, newTextElement } from "../helpers";
-import { Author as IAuthor } from "../SPX";
+import { Author as IAuthor } from "../SPX.v4";
 export class Author implements IAuthor {
   nameAndSurname: string;
   address: string;

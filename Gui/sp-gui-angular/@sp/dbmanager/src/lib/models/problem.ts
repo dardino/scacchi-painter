@@ -1,7 +1,7 @@
 import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
-import { Columns, IProblem, Traverse } from "../SPX";
+import { Columns, IProblemV4, Traverse } from "../SPX.v4";
 import { Base64 } from "../base64";
 import {
   GetLocationFromIndex,
@@ -28,7 +28,7 @@ import { Twins } from "./twins";
 
 const main_snapshot = "$_MAIN_$";
 
-export class Problem implements IProblem {
+export class Problem implements IProblemV4 {
   public textSolution = "";
   public date = new Date().toISOString();
   public stipulation = Stipulation.fromJson({});
@@ -51,8 +51,8 @@ export class Problem implements IProblem {
   public fairyCells: string[] = [];
   public tags: string[] = [];
 
-  public snapshots: IProblem["snapshots"] = {};
-  public currentSnapshotId: keyof IProblem["snapshots"] = main_snapshot;
+  public snapshots: IProblemV4["snapshots"] = {};
+  public currentSnapshotId: keyof IProblemV4["snapshots"] = main_snapshot;
   private get snap_keys(): (string | number)[] {
     return Object.keys(this.snapshots).filter(f => this.snapshots[f] != null);
   }
@@ -100,7 +100,7 @@ export class Problem implements IProblem {
     return p;
   }
 
-  static fromJson(jsonObj: Partial<IProblem>): Problem {
+  static fromJson(jsonObj: Partial<IProblemV4>): Problem {
     const p = new Problem();
     Problem.applyJson(jsonObj, p);
     p.snapshots = { ...jsonObj.snapshots };
@@ -123,7 +123,7 @@ export class Problem implements IProblem {
     return p;
   }
 
-  static applyJson(a: Partial<IProblem>, b: Problem) {
+  static applyJson(a: Partial<IProblemV4>, b: Problem) {
     b.authors
       = (a.authors?.length ?? 0)
         ? (a.authors ?? []).map(Author.fromJson)
@@ -169,8 +169,8 @@ export class Problem implements IProblem {
     b.tags = (a.tags ? [...a.tags] : []).filter(notEmpty);
   }
 
-  toJson(): Partial<IProblem> {
-    const json: Partial<IProblem> = {};
+  toJson(): Partial<IProblemV4> {
+    const json: Partial<IProblemV4> = {};
     if (this.authors.length > 0) {
       json.authors = this.authors.map(a => a.toJson());
     }
@@ -255,7 +255,7 @@ export class Problem implements IProblem {
     return item;
   }
 
-  saveSnapshot(snapshotId?: keyof IProblem["snapshots"]): string | number {
+  saveSnapshot(snapshotId?: keyof IProblemV4["snapshots"]): string | number {
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
@@ -276,8 +276,8 @@ export class Problem implements IProblem {
   }
 
   getNextId(
-    currentSnapshotId: keyof IProblem["snapshots"],
-  ): keyof IProblem["snapshots"] {
+    currentSnapshotId: keyof IProblemV4["snapshots"],
+  ): keyof IProblemV4["snapshots"] {
     if (currentSnapshotId === main_snapshot) {
       currentSnapshotId = -1;
     }
@@ -300,14 +300,14 @@ export class Problem implements IProblem {
   }
 
   loadSnapshot(
-    id?: keyof IProblem["snapshots"],
+    id?: keyof IProblemV4["snapshots"],
     ignoreChanges = false,
   ) {
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
     const prob = JSON.parse(
       Base64.decode(this.snapshots[id]),
-    ) as Partial<IProblem>;
+    ) as Partial<IProblemV4>;
     Problem.applyJson(prob, this);
     this.currentSnapshotId = id;
   }

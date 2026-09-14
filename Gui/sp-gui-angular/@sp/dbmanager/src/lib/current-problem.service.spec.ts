@@ -10,7 +10,7 @@ import { CurrentProblemService } from "./current-problem.service";
 import { DbmanagerService, IDbManagerService } from "./dbmanager.service";
 import { Piece, Problem } from "./models";
 import { SquareLocations } from "./models/locations";
-import { IPiece } from "./SPX";
+import { IPieceV4 } from "./SPX.v4";
 
 @Injectable({
   providedIn: "root",
@@ -47,7 +47,7 @@ class MockHostBridgeService {
 }
 
 @Injectable({ providedIn: "root" })
-class MockDbmanagerService {
+class MockDbmanagerService implements IDbManagerService {
   private all = signal<Problem[]>([]);
   get All() {
     return this.all();
@@ -137,17 +137,22 @@ class MockDbmanagerService {
   GotoIndex(arg0: number): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
+  SetCurrentProblem(problem: Problem | null): Promise<void> {
+    this.CurrentProblem.set(problem);
+    return Promise.resolve();
+  }
 }
 
-const WhiteQueen: Partial<IPiece> = {
+const WhiteQueen: Partial<IPieceV4> = {
   color: "White",
   appearance: "q",
 };
-const WhiteKing: Partial<IPiece> = {
+const WhiteKing: Partial<IPieceV4> = {
   color: "White",
   appearance: "k",
 };
-const BlackRook: Partial<IPiece> = {
+const BlackRook: Partial<IPieceV4> = {
   color: "Black",
   appearance: "r",
 };
@@ -167,7 +172,7 @@ describe("CurrentProblemService", () => {
   });
 
   afterEach(() => {
-    dbmanager.CurrentProblem.set(null);
+    dbmanager.SetCurrentProblem(null);
   });
 
   it("should be created", () => {
@@ -268,8 +273,8 @@ describe("CurrentProblemService", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     service.AddPieceAt(SquareLocations.b2, Piece.fromJson(BlackRook));
 
-    service.SetAsFairyPiece(SquareLocations.a1, "gn");
-    service.SetAsFairyPiece(SquareLocations.b2, "le");
+    service.SetAsFairyPiece(SquareLocations.a1, [], "gn");
+    service.SetAsFairyPiece(SquareLocations.b2, [], "le");
     const fen = dbmanager.CurrentProblem()?.getCurrentFen();
     expect(fen).toBe("8/8/8/8/8/8/1r6/Q7 [GNa1,LEb2]");
   });

@@ -13,7 +13,7 @@ import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { IPiece, IProblem } from "@sp/dbmanager/src/lib/SPX";
+import { IPieceV4, IProblemV4 } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   CurrentProblemService,
   EngineManagerService,
@@ -216,7 +216,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const contextLocation = this.contextOnCell;
     if (!contextLocation) return false;
     const piece = this.problem()?.GetPieceAt(contextLocation.column, contextLocation.traverse);
-    return piece && piece.fairyCode && piece.fairyCode.length > 0;
+    return piece && (piece.fairyCode || piece.fairyAttributes.length > 0);
   }
 
   startSolve(mode: "start" | "try") {
@@ -370,7 +370,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if ($event == null) this.resetActions();
   }
 
-  onChessboardPositionChanged($event: IProblem | null) {
+  onChessboardPositionChanged($event: IProblemV4 | null) {
     this.resetActions();
     if ($event == null) return;
     this.current.PasteJson($event);
@@ -439,7 +439,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private addPiece(figurine: string, loc: SquareLocation) {
     const p = Piece.fromPartial({
-      appearance: figurine[2] as IPiece["appearance"],
+      appearance: figurine[2] as IPieceV4["appearance"],
       color:
         figurine[0] === "w"
           ? "White"
@@ -613,8 +613,18 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       cell,
       originalPiece,
     }).subscribe((result) => {
-      if (!result || !result.updatedPiece || !result.updatedPiece.fairyCode) return;
-      this.current.SetAsFairyPiece(cell, result.updatedPiece.fairyCode[0].code);
+      if (!result || !result.updatedPiece) return;
+      if (!result.updatedPiece.fairyCode && result.updatedPiece.fairyAttributes.length === 0) {
+        this.current.RemoveFairyInfoAt(cell);
+      }
+      else {
+        this.current.SetAsFairyPiece(
+          cell,
+          result.updatedPiece.fairyAttributes ?? [],
+          result.updatedPiece.fairyCode ?? null,
+          result.updatedPiece.fairyParams ?? [],
+        );
+      }
     });
   }
 }

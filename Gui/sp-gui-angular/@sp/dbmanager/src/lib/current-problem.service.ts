@@ -7,13 +7,14 @@ import { Twin } from "./models/twin";
 import {
   Columns,
   EndingTypes,
-  IProblem,
+  IPieceV4,
+  IProblemV4,
   PieceRotation,
   ProblemTypes,
   Traverse,
   TwinModes,
   TwinTypesKeys,
-} from "./SPX";
+} from "./SPX.v4";
 import { TwinTypesConfigs } from "./twinTypes";
 
 @Injectable({
@@ -33,8 +34,8 @@ export class CurrentProblemService {
   }
 
   private syncCurrentProblem(problem: Problem | null): Problem | null {
-    const synced = problem?.clone() ?? Problem.fromJson({});
-    this.#dbManager.CurrentProblem.set(synced);
+    const synced = problem ?? Problem.fromJson({});
+    this.#dbManager.SetCurrentProblem(synced);
     return synced;
   }
 
@@ -50,7 +51,7 @@ export class CurrentProblemService {
     });
   }
 
-  PasteJson(json: Partial<IProblem>) {
+  PasteJson(json: Partial<IProblemV4>) {
     this.#problem.update((old) => {
       const next = this.ensureProblem(old);
       Problem.applyJson(json, next);
@@ -238,7 +239,7 @@ export class CurrentProblemService {
       if (!problem) return problem;
       const newProblem = problem.clone();
       const p = newProblem.GetPieceAt(location.column, location.traverse);
-      if (p) p.fairyAttribute = attribute;
+      if (p && !p.fairyAttributes.includes(attribute)) p.fairyAttributes.push(attribute);
       return this.syncCurrentProblem(newProblem);
     });
   }
@@ -252,12 +253,21 @@ export class CurrentProblemService {
     });
   }
 
-  SetAsFairyPiece(location: SquareLocation, fairyCode: FairyPiecesCodes) {
+  SetAsFairyPiece(location: SquareLocation,
+    fairyAttributes: string[] = [],
+    fairyCode: FairyPiecesCodes | null,
+    fairyParams: string[] = [],
+  ) {
+    const p = this.#problem()?.GetPieceAt(location.column, location.traverse);
+    if (!p) return;
+    p.fairyCode = fairyCode;
+    p.fairyParams = fairyParams;
+    p.fairyAttributes = fairyAttributes;
+
     this.#problem.update((problem) => {
       if (!problem) return problem;
       const newProblem = problem.clone();
-      const p = newProblem.GetPieceAt(location.column, location.traverse);
-      if (p) p.fairyCode = [{ code: fairyCode, params: [] }];
+      CurrentProblemService.addPieceAt(newProblem, location, p);
       return this.syncCurrentProblem(newProblem);
     });
   }
@@ -333,7 +343,7 @@ export class CurrentProblemService {
     });
   }
 
-  Reload(snapshotID?: keyof IProblem["snapshots"]) {
+  Reload(snapshotID?: keyof IProblemV4["snapshots"]) {
     this.#problem.update(() => {
       const newProblem = this.#dbManager.CurrentProblem()?.clone() ?? null;
       newProblem?.loadSnapshot(snapshotID, true);
@@ -345,7 +355,7 @@ export class CurrentProblemService {
     const newProblem = this.#problem()?.clone();
     if (!newProblem) return;
     newProblem.saveSnapshot(newProblem.currentSnapshotId);
-    this.#dbManager.CurrentProblem.set(newProblem);
+    this.#dbManager.SetCurrentProblem(newProblem);
     this.#dbManager.SaveTemporary();
   }
 
@@ -354,7 +364,7 @@ export class CurrentProblemService {
     const newProblem = this.#problem()?.clone();
     if (!newProblem) return snapshotId;
     snapshotId = newProblem.saveSnapshot();
-    this.#dbManager.CurrentProblem.set(newProblem); // calls detectionChanges on the current problem, so that the snapshot is saved with the current state of the problem
+    this.#dbManager.SetCurrentProblem(newProblem); // calls detectionChanges on the current problem, so that the snapshot is saved with the current state of the problem
     this.#dbManager.SaveTemporary(); // updates also the localStorage with the new snapshot
     return snapshotId;
   }
@@ -422,7 +432,9 @@ export class CurrentProblemService {
       const newProblem = problem.clone();
       const piece = newProblem.GetPieceAt(location.column, location.traverse);
       if (piece) {
-        piece.fairyCode = [];
+        piece.fairyCode = null;
+        piece.fairyAttributes = [];
+        piece.fairyParams = [];
       }
       return this.syncCurrentProblem(newProblem);
     });
@@ -448,13 +460,19 @@ export class CurrentProblemService {
   }
 
   private static addPieceAt(problem: Problem | null, location: SquareLocation, piece: Piece): void {
+    const newPiece: IPieceV4 = {
+      appearance: piece.appearance,
+      color: piece.color,
+      fairyCode: piece.fairyCode,
+      fairyParams: piece.fairyParams,
+      rotation: piece.rotation,
+      fairyAttributes: piece.fairyAttributes,
+      column: location.column,
+      traverse: location.traverse,
+    };
     CurrentProblemService.removePieceAt(problem, location);
     problem?.pieces.push(
-      Piece.fromJson({
-        ...piece,
-        column: location.column,
-        traverse: location.traverse,
-      }),
+      Piece.fromJson(newPiece),
     );
   }
 
