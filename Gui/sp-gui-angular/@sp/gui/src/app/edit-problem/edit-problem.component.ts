@@ -1,7 +1,6 @@
 import { CommonModule, Location } from "@angular/common";
 import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
-import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -29,12 +28,8 @@ import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolb
 import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
-import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
-import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
-import { SolveEngineDialogComponent, type SolveEngineDialogResult } from "../solve-engine-dialog/solve-engine-dialog.component";
-import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 
 @Component({
   selector: "app-edit-problem",
@@ -62,8 +57,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   private location = inject(Location);
   private route = inject(ActivatedRoute);
   private engine = inject(EngineManagerService);
-  private dialog = inject(MatDialog);
-  private confirm = inject(DialogService);
+  private dialogService = inject(DialogService);
   private preferences = inject(PreferencesService);
   private snackBar = inject(MatSnackBar);
   private chessanim = inject(ChessboardAnimationService);
@@ -107,7 +101,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   menuX = signal(0);
   menuY = signal(0);
-  contextOnCell = signal<SquareLocation | null>(null);
+  contextOnCell: SquareLocation | null = null;
 
   private resizing = { x: NaN, initialW: NaN };
 
@@ -192,24 +186,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openSolveEngineDialog() {
-    const dialogRef = this.dialog.open<SolveEngineDialogComponent, {
-      availableEngines: Engines[];
-      engine: Engines;
-      engineConfig: SolveEngineDialogResult["engineConfig"] | null;
-      engineConfigurationsByEngine: SolveEngineDialogResult["engineConfigurationsByEngine"] | null;
-    }, SolveEngineDialogResult | null>(
-      SolveEngineDialogComponent,
-      {
-        data: {
-          availableEngines: this.availableEngines,
-          engine: this.selectedEngine(),
-          engineConfig: this.current.Problem()?.engineConfig ?? null,
-          engineConfigurationsByEngine: this.current.Problem()?.engineConfigurationsByEngine ?? null,
-        },
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
+    this.dialogService.solverEngineSettings({
+      availableEngines: this.availableEngines,
+      engine: this.selectedEngine(),
+      engineConfig: this.current.Problem()?.engineConfig ?? null,
+      engineConfigurationsByEngine: this.current.Problem()?.engineConfigurationsByEngine ?? null,
+    }).subscribe((result) => {
       if (result == null) return;
       this.selectedEngine.set(result.engine);
       const problem = this.current.Problem();
@@ -221,13 +203,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  onTriggerContextMenu(data: { event: MouseEvent; location: SquareLocation }) {
-    data.event.preventDefault();
-    this.menuX.set(data.event.x - 20);
-    this.menuY.set(data.event.y - 40);
+  onTriggerContextMenu(data: { location: SquareLocation; mousePosition: { x: number; y: number } }) {
+    this.menuX.set(data.mousePosition.x - 20);
+    this.menuY.set(data.mousePosition.y - 40);
     this.menu.openMenu();
     this.editMode.set("select");
-    this.contextOnCell.set(data.location);
+    this.contextOnCell = data.location;
     this.resetActions();
   }
 
@@ -502,46 +483,20 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openTwinDialog($event: Twin | null): void {
-    const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin | null>(
-      TwinDialogComponent,
-      {
-        minWidth: "25rem",
-        maxWidth: "95%",
-        data: Twin.fromJson($event?.toJson() ?? {}),
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
+    this.dialogService.twinDialog(Twin.fromJson($event?.toJson() ?? {})).subscribe((result) => {
       if (result == null) return;
       this.current.AddTwin(result);
     });
   }
 
   openConditionDialog(): void {
-    const dialogRef = this.dialog.open<ConditionsDialogComponent, void, string>(
-      ConditionsDialogComponent,
-      {
-        width: "25rem",
-        maxWidth: "95%",
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
+    this.dialogService.fairyConditions().subscribe((result) => {
       this.current.AddCondition(result);
     });
   }
 
   openAuthorDialog($event: Author | null): void {
-    const dialogRef = this.dialog.open<AuthorDialogComponent, Author | null, Author | null>(
-      AuthorDialogComponent,
-      {
-        width: "25rem",
-        maxWidth: "95%",
-        data: $event,
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
+    this.dialogService.authors($event).subscribe((result) => {
       if (!result) return;
       this.current.AddOrUpdateAuthor(result);
     });
@@ -556,7 +511,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteAuthor($event: Author) {
-    const modal = this.confirm.confirmDialog({
+    const modal = this.dialogService.confirmDialog({
       cancelText: "No!",
       confirmText: "Yes! Remove Author!",
       message: `Are you sure you want to remove the author ${$event.nameAndSurname} (${$event.AuthorID})? This operation cannot be undone!`,
@@ -613,7 +568,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       $event.preventDefault();
     }
     if (text) {
-      // TODO: #170 check if text is a FEN, in this case use the method `this.current.PasteFEN`
+      // TODO: [#170] check if text is a FEN, in this case use the method `this.current.PasteFEN`
       try {
         const probJSON = JSON.parse(text);
         this.current.PasteJson(probJSON);
@@ -626,10 +581,28 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // #region CONTEXT COMMANDS
   ctxDeletePiece() {
-    const cell = this.contextOnCell();
+    const cell = this.contextOnCell;
     if (cell) {
       this.current.RemovePieceAt(cell);
     }
+  }
+
+  ctxSetFairyInfo() {
+    // this method should open a dialog to set fairy info for the piece at the current context cell
+    if (!this.contextOnCell) return;
+    // Open the dialog to set fairy info for the piece at the current context cell
+    this.openFairyInfoDialog(this.contextOnCell);
+  }
+
+  openFairyInfoDialog(cell: SquareLocation): void {
+    const originalPiece = this.current.Problem()?.GetPieceAt(cell.column, cell.traverse) ?? null;
+    // Implementation for opening the fairy info dialog
+    this.dialogService.fairypieceDialog({
+      cell,
+      originalPiece,
+    }).subscribe((result) => {
+      console.log("Fairy info dialog closed with result:", result);
+    });
   }
 }
 

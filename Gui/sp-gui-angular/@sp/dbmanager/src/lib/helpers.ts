@@ -62,11 +62,11 @@ export const GetSquareIndex = (
     col = col.column;
   }
   if (row == null) throw new Error("invalid parameters 'row'");
-  return Columns.indexOf(col) + 8 * Traverse.indexOf(row);
+  return Columns.indexOf(col) + Columns.length * Traverse.indexOf(row);
 };
 export const GetLocationFromIndex = (index: number): SquareLocation => ({
-  column: Columns[index % 8],
-  traverse: Traverse[Math.floor(index / 8)],
+  column: Columns[index % Columns.length],
+  traverse: Traverse[Math.floor(index / Columns.length)],
 });
 
 export type SP2PieceName

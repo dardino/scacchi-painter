@@ -60,7 +60,7 @@ implements OnInit, OnChanges, OnDestroy {
     };
   }>();
 
-  contextOnCell = output<{ event: MouseEvent; location: SquareLocation }>();
+  contextOnCell = output<{ location: SquareLocation; mousePosition: { x: number; y: number } }>();
 
   currentCell = signal<UiCell | null>(null);
   private lastHash = signal<string | undefined>(undefined);
@@ -210,6 +210,22 @@ implements OnInit, OnChanges, OnDestroy {
     return this.position()?.GetPieceAt(location.column, location.traverse) ?? null;
   }
 
+  #lastContextMousePosition: { x: number; y: number } | null = null;
+  onCellContextMenu($event: Event) {
+    $event.preventDefault();
+    $event.stopImmediatePropagation();
+    $event.stopPropagation();
+    if ($event.type === "cellContextClick" && this.#lastContextMousePosition) {
+      const eventDetail = ($event as CustomEvent<CellClickEventDetail>).detail;
+      const location = this.#toCellLocation(eventDetail);
+      this.contextOnCell.emit({ location, mousePosition: this.#lastContextMousePosition ?? { x: 0, y: 0 } });
+      this.#lastContextMousePosition = null;
+    }
+    else {
+      this.#lastContextMousePosition = { x: ($event as MouseEvent).clientX, y: ($event as MouseEvent).clientY };
+    }
+  }
+
   onCellClick($event: CustomEvent<CellClickEventDetail>) {
     const location = this.#toCellLocation($event.detail);
     const piece = this.#getPieceAtLocation(location);
@@ -252,10 +268,6 @@ implements OnInit, OnChanges, OnDestroy {
 
   cellInfo(cell: UiCell) {
     return `${(cell.piece?.ToLongDescription() ?? "")} ${cell.location.column.slice(-1).toLowerCase()}${cell.location.traverse.slice(-1)}`;
-  }
-
-  triggerContextOnCell($event: MouseEvent, cell: UiCell) {
-    this.contextOnCell.emit({ event: $event, location: cell.location });
   }
 
   #stopAnimation = (animation: Animations) => {

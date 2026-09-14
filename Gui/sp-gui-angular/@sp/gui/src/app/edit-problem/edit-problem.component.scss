@@ -58,6 +58,7 @@
   @media (max-width: mq.$smallScreen) and (orientation: portrait) {
     position: static;
     width: 100vw;
+    container-type: unset;
   }
 
   @media (max-height: mq.$smallScreen) and (orientation: landscape) {

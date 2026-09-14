@@ -6,7 +6,7 @@ import { MatInputModule } from "@angular/material/input";
 import { Author } from "@sp/dbmanager/src/lib/models";
 
 @Component({
-  selector: "app-author-dialog",
+  selector: "lib-author-dialog",
   templateUrl: "./author-dialog.component.html",
   styleUrl: "./author-dialog.component.scss",
   imports: [

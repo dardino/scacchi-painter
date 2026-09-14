@@ -36,7 +36,7 @@ export interface SolveEngineDialogResult {
 type EngineOptionState = { enabled: boolean; values: string[] };
 
 @Component({
-  selector: "app-solve-engine-dialog",
+  selector: "lib-solve-engine-dialog",
   templateUrl: "./solve-engine-dialog.component.html",
   styleUrls: ["./solve-engine-dialog.component.scss"],
   standalone: true,

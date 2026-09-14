@@ -11,7 +11,7 @@ import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
 
 @Component({
-  selector: "app-conditions-dialog",
+  selector: "lib-conditions-dialog",
   templateUrl: "./conditions-dialog.component.html",
   styleUrls: ["./conditions-dialog.component.scss"],
   standalone: true,
