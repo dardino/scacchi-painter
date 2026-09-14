@@ -1,4 +1,12 @@
 <h1 mat-dialog-title>Set Fairy Piece</h1>
 <div mat-dialog-content>
   <h3>Choose the fairy piece type then add the fairy piece parameters</h3>
+  <mat-form-field color="accent" appearance="outline" class="input-condition">
+    <mat-label>Fairy Piece Type</mat-label>
+    <mat-select [(value)]="selectedFairyType">
+      @for (fairyType of fairyTypes; track fairyType) {
+      <mat-option value="{{fairyType.code}}">{{fairyType.code}} - {{fairyType.description}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 </div>
