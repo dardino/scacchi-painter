@@ -10,6 +10,7 @@ import {
 } from "./helpers";
 
 import { Columns, EndingTypes, PieceColors, PieceRotation, ProblemTypes, Traverse } from "./SPX";
+import { FairyPiecesCodes } from "./models/fairesDB";
 
 export type XMLProblemTypesKeys
   = | "Direct"
@@ -189,11 +190,11 @@ export class SP2 {
   // #endregion
 
   // fairy
-  static getFairyCodes(f: Element): { code: string; params: string[] }[] {
+  static getFairyCodes(f: Element): { code: FairyPiecesCodes; params: string[] }[] {
     const ft = f.querySelectorAll("FairyType");
     if (ft.length > 0) {
       return Array.from(ft).map(c => ({
-        code: c.getAttribute("code") ?? "",
+        code: (c.getAttribute("code") ?? "") as FairyPiecesCodes,
         params: Array.from(c.querySelectorAll("Param"))
           .map((_el, i, all) => {
             const byIndex = all.find(
@@ -212,7 +213,7 @@ export class SP2 {
 
   static setFairyCode(
     el: Element,
-    fairyCode: { code: string; params: string[] }[],
+    fairyCode: { code: FairyPiecesCodes; params: string[] }[],
   ) {
     if (fairyCode == null) return;
     fairyCode.forEach((fc) => {

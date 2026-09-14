@@ -416,6 +416,18 @@ export class CurrentProblemService {
     });
   }
 
+  RemoveFairyInfoAt(location: SquareLocation) {
+    this.#problem.update((problem) => {
+      if (!problem) return problem;
+      const newProblem = problem.clone();
+      const piece = newProblem.GetPieceAt(location.column, location.traverse);
+      if (piece) {
+        piece.fairyCode = [];
+      }
+      return this.syncCurrentProblem(newProblem);
+    });
+  }
+
   async ReloadFromDbManager(problemId: number) {
     if (this.#dbManager.All().length === 0) {
       await this.#dbManager.Reload(problemId);

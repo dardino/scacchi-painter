@@ -62,6 +62,11 @@
     <button mat-menu-item (click)="ctxSetFairyInfo()">
       <mat-icon>edit</mat-icon><span>Set Fairy Info</span>
     </button>
+    @if (hasFairyInfo()) {
+    <button mat-menu-item (click)="ctxRemoveFairyInfo()">
+      <mat-icon>clear</mat-icon><span>Remove Fairy Info</span>
+    </button>
+    }
   </div>
 </mat-menu>
 <div [matMenuTriggerFor]="contextmenu" [style.position]="'absolute'" [style.left.px]="menuX()" [style.top.px]="menuY()">

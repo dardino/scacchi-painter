@@ -212,6 +212,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resetActions();
   }
 
+  hasFairyInfo() {
+    const contextLocation = this.contextOnCell;
+    if (!contextLocation) return false;
+    const piece = this.problem()?.GetPieceAt(contextLocation.column, contextLocation.traverse);
+    return piece && piece.fairyCode && piece.fairyCode.length > 0;
+  }
+
   startSolve(mode: "start" | "try") {
     this.resetActions();
     if (!this.problem()) {
@@ -594,6 +601,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.openFairyInfoDialog(this.contextOnCell);
   }
 
+  ctxRemoveFairyInfo() {
+    if (!this.contextOnCell) return;
+    this.current.RemoveFairyInfoAt(this.contextOnCell);
+  }
+
   openFairyInfoDialog(cell: SquareLocation): void {
     const originalPiece = this.current.Problem()?.GetPieceAt(cell.column, cell.traverse) ?? null;
     // Implementation for opening the fairy info dialog
@@ -601,7 +613,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       cell,
       originalPiece,
     }).subscribe((result) => {
-      console.log("Fairy info dialog closed with result:", result);
+      if (!result || !result.updatedPiece || !result.updatedPiece.fairyCode) return;
+      this.current.SetAsFairyPiece(cell, result.updatedPiece.fairyCode[0].code);
     });
   }
 }

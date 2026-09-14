@@ -1,6 +1,7 @@
 import { type ChessPieceType } from "@dardino/chess-board";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { EngineConfiguration, EngineConfigurationsByEngine } from "./models/engine";
+import { FairyPiecesCodes } from "./models/fairesDB";
 
 /**
  * This file contains the types and interfaces used in the SPX module.
@@ -104,7 +105,7 @@ export type PieceRotation = typeof PieceRotation[number];
 
 export interface IPiece {
   appearance: ChessPieceType | "";
-  fairyCode: { code: string; params: string[] }[];
+  fairyCode: { code: FairyPiecesCodes; params: string[] }[];
   color: PieceColors;
   column: Columns;
   traverse: Traverse;

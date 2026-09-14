@@ -10,6 +10,7 @@ import {
 } from "@dardino/chess-board";
 
 import { Base64 } from "./base64";
+import { FairyPiecesCodes } from "./models/fairesDB";
 import { Columns, IPiece, IProblem, IStipulation, PieceColors, PieceRotation, Traverse } from "./SPX";
 
 export interface ProblemDb {
@@ -402,7 +403,7 @@ export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
     }
 
     // TODO: in fen we haven't params for fairies?
-    const fairyCode = fairy?.replace(/[{}]/g, "").split("+").map(fp => ({ code: fp, params: [] }));
+    const fairyCode = fairy?.replace(/[{}]/g, "").split("+").map(fp => ({ code: fp, params: [] })) as { code: FairyPiecesCodes; params: string[] }[];
     const nonNeutralColor = pieceName.toLowerCase() !== pieceName ? "White" : "Black";
     const color = isNeutral ? "Neutral" : nonNeutralColor;
 
@@ -618,7 +619,7 @@ export function updatePositionFromFen(ffen: string, currentPosition?: IProblem):
         column: `Col${square[0].toUpperCase()}` as Columns,
         traverse: `Row${square[1]}` as Traverse,
         fairyAttribute: p.fairyCondition ?? "",
-        fairyCode: p.fairyName ? [{ code: p.fairyName, params: [] }] : [],
+        fairyCode: p.fairyName ? [{ code: p.fairyName as FairyPiecesCodes, params: [] }] : [],
         rotation: getRotationFromAngle(p.rotation ?? "0"),
       } satisfies IPiece);
     }).filter(p => p !== null) ?? [],
