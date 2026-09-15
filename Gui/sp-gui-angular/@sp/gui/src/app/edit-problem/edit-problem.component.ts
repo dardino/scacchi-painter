@@ -209,7 +209,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.menuX.set(data.mousePosition.x - 20);
     this.menuY.set(data.mousePosition.y - 40);
     this.menu.openMenu();
-    this.editMode.set("select");
     this.contextOnCell = data.location;
     this.resetActions();
   }
@@ -363,7 +362,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.pieceToAdd.set($event);
     }
     else {
-      this.editMode.set("select");
       this.resetActions();
     }
   }
@@ -383,12 +381,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const pieceToMoveValue = this.pieceToMove();
     if (button === "middle") {
       this.#current.RemovePieceAt($event);
-      this.editMode.set("select");
       this.resetActions();
       return;
     }
     if ($event == null || this.sameCell($event, pieceToMoveValue)) {
-      this.editMode.set("select");
       this.resetActions();
       return;
     }
@@ -400,7 +396,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const pieceToAddValue = this.pieceToAdd();
     if (editModeValue === "add" && pieceToAddValue != null) {
       this.addPiece(pieceToAddValue, $event);
-      this.resetActions();
+      if (!modifiers.shiftKey) {
+        this.resetActions();
+      }
       return;
     }
     if (editModeValue === "add" && pieceToAddValue == null) {
@@ -477,7 +475,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     else {
       this.#current.MovePiece(from, loc, "replace");
     }
-    this.editMode.set("select");
     this.resetActions();
   }
 
@@ -486,6 +483,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       figurine: null,
       rotation: null,
     };
+    this.editMode.set("select");
     this.pieceToAdd.set(null);
     this.pieceToMove.set(null);
     this.#selectedPieceSquare.set(null);

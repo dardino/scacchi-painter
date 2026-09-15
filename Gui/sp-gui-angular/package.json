@@ -44,7 +44,7 @@
     "@microsoft/microsoft-graph-client": "^3.0.5",
     "@standard-schema/spec": "^1.0.0",
     "@tauri-apps/api": "^2.11.1",
-    "@dardino/chess-board": "link:../../../chess-board",
+    "@dardino/chess-board": "^0.1.8",
     "file-saver": "^2.0.5",
     "marked": "18.0.10",
     "marked-base-url": "^1.1.3",

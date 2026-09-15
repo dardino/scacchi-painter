@@ -26,4 +26,4 @@ allowBuilds:
   zopflipng-bin: false
 
 minimumReleaseAgeExclude:
-  - "@dardino/chess-board@0.1.7"
+  - '@dardino/chess-board@0.1.7 || 0.1.8'

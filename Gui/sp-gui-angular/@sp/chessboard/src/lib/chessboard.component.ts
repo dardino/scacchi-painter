@@ -19,6 +19,7 @@ import {
   getFFenFromPosition,
   updatePositionFromFen,
 } from "@sp/dbmanager/src/public-api";
+import { getPieceIcon } from "@sp/gui/src/app/services/cursor.service";
 import { Subscription } from "rxjs";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
 
@@ -70,7 +71,7 @@ implements OnInit, OnChanges, OnDestroy {
 
   cells = computed(() => this.uiCells());
 
-  cellSize = computed(() => (this.chessboard()?.nativeElement.clientWidth ?? 256) / 8);
+  cellSize = () => (this.chessboard()?.nativeElement.offsetWidth ?? 256) / 8;
 
   fen = computed(() => {
     return getFFenFromPosition(this.position());
@@ -126,18 +127,19 @@ implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges<ChessboardComponent>): void {
     const cbHtml = this.container();
     if (changes.cursor?.currentValue && cbHtml) {
+      const cellSize = this.cellSize();
       if (changes.cursor.currentValue.figurine != null) {
         const dataURL = getPieceIcon(
           changes.cursor.currentValue.figurine ?? "q",
-          this.cellSize(),
+          cellSize,
           changes.cursor.currentValue.rotation ?? null,
         );
-        (cbHtml as unknown as ElementRef<HTMLDivElement>).nativeElement.style.cursor = `url(${dataURL}) ${Math.floor(
-          this.cellSize() / 2,
-        )} ${Math.floor(this.cellSize() / 2)}, auto`;
+        cbHtml.nativeElement.style.cursor = `url(${dataURL}) ${Math.floor(
+          cellSize / 2,
+        )} ${Math.floor(cellSize / 2)}, auto`;
       }
       else {
-        (cbHtml as unknown as ElementRef<HTMLDivElement>).nativeElement.style.cursor = "unset";
+        cbHtml.nativeElement.style.cursor = "unset";
       }
     }
   }
@@ -288,48 +290,3 @@ interface UiCell {
   piece: Piece | null;
   location: SquareLocation;
 }
-
-const getPieceIcon = (
-  figurine: string,
-  cellSize: number,
-  rot: ChessPieceRotation | null,
-) => {
-  const canvas = document.createElement("canvas");
-  canvas.width = cellSize;
-  canvas.height = cellSize;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    throw new Error("Can not create 2d context!");
-  }
-  const fsize = Math.floor(cellSize / 1.44);
-  const margin = Math.floor((cellSize - fsize) / 2);
-  ctx.font = `${fsize}px ${figurine === "X" ? "Arial, sans" : "ScacchiPainter"
-  }`;
-  ctx.lineWidth = 2;
-
-  if (rot != null) {
-    const center = Math.floor(cellSize / 2);
-    ctx.translate(center, center);
-    ctx.rotate(parseInt(rot) * (Math.PI / 180));
-    ctx.translate(-center, -center);
-  }
-
-  ctx.translate(margin, margin + fsize);
-  ctx.save();
-
-  if (figurine !== "X") {
-    ctx.fillStyle = "#ffffff";
-    ctx.strokeStyle = "#ffffff";
-    ctx.strokeText("_" + figurine.substring(1), 0, 0);
-    ctx.fillText("_" + figurine.substring(1), 0, 0);
-    ctx.restore();
-  }
-
-  ctx.fillStyle = figurine === "X" ? "#ff3300" : "#333333";
-  ctx.strokeStyle = "#ffffff";
-  ctx.strokeText(figurine === "X" ? "🗙" : figurine, 0, 0);
-  ctx.fillText(figurine === "X" ? "🗙" : figurine, 0, 0);
-  ctx.restore();
-
-  return canvas.toDataURL("image/png");
-};
