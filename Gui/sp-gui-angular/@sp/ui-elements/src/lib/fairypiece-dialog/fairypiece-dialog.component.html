@@ -1,23 +1,25 @@
 <h1 mat-dialog-title>Set Fairy Piece</h1>
 <div mat-dialog-content>
   <h3>Choose the fairy piece type then add the fairy piece parameters</h3>
-  <mat-form-field color="accent" appearance="outline">
-    <mat-label>Fairy Piece Type</mat-label>
-    <mat-select [(value)]="selectedFairyCode">
-      @for (fairyType of allFairyTypes; track fairyType) {
-      <mat-option value="{{fairyType.code}}">{{fairyType.code}} - {{fairyType.description}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+  <mat-card>
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>Fairy Piece Type</mat-label>
+      <mat-select [(value)]="selectedFairyCode">
+        @for (fairyType of allFairyTypes; track fairyType) {
+        <mat-option value="{{fairyType.code}}">{{fairyType.code}} - {{fairyType.description}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field color="accent" appearance="outline">
-    <mat-label>Fairy Piece Attribute</mat-label>
-    <mat-select [(value)]="selectedFairyAttribute">
-      @for (fairyAttribute of allFairyAttributes; track fairyAttribute) {
-      <mat-option value="{{fairyAttribute}}">{{fairyAttribute}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>Fairy Piece Attribute</mat-label>
+      <mat-select [(value)]="selectedFairyAttribute">
+        @for (fairyAttribute of allFairyAttributes; track fairyAttribute) {
+        <mat-option value="{{fairyAttribute}}">{{fairyAttribute}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-card>
   <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="getUpdatedPiece('apply')">Apply</button>
     <button mat-button [mat-dialog-close]="getUpdatedPiece('remove')">Remove</button>
