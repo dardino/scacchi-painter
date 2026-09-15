@@ -148,6 +148,8 @@ export class SaveFileComponent implements OnInit {
       default:
         break;
     }
+    // Navigate to the route with the source parameter
+    this.router.navigate(["/savefile", source]);
   }
 
   /**

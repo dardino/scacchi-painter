@@ -88,6 +88,9 @@ export class OpenFileComponent implements OnInit {
       default:
         break;
     }
+
+    // Navigate to the route with the source parameter
+    this.router.navigate(["/openfile", source]);
   }
 
   async newFile() {
