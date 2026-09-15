@@ -57,7 +57,7 @@ export class SpSolutionDescComponent {
 
   firstMove = computed(() => this.current.Problem()?.startMoveN ?? 1);
   totalMoves = computed(() => this.current.Problem()?.stipulation.moves ?? 2);
-  solutionFontSize = computed(() => `${Math.max(this.preferences.solutionFontSize, 1)}rem`);
+  solutionFontSize = computed(() => `${Math.max(this.preferences.solutionFontSize(), 1)}rem`);
   rows = computed(() => this.current.Problem()?.jsonSolution ?? []);
 
   #solutionText = computed(() => this.current.Problem()?.textSolution ?? "");

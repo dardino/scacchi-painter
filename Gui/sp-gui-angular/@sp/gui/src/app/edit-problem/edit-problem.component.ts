@@ -307,8 +307,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     const delta = $event.x - this.resizing.x;
     const editWindowWidth = this.resizing.initialW + delta;
-    if (this.#preferences.editWindowWidth !== editWindowWidth) {
-      this.#preferences.editWindowWidth = editWindowWidth;
+    if (this.#preferences.editWindowWidth() !== editWindowWidth) {
+      this.#preferences.editWindowWidth.set(editWindowWidth);
       this.applyPreferences();
     }
   };
@@ -319,7 +319,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     adoptedStyleSheet.replace(`:root {
-      --edit-window-width: ${this.#preferences.editWindowWidth}px;
+      --edit-window-width: ${this.#preferences.editWindowWidth()}px;
     }`);
   }
 

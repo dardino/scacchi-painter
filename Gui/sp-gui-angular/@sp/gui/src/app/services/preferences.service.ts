@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
+import { effect, Injectable, signal, untracked, WritableSignal } from "@angular/core";
 
 interface PreferencesTable {
-  editWindowWidth: number;
+  editWindowWidth: WritableSignal<number>;
+  solutionFontSize: WritableSignal<number>;
 }
 
 const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}` => {
@@ -9,27 +10,37 @@ const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}
   return retVal;
 };
 
-const BindToLocalStorage = <T extends "number" | "string">(
-  type: T,
-  defaultValue?: T extends "number" ? number : string,
-) => (target: unknown, key: string) => {
-  Object.defineProperty(target, key, {
-    get: () => {
-      const fromLS = localStorage.getItem(lsPropNameGetter(key)) ?? defaultValue ?? "";
-      switch (type) {
-        case "number":
-          return parseFloat(`0` + fromLS);
-        case "string":
-        default:
-          return fromLS;
-      }
-    },
-    set: (newValue) => {
-      localStorage.setItem(lsPropNameGetter(key), newValue.toString());
-    },
-  });
-};
+function serialize(v: unknown): string {
+  return typeof v === "string" ? v : JSON.stringify(v);
+}
 
+function parse<T>(raw: string, fallback: T): T {
+  try {
+    // Se fallback è string → non parse JSON
+    if (typeof fallback === "string") return raw as T;
+    return JSON.parse(raw) as T;
+  }
+  catch {
+    return fallback;
+  }
+}
+function localStoredSignal<T>(key: keyof PreferencesTable, defaultValue: T) {
+  const lsKey = lsPropNameGetter(key);
+
+  const raw = localStorage.getItem(lsKey);
+  const initial = raw !== null ? parse(raw, defaultValue) : defaultValue;
+
+  const s = signal<T>(initial);
+
+  effect(() => {
+    const v = s();
+    untracked(() => {
+      localStorage.setItem(lsKey, serialize(v));
+    });
+  });
+
+  return s;
+}
 @Injectable({
   providedIn: "root",
 })
@@ -38,9 +49,6 @@ export class PreferencesService implements PreferencesTable {
     throw new Error("Method not implemented.");
   }
 
-  @BindToLocalStorage("number")
-  public editWindowWidth: number;
-
-  @BindToLocalStorage("number", 1)
-  public solutionFontSize: number;
+  public editWindowWidth = localStoredSignal("editWindowWidth", 800);
+  public solutionFontSize = localStoredSignal("solutionFontSize", 1);
 }
