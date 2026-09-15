@@ -1,4 +1,4 @@
-<div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()" #cbHtml>
+<div class="chessboard-layout" #container tabindex="-1" (blur)="chessboardBlur()">
   <div class="chessboard-image">
     <chess-board #chessboard [attr.hide-labels]="smallBoard()" [attr.ignore-fen-active-color]="true"
       [attr.disable-piece-selection]="true" [attr.disable-piece-movement]="true" [disabled]="smallBoard()"

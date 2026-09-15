@@ -46,7 +46,7 @@ implements OnInit, OnChanges, OnDestroy {
   }
 
   chessboard = viewChild<ElementRef<ChessBoard>>("chessboard");
-  cbHtml = viewChild<ElementRef<HTMLDivElement>>("cbHtml");
+  container = viewChild<ElementRef<HTMLDivElement>>("container");
 
   focusOut = output<void>();
   currentCellChanged = output<SquareLocation | null>();
@@ -124,7 +124,7 @@ implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges<ChessboardComponent>): void {
-    const cbHtml = this.cbHtml();
+    const cbHtml = this.container();
     if (changes.cursor?.currentValue && cbHtml) {
       if (changes.cursor.currentValue.figurine != null) {
         const dataURL = getPieceIcon(
