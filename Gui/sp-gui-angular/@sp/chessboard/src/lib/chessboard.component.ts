@@ -38,6 +38,7 @@ implements OnInit, OnChanges, OnDestroy {
 
   hideInfo = input<boolean>(false);
   smallBoard = input<boolean>(false);
+  hideLabels = input<boolean>(false);
   cursor = input<{ figurine: string | null; rotation: ChessPieceRotation | null } | null>(null);
   position = input<Problem | null>(null);
   selectedPieceSquare = input<FairySquare | null>(null);

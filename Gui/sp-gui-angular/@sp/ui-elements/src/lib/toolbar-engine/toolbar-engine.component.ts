@@ -49,7 +49,7 @@ export class ToolbarEngineComponent {
   isMaxFont = computed(() => this.fontSize() >= 2);
   isMinFont = computed(() => this.fontSize() <= 1);
   logIcon = computed(() => this.fullLog() ? "compress" : "expand");
-  fontSize = computed(() => this.preferences.solutionFontSize());
+  fontSize = computed(() => this.preferences.editorSolutionFontSize());
   viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode()]?.icon);
 
   start() {
@@ -68,11 +68,11 @@ export class ToolbarEngineComponent {
   }
 
   increaseFontSize() {
-    this.preferences.solutionFontSize.set(Math.min(Math.max(this.preferences.solutionFontSize(), 1) + 0.1, 2));
+    this.preferences.editorSolutionFontSize.set(Math.min(Math.max(this.preferences.editorSolutionFontSize(), 1) + 0.1, 2));
   }
 
   decreaseFontSize() {
-    this.preferences.solutionFontSize.set(Math.min(Math.max(this.preferences.solutionFontSize(), 1) - 0.1, 2));
+    this.preferences.editorSolutionFontSize.set(Math.min(Math.max(this.preferences.editorSolutionFontSize(), 1) - 0.1, 2));
   }
 
   toggleEngineLog() {

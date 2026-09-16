@@ -1,158 +1,166 @@
 @use "../../mediaquery" as mq;
+@use "@dardino/chess-board/css";
 
-/* You can add global styles to this file, and also import other style files */
-:root {
-  --cell-white-color: white;
-  --cell-black-color: #ddd;
-  --white-color: white;
-  --black-color: #333;
-  --neutral-color: green;
-}
+@layer base {
 
-html {
-  min-height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: black;
-}
-
-body {
-  min-height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  background-size: 10rem;
-  background-position: center;
-  background-attachment: local;
-
-  display: grid;
-  grid-template-columns: auto auto 1fr;
-  grid-template-rows: auto auto auto 1fr;
-  grid-template-areas: "header header header"
-    "toolbar toolbar toolbar"
-    "side vsplit main"
-    ". vsplit main";
-}
-
-@media screen and (max-width: mq.$smallScreen) {
-  body {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto 1fr;
-    grid-template-areas: "header"
-      "toolbar"
-      "side"
-      "main";
+  /* You can add global styles to this file, and also import other style files */
+  :root {
+    --white-color: white;
+    --black-color: #333;
+    --neutral-color: green;
   }
-}
 
-@media screen and (max-height: mq.$smallScreen) and (orientation: landscape) {
-  body {
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto auto 1fr;
-    grid-template-areas: "header header"
-      "side toolbar"
-      "side main"
-      ". main";
+  html {
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: black;
   }
-}
 
-.dark-theme {
-  background-color: black;
-  background-image: url("./assets/bg.jpg");
-}
+  body {
+    --cb-chess-border-color: #666;
+    --cb-chess-label-color: #fff;
+    --cb-chess-label-font-weight: 300;
+    --cb-chess-label-font-size: 3cqw;
+    --cb-chess-label-font-family: Arial, sans-serif;
 
-.figurine {
-  color: var(--black-color);
-  font-family: "ScacchiPainter", sans-serif;
-  text-rendering: optimizeLegibility !important;
-  letter-spacing: normal !important;
-  font-style: normal;
-  font-weight: normal;
-  height: 1.42em;
-  width: 1.42em;
-  position: relative;
-  display: block;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background-size: 10rem;
+    background-position: center;
+    background-attachment: local;
 
-.figurine:after,
-.figurine:before {
-  height: 1em;
-  width: 1em;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  top: 0;
-  margin: auto;
-  position: absolute;
-  display: inline-block;
-}
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas: "header header header"
+      "toolbar toolbar toolbar"
+      "side vsplit main"
+      ". vsplit main";
+  }
 
-.figurine:before {
-  color: var(--white-color);
-  content: attr(data-bg-piece);
-}
+  @media screen and (max-width: mq.$smallScreen) {
+    body {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto 1fr;
+      grid-template-areas: "header"
+        "toolbar"
+        "side"
+        "main";
+    }
+  }
 
-.figurine:after {
-  content: attr(data-colored-piece);
-}
+  @media screen and (max-height: mq.$smallScreen) and (orientation: landscape) {
+    body {
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto auto 1fr;
+      grid-template-areas: "header header"
+        "side toolbar"
+        "side main"
+        ". main";
+    }
+  }
 
-.mat-tab-body-wrapper {
-  flex: 1 1 auto;
-}
+  .dark-theme {
+    background-color: black;
+    background-image: url("./assets/bg.jpg");
+  }
 
-.mat-tab-body-content {
-  display: flex;
-  flex-direction: column;
-}
+  .figurine {
+    color: var(--black-color);
+    font-family: "ScacchiPainter", sans-serif;
+    text-rendering: optimizeLegibility !important;
+    letter-spacing: normal !important;
+    font-style: normal;
+    font-weight: normal;
+    height: 1.42em;
+    width: 1.42em;
+    position: relative;
+    display: block;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-:focus {
-  outline: none;
-}
+  .figurine:after,
+  .figurine:before {
+    height: 1em;
+    width: 1em;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+    position: absolute;
+    display: inline-block;
+  }
 
-.mat-mdc-tab-body.mat-mdc-tab-body-active {
-  overflow: initial !important;
-}
+  .figurine:before {
+    color: var(--white-color);
+    content: attr(data-bg-piece);
+  }
 
-.mat-mdc-tab-body-content {
-  overflow: initial !important;
-}
+  .figurine:after {
+    content: attr(data-colored-piece);
+  }
 
-.mat-mdc-tab-body-wrapper {
-  flex: 1 1 auto;
-}
+  .mat-tab-body-wrapper {
+    flex: 1 1 auto;
+  }
 
-.ql-snow .ql-editor .ql-code-block-container {
-  background-color: transparent;
-  color: #333;
-}
+  .mat-tab-body-content {
+    display: flex;
+    flex-direction: column;
+  }
 
-app-root {
-  display: contents;
-}
+  :focus {
+    outline: none;
+  }
 
-img {
-  max-width: min(90vw, 90%);
-  max-height: 80vh;
-}
+  .mat-mdc-tab-body.mat-mdc-tab-body-active {
+    overflow: initial !important;
+  }
 
-.document {
-  box-sizing: border-box;
-  width: 100vw;
-  padding: 2rem;
-  min-height: calc(100vh - 4rem);
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
+  .mat-mdc-tab-body-content {
+    overflow: initial !important;
+  }
 
-  .page {
-    border-radius: 1rem;
+  .mat-mdc-tab-body-wrapper {
+    flex: 1 1 auto;
+  }
+
+  .ql-snow .ql-editor .ql-code-block-container {
+    background-color: transparent;
+    color: #333;
+  }
+
+  app-root {
+    display: contents;
+  }
+
+  img {
+    max-width: min(90vw, 90%);
+    max-height: 80vh;
+  }
+
+  .document {
+    box-sizing: border-box;
+    width: 100vw;
     padding: 2rem;
-    background: white;
-    color: black;
+    min-height: calc(100vh - 4rem);
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+
+    .page {
+      border-radius: 1rem;
+      padding: 2rem;
+      background: white;
+      color: black;
+    }
   }
 }

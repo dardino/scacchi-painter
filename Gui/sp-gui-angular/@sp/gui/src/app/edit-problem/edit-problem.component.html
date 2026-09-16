@@ -10,7 +10,7 @@
       <lib-chessboard class="lib-chessboard" [position]="problem()" [cursor]="boardCursor()"
         (positionChanged)="onChessboardPositionChanged($event)" (contextOnCell)="onTriggerContextMenu($event)"
         (currentCellChanged)="currentCellChange($event)" [smallBoard]="false"
-        [selectedPieceSquare]="selectedPieceSquare()"
+        [selectedPieceSquare]="selectedPieceSquare()" [hideLabels]="hideLabels()"
         (clickOnCell)="clickOnCell($event.location, $event.button, $event.modifiers)"
         (focusOut)="boardBlur()"></lib-chessboard>
       <section id="pieceselector">

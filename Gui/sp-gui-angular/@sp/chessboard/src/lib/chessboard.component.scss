@@ -1,15 +1,6 @@
 @use "../../../mediaquery" as mq;
-@use "@dardino/chess-board/css";
 
 :host {
-  --cb-chess-light-square: var(--cell-white-color);
-  --cb-chess-dark-square: var(--cell-black-color);
-  --cb-chess-border-color: #666;
-  --cb-chess-label-color: #fff;
-  --cb-chess-label-font-weight: 300;
-  --cb-chess-label-font-size: 3cqw;
-  --cb-chess-label-font-family: Arial, sans-serif;
-
   --animation-duration: 0.5s;
   display: block;
   width: 100%;

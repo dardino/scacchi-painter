@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
 
-import { Component, OnInit, computed, inject } from "@angular/core";
+import { Component, OnInit, computed, effect, inject } from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -15,6 +15,8 @@ import { SpToolbarButtonComponent, ToolbarDbComponent } from "@sp/ui-elements/sr
 import { Observable, filter, map, startWith } from "rxjs";
 import { RoutesList } from "./app-routing-list";
 import { MenuComponent } from "./menu/menu.component";
+import { PreferencesService } from "./services/preferences.service";
+import { ThemeService } from "./services/theme.service";
 
 @Component({
   selector: "app-root",
@@ -42,8 +44,9 @@ export class AppComponent implements OnInit {
   private bridge = inject(HostBridgeService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private iconRegistry = inject(AllMatIconRegistryService); // Force instantiation to register icons
-
+  private iconRegistry = inject(AllMatIconRegistryService);
+  #preferences = inject(PreferencesService); // Force instantiation to register icons
+  #theme = inject(ThemeService);
   private currentProblem = this.db.CurrentProblem;
   private currentFile = this.db.CurrentFile;
   private currentRoutePath = toSignal(
@@ -82,5 +85,12 @@ export class AppComponent implements OnInit {
 
   async closeMe() {
     this.bridge.closeApp();
+  }
+
+  constructor() {
+    effect(() => {
+      const theme = this.#preferences.chessboardTheme();
+      this.#theme.applyTheme(theme);
+    });
   }
 }
