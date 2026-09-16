@@ -14,8 +14,8 @@
         (clickOnCell)="clickOnCell($event.location, $event.button, $event.modifiers)"
         (focusOut)="boardBlur()"></lib-chessboard>
       <section id="pieceselector">
-        <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)"
-          [current]="pieceToAdd()"></lib-piece-selector>
+        <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)" [showExtraPieces]="editorShowExtraPieces()"
+          [current]="pieceToAdd()" [compact]="compactPieceSelector()"></lib-piece-selector>
       </section>
     </div>
   </section>

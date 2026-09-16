@@ -58,6 +58,19 @@
             fen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"></chess-board>
         </div>
       </fieldset>
+      <fieldset class="fieldset-settings">
+        <legend>Interface Settings</legend>
+        <div class="field-container">
+          <mat-label>Show extra pieces in the piece selector</mat-label>
+          <mat-checkbox [ngModel]="editorShowExtraPieces()"
+            (ngModelChange)="changeEditorShowExtraPieces($event)"></mat-checkbox>
+        </div>
+        <div class="field-container">
+          <mat-label>Compact piece selector</mat-label>
+          <mat-checkbox [ngModel]="compactPieceSelector()"
+            (ngModelChange)="changeCompactPieceSelector($event)"></mat-checkbox>
+        </div>
+      </fieldset>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

@@ -84,6 +84,16 @@ export class ConfigurationComponent implements OnInit {
     this.#preferences.chessboardBorderColor.set(value);
   }
 
+  editorShowExtraPieces = this.#preferences.editorShowExtraPieces.asReadonly();
+  changeEditorShowExtraPieces(value: boolean) {
+    this.#preferences.editorShowExtraPieces.set(value);
+  }
+
+  compactPieceSelector = this.#preferences.compactPieceSelector.asReadonly();
+  changeCompactPieceSelector(value: boolean) {
+    this.#preferences.compactPieceSelector.set(value);
+  }
+
   constructor() {
     const appRef = inject(ApplicationRef);
     const swUpdate = inject(SwUpdate);

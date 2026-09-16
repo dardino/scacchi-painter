@@ -81,6 +81,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   hideLabels = this.#preferences.chessboardLabels.asReadonly();
+  editorShowExtraPieces = this.#preferences.editorShowExtraPieces.asReadonly();
+  compactPieceSelector = this.#preferences.compactPieceSelector.asReadonly();
   solveInProgress = signal(false);
   solutionCount = signal(0);
   showLog = signal(false);

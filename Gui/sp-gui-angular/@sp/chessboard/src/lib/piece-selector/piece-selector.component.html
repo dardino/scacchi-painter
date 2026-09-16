@@ -1,9 +1,18 @@
-<div class="piece-selector">
-  @for (color of colors; track color) {
-  @for (piece of standardPieces; track piece) {
-  <em tabindex="0" [class.selected]="current===color+'_'+piece" (keydown.enter)="clickPiece(color, piece)"
-    (click)="clickPiece(color, piece)" class="piece-selector-item figurine" [attr.data-bg-piece]="'__' + piece"
-    [attr.data-colored-piece]="color + '_' + piece"></em>
-  }
-  }
+<div class="piece-selector-container" [class.compact]="compact()">
+  <div class="piece-selector">
+    @for (color of colors(); track color) {
+    @for (piece of standardPieces; track piece) {
+    <em tabindex="0" [class.selected]="current()===color+'_'+piece" (keydown.enter)="clickPiece(color, piece)"
+      (click)="clickPiece(color, piece)" class="piece-selector-item figurine" [attr.data-bg-piece]="'__' + piece"
+      [attr.data-colored-piece]="color + '_' + piece"></em>
+    }}
+    @if (showExtraPieces()) {
+    @for (color of colors(); track color) {
+    @for (piece of extraPieces; track piece) {
+    <em tabindex="0" [class.selected]="current()===color+'_'+piece" (keydown.enter)="clickPiece(color, piece)"
+      (click)="clickPiece(color, piece)" class="piece-selector-item figurine" [attr.data-bg-piece]="'__' + piece"
+      [attr.data-colored-piece]="color + '_' + piece"></em>
+    }}
+    }
+  </div>
 </div>
