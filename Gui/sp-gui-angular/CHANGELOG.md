@@ -1,5 +1,12 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.3.1
+
+**Release update**: align the Angular and Tauri app version metadata for the 0.3.1 product release.
+
+- [sp-gui-angular] **Version bump**: updated Angular GUI package metadata to 0.3.1
+- [sp-gui / Tauri] **Version bump**: updated Tauri desktop metadata to 0.3.1
+
 ## 0.2.2
 
 **Feature release**: new engine configuration UX, richer solver telemetry, stronger Tauri/Rust message payloads, and internal migration hardening.

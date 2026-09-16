@@ -1,5 +1,44 @@
 # Release Notes
 
+## Version 0.3.1
+
+Release 0.3.1.
+
+### A More Consistent Release Experience
+
+This release brings the application versioning and release messaging into better alignment across the desktop and web experience, making the product presentation clearer and more consistent.
+
+**What's New:**
+
+- ✨ **Version alignment across the app** - Angular and desktop release metadata now match the same product version
+- 🧭 **Cleaner release presentation** - Updated release notes and project summary reflect the current product state more clearly
+- 📦 **More consistent product identity** - The desktop app and the web interface now present the same versioning story
+- 🎨 **New configuration page** - A dedicated settings area now lets you personalize the board appearance, including square colors and other useful preferences
+- ⚙️ **More control over the workspace** - Adjustable display and editing preferences make the app easier to tailor to your own working style
+- ♟️ **Support for fairy pieces** - The editor and board now work with a wider range of fairy-piece sets, making more problem styles and conventions available
+- 🖼️ **Copy board as PNG from context menu** - The board can now be exported as an image directly from the contextual menu for easier sharing and publishing
+- 📸 **Snapshot history during editing** - You can now save intermediate positions while working on a problem and keep them available for later review
+- 🔄 **Recover saved snapshots** - Saved board states can be restored easily when you want to return to a previous version of the position
+
+**What changes for you:**
+
+- You’ll see a consistent version across the app and desktop build
+- Release notes are easier to follow and match the current product state
+- The experience feels more polished and coherent across platforms
+- You can customize the chessboard colors and other settings more directly from the app
+- The interface feels more personal and better suited to how you like to work
+- More fairy-piece problems can be edited and represented correctly
+- You can quickly save and share the board as an image without extra steps
+- It’s easier to experiment with different positions and safely return to earlier versions of your work
+
+![Configuration page with board colors and interface preferences](./release-notes-images/0.3.1/configuration.png)
+
+![Snapshots manager with saved board states](./release-notes-images/0.3.1/snapshots.png)
+
+**Compatibility:**
+
+- Existing problem/database files remain compatible
+
 ## Version 0.2.2
 
 Release 0.2.2.
