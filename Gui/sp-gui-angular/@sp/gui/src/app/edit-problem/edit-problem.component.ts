@@ -1,5 +1,6 @@
 import { CommonModule, Location } from "@angular/common";
 import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal, viewChild } from "@angular/core";
+import { MatBadgeModule } from "@angular/material/badge";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDivider } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
@@ -53,6 +54,7 @@ import { PreferencesService } from "../services/preferences.service";
     MatIconModule,
     MatDivider,
     SnapshotsManagerComponent,
+    MatBadgeModule,
   ],
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {

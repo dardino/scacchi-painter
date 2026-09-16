@@ -1,6 +1,6 @@
 import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, inject } from "@angular/core";
 import { MatAnchor, MatButton } from "@angular/material/button";
-import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardTitle } from "@angular/material/card";
+import { MatCard, MatCardActions, MatCardContent } from "@angular/material/card";
 import { CurrentProblemService } from "@sp/dbmanager/src/lib/current-problem.service";
 import { getFFenFromPosition } from "@sp/dbmanager/src/lib/helpers";
 import { Problem } from "@sp/dbmanager/src/lib/models";
@@ -12,7 +12,7 @@ import { DialogService } from "../services/dialog.service";
   selector: "lib-snapshots-manager",
   styleUrl: "./snapshots-manager.component.scss",
   templateUrl: "./snapshots-manager.component.html",
-  imports: [MatCard, MatAnchor, MatButton, MatCardTitle, MatCardActions, MatCardContent, MatCardFooter],
+  imports: [MatCard, MatAnchor, MatButton, MatCardActions, MatCardContent],
 })
 export class SnapshotsManagerComponent {
   modalService = inject(DialogService);
