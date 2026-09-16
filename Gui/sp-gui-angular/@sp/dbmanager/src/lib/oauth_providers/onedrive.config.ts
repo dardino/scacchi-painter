@@ -10,7 +10,6 @@ export const MSAL_CONFIG: Configuration = {
   },
   cache: {
     cacheLocation: "localStorage", // This configures where your cache will be stored
-    storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
   },
   system: {
     loggerOptions: {
@@ -39,7 +38,13 @@ export const MSAL_CONFIG: Configuration = {
   },
 };
 
-const scopes = ["email", "Files.ReadWrite", "openid", "profile", "User.Read"];
+const scopes = [
+  "email",
+  "Files.ReadWrite.All",
+  "openid",
+  "profile",
+  "User.Read",
+];
 
 export const REQUESTS = {
   LOGIN: {

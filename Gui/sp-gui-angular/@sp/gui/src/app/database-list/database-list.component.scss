@@ -34,34 +34,17 @@
 }
 
 .dblist {
-  height: 100%;
   width: 100%;
 }
 
 #toolbar {
-  grid-column: 1;
+  grid-area: toolbar;
 }
 
 #searchbar {
-  grid-column: 1;
+  grid-area: side;
 }
 
 #dbScrollViewport {
-  grid-column: 2;
-  grid-row: 2 / -1;
-}
-
-@media (orientation: portrait) and (max-width: mq.$smallScreen) {
-  #toolbar {
-    grid-column: span 2;
-  }
-
-  #searchbar {
-    grid-column: span 2;
-  }
-
-  #dbScrollViewport {
-    grid-column: span 2;
-    grid-row: auto / -1;
-  }
+  grid-area: main;
 }

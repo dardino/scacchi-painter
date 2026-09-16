@@ -1,7 +1,8 @@
+<div class="file-explorer">
 @if (mode === 'open') {
   <p>Current Path: {{ currentItem.fullPath }}</p>
 }
-<ul class="folder">
+<ul class="folder" [ngClass]="isloading() ? 'busy' : ''">
   @if (hasParent) {
     <li class="folderItem typeFolder" tabindex="0" (keydown.enter)="navToParent()" (click)="navToParent()"><mat-icon>subdirectory_arrow_left</mat-icon></li>
   }
@@ -27,3 +28,9 @@
     </li>
   }
 </ul>
+@if (isloading()) {
+  <div class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+}
+</div>

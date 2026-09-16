@@ -1,53 +1,54 @@
 @if (problem()) {
-  <div class="dbitem-infos">
-    <div class="dbitem">
-      <lib-chessboard [smallBoard]="true" [hideInfo]="true" boardType="HTML" class="miniboard" [position]="problem()"></lib-chessboard>
-      <div class="description">
-        <dl>
-          <dt class="authors">Authors:</dt>
-          @if (hasAuthors()) {
-            <dd class="authors">
-              @for (author of problem().authors; track $index) {
-              <span class="author">{{ author.nameAndSurname }}</span>
-              }
-            </dd>
+<div class="dbitem-infos">
+  <div class="dbitem">
+    <lib-chessboard [smallBoard]="true" [hideInfo]="true" boardType="HTML" class="miniboard" disabled
+      [position]="problem()"></lib-chessboard>
+    <div class="description">
+      <dl>
+        <dt class="authors">Authors:</dt>
+        @if (hasAuthors()) {
+        <dd class="authors">
+          @for (author of problem().authors; track $index) {
+          <span class="author">{{ author.nameAndSurname }}</span>
           }
-          @if (hasTwins()) {
-          <dt class="twins">Twins:</dt>
-          <dd class="twins">
-            @for (twin of twins(); track $index) {
-            <span class="twin">{{ twin }}</span>
-            }
-          </dd>
+        </dd>
+        }
+        @if (hasTwins()) {
+        <dt class="twins">Twins:</dt>
+        <dd class="twins">
+          @for (twin of twins(); track $index) {
+          <span class="twin">{{ twin }}</span>
           }
-          @if (hasCondition()) {
-          <dt class="twins">Conditions:</dt>
-          <dd class="twins">
-            @for (condition of conditions(); track $index) {
-            <span class="twin">{{ condition }}</span>
-            }
-          </dd>
+        </dd>
+        }
+        @if (hasCondition()) {
+        <dt class="twins">Conditions:</dt>
+        <dd class="twins">
+          @for (condition of conditions(); track $index) {
+          <span class="twin">{{ condition }}</span>
           }
-        </dl>
-        <p class="solution" [innerHTML]="solutionHTML()"></p>
-      </div>
-      <div class="actions">
-        <button title="Delete" type="button" class="action-button" mat-icon-button color="accent" (click)="removeItem()">
-          <mat-icon class="action">delete_permanent</mat-icon>
-        </button>
-        <a title="Edit" class="action-button" mat-icon-button color="accent" [routerLink]="['/edit/' + dbIndex()]">
-          <mat-icon class="action">forward</mat-icon>
-        </a>
-      </div>
+        </dd>
+        }
+      </dl>
+      <p class="solution" [innerHTML]="solutionHTML()"></p>
+    </div>
+    <div class="actions">
+      <button title="Delete" type="button" class="action-button" mat-icon-button color="accent" (click)="removeItem()">
+        <mat-icon class="action">delete_permanent</mat-icon>
+      </button>
+      <a title="Edit" class="action-button" mat-icon-button color="accent" [routerLink]="['/edit/' + dbIndex()]">
+        <mat-icon class="action">forward</mat-icon>
+      </a>
     </div>
   </div>
-  <div class="dbitem-status">
-    <span class="status-stipulation"><span>{{ stipulation() }}</span><span>{{ pieceCounter() }}</span></span>
-    <span class="status-twins">
-      @for (twin of twins(); track $index) {
-      <span class="twin">{{twin}}</span>
-      }
-    </span>
-    <span class="status-index">{{ dbIndex() }}</span>
-  </div>
+</div>
+<div class="dbitem-status">
+  <span class="status-stipulation"><span>{{ stipulation() }}</span><span>{{ pieceCounter() }}</span></span>
+  <span class="status-twins">
+    @for (twin of twins(); track $index) {
+    <span class="twin">{{twin}}</span>
+    }
+  </span>
+  <span class="status-index">{{ dbIndex() }}</span>
+</div>
 }

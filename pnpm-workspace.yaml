@@ -1,13 +1,26 @@
 packages:
-  - 'Gui/sp-gui-angular'
-  - 'Gui/sp-gui-angular/api'
-  - 'Gui/sp-gui-angular/@sp/chessboard'
-  - 'Gui/sp-gui-angular/@sp/dbmanager'
-  - 'Gui/sp-gui-angular/@sp/host-bridge'
-  - 'Gui/sp-gui-angular/@sp/ui-elements'
-  - 'Gui/popeye-js'
-  - 'Gui/sp-gui'
-  - 'CoreJS'
+  - "Gui/sp-gui-angular"
+  - "Gui/sp-gui-angular/api"
+  - "Gui/sp-gui-angular/@sp/chessboard"
+  - "Gui/sp-gui-angular/@sp/dbmanager"
+  - "Gui/sp-gui-angular/@sp/host-bridge"
+  - "Gui/sp-gui-angular/@sp/ui-elements"
+  - "Gui/popeye-js"
+  - "Gui/sp-gui"
+  - "CoreJS"
 
-# catalogs:
-#   default: {}
+overrides:
+  "prosemirror-model": "1.21.0"
+  # "@dardino/chess-board": "link:../chess-board"
+
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  lmdb: false
+  msgpackr-extract: false
+  optipng-bin: false
+  sharp: false
+  zopflipng-bin: false
+
+minimumReleaseAgeExclude:
+  - "@dardino/chess-board"

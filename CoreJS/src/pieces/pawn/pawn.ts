@@ -22,9 +22,20 @@ export const PawnMoveGenerator: PieceMoveGenerator = (bbs, color, lastMove) => {
   const pawnsBitboard = bbs.get(color === "w" ? WhitePawnNotation : BlackPawnNotation) || 0n;
   const pawnsInStartingPosition = getPawnsInStartingPosition(pawnsBitboard, color);
 
-  const pawnsMoves = color === "w"
-    ? ((pawnsBitboard << 8n) | (pawnsInStartingPosition << 16n)) & BOARD_MASK
-    : ((pawnsBitboard >> 8n) | (pawnsInStartingPosition >> 16n)) & BOARD_MASK;
+  const occupied = (bbs.get(BB_WHITE) || 0n) | (bbs.get(BB_BLACK) || 0n);
+  const empty = (~occupied) & BOARD_MASK;
+
+  let pawnsMoves: Bitboard;
+  if (color === "w") {
+    const singlePush = (pawnsBitboard << 8n) & empty & BOARD_MASK;
+    const doublePush = (((pawnsInStartingPosition << 8n) & empty) << 8n) & empty & BOARD_MASK;
+    pawnsMoves = (singlePush | doublePush) & BOARD_MASK;
+  }
+  else {
+    const singlePush = (pawnsBitboard >> 8n) & empty & BOARD_MASK;
+    const doublePush = (((pawnsInStartingPosition >> 8n) & empty) >> 8n) & empty & BOARD_MASK;
+    pawnsMoves = (singlePush | doublePush) & BOARD_MASK;
+  }
 
   let enPassantEnemies = 0n;
   if (lastMove) {

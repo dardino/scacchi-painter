@@ -1,12 +1,5 @@
-import {
-  IStipulation,
-  ProblemTypes,
-  EndingTypes,
-  XMLProblemTypesKeys,
-  XMLStipulationTypes,
-  getProblemType,
-  getEndingType,
-} from "../helpers";
+import { getEndingType, getProblemType, XMLProblemTypesKeys, XMLStipulationTypes } from "../SP2";
+import { EndingTypes, IStipulation, ProblemTypes } from "../SPX.v4";
 
 export class Stipulation implements IStipulation {
   problemType: ProblemTypes = "-";
@@ -22,6 +15,7 @@ export class Stipulation implements IStipulation {
     return (problemType === "-" ? "" : problemType) + stipulationType;
   }
 
+  // SP2
   static fromElement(source: Element): Stipulation {
     const p = new Stipulation();
     p.problemType = getProblemType(source.getAttribute("ProblemType") as XMLProblemTypesKeys);
@@ -34,6 +28,7 @@ export class Stipulation implements IStipulation {
     return p;
   }
 
+  // SPX
   static fromJson(stipulation: Partial<IStipulation> | undefined): Stipulation {
     const p = new Stipulation();
     if (!stipulation) return p;

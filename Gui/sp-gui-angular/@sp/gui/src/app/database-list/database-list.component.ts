@@ -1,4 +1,3 @@
-import { DataSource } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport, ScrollingModule } from "@angular/cdk/scrolling";
 
 import { Component, ElementRef, OnInit, ViewChild, ViewChildren, computed, inject, signal } from "@angular/core";
@@ -9,17 +8,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
-import { Problem } from "@sp/dbmanager/src/lib/models";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
-import { BehaviorSubject, Observable } from "rxjs";
 import { DatabaseListItemComponent } from "../database-list-item/database-list-item.component";
-import { intersect } from "../tools/array";
-import { includes } from "../tools/string";
-export interface ProblemRef {
-  problem: Problem | null;
-  dbIndex: number;
-}
+import { MyDataSource } from "./database-source";
 
 @Component({
   selector: "app-database-list",
@@ -43,13 +35,14 @@ export class DatabaseListComponent implements OnInit {
   private router = inject(Router);
 
   itemSource = new MyDataSource(this.db);
+
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
   @ViewChildren("dbItemContainer") dbItemContainer: ElementRef[];
 
   itemSize = computed(() => Math.round(this.dbItemContainer?.[0]?.nativeElement?.getBoundingClientRect().height ?? 256));
 
   ngOnInit(): void {
-    if (this.db.All.length < 1) {
+    if (this.db.All().length < 1) {
       this.router.navigate(["/openfile"]);
     }
     setTimeout(() => this.scrollToIndex(), 100);
@@ -75,7 +68,7 @@ export class DatabaseListComponent implements OnInit {
 
   async createNewPosition() {
     const createdIndex = await this.db.addBlankPosition();
-    this.router.navigate(["edit", createdIndex]);
+    this.router.navigate(["edit", createdIndex()]);
   }
 
   async deleteItem(dbIndex: number) {
@@ -92,72 +85,3 @@ export class DatabaseListComponent implements OnInit {
     });
   }
 }
-
-export class MyDataSource extends DataSource<ProblemRef | undefined> {
-  private originalDataSource: ProblemRef[];
-  private filteredDataSource: ProblemRef[];
-  private get items$() {
-    return this.itemsSubject.asObservable();
-  }
-
-  private itemsSubject = new BehaviorSubject<ProblemRef[]>([]);
-  constructor(private db: DbmanagerService) {
-    super();
-    this.reload();
-  }
-
-  connect(
-    /* collectionViewer: CollectionViewer */
-  ): Observable<(ProblemRef | undefined)[]> {
-    return this.items$;
-  }
-
-  disconnect(/* collectionViewer: CollectionViewer */): void {
-    // no op
-  }
-
-  getPositionalIndexFromId(dbIndex: number): number {
-    return this.originalDataSource.findIndex(pr => pr.dbIndex === dbIndex);
-  }
-
-  public async deleteProblemByDbIndex(dbIndex: number) {
-    await this.db.deleteProblemByIndex(this.getPositionalIndexFromId(dbIndex));
-    await this.reload();
-  }
-
-  private async reload() {
-    const items = this.db.All;
-    this.originalDataSource = items.map((problem, dbIndex) => ({ dbIndex: dbIndex + 1, problem }));
-    this.filter("");
-  }
-
-  public async filter(text: string) {
-    this.filteredDataSource = this.originalDataSource.slice();
-    if (text.trim() !== "") {
-      this.filteredDataSource = this.filteredDataSource.filter(filterByText(text));
-    }
-    this.sortDescByDate();
-    this.filteredDataSource.unshift({ dbIndex: -1, problem: null });
-    this.itemsSubject.next(this.filteredDataSource);
-  }
-
-  private async sortDescByDate() {
-    this.filteredDataSource.reverse();
-  }
-}
-
-const filterByText = (text: string, cfg = { stipulation: true, names: true, source: true }) => {
-  const textTokens = text.toLowerCase().split(" ");
-  return (e: ProblemRef /* , i: number, a: ProblemRef[] */) => {
-    if (!e.problem) return false;
-    const stip = e.problem.stipulation.completeStipulationDesc.toLowerCase();
-    const names = e.problem.authors.map(aut => aut.nameAndSurname.toLowerCase()) ?? "";
-    const magazine = e.problem.source.toLowerCase();
-
-    const isMatch = (cfg.stipulation && textTokens.filter(tok => stip.includes(tok)).length > 0)
-      || (cfg.names && intersect(names, textTokens, includes).length > 0)
-      || (cfg.source && textTokens.filter(tok => magazine.includes(tok)).length > 0);
-
-    return isMatch;
-  };
-};

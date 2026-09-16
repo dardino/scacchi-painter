@@ -1,55 +1,63 @@
 <div class="workboard" #workboard>
   <section id="toolbar">
     <mat-toolbar class="toolbar-row" color="secondary">
-      <lib-toolbar-edit (switchBoardType)="switchBoardType()" (editCommand)="editCommand($event)" [editMode]="editMode()"
-      (editModeChanged)="editModeChanged($event)"></lib-toolbar-edit>
+      <lib-toolbar-edit (editCommand)="editCommand($event)" [editMode]="editMode()"
+        (editModeChanged)="editModeChanged($event)"></lib-toolbar-edit>
     </mat-toolbar>
   </section>
   <section id="chessboard" #panelleft>
     <div class="chessboard-workarea">
-      <lib-chessboard class="lib-chessboard" [position]="problem()" [boardType]="boardType()" [cursor]="boardCursor()"
-        (cellMiddleClick)="clickOnCell($event, 'middle')" (contextOnCell)="onTriggerContextMenu($event)"
-        (currentCellChanged)="currentCellChange($event)" (cellClick)="clickOnCell($event, 'left')"
-      (focusOut)="boardBlur()"></lib-chessboard>
+      <lib-chessboard #chessboardLib class="lib-chessboard" [position]="problem()" [cursor]="boardCursor()"
+        (positionChanged)="onChessboardPositionChanged($event)" (contextOnCell)="onTriggerContextMenu($event)"
+        (currentCellChanged)="currentCellChange($event)" [smallBoard]="false"
+        [selectedPieceSquare]="selectedPieceSquare()" [hideLabels]="hideLabels()"
+        (clickOnCell)="clickOnCell($event.location, $event.button, $event.modifiers)"
+        (focusOut)="boardBlur()"></lib-chessboard>
       <section id="pieceselector">
-        <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)" [current]="pieceToAdd()"></lib-piece-selector>
+        <lib-piece-selector (selectedPieceChanged)="setPieceToAdd($event)" [showExtraPieces]="editorShowExtraPieces()"
+          [current]="pieceToAdd()" [compact]="compactPieceSelector()"></lib-piece-selector>
       </section>
     </div>
   </section>
+  <div #verticalSplitter (mousedown)="startResize($event)" class="vertical-splitter"></div>
   <div id="info">
-    <div #verticalSplitter (mousedown)="startResize($event)" class="vertical-splitter"></div>
     <section>
       <div class="custom-tabs">
         <div class="tab-header">
-          <button class="tab-button" [class.active]="activeTab() === 0" (click)="activeTab.set(0)">
+          <button matButton="filled" class="tab-button" [class.active]="activeTab() === 0" (click)="activeTab.set(0)">
             Problem Data
           </button>
-          <button class="tab-button" [class.active]="activeTab() === 1" (click)="activeTab.set(1)">
+          <button matButton="filled" class="tab-button" [class.active]="activeTab() === 1" (click)="activeTab.set(1)">
             Solution
+          </button>
+          <button matButton="filled" class="tab-button" [class.active]="activeTab() === 2" (click)="activeTab.set(2)">
+            <span matBadgeOverlap="false" matBadge="{{snapshotsCount()}}"> Snapshots </span>
           </button>
         </div>
         @if (activeTab() === 0) {
-          <div class="tab-content">
-            <lib-problem-info (openTwin)="openTwinDialog($event)" (deleteTwin)="deleteTwin($event)"
-              (addCondition)="openConditionDialog()" (deleteCondition)="deleteCondition($event)"
+        <div class="tab-content">
+          <lib-problem-info (openTwin)="openTwinDialog($event)" (deleteTwin)="deleteTwin($event)"
+            (addCondition)="openConditionDialog()" (deleteCondition)="deleteCondition($event)"
             (openAuthor)="openAuthorDialog($event)" (deleteAuthor)="deleteAuthor($event)"></lib-problem-info>
-          </div>
+        </div>
         }
         @if (activeTab() === 1) {
-          <div class="tab-content">
-            <mat-toolbar class="toolbar-row" color="secondary">
-              @if (engineEnabled) {
-                <lib-toolbar-engine [fullLog]="showLog()" [viewMode]="viewMode()"
-                  (startSolve)="startSolve($event)" (stopSolve)="stopSolve()" (toggleLog)="toggleLog()"
-                  (toggleEditor)="toggleEditor($event)" (toggleStreaming)="toggleStreaming()"
-                  (openEngineSettings)="openSolveEngineDialog()"
-                  [isRunning]="solveInProgress()" [solutionCount]="solutionCount()" [streaming]="streamSolutions()"
-                  [selectedEngine]="selectedEngine()"
-                [hideLabels]="true"></lib-toolbar-engine>
-              }
-            </mat-toolbar>
-            <lib-sp-solution-desc [viewMode]="viewMode()" [showLog]="showLog()"></lib-sp-solution-desc>
-          </div>
+        <div class="tab-content">
+          <mat-toolbar class="toolbar-row" color="secondary">
+            @if (engineEnabled) {
+            <lib-toolbar-engine [fullLog]="showLog()" [viewMode]="viewMode()" (startSolve)="startSolve($event)"
+              (stopSolve)="stopSolve()" (toggleLog)="toggleLog()" (toggleEditor)="toggleEditor($event)"
+              (openEngineSettings)="openSolveEngineDialog()" [isRunning]="solveInProgress()"
+              [selectedEngine]="selectedEngine()" [hideLabels]="true"></lib-toolbar-engine>
+            }
+          </mat-toolbar>
+          <lib-sp-solution-desc [viewMode]="viewMode()" [showLog]="showLog()"></lib-sp-solution-desc>
+        </div>
+        }
+        @if (activeTab() === 2) {
+        <div class="tab-content">
+          <lib-snapshots-manager></lib-snapshots-manager>
+        </div>
         }
       </div>
     </section>
@@ -57,8 +65,22 @@
 </div>
 <mat-menu #contextmenu>
   <div>
+    @if (hasPiece()) {
     <button mat-menu-item (click)="ctxDeletePiece()">
       <mat-icon>delete</mat-icon><span>Remove</span>
+    </button>
+    <button mat-menu-item (click)="ctxSetFairyInfo()">
+      <mat-icon>edit</mat-icon><span>Set Fairy Info</span>
+    </button>
+    @if (hasFairyInfo()) {
+    <button mat-menu-item (click)="ctxRemoveFairyInfo()">
+      <mat-icon>clear</mat-icon><span>Remove Fairy Info</span>
+    </button>
+    }
+    <mat-divider></mat-divider>
+    }
+    <button mat-menu-item (click)="ctxCopyToClipboard()">
+      <mat-icon>content_copy</mat-icon><span>Copy to Clipboard as Image</span>
     </button>
   </div>
 </mat-menu>

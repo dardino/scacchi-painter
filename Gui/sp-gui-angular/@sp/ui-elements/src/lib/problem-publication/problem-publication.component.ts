@@ -1,7 +1,7 @@
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, effect, inject, signal } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, effect, inject, signal } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatCardModule } from "@angular/material/card";
@@ -14,7 +14,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { Problem } from "@sp/dbmanager/src/lib/models/problem";
 import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
-import { Observable, Subscription, map, startWith } from "rxjs";
+import { Observable, map, startWith } from "rxjs";
 
 @Component({
   selector: "lib-problem-publication",
@@ -36,7 +36,7 @@ import { Observable, Subscription, map, startWith } from "rxjs";
     MatInputModule,
   ],
 })
-export class ProblemPublicationComponent implements OnInit, OnDestroy {
+export class ProblemPublicationComponent implements OnInit {
   private db = inject(DbmanagerService);
   private curProbSvc = inject(CurrentProblemService);
 
@@ -92,12 +92,12 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   @ViewChild("magazineInput") magazineInput: ElementRef<HTMLInputElement>;
 
   get allPreviousTags(): string[] {
-    const values = new Set(this.db.All.map(problem => problem.tags).flat());
+    const values = new Set(this.db.All().map(problem => problem.tags).flat());
     return Array.from(values);
   }
 
   get allMagazines(): string[] {
-    const values = new Set(this.db.All.map(problem => problem.source).flat());
+    const values = new Set(this.db.All().map(problem => problem.source).flat());
     return Array.from(values);
   }
 
@@ -117,19 +117,6 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._subscr = this.db.CurrentProblem$.subscribe((value) => {
-      this._currentProblem.set(value);
-      if (value) {
-        this._date.set(new Date(value.date));
-        this.magazineInputControl.setValue(value.source ?? "", { emitEvent: false });
-      }
-      else {
-        this._date.set(null);
-        this.magazineInputControl.setValue("", { emitEvent: false });
-      }
-    });
-    this._currentProblem.set(this.db.CurrentProblem);
-
     // Sincronizza magazine dal FormControl al modello
     this.magazineInputControl.valueChanges.subscribe((value) => {
       const prob = this._currentProblem();
@@ -146,12 +133,6 @@ export class ProblemPublicationComponent implements OnInit, OnDestroy {
       startWith(null),
       map((mag: string | null) => (mag ? this._filterMagazine(mag) : this.allMagazines.slice())),
     );
-  }
-
-  private _subscr: Subscription | undefined;
-
-  ngOnDestroy(): void {
-    if (this._subscr) this._subscr.unsubscribe();
   }
 
   addtag(event: MatChipInputEvent): void {

@@ -1,5 +1,5 @@
 import packageJson from "../../../../package.json";
-import "../../../host-bridge/src/tauriBridge/index";
+import "../bridges/tauri/tauri.bridge";
 
 export const environment = {
   production: true,

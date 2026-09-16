@@ -1,8 +1,8 @@
 # Scacchi Painter GUI - CHANGELOG
 
-## 0.2.2-dev
+## 0.2.2
 
-**Feature and integration snapshot**: new engine configuration UX, richer solver telemetry, stronger Tauri/Rust message payloads, and internal migration hardening.
+**Feature release**: new engine configuration UX, richer solver telemetry, stronger Tauri/Rust message payloads, and internal migration hardening.
 
 - [sp-gui-angular] **Engine configuration dialog**: added a dedicated solve engine configuration flow in the problem editor and refactored engine handling to centralize behavior
 - [sp-gui-angular] **New engine target: Popeye (ASM)**: introduced support for the new engine option and aligned related configuration and toolbar logic

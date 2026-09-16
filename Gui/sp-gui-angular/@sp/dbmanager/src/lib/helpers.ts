@@ -1,216 +1,29 @@
 import {
-  BoardFile,
-  BoardRank,
-  Colors,
-  Figurine,
-  Rotations,
-} from "canvas-chessboard";
+  FenPosition,
+  getEmptyBoardFen,
+  parseFen,
+  PiecesOnBoard,
+  positionToFen,
+  type ChessPieceColor,
+  type ChessPieceRotation,
+  type ChessPieceType,
+} from "@dardino/chess-board";
 
-import type { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { Base64 } from "./base64";
-import type { EngineConfiguration, EngineConfigurationsByEngine } from "./models/engine";
-
-export type XMLProblemTypesKeys
-  = | "Direct"
-    | "Help"
-    | "Self"
-    | "HelpSelf"
-    | "Custom";
-
-export const ProblemTypeCodes = {
-  "-": "Direct",
-  "H": "Help",
-  "S": "Self",
-  "HS": "HelpSelf",
-  "R": "Reflex",
-  "HR": "HelpReflex",
-} as const;
-
-export const EndingTypeCodes = {
-  "#": "Mate (#)",
-  "=": "Stalemate (=)",
-  "+": "Check (+)",
-  "%": "Gain Piece (%)",
-  "~": "(~)",
-  "##": "Double mate (##)",
-  "==": "Double stalemate (==)",
-  "#=": "(#=)",
-  "!=": "(!=)",
-  "!#": "(!#)",
-  "00": "(00)",
-  "ep": "(ep)",
-  "Zxy": "(Zxy)",
-  "x": "(x)",
-  "##!": "(##!)",
-  "ct": "(ct)",
-  "<>": "(&lt;>)",
-  "ctr": "(ctr)",
-  "<>r": "(&lt;>r)",
-  "c81": "(c81)",
-} as const;
-
-export type XMLStipulationTypes = "Mate" | "Stalemate" | "Custom";
-
-export type ProblemTypes = keyof typeof ProblemTypeCodes;
-export const getProblemType = (
-  original: XMLProblemTypesKeys | null = "Direct",
-): ProblemTypes => {
-  switch (original) {
-    case "Direct":
-      return "-";
-    case "Help":
-      return "H";
-    case "HelpSelf":
-      return "HS";
-    case "Self":
-      return "S";
-    default:
-      return "-";
-  }
-};
-export type EndingTypes = keyof typeof EndingTypeCodes;
-export const getEndingType = (original: XMLStipulationTypes): EndingTypes => {
-  switch (original) {
-    case "Mate":
-      return "#";
-    case "Stalemate":
-      return "=";
-    default:
-      return "#";
-  }
-};
-
-export interface IStipulation {
-  problemType: ProblemTypes;
-  stipulationType: EndingTypes;
-  maximum: boolean;
-  serie: boolean;
-  moves: number;
-  completeStipulationDesc: string;
-}
-
-export interface IProblem {
-  engine?: Engines;
-  stipulation: Partial<IStipulation>;
-  htmlSolution: string;
-  textSolution: string;
-  date: string;
-  prizeRank: number;
-  personalID: string;
-  prizeDescription: string;
-  source: string;
-  authors: Partial<Author>[];
-  pieces: Partial<IPiece>[] | null;
-  twins: Partial<ITwins> | null;
-  engineConfig?: EngineConfiguration | null;
-  engineConfigurationsByEngine?: EngineConfigurationsByEngine | null;
-  conditions: string[];
-  tags: string[];
-  snapshots: Record<string | number, string>;
-}
-
-export enum SequenceTypes {
-  Normal = "Normal",
-}
-export const TwinTypes = [
-  "Custom",
-  "Diagram", // no values
-  "MovePiece", // 2 values
-  "RemovePiece", // 1 value
-  "AddPiece", // 2 values
-  "Substitute", // 3 values
-  "SwapPieces", // 2 values
-  "Rotation90", // no value
-  "Rotation180", // no value
-  "Rotation270", // no value
-  "TraslateNormal", // 2 value
-  "TraslateToroidal", // 2 value
-  "Mirror", // 1 value
-  "MirrorHorizontal",
-  "MirrorVertical",
-  "ChangeProblemType", // 2 value
-  "Duplex", // no value
-  "AfterKey", // no value
-  "SwapColors", // no value
-  "Stipulation", // 1 value
-  "Condition", // no value
-] as const;
-
-export type TwinTypesKeys = typeof TwinTypes[number];
-export enum TwinModes {
-  Normal = "Normal",
-  Combined = "Combined",
-}
-export type TwinModesKeys = keyof typeof TwinModes;
-
-export interface ITwins {
-  TwinSequenceTypes?: SequenceTypes;
-  TwinList?: ITwin[];
-}
-
-export interface ITwin {
-  TwinType: TwinTypesKeys;
-  TwinModes: TwinModes;
-  ValueA: string;
-  ValueB: string;
-  ValueC: string;
-}
-
-export interface Author {
-  nameAndSurname: string;
-  address: string;
-  city: string;
-  phone: string;
-  zipCode: string;
-  stateOrProvince: string;
-  country: string;
-  language: string;
-}
-
-export interface IPiece {
-  appearance: Figurine | "";
-  fairyCode: { code: string; params: string[] }[];
-  color: PieceColors;
-  column: Columns;
-  traverse: Traverse;
-  rotation: PieceRotation;
-  fairyAttribute: string;
-}
+import { FairyPiecesCodes } from "./models/fairesDB";
+import { Columns, IPieceV4, IProblemV4, IStipulation, PieceColors, PieceRotation, Traverse } from "./SPX.v4";
 
 export interface ProblemDb {
   version: string;
   name: string;
   lastIndex: number;
-  problems: IProblem[];
+  problems: IProblemV4[];
 }
 
 export const FairyAttributes = ["None"] as const;
-export const Columns = [
-  "ColA",
-  "ColB",
-  "ColC",
-  "ColD",
-  "ColE",
-  "ColF",
-  "ColG",
-  "ColH",
-] as const;
-export type Columns = typeof Columns[number];
 
-export const Traverse = [
-  "Row8",
-  "Row7",
-  "Row6",
-  "Row5",
-  "Row4",
-  "Row3",
-  "Row2",
-  "Row1",
-] as const;
-export type Traverse = typeof Traverse[number];
-export const PieceColors = ["White", "Black", "Neutral"] as const;
-export type PieceColors = typeof PieceColors[number];
-
+export type BoardFile = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h`;
+export type BoardRank = `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8`;
 export type SquareColors = "black" | "white";
 
 export const GetSquareColor = (
@@ -250,24 +63,12 @@ export const GetSquareIndex = (
     col = col.column;
   }
   if (row == null) throw new Error("invalid parameters 'row'");
-  return Columns.indexOf(col) + 8 * Traverse.indexOf(row);
+  return Columns.indexOf(col) + Columns.length * Traverse.indexOf(row);
 };
 export const GetLocationFromIndex = (index: number): SquareLocation => ({
-  column: Columns[index % 8],
-  traverse: Traverse[Math.floor(index / 8)],
+  column: Columns[index % Columns.length],
+  traverse: Traverse[Math.floor(index / Columns.length)],
 });
-
-export const PieceRotation = [
-  "NoRotation",
-  "Clockwise45",
-  "Clockwise90",
-  "Clockwise135",
-  "UpsideDown",
-  "Counterclockwise135",
-  "Counterclockwise90",
-  "Counterclockwise45",
-] as const;
-export type PieceRotation = typeof PieceRotation[number];
 
 export type SP2PieceName
   = | "King"
@@ -281,62 +82,71 @@ export type SP2PieceName
     | "HorseTower"
     | "HorseBishop";
 
-export const getCanvasRotation = (rotation: PieceRotation) => {
+export const getCanvasRotation = (rotation: PieceRotation): ChessPieceRotation => {
   switch (rotation) {
     case "NoRotation":
-      return Rotations.NoRotation;
+      return "0";
     case "Clockwise45":
-      return Rotations.TopRight;
+      return "45";
     case "Clockwise90":
-      return Rotations.Right;
+      return "90";
     case "Clockwise135":
-      return Rotations.BottomRight;
+      return "135";
     case "UpsideDown":
-      return Rotations.UpsideDown;
+      return "180";
     case "Counterclockwise135":
-      return Rotations.BottomLeft;
+      return "225";
     case "Counterclockwise90":
-      return Rotations.Left;
+      return "270";
     case "Counterclockwise45":
-      return Rotations.TopLeft;
+      return "315";
     default:
-      return Rotations.NoRotation;
+      return "0";
   }
 };
 
-export const getCanvasLocation = (x: Columns, y: Traverse) => {
-  if (typeof x !== "string" || typeof y !== "string") {
-    return { col: BoardFile.A, row: BoardRank.R1 };
+export const getCanvasLocation = (x: Columns, y: Traverse): `${BoardFile}${BoardRank}` | null => {
+  if (!x || !y) {
+    return null;
   }
-  return {
-    col: getBoardFile(x),
-    row: getBoardRank(y),
-  };
+  return `${getBoardFile(x)}${getBoardRank(y)}`;
 };
 export const getBoardFile = (x: string | Columns): BoardFile => {
   if (typeof x === "number") x = Columns[x];
-  x = x.substr(3, 1); // extract col from "ColA";
-  return BoardFile[x as keyof typeof BoardFile];
+  x = x.substr(3, 1).toLowerCase(); // extract col from "ColA";
+  return x as BoardFile;
 };
 export const getBoardRank = (y: string | Traverse): BoardRank => {
   if (typeof y === "number") y = Traverse[y];
   y = y.substr(3, 1); // extract row from "Row8";
-  return BoardRank[`R${y}` as keyof typeof BoardRank];
+  return y as BoardRank;
 };
 
-export const getCanvasColor = (c: PieceColors): Colors => {
+export const getCanvasColor = (c: PieceColors): ChessPieceColor => {
   switch (c) {
     case "Black":
-      return "black";
+      return "b";
     case "Neutral":
-      return "neutral";
+      return "n";
     case "White":
     default:
-      return "white";
+      return "w";
   }
 };
 
-export const getFigurine = (appearance?: string): Figurine | null => {
+export const getPieceColor = (c: ChessPieceColor): PieceColors => {
+  switch (c) {
+    case "b":
+      return "Black";
+    case "n":
+      return "Neutral";
+    case "w":
+    default:
+      return "White";
+  }
+};
+
+export const getFigurine = (appearance?: string): ChessPieceType | null => {
   switch (appearance) {
     case "K":
     case "k":
@@ -382,6 +192,8 @@ const mapRotations = {
   [PieceRotation[6]]: ":6",
   [PieceRotation[7]]: ":7",
 } as const;
+export const getRotationSymbol = (rotation: IPieceV4["rotation"]): string =>
+  mapRotations[rotation];
 
 const RotationsCodes = [
   "+ ",
@@ -406,8 +218,18 @@ const RotationsCodeMap: Record<RotationsCodes, PieceRotation> = {
   "-\\": "Counterclockwise45",
 };
 
-export const getRotationSymbol = (rotation: IPiece["rotation"]): string =>
-  mapRotations[rotation];
+const RotationsAngleMap: Record<ChessPieceRotation, PieceRotation> = {
+  0: "NoRotation",
+  45: "Clockwise45",
+  90: "Clockwise90",
+  135: "Clockwise135",
+  180: "UpsideDown",
+  225: "Counterclockwise135",
+  270: "Counterclockwise90",
+  315: "Counterclockwise45",
+};
+export const getRotationFromAngle = (rotation: ChessPieceRotation): IPieceV4["rotation"] =>
+  RotationsAngleMap[rotation];
 
 /*
 <SP_Item
@@ -555,11 +377,11 @@ export const getPiecesString = (row: string): string[] => {
   return piecesStrings;
 };
 
-export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
+export const rowToPieces = (row1: string): (Partial<IPieceV4> | null)[] => {
   const fairies = /\{[a-z]*\}/.exec(row1);
   const piecesStrings = getPiecesString(row1);
 
-  const pieces: (Partial<IPiece> | null)[] = [];
+  const pieces: (Partial<IPieceV4> | null)[] = [];
   let f = 0;
   for (const c of piecesStrings) {
     // empty cell
@@ -568,7 +390,7 @@ export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
       continue;
     }
     const isNeutral = c.startsWith("*");
-    const pieceName = (isNeutral ? c.substring(1, 2) : c.substring(0, 1)) as Figurine;
+    const pieceName = (isNeutral ? c.substring(1, 2) : c.substring(0, 1)) as ChessPieceType;
     const pieceRotation = c.substring(1, 3) as RotationsCodes;
     let rotation: PieceRotation = "NoRotation";
     let fairy: string | null = null;
@@ -581,7 +403,7 @@ export const rowToPieces = (row1: string): (Partial<IPiece> | null)[] => {
     }
 
     // TODO: in fen we haven't params for fairies?
-    const fairyCode = fairy?.replace(/[{}]/g, "").split("+").map(fp => ({ code: fp, params: [] }));
+    const fairyCode = fairy?.replace(/[{}]/g, "") as FairyPiecesCodes;
     const nonNeutralColor = pieceName.toLowerCase() !== pieceName ? "White" : "Black";
     const color = isNeutral ? "Neutral" : nonNeutralColor;
 
@@ -600,7 +422,7 @@ export const fenToChessBoard = (original: string) => {
   const [fen] = original.split(" ");
   const fenrows = fen.split("/");
   const pieces = fenrows.map(f => rowToPieces(f));
-  const cells = pieces.reduce<(Partial<IPiece> | null)[]>(
+  const cells = pieces.reduce<(Partial<IPieceV4> | null)[]>(
     (a, b) => a.concat(b),
     [],
   );
@@ -775,4 +597,100 @@ export const notationCasingByColor: Record<PieceColors, (piecename: string) => s
   White: (txt: string) => txt.toUpperCase(),
   Black: (txt: string) => txt.toLowerCase(),
   Neutral: (txt: string) => `*${txt.toUpperCase()}`,
+};
+
+export function updatePositionFromFen(ffen: string, currentPosition?: IProblemV4): IProblemV4 {
+  const position = parseFen(ffen);
+  return {
+    authors: [...currentPosition?.authors ?? []],
+    conditions: [...currentPosition?.conditions ?? []],
+    date: currentPosition?.date ?? new Date().toISOString(),
+    engine: currentPosition?.engine,
+    engineConfig: currentPosition?.engineConfig,
+    engineConfigurationsByEngine: currentPosition?.engineConfigurationsByEngine,
+    htmlSolution: currentPosition?.htmlSolution ?? "",
+    textSolution: currentPosition?.textSolution ?? "",
+    personalID: currentPosition?.personalID ?? "",
+    pieces: Object.entries(position?.pieces ?? {}).map(([square, p]) => {
+      if (!p) return null;
+      return ({
+        appearance: p.type,
+        color: getPieceColor(p.color),
+        column: `Col${square[0].toUpperCase()}` as Columns,
+        traverse: `Row${square[1]}` as Traverse,
+        fairyAttributes: p.fairyCondition ? [p.fairyCondition] : [],
+        fairyCode: p.fairyName as FairyPiecesCodes ?? null,
+        fairyParams: p.fairyName ? [] : [],
+        rotation: getRotationFromAngle(p.rotation ?? "0"),
+      } satisfies IPieceV4);
+    }).filter(p => p !== null) ?? [],
+    prizeDescription: currentPosition?.prizeDescription ?? "",
+    prizeRank: currentPosition?.prizeRank ?? 0,
+    source: currentPosition?.source ?? "",
+    stipulation: { ...currentPosition?.stipulation },
+    tags: [...currentPosition?.tags ?? []],
+    snapshots: { ...currentPosition?.snapshots },
+    twins: { ...currentPosition?.twins },
+  } satisfies IProblemV4;
+}
+
+export function getStartingColor(stipulation: Partial<IStipulation> | null | undefined): "w" | "b" {
+  if (!stipulation) return "w";
+  const possibile = { "1": "w", "-1": "b" } as const;
+  let start: 1 | -1 = 1;
+  // help (mate or stalemate) starts with black, all other stipulations start with white
+  if (stipulation.problemType === "H") start = start * -1;
+  // if total moves is odd, starting color is opposite of the one defined by the stipulation
+  if (stipulation.moves && stipulation.moves % 2 === 1) start = start * -1;
+  return possibile[start.toString() as "1" | "-1"];
+}
+
+export function getFFenFromPosition(position?: Partial<IProblemV4> | null): string {
+  if (!position) return getEmptyBoardFen();
+  const pos: FenPosition = {
+    activeColor: getStartingColor(position.stipulation),
+    castlingRights: "KQkq",
+    enPassantTarget: "-",
+    fullmoveNumber: 1,
+    halfmoveClock: 0,
+    boardSize: { height: 8, width: 8 },
+    pieces: position.pieces?.reduce((aggr: PiecesOnBoard, p) => {
+      const square = getCanvasLocation(p.column ?? "ColA", p.traverse ?? "Row1");
+      if (!square) return aggr;
+      aggr[square] = {
+        type: p.appearance || "p",
+        color: getCanvasColor(p.color ?? "White"),
+        rotation: getCanvasRotation(p.rotation ?? "NoRotation") === "0" ? undefined : getCanvasRotation(p.rotation ?? "NoRotation"),
+        fairyCondition: p.fairyAttributes?.[0] === "None" ? undefined : (p.fairyAttributes?.[0] ?? ""),
+        fairyName: p.fairyCode ?? "",
+      };
+      return aggr;
+    }, {}) ?? {},
+  };
+  const fen = positionToFen(pos);
+  return fen;
+}
+
+/**
+ * Converts a SP2 FEN string to a new format if it is in the old FFEN format.
+ * @param fen
+ * @returns
+ */
+export const convertFen = (fen: string | null | undefined) => {
+  if (!fen) return "";
+  if (fen.split(" ")[0].includes(":") || fen.split(" ").pop()?.startsWith("[")) {
+    // OLD FFEN format, convert to new format
+
+    // Implement any conversion logic here if needed
+    return fen.replace(/\w:1/g, match => "*:0.5" + match[0])
+      .replace(/\w:2/g, match => "*1" + match[0])
+      .replace(/\w:3/g, match => "*1.5" + match[0])
+      .replace(/\w:4/g, match => "*2" + match[0])
+      .replace(/\w:5/g, match => "*2.5" + match[0])
+      .replace(/\w:6/g, match => "*3" + match[0])
+      .replace(/\w:7/g, match => "*3.5" + match[0])
+      .replace(/[[,](\w*)(\w\d)/g, "$2:$1:,")
+      .replace(/,]/g, "");
+  }
+  return fen;
 };

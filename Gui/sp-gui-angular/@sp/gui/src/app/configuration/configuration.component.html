@@ -1,6 +1,76 @@
-<div>
+<div class="configuration-side">
   <dl>
-    <dt>Version:</dt><dd>{{version}}</dd>
+    <dt>Version:</dt>
+    <dd>{{version}}</dd>
   </dl>
   <button (click)="reload()" mat-stroked-button color="warn">Force reload</button>
+</div>
+<div class="configuration-main">
+
+  <mat-accordion>
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Editor Settings</mat-panel-title>
+        <mat-panel-description>Configure your editor preferences</mat-panel-description>
+      </mat-expansion-panel-header>
+      <fieldset class="fieldset-settings">
+        <legend>Chessboard Settings</legend>
+        <div class="field-container">
+          <mat-label>Choose theme</mat-label>
+          <mat-select [value]="currentTheme()" (valueChange)="setCurrentTheme($event)">
+            @for (theme of availableThemes; track theme) {
+            <mat-option [value]="theme.value">{{theme.viewValue}}</mat-option>
+            }
+          </mat-select>
+        </div>
+        <div class="field-container">
+          <mat-label>Hide board coordinates </mat-label>
+          <mat-checkbox [ngModel]="editorHideBoardLabels()"
+            (ngModelChange)="changeEditorHideLabels($event)"></mat-checkbox>
+        </div>
+        <div class="field-container">
+          <mat-label>Color for black squares </mat-label>
+          <input matInput type="color" [ngModel]="blackCellColor()" (ngModelChange)="changeBlackCellColor($event)">
+        </div>
+        <div class="field-container">
+          <mat-label>Color for white squares </mat-label>
+          <input matInput type="color" [ngModel]="whiteCellColor()" (ngModelChange)="changeWhiteCellColor($event)">
+        </div>
+        <div class="field-container">
+          <mat-label>Color for white pieces </mat-label>
+          <input matInput type="color" [ngModel]="pieceWhiteColor()" (ngModelChange)="changePieceWhiteColor($event)">
+        </div>
+        <div class="field-container">
+          <mat-label>Color for black pieces </mat-label>
+          <input matInput type="color" [ngModel]="pieceBlackColor()" (ngModelChange)="changePieceBlackColor($event)">
+        </div>
+        <div class="field-container">
+          <mat-label>Color for board border </mat-label>
+          <input matInput type="color" [ngModel]="boardBorderColor()" (ngModelChange)="changeBoardBorderColor($event)">
+        </div>
+        <div class="field-container">
+          <mat-label>Apply shadow to pieces </mat-label>
+          <mat-checkbox [ngModel]="editorApplyPieceShadow()"
+            (ngModelChange)="changeEditorApplyPieceShadow($event)"></mat-checkbox>
+        </div>
+        <div class="chessboard-container">
+          <chess-board class="chessboard" [attr.hide-labels]="editorHideBoardLabels()" disabled
+            fen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"></chess-board>
+        </div>
+      </fieldset>
+      <fieldset class="fieldset-settings">
+        <legend>Interface Settings</legend>
+        <div class="field-container">
+          <mat-label>Show extra pieces in the piece selector</mat-label>
+          <mat-checkbox [ngModel]="editorShowExtraPieces()"
+            (ngModelChange)="changeEditorShowExtraPieces($event)"></mat-checkbox>
+        </div>
+        <div class="field-container">
+          <mat-label>Compact piece selector</mat-label>
+          <mat-checkbox [ngModel]="compactPieceSelector()"
+            (ngModelChange)="changeCompactPieceSelector($event)"></mat-checkbox>
+        </div>
+      </fieldset>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>

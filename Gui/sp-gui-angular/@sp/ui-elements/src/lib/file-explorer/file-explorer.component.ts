@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, signal } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, signal } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {
   FileSelected,
   FileService,
@@ -11,7 +12,7 @@ import {
 @Component({
   selector: "lib-file-explorer",
   templateUrl: "./file-explorer.component.html",
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatProgressSpinnerModule],
   standalone: true,
   styleUrls: ["./file-explorer.component.scss"],
 })

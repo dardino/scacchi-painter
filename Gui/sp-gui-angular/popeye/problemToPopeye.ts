@@ -1,6 +1,6 @@
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { SpCoreEngineOptionKey, SpCoreEngineOptions, createDefaultPopeyeEngineConfiguration } from "@sp/dbmanager/src/lib/models/engine";
-import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/public-api";
+import { TwinModes, TwinTypesKeys } from "@sp/dbmanager/src/lib/SPX.v4";
 import { SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 
 export const popeyeTwinMapper: Record<
@@ -43,7 +43,7 @@ const pieceSortByName = (a: Piece, b: Piece): -1 | 0 | 1 => {
 
 const toPopeyePiece = (a: Piece): string =>
   [
-    (a.fairyCode[0] ?? {}).code?.toUpperCase()
+    a.fairyCode?.toUpperCase()
     || a.appearance.toUpperCase().replace("N", "S"),
     a.column[3].toLowerCase(),
     a.traverse[3],

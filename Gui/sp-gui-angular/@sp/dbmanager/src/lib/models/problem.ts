@@ -1,36 +1,34 @@
 import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
+import { Columns, IProblemV4, Traverse } from "../SPX.v4";
 import { Base64 } from "../base64";
 import {
-    Columns,
-    GetLocationFromIndex,
-    GetSolutionFromElement,
-    GetSquareIndex,
-    IProblem,
-    SquareLocation,
-    Traverse,
-    convertToRtf,
-    createXmlElement,
-    fenToChessBoard,
-    notEmpty,
-    notNull,
+  GetLocationFromIndex,
+  GetSolutionFromElement,
+  GetSquareIndex,
+  SquareLocation,
+  convertToRtf,
+  createXmlElement,
+  fenToChessBoard,
+  notEmpty,
+  notNull,
 } from "../helpers";
 import { Author } from "./author";
 import {
-    cloneEngineConfiguration,
-    cloneEngineConfigurationsByEngine,
-    createDefaultPopeyeEngineConfiguration,
-    type EngineConfiguration,
-    type EngineConfigurationsByEngine,
+  cloneEngineConfiguration,
+  cloneEngineConfigurationsByEngine,
+  createDefaultPopeyeEngineConfiguration,
+  type EngineConfiguration,
+  type EngineConfigurationsByEngine,
 } from "./engine";
 import { Piece } from "./piece";
 import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
 
-const main_snapshot = "$_MAIN_$";
+export class Problem implements IProblemV4 {
+  static readonly SNAPSHOT_MAIN_ID = "$_MAIN_$";
 
-export class Problem implements IProblem {
   public textSolution = "";
   public date = new Date().toISOString();
   public stipulation = Stipulation.fromJson({});
@@ -43,6 +41,7 @@ export class Problem implements IProblem {
   public engineConfigurationsByEngine: EngineConfigurationsByEngine = {
     Popeye: createDefaultPopeyeEngineConfiguration(),
   };
+
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
@@ -52,8 +51,8 @@ export class Problem implements IProblem {
   public fairyCells: string[] = [];
   public tags: string[] = [];
 
-  public snapshots: IProblem["snapshots"] = {};
-  public currentSnapshotId: keyof IProblem["snapshots"] = main_snapshot;
+  public snapshots: IProblemV4["snapshots"] = {};
+  public currentSnapshotId: keyof IProblemV4["snapshots"] = Problem.SNAPSHOT_MAIN_ID;
   private get snap_keys(): (string | number)[] {
     return Object.keys(this.snapshots).filter(f => this.snapshots[f] != null);
   }
@@ -101,7 +100,7 @@ export class Problem implements IProblem {
     return p;
   }
 
-  static fromJson(jsonObj: Partial<IProblem>): Problem {
+  static fromJson(jsonObj: Partial<IProblemV4>): Problem {
     const p = new Problem();
     Problem.applyJson(jsonObj, p);
     p.snapshots = { ...jsonObj.snapshots };
@@ -109,7 +108,7 @@ export class Problem implements IProblem {
       p.saveAsMainSnapshot();
     }
     else {
-      p.saveSnapshot(p.currentSnapshotId ?? main_snapshot);
+      p.saveSnapshot(p.currentSnapshotId ?? Problem.SNAPSHOT_MAIN_ID);
     }
     return p;
   }
@@ -120,11 +119,11 @@ export class Problem implements IProblem {
     p.pieces = extractInfo
       .map((el, sqi) => Piece.fromPartial(el, GetLocationFromIndex(sqi)))
       .filter(notNull);
-    p.saveSnapshot(main_snapshot);
+    p.saveSnapshot(Problem.SNAPSHOT_MAIN_ID);
     return p;
   }
 
-  static applyJson(a: Partial<IProblem>, b: Problem) {
+  static applyJson(a: Partial<IProblemV4>, b: Problem) {
     b.authors
       = (a.authors?.length ?? 0)
         ? (a.authors ?? []).map(Author.fromJson)
@@ -170,8 +169,8 @@ export class Problem implements IProblem {
     b.tags = (a.tags ? [...a.tags] : []).filter(notEmpty);
   }
 
-  toJson(): Partial<IProblem> {
-    const json: Partial<IProblem> = {};
+  toJson(): Partial<IProblemV4> {
+    const json: Partial<IProblemV4> = {};
     if (this.authors.length > 0) {
       json.authors = this.authors.map(a => a.toJson());
     }
@@ -179,14 +178,27 @@ export class Problem implements IProblem {
       json.pieces = this.pieces.map(p => p.toJson());
     }
     json.engine = this.engine;
+
+    // Prepare a cloned copy of engine configurations to serialize without
+    // mutating the instance's internal state. If `engineConfig` is present
+    // ensure the selected engine entry reflects the current `engineConfig`
+    // in the cloned copy only.
+    let clonedEngineConfigurations: EngineConfigurationsByEngine | undefined
+      = cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
+
     if (this.engineConfig != null) {
-      this.engineConfigurationsByEngine[this.engine] = cloneEngineConfiguration(this.engineConfig) ?? {};
+      const cloned = cloneEngineConfiguration(this.engineConfig) ?? {};
+      clonedEngineConfigurations = clonedEngineConfigurations ?? {};
+      // assign into the cloned copy only (do not mutate `this.engineConfigurationsByEngine`)
+      clonedEngineConfigurations[this.engine] = cloned;
     }
+
     if (this.stipulation != null) json.stipulation = this.stipulation.toJson();
     if (this.twins) json.twins = this.twins.toJson();
-    if (this.engineConfigurationsByEngine != null) {
-      json.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {};
+    if (clonedEngineConfigurations != null && Object.keys(clonedEngineConfigurations).length > 0) {
+      json.engineConfigurationsByEngine = clonedEngineConfigurations;
     }
+
     if (this.engineConfig != null) json.engineConfig = cloneEngineConfiguration(this.engineConfig) ?? {};
     if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
     if (this.textSolution) json.textSolution = this.textSolution;
@@ -243,35 +255,35 @@ export class Problem implements IProblem {
     return item;
   }
 
-  saveSnapshot(snapshotId?: keyof IProblem["snapshots"]) {
+  saveSnapshot(snapshotId?: keyof IProblemV4["snapshots"]): string | number {
     const { snapshots, ...prob } = this.toJson();
     const snap = Base64.encode(JSON.stringify(prob));
     if (snapshotId == null) {
       const newKey = this.getNextId(this.currentSnapshotId);
       this.snapshots[newKey] = snap;
       this.currentSnapshotId = newKey;
+      return newKey;
     }
     else {
       this.snapshots[snapshotId] = snap;
       this.currentSnapshotId = snapshotId;
+      return snapshotId;
     }
   }
 
   saveAsMainSnapshot() {
-    this.saveSnapshot(main_snapshot);
+    this.saveSnapshot(Problem.SNAPSHOT_MAIN_ID);
   }
 
   getNextId(
-    currentSnapshotId: keyof IProblem["snapshots"],
-  ): keyof IProblem["snapshots"] {
-    if (currentSnapshotId === main_snapshot) {
-      currentSnapshotId = -1;
+    currentSnapshotId: keyof IProblemV4["snapshots"],
+  ): keyof IProblemV4["snapshots"] {
+    if (currentSnapshotId === Problem.SNAPSHOT_MAIN_ID) {
+      currentSnapshotId = "-1";
     }
-    if (typeof currentSnapshotId === "number") {
-      return (
-        Math.max(currentSnapshotId, 0, ...this.snap_keys.filter(filterNumber))
-        + 1
-      );
+    if (isNumber(currentSnapshotId)) {
+      const keys = this.snap_keys.map(Number).filter(isNumber);
+      return (Math.max(parseInt(currentSnapshotId as string, 10), 0, ...keys) + 1).toString();
     }
     else {
       return currentSnapshotId + "*";
@@ -285,21 +297,32 @@ export class Problem implements IProblem {
     delete this.snapshots[id];
   }
 
+  getSnapshotProblem(id?: keyof IProblemV4["snapshots"]): Partial<IProblemV4> | null {
+    if (id == null) id = this.currentSnapshotId;
+    const prob = JSON.parse(
+      Base64.decode(this.snapshots[id]),
+    ) as Partial<IProblemV4>;
+    if (!prob) {
+      return null;
+    }
+    return prob;
+  }
+
   loadSnapshot(
-    id?: keyof IProblem["snapshots"],
+    id?: keyof IProblemV4["snapshots"],
     ignoreChanges = false,
   ) {
     if (id == null) id = this.currentSnapshotId;
     if (!ignoreChanges) this.saveSnapshot();
     const prob = JSON.parse(
       Base64.decode(this.snapshots[id]),
-    ) as Partial<IProblem>;
+    ) as Partial<IProblemV4>;
     Problem.applyJson(prob, this);
     this.currentSnapshotId = id;
   }
 
   loadMainSnapshot(ignoreChanges = false) {
-    this.loadSnapshot(main_snapshot, ignoreChanges);
+    this.loadSnapshot(Problem.SNAPSHOT_MAIN_ID, ignoreChanges);
   }
 
   public getPieceCounter() {
@@ -341,7 +364,7 @@ export class Problem implements IProblem {
       }
       rows.push(row);
     }
-    return rows.join("/") + this.getFairiesFen();
+    return (rows.join("/") + this.getFairiesFen()).trim();
   }
 
   private getFairiesFen(): string {
@@ -371,4 +394,7 @@ export class Problem implements IProblem {
   }
 }
 
-const filterNumber = (v: unknown): v is number => typeof v === "number";
+const isNumber = (v: unknown): boolean => {
+  return (typeof v === "number" && !isNaN(v))
+    || (typeof v === "string" && !isNaN(parseInt(v, 10)));
+};

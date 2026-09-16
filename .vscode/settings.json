@@ -7,5 +7,6 @@
   "debug.internalConsoleOptions": "neverOpen",
   "azureFunctions.projectLanguageModel": 4,
   "azureFunctions.projectSubpath": "Gui/sp-gui-angular/api",
-  "azureFunctions.preDeployTask": "npm prune (functions)"
+  "azureFunctions.preDeployTask": "npm prune (functions)",
+  "editor.formatOnSave": true
 }

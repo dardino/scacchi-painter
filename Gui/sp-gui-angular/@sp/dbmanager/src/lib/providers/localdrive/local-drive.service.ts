@@ -20,6 +20,8 @@ export class LocalDriveService implements FileService {
     return [];
   }
 
+  #fileHandle: FileSystemFileHandle | null = null;
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getFileContent(item: FolderItemInfo): Promise<File> {
     // if (itemID === "root_no_permission") return [];
@@ -47,7 +49,10 @@ export class LocalDriveService implements FileService {
       const allOk = await this.verifyPermission(fileHandle, true);
       if (!allOk) throw new Error("Cannot open a file!");
 
-      const filecontent = await fileHandle.getFile();
+      this.#fileHandle = fileHandle;
+
+      const filecontent = await this.#fileHandle.getFile();
+
       return filecontent;
     }
     catch (err) {
@@ -59,8 +64,10 @@ export class LocalDriveService implements FileService {
     file: File,
     item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
-    const fileHandle = await window.showSaveFilePicker({ suggestedName: item.itemName });
-    const fileStream = await fileHandle.createWritable();
+    if (!this.#fileHandle) {
+      this.#fileHandle = await window.showSaveFilePicker({ suggestedName: item.itemName });
+    }
+    const fileStream = await this.#fileHandle.createWritable();
     await fileStream.write(file);
     await fileStream.close();
     return item;

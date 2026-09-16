@@ -1,6 +1,7 @@
 @use "../../../mediaquery" as mq;
 
 :host {
+  --animation-duration: 0.5s;
   display: block;
   width: 100%;
   margin: 0 auto;
@@ -8,11 +9,11 @@
 
 .chessboard-image {
   position: relative;
-  padding-top: 100%;
   width: 100%;
+  background-color: black;
 
-  > .chessboard,
-  > canvas {
+  >.chessboard,
+  >canvas {
     position: absolute;
     top: 0;
     right: 0;
@@ -45,12 +46,12 @@
 }
 
 /* Stile per il div */
-.rotatingToRight {
-  animation: rotateToRight 1s normal ease-in-out;
+.rotateRight {
+  animation: rotateToRight var(--animation-duration) normal ease-in-out;
 }
 
-.rotatingToLeft {
-  animation: rotateToRight 3s normal ease-in-out;
+.rotateLeft {
+  animation: rotateToLeft var(--animation-duration) normal ease-in-out;
 }
 
 .clickable {
@@ -86,9 +87,6 @@
   background-color: rgb(88 88 88);
   width: 100%;
   box-sizing: border-box;
-  container-type: size;
-  container-name: short-info;
-  min-height: 3em;
 
   .stipulation,
   .twins,
@@ -137,7 +135,7 @@
   justify-content: center;
   background-color: $bgc;
 
-  > span {
+  >span {
     color: $fgc;
     font-size: 3.3cqw;
     text-transform: uppercase;
@@ -164,6 +162,6 @@
   }
 
   to {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
   }
 }

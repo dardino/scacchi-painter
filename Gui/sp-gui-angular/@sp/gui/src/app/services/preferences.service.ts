@@ -1,34 +1,22 @@
-import { Injectable } from "@angular/core";
+import { Injectable, WritableSignal } from "@angular/core";
+
+import { localStoredSignal } from "./signalFactories/localStored";
+import { AvailableThemes } from "./types";
 
 interface PreferencesTable {
-  editWindowWidth: number;
+  editorWindowWidth: WritableSignal<number>;
+  editorSolutionFontSize: WritableSignal<number>;
+  chessboardLabels: WritableSignal<boolean>;
+  chessboardWhiteCellColor: WritableSignal<string>;
+  chessboardBlackCellColor: WritableSignal<string>;
+  chessboardPieceBlackColor: WritableSignal<string>;
+  chessboardPieceWhiteColor: WritableSignal<string>;
+  chessboardBorderColor: WritableSignal<string>;
+  chessboardPieceShadow: WritableSignal<boolean>;
+  chessboardTheme: WritableSignal<AvailableThemes>;
+  editorShowExtraPieces: WritableSignal<boolean>;
+  compactPieceSelector: WritableSignal<boolean>;
 }
-
-const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}` => {
-  const retVal = `spx:pref:${value}` as const;
-  return retVal;
-};
-
-const BindToLocalStorage = <T extends "number" | "string">(
-  type: T,
-  defaultValue?: T extends "number" ? number : string,
-) => (target: unknown, key: string) => {
-  Object.defineProperty(target, key, {
-    get: () => {
-      const fromLS = localStorage.getItem(lsPropNameGetter(key)) ?? defaultValue ?? "";
-      switch (type) {
-        case "number":
-          return parseFloat(`0` + fromLS);
-        case "string":
-        default:
-          return fromLS;
-      }
-    },
-    set: (newValue) => {
-      localStorage.setItem(lsPropNameGetter(key), newValue.toString());
-    },
-  });
-};
 
 @Injectable({
   providedIn: "root",
@@ -38,9 +26,16 @@ export class PreferencesService implements PreferencesTable {
     throw new Error("Method not implemented.");
   }
 
-  @BindToLocalStorage("number")
-  public editWindowWidth: number;
-
-  @BindToLocalStorage("number", 1)
-  public solutionFontSize: number;
+  public editorWindowWidth = localStoredSignal<PreferencesTable, "editorWindowWidth">("editorWindowWidth", 800);
+  public editorSolutionFontSize = localStoredSignal<PreferencesTable, "editorSolutionFontSize">("editorSolutionFontSize", 1);
+  public chessboardLabels = localStoredSignal<PreferencesTable, "chessboardLabels">("chessboardLabels", false);
+  public chessboardWhiteCellColor = localStoredSignal<PreferencesTable, "chessboardWhiteCellColor">("chessboardWhiteCellColor", "#ffffff");
+  public chessboardBlackCellColor = localStoredSignal<PreferencesTable, "chessboardBlackCellColor">("chessboardBlackCellColor", "#dddddd");
+  public chessboardPieceBlackColor = localStoredSignal<PreferencesTable, "chessboardPieceBlackColor">("chessboardPieceBlackColor", "#000000");
+  public chessboardPieceWhiteColor = localStoredSignal<PreferencesTable, "chessboardPieceWhiteColor">("chessboardPieceWhiteColor", "#ffffff");
+  public chessboardBorderColor = localStoredSignal<PreferencesTable, "chessboardBorderColor">("chessboardBorderColor", "transparent");
+  public chessboardPieceShadow = localStoredSignal<PreferencesTable, "chessboardPieceShadow">("chessboardPieceShadow", false);
+  public chessboardTheme = localStoredSignal<PreferencesTable, "chessboardTheme">("chessboardTheme", "default");
+  public editorShowExtraPieces = localStoredSignal<PreferencesTable, "editorShowExtraPieces">("editorShowExtraPieces", false);
+  public compactPieceSelector = localStoredSignal<PreferencesTable, "compactPieceSelector">("compactPieceSelector", false);
 }

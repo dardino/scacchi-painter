@@ -1,24 +1,23 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { Engines, SolutionRow, SolveModes } from "@sp/host-bridge/src/lib/bridge-global";
 import { HostBridgeService } from "@sp/host-bridge/src/public-api";
-import { BehaviorSubject } from "rxjs";
 import { Problem } from "./models";
 
 @Injectable({
   providedIn: "root",
 })
 export class EngineManagerService {
-  solution$ = new BehaviorSubject<SolutionRow | null>(null);
-  isSolving$ = new BehaviorSubject(false);
+  solution = signal<SolutionRow | null>(null);
+  isSolving = signal(false);
   supportsSolve = true;
 
   private bridge = inject(HostBridgeService);
 
   constructor() {
     this.bridge.Solver$.subscribe((msg) => {
-      this.solution$.next(msg);
+      this.solution.set(msg);
     });
-    this.bridge.solveInProgress$.subscribe(v => this.isSolving$.next(v));
+    this.bridge.solveInProgress$.subscribe(v => this.isSolving.set(v));
   }
 
   public startSolving(problem: Problem, mode: SolveModes): void {

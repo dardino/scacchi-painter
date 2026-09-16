@@ -4,7 +4,7 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c",
   "scripts": {
     "dev:web": "pnpm --dir Gui/sp-gui-angular start",
     "dev:web:insecure": "pnpm --dir Gui/sp-gui-angular startinsecure",
@@ -13,27 +13,11 @@
     "build:web": "pnpm --dir Gui/sp-gui-angular build:Azure",
     "test:web": "pnpm --dir Gui/sp-gui-angular test:ci",
     "lint:web": "pnpm --dir Gui/sp-gui-angular lint",
+    "dev:corejs": "pnpm --dir CoreJS watch",
     "build:corejs": "pnpm --dir CoreJS build",
     "test:corejs": "pnpm --dir CoreJS test",
     "build:tauri": "pnpm --dir Gui/sp-gui tauri build",
     "build:all": "pnpm build:web && pnpm build:corejs && pnpm build:tauri && cd Core && dotnet build"
-  },
-  "pnpm": {
-    "overrides": {
-      "prosemirror-model": "1.21.0"
-    },
-    "ignoredBuiltDependencies": [
-      "@parcel/watcher",
-      "lmdb",
-      "msgpackr-extract",
-      "optipng-bin",
-      "sharp",
-      "unrs-resolver",
-      "zopflipng-bin"
-    ],
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
   },
   "dependencies": {
     "eslint": "^10.2.0"

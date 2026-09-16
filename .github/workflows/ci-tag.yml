@@ -72,6 +72,10 @@ jobs:
         working-directory: ./Gui/sp-gui
         run: pnpm install --frozen-lockfile
 
+      - name: Build preprequistes
+        working-directory: ./CoreJS
+        run: pnpm build
+
       - name: Build Tauri desktop app
         working-directory: ./Gui/sp-gui
         run: pnpm tauri build
