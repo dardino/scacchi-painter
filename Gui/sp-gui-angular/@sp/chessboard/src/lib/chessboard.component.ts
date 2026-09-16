@@ -20,6 +20,7 @@ import {
   updatePositionFromFen,
 } from "@sp/dbmanager/src/public-api";
 import { getPieceIcon } from "@sp/gui/src/app/services/cursor.service";
+import html2canvas from "html2canvas";
 import { Subscription } from "rxjs";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
 
@@ -244,6 +245,19 @@ implements OnInit, OnChanges, OnDestroy {
 
   cellInfo(cell: UiCell) {
     return `${(cell.piece?.ToLongDescription() ?? "")} ${cell.location.column.slice(-1).toLowerCase()}${cell.location.traverse.slice(-1)}`;
+  }
+
+  async takeSnapshot() {
+    const board = this.chessboard()?.nativeElement;
+    if (!board) return null;
+    const canvas = await html2canvas(board);
+    const url = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob((blob) => {
+        if (!blob) resolve(null);
+        else resolve(blob);
+      }, "image/png");
+    });
+    return url;
   }
 
   #stopAnimation = (animation: Animations) => {

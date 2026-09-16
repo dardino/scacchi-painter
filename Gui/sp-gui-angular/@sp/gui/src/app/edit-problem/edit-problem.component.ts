@@ -1,6 +1,7 @@
 import { CommonModule, Location } from "@angular/common";
-import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal } from "@angular/core";
+import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal, viewChild } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDivider } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -9,7 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 import { FairySquare, ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
-import { ChessboardModule } from "@sp/chessboard/src/public-api";
+import { ChessboardComponent, ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
@@ -49,6 +50,7 @@ import { PreferencesService } from "../services/preferences.service";
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
+    MatDivider,
   ],
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -63,6 +65,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   #snackBar = inject(MatSnackBar);
   #chessanim = inject(ChessboardAnimationService);
   #selectedPieceSquare = signal<FairySquare | null>(null);
+
+  chessboard = viewChild<ChessboardComponent>("chessboardLib");
 
   public selectedPieceSquare = this.#selectedPieceSquare.asReadonly();
   public problem = this.#current.Problem;
@@ -212,6 +216,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.menu.openMenu();
     this.contextOnCell = data.location;
     this.resetActions();
+  }
+
+  hasPiece() {
+    const contextLocation = this.contextOnCell;
+    if (!contextLocation) return false;
+    const piece = this.problem()?.GetPieceAt(contextLocation.column, contextLocation.traverse);
+    return !!piece;
   }
 
   hasFairyInfo() {
@@ -604,6 +615,23 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.contextOnCell) return;
     // Open the dialog to set fairy info for the piece at the current context cell
     this.openFairyInfoDialog(this.contextOnCell);
+  }
+
+  ctxCopyToClipboard() {
+    const chessboard = this.chessboard();
+    if (!chessboard) {
+      console.error("No chessboard instance found");
+      return;
+    }
+    chessboard.takeSnapshot().then((blob) => {
+      if (blob) {
+        navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        this.#snackBar.open("Snapshot copied to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
+      }
+      else {
+        this.#snackBar.open("Failed to copy snapshot to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
+      }
+    });
   }
 
   ctxRemoveFairyInfo() {

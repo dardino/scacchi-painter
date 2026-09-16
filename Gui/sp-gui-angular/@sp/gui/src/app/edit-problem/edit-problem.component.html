@@ -7,7 +7,7 @@
   </section>
   <section id="chessboard" #panelleft>
     <div class="chessboard-workarea">
-      <lib-chessboard class="lib-chessboard" [position]="problem()" [cursor]="boardCursor()"
+      <lib-chessboard #chessboardLib class="lib-chessboard" [position]="problem()" [cursor]="boardCursor()"
         (positionChanged)="onChessboardPositionChanged($event)" (contextOnCell)="onTriggerContextMenu($event)"
         (currentCellChanged)="currentCellChange($event)" [smallBoard]="false"
         [selectedPieceSquare]="selectedPieceSquare()" [hideLabels]="hideLabels()"
@@ -57,6 +57,7 @@
 </div>
 <mat-menu #contextmenu>
   <div>
+    @if (hasPiece()) {
     <button mat-menu-item (click)="ctxDeletePiece()">
       <mat-icon>delete</mat-icon><span>Remove</span>
     </button>
@@ -68,6 +69,11 @@
       <mat-icon>clear</mat-icon><span>Remove Fairy Info</span>
     </button>
     }
+    <mat-divider></mat-divider>
+    }
+    <button mat-menu-item (click)="ctxCopyToClipboard()">
+      <mat-icon>content_copy</mat-icon><span>Copy to Clipboard as Image</span>
+    </button>
   </div>
 </mat-menu>
 <div [matMenuTriggerFor]="contextmenu" [style.position]="'absolute'" [style.left.px]="menuX()" [style.top.px]="menuY()">
