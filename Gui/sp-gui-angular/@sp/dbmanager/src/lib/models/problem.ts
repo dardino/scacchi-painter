@@ -26,9 +26,9 @@ import { Piece } from "./piece";
 import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
 
-const main_snapshot = "$_MAIN_$";
-
 export class Problem implements IProblemV4 {
+  static readonly SNAPSHOT_MAIN_ID = "$_MAIN_$";
+
   public textSolution = "";
   public date = new Date().toISOString();
   public stipulation = Stipulation.fromJson({});
@@ -52,7 +52,7 @@ export class Problem implements IProblemV4 {
   public tags: string[] = [];
 
   public snapshots: IProblemV4["snapshots"] = {};
-  public currentSnapshotId: keyof IProblemV4["snapshots"] = main_snapshot;
+  public currentSnapshotId: keyof IProblemV4["snapshots"] = Problem.SNAPSHOT_MAIN_ID;
   private get snap_keys(): (string | number)[] {
     return Object.keys(this.snapshots).filter(f => this.snapshots[f] != null);
   }
@@ -108,7 +108,7 @@ export class Problem implements IProblemV4 {
       p.saveAsMainSnapshot();
     }
     else {
-      p.saveSnapshot(p.currentSnapshotId ?? main_snapshot);
+      p.saveSnapshot(p.currentSnapshotId ?? Problem.SNAPSHOT_MAIN_ID);
     }
     return p;
   }
@@ -119,7 +119,7 @@ export class Problem implements IProblemV4 {
     p.pieces = extractInfo
       .map((el, sqi) => Piece.fromPartial(el, GetLocationFromIndex(sqi)))
       .filter(notNull);
-    p.saveSnapshot(main_snapshot);
+    p.saveSnapshot(Problem.SNAPSHOT_MAIN_ID);
     return p;
   }
 
@@ -272,20 +272,18 @@ export class Problem implements IProblemV4 {
   }
 
   saveAsMainSnapshot() {
-    this.saveSnapshot(main_snapshot);
+    this.saveSnapshot(Problem.SNAPSHOT_MAIN_ID);
   }
 
   getNextId(
     currentSnapshotId: keyof IProblemV4["snapshots"],
   ): keyof IProblemV4["snapshots"] {
-    if (currentSnapshotId === main_snapshot) {
-      currentSnapshotId = -1;
+    if (currentSnapshotId === Problem.SNAPSHOT_MAIN_ID) {
+      currentSnapshotId = "-1";
     }
-    if (typeof currentSnapshotId === "number") {
-      return (
-        Math.max(currentSnapshotId, 0, ...this.snap_keys.filter(filterNumber))
-        + 1
-      );
+    if (isNumber(currentSnapshotId)) {
+      const keys = this.snap_keys.map(Number).filter(isNumber);
+      return (Math.max(parseInt(currentSnapshotId as string, 10), 0, ...keys) + 1).toString();
     }
     else {
       return currentSnapshotId + "*";
@@ -297,6 +295,17 @@ export class Problem implements IProblemV4 {
       throw new Error("Snapshot not found!");
     }
     delete this.snapshots[id];
+  }
+
+  getSnapshotProblem(id?: keyof IProblemV4["snapshots"]): Partial<IProblemV4> | null {
+    if (id == null) id = this.currentSnapshotId;
+    const prob = JSON.parse(
+      Base64.decode(this.snapshots[id]),
+    ) as Partial<IProblemV4>;
+    if (!prob) {
+      return null;
+    }
+    return prob;
   }
 
   loadSnapshot(
@@ -313,7 +322,7 @@ export class Problem implements IProblemV4 {
   }
 
   loadMainSnapshot(ignoreChanges = false) {
-    this.loadSnapshot(main_snapshot, ignoreChanges);
+    this.loadSnapshot(Problem.SNAPSHOT_MAIN_ID, ignoreChanges);
   }
 
   public getPieceCounter() {
@@ -385,4 +394,7 @@ export class Problem implements IProblemV4 {
   }
 }
 
-const filterNumber = (v: unknown): v is number => typeof v === "number";
+const isNumber = (v: unknown): boolean => {
+  return (typeof v === "number" && !isNaN(v))
+    || (typeof v === "string" && !isNaN(parseInt(v, 10)));
+};

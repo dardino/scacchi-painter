@@ -19,11 +19,12 @@ describe("Snapshots", () => {
     problem.saveSnapshot();
     expect(Object.keys(problem.snapshots).length).toBe(2);
     problem.saveSnapshot();
-    expect(Object.keys(problem.snapshots).length).toBe(3);
-    problem.saveSnapshot();
-    expect(Object.keys(problem.snapshots).length).toBe(4);
+    const newProblem = problem.clone();
+    expect(Object.keys(newProblem.snapshots).length).toBe(3);
+    newProblem.saveSnapshot();
+    expect(Object.keys(newProblem.snapshots).length).toBe(4);
 
-    expect(Object.keys(problem.snapshots).join(",")).toBe(
+    expect(Object.keys(newProblem.snapshots).join(",")).toBe(
       "1,2,3,$_MAIN_$",
     );
   });

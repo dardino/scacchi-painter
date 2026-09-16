@@ -15,7 +15,8 @@ export type EditCommand
     | "updatePosition"
     | "clearBoard"
     | "copyToClipboard"
-    | "pasteFromClipboard";
+    | "pasteFromClipboard"
+    | "makeSnapshot";
 
 @Component({
   selector: "lib-toolbar-edit",
@@ -88,5 +89,9 @@ export class ToolbarEditComponent {
 
   pastePosition() {
     this.editCommand.emit("pasteFromClipboard");
+  }
+
+  makeSnapshot() {
+    this.editCommand.emit("makeSnapshot");
   }
 }

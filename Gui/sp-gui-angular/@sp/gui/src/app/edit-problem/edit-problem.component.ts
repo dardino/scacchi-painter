@@ -25,6 +25,7 @@ import {
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
+import { SnapshotsManagerComponent } from "@sp/ui-elements/src/lib/snapshots-manager/snapshots-manager.component";
 import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
 import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
@@ -51,6 +52,7 @@ import { PreferencesService } from "../services/preferences.service";
     MatButtonModule,
     MatIconModule,
     MatDivider,
+    SnapshotsManagerComponent,
   ],
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -65,6 +67,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   #snackBar = inject(MatSnackBar);
   #chessanim = inject(ChessboardAnimationService);
   #selectedPieceSquare = signal<FairySquare | null>(null);
+
+  snapshotsCount = computed(() => Object.keys(this.#current.Problem()?.snapshots ?? {}).length - 1);
 
   chessboard = viewChild<ChessboardComponent>("chessboardLib");
 
@@ -137,11 +141,20 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       const text = await navigator.clipboard.readText();
       this.onPaste(undefined, text);
     },
+    makeSnapshot: () => this.onMakeSnapshot(),
   };
 
   pieceToAdd = signal<string | null>(null);
   rotationToAdd = signal<ChessPieceRotation | null>(null);
   pieceToMove = signal<Piece | null>(null);
+
+  private onMakeSnapshot() {
+    const snapshotID = this.#current.Snapshot();
+    this.#snackBar.open(`Snapshot created with ID: ${snapshotID}`, "Close", {
+      duration: 3000,
+      verticalPosition: "top",
+    });
+  }
 
   private actualCursor: {
     figurine: string | null;

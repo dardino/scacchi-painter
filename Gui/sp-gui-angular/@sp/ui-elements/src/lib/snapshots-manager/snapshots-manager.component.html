@@ -1,0 +1,17 @@
+<h1>Snapshots Manager</h1>
+@for (item of snapshots(); track $index) {
+<mat-card>
+  <mat-card-content>
+    <div class="snapshot-container">
+      <chess-board ignore-fen-active-color class="mini-board" hide-labels [fen]="getFen(item.id)"></chess-board>
+      <p>
+        {{getFen(item.id)}}
+      </p>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button matButton="elevated" (click)="loadSnapshot(item.id)">Load Snapshot</button>
+    <button matButton="elevated" (click)="deleteSnapshot(item.id)">Delete Snapshot</button>
+  </mat-card-actions>
+</mat-card>
+}

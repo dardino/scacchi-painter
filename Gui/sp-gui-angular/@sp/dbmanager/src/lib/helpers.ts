@@ -634,7 +634,8 @@ export function updatePositionFromFen(ffen: string, currentPosition?: IProblemV4
   } satisfies IProblemV4;
 }
 
-export function getStartingColor(stipulation: Partial<IStipulation>): "w" | "b" {
+export function getStartingColor(stipulation: Partial<IStipulation> | null | undefined): "w" | "b" {
+  if (!stipulation) return "w";
   const possibile = { "1": "w", "-1": "b" } as const;
   let start: 1 | -1 = 1;
   // help (mate or stalemate) starts with black, all other stipulations start with white
@@ -644,7 +645,7 @@ export function getStartingColor(stipulation: Partial<IStipulation>): "w" | "b" 
   return possibile[start.toString() as "1" | "-1"];
 }
 
-export function getFFenFromPosition(position?: IProblemV4 | null): string {
+export function getFFenFromPosition(position?: Partial<IProblemV4> | null): string {
   if (!position) return getEmptyBoardFen();
   const pos: FenPosition = {
     activeColor: getStartingColor(position.stipulation),

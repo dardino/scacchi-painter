@@ -30,6 +30,9 @@
           <button class="tab-button" [class.active]="activeTab() === 1" (click)="activeTab.set(1)">
             Solution
           </button>
+          <button class="tab-button" [class.active]="activeTab() === 2" (click)="activeTab.set(2)">
+            Snapshots ({{snapshotsCount()}})
+          </button>
         </div>
         @if (activeTab() === 0) {
         <div class="tab-content">
@@ -49,6 +52,11 @@
             }
           </mat-toolbar>
           <lib-sp-solution-desc [viewMode]="viewMode()" [showLog]="showLog()"></lib-sp-solution-desc>
+        </div>
+        }
+        @if (activeTab() === 2) {
+        <div class="tab-content">
+          <lib-snapshots-manager></lib-snapshots-manager>
         </div>
         }
       </div>

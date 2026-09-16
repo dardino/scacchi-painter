@@ -182,7 +182,7 @@ export interface IProblemV4 {
   engineConfigurationsByEngine?: EngineConfigurationsByEngine | null;
   conditions: string[];
   tags: string[];
-  snapshots: Record<string | number, string>;
+  snapshots: Record<string, string>;
 }
 
 export interface IDbSpX_V4 {

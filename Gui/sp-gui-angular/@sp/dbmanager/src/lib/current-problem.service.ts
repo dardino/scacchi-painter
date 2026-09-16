@@ -363,6 +363,12 @@ export class CurrentProblemService {
     return this.syncCurrentProblem(newProblem);
   }
 
+  RemoveSnapshot(id: number | string) {
+    const newProblem = this.clonedProblem();
+    newProblem.deleteSnapshot(id);
+    return this.syncCurrentProblem(newProblem);
+  }
+
   async ReloadFromDbManager(problemId: number) {
     if (this.#dbManager.All().length === 0) {
       await this.#dbManager.Reload(problemId);

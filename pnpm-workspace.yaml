@@ -9,9 +9,6 @@ packages:
   - "Gui/sp-gui"
   - "CoreJS"
 
-# catalogs:
-#   default: {}
-# "pnpm": {
 overrides:
   "prosemirror-model": "1.21.0"
   "chess-board": "link:../chess-board"
@@ -26,4 +23,4 @@ allowBuilds:
   zopflipng-bin: false
 
 minimumReleaseAgeExclude:
-  - '@dardino/chess-board@0.1.7 || 0.1.8'
+  - "@dardino/chess-board"
