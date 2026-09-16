@@ -1,5 +1,3 @@
-<lib-sp-toolbar-button (click)="switchBT()" iconText="art_track" iconLabel="Picture/Vector" [noLabel]="true"
-  class="boardtype_switch"></lib-sp-toolbar-button>
 <lib-toolbar-piece [editMode]="editMode" (editModeChanged)="modeChange($event)"></lib-toolbar-piece>
 <lib-sp-toolbar-button (click)="rotateRight()" iconText="rotate_right" iconLabel="Rotate right"
   [noLabel]="true"></lib-sp-toolbar-button>
@@ -26,4 +24,6 @@
 <lib-sp-toolbar-button (click)="copyPosition()" iconText="content_copy" iconLabel="Copy to clipboard"
   [noLabel]="true"></lib-sp-toolbar-button>
 <lib-sp-toolbar-button (click)="pastePosition()" iconText="content_paste" iconLabel="Paste from clipboard"
+  [noLabel]="true"></lib-sp-toolbar-button>
+<lib-sp-toolbar-button (click)="makeSnapshot()" iconText="camera_alt" iconLabel="Make snapshot"
   [noLabel]="true"></lib-sp-toolbar-button>

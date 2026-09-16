@@ -1,14 +1,9 @@
 @use "./mediaquery" as mq;
 
 @mixin toolbar() {
-  #toolbar {
-    flex: 0 0 auto;
-    max-width: 100%;
-  }
   .toolbar-row {
     overflow-x: overlay;
     overflow-y: hidden;
-    max-width: 100vw;
 
     @media (min-width: (#{mq.$smallScreen} + 1)) {
       flex-wrap: wrap;

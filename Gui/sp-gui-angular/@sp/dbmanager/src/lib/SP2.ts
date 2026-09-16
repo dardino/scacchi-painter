@@ -1,22 +1,54 @@
 import {
-  Figurine,
-} from "canvas-chessboard";
+  type ChessPieceType,
+} from "@dardino/chess-board";
 import { Base64 } from "./base64";
 import {
-  Columns,
-  PieceColors,
-  PieceRotation,
   SP2PieceName,
-  Traverse,
-  XMLProblemTypesKeys,
-  XMLStipulationTypes,
   createXmlElement,
   notEmpty,
   notNull,
 } from "./helpers";
 
-const invertMap = <K extends string, V extends string>(
-  o: Record<K, V>,
+import { Columns, EndingTypes, PieceColors, PieceRotation, ProblemTypes, Traverse } from "./SPX.v4";
+import { FairyPiecesCodes } from "./models/fairesDB";
+
+export type XMLProblemTypesKeys
+  = | "Direct"
+    | "Help"
+    | "Self"
+    | "HelpSelf"
+    | "Custom";
+
+export type XMLStipulationTypes = "Mate" | "Stalemate" | "Custom";
+
+export const getProblemType = (
+  original: XMLProblemTypesKeys | null = "Direct",
+): ProblemTypes => {
+  switch (original) {
+    case "Direct":
+      return "-";
+    case "Help":
+      return "H";
+    case "HelpSelf":
+      return "HS";
+    case "Self":
+      return "S";
+    default:
+      return "-";
+  }
+};
+export const getEndingType = (original: XMLStipulationTypes): EndingTypes => {
+  switch (original) {
+    case "Mate":
+      return "#";
+    case "Stalemate":
+      return "=";
+    default:
+      return "#";
+  }
+};
+const invertMap = <T extends Record<string, string>, K extends (keyof T & string), V extends T[K] & string>(
+  o: T,
 ): Record<V, K> => {
   const keys = Object.keys(o) as K[];
   return keys.reduce(
@@ -36,6 +68,9 @@ const mapAppearance = {
   Queen: "q",
   Rock: "r",
   /* @deprecated */ Rook: "r",
+  Circle: "c",
+  Square: "s",
+  Cross: "x",
 } as const;
 
 const mapAppearanceRe = invertMap(mapAppearance);
@@ -155,11 +190,11 @@ export class SP2 {
   // #endregion
 
   // fairy
-  static getFairyCodes(f: Element): { code: string; params: string[] }[] {
+  static getFairyCodes(f: Element): { code: FairyPiecesCodes; params: string[] }[] {
     const ft = f.querySelectorAll("FairyType");
     if (ft.length > 0) {
       return Array.from(ft).map(c => ({
-        code: c.getAttribute("code") ?? "",
+        code: (c.getAttribute("code") ?? "") as FairyPiecesCodes,
         params: Array.from(c.querySelectorAll("Param"))
           .map((_el, i, all) => {
             const byIndex = all.find(
@@ -178,28 +213,27 @@ export class SP2 {
 
   static setFairyCode(
     el: Element,
-    fairyCode: { code: string; params: string[] }[],
+    fairyCode: FairyPiecesCodes | null,
+    params: string[],
   ) {
     if (fairyCode == null) return;
-    fairyCode.forEach((fc) => {
-      const fel = createXmlElement("FairyType");
-      fel.setAttribute("code", fc.code); // retrocompatibility
-      fc.params.forEach((p, i) => {
-        const felParm = createXmlElement("Param");
-        felParm.setAttribute("id", i.toFixed(0));
-        felParm.setAttribute("value", p);
-        fel.appendChild(felParm);
-      });
-      el.appendChild(fel);
+    const fel = createXmlElement("FairyType");
+    fel.setAttribute("code", fairyCode); // retrocompatibility
+    params.forEach((p, i) => {
+      const felParm = createXmlElement("Param");
+      felParm.setAttribute("id", i.toFixed(0));
+      felParm.setAttribute("value", p);
+      fel.appendChild(felParm);
     });
+    el.appendChild(fel);
   }
 
-  static getFairyAttribute(f: Element): string {
-    return f.getAttribute("FairyAttribute") ?? "";
+  static getFairyAttribute(f: Element): string[] {
+    return (f.getAttribute("FairyAttribute") ?? "").split(",").filter(notNull);
   }
 
-  static setFairyAttribute(el: Element, fairyAttribute: string) {
-    el.setAttribute("FairyAttribute", fairyAttribute);
+  static setFairyAttribute(el: Element, fairyAttribute: string[]) {
+    el.setAttribute("FairyAttribute", fairyAttribute.join(","));
   }
 
   // Piece rotation
@@ -261,14 +295,14 @@ export class SP2 {
   }
 
   // Piece type
-  static getAppearance(f: Element): Figurine | "" {
+  static getAppearance(f: Element): ChessPieceType | "" {
     const pieceName = f.getAttribute("Type") as SP2PieceName;
     return mapAppearance[pieceName] ?? "";
   }
 
-  static setAppearance(el: Element, f: Figurine | ""): void {
+  static setAppearance(el: Element, f: ChessPieceType | ""): void {
     if (f === "") return;
-    let tp = mapAppearanceRe[f];
+    let tp = mapAppearanceRe[f as keyof typeof mapAppearanceRe] ?? "Pawn";
     if (tp === "Rook") tp = "Rock"; // retrocompatibility
     el.setAttribute("Type", tp);
   }

@@ -1,12 +1,7 @@
 {
   "name": "ui-elements",
-  "version": "0.2.2",
-  "peerDependencies": {
-    "@angular/common": "^22.0.0",
-    "@angular/core": "^22.0.0"
-  },
+  "version": "0.3.1",
   "dependencies": {
-    "@dardino-chess/core": "workspace:*",
     "tslib": "^2.0.0"
   }
 }

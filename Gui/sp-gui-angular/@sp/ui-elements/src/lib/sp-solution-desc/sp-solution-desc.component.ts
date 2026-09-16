@@ -1,6 +1,6 @@
-import { Component, inject, Input, computed } from "@angular/core";
+import { Component, computed, inject, input } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
-import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
+import { CurrentProblemService } from "@sp/dbmanager/src/lib/current-problem.service";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { Editor, NgxEditorModule, Toolbar } from "ngx-editor";
@@ -38,7 +38,11 @@ export class SpSolutionDescComponent {
 
   colorPresets = ["red", "#FF0000", "rgb(255, 0, 0)"];
 
-  private problem = inject(CurrentProblemService);
+  private current = inject(CurrentProblemService);
+
+  showLog = input(false);
+  viewMode = input<ViewModes>("html");
+
   private preferences = inject(PreferencesService);
 
   constructor() {
@@ -51,32 +55,27 @@ export class SpSolutionDescComponent {
     });
   }
 
-  @Input()
-  showLog = false;
+  firstMove = computed(() => this.current.Problem()?.startMoveN ?? 1);
+  totalMoves = computed(() => this.current.Problem()?.stipulation.moves ?? 2);
+  solutionFontSize = computed(() => `${Math.max(this.preferences.editorSolutionFontSize(), 1)}rem`);
+  rows = computed(() => this.current.Problem()?.jsonSolution ?? []);
 
-  @Input()
-  viewMode: ViewModes = "html";
-
-  firstMove = computed(() => this.problem.Problem?.startMoveN ?? 1);
-  totalMoves = computed(() => this.problem.Problem?.stipulation.moves ?? 2);
-  solutionFontSize = computed(() => `${Math.max(this.preferences.solutionFontSize, 1)}rem`);
-  rows = computed(() => this.problem.Problem?.jsonSolution ?? []);
-
-  get solution() {
-    return this.problem.textSolution ?? "";
+  #solutionText = computed(() => this.current.Problem()?.textSolution ?? "");
+  get solutionText() {
+    return this.#solutionText();
   }
 
-  set solution(txt: string) {
-    this.problem.SetTextSolution(txt);
+  set solutionText(txt: string) {
+    this.current.SetTextSolution(txt);
   }
 
+  #solutionHtml = computed(() => this.current.Problem()?.htmlSolution ?? "");
   get solutionHtml() {
-    const changedText = this.problem.htmlSolution ?? "";
-    return changedText;
+    return this.#solutionHtml();
   }
 
   set solutionHtml(text: string) {
-    this.problem.SetHTMLSolution(text);
+    this.current.SetHTMLSolution(text);
   }
 
   getClass(item: string) {

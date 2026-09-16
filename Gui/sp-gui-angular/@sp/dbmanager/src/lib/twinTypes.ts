@@ -53,8 +53,9 @@
  *
  */
 
-import { FairyAttributes, PieceColors, TwinTypesKeys } from "./helpers";
+import { FairyAttributes } from "./helpers";
 import { SquareLocations } from "./models/locations";
+import { PieceColors, TwinTypesKeys } from "./SPX.v4";
 
 const Squares = Object.keys(SquareLocations) as (keyof typeof SquareLocations)[];
 

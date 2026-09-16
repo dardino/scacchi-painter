@@ -3,17 +3,18 @@
 :host {
   display: contents;
 }
+
 h1.title {
   text-shadow: -1px -1px 1px grey, 1px 1px 0px black;
   opacity: 0.8;
   padding: 1rem;
-  grid-column: span 2;
+  grid-area: toolbar;
 }
-@media screen and (max-width: mq.$smallScreen) {
-  .sources {
-    grid-column: span 2;
-  }
-  .explorer {
-    grid-column: span 2;
-  }
+
+.sources {
+  grid-area: side;
+}
+
+.explorer {
+  grid-area: main;
 }

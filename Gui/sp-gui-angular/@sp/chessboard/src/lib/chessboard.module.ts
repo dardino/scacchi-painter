@@ -1,13 +1,12 @@
 import { NgModule } from "@angular/core";
-import { PieceSelectorComponent } from "./piece-selector/piece-selector.component";
-import { BoardCellComponent } from "./board-cell/board-cell.component";
-import { ChessboardComponent } from "./chessboard.component";
 import { ChessboardAnimationService } from "./chessboard-animation.service";
+import { ChessboardComponent } from "./chessboard.component";
+import { PieceSelectorComponent } from "./piece-selector/piece-selector.component";
 
 @NgModule({
   declarations: [],
   providers: [ChessboardAnimationService],
-  imports: [PieceSelectorComponent, BoardCellComponent, ChessboardComponent],
-  exports: [PieceSelectorComponent, BoardCellComponent, ChessboardComponent],
+  imports: [PieceSelectorComponent, ChessboardComponent],
+  exports: [PieceSelectorComponent, ChessboardComponent],
 })
 export class ChessboardModule {}

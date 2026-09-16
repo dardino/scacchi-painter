@@ -4,6 +4,26 @@
 
 A new cross-platform engine and gui for chess problem composers
 
+## Latest Changes (0.3.1)
+
+Chessboard Angular Component Refactor:
+
+Replaced the previous custom chessboard rendering logic in chessboard.component.html with a new chess-board component, simplifying the UI and delegating board rendering and interaction to the new component. Removed the now-unused board-cell component and its associated files (board-cell.component.html, .scss, .less, .spec.ts, .ts). [1] [2] [3] [4] [5] [6]
+Updated FEN display to show only the piece placement part, and fixed info section visibility logic.
+Build & Packaging Improvements:
+
+Updated CoreJS/package.json and tsconfig.json to output type declarations to dist, generate them during build, and updated dependencies for better compatibility. Version bumped from 0.2.2 to 0.3.1. [1] [2] [3] [4] [5]
+Updated CI workflows to explicitly build CoreJS before building dependent projects, ensuring that the latest code and type declarations are always available. [1] [2]
+Synchronized version numbers for all packages from 0.2.2-dev to 0.2.2 to reflect a new release. [1] [2] [3]
+Core Chess Logic Bug Fixes and Improvements:
+
+Fixed pawn move generation in pawn.ts to correctly account for blocked squares, ensuring pawns cannot move through other pieces.
+Improved problem solver logic in Rust to handle refutations_try more robustly, avoiding incorrect behavior when set to zero or undefined. [1] [2] [3]
+Fixed parseMove helper to always return valid HalfMoveInfo objects, preventing potential runtime errors.
+Developer Experience:
+
+Enabled editor.formatOnSave in VSCode settings for consistent code formatting.
+
 ## Latest Changes (0.2.2)
 
 The 0.2.2 release introduces:

@@ -1,75 +1,71 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, computed, effect, inject, input, signal } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, computed, effect, inject, input, output, signal, viewChild } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import {
+  FairySquare,
+  type CellClickEventDetail,
+  type ChessBoard,
+  type ChessPieceRotation,
+  type FenChangeEventDetail,
+} from "@dardino/chess-board";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { Columns, IProblemV4, Traverse } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   GetLocationFromIndex,
   GetSquareIndex,
   SquareLocation,
-  Traverse,
+  getFFenFromPosition,
+  updatePositionFromFen,
 } from "@sp/dbmanager/src/public-api";
-import {
-  Piece as BP,
-  CanvasChessBoard,
-} from "canvas-chessboard";
-import presets from "canvas-chessboard/presets";
+import { getPieceIcon } from "@sp/gui/src/app/services/cursor.service";
+import html2canvas from "html2canvas";
 import { Subscription } from "rxjs";
-import { BoardCellComponent } from "./board-cell/board-cell.component";
 import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
 
 @Component({
   selector: "lib-chessboard",
   templateUrl: "chessboard.component.html",
-  imports: [CommonModule, DragDropModule, BoardCellComponent],
+  imports: [CommonModule, DragDropModule],
   standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrls: ["chessboard.component.scss"],
 })
 export class ChessboardComponent
-implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+implements OnInit, OnChanges, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private animationService = inject(ChessboardAnimationService);
 
-  @Output() focusOut = new EventEmitter<void>();
-  @Input() boardType: "canvas" | "HTML";
-  @Input() hideInfo: boolean;
-  @Input() smallBoard: boolean;
-  @Input() cursor: { figurine: string | null; rotation: number | null } | null;
-
+  hideInfo = input<boolean>(false);
+  smallBoard = input<boolean>(false);
+  hideLabels = input<boolean>(false);
+  cursor = input<{ figurine: string | null; rotation: ChessPieceRotation | null } | null>(null);
   position = input<Problem | null>(null);
-
-  get BoardType() {
-    return this.boardType ? this.boardType : "HTML";
-  }
+  selectedPieceSquare = input<FairySquare | null>(null);
 
   getTraverse(location: SquareLocation) {
     return 8 - Traverse.indexOf(location.traverse);
   }
 
-  @ViewChild("canvas", { static: true })
-  canvas: ElementRef;
+  chessboard = viewChild<ElementRef<ChessBoard>>("chessboard");
+  container = viewChild<ElementRef<HTMLDivElement>>("container");
 
-  @ViewChild("container", { static: true })
-  chessboard: ElementRef<HTMLDivElement>;
+  focusOut = output<void>();
+  currentCellChanged = output<SquareLocation | null>();
+  positionChanged = output<IProblemV4>();
+  clickOnCell = output<{
+    location: SquareLocation;
+    button: "left" | "middle";
+    modifiers: {
+      ctrlKey: boolean;
+      altKey: boolean;
+      metaKey: boolean;
+      shiftKey: boolean;
+    };
+  }>();
 
-  @ViewChild("cbHtml")
-  cbHtml: ElementRef<HTMLDivElement>;
-
-  @ViewChild("container", { static: true })
-  cbImage: ElementRef;
-
-  @Output()
-  currentCellChanged = new EventEmitter<SquareLocation | null>();
-
-  @Output()
-  cellClick = new EventEmitter<SquareLocation>();
-
-  @Output()
-  cellMiddleClick = new EventEmitter<SquareLocation>();
-
-  @Output()
-  contextOnCell = new EventEmitter<{ event: MouseEvent; location: SquareLocation }>();
+  contextOnCell = output<{ location: SquareLocation; mousePosition: { x: number; y: number } }>();
 
   currentCell = signal<UiCell | null>(null);
   private lastHash = signal<string | undefined>(undefined);
@@ -77,7 +73,19 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   cells = computed(() => this.uiCells());
 
-  fen = computed(() => this.position()?.getCurrentFen());
+  cellSize = () => (this.chessboard()?.nativeElement.offsetWidth ?? 256) / 8;
+
+  fen = computed(() => {
+    return getFFenFromPosition(this.position());
+  });
+
+  internalFenChanged($event: CustomEvent<FenChangeEventDetail>) {
+    const newFen = $event.detail.fen;
+    const position = updatePositionFromFen(newFen, this.position() ?? undefined);
+    this.positionChanged.emit(position);
+    return position;
+  }
+
   pieceCounter = computed(() => this.position()?.getPieceCounter());
   twins = computed(() => this.position()?.twins.TwinList.map((t: Twin) => t.toString()) ?? []);
   viewDiagram = computed(() => {
@@ -87,23 +95,9 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   stipulationDesc = computed(() => this.position()?.stipulation.completeStipulationDesc ?? "");
 
-  private settings: {
-    CELLCOLORS: [string, string];
-    PIECECOLORS: [string, string];
-    BORDER_SIZE: number;
-  } = {
-    BORDER_SIZE: 1,
-    CELLCOLORS: ["#fff", "#ddd"],
-    PIECECOLORS: ["#fff", "#333"],
-  };
-
-  private canvasBoard: CanvasChessBoard | null;
-  private cellSize = 32;
-
   animationSub: Subscription;
   constructor() {
     const animationService = this.animationService;
-
     this.animationSub = animationService.onAnimate.subscribe(this.#animate);
 
     // Watch position changes and update board
@@ -113,59 +107,42 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
         this.lastHash.set(pos?.currentHash);
         this.updateBoard();
       }
+      const selectedPieceSquare = this.selectedPieceSquare();
+      if (selectedPieceSquare) {
+        this.chessboard()?.nativeElement.selectPiece(selectedPieceSquare);
+      }
+      else {
+        this.chessboard()?.nativeElement.unselectPiece();
+      }
     });
-  }
-
-  onSelectCell($event: Event) {
-    // eslint-disable-next-line no-console
-    console.log($event);
   }
 
   ngOnDestroy(): void {
     // Later, you can stop observing
     this.animationSub.unsubscribe();
-    // window.removeEventListener("resize", this.sizeMutated);
   }
 
   ngOnInit() {
     this.updateBoard();
   }
 
-  ngOnChanges(changes: SimpleChanges2<ChessboardComponent>): void {
-    if (changes.cursor && this.cbImage) {
-      if (changes.cursor.currentValue?.figurine != null) {
+  ngOnChanges(changes: SimpleChanges<ChessboardComponent>): void {
+    const cbHtml = this.container();
+    if (changes.cursor?.currentValue && cbHtml) {
+      const cellSize = this.cellSize();
+      if (changes.cursor.currentValue.figurine != null) {
         const dataURL = getPieceIcon(
-          changes.cursor.currentValue?.figurine ?? "q",
-          this.cellSize,
-          changes.cursor.currentValue?.rotation ?? null,
+          changes.cursor.currentValue.figurine ?? "q",
+          cellSize,
+          changes.cursor.currentValue.rotation ?? null,
         );
-        (this.cbImage
-          .nativeElement as HTMLDivElement).style.cursor = `url(${dataURL}) ${Math.floor(
-          this.cellSize / 2,
-        )} ${Math.floor(this.cellSize / 2)}, auto`;
+        cbHtml.nativeElement.style.cursor = `url(${dataURL}) ${Math.floor(
+          cellSize / 2,
+        )} ${Math.floor(cellSize / 2)}, auto`;
       }
       else {
-        (this.cbImage.nativeElement as HTMLDivElement).style.cursor = "unset";
+        cbHtml.nativeElement.style.cursor = "unset";
       }
-    }
-    if (
-      changes.boardType
-      && !changes.boardType.isFirstChange()
-      && changes.boardType.currentValue === "canvas"
-      && this.canvas
-    ) {
-      this.canvasBoard = new CanvasChessBoard(
-        this.canvas.nativeElement,
-        this.settings,
-      );
-      const cfg = presets.ScacchiPainter;
-      cfg.fontSize = 1;
-      this.canvasBoard.AddFontConfig("ScacchiPainter", cfg);
-      this.canvasBoard.SetFont("ScacchiPainter");
-      this.updateBoard();
-    }
-    else if (changes.boardType?.currentValue !== "canvas") {
-      this.canvasBoard = null;
     }
   }
 
@@ -197,40 +174,51 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
         cells[index].piece = piece;
       }
     }
-    if (this.canvasBoard && pp) {
-      const mappedPieces: BP[] = pp.map((p: Piece) => p.ConvertToCanvasPiece());
-      const bps = mappedPieces.filter(notNull);
-      this.canvasBoard.SetPieces(bps);
-    }
+  }
 
-    if (this.BoardType === "canvas" && this.canvasBoard) {
-      this.canvasBoard.Redraw();
+  #toCellLocation(detail: CellClickEventDetail): SquareLocation {
+    return {
+      column: `Col${detail.square[0].toUpperCase()}` as Columns,
+      traverse: `Row${detail.square[1]}` as Traverse,
+    };
+  }
+
+  #getPieceAtLocation(location: SquareLocation): Piece | null {
+    return this.position()?.GetPieceAt(location.column, location.traverse) ?? null;
+  }
+
+  #lastContextMousePosition: { x: number; y: number } | null = null;
+  onCellContextMenu($event: Event) {
+    $event.preventDefault();
+    $event.stopImmediatePropagation();
+    $event.stopPropagation();
+    if ($event.type === "cellContextClick" && this.#lastContextMousePosition) {
+      const eventDetail = ($event as CustomEvent<CellClickEventDetail>).detail;
+      const location = this.#toCellLocation(eventDetail);
+      this.contextOnCell.emit({ location, mousePosition: this.#lastContextMousePosition ?? { x: 0, y: 0 } });
+      this.#lastContextMousePosition = null;
+    }
+    else {
+      this.#lastContextMousePosition = { x: ($event as MouseEvent).clientX, y: ($event as MouseEvent).clientY };
     }
   }
 
-  onMouseUp(cell: UiCell, $event: MouseEvent) {
-    const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
-    if ($event.button === 1 && !haskeymod) {
-      $event.preventDefault();
-      $event.stopImmediatePropagation();
-      $event.stopPropagation();
-      this.cellMiddleClick.emit({ ...cell.location });
-    }
-  }
+  onCellClick($event: CustomEvent<CellClickEventDetail>) {
+    const location = this.#toCellLocation($event.detail);
+    const piece = this.#getPieceAtLocation(location);
 
-  onMouseDown(_cell: UiCell, $event: MouseEvent) {
-    const haskeymod = $event.ctrlKey || $event.altKey || $event.metaKey || $event.shiftKey;
-    if ($event.button === 1 && !haskeymod) {
-      $event.preventDefault();
-      $event.stopImmediatePropagation();
-      $event.stopPropagation();
-    }
-  }
-
-  onCellClick(cell: UiCell) {
-    this.cellClick.emit({ ...cell.location });
+    this.clickOnCell.emit({
+      location: { ...location },
+      button: "left",
+      modifiers: {
+        ctrlKey: $event.detail.modifiers.ctrlKey,
+        altKey: $event.detail.modifiers.altKey,
+        metaKey: $event.detail.modifiers.metaKey,
+        shiftKey: $event.detail.modifiers.shiftKey,
+      },
+    });
     const current = this.currentCell();
-    if (cell !== current) this.currentCell.set(cell);
+    if (location !== current?.location) this.currentCell.set({ location, piece });
     else this.currentCell.set(null);
     this.currentCellChanged.emit(
       this.currentCell() ? { ...this.currentCell()!.location } : null,
@@ -255,43 +243,56 @@ implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
-    // Create an observer instance linked to the callback function
-    window.addEventListener("resize", this.sizeMutated);
-    setTimeout(() => {
-      this.sizeMutated();
-    }, 0);
-  }
-
-  private sizeMutated = () => {
-    this.cellSize
-      = (this.chessboard.nativeElement as HTMLDivElement).offsetWidth / 8;
-  };
-
   cellInfo(cell: UiCell) {
     return `${(cell.piece?.ToLongDescription() ?? "")} ${cell.location.column.slice(-1).toLowerCase()}${cell.location.traverse.slice(-1)}`;
   }
 
-  triggerContextOnCell($event: MouseEvent, cell: UiCell) {
-    this.contextOnCell.emit({ event: $event, location: cell.location });
+  async takeSnapshot() {
+    const board = this.chessboard()?.nativeElement;
+    if (!board) return null;
+    const canvas = await html2canvas(board);
+    const url = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob((blob) => {
+        if (!blob) resolve(null);
+        else resolve(blob);
+      }, "image/png");
+    });
+    return url;
   }
 
-  #animate(animation: Animations) {
+  #stopAnimation = (animation: Animations) => {
     switch (animation) {
       case "rotateLeft":
-        this.cbHtml.nativeElement.classList.add("rotateLeft");
+        this.chessboard()?.nativeElement.classList.remove("rotateLeft");
         break;
       case "rotateRight":
-        this.cbHtml.nativeElement.classList.add("rotateRight");
+        this.chessboard()?.nativeElement.classList.remove("rotateRight");
         break;
       default:
         break;
     }
-  }
-}
-const notNull = <T>(v: T | null): v is T => v != null;
+  };
 
-export declare type SimpleChanges2<T> = { [P in keyof T]?: SimpleChange<T[P]> };
+  #animate = (animation: Animations) => {
+    const chessboardElement = this.chessboard()?.nativeElement;
+    if (!chessboardElement) return;
+    switch (animation) {
+      case "rotateLeft":
+        chessboardElement.classList.add("rotateLeft");
+        setTimeout(() => this.#stopAnimation("rotateLeft"),
+          parseFloat(getComputedStyle(chessboardElement).getPropertyValue("--animation-duration")) * 1000);
+        break;
+      case "rotateRight":
+        chessboardElement.classList.add("rotateRight");
+        setTimeout(() => this.#stopAnimation("rotateRight"),
+          parseFloat(getComputedStyle(chessboardElement).getPropertyValue("--animation-duration")) * 1000);
+        break;
+      default:
+        break;
+    }
+  };
+}
+
 export declare class SimpleChange<T> {
   previousValue: T;
   currentValue: T;
@@ -304,48 +305,3 @@ interface UiCell {
   piece: Piece | null;
   location: SquareLocation;
 }
-
-const getPieceIcon = (
-  figurine: string,
-  cellSize: number,
-  rot: number | null,
-) => {
-  const canvas = document.createElement("canvas");
-  canvas.width = cellSize;
-  canvas.height = cellSize;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    throw new Error("Can not create 2d context!");
-  }
-  const fsize = Math.floor(cellSize / 1.44);
-  const margin = Math.floor((cellSize - fsize) / 2);
-  ctx.font = `${fsize}px ${figurine === "X" ? "Arial, sans" : "ScacchiPainter"
-  }`;
-  ctx.lineWidth = 2;
-
-  if (rot != null) {
-    const center = Math.floor(cellSize / 2);
-    ctx.translate(center, center);
-    ctx.rotate(rot * (Math.PI / 180));
-    ctx.translate(-center, -center);
-  }
-
-  ctx.translate(margin, margin + fsize);
-  ctx.save();
-
-  if (figurine !== "X") {
-    ctx.fillStyle = "#ffffff";
-    ctx.strokeStyle = "#ffffff";
-    ctx.strokeText("_" + figurine.substring(1), 0, 0);
-    ctx.fillText("_" + figurine.substring(1), 0, 0);
-    ctx.restore();
-  }
-
-  ctx.fillStyle = figurine === "X" ? "#ff3300" : "#333333";
-  ctx.strokeStyle = "#ffffff";
-  ctx.strokeText(figurine === "X" ? "🗙" : figurine, 0, 0);
-  ctx.fillText(figurine === "X" ? "🗙" : figurine, 0, 0);
-  ctx.restore();
-
-  return canvas.toDataURL("image/png");
-};

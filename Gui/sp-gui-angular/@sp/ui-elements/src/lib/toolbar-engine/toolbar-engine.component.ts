@@ -39,24 +39,17 @@ export class ToolbarEngineComponent {
   public toggleEditor = new EventEmitter<ViewModes>();
 
   @Output()
-  public toggleStreaming = new EventEmitter<void>();
-
-  @Output()
   public openEngineSettings = new EventEmitter<void>();
 
   isRunning = input<boolean>(false);
   fullLog = input<boolean>(false);
-  solutionCount = input<number>(0);
-  streaming = input<boolean>(true);
   viewMode = input<ViewModes>("both");
   selectedEngine = input<Engines>("Popeye");
 
   isMaxFont = computed(() => this.fontSize() >= 2);
   isMinFont = computed(() => this.fontSize() <= 1);
   logIcon = computed(() => this.fullLog() ? "compress" : "expand");
-  fontSize = computed(() => this.preferences.solutionFontSize);
-  streamingIcon = computed(() => this.streaming() ? "wifi_tethering" : "inventory_2");
-  streamingLabel = computed(() => this.streaming() ? "Live" : "Buffered");
+  fontSize = computed(() => this.preferences.editorSolutionFontSize());
   viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode()]?.icon);
 
   start() {
@@ -75,11 +68,11 @@ export class ToolbarEngineComponent {
   }
 
   increaseFontSize() {
-    this.preferences.solutionFontSize = Math.min(Math.max(this.preferences.solutionFontSize + 0.1, 1), 2);
+    this.preferences.editorSolutionFontSize.set(Math.min(Math.max(this.preferences.editorSolutionFontSize(), 1) + 0.1, 2));
   }
 
   decreaseFontSize() {
-    this.preferences.solutionFontSize = Math.min(Math.max(this.preferences.solutionFontSize - 0.1, 1), 2);
+    this.preferences.editorSolutionFontSize.set(Math.min(Math.max(this.preferences.editorSolutionFontSize(), 1) - 0.1, 2));
   }
 
   toggleEngineLog() {
@@ -88,10 +81,6 @@ export class ToolbarEngineComponent {
 
   toggleEditorview() {
     this.toggleEditor.emit(mapViewModeToIcons[this.viewMode()].nextM);
-  }
-
-  toggleStreamingMode() {
-    this.toggleStreaming.emit();
   }
 
   openEngineSettingsDialog() {

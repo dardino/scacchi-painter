@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-useless-assignment */
 /**
  *  Base64 encode / decode
  *  http://www.webtoolkit.info
@@ -116,7 +118,6 @@ export class Base64 {
     let textString = "";
     let i = 0;
     let c: number, c1: number, c2: number, c3: number;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     c = c1 = c2 = 0;
 
     while (i < utftext.length) {

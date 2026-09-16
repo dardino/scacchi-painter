@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
 
-import { Component, OnInit, computed, inject } from "@angular/core";
+import { Component, OnInit, computed, effect, inject } from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -15,6 +15,8 @@ import { SpToolbarButtonComponent, ToolbarDbComponent } from "@sp/ui-elements/sr
 import { Observable, filter, map, startWith } from "rxjs";
 import { RoutesList } from "./app-routing-list";
 import { MenuComponent } from "./menu/menu.component";
+import { PreferencesService } from "./services/preferences.service";
+import { ThemeService } from "./services/theme.service";
 
 @Component({
   selector: "app-root",
@@ -42,10 +44,11 @@ export class AppComponent implements OnInit {
   private bridge = inject(HostBridgeService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private iconRegistry = inject(AllMatIconRegistryService); // Force instantiation to register icons
-
-  private currentProblem = toSignal(this.db.CurrentProblem$, { initialValue: null });
-  private currentFile = toSignal(this.db.CurrentFile$, { initialValue: this.db.CurrentFile });
+  private iconRegistry = inject(AllMatIconRegistryService);
+  #preferences = inject(PreferencesService); // Force instantiation to register icons
+  #theme = inject(ThemeService);
+  private currentProblem = this.db.CurrentProblem;
+  private currentFile = this.db.CurrentFile;
   private currentRoutePath = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -66,16 +69,28 @@ export class AppComponent implements OnInit {
 
   title = "Scacchi Painter";
   chessBoardMode: "edit" | "view" = "view";
-  fsWip = this.db.wip$;
+  fsWip = this.db.wip;
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
 
   ngOnInit(): void {
-    this.db.Reload();
+    this.db.Reload().then(() => {
+      const problem = this.currentProblem();
+      if (problem == null && this.currentRoutePath() !== RoutesList.home.path) {
+        this.router.navigate([RoutesList.home.path]);
+      }
+    });
   }
 
   async closeMe() {
     this.bridge.closeApp();
+  }
+
+  constructor() {
+    effect(() => {
+      const theme = this.#preferences.chessboardTheme();
+      this.#theme.applyTheme(theme);
+    });
   }
 }

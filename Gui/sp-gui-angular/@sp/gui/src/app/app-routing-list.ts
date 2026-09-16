@@ -20,6 +20,10 @@ export const RoutesList = getRoutes({
     path: "savefile",
     loadComponent: () => import("./save-file/save-file.component").then(m => m.SaveFileComponent),
   },
+  saveWithSource: {
+    path: "savefile/:source",
+    loadComponent: () => import("./save-file/save-file.component").then(m => m.SaveFileComponent),
+  },
   list: {
     path: "list",
     loadComponent: () => import("./database-list/database-list.component").then(m => m.DatabaseListComponent),

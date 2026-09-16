@@ -1,11 +1,78 @@
+:host {
+  display: contents;
+}
+
 dl {
   display: grid;
   grid-template-columns: max-content max-content;
   margin: 1rem;
 }
+
 dt {
   padding: .2rem;
 }
+
 dd {
   padding: .2rem;
+}
+
+.configuration-side {
+  grid-area: side;
+}
+
+.configuration-main {
+  grid-area: main;
+}
+
+
+.fieldset-settings {
+  --settings-count: 8;
+  display: grid;
+  gap: .5em;
+  grid-template-columns: auto minmax(0, 1fr) 1fr;
+  grid-template-rows: repeat(var(--settings-count), auto);
+  grid-template-areas: "field1 field1 chessboard"
+    "field2 field2 chessboard"
+    "field3 field3 chessboard"
+    "field4 field4 chessboard"
+    "field5 field5 chessboard"
+    "field6 field6 chessboard"
+    "field7 field7 chessboard"
+    "field8 field8 chessboard"
+  ;
+  margin: 1rem;
+  grid-auto-rows: max-content;
+
+  @media (max-width: 600px) {
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "field1 field1"
+      "field2 field2"
+      "field3 field3"
+      "field4 field4"
+      "field5 field5"
+      "field6 field6"
+      "field7 field7"
+      "field8 field8"
+      "chessboard chessboard";
+  }
+}
+
+.field-container {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: subgrid;
+  align-items: center;
+}
+
+.chessboard-container {
+  grid-area: chessboard;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chessboard {
+  width: 100%;
+  max-width: 400px;
 }

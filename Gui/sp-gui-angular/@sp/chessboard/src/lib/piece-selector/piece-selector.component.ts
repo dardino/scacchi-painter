@@ -1,6 +1,8 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, computed, input, output } from "@angular/core";
+
+import { StandardPiecesList } from "@dardino/chess-board";
 
 @Component({
   selector: "lib-piece-selector",
@@ -10,19 +12,20 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
   styleUrls: ["./piece-selector.component.scss"],
 })
 export class PieceSelectorComponent {
-  @Input()
-  current: string | null = "";
+  current = input<string | null>("");
+  selectedPieceChanged = output<string | null>();
 
-  @Output()
-  selectedPieceChanged = new EventEmitter<string | null>();
+  standardPieces = StandardPiecesList.slice(0, 6);
+  extraPieces = StandardPiecesList.slice(6);
+  colors = computed(() => this.showExtraPieces() ? ["w", "b", "n"] : ["w", "b"]);
+
+  showExtraPieces = input(false);
+  compact = input(false);
 
   constructor() {}
 
   clickPiece(color: string, piece: string) {
     const newCurrent = `${color}_${piece}`;
-    if (newCurrent !== this.current) this.current = `${color}_${piece}`;
-    else this.current = "";
-
-    this.selectedPieceChanged.emit(this.current === "" ? null : this.current);
+    this.selectedPieceChanged.emit(newCurrent || null);
   }
 }

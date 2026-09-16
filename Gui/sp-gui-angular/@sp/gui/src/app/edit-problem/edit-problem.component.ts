@@ -1,43 +1,39 @@
 import { CommonModule, Location } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal, viewChild } from "@angular/core";
+import { MatBadgeModule } from "@angular/material/badge";
 import { MatButtonModule } from "@angular/material/button";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDivider } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
-import type { HalfMoveInfo } from "@dardino-chess/core";
+import { FairySquare, ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
 import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
-import { ChessboardModule } from "@sp/chessboard/src/public-api";
+import { ChessboardComponent, ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
 import { cloneEngineConfiguration, cloneEngineConfigurationsByEngine } from "@sp/dbmanager/src/lib/models/engine";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { IPieceV4, IProblemV4 } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   CurrentProblemService,
-  DbmanagerService,
   EngineManagerService,
-  IPiece,
   SquareLocation,
+  getCanvasLocation,
   getCanvasRotation,
   notNull,
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
+import { SnapshotsManagerComponent } from "@sp/ui-elements/src/lib/snapshots-manager/snapshots-manager.component";
 import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
 import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
-import { BehaviorSubject, Subscription, skip } from "rxjs";
-import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
-import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
-import { SolveEngineDialogComponent, type SolveEngineDialogResult } from "../solve-engine-dialog/solve-engine-dialog.component";
-import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 
 @Component({
   selector: "app-edit-problem",
@@ -56,102 +52,117 @@ import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
+    MatDivider,
+    SnapshotsManagerComponent,
+    MatBadgeModule,
   ],
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   activeTab = signal(0);
 
-  private current = inject(CurrentProblemService);
-  private location = inject(Location);
-  private route = inject(ActivatedRoute);
-  private engine = inject(EngineManagerService);
-  private dialog = inject(MatDialog);
-  private confirm = inject(DialogService);
-  private dbManager = inject(DbmanagerService);
-  private preferences = inject(PreferencesService);
-  private snackBar = inject(MatSnackBar);
-  private chessanim = inject(ChessboardAnimationService);
+  #current = inject(CurrentProblemService);
+  #location = inject(Location);
+  #route = inject(ActivatedRoute);
+  #engine = inject(EngineManagerService);
+  #dialogService = inject(DialogService);
+  #preferences = inject(PreferencesService);
+  #snackBar = inject(MatSnackBar);
+  #chessanim = inject(ChessboardAnimationService);
+  #selectedPieceSquare = signal<FairySquare | null>(null);
 
-  private readonly currentProblemSignal = toSignal(this.dbManager.CurrentProblem$, { initialValue: null });
-  private boardRenderVersion = signal(0);
+  snapshotsCount = computed(() => Object.keys(this.#current.Problem()?.snapshots ?? {}).length - 1);
 
-  public problem = computed(() => {
-    this.boardRenderVersion();
-    return this.currentProblemSignal()?.clone() ?? null;
-  });
+  chessboard = viewChild<ChessboardComponent>("chessboardLib");
 
+  public selectedPieceSquare = this.#selectedPieceSquare.asReadonly();
+  public problem = this.#current.Problem;
   public get engineEnabled() {
-    return this.engine?.supportsSolve === true;
+    return this.#engine?.supportsSolve === true;
   }
 
+  hideLabels = this.#preferences.chessboardLabels.asReadonly();
+  editorShowExtraPieces = this.#preferences.editorShowExtraPieces.asReadonly();
+  compactPieceSelector = this.#preferences.compactPieceSelector.asReadonly();
   solveInProgress = signal(false);
   solutionCount = signal(0);
   showLog = signal(false);
-  streamSolutions = signal(true);
   availableEngines: Engines[] = [];
   selectedEngine = signal<Engines>("Popeye");
   viewMode = signal<ViewModes>("html");
-  private pendingSolutionRows: SolutionRow[] = [];
 
+  effects: EffectRef[] = [];
   constructor() {
-    this.availableEngines = this.engine.availableEngines();
+    this.availableEngines = this.#engine.availableEngines();
     this.selectedEngine.set(this.availableEngines[0] ?? "Popeye");
 
-    this.engine.isSolving$.subscribe((state) => {
-      const wasSolving = this.solveInProgress();
-      this.solveInProgress.set(state);
-      if (wasSolving && !state) {
-        this.flushBufferedSolutionRows();
-      }
-    });
+    this.effects.push(effect(() => {
+      const isSolving = this.#engine.isSolving() ?? false;
+      this.solveInProgress.set(isSolving);
+    }));
+    this.effects.push(effect(() => {
+      const newSolutionRow = this.#engine.solution();
+      if (newSolutionRow === null) return;
+      queueMicrotask(() => {
+        this.appendSolutionMessage(newSolutionRow);
+      });
+    }));
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
   @ViewChild("panelleft") panelleft: ElementRef<HTMLDivElement>;
   @ViewChild("workboard") workboard: ElementRef<HTMLDivElement>;
 
-  private subscribe: Subscription;
-
   public editMode = signal<EditModes>("select");
-  public boardType = signal<"HTML" | "canvas">("HTML");
-  public rows$ubject = new BehaviorSubject<HalfMoveInfo[] | null>(null);
+
   menuX = signal(0);
   menuY = signal(0);
-  contextOnCell = signal<SquareLocation | null>(null);
+  contextOnCell: SquareLocation | null = null;
 
   private resizing = { x: NaN, initialW: NaN };
 
   private leaveTimeout?: ReturnType<typeof setTimeout>;
 
   private commandMapper: Record<EditCommand, () => void> = {
-    flipH: () => this.current.FlipBoard("y"),
-    flipV: () => this.current.FlipBoard("x"),
+    flipH: () => this.#current.FlipBoard("y"),
+    flipV: () => this.#current.FlipBoard("x"),
     rotateL: () => {
-      this.current.RotateBoard("left");
-      this.chessanim.animate("rotateLeft");
+      this.#chessanim.animate("rotateLeft");
+      this.#current.RotateBoard("left");
     },
-    rotateR: () => this.current.RotateBoard("right"),
-    moveU: () => this.current.ShiftBoard("-y"),
-    moveD: () => this.current.ShiftBoard("y"),
-    moveL: () => this.current.ShiftBoard("-x"),
-    moveR: () => this.current.ShiftBoard("x"),
-    resetPosition: () => this.current.Reload(), // reload current snapshot
-    updatePosition: () => this.current.UpdateSnapshot(), // update current snapshot
-    clearBoard: () => this.current.ClearBoard(),
+    rotateR: () => {
+      this.#chessanim.animate("rotateRight");
+      this.#current.RotateBoard("right");
+    },
+    moveU: () => this.#current.ShiftBoard("-y"),
+    moveD: () => this.#current.ShiftBoard("y"),
+    moveL: () => this.#current.ShiftBoard("-x"),
+    moveR: () => this.#current.ShiftBoard("x"),
+    resetPosition: () => this.#current.Reload(), // reload current snapshot
+    updatePosition: () => this.#current.UpdateSnapshot(), // update current snapshot
+    clearBoard: () => this.#current.ClearBoard(),
     copyToClipboard: () => this.onCopy(),
     pasteFromClipboard: async () => {
       const text = await navigator.clipboard.readText();
       this.onPaste(undefined, text);
     },
+    makeSnapshot: () => this.onMakeSnapshot(),
   };
 
   pieceToAdd = signal<string | null>(null);
-  rotationToAdd = signal<number | null>(null);
+  rotationToAdd = signal<ChessPieceRotation | null>(null);
   pieceToMove = signal<Piece | null>(null);
+
+  private onMakeSnapshot() {
+    const snapshotID = this.#current.Snapshot();
+    this.#snackBar.open(`Snapshot created with ID: ${snapshotID}`, "Close", {
+      duration: 3000,
+      verticalPosition: "top",
+    });
+  }
 
   private actualCursor: {
     figurine: string | null;
-    rotation: number | null;
+    rotation: ChessPieceRotation | null;
   } = {
     figurine: null,
     rotation: null,
@@ -159,7 +170,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   boardCursor = computed<{
     figurine: string | null;
-    rotation: number | null;
+    rotation: ChessPieceRotation | null;
   } | null>(() => {
     const editModeValue = this.editMode();
     const editModeCursor = (editModeValue === "remove" ? "X" : null);
@@ -193,169 +204,124 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   toggleLog = () => this.showLog.update(v => !v);
-  toggleStreaming() {
-    const nextValue = !this.streamSolutions();
-    this.streamSolutions.set(nextValue);
-    if (nextValue) {
-      this.flushBufferedSolutionRows();
-    }
-  }
 
   toggleEditor($event: ViewModes) {
     this.viewMode.set($event);
   }
 
   openSolveEngineDialog() {
-    const dialogRef = this.dialog.open<SolveEngineDialogComponent, {
-      availableEngines: Engines[];
-      engine: Engines;
-      engineConfig: SolveEngineDialogResult["engineConfig"] | null;
-      engineConfigurationsByEngine: SolveEngineDialogResult["engineConfigurationsByEngine"] | null;
-    }, SolveEngineDialogResult | null>(
-      SolveEngineDialogComponent,
-      {
-        data: {
-          availableEngines: this.availableEngines,
-          engine: this.selectedEngine(),
-          engineConfig: this.current.Problem?.engineConfig ?? null,
-          engineConfigurationsByEngine: this.current.Problem?.engineConfigurationsByEngine ?? null,
-        },
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
+    this.#dialogService.solverEngineSettings({
+      availableEngines: this.availableEngines,
+      engine: this.selectedEngine(),
+      engineConfig: this.#current.Problem()?.engineConfig ?? null,
+      engineConfigurationsByEngine: this.#current.Problem()?.engineConfigurationsByEngine ?? null,
+    }).subscribe((result) => {
       if (result == null) return;
       this.selectedEngine.set(result.engine);
-      if (this.current.Problem) {
-        this.current.Problem.engine = result.engine;
-        this.current.Problem.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(result.engineConfigurationsByEngine) ?? {};
-        this.current.Problem.engineConfig = cloneEngineConfiguration(result.engineConfig) ?? {};
+      const problem = this.#current.Problem();
+      if (problem) {
+        problem.engine = result.engine;
+        problem.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(result.engineConfigurationsByEngine) ?? {};
+        problem.engineConfig = cloneEngineConfiguration(result.engineConfig) ?? {};
       }
     });
   }
 
-  switchBoardType() {
-    this.boardType.update(current => current === "HTML" ? "canvas" : "HTML");
+  onTriggerContextMenu(data: { location: SquareLocation; mousePosition: { x: number; y: number } }) {
+    this.menuX.set(data.mousePosition.x - 20);
+    this.menuY.set(data.mousePosition.y - 40);
+    this.menu.openMenu();
+    this.contextOnCell = data.location;
     this.resetActions();
   }
 
-  onTriggerContextMenu(data: { event: MouseEvent; location: SquareLocation }) {
-    data.event.preventDefault();
-    this.menuX.set(data.event.x - 20);
-    this.menuY.set(data.event.y - 40);
-    this.menu.openMenu();
-    this.editMode.set("select");
-    this.contextOnCell.set(data.location);
-    this.resetActions();
+  hasPiece() {
+    const contextLocation = this.contextOnCell;
+    if (!contextLocation) return false;
+    const piece = this.problem()?.GetPieceAt(contextLocation.column, contextLocation.traverse);
+    return !!piece;
+  }
+
+  hasFairyInfo() {
+    const contextLocation = this.contextOnCell;
+    if (!contextLocation) return false;
+    const piece = this.problem()?.GetPieceAt(contextLocation.column, contextLocation.traverse);
+    return piece && (piece.fairyCode || piece.fairyAttributes.length > 0);
   }
 
   startSolve(mode: "start" | "try") {
-    if (!this.problem) {
+    this.resetActions();
+    if (!this.problem()) {
       console.warn("[WARN] -> No problem selected!");
       return;
     }
-    this.rows$ubject.next(null);
-    this.rows$ubject.next([]);
+
     this.solutionCount.set(0);
-    this.pendingSolutionRows = [];
-    if (this.current.Problem) {
-      this.current.Problem.engine = this.selectedEngine();
-      this.current.Problem.jsonSolution = [];
-      this.current.Problem.htmlSolution = "";
-      this.current.Problem.textSolution = "";
-      this.engine.startSolving(this.current.Problem, mode);
+    const prob = this.problem()?.clone();
+    if (prob) {
+      prob.engine = this.selectedEngine();
+      prob.jsonSolution = [];
+      prob.htmlSolution = "";
+      prob.textSolution = "";
+      this.#current.SetProblem(() => prob);
+      this.#engine.startSolving(prob, mode);
     }
-    this.resetActions();
   }
 
   stopSolve() {
-    this.engine.stopSolving();
     this.resetActions();
+    this.#engine.stopSolving();
   }
 
   goBack() {
-    this.location.back();
     this.resetActions();
+    this.#location.back();
   }
 
   // #region NG Component life cycle
   ngOnInit(): void {
-    this.subscribe = this.engine.solution$.pipe(
-      skip(1), // skip first execution to avoid the reset of text at load
-    ).subscribe((msg) => {
-      if (msg === null) return;
-      if (!this.current.Problem) return;
-      this.trackSolutionCount(msg);
-      if (this.streamSolutions()) {
-        this.appendSolutionMessage(msg);
-      }
-      else {
-        this.pendingSolutionRows.push(msg);
-      }
-    });
-
-    this.route.params.subscribe(async (params) => {
+    this.#route.params.subscribe(async (params) => {
       const problemId = Number.parseInt(params.id, 10);
       if (!Number.isFinite(problemId)) {
         return;
       }
+      this.#current.ReloadFromDbManager(problemId);
 
-      if (this.dbManager.All.length === 0) {
-        await this.dbManager.Reload(problemId);
-      }
-      else {
-        await this.dbManager.GotoIndex(problemId);
-      }
-
-      const problemEngine = this.current.Problem?.engine;
+      const problemEngine = this.#current.Problem()?.engine;
       if (problemEngine && this.availableEngines.includes(problemEngine)) {
         this.selectedEngine.set(problemEngine);
       }
       else {
         const fallbackEngine = this.availableEngines[0] ?? "Popeye";
         this.selectedEngine.set(fallbackEngine);
-        if (this.current.Problem) {
-          this.current.Problem.engine = fallbackEngine;
+        const problem = this.#current.Problem();
+        if (problem) {
+          problem.engine = fallbackEngine;
         }
       }
     });
   }
 
-  private flushBufferedSolutionRows() {
-    if (this.pendingSolutionRows.length === 0) return;
-
-    const bufferedRows = this.pendingSolutionRows;
-    this.pendingSolutionRows = [];
-    bufferedRows.forEach(msg => this.appendSolutionMessage(msg));
-  }
-
   private appendSolutionMessage(msg: SolutionRow) {
-    if (!this.current.Problem) return;
-
+    const newProblem = this.#current.Problem()?.clone();
+    if (!newProblem) return;
     const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
-    this.current.Problem.htmlSolution += this.toHtml([...raw]);
-    this.current.Problem.textSolution += `\n` + raw.join(`\n`);
-    this.current.Problem.jsonSolution.push(...msg.moveTree);
-    this.rows$ubject.next(msg.moveTree);
-  }
-
-  private trackSolutionCount(msg: SolutionRow) {
-    const newSolutions = msg.moveTree.filter(move => move?.isKey).length;
-    if (newSolutions > 0) {
-      this.solutionCount.update(count => count + newSolutions);
-    }
+    newProblem.htmlSolution += this.toHtml([...raw]);
+    newProblem.textSolution += raw.join(`\n`);
+    newProblem.jsonSolution.push(...msg.moveTree);
+    this.#current.SetProblem(() => newProblem);
   }
 
   ngOnDestroy(): void {
     this.endResize();
     this.resetActions();
-    this.rows$ubject.complete();
-    this.rows$ubject.unsubscribe();
-    this.subscribe.unsubscribe();
+    this.effects.forEach(e => e.destroy());
+    this.effects = [];
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
+      document.adoptedStyleSheets = [new CSSStyleSheet()];
       this.applyPreferences();
     });
   }
@@ -369,15 +335,20 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     const delta = $event.x - this.resizing.x;
     const editWindowWidth = this.resizing.initialW + delta;
-    if (this.preferences.editWindowWidth !== editWindowWidth) {
-      this.preferences.editWindowWidth = editWindowWidth;
+    if (this.#preferences.editorWindowWidth() !== editWindowWidth) {
+      this.#preferences.editorWindowWidth.set(editWindowWidth);
       this.applyPreferences();
     }
   };
 
   private applyPreferences() {
-    this.panelleft.nativeElement.style.width = `min(max(20rem, ${this.preferences.editWindowWidth}px), calc(100vw - 20rem))`;
-    window.dispatchEvent(new Event("resize"));
+    const adoptedStyleSheet = document.adoptedStyleSheets.at(0);
+    if (!adoptedStyleSheet) {
+      return;
+    }
+    adoptedStyleSheet.replace(`:root {
+      --edit-window-width: ${this.#preferences.editorWindowWidth()}px;
+    }`);
   }
 
   startResize($event: MouseEvent) {
@@ -407,10 +378,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   editCommand($event: EditCommand) {
     this.resetActions();
     this.commandMapper[$event]();
-    // Notify solo per comandi che modificano la board (escludi copy/paste)
-    if ($event !== "copyToClipboard" && $event !== "pasteFromClipboard") {
-      this.notifyProblemChanged();
-    }
   }
 
   setPieceToAdd($event: string | null) {
@@ -424,7 +391,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.pieceToAdd.set($event);
     }
     else {
-      this.editMode.set("select");
       this.resetActions();
     }
   }
@@ -433,30 +399,35 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if ($event == null) this.resetActions();
   }
 
-  clickOnCell($event: SquareLocation, button: "left" | "middle") {
+  onChessboardPositionChanged($event: IProblemV4 | null) {
+    this.resetActions();
+    if ($event == null) return;
+    this.#current.PasteJson($event);
+  }
+
+  clickOnCell($event: SquareLocation, button: "left" | "middle", modifiers: ModifierKeys) {
     const editModeValue = this.editMode();
     const pieceToMoveValue = this.pieceToMove();
     if (button === "middle") {
-      this.current.RemovePieceAt($event);
-      this.notifyProblemChanged();
-      this.editMode.set("select");
+      this.#current.RemovePieceAt($event);
       this.resetActions();
       return;
     }
     if ($event == null || this.sameCell($event, pieceToMoveValue)) {
-      this.editMode.set("select");
       this.resetActions();
       return;
     }
     if (editModeValue === "remove") {
-      this.current.RemovePieceAt($event);
-      this.notifyProblemChanged();
+      this.#current.RemovePieceAt($event);
       this.resetActions();
       return;
     }
     const pieceToAddValue = this.pieceToAdd();
     if (editModeValue === "add" && pieceToAddValue != null) {
       this.addPiece(pieceToAddValue, $event);
+      if (!modifiers.shiftKey) {
+        this.resetActions();
+      }
       return;
     }
     if (editModeValue === "add" && pieceToAddValue == null) {
@@ -465,16 +436,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if (editModeValue === "move") {
       if (pieceToMoveValue == null) {
         this.prepareMovePiece(
-          this.current.Problem?.GetPieceAt($event.column, $event.traverse),
+          this.#current.Problem()?.GetPieceAt($event.column, $event.traverse),
         );
       }
       else {
-        this.completeMove($event);
+        this.completeMove($event, modifiers);
       }
       return;
     }
     if (editModeValue === "select") {
-      const piece = this.current.Problem?.GetPieceAt(
+      const piece = this.#current.Problem()?.GetPieceAt(
         $event.column,
         $event.traverse,
       );
@@ -492,17 +463,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   boardBlur() {
-    // no op
-  }
-
-  private notifyProblemChanged() {
-    // Force board input refresh when the current problem is mutated in place.
-    this.boardRenderVersion.update(v => v + 1);
+    this.resetActions();
   }
 
   private addPiece(figurine: string, loc: SquareLocation) {
     const p = Piece.fromPartial({
-      appearance: figurine[2] as IPiece["appearance"],
+      appearance: figurine[2] as IPieceV4["appearance"],
       color:
         figurine[0] === "w"
           ? "White"
@@ -510,22 +476,34 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
             ? "Black"
             : "Neutral",
     }) as Piece;
-    this.current.AddPieceAt(loc, p);
-    this.notifyProblemChanged();
+    this.#current.AddPieceAt(loc, p);
   }
 
   private prepareMovePiece(p: Piece | undefined) {
     if (!p) return;
     this.pieceToMove.set(p);
+    const loc = p.GetLocation();
+    const fairySquare = getCanvasLocation(loc.column, loc.traverse);
+    this.#selectedPieceSquare.set(fairySquare);
   }
 
-  private completeMove(loc: SquareLocation) {
-    const pieceToMoveValue = this.pieceToMove();
+  private completeMove(loc: SquareLocation, modifiers: ModifierKeys) {
+    const pieceToMoveValue = Piece.fromPartial(this.pieceToMove()?.toJson());
     if (!pieceToMoveValue) return;
     const from = pieceToMoveValue.GetLocation();
-    this.current.MovePiece(from, loc, "replace");
-    this.notifyProblemChanged();
-    this.editMode.set("select");
+    if (modifiers.altKey) {
+      // Change piece color:
+      pieceToMoveValue.color
+        = pieceToMoveValue.color === "White"
+          ? "Black"
+          : "White";
+    }
+    if (modifiers.shiftKey) {
+      this.#current.AddPieceAt(loc, pieceToMoveValue);
+    }
+    else {
+      this.#current.MovePiece(from, loc, "replace");
+    }
     this.resetActions();
   }
 
@@ -534,8 +512,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       figurine: null,
       rotation: null,
     };
+    this.editMode.set("select");
     this.pieceToAdd.set(null);
     this.pieceToMove.set(null);
+    this.#selectedPieceSquare.set(null);
   }
 
   private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {
@@ -543,68 +523,42 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openTwinDialog($event: Twin | null): void {
-    const dialogRef = this.dialog.open<TwinDialogComponent, Twin, Twin | null>(
-      TwinDialogComponent,
-      {
-        minWidth: "25rem",
-        maxWidth: "95%",
-        data: Twin.fromJson($event?.toJson() ?? {}),
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
+    this.#dialogService.twinDialog(Twin.fromJson($event?.toJson() ?? {})).subscribe((result) => {
       if (result == null) return;
-      this.current.AddTwin(result);
+      this.#current.AddTwin(result);
     });
   }
 
   openConditionDialog(): void {
-    const dialogRef = this.dialog.open<ConditionsDialogComponent, void, string>(
-      ConditionsDialogComponent,
-      {
-        width: "25rem",
-        maxWidth: "95%",
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
-      this.current.AddCondition(result);
+    this.#dialogService.fairyConditions().subscribe((result) => {
+      this.#current.AddCondition(result);
     });
   }
 
   openAuthorDialog($event: Author | null): void {
-    const dialogRef = this.dialog.open<AuthorDialogComponent, Author | null, Author | null>(
-      AuthorDialogComponent,
-      {
-        width: "25rem",
-        maxWidth: "95%",
-        data: $event,
-      },
-    );
-
-    dialogRef.afterClosed().subscribe((result) => {
+    this.#dialogService.authors($event).subscribe((result) => {
       if (!result) return;
-      this.current.AddOrUpdateAuthor(result);
+      this.#current.AddOrUpdateAuthor(result);
     });
   }
 
   deleteCondition($event: string) {
-    this.current.RemoveCondition($event);
+    this.#current.RemoveCondition($event);
   }
 
   deleteTwin($event: Twin) {
-    this.current.RemoveTwin($event);
+    this.#current.RemoveTwin($event);
   }
 
   deleteAuthor($event: Author) {
-    const modal = this.confirm.confirmDialog({
+    const modal = this.#dialogService.confirmDialog({
       cancelText: "No!",
       confirmText: "Yes! Remove Author!",
       message: `Are you sure you want to remove the author ${$event.nameAndSurname} (${$event.AuthorID})? This operation cannot be undone!`,
       title: "Remove Author Confirm",
     }).subscribe((res) => {
       if (res === true) {
-        this.current.RemoveAuthor($event);
+        this.#current.RemoveAuthor($event);
       }
       modal.unsubscribe();
     });
@@ -633,12 +587,12 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       $event.preventDefault();
     }
     try {
-      const json = this.current.GetJSONString() ?? "";
+      const json = this.#current.GetJSONString() ?? "";
       navigator.clipboard.writeText(json);
-      this.snackBar.open("Position saved to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
+      this.#snackBar.open("Position saved to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
     }
     catch (err) {
-      this.snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
+      this.#snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
     }
   };
 
@@ -654,24 +608,74 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       $event.preventDefault();
     }
     if (text) {
-      // TODO: #170 check if text is a FEN, in this case use the method `this.current.PasteFEN`
+      // TODO: [#170] check if text is a FEN, in this case use the method `this.current.PasteFEN`
       try {
         const probJSON = JSON.parse(text);
-        this.current.PasteJson(probJSON);
+        this.#current.PasteJson(probJSON);
       }
       catch (err) {
-        this.snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
+        this.#snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
       }
     }
   };
 
   // #region CONTEXT COMMANDS
   ctxDeletePiece() {
-    const cell = this.contextOnCell();
+    const cell = this.contextOnCell;
     if (cell) {
-      this.current.RemovePieceAt(cell);
-      this.notifyProblemChanged();
+      this.#current.RemovePieceAt(cell);
     }
+  }
+
+  ctxSetFairyInfo() {
+    // this method should open a dialog to set fairy info for the piece at the current context cell
+    if (!this.contextOnCell) return;
+    // Open the dialog to set fairy info for the piece at the current context cell
+    this.openFairyInfoDialog(this.contextOnCell);
+  }
+
+  ctxCopyToClipboard() {
+    const chessboard = this.chessboard();
+    if (!chessboard) {
+      console.error("No chessboard instance found");
+      return;
+    }
+    chessboard.takeSnapshot().then((blob) => {
+      if (blob) {
+        navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        this.#snackBar.open("Snapshot copied to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
+      }
+      else {
+        this.#snackBar.open("Failed to copy snapshot to clipboard", undefined, { duration: 1000, verticalPosition: "top" });
+      }
+    });
+  }
+
+  ctxRemoveFairyInfo() {
+    if (!this.contextOnCell) return;
+    this.#current.RemoveFairyInfoAt(this.contextOnCell);
+  }
+
+  openFairyInfoDialog(cell: SquareLocation): void {
+    const originalPiece = this.#current.Problem()?.GetPieceAt(cell.column, cell.traverse) ?? null;
+    // Implementation for opening the fairy info dialog
+    this.#dialogService.fairypieceDialog({
+      cell,
+      originalPiece,
+    }).subscribe((result) => {
+      if (!result || !result.updatedPiece) return;
+      if (!result.updatedPiece.fairyCode && result.updatedPiece.fairyAttributes.length === 0) {
+        this.#current.RemoveFairyInfoAt(cell);
+      }
+      else {
+        this.#current.SetAsFairyPiece(
+          cell,
+          result.updatedPiece.fairyAttributes ?? [],
+          result.updatedPiece.fairyCode ?? null,
+          result.updatedPiece.fairyParams ?? [],
+        );
+      }
+    });
   }
 }
 
