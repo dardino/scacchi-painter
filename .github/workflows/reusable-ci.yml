@@ -4,9 +4,9 @@ on:
   workflow_call:
     inputs:
       working_directory:
-        description: 'Working directory for CI tasks'
+        description: "Working directory for CI tasks"
         required: false
-        default: './Gui/sp-gui-angular'
+        default: "./Gui/sp-gui-angular"
         type: string
 
 jobs:
@@ -15,24 +15,22 @@ jobs:
     name: Build, Test, and Package
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: "24"
           check-latest: true
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.33.0
+        uses: pnpm/action-setup@v6
 
       - name: Install workspace dependencies (root)
         run: pnpm install --frozen-lockfile
-        
+
       - name: Build CoreJS
         run: pnpm --dir CoreJS build
 
@@ -74,14 +72,14 @@ jobs:
           cp -R "$WEB_ROOT"/api/node_modules ./deploy/api/node_modules
 
       - name: Upload web deploy artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: web-deploy
           path: ./deploy/web
           if-no-files-found: error
 
       - name: Upload api deploy artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: api-deploy
           path: ./deploy/api

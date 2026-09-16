@@ -12,7 +12,7 @@ import { Author } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { EndingTypes, ProblemTypes } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
-    CurrentProblemService,
+  CurrentProblemService,
 } from "@sp/dbmanager/src/public-api";
 import { SortableListComponent } from "../sortable-list/sortable-list.component";
 
