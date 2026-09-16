@@ -11,7 +11,7 @@ packages:
 
 overrides:
   "prosemirror-model": "1.21.0"
-  "chess-board": "link:../chess-board"
+  # "@dardino/chess-board": "link:../chess-board"
 
 allowBuilds:
   "@parcel/watcher": true
