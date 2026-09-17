@@ -15,18 +15,18 @@ jobs:
     name: Deploy to Nightly
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
 
       - name: Download web deploy artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: web-deploy
           path: ./deploy/web
 
       - name: Download api deploy artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: api-deploy
           path: ./deploy/api
