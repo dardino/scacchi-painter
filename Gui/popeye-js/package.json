@@ -18,6 +18,5 @@
     "concat": "concat -o ./out/popeye_ww.js ./out/popeye_ww.min.tmp ./src/py.js",
     "clear": "rm -rf out/*.tmp",
     "build": "pnpm run compile && pnpm run minify && pnpm run concat && pnpm run clear"
-  },
-  "packageManager": "pnpm@10.33.0"
+  }
 }
