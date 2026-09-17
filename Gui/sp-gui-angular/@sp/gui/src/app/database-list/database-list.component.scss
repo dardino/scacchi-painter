@@ -43,6 +43,9 @@
 
 #searchbar {
   grid-area: side;
+
+  display: flex;
+  flex-direction: column;
 }
 
 #dbScrollViewport {

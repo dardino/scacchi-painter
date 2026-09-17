@@ -3,7 +3,6 @@
  */
 
 export * from "./lib/current-problem.service";
-export * from "./lib/dbmanager.module";
 export * from "./lib/dbmanager.service";
 export * from "./lib/engine-manager.service";
 export * from "./lib/helpers";

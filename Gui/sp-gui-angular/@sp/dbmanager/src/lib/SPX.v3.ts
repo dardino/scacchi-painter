@@ -7,7 +7,7 @@
 
 import { ChessPieceType } from "@dardino/chess-board";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
-import { Author, Columns, IPieceV4, IProblemV4, IStipulation, ITwins, PieceColors, PieceRotation, Traverse } from "./SPX.v4";
+import { adjustDate, Author, Columns, IPieceV4, IProblemV4, IStipulation, ITwins, PieceColors, PieceRotation, Traverse } from "./SPX.v4";
 import { EngineConfiguration, EngineConfigurationsByEngine } from "./models/engine";
 import { FairyPiecesCodes } from "./models/fairesDB";
 
@@ -40,7 +40,6 @@ export interface IProblemV3 {
   tags: string[];
   snapshots: Record<string | number, string>;
 }
-
 function convertPiecesV3ToV4(piecesV3: Partial<IPieceV3>[] | null): Partial<IPieceV4>[] | null {
   if (!piecesV3) {
     return null;
@@ -62,7 +61,7 @@ export function convertProblemV3ToV4(problemV3: Partial<IProblemV3>): Partial<IP
     stipulation: problemV3.stipulation,
     htmlSolution: problemV3.htmlSolution,
     textSolution: problemV3.textSolution,
-    date: problemV3.date,
+    date: adjustDate(problemV3.date) ?? "1970-01-01T00:00:00.000Z",
     prizeRank: problemV3.prizeRank,
     personalID: problemV3.personalID,
     prizeDescription: problemV3.prizeDescription,

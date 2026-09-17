@@ -1,4 +1,5 @@
 import {
+  FairySquare,
   FenPosition,
   getEmptyBoardFen,
   parseFen,
@@ -105,7 +106,7 @@ export const getCanvasRotation = (rotation: PieceRotation): ChessPieceRotation =
   }
 };
 
-export const getCanvasLocation = (x: Columns, y: Traverse): `${BoardFile}${BoardRank}` | null => {
+export const getCanvasLocation = (x: Columns, y: Traverse): FairySquare | null => {
   if (!x || !y) {
     return null;
   }

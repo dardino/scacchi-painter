@@ -1,20 +1,25 @@
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, OnInit, ViewChild, effect, inject, signal } from "@angular/core";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { Component, computed, ElementRef, inject, signal, viewChild } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatCardModule } from "@angular/material/card";
 import { MatChipEditedEvent, MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { provideNativeDateAdapter } from "@angular/material/core";
-import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatDatepickerInputEvent, MatDatepickerModule } from "@angular/material/datepicker";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { Problem } from "@sp/dbmanager/src/lib/models/problem";
 import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
-import { Observable, map, startWith } from "rxjs";
+import { alphabeticalSort } from "../tools/array";
+
+const predefinedPlacementTypes = ["Prize", "Placement", "Honorable mention", "Commendation", "Special Prize", "Special Honorable mention"] as const;
+type StandardPlacementType = (typeof predefinedPlacementTypes)[number];
+type StandardPlacements = Array<{ value: StandardPlacementType; description: string }>;
+
+const AllStandardPlacements: StandardPlacements = predefinedPlacementTypes.map(value => ({ value, description: value }));
 
 @Component({
   selector: "lib-problem-publication",
@@ -36,128 +41,93 @@ import { Observable, map, startWith } from "rxjs";
     MatInputModule,
   ],
 })
-export class ProblemPublicationComponent implements OnInit {
-  private db = inject(DbmanagerService);
+export class ProblemPublicationComponent {
+  #db = inject(DbmanagerService);
+  #filterMagazine = signal("");
+  #filterTag = signal("");
+  filteredTags = computed(() => {
+    const values = new Set(this.#db.All().map(problem => problem.tags).flat());
+    return Array.from(values)
+      .filter(tag => tag.toLowerCase().includes(this.#filterTag().trim().toLowerCase()))
+      .sort(alphabeticalSort);
+  });
+
+  filteredMagazines = computed(() => {
+    const values = new Set(this.#db.All().map(problem => problem.source).flat());
+    return Array.from(values)
+      .filter(mag => mag.toLowerCase().includes(this.#filterMagazine().trim().toLowerCase()))
+      .sort(alphabeticalSort);
+  });
+
+  placementTypes = computed(() => {
+    return [
+      { value: "", description: "None" },
+      ...AllStandardPlacements,
+    ].concat(
+      Array.from(new Set(this.#db.All().map(problem => problem.prizeDescription)
+        .sort(alphabeticalSort)
+        .filter(desc => !!desc && !predefinedPlacementTypes.includes(desc as StandardPlacementType)),
+      )).map(desc => ({ value: desc, description: desc })),
+    );
+  });
+
   private curProbSvc = inject(CurrentProblemService);
 
-  private _currentProblem = signal<Problem | null>(null);
+  tagInput = viewChild<ElementRef<HTMLInputElement>>("tagInput");
+  magazine = computed(() => this.curProbSvc.Problem()?.source ?? "");
+  date = computed(() => this.curProbSvc.Problem()?.dateAsDate ?? null);
+  personalId = computed(() => this.curProbSvc.Problem()?.personalID ?? "");
+  rank = computed(() => this.curProbSvc.Problem()?.prizeRank?.toFixed(0) ?? "");
+  rankType = computed(() => this.curProbSvc.Problem()?.prizeDescription ?? "");
+  tags = computed<string[]>(() => this.curProbSvc.Problem()?.tags ?? []);
 
-  get magazine(): string { return this._currentProblem()?.source ?? ""; }
-  set magazine(val: string) {
-    const prob = this._currentProblem();
-    if (prob) prob.source = val;
+  setRank(value: string) {
+    this.curProbSvc.SetAward({ rank: parseInt(value) });
   }
 
-  private _date = signal<Date | null>(new Date());
-  get date(): Date | null { return this._date(); }
-  set date(val: Date | null) {
-    this._date.set(val);
-    if (val) this.curProbSvc.SetPublicationDate(val);
+  setRankType(value: string) {
+    this.curProbSvc.SetAward({ description: value });
   }
 
-  get rank(): string { return this._currentProblem()?.prizeRank?.toFixed(0) ?? ""; }
-  set rank(v: string) {
-    const prob = this._currentProblem();
-    if (prob) prob.prizeRank = parseInt(v);
+  setPersonalId(value: string) {
+    this.curProbSvc.SetPersonalID(value);
   }
 
-  get rankType(): string { return this._currentProblem()?.prizeDescription ?? ""; }
-  set rankType(value: string) {
-    const prob = this._currentProblem();
-    if (prob) prob.prizeDescription = value;
+  setMagazine(val: string) {
+    this.#filterMagazine.set(val);
+    this.curProbSvc.SetSource(val);
   }
 
-  get personalId(): string { return this._currentProblem()?.personalID ?? ""; }
-  set personalId(value: string) {
-    const prob = this._currentProblem();
-    if (prob) prob.personalID = value;
+  setDate(event: MatDatepickerInputEvent<Date>) {
+    const val = event.value;
+    this.curProbSvc.SetPublicationDate(val ?? new Date());
   }
 
-  tags = signal<string[]>([]);
-
-  constructor() {
-    // Effetto per sincronizzare i tag quando cambia il problema
-    effect(() => {
-      const problem = this._currentProblem();
-      if (problem) {
-        this.tags.set([...problem.tags]);
-      }
-    });
-  }
-
-  addOnBlur = true;
+  addOnBlur = false;
   announcer = inject(LiveAnnouncer);
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  @ViewChild("tagInput") tagInput: ElementRef<HTMLInputElement>;
-  @ViewChild("magazineInput") magazineInput: ElementRef<HTMLInputElement>;
 
-  get allPreviousTags(): string[] {
-    const values = new Set(this.db.All().map(problem => problem.tags).flat());
-    return Array.from(values);
-  }
-
-  get allMagazines(): string[] {
-    const values = new Set(this.db.All().map(problem => problem.source).flat());
-    return Array.from(values);
-  }
-
-  tagInputControl = new FormControl("");
-  magazineInputControl = new FormControl("");
-  filteredTags: Observable<string[]>;
-  magazineFiltered: Observable<string[]>;
-
-  private _filterTags(item: string): string[] {
-    const filterValue = item.toLowerCase();
-    return this.allPreviousTags.filter(tag => tag.toLowerCase().includes(filterValue.toLowerCase()));
-  }
-
-  private _filterMagazine(item: string): string[] {
-    const filterValue = item.toLowerCase();
-    return this.allMagazines.filter(mag => mag.toLowerCase().includes(filterValue.toLowerCase()));
-  }
-
-  ngOnInit(): void {
-    // Sincronizza magazine dal FormControl al modello
-    this.magazineInputControl.valueChanges.subscribe((value) => {
-      const prob = this._currentProblem();
-      if (prob) {
-        prob.source = value ?? "";
-      }
-    });
-
-    this.filteredTags = this.tagInputControl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) => (tag ? this._filterTags(tag) : this.allPreviousTags.slice())),
-    );
-    this.magazineFiltered = this.magazineInputControl.valueChanges.pipe(
-      startWith(null),
-      map((mag: string | null) => (mag ? this._filterMagazine(mag) : this.allMagazines.slice())),
-    );
+  setFilterTag(value: string) {
+    this.#filterTag.set(value);
   }
 
   addtag(event: MatChipInputEvent): void {
     const value = (event.value || "").trim();
-    // Add our tag
-    const currentTags = this.tags();
-    const arleadyExists = currentTags.indexOf(value) > -1;
-    if (value && !arleadyExists) {
-      this.tags.update(tags => [...tags, value]);
+    const set = new Set(this.tags());
+    set.add(value);
+    this.curProbSvc.SetTags([...set].filter(tag => !!tag));
+    this.#filterTag.set("");
+
+    const input = this.tagInput();
+    if (input) {
+      input.nativeElement.value = "";
     }
-    this.tagInput.nativeElement.value = "";
-    this.tagInputControl.setValue(null);
   }
 
   removetag(tag: string): void {
-    this.tags.update((tags) => {
-      const index = tags.indexOf(tag);
-      if (index >= 0) {
-        const newTags = [...tags];
-        newTags.splice(index, 1);
-        this.announcer.announce(`Removed ${tag}`);
-        return newTags;
-      }
-      return tags;
-    });
+    const set = new Set(this.tags());
+    set.delete(tag);
+    this.curProbSvc.SetTags([...set]);
   }
 
   edittag(tag: string, event: MatChipEditedEvent) {
@@ -169,21 +139,27 @@ export class ProblemPublicationComponent implements OnInit {
       return;
     }
 
-    // Edit existing fruit
-    this.tags.update((tags) => {
-      const index = tags.indexOf(tag);
-      if (index >= 0) {
-        const newTags = [...tags];
-        newTags[index] = value;
-        return newTags;
-      }
-      return tags;
-    });
+    // Edit existing tag
+    const set = new Set(this.tags());
+    if (set.has(tag)) {
+      set.delete(tag);
+      set.add(value);
+      this.curProbSvc.SetTags([...set]);
+    }
   }
 
   selecttag(event: MatAutocompleteSelectedEvent) {
-    this.tags.update(tags => [...tags, event.option.viewValue]);
-    this.tagInput.nativeElement.value = "";
-    this.tagInputControl.setValue(null);
+    const value = event.option.viewValue.trim();
+    if (!value) {
+      return;
+    }
+    const set = new Set(this.tags());
+    set.add(value);
+    this.curProbSvc.SetTags([...set]);
+
+    const input = this.tagInput();
+    if (input) {
+      input.nativeElement.value = "";
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import { Component, EventEmitter, Output, computed, input } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -12,6 +13,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
   styleUrls: ["./database-list-item.component.scss"],
   standalone: true,
   imports: [
+    DatePipe,
     ChessboardModule,
     MatIconModule,
     RouterModule,
@@ -42,6 +44,9 @@ export class DatabaseListItemComponent {
   stipulation = computed(() => `${this.problem()?.stipulation.completeStipulationDesc}`);
   pieceCounter = computed(() => `${this.problem()?.getPieceCounter() ?? "0+0"}`);
   solutionHTML = computed(() => this.problem()?.htmlSolution);
+  date = computed(() => new Date(this.problem()?.date ?? "1970-01-01T00:00:00.000Z"));
+  personalID = computed(() => this.problem()?.personalID ?? "");
+  kingPosition = computed(() => this.problem()?.kingPositions ?? "");
 
   removeItem() {
     this.delete.emit(this.dbIndex());

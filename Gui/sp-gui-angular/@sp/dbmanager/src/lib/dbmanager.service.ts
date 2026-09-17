@@ -5,17 +5,24 @@ import { prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "./providers";
 import { convertProblemV3ToV4, IDbSpX_V3, isV3 } from "./SPX.v3";
-import { IDbSpX_V4, isV4 } from "./SPX.v4";
+import { IDbSpX_V4, isV4, verifyProblemV4 } from "./SPX.v4";
 
 export interface IDbManagerService {
   CurrentProblem: Signal<Problem | null>;
+  All: Signal<Problem[]>;
   SetCurrentProblem(problem: Problem | null): Promise<void>;
+  SetData(problems: Problem[]): void;
+  SaveTemporary(): Promise<void>;
 }
 
 @Injectable({
   providedIn: "root",
 })
 export class DbmanagerService implements IDbManagerService {
+  SetData(problems: Problem[]): void {
+    this.#database.set(problems);
+  }
+
   #dropboxFS = inject(DropboxdbService);
   #oneDriveFS = inject(OneDriveService);
   #localDriveFS = inject(LocalDriveService);
@@ -25,14 +32,14 @@ export class DbmanagerService implements IDbManagerService {
   #currentIndex = signal(1);
   #currentFile = signal<FolderSelected | null>(null);
   #workInProgress = signal(false);
+  #database = signal<Problem[]>([]);
 
   // #region public Properties
-  public All = signal<Problem[]>([]);
-
+  All = this.#database.asReadonly();
   wip = computed(() => this.#workInProgress());
   FileName = computed(() => this.#currentFile()?.meta.itemName);
   CurrentIndex = computed(() => this.#currentIndex());
-  Count = computed(() => this.All().length);
+  Count = computed(() => this.#database().length);
 
   #currentProblem = signal<Problem | null>(null);
   CurrentProblem: Signal<Problem | null> = this.#currentProblem.asReadonly();
@@ -44,15 +51,15 @@ export class DbmanagerService implements IDbManagerService {
   // #endregion
 
   async addBlankPosition() {
-    this.All.set([...this.All(), Problem.fromJson({})]);
-    this.#currentIndex.set(this.All().length);
+    this.#database.set([...this.#database(), Problem.fromJson({})]);
+    this.#currentIndex.set(this.#database().length);
     await this.loadProblem();
     await this.saveToLocalStorage();
     return this.#currentIndex;
   }
 
   async deleteProblem(problem: Problem) {
-    const pIndex = this.All().indexOf(problem);
+    const pIndex = this.#database().indexOf(problem);
     await this.deleteProblemAtIndex(pIndex);
   }
 
@@ -66,7 +73,7 @@ export class DbmanagerService implements IDbManagerService {
 
   private async deleteProblemAtIndex(pIndex: number) {
     this.#workInProgress.set(true);
-    const oldArray = this.All();
+    const oldArray = this.#database();
     // delete only if index is valid
     if (pIndex >= oldArray.length || pIndex < 0) {
       this.#workInProgress.set(false);
@@ -79,11 +86,11 @@ export class DbmanagerService implements IDbManagerService {
     // if deleted problem is the last one in database then create a blank problem
     if (oldArray.length === 0) {
       oldArray.push(Problem.fromJson({}));
-      this.All.set(oldArray);
+      this.#database.set(oldArray);
       this.#currentIndex.set(1);
     }
     else {
-      this.All.set(oldArray);
+      this.#database.set(oldArray);
       // if problem index is the same as current then move current problem to the previous if present
       if (pIndex === this.#currentIndex() - 1) {
         this.#currentIndex.set(Math.max(0, pIndex - 1) + 1);
@@ -202,7 +209,7 @@ export class DbmanagerService implements IDbManagerService {
   }
 
   private async saveToLocalStorage() {
-    this.All.update((all) => {
+    this.#database.update((all) => {
       const currentProblem = this.CurrentProblem();
       const currentIndex = this.#currentIndex();
       if (currentProblem && currentIndex > 0 && currentIndex <= all.length) {
@@ -220,14 +227,14 @@ export class DbmanagerService implements IDbManagerService {
   private toJSON(): IDbSpX_V4 {
     return {
       lastIndex: this.#currentIndex(),
-      problems: this.All().map(p => p.toJson()),
+      problems: this.#database().map(p => p.toJson()),
       name: "Scacchi Painter X Database",
       version: 4,
     };
   }
 
   private async ToXML(): Promise<Document> {
-    const problems = await Promise.all(this.All().map(f => f.toSP2Xml()));
+    const problems = await Promise.all(this.#database().map(f => f.toSP2Xml()));
     const parser = new DOMParser();
     const doc = parser.parseFromString(
       "<ScacchiPainterDatabase></ScacchiPainterDatabase>",
@@ -326,7 +333,9 @@ export class DbmanagerService implements IDbManagerService {
         version: 4,
       } as IDbSpX_V4;
 
-      this.All.set(obj.problems.map(p => Problem.fromJson(p)));
+      obj = verifyProblemV4(obj);
+
+      this.#database.set(obj.problems.map(p => Problem.fromJson(p)));
       this.#currentIndex.set(obj.lastIndex ?? 1);
       return null;
     }
@@ -339,7 +348,7 @@ export class DbmanagerService implements IDbManagerService {
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-      this.All.set(await Promise.all(
+      this.#database.set(await Promise.all(
         Array.from(xmlDoc.querySelectorAll("SP_Item")).map(e =>
           Problem.fromElement(e),
         ),
@@ -383,7 +392,7 @@ export class DbmanagerService implements IDbManagerService {
    * @returns
    */
   async GotoIndex(arg0: number) {
-    if (arg0 > this.All().length || arg0 <= 0) {
+    if (arg0 > this.#database().length || arg0 <= 0) {
       return;
     }
     this.reset();
@@ -394,10 +403,10 @@ export class DbmanagerService implements IDbManagerService {
 
   private async loadProblem() {
     const realIndex = this.#currentIndex() - 1;
-    if (realIndex < 0 || realIndex >= this.All().length) {
+    if (realIndex < 0 || realIndex >= this.#database().length) {
       return this.reset();
     }
-    const newP = this.All()[realIndex];
+    const newP = this.#database()[realIndex];
     this.SetCurrentProblem(newP);
   }
 

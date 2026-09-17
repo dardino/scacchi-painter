@@ -3,10 +3,10 @@
   <mat-card-content>
     <mat-form-field class="field magazine">
       <mat-label>Magazine</mat-label>
-      <input matInput #magazineInput [formControl]="magazineInputControl" placeholder="Name of magazine"
-        [matAutocomplete]="automagazine" />
+      <input matInput #magazineInput [value]="magazine()" (change)="setMagazine($event.target.value)"
+        placeholder="Name of magazine" [matAutocomplete]="automagazine" />
       <mat-autocomplete #automagazine="matAutocomplete">
-        @for (magSugg of magazineFiltered | async; track $index) {
+        @for (magSugg of filteredMagazines(); track $index) {
         <mat-option [value]="magSugg">{{magSugg}}</mat-option>
         }
       </mat-autocomplete>
@@ -14,7 +14,8 @@
     </mat-form-field>
     <mat-form-field class="field date">
       <mat-label>Date</mat-label>
-      <input matInput #dateInput [matDatepicker]="picker" placeholder="Publication date" [(ngModel)]="date"/>
+      <input matInput #dateInput placeholder="Publication date" [matDatepicker]="picker" [value]="date()"
+        (dateChange)="setDate($event)" />
       <mat-hint>publication date or request date</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
@@ -25,8 +26,8 @@
   <mat-card-title>Award</mat-card-title>
   <mat-card-content>
     <mat-form-field class="field magazine">
-      <mat-label>Rank</mat-label>
-      <mat-select [(value)]="rank">
+      <mat-label>Placement</mat-label>
+      <mat-select [value]="rank()" (selectionChange)="setRank($event.value)">
         <mat-option value="">Clear</mat-option>
         <mat-option value="1">1°</mat-option>
         <mat-option value="2">2°</mat-option>
@@ -38,15 +39,13 @@
       <mat-hint>(ie: 1°)</mat-hint>
     </mat-form-field>
     <mat-form-field class="field magazine">
-      <mat-label>Award</mat-label>
-      <input matInput placeholder="Award" [(ngModel)]="rankType" [matAutocomplete]="award" />
+      <mat-label>Type</mat-label>
+      <input matInput placeholder="Award" [value]="rankType()" (change)="setRankType($event.target.value)"
+        [matAutocomplete]="award" />
       <mat-autocomplete #award="matAutocomplete">
-        <mat-option value=""></mat-option>
-        <mat-option value="Prize">Prize</mat-option>
-        <mat-option value="Honorable mention">Honorable mention</mat-option>
-        <mat-option value="Commendation">Commendation</mat-option>
-        <mat-option value="Special Prize">Special Prize</mat-option>
-        <mat-option value="Special Honorable mention">Special Honorable mention</mat-option>
+        @for (placetype of placementTypes(); track $index) {
+        <mat-option [value]="placetype.value">{{placetype.description}}</mat-option>
+        }
       </mat-autocomplete>
       <mat-hint>(ie: Honorable mention)</mat-hint>
     </mat-form-field>
@@ -57,7 +56,8 @@
   <mat-card-content>
     <mat-form-field class="field magazine">
       <mat-label>Personal Id</mat-label>
-      <input matInput placeholder="Write a free text id" [(ngModel)]="personalId" />
+      <input matInput placeholder="Write a free text id" [value]="personalId()"
+        (change)="setPersonalId($event.target.value)" />
       <mat-hint>(ie: 234/f)</mat-hint>
     </mat-form-field>
     <mat-form-field class="field magazine">
@@ -73,12 +73,12 @@
         </mat-chip-row>
         }
         <input placeholder="Add a tag and press Enter" #tagInput [matChipInputFor]="chipGrid"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-          (matChipInputTokenEnd)="addtag($event)" [formControl]="tagInputControl" [matAutocomplete]="tagauto" />
+          (input)="setFilterTag($event.target.value)" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addtag($event)" [matAutocomplete]="tagauto" />
       </mat-chip-grid>
       <mat-hint>(ie: tags)</mat-hint>
-      <mat-autocomplete #tagauto="matAutocomplete" (optionSelected)="selecttag($event)">
-        @for (tagsugg of filteredTags | async; track $index) {
+      <mat-autocomplete requireSelection="false" #tagauto="matAutocomplete" (optionSelected)="selecttag($event)">
+        @for (tagsugg of filteredTags(); track $index) {
         <mat-option [value]="tagsugg">{{tagsugg}}</mat-option>
         }
       </mat-autocomplete>
