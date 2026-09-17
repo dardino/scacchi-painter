@@ -56,6 +56,8 @@ describe("DatabaseSource", () => {
       expect(dbData.length).toBeGreaterThan(0);
     });
 
+    expect(dbData.every(entry => entry.problem !== null)).toBe(true);
+
     const loadedItems = dbData.filter((entry: { dbIndex?: number } | undefined) => entry && entry.dbIndex != null && entry.dbIndex > 0);
 
     expect(loadedItems.length).toBe(dbmanager.All().length);
