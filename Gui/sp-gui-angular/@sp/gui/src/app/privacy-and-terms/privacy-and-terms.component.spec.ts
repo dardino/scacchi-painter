@@ -21,4 +21,14 @@ describe("PrivacyAndTermsComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should explain that data is sent only via selected cloud storage providers", () => {
+    const text = fixture.nativeElement.textContent as string;
+    const links = Array.from(fixture.nativeElement.querySelectorAll("a")).map((link: Element) => (link as HTMLAnchorElement).href);
+
+    expect(text).toContain("OneDrive");
+    expect(text).toContain("Dropbox");
+    expect(links).toContain("https://privacy.microsoft.com/privacystatement");
+    expect(links).toContain("https://www.dropbox.com/terms");
+  });
 });
