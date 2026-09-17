@@ -112,6 +112,31 @@ export class CurrentProblemService {
     this.syncCurrentProblem(newProblem);
   }
 
+  SetSource(val: string) {
+    const newProblem = this.clonedProblem();
+    newProblem.source = val;
+    this.syncCurrentProblem(newProblem);
+  }
+
+  SetPersonalID(val: string) {
+    const newProblem = this.clonedProblem();
+    newProblem.personalID = val;
+    this.syncCurrentProblem(newProblem);
+  }
+
+  SetAward(val: Partial<{ rank: number; description: string }>) {
+    const newProblem = this.clonedProblem();
+    newProblem.prizeRank = val.rank ?? newProblem.prizeRank;
+    newProblem.prizeDescription = val.description ?? newProblem.prizeDescription;
+    this.syncCurrentProblem(newProblem);
+  }
+
+  SetTags(v: string[]): void {
+    const newProblem = this.clonedProblem();
+    newProblem.tags = v;
+    this.syncCurrentProblem(newProblem);
+  }
+
   SetTwins(v: Twin[]): void {
     const newProblem = this.clonedProblem();
     newProblem.twins.TwinList = v;
