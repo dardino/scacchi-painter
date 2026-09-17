@@ -14,7 +14,7 @@ jobs:
     uses: ./.github/workflows/reusable-ci.yml
 
   build_tauri:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:
