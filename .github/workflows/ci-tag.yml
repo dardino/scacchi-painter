@@ -42,7 +42,7 @@ jobs:
               Gui/sp-gui/src-tauri/target/aarch64-apple-darwin/release/bundle/**/*.dmg
               Gui/sp-gui/src-tauri/target/aarch64-apple-darwin/release/bundle/**/*.app
           - name: macos_x64
-            os: macos-14
+            os: macos-13
             target: x86_64-apple-darwin
             artifact_name: tauri-macos-x64
             artifact_paths: |
