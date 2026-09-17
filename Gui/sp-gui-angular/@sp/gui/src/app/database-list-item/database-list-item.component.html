@@ -44,6 +44,8 @@
 </div>
 <div class="dbitem-status">
   <span class="status-stipulation"><span>{{ stipulation() }}</span><span>{{ pieceCounter() }}</span></span>
+  <span class="status-personalid">{{ personalID() }} | {{ kingPosition() }}</span>
+  <span class="status-date">{{ date() | date: 'longDate' }}</span>
   <span class="status-twins">
     @for (twin of twins(); track $index) {
     <span class="twin">{{twin}}</span>

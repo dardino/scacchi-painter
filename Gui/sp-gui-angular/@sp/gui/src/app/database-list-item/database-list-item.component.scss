@@ -8,53 +8,67 @@
   flex: 0 0 auto;
   display: flex;
   width: 100%;
+}
 
-  .status-index {
-    align-self: flex-end;
-    margin: 0;
-    display: block;
-    width: 4em;
-    background-color: rgba(255, 255, 255, 0.2);
-    text-align: right;
-    padding: 0 0.5rem;
-    flex: 0 0 auto;
+.status-index {
+  align-self: flex-end;
+  margin: 0;
+  display: block;
+  width: 3em;
+  background-color: rgba(255, 255, 255, 0.2);
+  text-align: right;
+  padding: 0 0.5rem 0 0;
+  flex: 0 0 auto;
 
-    @media (max-width: mq.$smallScreen) {
-      flex: 1 1 auto;
-    }
-  }
-
-  .status-twins {
-    background-color: rgba(197, 69, 69, 0.2);
-    flex: 1 1 0%;
-    padding: 0 1rem;
-
-    @media (max-width: mq.$smallScreen) {
-      display: none;
-    }
-
-    .twin {
-      margin-right: 1em;
-    }
-  }
-
-  .status-stipulation {
-    background-color: rgba(80, 255, 0, 0.36);
-    width: 14.6rem;
-    flex: 0 0 auto;
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 0.3em;
-    box-sizing: border-box;
-    align-items: center;
-
-    @media (max-width: mq.$smallScreen) {
-      width: 8.6rem;
-      font-size: 0.7em;
-    }
+  @media (max-width: mq.$smallScreen) {
+    flex: 1 1 auto;
   }
 }
+
+.status-date {
+  background-color: rgba(69, 197, 197, 0.2);
+  flex: 0 0 10rem;
+  padding: 0 1rem;
+
+}
+
+.status-personalid {
+  background-color: rgba(197, 197, 69, 0.2);
+  flex: 0 0 auto;
+  padding: 0 1rem;
+}
+
+.status-twins {
+  background-color: rgba(197, 69, 69, 0.2);
+  flex: 1 1 0%;
+  padding: 0 1rem;
+
+  @media (max-width: mq.$smallScreen) {
+    display: none;
+  }
+
+  .twin {
+    margin-right: 1em;
+  }
+}
+
+.status-stipulation {
+  background-color: rgba(80, 255, 0, 0.36);
+  width: 14.6rem;
+  flex: 0 0 auto;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.3em;
+  box-sizing: border-box;
+  align-items: center;
+
+  @media (max-width: mq.$smallScreen) {
+    width: 8.6rem;
+    font-size: 0.7em;
+  }
+}
+
 
 .dbitem-infos {
   flex: 1 1 0;
@@ -74,7 +88,7 @@
 
 .description {
   align-self: stretch;
-  min-width: 14.6rem;
+  min-width: 7.8rem;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
@@ -85,13 +99,13 @@
     }
   }
 
-  > dl {
+  >dl {
     margin: 0;
     flex: 0 0 auto;
-    padding: 1rem;
+    padding: .4rem;
 
     @media (max-width: mq.$smallScreen) {
-      padding: 0.5rem;
+      padding: 0.2rem;
     }
   }
 
@@ -125,13 +139,15 @@
 }
 
 .miniboard {
+  --cb-min-width: 5rem;
+  --cb-min-height: 5rem;
   width: 14.6rem;
   height: 14.6rem;
   flex: 0 0 auto;
 
   @media (max-width: mq.$smallScreen) {
-    width: 8.6rem;
-    height: 8.6rem;
+    width: 7rem;
+    height: 7rem;
   }
 }
 
@@ -148,11 +164,15 @@
 .solution {
   flex: 1 1 0;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: clip;
   line-height: 1em;
   margin: 0;
-  padding: 0;
   line-clamp: 3;
+  padding: .4rem;
+
+  @media (max-width: mq.$smallScreen) {
+    padding: 0.2rem;
+  }
 
   ::ng-deep {
     * {

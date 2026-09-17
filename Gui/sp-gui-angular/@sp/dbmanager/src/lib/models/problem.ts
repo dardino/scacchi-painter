@@ -11,6 +11,7 @@ import {
   convertToRtf,
   createXmlElement,
   fenToChessBoard,
+  getCanvasLocation,
   notEmpty,
   notNull,
 } from "../helpers";
@@ -31,6 +32,15 @@ export class Problem implements IProblemV4 {
 
   public textSolution = "";
   public date = new Date().toISOString();
+  #dateAsDate = new Date(this.date);
+  public get dateAsDate(): Date {
+    // avoid creating a new Date object every time this getter is accessed
+    if (this.#dateAsDate.getTime() !== new Date(this.date).getTime()) {
+      this.#dateAsDate = new Date(this.date);
+    }
+    return this.#dateAsDate;
+  }
+
   public stipulation = Stipulation.fromJson({});
   public prizeRank = 0;
   public personalID = "";
@@ -67,6 +77,12 @@ export class Problem implements IProblemV4 {
 
   public get pieceTypes(): string[] {
     return Array.from(new Set(this.pieces.map(piece => piece.ToFairyNotation())));
+  }
+
+  public get kingPositions(): string {
+    return this.pieces?.filter(p => p.appearance === "k")
+      .sort(a => (a.color == "White" ? -1 : 1))
+      .map(p => getCanvasLocation(p.GetLocation().column, p.GetLocation().traverse)).join("-");
   }
 
   static async fromElement(source: Element) {

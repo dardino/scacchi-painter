@@ -6,6 +6,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatOption, MatSelect, MatSelectChange } from "@angular/material/select";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
@@ -27,6 +28,8 @@ import { MyDataSource } from "./database-source";
     DatabaseListItemComponent,
     MatToolbarModule,
     MatButtonModule,
+    MatSelect,
+    MatOption,
   ],
 })
 export class DatabaseListComponent implements OnInit {
@@ -34,6 +37,7 @@ export class DatabaseListComponent implements OnInit {
   private modal = inject(DialogService);
   private router = inject(Router);
 
+  sortValue = signal("id-desc");
   itemSource = new MyDataSource(this.db);
 
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
@@ -64,6 +68,12 @@ export class DatabaseListComponent implements OnInit {
     const value = ($event.target as HTMLInputElement).value;
     this.searchValue.set(value);
     this.itemSource.filter(value);
+  }
+
+  public sortChange($event: MatSelectChange) {
+    const value = $event.value;
+    this.sortValue.set(value);
+    this.itemSource.sort(value);
   }
 
   async createNewPosition() {

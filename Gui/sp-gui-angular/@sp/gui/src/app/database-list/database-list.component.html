@@ -13,6 +13,19 @@
     <mat-icon matSuffix>search</mat-icon>
     <mat-hint>Example: Hm#3 or d2-d3</mat-hint>
   </mat-form-field>
+  <mat-form-field>
+    <mat-label>Sort by</mat-label>
+    <mat-select [value]="sortValue()" (selectionChange)="sortChange($event)">
+      <mat-option value="date">Date Ascending</mat-option>
+      <mat-option value="date-desc">Date Descending</mat-option>
+      <mat-option value="id">Id Ascending</mat-option>
+      <mat-option value="id-desc">Id Descending</mat-option>
+      <mat-option value="personalid">Personal Id Ascending</mat-option>
+      <mat-option value="personalid-desc">Personal Id Descending</mat-option>
+    </mat-select>
+    <mat-icon matSuffix>sort</mat-icon>
+    <mat-hint>Example: Date or Difficulty</mat-hint>
+  </mat-form-field>
 </section>
 
 <cdk-virtual-scroll-viewport id="dbScrollViewport" [itemSize]="1" class="dblist">

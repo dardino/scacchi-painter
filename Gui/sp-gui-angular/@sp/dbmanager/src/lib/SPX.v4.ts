@@ -195,3 +195,28 @@ export interface IDbSpX_V4 {
 export function isV4(obj: unknown): obj is IDbSpX_V4 {
   return "version" in (obj as Record<string, unknown>) && (obj as Record<string, unknown>).version === 4;
 }
+
+const fullIsoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+export function adjustDate(date: string | null | undefined): string | null {
+  if (!date) return null;
+  // if date matches reges of full iso date let them unchanged
+  if (fullIsoDateRegex.test(date)) return date;
+  // if the date string does not include milliseconds, add them
+  // this date: 2010-12-16T23:00:00Z
+  // should be this: 2010-12-16T23:00:00.000Z
+  if (!date.includes(".")) {
+    const parts = date.split("Z");
+    date = `${parts[0]}.000Z`;
+  }
+  return date;
+}
+
+export function verifyProblemV4(obj: IDbSpX_V4): IDbSpX_V4 {
+  return {
+    ...obj,
+    problems: obj.problems.map(p => ({
+      ...p,
+      date: adjustDate(p.date) ?? "1970-01-01T00:00:00.000Z",
+    })),
+  };
+}

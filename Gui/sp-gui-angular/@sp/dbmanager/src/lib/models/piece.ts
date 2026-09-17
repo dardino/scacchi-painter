@@ -1,8 +1,9 @@
-import { type PieceInfo as BP } from "@dardino/chess-board";
+import { FairySquare, type PieceInfo as BP } from "@dardino/chess-board";
 
 import {
   createXmlElement,
   getCanvasColor,
+  getCanvasLocation,
   getCanvasRotation,
   getFigurine,
   getRotationSymbol,
@@ -99,6 +100,10 @@ export class Piece implements IPieceV4 {
       column: this.column,
       traverse: this.traverse,
     };
+  }
+
+  get square(): FairySquare | null {
+    return getCanvasLocation(this.column, this.traverse);
   }
 
   ToNotation() {
