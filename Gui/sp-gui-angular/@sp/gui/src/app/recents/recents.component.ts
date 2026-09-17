@@ -30,9 +30,12 @@ export class RecentsComponent {
       if (!(result instanceof Error)) {
         this.router.navigate(["/list"]);
       }
+      else {
+        console.error(result);
+      }
     }
     catch (_err) {
-      // noop
+      console.error(_err);
     }
   }
 }

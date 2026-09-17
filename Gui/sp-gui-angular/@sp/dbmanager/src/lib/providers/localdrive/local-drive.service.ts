@@ -22,40 +22,176 @@ export class LocalDriveService implements FileService {
 
   #fileHandle: FileSystemFileHandle | null = null;
 
+  /**
+   * This method triggers a file input dialog to allow the user to pick a file.
+   * is intended to be used as a fallback when the File System API is not available.
+   * @returns A promise that resolves with the selected file.
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getFileContent(item: FolderItemInfo): Promise<File> {
-    // if (itemID === "root_no_permission") return [];
-    if (!window.showOpenFilePicker) {
-      throw new Error("Your current device does not support the File System API. Try again on desktop Chrome!");
+  #pickFileWithInput = async (item: FolderItemInfo): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".sp2,.sp3";
+      input.onchange = async (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        if (target.files && target.files.length > 0) {
+          resolve(target.files[0]);
+        }
+        else {
+          reject(new AbortError("No file selected"));
+        }
+      };
+      input.click();
+    });
+  };
+
+  /**
+   * Retrieves the file handle associated with the given folder item from IndexedDB, if it exists.
+   * @param item The folder item information for which to retrieve the file handle from IndexedDB.
+   * @returns A promise that resolves with the file handle if found, or null otherwise.
+   */
+  async #getFileHandleFromIndexedDB(item: FolderItemInfo): Promise<FileSystemFileHandle | null> {
+    if (!("indexedDB" in window)) {
+      return null;
+    }
+    try {
+      const db = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = window.indexedDB.open("spx_filehandles", 1);
+
+        request.onupgradeneeded = () => {
+          const database = request.result;
+          if (!database.objectStoreNames.contains("filehandles")) {
+            database.createObjectStore("filehandles");
+          }
+        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error ?? new Error("Unable to open IndexedDB"));
+      });
+
+      const handle = await new Promise<FileSystemFileHandle | null>((resolve) => {
+        const transaction = db.transaction("filehandles", "readonly");
+        const store = transaction.objectStore("filehandles");
+        const request = store.get(item.id + "|" + item.fullPath + "|" + item.itemName);
+
+        request.onsuccess = () => {
+          resolve((request.result as FileSystemFileHandle | null) ?? null);
+        };
+
+        request.onerror = () => resolve(null);
+      });
+
+      db.close();
+      return handle;
+    }
+    catch {
+      return null;
+    }
+  }
+
+  async #saveFileHandleToIndexedDB(item: FolderItemInfo, fileHandle: FileSystemFileHandle): Promise<void> {
+    if (!("indexedDB" in window)) {
+      return;
     }
 
     try {
-      const [fileHandle] = await window.showOpenFilePicker({
-        types: [
-          {
-            description: "Scacchi Painter X",
-            accept: {
-              "application/json": [".sp3"],
-            },
-          },
-          {
-            description: "Scacchi Painter 2",
-            accept: {
-              "text/xml": [".sp2"],
-            },
-          },
-        ],
-      });
-      const allOk = await this.verifyPermission(fileHandle, true);
-      if (!allOk) throw new Error("Cannot open a file!");
+      const db = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = window.indexedDB.open("spx_filehandles", 1);
 
-      this.#fileHandle = fileHandle;
+        request.onupgradeneeded = () => {
+          const database = request.result;
+          if (!database.objectStoreNames.contains("filehandles")) {
+            database.createObjectStore("filehandles");
+          }
+        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error ?? new Error("Unable to open IndexedDB"));
+      });
+
+      await new Promise<void>((resolve) => {
+        const transaction = db.transaction("filehandles", "readwrite");
+        const store = transaction.objectStore("filehandles");
+        const request = store.put(fileHandle, item.id + "|" + item.fullPath + "|" + item.itemName);
+
+        request.onsuccess = () => resolve();
+        request.onerror = () => resolve();
+      });
+
+      db.close();
+    }
+    catch {
+      // no-op: persistence is best-effort only for file handles
+    }
+  }
+
+  #askForFileHandle = async (_item: FolderItemInfo): Promise<FileSystemFileHandle> => {
+    const [fileHandle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: "Scacchi Painter X",
+          accept: {
+            "application/json": [".sp3"],
+          },
+        },
+        {
+          description: "Scacchi Painter 2",
+          accept: {
+            "text/xml": [".sp2"],
+          },
+        },
+      ],
+    });
+    return fileHandle;
+  };
+
+  /**
+   * Downloads a file using a hidden anchor element.
+   * This method creates a temporary anchor element to trigger the download of the specified file.
+   * Is intended as a fallback mechanism when the File System API is not available.
+   * @param file The file to download.
+   * @param item The folder item information.
+   */
+  #downloadFileWithAnchor = async (file: File, item: FolderItemInfo): Promise<void> => {
+    const url = URL.createObjectURL(file);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = item.itemName || file.name;
+    anchor.style.display = "none";
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  async getFileContent(item: FolderItemInfo): Promise<File> {
+    if (!window.showOpenFilePicker) {
+      // fallback to using the input element for file selection
+      console.warn("Your current device does not support the File System API. Try again on desktop Chrome! Now Switching to fallback mode.");
+      return await this.#pickFileWithInput(item);
+    }
+
+    try {
+      const fileHandleFromIndexedDB = await this.#getFileHandleFromIndexedDB(item);
+      if (fileHandleFromIndexedDB) {
+        this.#fileHandle = fileHandleFromIndexedDB;
+      }
+      else {
+        this.#fileHandle = await this.#askForFileHandle(item);
+      }
+
+      await this.#saveFileHandleToIndexedDB(item, this.#fileHandle);
+
+      const allOk = await this.verifyPermission(this.#fileHandle, true);
+      if (!allOk) throw new Error("Cannot open a file!");
 
       const filecontent = await this.#fileHandle.getFile();
 
       return filecontent;
     }
     catch (err) {
+      this.#fileHandle = null;
       throw new AbortError((err as Error).message);
     }
   }
@@ -64,6 +200,13 @@ export class LocalDriveService implements FileService {
     file: File,
     item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
+    if (!window.showSaveFilePicker) {
+      // fallback mechanism when the File System API is not available
+      console.warn("Your current device does not support the File System API. Falling back to download via anchor element.");
+      await this.#downloadFileWithAnchor(file, item);
+      return item;
+    }
+
     if (!this.#fileHandle) {
       this.#fileHandle = await window.showSaveFilePicker({ suggestedName: item.itemName });
     }
