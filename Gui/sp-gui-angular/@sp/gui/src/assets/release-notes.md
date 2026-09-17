@@ -15,11 +15,13 @@ This release brings the application versioning and release messaging into better
 - 📦 **More consistent product identity** - The desktop app and the web interface now present the same versioning story
 - 🎨 **New configuration page** - A dedicated settings area now lets you personalize the board appearance, including square colors and other useful preferences
 - ⚙️ **More control over the workspace** - Adjustable display and editing preferences make the app easier to tailor to your own working style
+![Configuration page with board colors and interface preferences](./release-notes-images/0.3.1/settings.png)
 - ♟️ **Support for fairy pieces** - The editor and board now work with a wider range of fairy-piece sets, making more problem styles and conventions available
 - 🗂️ **More powerful problem list** - Problem entries can now be sorted by creation date, kings’ positions, personal ID, and related metadata, with more reliable multi-field text filtering across the list
 - 🧾 **Problem data loads correctly** - The problem details panel now keeps the correct values for date, magazine, rank, award, personal ID, and tags instead of resetting them to defaults or blanks
 - 🖼️ **Copy board as PNG from context menu** - The board can now be exported as an image directly from the contextual menu for easier sharing and publishing
 - 📸 **Snapshot history during editing** - You can now save intermediate positions while working on a problem and keep them available for later review
+![Snapshots manager with saved board states](./release-notes-images/0.3.1/snapshot_manager.png)
 - 🔄 **Recover saved snapshots** - Saved board states can be restored easily when you want to return to a previous version of the position
 
 **What changes for you:**
@@ -34,10 +36,6 @@ This release brings the application versioning and release messaging into better
 - Selected problem details now display the correct metadata instead of blank or default values
 - You can quickly save and share the board as an image without extra steps
 - It’s easier to experiment with different positions and safely return to earlier versions of your work
-
-![Configuration page with board colors and interface preferences](./release-notes-images/0.3.1/configuration.png)
-
-![Snapshots manager with saved board states](./release-notes-images/0.3.1/snapshots.png)
 
 **Compatibility:**
 
