@@ -36,7 +36,7 @@ import { firstValueFrom } from "rxjs/internal/firstValueFrom";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
 
-export const fenLikeTextPattern = /^(?=[^\s]*[1-8*'"+-])(?:[A-Za-z1-8*'"+-]+(?:\/[A-Za-z1-8*'"+-]+){0,7})(?:\s+[wb](?:\s+[KQRBqrbk-]+)?(?:\s+(?:[a-h][1-8]|-))?(?:\s+[-\d]+\s+\d+)?(?:\s+[A-Za-z0-9_:-]+(?:\s+[A-Za-z0-9_:-]+)*)?)?$/;
+export const fenLikeTextPattern = /^(?=[^\s]*[1-8*'"+-])(?:[A-Za-z1-8*'"+-]+(?:\/[A-Za-z1-8*'"+-]+)*)(?:\s+[wb](?:\s+[KQRBqrbk-]+)?(?:\s+(?:[a-h][1-8]|-))?(?:\s+[-\d]+\s+\d+)?(?:\s+[A-Za-z0-9_,:-]+(?:\s+[A-Za-z0-9_,:-]+)*)?)?$/;
 
 @Component({
   selector: "app-edit-problem",

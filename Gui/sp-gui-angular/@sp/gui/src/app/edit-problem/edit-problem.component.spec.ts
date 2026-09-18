@@ -45,6 +45,8 @@ describe("EditProblemComponent - Interactive Features", () => {
       "8/8/8/8/8/8/8/8 w KQkq - 0 1",
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 e4:gn:Chameleon",
       "rnbqkbnr/pppppppp/8/4s3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 d5:gn:Test",
+      "rnbqkbnreta/ppppppppppp/83/83/83/83/83/83/83/PPPPPPPPPPP/ETARNBQKBNR w KQkq - 0 1",
+      "*2q'1'2'3'4'5'6'7/'G'A'B'R'i'e'l'e/cxs''12''ABSCX/-c-x-s5/ETA-e-t-a2/KQRBNP2/eta'g'a'b2/kqrbnp2 w KQkq - 0 1 a8:GN:Imitator,h6::BlackHole",
       "*1RNBQKBNR w KQkq - 0 1",
       "-Krnbqbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/''gnNBQKBNR w KQkq - 0 1",
