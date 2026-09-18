@@ -4,9 +4,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { RouterModule } from "@angular/router";
-import { SquareLocation } from "@sp/dbmanager/src/public-api";
+import { CurrentProblemService, SquareLocation } from "@sp/dbmanager/src/public-api";
 import { of } from "rxjs";
-import { EditProblemComponent } from "./edit-problem.component";
+import { EditProblemComponent, fenLikeTextPattern } from "./edit-problem.component";
 
 describe("EditProblemComponent - Interactive Features", () => {
   let component: EditProblemComponent;
@@ -31,6 +31,70 @@ describe("EditProblemComponent - Interactive Features", () => {
     fixture = TestBed.createComponent(EditProblemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  describe("Clipboard paste detection", () => {
+    const validFenLike = [
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "8/8/8/8/8/8/8/8",
+      "8/8/8/8/8/8/8/8 w",
+      "8/8/8/8/8/8/8/8 w KQkq - 0 1",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 e4:gn:Chameleon",
+      "rnbqkbnr/pppppppp/8/4s3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 d5:gn:Test",
+      "rnbqkbnreta/ppppppppppp/83/83/83/83/83/83/83/PPPPPPPPPPP/ETARNBQKBNR w KQkq - 0 1",
+      "*2q'1'2'3'4'5'6'7/'G'A'B'R'i'e'l'e/cxs''12''ABSCX/-c-x-s5/ETA-e-t-a2/KQRBNP2/eta'g'a'b2/kqrbnp2 w KQkq - 0 1 a8:GN:Imitator,h6::BlackHole",
+      "*1RNBQKBNR w KQkq - 0 1",
+      "-Krnbqbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/''gnNBQKBNR w KQkq - 0 1",
+      "4k3/8/8/8/8/8/8/8 b - - 0 1",
+    ];
+    const recoverableFenLike = [
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -1 1",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 d5:gn:Test extra",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 invalid",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 extra",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 foo bar baz",
+    ];
+    const invalidFenLike = [
+      "hello world",
+      "not a chess position",
+      '{ "foo": "bar" }',
+      "[1,2,3]",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1",
+      "hello w KQkq - 0 1",
+      "invalid/fen/structure",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 / junk",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 !!!",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 #notfen",
+    ];
+
+    it.each(validFenLike)("accepts valid FEN-like paste %s", (text) => {
+      expect(fenLikeTextPattern.test(text)).toBe(true);
+      const current = TestBed.inject(CurrentProblemService);
+      const pasteFenSpy = vi.spyOn(current, "PasteFEN");
+      (component as any).onPaste(undefined, text);
+      expect(pasteFenSpy).toHaveBeenCalledWith(text.trim());
+    });
+
+    it.each(recoverableFenLike)("accepts recoverable FEN-like paste %s", (text) => {
+      expect(fenLikeTextPattern.test(text)).toBe(true);
+      const current = TestBed.inject(CurrentProblemService);
+      const pasteFenSpy = vi.spyOn(current, "PasteFEN");
+      (component as any).onPaste(undefined, text);
+      expect(pasteFenSpy).toHaveBeenCalledWith(text.trim());
+    });
+
+    it.each(invalidFenLike)("rejects invalid pasted text %s", (text) => {
+      expect(fenLikeTextPattern.test(text)).toBe(false);
+      const current = TestBed.inject(CurrentProblemService);
+      const pasteFenSpy = vi.spyOn(current, "PasteFEN");
+      (component as any).onPaste(undefined, text);
+      expect(pasteFenSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe("Add Piece Functionality", () => {
