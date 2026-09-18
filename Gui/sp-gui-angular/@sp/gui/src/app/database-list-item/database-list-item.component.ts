@@ -5,7 +5,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { RouterModule } from "@angular/router";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Problem } from "@sp/dbmanager/src/lib/models";
-import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 
 @Component({
   selector: "app-database-list-item",
@@ -31,10 +30,12 @@ export class DatabaseListItemComponent {
     return !!twinsNoDiagram.length;
   });
 
+  hasZeroPosition = computed(() => this.problem()?.twins?.HasZeroPosition ?? false);
   twins = computed(() => {
-    const twinsNoDiagram = this.problem()?.twins?.TwinList.filter(twin => twin.TwinType !== "Diagram") ?? [];
-    if (!twinsNoDiagram.length) return [];
-    return [Twin.DIAGRAM].concat(twinsNoDiagram).map((twin, index) => `${index + 1}) ${twin.toString()}`);
+    const problemTwins = this.problem()?.twins ?? [];
+    // If the only one twin is a diagram then return an empty array (Diagram is implicit)
+    if (problemTwins.HasDiagram && problemTwins.TwinList.length === 1) return [];
+    return problemTwins.TwinList.map(twin => `${twin.toString()}`);
   });
 
   hasAuthors = computed(() => (this.problem()?.authors?.length ?? 0) > 0);
