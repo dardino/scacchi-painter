@@ -1,6 +1,6 @@
 import { CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
 
-import { Component, EventEmitter, Output, computed, inject } from "@angular/core";
+import { Component, computed, inject, output } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatMiniFabButton } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -10,7 +10,6 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { Author } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { EndingTypes, ProblemTypes } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   CurrentProblemService,
 } from "@sp/dbmanager/src/public-api";
@@ -37,76 +36,41 @@ import { SortableListComponent } from "../sortable-list/sortable-list.component"
 export class ProblemDefinitionsComponent {
   private current = inject(CurrentProblemService);
 
-  @Output()
-  public openTwin = new EventEmitter<Twin | null>();
-
-  @Output()
-  public addCondition = new EventEmitter<void>();
-
-  @Output()
-  public deleteCondition = new EventEmitter<string>();
-
-  @Output()
-  public deleteTwin = new EventEmitter<Twin>();
-
+  openTwin = output<Twin | null>();
+  addCondition = output<void>();
+  deleteCondition = output<string>();
+  deleteTwin = output<Twin>();
+  zeroposition = computed(() => this.current.Problem()?.twins.HasZeroPosition ?? false);
   completeDesc = computed(() => this.current.Problem()?.stipulation.completeStipulationDesc);
 
-  get authors(): Author[] {
-    return this.current.Problem()?.authors ?? [];
+  authors = computed(() => this.current.Problem()?.authors ?? []);
+  twins = computed(() => this.current.Problem()?.twins.TwinList ?? []);
+  conditions = computed(() => this.current.Problem()?.conditions ?? []);
+  problemType = computed(() => this.current.Problem()?.stipulation.problemType ?? "-");
+  leadsTo = computed(() => this.current.Problem()?.stipulation.stipulationType ?? "#");
+  moves = computed(() => (this.current.Problem()?.stipulation.moves ?? 2).toString());
+
+  setProblemType(value: "-" | "H" | "S" | "HS" | "R" | "HR") {
+    this.current.SetProblemType(value);
   }
 
-  set authors(v: Author[]) {
-    this.current.SetAuthors(v);
+  setLeadsTo(value: "#" | "=" | "+" | "%" | "~" | "##" | "==" | "#=" | "!=" | "!#" | "00" | "ep" | "Zxy" | "x" | "##!" | "ct" | "<>" | "ctr" | "<>r" | "c81") {
+    this.current.SetStipulationType(value);
   }
 
-  get twins(): Twin[] {
-    return this.current.Problem()?.twins.TwinList ?? [];
-  }
-
-  set twins(v: Twin[]) {
-    this.current.SetTwins(v);
-  }
-
-  get conditions(): string[] {
-    return this.current.Problem()?.conditions ?? [];
-  }
-
-  set conditions(v: string[]) {
-    this.current.SetConditions(v);
-  }
-
-  get problemType(): ProblemTypes {
-    return this.current.Problem()?.stipulation.problemType ?? "-";
-  }
-
-  set problemType(v: ProblemTypes) {
-    this.current.SetProblemType(v);
-  }
-
-  get leadsTo(): EndingTypes {
-    return this.current.Problem()?.stipulation.stipulationType ?? "#";
-  }
-
-  set leadsTo(v: EndingTypes) {
-    this.current.SetStipulationType(v);
-  }
-
-  get moves(): string {
-    return (this.current.Problem()?.stipulation.moves ?? 2).toString();
-  }
-
-  set moves(v: string) {
-    const moves = parseFloat(v.replace(",", "."));
-    this.current.SetStipulationMoves(!isNaN(moves) ? moves : this.current.Problem()?.stipulation.moves ?? 2);
+  setMoves(value: string) {
+    const valueNum = parseInt(value.replace(",", "."), 10);
+    if (isNaN(valueNum)) return;
+    this.current.SetStipulationMoves(valueNum);
   }
 
   public twinCanBeDeleted = (twin: Twin) => {
-    if (twin.TwinType === "Diagram" && this.twins?.length <= 2) return false;
-    return (this.twins?.length >= 2);
+    if (twin.TwinType === "Diagram" && this.twins()?.length <= 2) return false;
+    return (this.twins()?.length >= 2);
   };
 
   public isDragDisabledForTwin = (twin: Twin): boolean => {
-    const length = this.twins?.length ?? 0;
+    const length = this.twins()?.length ?? 0;
     const hasDiagram = this.current.Problem()?.twins?.HasDiagram === true;
     const tooFewElements = length < 2;
     const tooFewElementsWDiagram = (hasDiagram && length <= 2);
@@ -115,16 +79,20 @@ export class ProblemDefinitionsComponent {
   };
 
   dropAuthor(event: CdkDragDrop<Author[]>) {
-    moveItemInArray(this.authors, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.authors(), event.previousIndex, event.currentIndex);
   }
 
   dropTwin(event: CdkDragDrop<Twin[]>) {
     if (event.currentIndex <= 0) event.currentIndex = 1;
-    moveItemInArray(this.twins, event.previousIndex, event.currentIndex);
+    const array = this.twins();
+    moveItemInArray(array, event.previousIndex, event.currentIndex);
+    this.current.SetTwins(array);
   }
 
   dropCondition(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.conditions, event.previousIndex, event.currentIndex);
+    const array = this.conditions();
+    moveItemInArray(array, event.previousIndex, event.currentIndex);
+    this.current.SetConditions(array);
   }
 }
 

@@ -9,7 +9,7 @@
       <p>
         <mat-form-field color="accent" appearance="fill" class="tile-input">
           <mat-label>Type</mat-label>
-          <mat-select [(value)]="problemType">
+          <mat-select [value]="problemType()" (selectionChange)="setProblemType($event.value)">
             <mat-option value="-">Direct</mat-option>
             <mat-option value="H">Help (H)</mat-option>
             <mat-option value="S">Self (S)</mat-option>
@@ -24,7 +24,7 @@
         <mat-form-field color="accent" appearance="fill" class="tile-input">
           <mat-label>Goal</mat-label>
           <mat-hint>(ie: Mate, Stalemate, etc...)</mat-hint>
-          <mat-select [(value)]="leadsTo">
+          <mat-select [value]="leadsTo()" (selectionChange)="setLeadsTo($event.value)">
             <mat-option value="#">Mate (#) </mat-option>
             <mat-option value="=">Stalemate (=) </mat-option>
             <mat-option value="+">Check (+) </mat-option>
@@ -51,7 +51,7 @@
       <p>
         <mat-form-field color="accent" appearance="fill" class="tile-input">
           <mat-label>Moves</mat-label>
-          <input matInput placeholder="2" [(ngModel)]="moves" />
+          <input matInput placeholder="2" [value]="moves()" (input)="setMoves($event.target.value)" />
           <mat-hint>use . or , to write semi-move (ie: 2,5)</mat-hint>
         </mat-form-field>
       </p>
@@ -60,13 +60,14 @@
   <mat-card class="tile">
     <mat-card-title>
       <div class="tile-title">
-        <span>Twins</span><button mat-mini-fab color="primary" (click)="openTwin.emit(null)">
+        <span>Twins{{ zeroposition() ? ' (Zero Position)' : '' }}</span><button mat-mini-fab color="primary"
+          (click)="openTwin.emit(null)">
           <mat-icon>add</mat-icon>
         </button>
       </div>
     </mat-card-title>
     <mat-card-content cdkDropList class="list" (cdkDropListDropped)="dropTwin($event)">
-      <lib-sortable-list [elements]="twins" [isDragDisabledForItem]="isDragDisabledForTwin"
+      <lib-sortable-list [elements]="twins()" [isDragDisabledForItem]="isDragDisabledForTwin"
         (deleteItem)="deleteTwin.emit($event)" [canBeDeleted]="twinCanBeDeleted"></lib-sortable-list>
     </mat-card-content>
   </mat-card>
@@ -78,9 +79,9 @@
         </button>
       </div>
     </mat-card-title>
-    @if (conditions.length > 0) {
+    @if (conditions().length > 0) {
     <mat-card-content cdkDropList class="list" (cdkDropListDropped)="dropCondition($event)">
-      <lib-sortable-list [elements]="conditions" (deleteItem)="deleteCondition.emit($event)"></lib-sortable-list>
+      <lib-sortable-list [elements]="conditions()" (deleteItem)="deleteCondition.emit($event)"></lib-sortable-list>
     </mat-card-content>
     }
   </mat-card>
