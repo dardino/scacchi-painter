@@ -11,6 +11,7 @@ import { EditProblemComponent, fenLikeTextPattern } from "./edit-problem.compone
 describe("EditProblemComponent - Interactive Features", () => {
   let component: EditProblemComponent;
   let fixture: ComponentFixture<EditProblemComponent>;
+  let pasteText: (text: string) => void;
 
   beforeEach(async () => {
     TestBed.resetTestingModule();
@@ -30,6 +31,8 @@ describe("EditProblemComponent - Interactive Features", () => {
 
     fixture = TestBed.createComponent(EditProblemComponent);
     component = fixture.componentInstance;
+    pasteText = (text: string) => (component as unknown as { onPaste: ($event?: ClipboardEvent, patext?: string) => void })
+      .onPaste(undefined, text);
     fixture.detectChanges();
   });
 
@@ -62,7 +65,7 @@ describe("EditProblemComponent - Interactive Features", () => {
     const invalidFenLike = [
       "hello world",
       "not a chess position",
-      '{ "foo": "bar" }',
+      "{ \"foo\": \"bar\" }",
       "[1,2,3]",
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1",
       "hello w KQkq - 0 1",
@@ -76,7 +79,7 @@ describe("EditProblemComponent - Interactive Features", () => {
       expect(fenLikeTextPattern.test(text)).toBe(true);
       const current = TestBed.inject(CurrentProblemService);
       const pasteFenSpy = vi.spyOn(current, "PasteFEN");
-      (component as any).onPaste(undefined, text);
+      pasteText(text);
       expect(pasteFenSpy).toHaveBeenCalledWith(text.trim());
     });
 
@@ -84,7 +87,7 @@ describe("EditProblemComponent - Interactive Features", () => {
       expect(fenLikeTextPattern.test(text)).toBe(true);
       const current = TestBed.inject(CurrentProblemService);
       const pasteFenSpy = vi.spyOn(current, "PasteFEN");
-      (component as any).onPaste(undefined, text);
+      pasteText(text);
       expect(pasteFenSpy).toHaveBeenCalledWith(text.trim());
     });
 
@@ -92,7 +95,7 @@ describe("EditProblemComponent - Interactive Features", () => {
       expect(fenLikeTextPattern.test(text)).toBe(false);
       const current = TestBed.inject(CurrentProblemService);
       const pasteFenSpy = vi.spyOn(current, "PasteFEN");
-      (component as any).onPaste(undefined, text);
+      pasteText(text);
       expect(pasteFenSpy).not.toHaveBeenCalled();
     });
   });
