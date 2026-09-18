@@ -36,6 +36,8 @@ import { firstValueFrom } from "rxjs/internal/firstValueFrom";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
 
+export const fenLikeTextPattern = /^(?:(?:[A-Za-z1-8*'"+-]+(?:\/[A-Za-z1-8*'"+-]+){7})(?:\s+[wb])?(?:\s+[KQRBqrbk-]+)?(?:\s+(?:[a-h][1-8]|-))?(?:\s+[-\d]+\s+\d+)?|(?:[A-Za-z1-8*'"+-]+(?=[^\n]*?(?:[1-8*'"+-])))(?:\s+[wb])?(?:\s+[KQRBqrbk-]+)?(?:\s+(?:[a-h][1-8]|-))?(?:\s+[-\d]+\s+\d+)?|(?:[A-Za-z1-8*'"+-]+(?:\/[A-Za-z1-8*'"+-]+){7}|[A-Za-z1-8*'"+-]+(?=[^\n]*?(?:[1-8*'"+-])))(?:\s+[wb])?(?:\s+[KQRBqrbk-]+)?(?:\s+(?:[a-h][1-8]|-))?\s+[-\d]+\s+\d+\s+[A-Za-z0-9_:-]+(?:\s+[A-Za-z0-9_:-]+)*)$/;
+
 @Component({
   selector: "app-edit-problem",
   templateUrl: "./edit-problem.component.html",
@@ -634,6 +636,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
+  private isFenLikeText(text: string): boolean {
+    return fenLikeTextPattern.test(text.trim());
+  }
+
   @HostListener("window:paste", ["$event"])
   private onPaste = ($event?: ClipboardEvent, patext?: string) => {
     if ($event?.target && (
@@ -646,7 +652,10 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       $event.preventDefault();
     }
     if (text) {
-      // TODO: [#170] check if text is a FEN, in this case use the method `this.current.PasteFEN`
+      if (this.isFenLikeText(text)) {
+        this.#current.PasteFEN(text.trim());
+        return;
+      }
       try {
         const probJSON = JSON.parse(text);
         this.#current.PasteJson(probJSON);
