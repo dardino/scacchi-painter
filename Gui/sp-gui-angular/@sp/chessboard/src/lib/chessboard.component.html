@@ -10,11 +10,14 @@
   <div class="short-info">
     <span class="stipulation">{{stipulationDesc()}}</span>
     <span class="twins">
+      @if (viewZeroPosition()) {
+      <span>ZeroPosition</span>
+      }
       <ol>
         @if (viewDiagram()) {
         <li>Diagram</li>
         }
-        @for (t of twins(); track $index) {
+        @for (t of twins().filter(t => t !== "Diagram" && t !== "ZeroPosition"); track $index) {
         <li>{{ t }}</li>
         }
       </ol>
