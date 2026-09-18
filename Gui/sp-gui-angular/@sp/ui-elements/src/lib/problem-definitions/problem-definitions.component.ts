@@ -100,9 +100,10 @@ export class ProblemDefinitionsComponent {
     this.current.SetStipulationMoves(!isNaN(moves) ? moves : this.current.Problem()?.stipulation.moves ?? 2);
   }
 
-  public twinCanBeDeleted(twin: Twin) {
-    return (this.twins?.length > 2) || twin.TwinType !== "Diagram";
-  }
+  public twinCanBeDeleted = (twin: Twin) => {
+    if (twin.TwinType === "Diagram" && this.twins?.length <= 2) return false;
+    return (this.twins?.length >= 2);
+  };
 
   public isDragDisabledForTwin = (twin: Twin): boolean => {
     const length = this.twins?.length ?? 0;

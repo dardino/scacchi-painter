@@ -13,9 +13,9 @@ export const popeyeTwinMapper: Record<
   RemovePiece: (...args: string[]) => `Remove ${args[0]}`.trim(),
   AddPiece: (...args: string[]) => `Add ${args.join(" ")}`.trim(),
   Substitute: (...args: string[]) =>
-    `Substitute ${args[0]} ==> ${args[1]}`.trim(),
+    `Substitute ${args[0]} ${args[1]}`.trim(),
   SwapPieces: (...args: string[]) =>
-    `Exchange ${args[0]} <-> ${args[1]}`.trim(),
+    `Exchange ${args[0]} ${args[1]}`.trim(),
   Rotation90: () => `Rotate 90`,
   Rotation180: () => `Rotate 180`,
   Rotation270: () => `Rotate 270`,
@@ -23,8 +23,10 @@ export const popeyeTwinMapper: Record<
     `Shift: ${args[0]} -> ${args[1]}`.trim(),
   TraslateToroidal: (...args: string[]) =>
     `Shift: ${args[0]} -> ${args[1]}`.trim(),
-  MirrorHorizontal: () => `Mirror a1<-->a8`,
-  MirrorVertical: () => `Mirror a1<-->h1`,
+  MirrorHorizontal: () => `Mirror a1 a8`,
+  MirrorVertical: () => `Mirror a1 h1`,
+  MirrorDiagonalA1H8: () => `Mirror a1 h8`,
+  MirrorDiagonalA8H1: () => `Mirror a8 h1`,
   Stipulation: (...args: string[]) => `Stipulation > ${args.join(" ")}`.trim(),
   ChangeProblemType: (...args: string[]) =>
     `Stipulation > ${args.join(" ")}`.trim(),
@@ -32,7 +34,7 @@ export const popeyeTwinMapper: Record<
   AfterKey: () => `After Key`,
   SwapColors: () => `PolishType`,
   Condition: (...args: string[]) => `Condition ${args.join(" ")}`.trim(),
-  Mirror: (...args: string[]) => `Mirror ${args.join(" ")}`.trim(),
+  Mirror: (...args: string[]) => `Mirror ${args.join(" ").replace("<-->", " ")}`.trim(),
 };
 
 const pieceSortByName = (a: Piece, b: Piece): -1 | 0 | 1 => {
@@ -95,10 +97,12 @@ export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   rows.push(`Option${extraOptions.length > 0 ? ` ${extraOptions.join(" ")}` : ""}`);
 
   // Twins
-  problem.twins.TwinList.forEach((t) => {
+  const zeropostion = problem.twins.HasZeroPosition;
+  problem.twins.TwinList.forEach((t, i) => {
     if (t.TwinType === "Diagram") return;
+    const keyword = zeropostion && i === 0 ? "Zero" : "Twin";
     rows.push(
-      `Twin ${
+      `${keyword} ${
         t.TwinModes === TwinModes.Combined ? "Cont " : ""
       }${popeyeTwinMapper[t.TwinType](t.ValueA, t.ValueB, t.ValueC)}`,
     );

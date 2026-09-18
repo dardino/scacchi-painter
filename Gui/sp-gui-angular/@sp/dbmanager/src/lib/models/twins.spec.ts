@@ -156,6 +156,33 @@ describe("Twins - fromJson", () => {
     expect(twins2.TwinList[1].TwinType).toBe("Custom");
     expect(twins2.TwinSequenceTypes).toBe(SequenceTypes.Normal);
   });
+
+  it("should not add 'Diagram' Twin if TwinList doesn't have 'Diagram' but has more than one Twin", () => {
+    const json1: ITwins = {
+      TwinList: [
+        {
+          TwinModes: TwinModes.Normal,
+          TwinType: "MovePiece",
+          ValueA: "a1",
+          ValueB: "b1",
+          ValueC: "",
+        },
+        {
+          TwinModes: TwinModes.Normal,
+          TwinType: "MovePiece",
+          ValueA: "a1",
+          ValueB: "b2",
+          ValueC: "",
+        },
+      ],
+      TwinSequenceTypes: SequenceTypes.Normal,
+    };
+
+    const twins1 = Twins.fromJson(json1);
+
+    expect(twins1.TwinList.length).toBe(2);
+    expect(twins1.TwinList.find(tw => tw.TwinType === "Diagram")).toBeFalsy();
+  });
 });
 describe("Twins - HasDiagram", () => {
   it ("should have diagram if is the only one", () => {

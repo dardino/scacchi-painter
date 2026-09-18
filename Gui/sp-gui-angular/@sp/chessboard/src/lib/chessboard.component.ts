@@ -90,7 +90,12 @@ implements OnInit, OnChanges, OnDestroy {
   twins = computed(() => this.position()?.twins.TwinList.map((t: Twin) => t.toString()) ?? []);
   viewDiagram = computed(() => {
     const twinList = this.position()?.twins.TwinList ?? [];
-    return twinList.length > 0 && twinList.every((t: Twin) => t.TwinType !== "Diagram");
+    return twinList.length > 1 && twinList.some((t: Twin) => t.TwinType === "Diagram");
+  });
+
+  viewZeroPosition = computed(() => {
+    const twinList = this.position()?.twins.TwinList ?? [];
+    return twinList.length > 1 && twinList.every((t: Twin) => t.TwinType !== "Diagram");
   });
 
   stipulationDesc = computed(() => this.position()?.stipulation.completeStipulationDesc ?? "");

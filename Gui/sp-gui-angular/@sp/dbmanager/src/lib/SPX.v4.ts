@@ -136,6 +136,8 @@ export const TwinTypes = [
   "Mirror", // 1 value
   "MirrorHorizontal",
   "MirrorVertical",
+  "MirrorDiagonalA1H8",
+  "MirrorDiagonalA8H1",
   "ChangeProblemType", // 2 value
   "Duplex", // no value
   "AfterKey", // no value

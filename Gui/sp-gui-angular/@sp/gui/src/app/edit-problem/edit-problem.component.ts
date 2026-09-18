@@ -32,6 +32,7 @@ import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolb
 import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
+import { firstValueFrom } from "rxjs/internal/firstValueFrom";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
 
@@ -522,6 +523,39 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return loc1?.column === loc2?.column && loc1?.traverse === loc2?.traverse;
   }
 
+  #twinCanBeDeleted = async (twin: Twin): Promise<boolean> => {
+    const twins = this.#current.Problem()?.twins.TwinList ?? [];
+    const twinsCount = twins.length;
+    if (twin.TwinType === "Diagram" && twinsCount <= 2) {
+      this.#snackBar.open("Cannot delete Diagram twin when there are 2 or fewer twins.", "Close", { duration: 3000 });
+      return false;
+    }
+    if (this.#current.Problem()?.twins.HasDiagram !== true && twinsCount <= 2) {
+      // ask for confirmation before deleting a twin when there are 2 or fewer twins without a Diagram
+      const confirm = await firstValueFrom(this.#dialogService.confirmDialog({
+        cancelText: "No!",
+        confirmText: "Yes! I want to add Diagram!",
+        message: "Are you sure you want to delete this twin? This operation should add a Diagram twin.",
+        title: "Delete Twin Confirm",
+      }));
+      if (!confirm) return false;
+      this.#current.AddTwin(Twin.fromJson({ TwinType: "Diagram" }));
+      return true;
+    }
+    if (twinsCount > 2 && twin.TwinType === "Diagram") {
+      // ask for confirmation before deleting a Diagram twin when there are more than 2 twins
+      const confirm = await firstValueFrom(this.#dialogService.confirmDialog({
+        cancelText: "No!",
+        confirmText: "Yes! I want a Zero-Position!",
+        message: "Are you sure you want to delete the Diagram twin? This operation should transform the problem into a Zero-Position!",
+        title: "Delete Diagram Twin Confirm",
+      }));
+      if (!confirm) return false;
+      return true;
+    }
+    return twinsCount > 2;
+  };
+
   openTwinDialog($event: Twin | null): void {
     this.#dialogService.twinDialog(Twin.fromJson($event?.toJson() ?? {})).subscribe((result) => {
       if (result == null) return;
@@ -547,7 +581,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteTwin($event: Twin) {
-    this.#current.RemoveTwin($event);
+    this.#twinCanBeDeleted($event).then((canDelete) => {
+      if (canDelete) {
+        this.#current.RemoveTwin($event);
+      }
+    });
   }
 
   deleteAuthor($event: Author) {
