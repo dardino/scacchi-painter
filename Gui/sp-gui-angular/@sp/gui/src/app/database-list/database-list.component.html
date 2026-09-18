@@ -28,14 +28,13 @@
   </mat-form-field>
 </section>
 
-<div class="add-item">
-  <button class="add-item-button" mat-button (click)="createNewPosition()">
-    <mat-icon>library_add</mat-icon>
-    add new problem
-  </button>
-</div>
-
 <cdk-virtual-scroll-viewport id="dbScrollViewport" [itemSize]="1" class="dblist">
+  <div class="add-item">
+    <button class="add-item-button" matButton="filled" (click)="createNewPosition()">
+      <mat-icon>library_add</mat-icon>
+      add new problem
+    </button>
+  </div>
   <div class="dbitem-container" #dbItemContainer *cdkVirtualFor="let item of itemSource; let index = index">
     <app-database-list-item (delete)="deleteItem($event)" [problem]="item!.problem!"
       [dbIndex]="item!.dbIndex"></app-database-list-item>
