@@ -48,7 +48,7 @@
   <span class="status-date">{{ date() | date: 'longDate' }}</span>
   <ol class="status-twins">
     @if (hasZeroPosition()) {
-    <label>Zeroposition</label>
+    <li class="twin">Zeroposition</li>
     }
     @for (twin of twins(); track $index) {
     <li class="twin">{{twin}}</li>
