@@ -63,6 +63,7 @@ describe("EditProblemComponent - Interactive Features", () => {
       '{ "foo": "bar" }',
       "[1,2,3]",
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1",
+      "hello w KQkq - 0 1",
       "invalid/fen/structure",
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 / junk",
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 !!!",
