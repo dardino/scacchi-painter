@@ -4,7 +4,11 @@
 
 A new cross-platform engine and gui for chess problem composers
 
-## Latest Changes (0.4.0)
+## Latest Changes (0.4.1)
+
+- Fix stipulation with half moves (was rounded)
+
+## (0.4.0)
 
 - Added support for animations [#173]
 - Fixed the local file-opening loop that could repeatedly reload the board

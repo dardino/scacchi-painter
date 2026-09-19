@@ -59,7 +59,7 @@ export class ProblemDefinitionsComponent {
   }
 
   setMoves(value: string) {
-    const valueNum = parseInt(value.replace(",", "."), 10);
+    const valueNum = parseFloat(value.replace(",", "."));
     if (isNaN(valueNum)) return;
     this.current.SetStipulationMoves(valueNum);
   }

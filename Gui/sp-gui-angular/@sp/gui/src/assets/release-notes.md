@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.4.1
+
+This version is a patch version to fix a truncate problem with stipulation moves
+
 ## Version 0.4.0
 
 ### FEN Paste, Animations, And Zero-Position Support

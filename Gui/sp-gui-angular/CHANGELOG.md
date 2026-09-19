@@ -1,5 +1,9 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.4.1
+
+- [sp-gui-angular] - Fix problem stipulations with half moves (was rounded)
+
 ## 0.4.0
 
 - [sp-gui-angular] [#170] - Paste FEN
