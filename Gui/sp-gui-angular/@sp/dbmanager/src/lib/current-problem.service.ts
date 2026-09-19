@@ -46,8 +46,8 @@ export class CurrentProblemService {
 
   PasteFEN(fen: string) {
     const next = this.clonedProblem();
-    updatePositionFromFen(fen, next);
-    this.syncCurrentProblem(next);
+    const updatedProblem = updatePositionFromFen(fen, next);
+    this.PasteJson(updatedProblem);
   }
 
   PasteJson(json: Partial<IProblemV4>) {
@@ -87,7 +87,8 @@ export class CurrentProblemService {
         ValueC: twinargs[2],
       });
     }
-    if (newProblem.twins.HasDiagram && twindesc.TwinType === "Diagram") return this.syncCurrentProblem(newProblem); // only ONE Diagram can be accepted
+    if (newProblem.twins.HasDiagram && twindesc.TwinType === "Diagram")
+      return this.syncCurrentProblem(newProblem); // only ONE Diagram can be accepted
     newProblem.twins.TwinList.push(twindesc);
     this.syncCurrentProblem(newProblem);
   }

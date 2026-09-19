@@ -9,7 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
 import { FairySquare, ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
-import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
+import { AnimationData, Animations, ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardComponent, ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
@@ -32,8 +32,11 @@ import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolb
 import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
 import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
+import { firstValueFrom } from "rxjs/internal/firstValueFrom";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
+
+export const fenLikeTextPattern = /^(?=[^\s]*[1-8*'"+-])(?:[A-Za-z1-8*'"+-]+(?:\/[A-Za-z1-8*'"+-]+)*)(?:\s+[wb](?:\s+[KQRBqrbk-]+)?(?:\s+(?:[a-h][1-8]|-))?(?:\s+[-\d]+\s+\d+)?(?:\s+[A-Za-z0-9_,:-]+(?:\s+[A-Za-z0-9_,:-]+)*)?)?$/;
 
 @Component({
   selector: "app-edit-problem",
@@ -83,6 +86,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   hideLabels = this.#preferences.chessboardLabels.asReadonly();
   editorShowExtraPieces = this.#preferences.editorShowExtraPieces.asReadonly();
   compactPieceSelector = this.#preferences.compactPieceSelector.asReadonly();
+  chessboardAnimation = this.#preferences.chessboardAnimation.asReadonly();
   solveInProgress = signal(false);
   solutionCount = signal(0);
   showLog = signal(false);
@@ -122,21 +126,52 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private leaveTimeout?: ReturnType<typeof setTimeout>;
 
+  private runAnimation = (animData: AnimationData<Animations>, condition: boolean): Promise<void> => {
+    if (!condition) return Promise.resolve();
+    return this.#chessanim.animate(animData.animation, animData.args ?? "");
+  };
+
   private commandMapper: Record<EditCommand, () => void> = {
-    flipH: () => this.#current.FlipBoard("y"),
-    flipV: () => this.#current.FlipBoard("x"),
+    flipH: () => {
+      this.runAnimation({ animation: "mirror", args: "horizontal" }, this.chessboardAnimation()).then(() => {
+        this.#current.FlipBoard("y");
+      });
+    },
+    flipV: () => {
+      this.runAnimation({ animation: "mirror", args: "vertical" }, this.chessboardAnimation()).then(() => {
+        this.#current.FlipBoard("x");
+      });
+    },
     rotateL: () => {
-      this.#chessanim.animate("rotateLeft");
-      this.#current.RotateBoard("left");
+      this.runAnimation({ animation: "rotate", args: "left" }, this.chessboardAnimation()).then(() => {
+        this.#current.RotateBoard("left");
+      });
     },
     rotateR: () => {
-      this.#chessanim.animate("rotateRight");
-      this.#current.RotateBoard("right");
+      this.runAnimation({ animation: "rotate", args: "right" }, this.chessboardAnimation()).then(() => {
+        this.#current.RotateBoard("right");
+      });
     },
-    moveU: () => this.#current.ShiftBoard("-y"),
-    moveD: () => this.#current.ShiftBoard("y"),
-    moveL: () => this.#current.ShiftBoard("-x"),
-    moveR: () => this.#current.ShiftBoard("x"),
+    moveU: () => {
+      this.runAnimation({ animation: "translate", args: "up" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("-y");
+      });
+    },
+    moveD: () => {
+      this.runAnimation({ animation: "translate", args: "down" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("y");
+      });
+    },
+    moveL: () => {
+      this.runAnimation({ animation: "translate", args: "left" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("-x");
+      });
+    },
+    moveR: () => {
+      this.runAnimation({ animation: "translate", args: "right" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("x");
+      });
+    },
     resetPosition: () => this.#current.Reload(), // reload current snapshot
     updatePosition: () => this.#current.UpdateSnapshot(), // update current snapshot
     clearBoard: () => this.#current.ClearBoard(),
@@ -522,6 +557,39 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return loc1?.column === loc2?.column && loc1?.traverse === loc2?.traverse;
   }
 
+  #twinCanBeDeleted = async (twin: Twin): Promise<boolean> => {
+    const twins = this.#current.Problem()?.twins.TwinList ?? [];
+    const twinsCount = twins.length;
+    if (twin.TwinType === "Diagram" && twinsCount <= 2) {
+      this.#snackBar.open("Cannot delete Diagram twin when there are 2 or fewer twins.", "Close", { duration: 3000 });
+      return false;
+    }
+    if (this.#current.Problem()?.twins.HasDiagram !== true && twinsCount <= 2) {
+      // ask for confirmation before deleting a twin when there are 2 or fewer twins without a Diagram
+      const confirm = await firstValueFrom(this.#dialogService.confirmDialog({
+        cancelText: "No!",
+        confirmText: "Yes! I want to add Diagram!",
+        message: "Are you sure you want to delete this twin? This operation should add a Diagram twin.",
+        title: "Delete Twin Confirm",
+      }));
+      if (!confirm) return false;
+      this.#current.AddTwin(Twin.fromJson({ TwinType: "Diagram" }));
+      return true;
+    }
+    if (twinsCount > 2 && twin.TwinType === "Diagram") {
+      // ask for confirmation before deleting a Diagram twin when there are more than 2 twins
+      const confirm = await firstValueFrom(this.#dialogService.confirmDialog({
+        cancelText: "No!",
+        confirmText: "Yes! I want a Zero-Position!",
+        message: "Are you sure you want to delete the Diagram twin? This operation should transform the problem into a Zero-Position!",
+        title: "Delete Diagram Twin Confirm",
+      }));
+      if (!confirm) return false;
+      return true;
+    }
+    return twinsCount > 2;
+  };
+
   openTwinDialog($event: Twin | null): void {
     this.#dialogService.twinDialog(Twin.fromJson($event?.toJson() ?? {})).subscribe((result) => {
       if (result == null) return;
@@ -547,7 +615,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteTwin($event: Twin) {
-    this.#current.RemoveTwin($event);
+    this.#twinCanBeDeleted($event).then((canDelete) => {
+      if (canDelete) {
+        this.#current.RemoveTwin($event);
+      }
+    });
   }
 
   deleteAuthor($event: Author) {
@@ -596,19 +668,28 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
+  private isFenLikeText(text: string): boolean {
+    return fenLikeTextPattern.test(text.trim());
+  }
+
   @HostListener("window:paste", ["$event"])
   private onPaste = ($event?: ClipboardEvent, patext?: string) => {
     if ($event?.target && (
       $event.target instanceof HTMLInputElement
       || isEditable($event.target as HTMLElement)
-    )) return;
+    )) {
+      return;
+    }
 
     const text = patext ?? $event?.clipboardData?.getData("text/plain") ?? null;
     if ($event) {
       $event.preventDefault();
     }
     if (text) {
-      // TODO: [#170] check if text is a FEN, in this case use the method `this.current.PasteFEN`
+      if (this.isFenLikeText(text)) {
+        this.#current.PasteFEN(text.trim());
+        return;
+      }
       try {
         const probJSON = JSON.parse(text);
         this.#current.PasteJson(probJSON);

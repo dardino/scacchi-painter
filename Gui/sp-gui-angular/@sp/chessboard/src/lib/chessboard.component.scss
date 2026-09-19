@@ -1,7 +1,8 @@
 @use "../../../mediaquery" as mq;
 
 :host {
-  --animation-duration: 0.5s;
+  --cb-chess-animating-duration: var(--global-animation-duration, 0.5s);
+
   display: block;
   width: 100%;
   margin: 0 auto;
@@ -46,13 +47,6 @@
 }
 
 /* Stile per il div */
-.rotateRight {
-  animation: rotateToRight var(--animation-duration) normal ease-in-out;
-}
-
-.rotateLeft {
-  animation: rotateToLeft var(--animation-duration) normal ease-in-out;
-}
 
 .clickable {
   cursor: pointer;
@@ -141,27 +135,5 @@
     text-transform: uppercase;
     text-align: center;
     display: block;
-  }
-}
-
-/* Definizione dell'animazione */
-@keyframes rotateToRight {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(90deg);
-  }
-}
-
-/* Definizione dell'animazione */
-@keyframes rotateToLeft {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(-90deg);
   }
 }

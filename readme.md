@@ -4,7 +4,14 @@
 
 A new cross-platform engine and gui for chess problem composers
 
-## Latest Changes (0.3.1)
+## Latest Changes (0.4.0)
+
+- Added support for animations [#173]
+- Fixed the local file-opening loop that could repeatedly reload the board
+- Added support for pasting a plausible FEN string from the clipboard directly onto the board [#170]
+- Added support for problems defined as "zero-position" [#323]
+
+## (0.3.1)
 
 Chessboard Angular Component Refactor:
 

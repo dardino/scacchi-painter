@@ -27,29 +27,40 @@
 
 .status-date {
   background-color: rgba(69, 197, 197, 0.2);
-  flex: 0 0 10rem;
+  flex: 0 1 10rem;
   padding: 0 1rem;
 
 }
 
 .status-personalid {
   background-color: rgba(197, 197, 69, 0.2);
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   padding: 0 1rem;
 }
 
+@counter-style space-counter {
+  symbols: "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P";
+  suffix: ") ";
+}
+
 .status-twins {
+  display: flex;
   background-color: rgba(197, 69, 69, 0.2);
-  flex: 1 1 0%;
+  flex: 2 2 0%;
   padding: 0 1rem;
+  margin: 0;
+  list-style-position: outside;
+  list-style-type: space-counter;
+  gap: 1rem;
 
   @media (max-width: mq.$smallScreen) {
     display: none;
   }
 
   .twin {
-    margin-right: 1em;
+    margin-left: 0.5rem;
   }
+
 }
 
 .status-stipulation {

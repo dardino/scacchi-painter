@@ -17,7 +17,9 @@ export class LocalDriveService implements FileService {
     _itemType: "root" | "file" | "folder" | "drive",
     ..._extensions: string[]
   ): Promise<FolderItemInfo[]> {
-    return [];
+    return [
+      { id: "openFile", fullPath: "openFile", itemName: "Click to pick a file ...", type: "file" },
+    ];
   }
 
   #fileHandle: FileSystemFileHandle | null = null;
@@ -27,8 +29,8 @@ export class LocalDriveService implements FileService {
    * is intended to be used as a fallback when the File System API is not available.
    * @returns A promise that resolves with the selected file.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  #pickFileWithInput = async (item: FolderItemInfo): Promise<File> => {
+
+  #pickFileWithInput = async (): Promise<File> => {
     return new Promise((resolve, reject) => {
       const input = document.createElement("input");
       input.type = "file";
@@ -126,7 +128,7 @@ export class LocalDriveService implements FileService {
     }
   }
 
-  #askForFileHandle = async (_item: FolderItemInfo): Promise<FileSystemFileHandle> => {
+  #askForFileHandle = async (_item: FolderItemInfo | null): Promise<FileSystemFileHandle> => {
     const [fileHandle] = await window.showOpenFilePicker({
       types: [
         {
@@ -166,10 +168,20 @@ export class LocalDriveService implements FileService {
   };
 
   async getFileContent(item: FolderItemInfo): Promise<File> {
+    if (item.type === "file" && item.id === "openFile") {
+      item.id = Math.random().toString(36).substring(2);
+      item.fullPath = "";
+      item.itemName = "";
+    }
     if (!window.showOpenFilePicker) {
       // fallback to using the input element for file selection
       console.warn("Your current device does not support the File System API. Try again on desktop Chrome! Now Switching to fallback mode.");
-      return await this.#pickFileWithInput(item);
+      const file2open = await this.#pickFileWithInput();
+      item.fullPath = file2open.name;
+      item.itemName = file2open.name;
+      item.type = "file";
+      item.id = item.fullPath;
+      return file2open;
     }
 
     try {

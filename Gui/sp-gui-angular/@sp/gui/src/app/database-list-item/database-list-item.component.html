@@ -46,11 +46,14 @@
   <span class="status-stipulation"><span>{{ stipulation() }}</span><span>{{ pieceCounter() }}</span></span>
   <span class="status-personalid">{{ personalID() }} | {{ kingPosition() }}</span>
   <span class="status-date">{{ date() | date: 'longDate' }}</span>
-  <span class="status-twins">
-    @for (twin of twins(); track $index) {
-    <span class="twin">{{twin}}</span>
+  <ol class="status-twins">
+    @if (hasZeroPosition()) {
+    <li class="twin">Zeroposition</li>
     }
-  </span>
+    @for (twin of twins(); track $index) {
+    <li class="twin">{{twin}}</li>
+    }
+  </ol>
   <span class="status-index">{{ dbIndex() }}</span>
 </div>
 }

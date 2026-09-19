@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, signal } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
-import { AbortError } from "@sp/dbmanager/src/lib/providers/AbortError";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { FileExplorerComponent } from "@sp/ui-elements/src/lib/file-explorer/file-explorer.component";
 import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source-selector/file-source-selector.component";
+import { RecentsComponent } from "../recents/recents.component";
 
 @Component({
   selector: "app-sp-openfile",
@@ -15,6 +15,7 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
   imports: [
     FileSourceSelectorComponent,
     FileExplorerComponent,
+    RecentsComponent,
   ],
 })
 export class OpenFileComponent implements OnInit {
@@ -24,40 +25,17 @@ export class OpenFileComponent implements OnInit {
   private localFolderService = inject(LocalDriveService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-
   public showFilePicker = signal(false);
-  @ViewChild("fileloader") fileloader: ElementRef<HTMLInputElement>;
 
   public currentFileService: FileService | null = null;
 
   public showNewFileWizard = false;
-
-  selectLocalFile(args: FileList) {
-    if (args.length === 1) {
-      const file = args.item(0);
-      if (file == null) return;
-      this.loadFromFile({
-        meta: {
-          fullPath: file?.name,
-          id: file.name,
-          itemName: file.name,
-          type: "file",
-        },
-        file,
-        source: "local",
-      });
-    }
-  }
 
   ngOnInit() {
     // Check route parameter first
     this.route.paramMap.subscribe((params) => {
       const source = params.get("source") as AvaliableFileServices | "new" | null | undefined;
       if (source) {
-        // Reset state when switching sources
-        this.showFilePicker.set(false);
-        this.currentFileService = null;
-
         setTimeout(() => {
           this.sourceSelected(source);
         }, 1);
@@ -89,8 +67,10 @@ export class OpenFileComponent implements OnInit {
         break;
     }
 
-    // Navigate to the route with the source parameter
-    this.router.navigate(["/openfile", source]);
+    // Navigate to the route with the source parameter only if current route is not already the same
+    if (this.router.url !== `/openfile/${source}`) {
+      this.router.navigate(["/openfile", source]);
+    }
   }
 
   async newFile() {
@@ -108,25 +88,7 @@ export class OpenFileComponent implements OnInit {
 
   async localFolder() {
     this.currentFileService = this.localFolderService;
-    try {
-      const file = await this.currentFileService.getFileContent({
-        fullPath: "",
-        id: "",
-        itemName: "",
-        type: "file",
-      });
-      this.openFile({ file, meta: {
-        fullPath: file.name,
-        id: file.name,
-        itemName: file.name,
-        type: "file",
-      }, source: this.currentFileService.sourceName });
-    }
-    catch (err) {
-      if (!(err instanceof AbortError))
-        // if something was wrong use native element;
-        this.fileloader.nativeElement.click();
-    }
+    this.showFilePicker.set(true);
   }
 
   async fromDropbox() {

@@ -189,7 +189,12 @@ export const TwinTypesConfigs: { [key in TwinTypesKeys]: TwinTypeItem<key> } = {
     keyword: `Mirror`,
     title: `Mirrors the position based on chosen axis.`,
     parameters: [
-      { id: "axis", type: "string", description: "Choose mirror axis", values: ["a1<-->h1", "a1<-->a8", "a1<-->h8", "a8<-->h1"] },
+      {
+        id: "axis",
+        type: "string",
+        description: "Choose mirror axis",
+        values: ["a1<-->h1", "a1<-->a8", "a1<-->h8", "a8<-->h1"],
+      },
     ],
     template: `mirror {axis}`,
   },
@@ -197,13 +202,25 @@ export const TwinTypesConfigs: { [key in TwinTypesKeys]: TwinTypeItem<key> } = {
     keyword: `MirrorVertical`,
     title: `Mirrors the position based on chosen axis.`,
     parameters: [],
-    template: `mirror a1<-->h1`,
+    template: `mirror a1 h1`,
   },
   MirrorHorizontal: {
     keyword: `MirrorHorizontal`,
     title: `Mirrors the position based on chosen axis.`,
     parameters: [],
-    template: `mirror a1<-->h8`,
+    template: `mirror a1 a8`,
+  },
+  MirrorDiagonalA1H8: {
+    keyword: `MirrorDiagonalA1H8`,
+    title: `Mirrors the position based on chosen axis.`,
+    parameters: [],
+    template: `mirror a1 h8`,
+  },
+  MirrorDiagonalA8H1: {
+    keyword: `MirrorDiagonalA8H1`,
+    title: `Mirrors the position based on chosen axis.`,
+    parameters: [],
+    template: `mirror a8 h1`,
   },
   TraslateToroidal: {
     keyword: "TraslateToroidal",

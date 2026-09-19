@@ -71,6 +71,10 @@ export class FileExplorerComponent implements OnInit, OnChanges {
     if (!this.service) return;
     try {
       const file = await this.service.getFileContent(item);
+      item.itemName = item.itemName || file.name;
+      item.fullPath = item.fullPath || file.name;
+      item.type = item.type || "file";
+      item.id = item.id || item.fullPath;
       this.selectFile.emit({ file, meta: item, source: this.service.sourceName });
     }
     catch (err) {

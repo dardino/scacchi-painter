@@ -29,7 +29,6 @@ export class MyDataSource extends DataSource<ProblemRef | undefined> {
       const allProblems = this.db.All();
       this._length = allProblems.length;
       this._cachedData = allProblems.map((problem, index) => ({ problem, dbIndex: index + 1 }));
-      this._cachedData.unshift({ problem: null, dbIndex: -1 }); // Add a placeholder for the "Add New Position" button
       this._refreshCurrentView();
     });
   }

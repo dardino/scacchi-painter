@@ -18,3 +18,11 @@ h1.title {
 .explorer {
   grid-area: main;
 }
+
+.recents {
+  container-type: inline-size;
+  grid-area: main;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+}

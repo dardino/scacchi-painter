@@ -70,6 +70,10 @@
           <mat-checkbox [ngModel]="compactPieceSelector()"
             (ngModelChange)="changeCompactPieceSelector($event)"></mat-checkbox>
         </div>
+        <div class="field-container">
+          <mat-label>Enable animations</mat-label>
+          <mat-checkbox [ngModel]="enableAnimations()" (ngModelChange)="changeEnableAnimations($event)"></mat-checkbox>
+        </div>
       </fieldset>
     </mat-expansion-panel>
   </mat-accordion>

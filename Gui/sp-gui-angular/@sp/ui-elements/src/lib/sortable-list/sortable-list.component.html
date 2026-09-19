@@ -1,27 +1,18 @@
 <mat-list role="list">
-  @for (item of elements; track $index) {
-    <mat-list-item role="listitem"
-      class="box"
-      [class.dragable]="!isDragDisabledForItem?.(item)"
-      [cdkDragDisabled]="isDragDisabledForItem?.(item) ?? false"
-      cdkDrag
-      >
-      <span matListItemLine>
-        <span class="placeholder" *cdkDragPlaceholder></span>
-        {{ item.toString() }}
-      </span>
-      <span matListItemMeta>
-        @if (canBeDeleted?.(item) ?? true) {
-          <button
-            type="button"
-            mat-icon-button
-            color="secondary"
-            (click)="deleteItem.emit(item)"
-            >
-            <mat-icon>delete</mat-icon>
-          </button>
-        }
-      </span>
-    </mat-list-item>
+  @for (item of elements(); track $index) {
+  <mat-list-item role="listitem" class="box" [class.dragable]="!isDragDisabledForItem?.(item)"
+    [cdkDragDisabled]="isDragDisabledForItem?.(item) ?? false" cdkDrag>
+    <span matListItemLine>
+      <span class="placeholder" *cdkDragPlaceholder></span>
+      {{ item.toString() }}
+    </span>
+    <span matListItemMeta>
+      @if (canBeDeleted()(item)) {
+      <button type="button" mat-icon-button color="secondary" (click)="deleteItem.emit(item)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      }
+    </span>
+  </mat-list-item>
   }
 </mat-list>
