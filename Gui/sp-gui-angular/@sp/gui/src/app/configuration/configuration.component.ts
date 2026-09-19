@@ -94,6 +94,11 @@ export class ConfigurationComponent implements OnInit {
     this.#preferences.compactPieceSelector.set(value);
   }
 
+  enableAnimations = this.#preferences.chessboardAnimation.asReadonly();
+  changeEnableAnimations(value: boolean) {
+    this.#preferences.chessboardAnimation.set(value);
+  }
+
   constructor() {
     const appRef = inject(ApplicationRef);
     const swUpdate = inject(SwUpdate);
