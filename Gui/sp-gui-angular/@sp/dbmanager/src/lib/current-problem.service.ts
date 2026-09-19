@@ -46,8 +46,8 @@ export class CurrentProblemService {
 
   PasteFEN(fen: string) {
     const next = this.clonedProblem();
-    updatePositionFromFen(fen, next);
-    this.syncCurrentProblem(next);
+    const updatedProblem = updatePositionFromFen(fen, next);
+    this.PasteJson(updatedProblem);
   }
 
   PasteJson(json: Partial<IProblemV4>) {

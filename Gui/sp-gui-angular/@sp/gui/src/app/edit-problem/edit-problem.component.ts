@@ -677,7 +677,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     if ($event?.target && (
       $event.target instanceof HTMLInputElement
       || isEditable($event.target as HTMLElement)
-    )) return;
+    )) {
+      return;
+    }
 
     const text = patext ?? $event?.clipboardData?.getData("text/plain") ?? null;
     if ($event) {

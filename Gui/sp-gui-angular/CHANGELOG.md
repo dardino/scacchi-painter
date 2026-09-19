@@ -2,8 +2,8 @@
 
 ## 0.4.0
 
+- [sp-gui-angular] [#170] - Paste FEN
 - [sp-gui-angular] [#173](https://github.com/dardino/scacchi-painter/issues/173) Board animation support
-- [sp-gui-angular] [#329],[#327] - Paste FEN
 - [sp-gui-angular] [#322] - Better placement for button "Add new position"
 - [sp-gui-angular] [#323] - Support for zeroposition
 
