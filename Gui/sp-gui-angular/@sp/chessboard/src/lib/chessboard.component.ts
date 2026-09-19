@@ -22,7 +22,7 @@ import {
 import { getPieceIcon } from "@sp/gui/src/app/services/cursor.service";
 import html2canvas from "html2canvas";
 import { Subscription } from "rxjs";
-import { Animations, ChessboardAnimationService } from "./chessboard-animation.service";
+import { AnimationData, Animations, ChessboardAnimationService } from "./chessboard-animation.service";
 
 @Component({
   selector: "lib-chessboard",
@@ -101,9 +101,11 @@ implements OnInit, OnChanges, OnDestroy {
   stipulationDesc = computed(() => this.position()?.stipulation.completeStipulationDesc ?? "");
 
   animationSub: Subscription;
+  stopAnimationSub: Subscription;
   constructor() {
     const animationService = this.animationService;
     this.animationSub = animationService.onAnimate.subscribe(this.#animate);
+    this.stopAnimationSub = animationService.onStop.subscribe(this.#stopAnimation);
 
     // Watch position changes and update board
     effect(() => {
@@ -265,32 +267,25 @@ implements OnInit, OnChanges, OnDestroy {
     return url;
   }
 
-  #stopAnimation = (animation: Animations) => {
-    switch (animation) {
-      case "rotateLeft":
-        this.chessboard()?.nativeElement.classList.remove("rotateLeft");
-        break;
-      case "rotateRight":
-        this.chessboard()?.nativeElement.classList.remove("rotateRight");
-        break;
-      default:
-        break;
-    }
+  #stopAnimation = () => {
+    this.chessboard()?.nativeElement.removeAttribute("rotating");
+    this.chessboard()?.nativeElement.removeAttribute("translating");
+    this.chessboard()?.nativeElement.removeAttribute("mirroring");
   };
 
-  #animate = (animation: Animations) => {
+  #animate = <T extends Animations>(data: AnimationData<T>) => {
     const chessboardElement = this.chessboard()?.nativeElement;
     if (!chessboardElement) return;
-    switch (animation) {
-      case "rotateLeft":
-        chessboardElement.classList.add("rotateLeft");
-        setTimeout(() => this.#stopAnimation("rotateLeft"),
-          parseFloat(getComputedStyle(chessboardElement).getPropertyValue("--animation-duration")) * 1000);
+    chessboardElement.removeAttribute("rotating");
+    switch (data.animation) {
+      case "rotate":
+        chessboardElement.setAttribute("rotating", data.args ?? "");
         break;
-      case "rotateRight":
-        chessboardElement.classList.add("rotateRight");
-        setTimeout(() => this.#stopAnimation("rotateRight"),
-          parseFloat(getComputedStyle(chessboardElement).getPropertyValue("--animation-duration")) * 1000);
+      case "translate":
+        chessboardElement.setAttribute("translating", data.args ?? "");
+        break;
+      case "mirror":
+        chessboardElement.setAttribute("mirroring", data.args ?? "");
         break;
       default:
         break;

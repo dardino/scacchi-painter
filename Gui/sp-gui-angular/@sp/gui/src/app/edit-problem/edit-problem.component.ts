@@ -9,7 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
 import { FairySquare, ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
-import { ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
+import { AnimationData, Animations, ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
 import { ChessboardComponent, ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Author, Piece } from "@sp/dbmanager/src/lib/models";
@@ -86,6 +86,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   hideLabels = this.#preferences.chessboardLabels.asReadonly();
   editorShowExtraPieces = this.#preferences.editorShowExtraPieces.asReadonly();
   compactPieceSelector = this.#preferences.compactPieceSelector.asReadonly();
+  chessboardAnimation = this.#preferences.chessboardAnimation.asReadonly();
   solveInProgress = signal(false);
   solutionCount = signal(0);
   showLog = signal(false);
@@ -125,21 +126,52 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private leaveTimeout?: ReturnType<typeof setTimeout>;
 
+  private runAnimation = (animData: AnimationData<Animations>, condition: boolean): Promise<void> => {
+    if (!condition) return Promise.resolve();
+    return this.#chessanim.animate(animData.animation, animData.args ?? "");
+  };
+
   private commandMapper: Record<EditCommand, () => void> = {
-    flipH: () => this.#current.FlipBoard("y"),
-    flipV: () => this.#current.FlipBoard("x"),
+    flipH: () => {
+      this.runAnimation({ animation: "mirror", args: "horizontal" }, this.chessboardAnimation()).then(() => {
+        this.#current.FlipBoard("y");
+      });
+    },
+    flipV: () => {
+      this.runAnimation({ animation: "mirror", args: "vertical" }, this.chessboardAnimation()).then(() => {
+        this.#current.FlipBoard("x");
+      });
+    },
     rotateL: () => {
-      this.#chessanim.animate("rotateLeft");
-      this.#current.RotateBoard("left");
+      this.runAnimation({ animation: "rotate", args: "left" }, this.chessboardAnimation()).then(() => {
+        this.#current.RotateBoard("left");
+      });
     },
     rotateR: () => {
-      this.#chessanim.animate("rotateRight");
-      this.#current.RotateBoard("right");
+      this.runAnimation({ animation: "rotate", args: "right" }, this.chessboardAnimation()).then(() => {
+        this.#current.RotateBoard("right");
+      });
     },
-    moveU: () => this.#current.ShiftBoard("-y"),
-    moveD: () => this.#current.ShiftBoard("y"),
-    moveL: () => this.#current.ShiftBoard("-x"),
-    moveR: () => this.#current.ShiftBoard("x"),
+    moveU: () => {
+      this.runAnimation({ animation: "translate", args: "up" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("-y");
+      });
+    },
+    moveD: () => {
+      this.runAnimation({ animation: "translate", args: "down" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("y");
+      });
+    },
+    moveL: () => {
+      this.runAnimation({ animation: "translate", args: "left" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("-x");
+      });
+    },
+    moveR: () => {
+      this.runAnimation({ animation: "translate", args: "right" }, this.chessboardAnimation()).then(() => {
+        this.#current.ShiftBoard("x");
+      });
+    },
     resetPosition: () => this.#current.Reload(), // reload current snapshot
     updatePosition: () => this.#current.UpdateSnapshot(), // update current snapshot
     clearBoard: () => this.#current.ClearBoard(),

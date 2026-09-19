@@ -312,8 +312,8 @@ importers:
         specifier: workspace:*
         version: link:../../CoreJS
       '@dardino/chess-board':
-        specifier: ^0.1.9
-        version: 0.1.9
+        specifier: ^0.2.0
+        version: 0.2.0
       '@microsoft/microsoft-graph-client':
         specifier: ^3.0.5
         version: 3.0.7(@azure/msal-browser@5.19.0)(buffer@6.0.3)
@@ -1564,8 +1564,8 @@ packages:
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
 
-  '@dardino/chess-board@0.1.9':
-    resolution: {integrity: sha512-1k42PwG8daXnN8vtJm2yTvSLneoJT46h74r78KHombBn69AqXBkXopjJpU28QmaoIyu9Ihz3irQZVCLW81L2yA==}
+  '@dardino/chess-board@0.2.0':
+    resolution: {integrity: sha512-o0VqSUTvDQzTawDw22B5qMR47EjuK3akm3Ejwo532sTd8HYXZtYyeN5v1Aiy+yOD4BmKzzvtkkp62SU9TTqKeA==}
 
   '@discoveryjs/json-ext@1.1.0':
     resolution: {integrity: sha512-Xc3VhU02wqZ1HvHRJUwL09HkZSTvidqY5Ya0NXBSYOxAp+Ln9dcJr9fySI+CkONzP3PekQo9WdzCv0PGER/mOA==}
@@ -10881,7 +10881,7 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
-  '@dardino/chess-board@0.1.9': {}
+  '@dardino/chess-board@0.2.0': {}
 
   '@discoveryjs/json-ext@1.1.0': {}
 

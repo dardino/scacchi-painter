@@ -14,6 +14,7 @@ interface PreferencesTable {
   chessboardBorderColor: WritableSignal<string>;
   chessboardPieceShadow: WritableSignal<boolean>;
   chessboardTheme: WritableSignal<AvailableThemes>;
+  chessboardAnimation: WritableSignal<boolean>;
   editorShowExtraPieces: WritableSignal<boolean>;
   compactPieceSelector: WritableSignal<boolean>;
 }
@@ -36,6 +37,7 @@ export class PreferencesService implements PreferencesTable {
   public chessboardBorderColor = localStoredSignal<PreferencesTable, "chessboardBorderColor">("chessboardBorderColor", "transparent");
   public chessboardPieceShadow = localStoredSignal<PreferencesTable, "chessboardPieceShadow">("chessboardPieceShadow", false);
   public chessboardTheme = localStoredSignal<PreferencesTable, "chessboardTheme">("chessboardTheme", "default");
+  public chessboardAnimation = localStoredSignal<PreferencesTable, "chessboardAnimation">("chessboardAnimation", true);
   public editorShowExtraPieces = localStoredSignal<PreferencesTable, "editorShowExtraPieces">("editorShowExtraPieces", false);
   public compactPieceSelector = localStoredSignal<PreferencesTable, "compactPieceSelector">("compactPieceSelector", false);
 }
