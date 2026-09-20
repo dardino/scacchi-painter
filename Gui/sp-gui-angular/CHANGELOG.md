@@ -1,5 +1,12 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.4.2
+
+- [sp-gui-angular] - Fix a bug preventing twins from being deleted
+- [sp-gui-angular] - Fix a bug preventing authors from being deleted
+- [sp-gui-angular] - Fix a bug preventing fairy conditions from being deleted
+- [sp-gui-angular] - Fix a bug where creating a new file cloned the current one
+
 ## 0.4.1
 
 - [sp-gui-angular] - Fix problem stipulations with half moves (was rounded)

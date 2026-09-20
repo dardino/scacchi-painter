@@ -1,5 +1,30 @@
 # Release Notes
 
+## Version 0.4.2
+
+### Fixes For New Problem, Authors, And Deletion Logic
+
+This patch release focuses on a small set of editor and data-flow fixes that were reported while working with problem creation and metadata management.
+
+**What's New:**
+
+* 🧩 **New problem flow fixes** - corrected the file and source selection flow when creating a new problem
+* 👤 **Author cards fix** - improved author metadata handling and the rendering of author-related UI cards
+* 🗑️ **Twin deletion fix** - fixed deletion behavior for twin entries in the problem editor
+* ✨ **Fairy deletion condition fix** - corrected the condition that controlled deletion of fairy entries
+* 🔄 **Problem state consistency** - tightened synchronization between the current problem and related editor metadata
+
+**What changes for you:**
+
+* Creating a new problem is more reliable and predictable
+* Author information displays and updates more consistently in the UI
+* Deleting twins and fairy entries behaves correctly in edge cases
+* Editing complex problem records feels more stable and less error-prone
+
+**Compatibility:**
+
+* Existing problem/database files remain compatible
+
 ## Version 0.4.1
 
 This version is a patch version to fix a truncate problem with stipulation moves
