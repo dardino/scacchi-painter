@@ -9,7 +9,7 @@ export class Author implements IAuthor {
   stateOrProvince: string;
   country: string;
   language: string;
-  AuthorID: number;
+  authorId: number = -1;
 
   public static fromElement(el: Element, id: number): Author {
     const a = new Author();
@@ -21,14 +21,15 @@ export class Author implements IAuthor {
     a.stateOrProvince = el.querySelector("StateOrProvince")?.innerHTML ?? "";
     a.country = el.querySelector("Country")?.innerHTML ?? "";
     a.language = el.querySelector("Language")?.innerHTML ?? "";
-    a.AuthorID = id;
+    a.authorId = id;
     return a;
   }
 
   static fromJson(el: Partial<IAuthor>, id: number): Author {
     const a = new Author();
-    a.AuthorID = id;
-    return a.updateFrom(el);
+    a.authorId = id;
+    const updated = a.updateFrom(el);
+    return updated;
   }
 
   updateFrom(result: Partial<IAuthor>) {
@@ -53,6 +54,7 @@ export class Author implements IAuthor {
     if (this.stateOrProvince !== "") json.stateOrProvince = this.stateOrProvince;
     if (this.country !== "") json.country = this.country;
     if (this.language !== "") json.language = this.language;
+    if (this.authorId !== -1) json.authorId = this.authorId;
     return json;
   }
 
@@ -78,6 +80,6 @@ export class Author implements IAuthor {
     this.stateOrProvince = "";
     this.country = "";
     this.language = "";
-    this.AuthorID = -1;
+    this.authorId = -1;
   }
 }

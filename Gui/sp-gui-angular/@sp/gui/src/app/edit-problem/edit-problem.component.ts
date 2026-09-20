@@ -587,7 +587,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       if (!confirm) return false;
       return true;
     }
-    return twinsCount > 2;
+    return twinsCount >= 2;
   };
 
   openTwinDialog($event: Twin | null): void {
@@ -626,7 +626,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const modal = this.#dialogService.confirmDialog({
       cancelText: "No!",
       confirmText: "Yes! Remove Author!",
-      message: `Are you sure you want to remove the author ${$event.nameAndSurname} (${$event.AuthorID})? This operation cannot be undone!`,
+      message: `Are you sure you want to remove the author ${$event.nameAndSurname} (${$event.authorId})? This operation cannot be undone!`,
       title: "Remove Author Confirm",
     }).subscribe((res) => {
       if (res === true) {

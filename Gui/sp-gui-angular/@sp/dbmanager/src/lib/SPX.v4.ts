@@ -54,6 +54,7 @@ export interface IStipulation {
 }
 
 export interface Author {
+  authorId: number;
   nameAndSurname: string;
   address: string;
   city: string;

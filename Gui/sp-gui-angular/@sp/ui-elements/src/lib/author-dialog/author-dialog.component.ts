@@ -24,13 +24,13 @@ export class AuthorDialogComponent {
 
   author: Author;
 
-  get Id() { return this.author.AuthorID; }
+  get Id() { return this.author.authorId; }
 
   constructor() {
     const data = this.data;
 
     // clone to keep old values unchanged until save
-    this.author = Author.fromJson(data ?? {}, data?.AuthorID ?? -1);
+    this.author = Author.fromJson(data ?? {}, data?.authorId ?? -1);
   }
 
   clickCancel() {

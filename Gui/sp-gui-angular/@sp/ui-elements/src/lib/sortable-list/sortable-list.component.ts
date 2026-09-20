@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 
-import { Component, EventEmitter, input, Input, Output } from "@angular/core";
+import { Component, EventEmitter, input, Output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
@@ -20,10 +20,8 @@ import { MatListModule } from "@angular/material/list";
 export class SortableListComponent<T extends { toString: () => string }> {
   elements = input<T[]>([]);
 
-  @Input()
-  isDragDisabledForItem?: (item: T) => boolean;
-
-  canBeDeleted = input<(item: T) => boolean>(() => false);
+  isDragDisabledForItem = input<(item: T) => boolean>();
+  canBeDeleted = input<(item: T) => boolean>(() => true);
 
   @Output()
   deleteItem = new EventEmitter<T>();

@@ -1,7 +1,7 @@
 <mat-list role="list">
   @for (item of elements(); track $index) {
-  <mat-list-item role="listitem" class="box" [class.dragable]="!isDragDisabledForItem?.(item)"
-    [cdkDragDisabled]="isDragDisabledForItem?.(item) ?? false" cdkDrag>
+  <mat-list-item role="listitem" class="box" [class.dragable]="!isDragDisabledForItem()?.(item)"
+    [cdkDragDisabled]="isDragDisabledForItem()?.(item) ?? false" cdkDrag>
     <span matListItemLine>
       <span class="placeholder" *cdkDragPlaceholder></span>
       {{ item.toString() }}

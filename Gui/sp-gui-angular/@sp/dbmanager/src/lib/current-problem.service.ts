@@ -343,12 +343,12 @@ export class CurrentProblemService {
 
   AddOrUpdateAuthor(result: Author) {
     const newProblem = this.clonedProblem();
-    if (result.AuthorID < 0) {
-      result.AuthorID = Math.max(...newProblem.authors.map(au => au.AuthorID)) + 1;
+    if (result.authorId < 0) {
+      result.authorId = Math.max(...newProblem.authors.map(au => au.authorId), -1) + 1;
       newProblem.authors.push(result);
     }
     else {
-      const real = newProblem.authors.find(au => au.AuthorID === result.AuthorID);
+      const real = newProblem.authors.find(au => au.authorId === result.authorId);
       if (!real) {
         newProblem.authors.push(result);
       }
@@ -361,7 +361,7 @@ export class CurrentProblemService {
 
   RemoveAuthor($event: Author) {
     const newProblem = this.clonedProblem();
-    const real = newProblem.authors.findIndex(au => au.AuthorID === $event.AuthorID);
+    const real = newProblem.authors.findIndex(au => au.authorId === $event.authorId);
     if (real >= 0) newProblem.authors.splice(real, 1);
     return this.syncCurrentProblem(newProblem);
   }

@@ -1,6 +1,6 @@
 {
   "name": "chessboard",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "dependencies": {
     "tslib": "^2.0.0"
   }

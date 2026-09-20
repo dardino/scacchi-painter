@@ -25,10 +25,9 @@ export class OpenFileComponent implements OnInit {
   private localFolderService = inject(LocalDriveService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+
   public showFilePicker = signal(false);
-
   public currentFileService: FileService | null = null;
-
   public showNewFileWizard = false;
 
   ngOnInit() {
@@ -82,7 +81,7 @@ export class OpenFileComponent implements OnInit {
         type: "file",
       },
       source: "unknown",
-      file: new File([`{"problems":[{}]}`], "newfile.sp3"),
+      file: new File([`{"problems":[{}],"version":4}`], "newfile.sp3"),
     });
   }
 

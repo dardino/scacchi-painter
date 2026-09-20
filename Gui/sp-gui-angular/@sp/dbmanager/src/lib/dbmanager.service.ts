@@ -377,9 +377,8 @@ export class DbmanagerService implements IDbManagerService {
         await this.loadFromXML(content);
         break;
       case "sp3":
-        await this.loadFromJson(content);
-        break;
       default:
+        await this.loadFromJson(content);
         break;
     }
     await this.saveToLocalStorage();
