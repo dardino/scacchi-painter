@@ -587,7 +587,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       if (!confirm) return false;
       return true;
     }
-    return twinsCount > 2;
+    return twinsCount >= 2;
   };
 
   openTwinDialog($event: Twin | null): void {

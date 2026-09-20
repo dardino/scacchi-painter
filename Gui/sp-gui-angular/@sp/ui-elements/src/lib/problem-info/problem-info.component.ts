@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, output } from "@angular/core";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { Author } from "@sp/dbmanager/src/lib/models/author";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
@@ -20,23 +20,12 @@ import { ProblemPublicationComponent } from "../problem-publication/problem-publ
   standalone: true,
 })
 export class ProblemInfoComponent {
-  @Output()
-  public openTwin = new EventEmitter<Twin | null>();
-
-  @Output()
-  public addCondition = new EventEmitter<void>();
-
-  @Output()
-  public deleteCondition = new EventEmitter<string>();
-
-  @Output()
-  public deleteTwin = new EventEmitter<Twin>();
-
-  @Output()
-  public openAuthor = new EventEmitter<Author | null>();
-
-  @Output()
-  public deleteAuthor = new EventEmitter<Author>();
+  public openTwin = output<Twin | null>();
+  public addCondition = output<void>();
+  public deleteCondition = output<string>();
+  public deleteTwin = output<Twin>();
+  public openAuthor = output<Author | null>();
+  public deleteAuthor = output<Author>();
 
   callAuthorAction($event: { author: Author | null; action: AuthorCardActions }) {
     switch ($event.action) {
