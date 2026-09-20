@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, computed, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -14,14 +14,14 @@ export type AuthorCardActions = "delete" | "edit";
   standalone: true,
 })
 export class AuthorCardComponent {
-  @Input() author: Author | null;
+  author = input<Author | null>(null);
 
-  get nameAndSurname() { return this.author?.nameAndSurname; }
-  get country() { return this.author?.country; }
-  get longText() { return this.author?.city; }
+  authorId = computed(() => this.author()?.authorId);
+  nameAndSurname = computed(() => this.author()?.nameAndSurname);
+  country = computed(() => this.author()?.country);
+  longText = computed(() => this.author()?.city);
 
-  @Output()
-  public action = new EventEmitter<AuthorCardActions>();
+  public action = output<AuthorCardActions>();
 
   execDelete = () => {
     this.action.emit("delete");

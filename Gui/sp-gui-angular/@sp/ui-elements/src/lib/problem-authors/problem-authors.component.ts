@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from "@angular/core";
+import { Component, computed, inject, output } from "@angular/core";
 import { Author } from "@sp/dbmanager/src/lib/models";
 import { CurrentProblemService } from "@sp/dbmanager/src/public-api";
 import { AuthorCardActions, AuthorCardComponent } from "../author-card/author-card.component";
@@ -13,9 +13,8 @@ import { AuthorCardActions, AuthorCardComponent } from "../author-card/author-ca
 export class ProblemAuthorsComponent {
   private current = inject(CurrentProblemService);
 
-  get currentProblem() { return this.current.Problem; }
-  @Output()
-  public callAction = new EventEmitter<{ author: Author | null; action: AuthorCardActions }>();
+  currentProblem = computed(() => this.current.Problem());
+  callAction = output<{ author: Author | null; action: AuthorCardActions }>();
 
   action($event: AuthorCardActions, author: Author | null) {
     this.callAction.emit({ action: $event, author });
