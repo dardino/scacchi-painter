@@ -1,5 +1,6 @@
 import { Component, computed, inject, input } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
+import { HalfMoveInfo } from "@dardino-chess/core";
 import { CurrentProblemService } from "@sp/dbmanager/src/lib/current-problem.service";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
@@ -38,12 +39,12 @@ export class SpSolutionDescComponent {
 
   colorPresets = ["red", "#FF0000", "rgb(255, 0, 0)"];
 
-  private current = inject(CurrentProblemService);
+  #current = inject(CurrentProblemService);
+  #preferences = inject(PreferencesService);
+  jsonSolution = input<HalfMoveInfo[]>([]);
 
   showLog = input(false);
   viewMode = input<ViewModes>("html");
-
-  private preferences = inject(PreferencesService);
 
   constructor() {
     // noop
@@ -55,27 +56,27 @@ export class SpSolutionDescComponent {
     });
   }
 
-  firstMove = computed(() => this.current.Problem()?.startMoveN ?? 1);
-  totalMoves = computed(() => this.current.Problem()?.stipulation.moves ?? 2);
-  solutionFontSize = computed(() => `${Math.max(this.preferences.editorSolutionFontSize(), 1)}rem`);
-  rows = computed(() => this.current.Problem()?.jsonSolution ?? []);
+  firstMove = computed(() => this.#current.Problem()?.startMoveN ?? 1);
+  totalMoves = computed(() => this.#current.Problem()?.stipulation.moves ?? 2);
+  solutionFontSize = computed(() => `${Math.max(this.#preferences.editorSolutionFontSize(), 1)}rem`);
+  rows = computed(() => this.jsonSolution() ?? []);
 
-  #solutionText = computed(() => this.current.Problem()?.textSolution ?? "");
+  #solutionText = computed(() => this.#current.Problem()?.textSolution ?? "");
   get solutionText() {
     return this.#solutionText();
   }
 
   set solutionText(txt: string) {
-    this.current.SetTextSolution(txt);
+    this.#current.SetTextSolution(txt);
   }
 
-  #solutionHtml = computed(() => this.current.Problem()?.htmlSolution ?? "");
+  #solutionHtml = computed(() => this.#current.Problem()?.htmlSolution ?? "");
   get solutionHtml() {
     return this.#solutionHtml();
   }
 
   set solutionHtml(text: string) {
-    this.current.SetHTMLSolution(text);
+    this.#current.SetHTMLSolution(text);
   }
 
   getClass(item: string) {

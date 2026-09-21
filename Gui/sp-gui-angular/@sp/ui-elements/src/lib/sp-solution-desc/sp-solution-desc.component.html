@@ -21,15 +21,14 @@
 }
 <lib-sp-solution-move [attr.data-moveno]="myMove" [attr.data-movenopre]="prevMove"
   [hideNum]="mode === 'inline' && !lineBr && prevItem !== null && !move.refutes" [value]="move" [refutes]="move.refutes"
-  [class]="[
-          'solution',
-          mode,
-          move.threat ? 'threat' : '',
-          move.zugzwang ? 'zugzwang' : '',
-          move.isKey ? 'key' : '',
-          move.refutes ? 'refutes' : '',
-          prevMove === myMove ? 'demolition' : '',
-        ].join(' ')"></lib-sp-solution-move>
+  [class]="['solution',
+            mode,
+            move.threat ? 'threat' : '',
+            move.zugzwang ? 'zugzwang' : '',
+            move.isKey ? 'key' : '',
+            move.refutes ? 'refutes' : '',
+            prevMove === myMove ? 'demolition' : '',
+           ].join(' ')"></lib-sp-solution-move>
 }
 </div>
 }

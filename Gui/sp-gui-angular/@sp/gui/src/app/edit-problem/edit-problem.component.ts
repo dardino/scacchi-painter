@@ -8,6 +8,7 @@ import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
+import { HalfMoveInfo } from "@dardino-chess/core";
 import { FairySquare, ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
 import { AnimationData, Animations, ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
@@ -73,8 +74,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   #chessanim = inject(ChessboardAnimationService);
   #selectedPieceSquare = signal<FairySquare | null>(null);
 
+  jsonSolution = signal<HalfMoveInfo[]>([]);
   snapshotsCount = computed(() => Object.keys(this.#current.Problem()?.snapshots ?? {}).length - 1);
-
   chessboard = viewChild<ChessboardComponent>("chessboardLib");
 
   public selectedPieceSquare = this.#selectedPieceSquare.asReadonly();
@@ -295,7 +296,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const prob = this.problem()?.clone();
     if (prob) {
       prob.engine = this.selectedEngine();
-      prob.jsonSolution = [];
+      this.jsonSolution.set([]);
       prob.htmlSolution = "";
       prob.textSolution = "";
       this.#current.SetProblem(() => prob);
@@ -343,7 +344,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
     newProblem.htmlSolution += this.toHtml([...raw]);
     newProblem.textSolution += raw.join(`\n`);
-    newProblem.jsonSolution.push(...msg.moveTree);
+    this.jsonSolution.set([...this.jsonSolution(), ...msg.moveTree]);
     this.#current.SetProblem(() => newProblem);
   }
 

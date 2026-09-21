@@ -1,4 +1,3 @@
-import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Columns, IProblemV4, Traverse } from "../SPX.v4";
@@ -55,7 +54,6 @@ export class Problem implements IProblemV4 {
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
-  public jsonSolution: HalfMoveInfo[] = [];
   public htmlSolution = "";
   public conditions: string[] = [];
   public fairyCells: string[] = [];
