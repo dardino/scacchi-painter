@@ -1,5 +1,9 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## WIP - Future
+
+- [sp-gui-angular] - Add a startup “Did you know?” tip banner with weighted rotation, IndexedDB persistence, and per-session decay
+
 ## 0.4.2
 
 - [sp-gui-angular] - Fix a bug preventing twins from being deleted

@@ -2,5 +2,15 @@
   <app-recents></app-recents>
 </section>
 <section role="article" class="news">
+  @if (showTipsBanner()) {
+    <app-tip-banner
+      [tip]="currentTip()"
+      [hasNext]="hasNextTip()"
+      [hasPrev]="hasPrevTip()"
+      (nextTip)="nextTip()"
+      (prevTip)="prevTip()"
+      (hideTips)="hideTips()"
+    ></app-tip-banner>
+  }
   <div [innerHTML]="news() | markdown"></div>
 </section>
