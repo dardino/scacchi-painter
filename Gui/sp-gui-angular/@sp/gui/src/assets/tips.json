@@ -1,5 +1,9 @@
 [
-  "You can drag pieces with right-click to annotate faster.",
-  "Hold Shift to lock the board orientation.",
-  "Use Ctrl+S to save the puzzle instantly."
+  "Hold Shift while placing a piece to keep adding identical pieces.",
+  "With the board highlighted, you can move from square to square using the arrow keys.",
+  "With a highlighted square on the board, press the key corresponding to the piece to add it there (e.g. press \"p\" to add a black pawn, \"Q\" for a white queen, etc.).",
+  "Hold Shift while moving a piece to clone it instead of moving it.",
+  "You can now change the board colors in the configuration page.",
+  "You can now create a snapshot of the current position and restore it later.",
+  "If you paste a FEN with the board highlighted (CTRL+V or CMD+V on Mac), it is applied to the board."
 ]
