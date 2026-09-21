@@ -7,8 +7,8 @@ export interface FolderItemInfo {
 
 export type AvaliableFileServices = "local" | "dropbox" | "onedrive" | "unknown";
 
-export interface FileService {
-  readonly sourceName: AvaliableFileServices;
+export interface FileService<T extends AvaliableFileServices> {
+  readonly sourceName: T;
   enumContent(
     itemID: string,
     itemType: FolderItemInfo["type"],

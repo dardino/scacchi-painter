@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 
 import {
-  AvaliableFileServices,
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
@@ -10,8 +9,8 @@ import { AbortError } from "../AbortError";
 @Injectable({
   providedIn: "root",
 })
-export class LocalDriveService implements FileService {
-  sourceName: AvaliableFileServices = "local";
+export class LocalDriveService implements FileService<"local"> {
+  sourceName: "local" = "local" as const;
   async enumContent(
     _itemID: string,
     _itemType: "root" | "file" | "folder" | "drive",

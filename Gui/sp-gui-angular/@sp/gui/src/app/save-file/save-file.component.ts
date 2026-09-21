@@ -76,7 +76,7 @@ export class SaveFileComponent implements OnInit {
     this.selectedFile.meta.itemName = v;
   }
 
-  public get currentFileService(): FileService | null {
+  public get currentFileService(): FileService<AvaliableFileServices> | null {
     switch (this.currentSource) {
       case "local":
         return this.localFS;

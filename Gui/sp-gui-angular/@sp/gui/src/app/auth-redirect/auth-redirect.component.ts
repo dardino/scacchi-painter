@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TokenResponse } from "@sp/dbmanager/src/lib/oauth_funcs/pkce";
-import { LocalAuthInfo, getLocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager/src/lib/oauth_providers/helpers";
-import { OneDriveCliProvider } from "@sp/dbmanager/src/lib/oauth_providers/onedrive.cli";
+import { getLocalAuthInfo, LocalAuthInfo, setLocalAuthInfo } from "@sp/dbmanager/src/lib/oauth_providers/helpers";
+import { MsalAuthService } from "@sp/dbmanager/src/lib/oauth_providers/onedrive.cli";
+import { LogService } from "../services/log.service";
 
 @Component({
   selector: "app-auth-redirect",
@@ -10,6 +11,9 @@ import { OneDriveCliProvider } from "@sp/dbmanager/src/lib/oauth_providers/onedr
 
 })
 export class AuthRedirectComponent implements OnInit {
+  #logService = inject(LogService);
+  #msalService = inject(MsalAuthService);
+
   ngOnInit(): void {
     this.parseAuth();
   }
@@ -20,10 +24,10 @@ export class AuthRedirectComponent implements OnInit {
     // MSAL redirect
     switch (authInfo.redirect) {
       case "dropbox":
-        response = await this.redirectDropbox(authInfo);
+        response = await this.redirectFromDropbox(authInfo);
         break;
       case "onedrive":
-        response = await this.redirectMsal(authInfo);
+        response = await this.redirectFromMsal(authInfo, this.#logService);
         break;
       case "null":
         response = false;
@@ -32,7 +36,7 @@ export class AuthRedirectComponent implements OnInit {
     setTimeout(() => {
       if (response) {
         // Redirect to the original URL the user was on, or fallback to /openfile
-        const returnUrl = authInfo.return_url || "/openfile#" + authInfo.redirect;
+        const returnUrl = authInfo.return_url || "/openfile/" + authInfo.redirect;
         location.href = returnUrl;
       }
       else {
@@ -41,11 +45,11 @@ export class AuthRedirectComponent implements OnInit {
     }, 100);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async redirectMsal(authInfo: Required<LocalAuthInfo>) {
+  async redirectFromMsal(authInfo: Required<LocalAuthInfo>, logService: LogService) {
     try {
-      // Use OneDriveCliProvider which properly initializes and handles the redirect
-      await OneDriveCliProvider.initialize();
+      logService.log("Redirected from MSAL..." + JSON.stringify(authInfo));
+      // Use MsalAuthService which properly initializes and handles the redirect
+      await this.#msalService.handleRedirect();
       setLocalAuthInfo({ onedrive_token: "authenticated" });
       return true;
     }
@@ -55,7 +59,7 @@ export class AuthRedirectComponent implements OnInit {
     }
   }
 
-  async redirectDropbox(authInfo: Required<LocalAuthInfo>) {
+  async redirectFromDropbox(authInfo: Required<LocalAuthInfo>) {
     const search = new URLSearchParams(`?${location.hash.substring(1)}`);
     const tokenMessage: TokenResponse = {
       uid: search.get("uid") ?? "",
