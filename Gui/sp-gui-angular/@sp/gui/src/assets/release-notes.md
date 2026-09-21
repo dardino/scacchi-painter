@@ -2,13 +2,12 @@
 
 ## Version 0.4.2
 
-### Tips Banner, Editor Fixes, And More Stable Data Handling
+### Editor Fixes And More Stable Data Handling
 
-This patch release includes the new startup tip banner and a few editor/data-flow fixes reported while working with problem creation and metadata management.
+This patch release includes a few editor and data-flow fixes reported while working with problem creation and metadata management.
 
 **What's New:**
 
-* 🧠 **Startup tip banner** - a new “Did you know?” banner appears on the home page with weighted rotation, manual navigation, and per-session decay
 * 🧩 **New problem flow fixes** - corrected the file and source selection flow when creating a new problem
 * 👤 **Author cards fix** - improved author metadata handling and the rendering of author-related UI cards
 * 🗑️ **Twin deletion fix** - fixed deletion behavior for twin entries in the problem editor
@@ -17,8 +16,6 @@ This patch release includes the new startup tip banner and a few editor/data-flo
 
 **What changes for you:**
 
-* The home page now offers lightweight onboarding hints at startup
-* Tip rotation is weighted and less repetitive across a session
 * Creating a new problem is more reliable and predictable
 * Author information displays and updates more consistently in the UI
 * Deleting twins and fairy entries behaves correctly in edge cases
@@ -27,6 +24,25 @@ This patch release includes the new startup tip banner and a few editor/data-flo
 **Compatibility:**
 
 * Existing problem/database files remain compatible
+
+## Future
+
+### Startup Tip Banner
+
+A future update will introduce a new “Did you know?” banner on the home page with weighted rotation, manual navigation, and per-session decay.
+
+**What's New:**
+
+* 🧠 **Startup tip banner** - a new banner appears on the home page with lightweight onboarding hints for key board features
+* 🔁 **Weighted rotation** - tips are selected proportionally to their stored weights to avoid repetition while keeping newer tips more visible
+* 🧭 **Manual navigation** - users can move between tips with next/previous controls and keep the banner useful as a quick reminder
+* ♻️ **Per-session decay** - each tip can decay once per app session, reducing repetition without fully excluding it from future cycles
+
+**What changes for you:**
+
+* The home page will offer helpful starter guidance when you open the app
+* Important tips will surface more often without always repeating the same ones
+* The banner can be hidden if you prefer not to see it at startup
 
 ## Version 0.4.1
 
