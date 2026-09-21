@@ -5,6 +5,7 @@ import { CurrentProblemService } from "@sp/dbmanager/src/lib/current-problem.ser
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { Editor, NgxEditorModule, Toolbar } from "ngx-editor";
+import { DisplayMoveService } from "../services/displayMove.service";
 import { SpSolutionMoveComponent } from "../sp-solution-move/sp-solution-move.component";
 import { ViewModes } from "../toolbar-engine/toolbar-engine.component";
 
@@ -41,9 +42,23 @@ export class SpSolutionDescComponent {
 
   #current = inject(CurrentProblemService);
   #preferences = inject(PreferencesService);
-  jsonSolution = input<HalfMoveInfo[]>([]);
+  #moveDisplayService = inject(DisplayMoveService);
 
-  showLog = input(false);
+  jsonSolution = input<HalfMoveInfo[]>([]);
+  onClickMove = (moveIndex: number) => {
+    const findMove = this.rows().slice(0, moveIndex + 1);
+    // backward lookup of moves to find the first move of the current line
+    // the first move is the closest move with move number equal to the start move number of the current problem
+    const isHalfMove = Math.floor(this.firstMove()) !== Math.ceil(this.firstMove());
+    const firstMoveObj = findMove.findLast(m =>
+      m.num === Math.floor(this.firstMove())
+      && m.part == (isHalfMove ? "r" : "l"),
+    );
+    const firstMoveIndex = findMove.lastIndexOf(firstMoveObj!);
+    const allmovestoCurrent = findMove.slice(firstMoveIndex, moveIndex + 1);
+    this.#moveDisplayService.applyMoves(allmovestoCurrent);
+  };
+
   viewMode = input<ViewModes>("html");
 
   constructor() {

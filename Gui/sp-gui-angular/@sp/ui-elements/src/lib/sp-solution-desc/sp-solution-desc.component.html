@@ -19,7 +19,7 @@
     @let lineBr = myMove < prevMove || prevItem===null || prevItem.zugzwang; @if (lineBr) { <div class="linebr">
 </div>
 }
-<lib-sp-solution-move [attr.data-moveno]="myMove" [attr.data-movenopre]="prevMove"
+<lib-sp-solution-move [attr.data-moveno]="myMove" [attr.data-movenopre]="prevMove" tabindex="0"
   [hideNum]="mode === 'inline' && !lineBr && prevItem !== null && !move.refutes" [value]="move" [refutes]="move.refutes"
   [class]="['solution',
             mode,
@@ -28,7 +28,7 @@
             move.isKey ? 'key' : '',
             move.refutes ? 'refutes' : '',
             prevMove === myMove ? 'demolition' : '',
-           ].join(' ')"></lib-sp-solution-move>
+           ].join(' ')" (focus)="onClickMove($index)"></lib-sp-solution-move>
 }
 </div>
 }

@@ -97,3 +97,7 @@ hr {
   border-color: gray;
   margin: 0;
 }
+
+.solution:focus {
+  outline: 2px solid rgba(255, 202, 202, 0.8);
+}

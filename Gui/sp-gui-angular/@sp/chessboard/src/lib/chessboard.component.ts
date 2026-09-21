@@ -20,6 +20,7 @@ import {
   updatePositionFromFen,
 } from "@sp/dbmanager/src/public-api";
 import { getPieceIcon } from "@sp/gui/src/app/services/cursor.service";
+import { DisplayMoveService } from "@sp/ui-elements/src/lib/services/displayMove.service";
 import html2canvas from "html2canvas";
 import { Subscription } from "rxjs";
 import { AnimationData, Animations, ChessboardAnimationService } from "./chessboard-animation.service";
@@ -70,13 +71,15 @@ implements OnInit, OnChanges, OnDestroy {
   currentCell = signal<UiCell | null>(null);
   private lastHash = signal<string | undefined>(undefined);
   private uiCells = signal<UiCell[]>([]);
+  #displayMoveService = inject(DisplayMoveService);
 
   cells = computed(() => this.uiCells());
 
   cellSize = () => (this.chessboard()?.nativeElement.offsetWidth ?? 256) / 8;
 
   fen = computed(() => {
-    return getFFenFromPosition(this.position());
+    console.log("🚀 ~ ChessboardComponent ~ this.#displayMoveService.fenToDisplay():", this.#displayMoveService.fenToDisplay());
+    return this.#displayMoveService.fenToDisplay() || getFFenFromPosition(this.position());
   });
 
   internalFenChanged($event: CustomEvent<FenChangeEventDetail>) {

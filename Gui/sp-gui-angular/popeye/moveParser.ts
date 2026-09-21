@@ -20,7 +20,7 @@ export function parseHalfMove(moveN: number, part: "l" | "r", halfMove?: string,
   const parsed = halfMoveRx.exec(halfMove);
   if (!parsed?.groups) return null;
 
-  const effects = parsed.groups.effects.split("").filter(eff => !!eff);
+  const effects = parsed.groups.effects?.split("").filter(eff => !!eff) ?? [];
 
   const halfMoveInfo: HalfMoveInfo = {
     num: moveN,

@@ -27,6 +27,7 @@ import {
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
+import { DisplayMoveService } from "@sp/ui-elements/src/lib/services/displayMove.service";
 import { SnapshotsManagerComponent } from "@sp/ui-elements/src/lib/snapshots-manager/snapshots-manager.component";
 import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
 import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
@@ -73,6 +74,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   #snackBar = inject(MatSnackBar);
   #chessanim = inject(ChessboardAnimationService);
   #selectedPieceSquare = signal<FairySquare | null>(null);
+  #displayMoveService = inject(DisplayMoveService);
 
   jsonSolution = signal<HalfMoveInfo[]>([]);
   snapshotsCount = computed(() => Object.keys(this.#current.Problem()?.snapshots ?? {}).length - 1);
@@ -90,7 +92,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   chessboardAnimation = this.#preferences.chessboardAnimation.asReadonly();
   solveInProgress = signal(false);
   solutionCount = signal(0);
-  showLog = signal(false);
   availableEngines: Engines[] = [];
   selectedEngine = signal<Engines>("Popeye");
   viewMode = signal<ViewModes>("html");
@@ -238,8 +239,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return this.actualCursor;
   });
-
-  toggleLog = () => this.showLog.update(v => !v);
 
   toggleEditor($event: ViewModes) {
     this.viewMode.set($event);
@@ -552,6 +551,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.pieceToAdd.set(null);
     this.pieceToMove.set(null);
     this.#selectedPieceSquare.set(null);
+    this.#displayMoveService.reset();
   }
 
   private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {
