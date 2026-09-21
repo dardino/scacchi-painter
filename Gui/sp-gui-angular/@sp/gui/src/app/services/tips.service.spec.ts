@@ -4,14 +4,14 @@ import {
   DEFAULT_EXISTING_TIP_WEIGHT,
   DEFAULT_NEW_TIP_WEIGHT,
   MIN_TIP_WEIGHT,
-  TipsEngine,
+  TipsService,
   decayWeight,
   loadTipsFromJson,
   selectWeightedTip,
   syncTipsState,
-} from "./tips-engine";
+} from "../services/tips.service";
 
-describe("TipsEngine", () => {
+describe("TipsService", () => {
   it("loads and sanitizes strings from JSON input", () => {
     expect(loadTipsFromJson([
       "  First tip  ",
@@ -84,7 +84,7 @@ describe("TipsEngine", () => {
   });
 
   it("tracks session decay state independently for each tip", () => {
-    const engine = new TipsEngine();
+    const engine = new TipsService();
 
     engine.weights.set({ A: 16, B: 8 });
     engine.tips.set(["A", "B"]);
@@ -99,7 +99,7 @@ describe("TipsEngine", () => {
   });
 
   it("can select and navigate tips while persisting the visible state", () => {
-    const engine = new TipsEngine();
+    const engine = new TipsService();
     const random = vi.fn()
       .mockReturnValueOnce(0.1)
       .mockReturnValueOnce(0.2)

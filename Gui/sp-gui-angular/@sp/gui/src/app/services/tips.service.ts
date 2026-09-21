@@ -174,7 +174,7 @@ async function writeTipsStateToIndexedDB(state: TipsState): Promise<void> {
   }
 }
 
-export class TipsEngine {
+export class TipsService {
   public readonly tips = signal<string[]>([]);
   public readonly weights = signal<Record<string, number>>({});
   public readonly lastShownTip = signal<string | null>(null);
