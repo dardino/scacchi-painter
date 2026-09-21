@@ -23,4 +23,5 @@ export class MenuComponent {
   selectElement = new EventEmitter<void>();
 
   dbLoaded = computed(() => this.db.All().length !== 0);
+  dbCurrentIndex = computed(() => this.db.CurrentIndex());
 }

@@ -5,5 +5,6 @@
   "Hold Shift while moving a piece to clone it instead of moving it.",
   "You can now change the board colors in the configuration page.",
   "You can now create a snapshot of the current position and restore it later.",
-  "If you paste (CTRL+V or CMD+V on Mac) a FEN with the board highlighted, it is applied to the board."
+  "If you paste (CTRL+V or CMD+V on Mac) a FEN with the board highlighted, it is applied to the board.",
+  "You can now access the problem editor directly from the menu without navigating through the problem list."
 ]
