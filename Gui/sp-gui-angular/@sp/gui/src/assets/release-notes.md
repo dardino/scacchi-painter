@@ -12,12 +12,14 @@ A future update will introduce a new “Did you know?” banner on the home page
 * 🔁 **Weighted rotation** - tips are selected proportionally to their stored weights to avoid repetition while keeping newer tips more visible
 * 🧭 **Manual navigation** - users can move between tips with next/previous controls and keep the banner useful as a quick reminder
 * ♻️ **Per-session decay** - each tip can decay once per app session, reducing repetition without fully excluding it from future cycles
+* 📎 **Direct problem editing** - a new menu item will allow direct access to the single problem editing page
 
 **What changes for you:**
 
 * The home page will offer helpful starter guidance when you open the app
 * Important tips will surface more often without always repeating the same ones
 * The banner can be hidden if you prefer not to see it at startup
+* You'll be able to access the problem editor directly from the menu without navigating through the problem list
 
 ## Version 0.4.2
 

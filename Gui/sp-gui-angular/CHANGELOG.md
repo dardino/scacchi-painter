@@ -3,6 +3,7 @@
 ## WIP - Future
 
 - [sp-gui-angular] - Add a startup “Did you know?” tip banner with weighted rotation, IndexedDB persistence, and per-session decay
+- [sp-gui-angular] - Add menu item to directly access single problem editing page
 
 ## 0.4.2
 
