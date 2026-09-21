@@ -2,6 +2,7 @@
 
 ## 0.4.2
 
+- [sp-gui-angular] - Add a startup “Did you know?” tip banner with weighted rotation, IndexedDB persistence, and per-session decay
 - [sp-gui-angular] - Fix a bug preventing twins from being deleted
 - [sp-gui-angular] - Fix a bug preventing authors from being deleted
 - [sp-gui-angular] - Fix a bug preventing fairy conditions from being deleted

@@ -2,12 +2,13 @@
 
 ## Version 0.4.2
 
-### Fixes For New Problem, Authors, And Deletion Logic
+### Tips Banner, Editor Fixes, And More Stable Data Handling
 
-This patch release focuses on a small set of editor and data-flow fixes that were reported while working with problem creation and metadata management.
+This patch release includes the new startup tip banner and a few editor/data-flow fixes reported while working with problem creation and metadata management.
 
 **What's New:**
 
+* 🧠 **Startup tip banner** - a new “Did you know?” banner appears on the home page with weighted rotation, manual navigation, and per-session decay
 * 🧩 **New problem flow fixes** - corrected the file and source selection flow when creating a new problem
 * 👤 **Author cards fix** - improved author metadata handling and the rendering of author-related UI cards
 * 🗑️ **Twin deletion fix** - fixed deletion behavior for twin entries in the problem editor
@@ -16,6 +17,8 @@ This patch release focuses on a small set of editor and data-flow fixes that wer
 
 **What changes for you:**
 
+* The home page now offers lightweight onboarding hints at startup
+* Tip rotation is weighted and less repetitive across a session
 * Creating a new problem is more reliable and predictable
 * Author information displays and updates more consistently in the UI
 * Deleting twins and fairy entries behaves correctly in edge cases
