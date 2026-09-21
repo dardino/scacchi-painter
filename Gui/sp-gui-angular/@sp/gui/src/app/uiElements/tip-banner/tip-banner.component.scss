@@ -1,0 +1,28 @@
+.tip-banner {
+  margin: 0 0 1rem;
+  overflow-wrap: anywhere;
+}
+
+.tip-banner__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tip-banner__title {
+  font-weight: 600;
+}
+
+.tip-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tip-banner__text {
+  margin: 0.5rem 0 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}

@@ -1,0 +1,15 @@
+<mat-card class="tip-banner" appearance="outlined">
+  <div class="tip-banner__header">
+    <div class="tip-banner__title">Did you know?</div>
+    <div class="tip-banner__actions">
+      <button mat-icon-button type="button" aria-label="Previous tip" [disabled]="!hasPrev()" (click)="onPrev()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button mat-icon-button type="button" aria-label="Next tip" [disabled]="!hasNext()" (click)="onNext()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button mat-button type="button" (click)="onHide()">Hide tips</button>
+    </div>
+  </div>
+  <p class="tip-banner__text">{{ tip() }}</p>
+</mat-card>
