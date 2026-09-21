@@ -1,6 +1,9 @@
 <mat-card class="tip-banner" appearance="outlined">
   <div class="tip-banner__header">
-    <div class="tip-banner__title">Did you know?</div>
+    <div class="tip-banner__title">
+      <mat-icon class="tip-banner__icon" aria-hidden="true">lightbulb</mat-icon>
+      <span>Did you know?</span>
+    </div>
     <div class="tip-banner__actions">
       <button mat-icon-button type="button" aria-label="Previous tip" [disabled]="!hasPrev()" (click)="onPrev()">
         <mat-icon>chevron_left</mat-icon>

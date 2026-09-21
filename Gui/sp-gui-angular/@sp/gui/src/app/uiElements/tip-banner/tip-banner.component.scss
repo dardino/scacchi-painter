@@ -12,7 +12,17 @@
 }
 
 .tip-banner__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 600;
+}
+
+.tip-banner__icon {
+  font-size: 1.1rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  line-height: 1.1rem;
 }
 
 .tip-banner__actions {
