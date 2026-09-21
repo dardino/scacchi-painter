@@ -27,17 +27,20 @@ export class DisplayMoveService {
       const row = `Row${move.from[1]}` as Traverse;
       const pieceToMove = problem.GetPieceAt(col, row);
       if (pieceToMove) {
+        // move the piece from its current location to the target location
+
         const pieceIndex = problem.pieces.indexOf(pieceToMove);
         problem.pieces.splice(pieceIndex, 1);
         const toCol = `Col${move.to[0].toUpperCase()}` as Columns;
         const toRow = `Row${move.to[1]}` as Traverse;
-        const pieceToRemove = problem.GetPieceAt(toCol, toRow);
-        if (pieceToRemove) {
-          const removeIndex = problem.pieces.indexOf(pieceToRemove);
+        const capturedPiece = problem.GetPieceAt(toCol, toRow);
+        if (capturedPiece) {
+          const removeIndex = problem.pieces.indexOf(capturedPiece);
           problem.pieces.splice(removeIndex, 1);
         }
         pieceToMove.SetLocation(toCol, toRow);
         problem.pieces.push(pieceToMove);
+        // TODO: apply fairy effects to the move if any
       }
     }
     this.#fen.set(getFFenFromPosition(problem) ?? "");
