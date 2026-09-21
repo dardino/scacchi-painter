@@ -1,5 +1,24 @@
 # Release Notes
 
+## WIP - Future
+
+### Startup Tip Banner
+
+A future update will introduce a new “Did you know?” banner on the home page with weighted rotation, manual navigation, and per-session decay.
+
+**What's New:**
+
+* 🧠 **Startup tip banner** - a new banner appears on the home page with lightweight onboarding hints for key board features
+* 🔁 **Weighted rotation** - tips are selected proportionally to their stored weights to avoid repetition while keeping newer tips more visible
+* 🧭 **Manual navigation** - users can move between tips with next/previous controls and keep the banner useful as a quick reminder
+* ♻️ **Per-session decay** - each tip can decay once per app session, reducing repetition without fully excluding it from future cycles
+
+**What changes for you:**
+
+* The home page will offer helpful starter guidance when you open the app
+* Important tips will surface more often without always repeating the same ones
+* The banner can be hidden if you prefer not to see it at startup
+
 ## Version 0.4.2
 
 ### Editor Fixes And More Stable Data Handling
@@ -24,25 +43,6 @@ This patch release includes a few editor and data-flow fixes reported while work
 **Compatibility:**
 
 * Existing problem/database files remain compatible
-
-## Future
-
-### Startup Tip Banner
-
-A future update will introduce a new “Did you know?” banner on the home page with weighted rotation, manual navigation, and per-session decay.
-
-**What's New:**
-
-* 🧠 **Startup tip banner** - a new banner appears on the home page with lightweight onboarding hints for key board features
-* 🔁 **Weighted rotation** - tips are selected proportionally to their stored weights to avoid repetition while keeping newer tips more visible
-* 🧭 **Manual navigation** - users can move between tips with next/previous controls and keep the banner useful as a quick reminder
-* ♻️ **Per-session decay** - each tip can decay once per app session, reducing repetition without fully excluding it from future cycles
-
-**What changes for you:**
-
-* The home page will offer helpful starter guidance when you open the app
-* Important tips will surface more often without always repeating the same ones
-* The banner can be hidden if you prefer not to see it at startup
 
 ## Version 0.4.1
 
