@@ -78,7 +78,6 @@ implements OnInit, OnChanges, OnDestroy {
   cellSize = () => (this.chessboard()?.nativeElement.offsetWidth ?? 256) / 8;
 
   fen = computed(() => {
-    console.log("🚀 ~ ChessboardComponent ~ this.#displayMoveService.fenToDisplay():", this.#displayMoveService.fenToDisplay());
     return this.#displayMoveService.fenToDisplay() || getFFenFromPosition(this.position());
   });
 

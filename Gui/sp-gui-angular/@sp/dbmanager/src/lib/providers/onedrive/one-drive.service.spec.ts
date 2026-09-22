@@ -1,20 +1,54 @@
 import { TestBed } from "@angular/core/testing";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { OneDriveService } from "./one-drive.service";
-import { OneDriveCliProvider } from "../../oauth_providers/onedrive.cli";
 import { AuthenticationResult } from "@azure/msal-browser";
 import { FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { MsalAuthService } from "../../oauth_providers/onedrive.cli";
+import { OneDriveService } from "./one-drive.service";
 
-/**
- * Unit tests for OneDriveService
- * These tests verify the OneDrive file service integration with auth mocking
- * SKIP: MSAL requires actual browser crypto API which is not available in jsdom
- */
-describe.skip("OneDriveService", () => {
+describe("OneDriveService", () => {
   let service: OneDriveService;
+  let msalAuthServiceMock: {
+    getToken: ReturnType<typeof vi.fn>;
+    login: ReturnType<typeof vi.fn>;
+    initialize: ReturnType<typeof vi.fn>;
+    handleRedirect: ReturnType<typeof vi.fn>;
+  };
+
+  const mockToken: AuthenticationResult = {
+    accessToken: "mocked-access-token-for-graph-api",
+    account: {
+      homeAccountId: "test-account-id",
+      localAccountId: "local-test-id",
+      username: "testuser@onedrive.com",
+      environment: "login.microsoftonline.com",
+      tenantId: "test-tenant",
+    },
+    authority: "https://login.microsoftonline.com/common",
+    uniqueId: "unique-id",
+    tenantId: "tenant-id",
+    scopes: ["User.Read", "Files.ReadWrite"],
+    idToken: "mock-id-token",
+    idTokenClaims: {},
+    fromCache: false,
+    expiresOn: new Date(Date.now() + 3600000),
+    tokenType: "Bearer",
+    correlationId: "correlation-id",
+  };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.resetTestingModule();
+    vi.clearAllMocks();
+
+    msalAuthServiceMock = {
+      getToken: vi.fn().mockResolvedValue(mockToken),
+      login: vi.fn(),
+      initialize: vi.fn().mockResolvedValue(undefined),
+      handleRedirect: vi.fn(),
+    };
+
+    TestBed.configureTestingModule({
+      providers: [{ provide: MsalAuthService, useValue: msalAuthServiceMock }],
+    });
     service = TestBed.inject(OneDriveService);
   });
 
@@ -51,64 +85,26 @@ describe.skip("OneDriveService", () => {
   });
 
   describe("authorize", () => {
-    it("should call OneDriveCliProvider.getToken", async () => {
-      const getTokenSpy = vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined),
-      );
-
-      await service.authorize();
-
-      expect(getTokenSpy).toHaveBeenCalled();
-    });
-
-    it("should return token from provider", async () => {
-      const mockToken: AuthenticationResult = {
-        accessToken: "test-access-token",
-        account: {
-          homeAccountId: "test-id",
-          localAccountId: "local-id",
-          username: "test@example.com",
-          environment: "login.microsoftonline.com",
-          tenantId: "test-tenant",
-        },
-        authority: "https://login.microsoftonline.com/common",
-        uniqueId: "unique-id",
-        tenantId: "tenant-id",
-        scopes: ["User.Read"],
-        idToken: "mock-id-token",
-        idTokenClaims: {},
-        fromCache: false,
-        expiresOn: new Date(Date.now() + 3600000),
-        tokenType: "Bearer",
-        correlationId: "correlation-id",
-      };
-
-      vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(mockToken),
-      );
-
+    it("should return the token from MsalAuthService when available", async () => {
       const result = await service.authorize();
 
       expect(result).toBe(mockToken);
-      expect(result?.accessToken).toBe("test-access-token");
+      expect(msalAuthServiceMock.getToken).toHaveBeenCalledTimes(1);
     });
 
-    it("should return undefined when authentication fails", async () => {
-      vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined),
-      );
+    it("should trigger login and return null when the token is unavailable", async () => {
+      msalAuthServiceMock.getToken.mockResolvedValueOnce(null);
 
       const result = await service.authorize();
 
-      expect(result).toBeUndefined();
+      expect(result).toBeNull();
+      expect(msalAuthServiceMock.login).toHaveBeenCalledTimes(1);
     });
   });
 
   describe("enumContent", () => {
-    it("should return empty array when authorization fails", async () => {
-      vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined),
-      );
+    it("should return an empty array when authorization fails", async () => {
+      msalAuthServiceMock.getToken.mockResolvedValueOnce(null);
 
       const result = await service.enumContent(null, "root");
 
@@ -117,10 +113,8 @@ describe.skip("OneDriveService", () => {
   });
 
   describe("getFileContent", () => {
-    it("should throw error when authorization fails", async () => {
-      vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined),
-      );
+    it("should throw an error when authorization fails", async () => {
+      msalAuthServiceMock.getToken.mockResolvedValueOnce(null);
 
       const mockItem: FolderItemInfo = {
         fullPath: "/drives/root:/test.txt",
@@ -136,10 +130,8 @@ describe.skip("OneDriveService", () => {
   });
 
   describe("saveFileContent", () => {
-    it("should throw error when authorization fails", async () => {
-      vi.spyOn(OneDriveCliProvider, "getToken").mockReturnValue(
-        Promise.resolve(undefined),
-      );
+    it("should throw an error when authorization fails", async () => {
+      msalAuthServiceMock.getToken.mockResolvedValueOnce(null);
 
       const mockFile = new File(["test content"], "test.txt");
       const mockItem: FolderItemInfo = {
@@ -152,63 +144,6 @@ describe.skip("OneDriveService", () => {
       await expect(
         service.saveFileContent(mockFile, mockItem),
       ).rejects.toThrowError("Unable to open file: /drives/root:/test.txt");
-    });
-  });
-});
-
-describe("OneDriveService with mocked auth", () => {
-  let service: OneDriveService;
-  const mockToken: AuthenticationResult = {
-    accessToken: "mocked-access-token-for-graph-api",
-    account: {
-      homeAccountId: "test-account-id",
-      localAccountId: "local-test-id",
-      username: "testuser@onedrive.com",
-      environment: "login.microsoftonline.com",
-      tenantId: "test-tenant",
-    },
-    authority: "https://login.microsoftonline.com/common",
-    uniqueId: "unique-id",
-    tenantId: "tenant-id",
-    scopes: ["User.Read", "Files.ReadWrite"],
-    idToken: "mock-id-token",
-    idTokenClaims: {},
-    fromCache: false,
-    expiresOn: new Date(Date.now() + 3600000),
-    tokenType: "Bearer",
-    correlationId: "correlation-id",
-  };
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(OneDriveService);
-
-    // Mock the auth provider to return a valid token
-    vi.spyOn(OneDriveCliProvider, "getToken").mockResolvedValue(
-      mockToken,
-    );
-  });
-
-  it("should have valid authorization", async () => {
-    const token = await service.authorize();
-
-    expect(token).toBeDefined();
-    expect(token?.accessToken).toBe("mocked-access-token-for-graph-api");
-  });
-
-  describe("enumContent with auth", () => {
-    it("should request root drives when type is root", async () => {
-      // The actual Graph API call would fail without network,
-      // but we can verify the auth token is passed correctly
-      const token = await service.authorize();
-
-      expect(token?.accessToken).toBeDefined();
-    });
-
-    it("should request drive children when type is drive", async () => {
-      const token = await service.authorize();
-
-      expect(token?.accessToken).toBe("mocked-access-token-for-graph-api");
     });
   });
 });

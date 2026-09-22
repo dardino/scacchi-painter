@@ -1,17 +1,29 @@
 import { TestBed } from "@angular/core/testing";
-import { beforeEach, describe, expect, it } from "vitest";
 import { RouterModule } from "@angular/router";
+import { MsalAuthService } from "@sp/dbmanager/src/lib/oauth_providers/onedrive.cli";
 import { AllMatIconRegistryService } from "@sp/ui-elements/src/lib/registerIcons";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppComponent } from "./app.component";
+
+const msalAuthServiceMock = {
+  initialize: vi.fn().mockResolvedValue(undefined),
+  handleRedirect: vi.fn(),
+  login: vi.fn(),
+  getToken: vi.fn().mockResolvedValue(null),
+};
 
 describe("AppComponent", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     TestBed.configureTestingModule({
       imports: [
         AppComponent,
         RouterModule.forRoot([]),
       ],
-      providers: [AllMatIconRegistryService],
+      providers: [
+        AllMatIconRegistryService,
+        { provide: MsalAuthService, useValue: msalAuthServiceMock },
+      ],
     });
   });
 
