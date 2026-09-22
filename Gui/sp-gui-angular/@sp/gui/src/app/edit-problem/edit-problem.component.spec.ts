@@ -133,6 +133,26 @@ describe("EditProblemComponent - Interactive Features", () => {
     });
   });
 
+  describe("Keyboard shortcuts", () => {
+    it("saves the current position on Ctrl+S", () => {
+      const current = TestBed.inject(CurrentProblemService);
+      const updateSnapshotSpy = vi.spyOn(current, "UpdateSnapshot");
+
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "s", ctrlKey: true }));
+
+      expect(updateSnapshotSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("saves the current position on Cmd+S", () => {
+      const current = TestBed.inject(CurrentProblemService);
+      const updateSnapshotSpy = vi.spyOn(current, "UpdateSnapshot");
+
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "s", metaKey: true }));
+
+      expect(updateSnapshotSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("Edit Mode", () => {
     it("should change editMode when editModeChanged is called", () => {
       component.editModeChanged("remove");

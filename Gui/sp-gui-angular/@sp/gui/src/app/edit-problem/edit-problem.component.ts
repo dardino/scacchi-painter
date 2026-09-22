@@ -1,5 +1,5 @@
 import { CommonModule, Location } from "@angular/common";
-import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal, viewChild } from "@angular/core";
+import { AfterViewInit, Component, EffectRef, ElementRef, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal, viewChild } from "@angular/core";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDivider } from "@angular/material/divider";
@@ -19,6 +19,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { IPieceV4, IProblemV4 } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   CurrentProblemService,
+  DbmanagerService,
   EngineManagerService,
   SquareLocation,
   getCanvasLocation,
@@ -45,6 +46,11 @@ export const fenLikeTextPattern = /^(?=[^\s]*[1-8*'"+-])(?:[A-Za-z1-8*'"+-]+(?:\
   templateUrl: "./edit-problem.component.html",
   styleUrls: ["./edit-problem.component.scss"],
   standalone: true,
+  host: {
+    "(window:keydown)": "onKeyDown($event)",
+    "(window:copy)": "onCopy($event)",
+    "(window:paste)": "onPaste($event)",
+  },
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -75,6 +81,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   #chessanim = inject(ChessboardAnimationService);
   #selectedPieceSquare = signal<FairySquare | null>(null);
   #displayMoveService = inject(DisplayMoveService);
+  #db = inject(DbmanagerService);
 
   jsonSolution = signal<HalfMoveInfo[]>([]);
   snapshotsCount = computed(() => Object.keys(this.#current.Problem()?.snapshots ?? {}).length - 1);
@@ -652,8 +659,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return content;
   }
 
-  @HostListener("window:copy", ["$event"])
-  private onCopy = ($event?: ClipboardEvent): void => {
+  onCopy($event?: ClipboardEvent): void {
     if ($event?.target instanceof HTMLElement && isEditable($event.target)) return;
 
     if ($event) {
@@ -667,14 +673,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     catch (err) {
       this.#snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
     }
-  };
+  }
 
   private isFenLikeText(text: string): boolean {
     return fenLikeTextPattern.test(text.trim());
   }
 
-  @HostListener("window:paste", ["$event"])
-  private onPaste = ($event?: ClipboardEvent, patext?: string) => {
+  onPaste($event?: ClipboardEvent, patext?: string) {
     if ($event?.target && (
       $event.target instanceof HTMLInputElement
       || isEditable($event.target as HTMLElement)
@@ -699,7 +704,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         this.#snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
       }
     }
-  };
+  }
+
+  onKeyDown($event?: KeyboardEvent): void {
+    if (!$event || !($event.ctrlKey || $event.metaKey)) return;
+    if ($event.key.toLowerCase() !== "s") return;
+
+    $event.preventDefault();
+    this.#current.UpdateSnapshot();
+    this.#db.Save();
+  }
 
   // #region CONTEXT COMMANDS
   ctxDeletePiece() {

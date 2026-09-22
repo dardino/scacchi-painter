@@ -29,8 +29,8 @@ export class Piece implements IPieceV4 {
     p.color = SP2.getColor(source);
     p.column = SP2.getColum(source) ?? Columns[0];
     p.fairyAttributes = SP2.getFairyAttribute(source);
-    p.fairyCode = SP2.getFairyCodes(source)[0].code ?? null;
-    p.fairyParams = SP2.getFairyCodes(source)[0].params ?? [];
+    p.fairyCode = SP2.getFairyCodes(source)[0]?.code ?? null;
+    p.fairyParams = SP2.getFairyCodes(source)[0]?.params ?? [];
     p.rotation = SP2.getRotation(source);
     p.traverse = SP2.getTraverse(source) ?? Traverse[0];
     return p;
