@@ -139,6 +139,11 @@ export class Piece implements IPieceV4 {
     return json;
   }
 
+  clone(): Piece {
+    const cloned = Piece.fromJson(this.toJson());
+    return cloned;
+  }
+
   cursor() {
     const cursorColorByPieceColor: Record<PieceColors, string> = {
       Black: "b",

@@ -9,26 +9,23 @@
 }
 @if (viewMode() === 'both' || viewMode() === 'txt') {
 <div [style.fontSize]="solutionFontSize()" class="solutions">
-  @for (move of rows(); track $index) {
-  @let prevItem = $index < 1 ? null : rows()[$index - 1]; @let prevMove=prevItem===null ? 0 : prevItem.num +
-    (prevItem.part==="l" ? 0 : 0.5); <!-- se esiste una mossa la gestisco come tale -->
-    @let myMove = move.num + (move.part === "l" ? 0 : 0.5);
-    @if (myMove === firstMove()) {
-    <hr />
-    }
-    @let lineBr = myMove < prevMove || prevItem===null || prevItem.zugzwang; @if (lineBr) { <div class="linebr">
-</div>
-}
-<lib-sp-solution-move [attr.data-moveno]="myMove" [attr.data-movenopre]="prevMove" tabindex="0"
-  [hideNum]="mode === 'inline' && !lineBr && prevItem !== null && !move.refutes" [value]="move" [refutes]="move.refutes"
-  [class]="['solution',
-            mode,
-            move.threat ? 'threat' : '',
-            move.zugzwang ? 'zugzwang' : '',
-            move.isKey ? 'key' : '',
-            move.refutes ? 'refutes' : '',
-            prevMove === myMove ? 'demolition' : '',
-           ].join(' ')" (focus)="onClickMove($index)"></lib-sp-solution-move>
-}
+  @for (treeNode of moveTree(); track $index) {
+    @if (treeNode.parentId == null && $index > 0) { <hr /> }
+    @if (lineBr(treeNode)) { <div class="linebr"></div> }
+    <lib-sp-solution-move
+      tabindex="0"
+      [attr.data-moveno]="treeNode.move.num"
+      [hideNum]="mode === 'inline' && !lineBr(treeNode) && treeNode.parentId !== null && !treeNode.move.refutes"
+      [value]="treeNode.move" [refutes]="treeNode.move.refutes"
+      [class]="[
+        'solution',
+        mode,
+        treeNode.move.threat ? 'threat' : '',
+        treeNode.move.zugzwang ? 'zugzwang' : '',
+        treeNode.move.isKey ? 'key' : '',
+        treeNode.move.refutes ? 'refutes' : '',
+      ].join(' ')" (focus)="onClickMove($index)"
+    ></lib-sp-solution-move>
+  }
 </div>
 }
