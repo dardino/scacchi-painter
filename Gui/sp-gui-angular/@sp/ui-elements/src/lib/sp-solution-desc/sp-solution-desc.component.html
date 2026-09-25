@@ -10,22 +10,19 @@
 @if (viewMode() === 'both' || viewMode() === 'txt') {
 <div [style.fontSize]="solutionFontSize()" class="solutions">
   @for (treeNode of moveTree(); track $index) {
-    @if (treeNode.parentId == null && $index > 0) { <hr /> }
-    @if (lineBr(treeNode)) { <div class="linebr"></div> }
-    <lib-sp-solution-move
-      tabindex="0"
-      [attr.data-moveno]="treeNode.move.num"
-      [hideNum]="mode === 'inline' && !lineBr(treeNode) && treeNode.parentId !== null && !treeNode.move.refutes"
-      [value]="treeNode.move" [refutes]="treeNode.move.refutes"
-      [class]="[
+  @if (treeNode.parentId === null && $index > 0) {
+  <hr /> }
+  @if (lineBr(treeNode)) { <div class="linebr"></div> }
+  <lib-sp-solution-move tabindex="0" [attr.data-moveno]="treeNode.move.num"
+    [hideNum]="mode === 'inline' && !lineBr(treeNode) && treeNode.parentId !== null && !treeNode.move.refutes"
+    [value]="treeNode.move" [refutes]="treeNode.move.refutes" [class]="[
         'solution',
         mode,
         treeNode.move.threat ? 'threat' : '',
         treeNode.move.zugzwang ? 'zugzwang' : '',
         treeNode.move.isKey ? 'key' : '',
         treeNode.move.refutes ? 'refutes' : '',
-      ].join(' ')" (focus)="onClickMove($index)"
-    ></lib-sp-solution-move>
+      ].join(' ')" (focus)="onClickMove($index)"></lib-sp-solution-move>
   }
 </div>
 }
