@@ -303,11 +303,11 @@ importers:
         specifier: ^4.11.2
         version: 4.12.0
       '@azure/msal-angular':
-        specifier: ^6.1.0
-        version: 6.1.0(@azure/msal-browser@5.19.0)(rxjs@7.8.2)
+        specifier: ^6.2.1
+        version: 6.2.1(@azure/msal-browser@5.22.0)(rxjs@7.8.2)
       '@azure/msal-browser':
-        specifier: ^5.19.0
-        version: 5.19.0
+        specifier: ^5.22.0
+        version: 5.22.0
       '@dardino-chess/core':
         specifier: workspace:*
         version: link:../../CoreJS
@@ -316,7 +316,7 @@ importers:
         version: 0.2.0
       '@microsoft/microsoft-graph-client':
         specifier: ^3.0.5
-        version: 3.0.7(@azure/msal-browser@5.19.0)(buffer@6.0.3)
+        version: 3.0.7(@azure/msal-browser@5.22.0)(buffer@6.0.3)
       '@standard-schema/spec':
         specifier: ^1.0.0
         version: 1.1.0
@@ -920,18 +920,18 @@ packages:
     resolution: {integrity: sha512-fCqPIfOcLE+CGqGPd66c8bZpwAji98tZ4JI9i/mlTNTlsIWslCfpg48s/ypyLxZTump5sypjrKn2/kY7q8oAbA==}
     engines: {node: '>=20.0.0'}
 
-  '@azure/msal-angular@6.1.0':
-    resolution: {integrity: sha512-52sgt5YQ3hHxBue3JEgEgeJGkLNz16ZzfNOV6W8ZbKSmynZnPPr8vk2eiQDauNAfe//PnSQ4sA6ngkvjN0zH0Q==}
+  '@azure/msal-angular@6.2.1':
+    resolution: {integrity: sha512-96owAEqAlU52zChHSAaFFrUi4QppBO7dFPekk87pcfgTLIyr5UD8cU79yn02UWkQsb7cuwKR9r8PTa68foY79A==}
     peerDependencies:
-      '@azure/msal-browser': ^5.19.0
+      '@azure/msal-browser': ^5.22.0
       rxjs: ^7.4.0
 
-  '@azure/msal-browser@5.19.0':
-    resolution: {integrity: sha512-DHe9iRcyByGJuLPkl0K31a1JjOdRY2zX38Q07mQpSbR8zOj1EIgsWfTXhSQVyyijUxlcofVy/br7qWJbrMwVXQ==}
+  '@azure/msal-browser@5.22.0':
+    resolution: {integrity: sha512-5kgu9xeEKgGc2JeidxAtU15NJTqiH/CMCRRQAJ4Rac56kB7KVg91vbNmn+z3RO1vNomPN69UvjKG9h1Pghx6dQ==}
     engines: {node: '>=0.8.0'}
 
-  '@azure/msal-common@16.13.0':
-    resolution: {integrity: sha512-rOAy0KUcyBbdwVJ+f3uPpthXatFLLZN+/KWAsTLzk1aB23Xl9DRmmXYwSvBFOZyXj4jUQQ5FKxxRkhAFW1fOow==}
+  '@azure/msal-common@16.14.1':
+    resolution: {integrity: sha512-Or6xhPNyi4zHW25158yxBoyxuCqNSPa5YBVqfF1J5Ks4MJWBo/USXdp05DQIPu1Zli00YZu6t0+h6KvHJealxQ==}
     engines: {node: '>=0.8.0'}
 
   '@babel/code-frame@7.29.0':
@@ -10143,17 +10143,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@azure/msal-angular@6.1.0(@azure/msal-browser@5.19.0)(rxjs@7.8.2)':
+  '@azure/msal-angular@6.2.1(@azure/msal-browser@5.22.0)(rxjs@7.8.2)':
     dependencies:
-      '@azure/msal-browser': 5.19.0
+      '@azure/msal-browser': 5.22.0
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@azure/msal-browser@5.19.0':
+  '@azure/msal-browser@5.22.0':
     dependencies:
-      '@azure/msal-common': 16.13.0
+      '@azure/msal-common': 16.14.1
 
-  '@azure/msal-common@16.13.0': {}
+  '@azure/msal-common@16.14.1': {}
 
   '@babel/code-frame@7.29.0':
     dependencies:
@@ -11827,12 +11827,12 @@ snapshots:
   '@lmdb/lmdb-win32-x64@3.5.6':
     optional: true
 
-  '@microsoft/microsoft-graph-client@3.0.7(@azure/msal-browser@5.19.0)(buffer@6.0.3)':
+  '@microsoft/microsoft-graph-client@3.0.7(@azure/msal-browser@5.22.0)(buffer@6.0.3)':
     dependencies:
       '@babel/runtime': 7.29.2
       tslib: 2.8.1
     optionalDependencies:
-      '@azure/msal-browser': 5.19.0
+      '@azure/msal-browser': 5.22.0
       buffer: 6.0.3
 
   '@microsoft/microsoft-graph-types@2.43.1': {}

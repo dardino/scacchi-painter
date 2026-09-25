@@ -1,16 +1,19 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Client } from "@microsoft/microsoft-graph-client";
 import type { DriveItem } from "@microsoft/microsoft-graph-types";
+import { LogService } from "@sp/gui/src/app/services/log.service";
 import {
   FileService,
   FolderItemInfo,
 } from "@sp/host-bridge/src/lib/fileService";
-import { OneDriveCliProvider } from "../../oauth_providers/onedrive.cli";
+import { MsalAuthService } from "../../oauth_providers/onedrive.cli";
 
 @Injectable({
   providedIn: "root",
 })
-export class OneDriveService implements FileService {
+export class OneDriveService implements FileService<"onedrive"> {
+  #logService = inject(LogService);
+
   get sourceName() {
     return "onedrive" as const;
   }
@@ -25,11 +28,12 @@ export class OneDriveService implements FileService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...extensions: string[]
   ): Promise<FolderItemInfo[]> {
+    this.#logService.log("Enumerating content for itemId:", itemId);
     const tokenReponse = await this.authorize();
     if (tokenReponse == null) return [];
     const client = Client.initWithMiddleware({
       authProvider: {
-        getAccessToken: async () => tokenReponse.accessToken,
+        getAccessToken: async () => tokenReponse,
       },
     });
 
@@ -59,7 +63,7 @@ export class OneDriveService implements FileService {
     }
     const client = Client.initWithMiddleware({
       authProvider: {
-        getAccessToken: async () => tokenReponse.accessToken,
+        getAccessToken: async () => tokenReponse,
       },
     });
     const aw = await client.api("/drive/items/" + item.id).get();
@@ -78,7 +82,7 @@ export class OneDriveService implements FileService {
     }
     const client = Client.initWithMiddleware({
       authProvider: {
-        getAccessToken: async () => tokenReponse.accessToken,
+        getAccessToken: async () => tokenReponse,
       },
     });
     try {
@@ -93,8 +97,16 @@ export class OneDriveService implements FileService {
     }
   }
 
+  #msalService = inject(MsalAuthService);
+
   async authorize() {
-    const token = await OneDriveCliProvider.getToken();
+    const token = await this.#msalService.getToken();
+
+    if (!token) {
+      this.#msalService.login();
+      return null;
+    }
+
     return token;
   }
 }

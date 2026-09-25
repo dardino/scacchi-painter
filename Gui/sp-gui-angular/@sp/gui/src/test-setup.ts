@@ -5,11 +5,22 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from "@angular/platform-browser-dynamic/testing";
+import { MsalAuthService } from "@sp/dbmanager/src/lib/oauth_providers/onedrive.cli";
 import { webcrypto } from "node:crypto";
+import { beforeEach, vi } from "vitest";
 
 // Polyfill crypto for MSAL browser in jsdom environment
-if (typeof global.crypto === "undefined") {
-  (global as any).crypto = webcrypto;
+if (typeof globalThis.crypto === "undefined") {
+  Object.defineProperty(globalThis, "crypto", {
+    value: webcrypto,
+    configurable: true,
+  });
+}
+if (typeof window !== "undefined" && typeof window.crypto === "undefined") {
+  Object.defineProperty(window, "crypto", {
+    value: webcrypto,
+    configurable: true,
+  });
 }
 
 // Polyfill TextEncoder/TextDecoder if needed
@@ -21,6 +32,13 @@ if (typeof global.TextEncoder === "undefined") {
   });
 }
 
+const msalAuthServiceMock = {
+  initialize: vi.fn().mockResolvedValue(undefined),
+  handleRedirect: vi.fn(),
+  login: vi.fn(),
+  getToken: vi.fn().mockResolvedValue(null),
+};
+
 // Initialize the Angular testing environment
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
@@ -29,6 +47,13 @@ getTestBed().initTestEnvironment(
     teardown: { destroyAfterEach: true },
   },
 );
+
+beforeEach(() => {
+  getTestBed().overrideProvider(MsalAuthService, {
+    useValue: msalAuthServiceMock,
+  });
+  vi.clearAllMocks();
+});
 
 // Helper function to check if an error is related to icon loading
 function isIconError(value: any): boolean {

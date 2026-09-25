@@ -6,6 +6,7 @@ import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridg
 import { FileExplorerComponent } from "@sp/ui-elements/src/lib/file-explorer/file-explorer.component";
 import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source-selector/file-source-selector.component";
 import { RecentsComponent } from "../recents/recents.component";
+import { LogService } from "../services/log.service";
 
 @Component({
   selector: "app-sp-openfile",
@@ -25,18 +26,20 @@ export class OpenFileComponent implements OnInit {
   private localFolderService = inject(LocalDriveService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  #logService = inject(LogService);
 
   public showFilePicker = signal(false);
-  public currentFileService: FileService | null = null;
+  public currentFileService: FileService<AvaliableFileServices> | null = null;
   public showNewFileWizard = false;
 
   ngOnInit() {
     // Check route parameter first
     this.route.paramMap.subscribe((params) => {
       const source = params.get("source") as AvaliableFileServices | "new" | null | undefined;
+      this.#logService.log("OpenFileComponent ~ from source:", source);
       if (source) {
         setTimeout(() => {
-          this.sourceSelected(source);
+          this.#processSource(source);
         }, 1);
         return;
       }
@@ -47,32 +50,37 @@ export class OpenFileComponent implements OnInit {
     // Reset state first
     this.showFilePicker.set(false);
     this.currentFileService = null;
+    // Navigate to the route with the source parameter only if current route is not already the same
+    if (this.router.url !== `/openfile/${source}`) {
+      this.#logService.log("Navigating to /openfile/" + source);
+      this.router.navigate(["/openfile", source]);
+    }
+    else {
+      this.#processSource(source);
+    }
+  }
 
+  async #processSource(source: "new" | AvaliableFileServices) {
     switch (source) {
       case "new":
-        await this.newFile();
+        await this.#newFile();
         break;
       case "local":
-        await this.localFolder();
+        await this.#localFolder();
         break;
       case "dropbox":
-        await this.fromDropbox();
+        await this.#fromDropbox();
         break;
       case "onedrive":
-        await this.fromOneDrive();
+        await this.#fromOneDrive();
         break;
       case "unknown":
       default:
         break;
     }
-
-    // Navigate to the route with the source parameter only if current route is not already the same
-    if (this.router.url !== `/openfile/${source}`) {
-      this.router.navigate(["/openfile", source]);
-    }
   }
 
-  async newFile() {
+  async #newFile() {
     this.createFile({
       meta: {
         fullPath: "newfile.sp3",
@@ -85,20 +93,20 @@ export class OpenFileComponent implements OnInit {
     });
   }
 
-  async localFolder() {
+  async #localFolder() {
     this.currentFileService = this.localFolderService;
     this.showFilePicker.set(true);
   }
 
-  async fromDropbox() {
-    await this.dropboxService.authorize();
+  async #fromDropbox() {
     this.currentFileService = this.dropboxService;
+    await this.dropboxService.authorize();
     this.showFilePicker.set(true);
   }
 
-  async fromOneDrive() {
-    await this.onedriveService.authorize();
+  async #fromOneDrive() {
     this.currentFileService = this.onedriveService;
+    await this.onedriveService.authorize();
     this.showFilePicker.set(true);
   }
 

@@ -25,6 +25,44 @@ fn rust_solver_stop_flag() -> &'static AtomicBool {
     STOP_FLAG.get_or_init(|| AtomicBool::new(false))
 }
 
+fn custom_auth_redirect_response(request: tauri::http::Request<Vec<u8>>) -> tauri::http::Response<Vec<u8>> {
+    let path = request.uri().path();
+    let target_path = match path {
+        "" | "/" | "/auth" | "/auth/redirect" => "/redirect",
+        _ => path,
+    };
+    let query = request.uri().query().unwrap_or("");
+    let redirect_url = if query.is_empty() {
+        format!("tauri://localhost{target_path}")
+    } else {
+        format!("tauri://localhost{target_path}?{query}")
+    };
+
+    let script_target = serde_json::to_string(&redirect_url).unwrap();
+    let body = format!(
+        r#"<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url={redirect_url}" />
+    <script>
+      window.location.replace({script_target});
+    </script>
+    <title>Redirecting...</title>
+  </head>
+  <body></body>
+</html>"#,
+        redirect_url = redirect_url,
+        script_target = script_target,
+    );
+
+    tauri::http::Response::builder()
+        .status(200)
+        .header("Content-Type", "text/html; charset=utf-8")
+        .body(body.into_bytes())
+        .unwrap()
+}
+
 #[derive(Debug, Clone, Deserialize, Default)]
 #[serde(default, rename_all = "camelCase")]
 struct RustSolverOptionsInput {
@@ -283,6 +321,9 @@ async fn close_app<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .register_uri_scheme_protocol("scacchi-painter-x", |_, request| {
+            custom_auth_redirect_response(request)
+        })
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             close_app,

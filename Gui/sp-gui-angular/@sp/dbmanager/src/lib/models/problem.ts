@@ -1,4 +1,4 @@
-import type { HalfMoveInfo } from "@dardino-chess/core";
+import { computed } from "@angular/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Columns, IProblemV4, Traverse } from "../SPX.v4";
@@ -10,6 +10,7 @@ import {
   SquareLocation,
   convertToRtf,
   createXmlElement,
+  distinct,
   fenToChessBoard,
   getCanvasLocation,
   notEmpty,
@@ -41,6 +42,12 @@ export class Problem implements IProblemV4 {
     return this.#dateAsDate;
   }
 
+  public fairyPieces = computed(() => {
+    return distinct(this.pieces.filter(piece => piece.isFairy()).map(piece => piece.clone()), (piece) => {
+      return piece.fairyCode;
+    });
+  });
+
   public stipulation = Stipulation.fromJson({});
   public prizeRank = 0;
   public personalID = "";
@@ -55,7 +62,6 @@ export class Problem implements IProblemV4 {
   public authors: Author[] = [];
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
-  public jsonSolution: HalfMoveInfo[] = [];
   public htmlSolution = "";
   public conditions: string[] = [];
   public fairyCells: string[] = [];
@@ -67,7 +73,7 @@ export class Problem implements IProblemV4 {
     return Object.keys(this.snapshots).filter(f => this.snapshots[f] != null);
   }
 
-  public get startMoveN(): number {
+  public get startMoveN(): 1 | 1.5 {
     return Math.floor(this.stipulation.moves) === Math.ceil(this.stipulation.moves) ? 1 : 1.5;
   }
 

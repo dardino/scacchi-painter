@@ -72,6 +72,10 @@
     z-index: 2;
   }
 
+  @media screen and (max-height: mq.$smallScreen) and (orientation: landscape) {
+    top: 0;
+  }
+
 
   .chessboard-workarea {
     z-index: 20;
