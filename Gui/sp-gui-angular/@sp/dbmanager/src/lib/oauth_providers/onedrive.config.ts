@@ -1,12 +1,18 @@
+/* eslint-disable no-console */
 import { Configuration, LogLevel } from "@azure/msal-browser";
+import { LogService } from "@sp/gui/src/app/services/log.service";
 
 /**
  * Configuration class for @azure/msal-browser:
  * https://azuread.github.io/microsoft-authentication-library-for-js/ref/msal-browser/modules/_src_config_configuration_.html
  */
-export const MSAL_CONFIG: Configuration = {
+export const MSAL_CONFIG: (customLogger: LogService | null) => Configuration = (customLogger: LogService | null) => ({
   auth: {
     clientId: "a1c79ff3-d67f-43c5-8178-1d89fb84e03a",
+    onRedirectNavigate: (url) => {
+      if (customLogger) customLogger.log("Redirecting to:", url);
+      return true;
+    },
   },
   cache: {
     cacheLocation: "localStorage", // This configures where your cache will be stored
@@ -19,24 +25,26 @@ export const MSAL_CONFIG: Configuration = {
         }
         switch (level) {
           case LogLevel.Error:
+            if (customLogger) customLogger.error(message);
             console.error(message);
             return;
           case LogLevel.Info:
-            // eslint-disable-next-line no-console
+            if (customLogger) customLogger.info(message);
             console.info(message);
             return;
           case LogLevel.Verbose:
-            // eslint-disable-next-line no-console
+            if (customLogger) customLogger.debug(message);
             console.debug(message);
             return;
           case LogLevel.Warning:
+            if (customLogger) customLogger.warn(message);
             console.warn(message);
             return;
         }
       },
     },
   },
-};
+});
 
 const scopes = [
   "email",

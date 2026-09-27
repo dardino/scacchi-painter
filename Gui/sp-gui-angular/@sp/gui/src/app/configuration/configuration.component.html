@@ -6,9 +6,8 @@
   <button (click)="reload()" mat-stroked-button color="warn">Force reload</button>
 </div>
 <div class="configuration-main">
-
   <mat-accordion>
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>Editor Settings</mat-panel-title>
         <mat-panel-description>Configure your editor preferences</mat-panel-description>
@@ -75,6 +74,22 @@
           <mat-checkbox [ngModel]="enableAnimations()" (ngModelChange)="changeEnableAnimations($event)"></mat-checkbox>
         </div>
       </fieldset>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          System Log
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div>
+        <button matButton="filled" (click)="clearLog()">Clear Log</button>
+        <button matButton="filled" (click)="downloadLog()">Download Log</button>
+        <pre class="log">
+        @for (entry of log(); track $index) {
+          {{entry}}
+        }
+        </pre>
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

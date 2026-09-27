@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, signal } fro
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {
+  AvaliableFileServices,
   FileSelected,
   FileService,
   FolderItemInfo,
@@ -17,7 +18,7 @@ import {
   styleUrls: ["./file-explorer.component.scss"],
 })
 export class FileExplorerComponent implements OnInit, OnChanges {
-  @Input() service: FileService | null;
+  @Input() service: FileService<AvaliableFileServices> | null;
   @Input() mode: "save" | "open";
   @Output() selectFile = new EventEmitter<FileSelected>();
   @Output() folderChanged = new EventEmitter<FolderSelected>();

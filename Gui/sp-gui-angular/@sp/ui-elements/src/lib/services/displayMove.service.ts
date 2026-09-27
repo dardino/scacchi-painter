@@ -1,0 +1,69 @@
+import { inject, Injectable, signal } from "@angular/core";
+import { HalfMoveInfo } from "@dardino-chess/core";
+import { ChessPieceType } from "@dardino/chess-board";
+import { Columns, Traverse } from "@sp/dbmanager/src/lib/SPX.v4";
+import { CurrentProblemService, getFFenFromPosition } from "@sp/dbmanager/src/public-api";
+
+@Injectable({
+  providedIn: "root",
+})
+export class DisplayMoveService {
+  #problem = inject(CurrentProblemService);
+  #fen = signal<string | null>(null);
+
+  fenToDisplay = this.#fen.asReadonly();
+
+  reset() {
+    this.#fen.set(null);
+  }
+
+  applyMoves(moves: HalfMoveInfo[]) {
+    const problem = this.#problem.Problem()?.clone();
+    if (!problem) return;
+    // Apply the moves to the cloned problem
+    for (const move of moves) {
+      // Implement the logic to apply each move to the problem
+      // This is a placeholder and should be replaced with actual move application logic
+      const col = `Col${move.from[0].toUpperCase()}` as Columns;
+      const row = `Row${move.from[1]}` as Traverse;
+      const pieceToMove = problem.GetPieceAt(col, row);
+      if (pieceToMove) {
+        // move the piece from its current location to the target location
+        const pieceIndex = problem.pieces.indexOf(pieceToMove);
+        problem.pieces.splice(pieceIndex, 1);
+        const toCol = `Col${move.to[0].toUpperCase()}` as Columns;
+        const toRow = `Row${move.to[1]}` as Traverse;
+        const capturedPiece = problem.GetPieceAt(toCol, toRow);
+        if (capturedPiece) {
+          const removeIndex = problem.pieces.indexOf(capturedPiece);
+          problem.pieces.splice(removeIndex, 1);
+        }
+        pieceToMove.SetLocation(toCol, toRow);
+        // Apply Promotion if any
+        if (move.isPromotion) {
+          if (problem.engine === "Popeye") {
+            // Popeye specific promotion adjustments due to popeye using 's' for knight instead of 'n'
+            if (move.promotedPiece === "s") move.promotedPiece = "n";
+            if (move.promotedPiece === "S") move.promotedPiece = "N";
+          }
+          const fairyPieces = problem.fairyPieces().find(fp => fp.fairyCode?.toLowerCase() === move.promotedPiece.toLowerCase());
+          if (fairyPieces) {
+            // promotion to fairy piece
+            pieceToMove.fairyCode = fairyPieces.fairyCode;
+            pieceToMove.appearance = fairyPieces.appearance;
+            pieceToMove.rotation = fairyPieces.rotation;
+            pieceToMove.fairyAttributes = [...fairyPieces.fairyAttributes];
+            pieceToMove.fairyParams = [...fairyPieces.fairyParams];
+          }
+          else {
+            // promotion to standard chess piece
+            pieceToMove.appearance = move.promotedPiece.toLowerCase() as ChessPieceType;
+          }
+        }
+        problem.pieces.push(pieceToMove);
+        // TODO: apply fairy effects to the move if any
+      }
+    }
+    this.#fen.set(getFFenFromPosition(problem) ?? "");
+  }
+}

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { RouterModule } from "@angular/router";
+import { MsalAuthService } from "@sp/dbmanager/src/lib/oauth_providers/onedrive.cli";
 import { CurrentProblemService, SquareLocation } from "@sp/dbmanager/src/public-api";
 import { of } from "rxjs";
 import { EditProblemComponent, fenLikeTextPattern } from "./edit-problem.component";
@@ -12,6 +13,12 @@ describe("EditProblemComponent - Interactive Features", () => {
   let component: EditProblemComponent;
   let fixture: ComponentFixture<EditProblemComponent>;
   let pasteText: (text: string) => void;
+  const msalAuthServiceMock = {
+    initialize: vi.fn().mockResolvedValue(undefined),
+    handleRedirect: vi.fn(),
+    login: vi.fn(),
+    getToken: vi.fn().mockResolvedValue(null),
+  };
 
   beforeEach(async () => {
     TestBed.resetTestingModule();
@@ -26,6 +33,7 @@ describe("EditProblemComponent - Interactive Features", () => {
             open: vi.fn().mockReturnValue({ afterClosed: () => of(null) }),
           },
         },
+        { provide: MsalAuthService, useValue: msalAuthServiceMock },
       ],
     }).compileComponents();
 
@@ -122,6 +130,26 @@ describe("EditProblemComponent - Interactive Features", () => {
       component.setPieceToAdd(null);
       expect(component.editMode()).toBe("select");
       expect(component.pieceToAdd()).toBeNull();
+    });
+  });
+
+  describe("Keyboard shortcuts", () => {
+    it("saves the current position on Ctrl+S", () => {
+      const current = TestBed.inject(CurrentProblemService);
+      const updateSnapshotSpy = vi.spyOn(current, "UpdateSnapshot");
+
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "s", ctrlKey: true }));
+
+      expect(updateSnapshotSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("saves the current position on Cmd+S", () => {
+      const current = TestBed.inject(CurrentProblemService);
+      const updateSnapshotSpy = vi.spyOn(current, "UpdateSnapshot");
+
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "s", metaKey: true }));
+
+      expect(updateSnapshotSpy).toHaveBeenCalledTimes(1);
     });
   });
 

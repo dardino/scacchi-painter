@@ -1,122 +1,110 @@
-import { AccountInfo } from "@azure/msal-browser";
-import { OneDriveCliProvider } from "./onedrive.cli";
-import { describe, expect, it, vi } from "vitest";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TestBed } from "@angular/core/testing";
+import type { AccountInfo, RedirectRequest } from "@azure/msal-browser";
+import { LogService } from "@sp/gui/src/app/services/log.service";
+import { webcrypto } from "node:crypto";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-/**
- * Unit tests for OneDriveCliProvider
- * These tests focus on testing the public interface of the OneDriveCliProvider
- * Tests avoid triggering actual MSAL authentication calls which would timeout in test environment.
- * SKIP: MSAL requires actual browser crypto API which is not available in jsdom
- */
-describe.skip("OneDriveCliProvider", () => {
-  const mockAccountInfo: AccountInfo = {
+const mockClient = vi.hoisted(() => ({
+  initialize: vi.fn().mockResolvedValue(undefined),
+  loginRedirect: vi.fn().mockResolvedValue(undefined),
+  getAllAccounts: vi.fn().mockReturnValue([]),
+  acquireTokenSilent: vi.fn().mockResolvedValue({ accessToken: "mock-access-token" }),
+  handleRedirectPromise: vi.fn().mockResolvedValue(undefined),
+}));
+
+if (typeof globalThis.crypto === "undefined") {
+  Object.defineProperty(globalThis, "crypto", {
+    value: webcrypto,
+    configurable: true,
+  });
+}
+if (typeof window !== "undefined" && typeof window.crypto === "undefined") {
+  Object.defineProperty(window, "crypto", {
+    value: webcrypto,
+    configurable: true,
+  });
+}
+
+describe("MsalAuthService", () => {
+  let service: any;
+  let MsalAuthService: any;
+
+  const mockAccount: AccountInfo = {
     homeAccountId: "test-account-id",
     localAccountId: "local-test-id",
     username: "test@example.com",
-    environment: "test-env",
+    environment: "login.microsoftonline.com",
     tenantId: "test-tenant",
     name: "Test User",
   };
 
-  describe("showWelcomeMessage", () => {
-    it("should log welcome message with username", () => {
-      const consoleSpy = vi.spyOn(console, "warn");
+  beforeEach(async () => {
+    vi.resetModules();
+    vi.doMock("@azure/msal-browser", () => {
+      class MockPublicClientApplication {
+        initialize = mockClient.initialize;
+        loginRedirect = mockClient.loginRedirect;
+        getAllAccounts = mockClient.getAllAccounts;
+        acquireTokenSilent = mockClient.acquireTokenSilent;
+        handleRedirectPromise = mockClient.handleRedirectPromise;
+      }
 
-      OneDriveCliProvider.showWelcomeMessage(mockAccountInfo);
-
-      expect(consoleSpy).toHaveBeenCalledWith("Welcome test@example.com");
+      return { PublicClientApplication: MockPublicClientApplication };
     });
 
-    it("should handle accounts with different username formats", () => {
-      const consoleSpy = vi.spyOn(console, "warn");
-      const accountWithDifferentUsername: AccountInfo = {
-        ...mockAccountInfo,
-        username: "admin@company.onmicrosoft.com",
-      };
+    const mod = await import("./onedrive.cli");
+    MsalAuthService = mod.MsalAuthService;
 
-      OneDriveCliProvider.showWelcomeMessage(accountWithDifferentUsername);
-
-      expect(consoleSpy).toHaveBeenCalledWith("Welcome admin@company.onmicrosoft.com");
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [LogService, MsalAuthService],
     });
 
-    it("should handle accounts with empty username", () => {
-      const consoleSpy = vi.spyOn(console, "warn");
-      const accountWithEmptyUsername: AccountInfo = {
-        ...mockAccountInfo,
-        username: "",
-      };
+    service = TestBed.inject(MsalAuthService);
+    vi.clearAllMocks();
+    mockClient.getAllAccounts.mockReturnValue([]);
+  });
 
-      OneDriveCliProvider.showWelcomeMessage(accountWithEmptyUsername);
+  it("should be created", () => {
+    expect(service).toBeTruthy();
+  });
 
-      expect(consoleSpy).toHaveBeenCalledWith("Welcome ");
+  it("should initialize the MSAL client", async () => {
+    await service.initialize();
+
+    expect(mockClient.initialize).toHaveBeenCalledTimes(1);
+  });
+
+  it("should log in with redirect request scopes", async () => {
+    await service.login();
+
+    expect(mockClient.loginRedirect).toHaveBeenCalledTimes(1);
+    expect(mockClient.loginRedirect).toHaveBeenCalledWith({
+      scopes: ["Files.ReadWrite", "User.Read"],
+    } satisfies RedirectRequest);
+  });
+
+  it("should return null when no account is available", async () => {
+    mockClient.getAllAccounts.mockReturnValue([]);
+
+    await expect(service.getToken()).resolves.toBeNull();
+  });
+
+  it("should return the access token for the first account", async () => {
+    mockClient.getAllAccounts.mockReturnValue([mockAccount]);
+    mockClient.acquireTokenSilent.mockResolvedValue({ accessToken: "mock-access-token" });
+
+    await expect(service.getToken()).resolves.toBe("mock-access-token");
+    expect(mockClient.acquireTokenSilent).toHaveBeenCalledWith({
+      account: mockAccount,
+      scopes: ["Files.ReadWrite"],
     });
   });
 
-  describe("signIn methods", () => {
-    it("should return a promise for popup method", () => {
-      // This only verifies the method returns a promise, not that it completes
-      const signInPromise = OneDriveCliProvider.signIn("popup");
+  it("should delegate redirect handling", async () => {
+    await service.handleRedirect();
 
-      expect(signInPromise).toBeInstanceOf(Promise);
-    });
-
-    it("should return a promise for redirect method", () => {
-      // This only verifies the method returns a promise, not that it completes
-      const signInPromise = OneDriveCliProvider.signIn("redirect");
-
-      expect(signInPromise).toBeInstanceOf(Promise);
-    });
-  });
-
-  describe("getTokenPopup", () => {
-    it("should return a promise", () => {
-      const request = { scopes: ["User.Read"] };
-
-      const tokenPromise = OneDriveCliProvider.getTokenPopup(request);
-
-      expect(tokenPromise).toBeInstanceOf(Promise);
-    });
-
-    it("should accept request with multiple scopes", () => {
-      const request = { scopes: ["User.Read", "Files.ReadWrite", "openid", "profile"] };
-
-      const tokenPromise = OneDriveCliProvider.getTokenPopup(request);
-
-      expect(tokenPromise).toBeInstanceOf(Promise);
-    });
-  });
-
-  describe("getTokenRedirect", () => {
-    it("should return a promise", () => {
-      const request = { scopes: ["User.Read"] };
-
-      const tokenPromise = OneDriveCliProvider.getTokenRedirect(request);
-
-      expect(tokenPromise).toBeInstanceOf(Promise);
-    });
-
-    it("should accept optional account info parameter", () => {
-      const request = { scopes: ["User.Read"] };
-
-      const tokenPromise = OneDriveCliProvider.getTokenRedirect(request, mockAccountInfo);
-
-      expect(tokenPromise).toBeInstanceOf(Promise);
-    });
-  });
-
-  describe("getToken", () => {
-    it("should return a promise", () => {
-      const tokenPromise = OneDriveCliProvider.getToken();
-
-      expect(tokenPromise).toBeInstanceOf(Promise);
-    });
-  });
-
-  describe("initialize", () => {
-    it("should return a promise", () => {
-      const initPromise = OneDriveCliProvider.initialize();
-
-      expect(initPromise).toBeInstanceOf(Promise);
-    });
+    expect(mockClient.handleRedirectPromise).toHaveBeenCalledTimes(1);
   });
 });

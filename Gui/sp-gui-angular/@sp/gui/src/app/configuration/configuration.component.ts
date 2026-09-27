@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
-
-import { ApplicationRef, CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, inject } from "@angular/core";
+import { ApplicationRef, CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, computed, inject } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckbox } from "@angular/material/checkbox";
@@ -11,6 +9,7 @@ import { MatOption, MatSelect } from "@angular/material/select";
 import { ServiceWorkerModule, SwUpdate } from "@angular/service-worker";
 import { concat, first, interval } from "rxjs";
 import { environment } from "../../environments/environment";
+import { LogService } from "../services/log.service";
 import { PreferencesService } from "../services/preferences.service";
 import { ThemeService } from "../services/theme.service";
 import { AvailableThemes } from "../services/types";
@@ -41,6 +40,7 @@ import { AvailableThemes } from "../services/types";
 export class ConfigurationComponent implements OnInit {
   #preferences = inject(PreferencesService);
   #themeService = inject(ThemeService);
+  #logService = inject(LogService);
 
   availableThemes = this.#themeService.AllThemes;
 
@@ -111,10 +111,10 @@ export class ConfigurationComponent implements OnInit {
       everySixHoursOnceAppIsStable$.subscribe(async () => {
         try {
           const updateFound = await swUpdate.checkForUpdate();
-          console.log(updateFound ? "A new version is available." : "Already on the latest version.");
+          this.#logService.log(updateFound ? "A new version is available." : "Already on the latest version.");
         }
         catch (err) {
-          console.error("Failed to check for updates:", err);
+          this.#logService.log("Failed to check for updates: " + err);
         }
       });
 
@@ -122,12 +122,12 @@ export class ConfigurationComponent implements OnInit {
       swUpdate.versionUpdates.subscribe(async (evt) => {
         switch (evt.type) {
           case "VERSION_DETECTED":
-            console.log(`Downloading new app version: ${evt.version.hash}`);
+            this.#logService.log(`Downloading new app version: ${evt.version.hash}`);
             break;
           case "VERSION_READY":
             {
-              console.log(`Current app version: ${evt.currentVersion.hash}`);
-              console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
+              this.#logService.log(`Current app version: ${evt.currentVersion.hash}`);
+              this.#logService.log(`New app version ready for use: ${evt.latestVersion.hash}`);
               const run = confirm(`New app version ready for use: ${evt.latestVersion.hash}\r\nRestart is reqired to load the new version.\r\nWould you like to restart the application now?`);
               if (run) {
                 document.location.reload();
@@ -135,11 +135,23 @@ export class ConfigurationComponent implements OnInit {
             }
             break;
           case "VERSION_INSTALLATION_FAILED":
-            console.log(`Failed to install app version '${evt.version.hash}': ${evt.error}`);
+            this.#logService.log(`Failed to install app version '${evt.version.hash}': ${evt.error}`);
             break;
         }
       });
     }
+  }
+
+  log = computed(() => {
+    return this.#logService.Logs();
+  });
+
+  clearLog() {
+    this.#logService.clearLogs();
+  }
+
+  downloadLog() {
+    this.#logService.downloadLogs();
   }
 
   version: string;

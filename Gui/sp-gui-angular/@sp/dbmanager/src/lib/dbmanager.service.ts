@@ -107,7 +107,7 @@ export class DbmanagerService implements IDbManagerService {
     });
   }
 
-  private get fileService(): FileService | null {
+  private get fileService(): FileService<AvaliableFileServices> | null {
     switch (this.#currentFile()?.source) {
       case "dropbox":
         return this.#dropboxFS;

@@ -22,6 +22,7 @@ dd {
 
 .configuration-main {
   grid-area: main;
+  padding-bottom: 3rem;
 }
 
 
@@ -75,4 +76,16 @@ dd {
 .chessboard {
   width: 100%;
   max-width: 400px;
+}
+
+.log {
+  background-color: black;
+  color: lime;
+  padding: 1rem;
+  font-family: monospace;
+  white-space: pre-line;
+  line-height: 1;
+  font-size: smaller;
+  max-height: 60vh;
+  overflow-y: auto;
 }

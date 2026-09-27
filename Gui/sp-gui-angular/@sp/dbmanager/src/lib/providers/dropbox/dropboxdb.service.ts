@@ -30,16 +30,16 @@ interface DropboxFileSavedInfo {
 @Injectable({
   providedIn: "root",
 })
-export class DropboxdbService implements FileService {
+export class DropboxdbService implements FileService<"dropbox"> {
   constructor() {}
-  private token: TokenResponse | null;
+  private token: TokenResponse | null = null;
 
   private currentCursor: string | null = null;
   private pagesize = 1000;
   private hasMore = true;
 
-  get sourceName() {
-    return "dropbox" as const;
+  get sourceName(): "dropbox" {
+    return "dropbox";
   }
 
   joinPath(...parts: string[]): string {

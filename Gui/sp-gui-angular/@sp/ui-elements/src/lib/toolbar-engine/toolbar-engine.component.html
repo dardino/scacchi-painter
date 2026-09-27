@@ -1,61 +1,21 @@
 <mat-toolbar-row class="lib-toolbar">
-  <lib-sp-toolbar-button
-    (click)="openEngineSettingsDialog()"
-    iconText="settings"
-    [iconLabel]="`Engine: ${selectedEngine()}`"
-    [noLabel]="hideLabels()"
-    [disabled]="isRunning()"
-  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button (click)="openEngineSettingsDialog()" iconText="settings"
+    [iconLabel]="`Engine: ${selectedEngine()}`" [noLabel]="hideLabels()"
+    [disabled]="isRunning()"></lib-sp-toolbar-button>
   @if (!isRunning()) {
-    <lib-sp-toolbar-button
-      (click)="start()"
-      iconText="play_circle_filled"
-      iconLabel="Start"
-      [noLabel]="hideLabels()"
-      mat-toolip="Solve"
-    ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button (click)="start()" iconText="play_circle_filled" iconLabel="Start" [noLabel]="hideLabels()"
+    mat-toolip="Solve"></lib-sp-toolbar-button>
   }
   @if (isRunning()) {
-    <lib-sp-toolbar-button
-      (click)="stop()"
-      iconText="stop"
-      iconLabel="Stop"
-      mat-toolip="Stop solve"
-      [noLabel]="hideLabels()"
-    ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button (click)="stop()" iconText="stop" iconLabel="Stop" mat-toolip="Stop solve"
+    [noLabel]="hideLabels()"></lib-sp-toolbar-button>
   }
-  <lib-sp-toolbar-button
-    (click)="tryMove()"
-    iconText="play_circle_outline"
-    iconLabel="Try"
-    mat-toolip="Try a move"
-    [noLabel]="hideLabels()"
-    [disabled]="isRunning()"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
-    (click)="increaseFontSize()"
-    iconText="text_increase"
-    mat-toolip="Increase text size"
-    [noLabel]="hideLabels()"
-    [disabled]="isMaxFont()"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
-    (click)="decreaseFontSize()"
-    iconText="text_decrease"
-    mat-toolip="Decrease text size"
-    [noLabel]="hideLabels()"
-    [disabled]="isMinFont()"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
-    (click)="toggleEngineLog()"
-    [iconText]="logIcon()"
-    iconLabel="Toggle engine log"
-    [noLabel]="true"
-  ></lib-sp-toolbar-button>
-  <lib-sp-toolbar-button
-    (click)="toggleEditorview()"
-    [iconText]="viewModeIcon()"
-    iconLabel="Toggle editor"
-    [noLabel]="true"
-  ></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button (click)="tryMove()" iconText="play_circle_outline" iconLabel="Try" mat-toolip="Try a move"
+    [noLabel]="hideLabels()" [disabled]="isRunning()"></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button (click)="increaseFontSize()" iconText="text_increase" mat-toolip="Increase text size"
+    [noLabel]="hideLabels()" [disabled]="isMaxFont()"></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button (click)="decreaseFontSize()" iconText="text_decrease" mat-toolip="Decrease text size"
+    [noLabel]="hideLabels()" [disabled]="isMinFont()"></lib-sp-toolbar-button>
+  <lib-sp-toolbar-button (click)="toggleEditorview()" [iconText]="viewModeIcon()" iconLabel="Toggle editor"
+    [noLabel]="true"></lib-sp-toolbar-button>
 </mat-toolbar-row>

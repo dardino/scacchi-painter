@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, computed, inject, input } from "@angular/core";
+import { Component, computed, inject, input, output } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
@@ -26,29 +26,17 @@ export class ToolbarEngineComponent {
 
   hideLabels = input<boolean>(false);
 
-  @Output()
-  public startSolve = new EventEmitter<"start" | "try">();
-
-  @Output()
-  public stopSolve = new EventEmitter<"stop">();
-
-  @Output()
-  public toggleLog = new EventEmitter<void>();
-
-  @Output()
-  public toggleEditor = new EventEmitter<ViewModes>();
-
-  @Output()
-  public openEngineSettings = new EventEmitter<void>();
+  public startSolve = output<"start" | "try">();
+  public stopSolve = output<"stop">();
+  public toggleEditor = output<ViewModes>();
+  public openEngineSettings = output<void>();
 
   isRunning = input<boolean>(false);
-  fullLog = input<boolean>(false);
   viewMode = input<ViewModes>("both");
   selectedEngine = input<Engines>("Popeye");
 
   isMaxFont = computed(() => this.fontSize() >= 2);
   isMinFont = computed(() => this.fontSize() <= 1);
-  logIcon = computed(() => this.fullLog() ? "compress" : "expand");
   fontSize = computed(() => this.preferences.editorSolutionFontSize());
   viewModeIcon = computed(() => mapViewModeToIcons[this.viewMode()]?.icon);
 
@@ -73,10 +61,6 @@ export class ToolbarEngineComponent {
 
   decreaseFontSize() {
     this.preferences.editorSolutionFontSize.set(Math.min(Math.max(this.preferences.editorSolutionFontSize(), 1) - 0.1, 2));
-  }
-
-  toggleEngineLog() {
-    this.toggleLog.emit();
   }
 
   toggleEditorview() {

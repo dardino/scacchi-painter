@@ -695,3 +695,16 @@ export const convertFen = (fen: string | null | undefined) => {
   }
   return fen;
 };
+
+export function distinct<T>(array: T[], keyFn?: (item: T) => unknown): T[] {
+  if (!keyFn) {
+    return Array.from(new Set(array));
+  }
+  const seen = new Set();
+  return array.filter((item) => {
+    const key = keyFn(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}

@@ -1,5 +1,5 @@
 import { CommonModule, Location } from "@angular/common";
-import { AfterViewInit, Component, EffectRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal, viewChild } from "@angular/core";
+import { AfterViewInit, Component, EffectRef, ElementRef, OnDestroy, OnInit, ViewChild, computed, effect, inject, signal, viewChild } from "@angular/core";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDivider } from "@angular/material/divider";
@@ -8,6 +8,7 @@ import { MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ActivatedRoute } from "@angular/router";
+import { HalfMoveInfo } from "@dardino-chess/core";
 import { FairySquare, ModifierKeys, type ChessPieceRotation } from "@dardino/chess-board";
 import { AnimationData, Animations, ChessboardAnimationService } from "@sp/chessboard/src/lib/chessboard-animation.service";
 import { PieceSelectorComponent } from "@sp/chessboard/src/lib/piece-selector/piece-selector.component";
@@ -18,6 +19,7 @@ import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { IPieceV4, IProblemV4 } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
   CurrentProblemService,
+  DbmanagerService,
   EngineManagerService,
   SquareLocation,
   getCanvasLocation,
@@ -26,6 +28,7 @@ import {
 } from "@sp/dbmanager/src/public-api";
 import { Engines, SolutionRow } from "@sp/host-bridge/src/lib/bridge-global";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
+import { DisplayMoveService } from "@sp/ui-elements/src/lib/services/displayMove.service";
 import { SnapshotsManagerComponent } from "@sp/ui-elements/src/lib/snapshots-manager/snapshots-manager.component";
 import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-desc/sp-solution-desc.component";
 import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
@@ -43,6 +46,11 @@ export const fenLikeTextPattern = /^(?=[^\s]*[1-8*'"+-])(?:[A-Za-z1-8*'"+-]+(?:\
   templateUrl: "./edit-problem.component.html",
   styleUrls: ["./edit-problem.component.scss"],
   standalone: true,
+  host: {
+    "(window:keydown)": "onKeyDown($event)",
+    "(window:copy)": "onCopy($event)",
+    "(window:paste)": "onPaste($event)",
+  },
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -72,9 +80,11 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   #snackBar = inject(MatSnackBar);
   #chessanim = inject(ChessboardAnimationService);
   #selectedPieceSquare = signal<FairySquare | null>(null);
+  #displayMoveService = inject(DisplayMoveService);
+  #db = inject(DbmanagerService);
 
+  jsonSolution = signal<HalfMoveInfo[]>([]);
   snapshotsCount = computed(() => Object.keys(this.#current.Problem()?.snapshots ?? {}).length - 1);
-
   chessboard = viewChild<ChessboardComponent>("chessboardLib");
 
   public selectedPieceSquare = this.#selectedPieceSquare.asReadonly();
@@ -89,7 +99,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   chessboardAnimation = this.#preferences.chessboardAnimation.asReadonly();
   solveInProgress = signal(false);
   solutionCount = signal(0);
-  showLog = signal(false);
   availableEngines: Engines[] = [];
   selectedEngine = signal<Engines>("Popeye");
   viewMode = signal<ViewModes>("html");
@@ -238,8 +247,6 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.actualCursor;
   });
 
-  toggleLog = () => this.showLog.update(v => !v);
-
   toggleEditor($event: ViewModes) {
     this.viewMode.set($event);
   }
@@ -295,7 +302,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const prob = this.problem()?.clone();
     if (prob) {
       prob.engine = this.selectedEngine();
-      prob.jsonSolution = [];
+      this.jsonSolution.set([]);
       prob.htmlSolution = "";
       prob.textSolution = "";
       this.#current.SetProblem(() => prob);
@@ -343,7 +350,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
     newProblem.htmlSolution += this.toHtml([...raw]);
     newProblem.textSolution += raw.join(`\n`);
-    newProblem.jsonSolution.push(...msg.moveTree);
+    this.jsonSolution.set([...this.jsonSolution(), ...msg.moveTree]);
     this.#current.SetProblem(() => newProblem);
   }
 
@@ -551,6 +558,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.pieceToAdd.set(null);
     this.pieceToMove.set(null);
     this.#selectedPieceSquare.set(null);
+    this.#displayMoveService.reset();
   }
 
   private sameCell(loc1: SquareLocation | null, loc2: SquareLocation | null) {
@@ -651,8 +659,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     return content;
   }
 
-  @HostListener("window:copy", ["$event"])
-  private onCopy = ($event?: ClipboardEvent): void => {
+  onCopy($event?: ClipboardEvent): void {
     if ($event?.target instanceof HTMLElement && isEditable($event.target)) return;
 
     if ($event) {
@@ -666,14 +673,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     catch (err) {
       this.#snackBar.open("Error copying position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
     }
-  };
+  }
 
   private isFenLikeText(text: string): boolean {
     return fenLikeTextPattern.test(text.trim());
   }
 
-  @HostListener("window:paste", ["$event"])
-  private onPaste = ($event?: ClipboardEvent, patext?: string) => {
+  onPaste($event?: ClipboardEvent, patext?: string) {
     if ($event?.target && (
       $event.target instanceof HTMLInputElement
       || isEditable($event.target as HTMLElement)
@@ -698,7 +704,16 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         this.#snackBar.open("Error pasting position: " + (err as Error)?.message, undefined, { duration: 1000, verticalPosition: "top" });
       }
     }
-  };
+  }
+
+  onKeyDown($event?: KeyboardEvent): void {
+    if (!$event || !($event.ctrlKey || $event.metaKey)) return;
+    if ($event.key.toLowerCase() !== "s") return;
+
+    $event.preventDefault();
+    this.#current.UpdateSnapshot();
+    this.#db.Save();
+  }
 
   // #region CONTEXT COMMANDS
   ctxDeletePiece() {

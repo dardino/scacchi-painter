@@ -36,8 +36,10 @@ type NumberProps<T> = Extract<{
 type BooleanProps<T> = Extract<{
   [K in keyof T]: T[K] extends boolean | Signal<boolean> ? K : never;
 }[keyof T], string>;
-
-type ValidPreferenceKey<T> = StringProps<T> | NumberProps<T> | BooleanProps<T>;
+type ArrayProps<T> = Extract<{
+  [K in keyof T]: T[K] extends Array<string | number | boolean> | Signal<Array<string | number | boolean>> ? K : never;
+}[keyof T], string>;
+type ValidPreferenceKey<T> = StringProps<T> | NumberProps<T> | BooleanProps<T> | ArrayProps<T>;
 
 /**
  * Creates a signal that is synchronized with localStorage.
