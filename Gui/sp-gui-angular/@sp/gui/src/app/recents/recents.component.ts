@@ -3,7 +3,7 @@ import { MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { DbmanagerService, setLocalAuthInfo } from "@sp/dbmanager/src/public-api";
 import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { DbsourceComponent } from "@sp/ui-elements/src/lib/dbsource/dbsource.component";
 import { LogService } from "../services/log.service";
@@ -34,6 +34,9 @@ export class RecentsComponent {
 
   async clickOnRecent(fInfo: RecentFileInfo) {
     try {
+      setLocalAuthInfo({
+        return_url: this.#router.createUrlTree(["/list"]).toString(),
+      });
       const result = await this.#db.LoadFromService(fInfo);
       if (!(result instanceof Error)) {
         this.#router.navigate(["/list"]);

@@ -1,12 +1,16 @@
+@use "sass:math";
+
 // Generate padding-left for data-indent from 1 to 10
+$indent-step: 3em;
+
 :host:first-child,
-div + :host {
+div+ :host {
   @for $i from 1 through 10 {
     [data-indent="#{$i}"] {
-      padding-left: ($i - 1) * 1em;
+      padding-left: ($i - 1) * $indent-step;
 
       &[data-part="r"] {
-        padding-left: ($i - 1) * 1em + 1.5em;
+        padding-left: ($i - 1) * $indent-step + math.div($indent-step, 2);
       }
     }
   }
@@ -16,7 +20,7 @@ div + :host {
   margin-right: 1em;
   flex: 1 0 auto;
 
-  & + [data-indent="0"]::before {
+  &+[data-indent="0"]::before {
     content: "";
     display: block;
     width: 0;
@@ -29,6 +33,7 @@ div + :host {
 }
 
 .move {
+  display: inline-block;
   cursor: pointer;
 
   &:hover {

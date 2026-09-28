@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from "@angular/core/testing";
-import type { AccountInfo, RedirectRequest } from "@azure/msal-browser";
-import { LogService } from "@sp/gui/src/app/services/log.service";
+import type { AccountInfo } from "@azure/msal-browser";
 import { webcrypto } from "node:crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { REQUESTS } from "./onedrive.config";
 
 const mockClient = vi.hoisted(() => ({
   initialize: vi.fn().mockResolvedValue(undefined),
@@ -12,6 +12,14 @@ const mockClient = vi.hoisted(() => ({
   acquireTokenSilent: vi.fn().mockResolvedValue({ accessToken: "mock-access-token" }),
   handleRedirectPromise: vi.fn().mockResolvedValue(undefined),
 }));
+
+const mockLogService = {
+  log: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
+  debug: vi.fn(),
+  warn: vi.fn(),
+};
 
 if (typeof globalThis.crypto === "undefined") {
   Object.defineProperty(globalThis, "crypto", {
@@ -29,6 +37,7 @@ if (typeof window !== "undefined" && typeof window.crypto === "undefined") {
 describe("MsalAuthService", () => {
   let service: any;
   let MsalAuthService: any;
+  let LogServiceToken: any;
 
   const mockAccount: AccountInfo = {
     homeAccountId: "test-account-id",
@@ -54,13 +63,17 @@ describe("MsalAuthService", () => {
     });
 
     const mod = await import("./onedrive.cli");
+    const logMod = await import("@sp/gui/src/app/services/log.service");
     MsalAuthService = mod.MsalAuthService;
+    LogServiceToken = logMod.LogService;
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [LogService, MsalAuthService],
+      providers: [
+        { provide: LogServiceToken, useValue: mockLogService },
+        MsalAuthService,
+      ],
     });
-
     service = TestBed.inject(MsalAuthService);
     vi.clearAllMocks();
     mockClient.getAllAccounts.mockReturnValue([]);
@@ -80,9 +93,7 @@ describe("MsalAuthService", () => {
     await service.login();
 
     expect(mockClient.loginRedirect).toHaveBeenCalledTimes(1);
-    expect(mockClient.loginRedirect).toHaveBeenCalledWith({
-      scopes: ["Files.ReadWrite", "User.Read"],
-    } satisfies RedirectRequest);
+    expect(mockClient.loginRedirect).toHaveBeenCalledWith(REQUESTS.LOGIN);
   });
 
   it("should return null when no account is available", async () => {
@@ -98,8 +109,17 @@ describe("MsalAuthService", () => {
     await expect(service.getToken()).resolves.toBe("mock-access-token");
     expect(mockClient.acquireTokenSilent).toHaveBeenCalledWith({
       account: mockAccount,
-      scopes: ["Files.ReadWrite"],
+      ...REQUESTS.SILENT,
     });
+  });
+
+  it("should redirect and return null when silent token acquisition fails", async () => {
+    mockClient.getAllAccounts.mockReturnValue([mockAccount]);
+    mockClient.acquireTokenSilent.mockRejectedValue(new Error("silent failure"));
+
+    await expect(service.getToken()).resolves.toBeNull();
+    expect(mockLogService.info).toHaveBeenCalledWith("Failed to acquire token silently: silent failure");
+    expect(mockClient.loginRedirect).toHaveBeenCalledWith(REQUESTS.LOGIN);
   });
 
   it("should delegate redirect handling", async () => {
