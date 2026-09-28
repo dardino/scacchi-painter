@@ -61,7 +61,7 @@ describe("MsalAuthService", () => {
     TestBed.configureTestingModule({
       providers: [LogService, MsalAuthService],
     });
-
+    service = TestBed.inject(MsalAuthService);
     service = TestBed.inject(MsalAuthService);
     vi.clearAllMocks();
     mockClient.getAllAccounts.mockReturnValue([]);
@@ -104,8 +104,10 @@ describe("MsalAuthService", () => {
   it("should redirect and return null when silent token acquisition fails", async () => {
     mockClient.getAllAccounts.mockReturnValue([mockAccount]);
     mockClient.acquireTokenSilent.mockRejectedValue(new Error("silent failure"));
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
     await expect(service.getToken()).resolves.toBeNull();
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("INFO: Failed to acquire token silently: silent failure"));
     expect(mockClient.loginRedirect).toHaveBeenCalledWith(REQUESTS.LOGIN);
   });
 
