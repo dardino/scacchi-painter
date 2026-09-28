@@ -4,7 +4,7 @@ import { LogService } from "@sp/gui/src/app/services/log.service";
 
 /**
  * Configuration class for @azure/msal-browser:
- * https://azuread.github.io/microsoft-authentication-library-for-js/ref/msal-browser/modules/_src_config_configuration_.html
+ * https://learn.microsoft.com/en-us/entra/msal/javascript/
  */
 export const MSAL_CONFIG: (customLogger: LogService | null) => Configuration = (customLogger: LogService | null) => ({
   auth: {
@@ -12,6 +12,11 @@ export const MSAL_CONFIG: (customLogger: LogService | null) => Configuration = (
     onRedirectNavigate: (url) => {
       if (customLogger) customLogger.log("Redirecting to:", url);
       return true;
+    },
+    redirectUri: `${location.origin}`,
+    OIDCOptions: {
+      defaultScopes: [...scopes],
+      responseMode: "query",
     },
   },
   cache: {
@@ -60,7 +65,7 @@ export const REQUESTS = {
     redirectUri: `${location.origin}/redirect`,
   },
   SILENT: {
-    scopes: ["openid", "profile", "User.Read"],
+    scopes: [...scopes],
     redirectUri: `${location.origin}/redirect`,
     forceRefresh: false,
   },
