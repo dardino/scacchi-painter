@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from "@angular/core/testing";
-import type { AccountInfo, RedirectRequest } from "@azure/msal-browser";
+import type { AccountInfo } from "@azure/msal-browser";
 import { LogService } from "@sp/gui/src/app/services/log.service";
 import { webcrypto } from "node:crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { REQUESTS } from "./onedrive.config";
 
 const mockClient = vi.hoisted(() => ({
   initialize: vi.fn().mockResolvedValue(undefined),
@@ -80,9 +81,7 @@ describe("MsalAuthService", () => {
     await service.login();
 
     expect(mockClient.loginRedirect).toHaveBeenCalledTimes(1);
-    expect(mockClient.loginRedirect).toHaveBeenCalledWith({
-      scopes: ["Files.ReadWrite", "User.Read"],
-    } satisfies RedirectRequest);
+    expect(mockClient.loginRedirect).toHaveBeenCalledWith(REQUESTS.LOGIN);
   });
 
   it("should return null when no account is available", async () => {
@@ -98,7 +97,7 @@ describe("MsalAuthService", () => {
     await expect(service.getToken()).resolves.toBe("mock-access-token");
     expect(mockClient.acquireTokenSilent).toHaveBeenCalledWith({
       account: mockAccount,
-      scopes: ["Files.ReadWrite"],
+      ...REQUESTS.SILENT,
     });
   });
 
