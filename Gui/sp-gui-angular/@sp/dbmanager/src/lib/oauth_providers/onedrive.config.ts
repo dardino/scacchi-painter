@@ -13,11 +13,6 @@ export const MSAL_CONFIG: (customLogger: LogService | null) => Configuration = (
       if (customLogger) customLogger.log("Redirecting to:", url);
       return true;
     },
-    redirectUri: `${location.origin}`,
-    OIDCOptions: {
-      defaultScopes: [...scopes],
-      responseMode: "query",
-    },
   },
   cache: {
     cacheLocation: "localStorage", // This configures where your cache will be stored
