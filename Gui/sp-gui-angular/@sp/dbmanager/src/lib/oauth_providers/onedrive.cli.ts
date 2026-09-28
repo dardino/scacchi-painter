@@ -15,7 +15,7 @@ export class MsalAuthService {
       return await this.#msal.initialize();
     }
     catch (error) {
-      this.#logService.error("Failed to initialize MSAL" + (error as Error).message);
+      this.#logService.error(`Failed to initialize MSAL: ${(error as Error).message}`);
       throw error;
     }
   }
@@ -35,16 +35,16 @@ export class MsalAuthService {
       account: accounts[0],
       ...REQUESTS.SILENT,
     }).catch((error) => {
-      this.#logService.info("Failed to acquire token silently" + (error as Error).message);
+      this.#logService.info(`Failed to acquire token silently: ${(error as Error).message}`);
       return null;
     });
     if (!result) {
       await this.#msal.loginRedirect({
         ...REQUESTS.LOGIN,
       });
-    };
+    }
 
-    return result?.accessToken;
+    return result?.accessToken ?? null;
   }
 
   handleRedirect() {

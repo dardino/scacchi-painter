@@ -101,6 +101,14 @@ describe("MsalAuthService", () => {
     });
   });
 
+  it("should redirect and return null when silent token acquisition fails", async () => {
+    mockClient.getAllAccounts.mockReturnValue([mockAccount]);
+    mockClient.acquireTokenSilent.mockRejectedValue(new Error("silent failure"));
+
+    await expect(service.getToken()).resolves.toBeNull();
+    expect(mockClient.loginRedirect).toHaveBeenCalledWith(REQUESTS.LOGIN);
+  });
+
   it("should delegate redirect handling", async () => {
     await service.handleRedirect();
 
