@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, computed, input } from "@angular/core";
 import type { HalfMoveInfo } from "@dardino-chess/core";
 
 @Component({
@@ -8,37 +8,36 @@ import type { HalfMoveInfo } from "@dardino-chess/core";
   standalone: true,
 })
 export class SpSolutionMoveComponent {
-  @Input()
-  value: HalfMoveInfo;
+  value = input<HalfMoveInfo>();
 
-  @Input()
-  hideNum: boolean;
+  hideNum = input<boolean>();
 
-  @Input()
-  refutes: boolean;
+  refutes = input<boolean>();
 
-  get numText() {
+  numText = computed(() => {
     return [
-      this.value.num,
-      this.value.part === "l" ? "." : "...",
+      this.value()?.num,
+      this.value()?.part === "l" ? "." : "...",
     ].join("");
-  }
+  });
 
-  get moveText() {
+  moveText = computed(() => {
+    const value = this.value();
+    if (!value) return "";
     return [
-      this.value.piece === "P" ? "" : this.value.piece,
-      this.value.from,
-      this.value.type,
-      this.value.to,
-      this.value.isPromotion ? "=" : "",
-      this.value.promotedPiece,
-      this.value.extraMoves.join(""),
-      this.value.isCheck ? "+" : "",
-      this.value.isCheckMate ? "#" : "",
-      this.value.isStaleMate ? "=" : "",
-      this.value.isTry ? "?" : "",
-      this.value.refutes ? "!" : "",
-      this.value.isKey ? "!" : "",
+      value.piece === "P" ? "" : value.piece,
+      value.from,
+      value.type,
+      value.to,
+      value.isPromotion ? "=" : "",
+      value.promotedPiece,
+      value.extraMoves.join(""),
+      value.isCheck ? "+" : "",
+      value.isCheckMate ? "#" : "",
+      value.isStaleMate ? "=" : "",
+      value.isTry ? "?" : "",
+      value.refutes ? "!" : "",
+      value.isKey ? "!" : "",
     ].join("");
-  }
+  });
 }

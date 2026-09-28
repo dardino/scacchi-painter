@@ -22,6 +22,7 @@
         treeNode.move.zugzwang ? 'zugzwang' : '',
         treeNode.move.isKey ? 'key' : '',
         treeNode.move.refutes ? 'refutes' : '',
+        isDemolition(treeNode) ? 'demolition' : '',
       ].join(' ')" (focus)="onClickMove($index)"></lib-sp-solution-move>
   }
 </div>

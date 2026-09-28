@@ -110,8 +110,18 @@ export class SpSolutionDescComponent {
 
   lineBr = (move: TreeMove<HalfMoveInfo>) => {
     const prevByIndex = this.moveTree().find(node => node.id === move.id - 1) ?? null;
-    const isNewLine = !move.lineAge.startsWith(prevByIndex?.lineAge ?? "");
-    return move.parentId === null || move.move.zugzwang || isNewLine;
+    if (!prevByIndex) return true;
+    if (prevByIndex.parentId === move.parentId) return false;
+    const isNewLine = !move.lineAge.startsWith(prevByIndex.lineAge);
+    const siblings = this.moveTree().filter(node => node.parentId !== null && node.parentId === move.parentId && node.move.part === "l");
+    return move.parentId === null || move.move.zugzwang || isNewLine || siblings.length > 1;
+  };
+
+  isDemolition = (treeNode: TreeMove<HalfMoveInfo>) => {
+    // is demolition in direct problems when:
+    // more than one halfmove of current player has the same parent and the parent is not null
+    const siblings = this.moveTree().filter(node => node.parentId !== null && node.parentId === treeNode.parentId && node.move.part === "l");
+    return siblings.length > 1;
   };
 
   ngModelOptions: NgModel["options"] = {
