@@ -132,13 +132,14 @@ const handleFiles = async (files: HandledFile[]) => {
 
 export const polyfillBridge = () => {
   if ("launchQueue" in window) {
-    console.warn("File Handling API is supported!");
+    // eslint-disable-next-line no-console
+    console.info("File Handling API is supported!");
     window.launchQueue?.setConsumer((launchParams) => {
       handleFiles(launchParams.files);
     });
   }
   else {
-    console.error("File Handling API is not supported!");
+    console.warn("File Handling API is not supported!");
   }
 
   if (!window.Bridge) {

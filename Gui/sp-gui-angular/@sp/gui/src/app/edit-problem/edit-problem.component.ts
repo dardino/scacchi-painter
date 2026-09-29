@@ -34,7 +34,7 @@ import { SpSolutionDescComponent } from "@sp/ui-elements/src/lib/sp-solution-des
 import { EditCommand, ToolbarEditComponent } from "@sp/ui-elements/src/lib/toolbar-edit/toolbar-edit.component";
 import { ToolbarEngineComponent, ViewModes } from "@sp/ui-elements/src/lib/toolbar-engine/toolbar-engine.component";
 import { EditModes } from "@sp/ui-elements/src/lib/toolbar-piece/toolbar-piece.component";
-import { ProblemInfoComponent } from "@sp/ui-elements/src/public-api";
+import { ProblemInfoComponent, SpToolbarButtonComponent } from "@sp/ui-elements/src/public-api";
 import { firstValueFrom } from "rxjs/internal/firstValueFrom";
 import { istructionRegExp, outlogRegExp } from "../constants/constants";
 import { PreferencesService } from "../services/preferences.service";
@@ -66,6 +66,7 @@ export const fenLikeTextPattern = /^(?=[^\s]*[1-8*'"+-])(?:[A-Za-z1-8*'"+-]+(?:\
     MatDivider,
     SnapshotsManagerComponent,
     MatBadgeModule,
+    SpToolbarButtonComponent,
   ],
 })
 export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -363,7 +364,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      document.adoptedStyleSheets = [new CSSStyleSheet()];
+      if ((typeof CSSStyleSheet !== "undefined" && "adoptedStyleSheets" in document)) {
+        document.adoptedStyleSheets = [new CSSStyleSheet()];
+      }
       this.applyPreferences();
     });
   }
@@ -384,6 +387,9 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   private applyPreferences() {
+    if (typeof CSSStyleSheet === "undefined" || !("adoptedStyleSheets" in document)) {
+      return;
+    }
     const adoptedStyleSheet = document.adoptedStyleSheets.at(0);
     if (!adoptedStyleSheet) {
       return;
