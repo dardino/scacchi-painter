@@ -5,20 +5,22 @@
     "build": "pnpm vite-node ./scripts/build.ts",
     "icons": "pnpm tauricon ./src-tauri/logo.svg",
     "start": "echo 'il server è già avviato a mano in locahost:4200'",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "android:init": "tauri android init --ci",
+    "android:build:apk": "tauri android build --apk --ci"
   },
   "private": true,
   "dependencies": {
-    "@tauri-apps/api": "^2.11.1",
-    "@tauri-apps/plugin-opener": "~2.5.3",
-    "@tauri-apps/plugin-shell": "~2.3.5"
+    "@tauri-apps/api": "^2.12.1",
+    "@tauri-apps/plugin-opener": "2.7.0",
+    "@tauri-apps/plugin-shell": "2.4.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.1",
     "@tauri-apps/tauricon": "^1.0.3",
-    "@types/node": "^25.0.3",
-    "chalk": "^5.6.2",
-    "typescript": "^5.8.3",
-    "vite-node": "^5.2.0"
+    "@types/node": "^26.6.3",
+    "chalk": "^6.0.1",
+    "typescript": "^7.0.2",
+    "vite-node": "^6.0.0"
   }
 }
