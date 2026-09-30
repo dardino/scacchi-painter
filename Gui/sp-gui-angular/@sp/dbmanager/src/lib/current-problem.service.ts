@@ -1,17 +1,15 @@
 import { Injectable, computed, effect, inject, signal } from "@angular/core";
 import { DbmanagerService } from "./dbmanager.service";
 import { SquareLocation, updatePositionFromFen } from "./helpers";
+import { FlipAxis, ProblemHelpers } from "./helpers/problem.helpers";
 import { Author, Piece, Problem } from "./models";
 import { FairyPiecesCodes } from "./models/fairesDB";
 import { Twin } from "./models/twin";
 import {
-  Columns,
   EndingTypes,
-  IPieceV4,
   IProblemV4,
   PieceRotation,
   ProblemTypes,
-  Traverse,
   TwinModes,
   TwinTypesKeys,
 } from "./SPX.v4";
@@ -68,9 +66,10 @@ export class CurrentProblemService {
   }
 
   SetStipulationMoves(v: number) {
-    const newProblem = this.clonedProblem();
+    const newProblem = ProblemHelpers.recalcStipulationDesc(this.clonedProblem());
+    if (!newProblem) return;
     newProblem.stipulation.moves = v;
-    CurrentProblemService.recalcStipulationDesc(newProblem);
+    ProblemHelpers.recalcStipulationDesc(newProblem);
     this.syncCurrentProblem(newProblem);
   }
 
@@ -94,16 +93,16 @@ export class CurrentProblemService {
   }
 
   SetStipulationType(v: EndingTypes) {
-    const newProblem = this.clonedProblem();
+    const newProblem = ProblemHelpers.recalcStipulationDesc(this.clonedProblem());
+    if (!newProblem) return;
     newProblem.stipulation.stipulationType = v;
-    CurrentProblemService.recalcStipulationDesc(newProblem);
     this.syncCurrentProblem(newProblem);
   }
 
   SetProblemType(v: ProblemTypes) {
-    const newProblem = this.clonedProblem();
+    const newProblem = ProblemHelpers.recalcStipulationDesc(this.clonedProblem());
+    if (!newProblem) return;
     newProblem.stipulation.problemType = v;
-    CurrentProblemService.recalcStipulationDesc(newProblem);
     this.syncCurrentProblem(newProblem);
   }
 
@@ -186,14 +185,12 @@ export class CurrentProblemService {
   }
 
   AddPieceAt(location: SquareLocation, piece: Piece) {
-    const current = this.clonedProblem();
-    CurrentProblemService.addPieceAt(current, location, piece);
+    const current = ProblemHelpers.addPieceAt(this.clonedProblem(), location, piece);
     this.syncCurrentProblem(current);
   }
 
   RemovePieceAt(location: SquareLocation) {
-    const current = this.clonedProblem();
-    CurrentProblemService.removePieceAt(current, location);
+    const current = ProblemHelpers.removePieceAt(this.clonedProblem(), location);
     this.syncCurrentProblem(current);
   }
 
@@ -202,10 +199,7 @@ export class CurrentProblemService {
     to: SquareLocation,
     mode: "swap" | "replace" = "replace",
   ) {
-    if (from.column === to.column && from.traverse === to.traverse) return;
-    const current = this.clonedProblem();
-    if (mode === "swap") CurrentProblemService.swapPieces(current, from, to);
-    if (mode === "replace") CurrentProblemService.movePiece(current, from, to);
+    const current = ProblemHelpers.movePiece(this.clonedProblem(), from, to, mode);
     this.syncCurrentProblem(current);
   }
 
@@ -245,61 +239,25 @@ export class CurrentProblemService {
     p.fairyParams = fairyParams;
     p.fairyAttributes = fairyAttributes;
 
-    const newProblem = this.clonedProblem();
-    CurrentProblemService.addPieceAt(newProblem, location, p);
+    const newProblem = ProblemHelpers.addPieceAt(this.clonedProblem(), location, p);
     return this.syncCurrentProblem(newProblem);
   }
 
-  RotateBoard(angle: "left" | "right") {
-    const newProblem = this.clonedProblem();
-    newProblem.pieces.forEach((p) => {
-      CurrentProblemService.setPieceLocation(p, {
-        column:
-        Columns[
-          angle === "right"
-            ? 7 - Traverse.indexOf(p.traverse)
-            : Traverse.indexOf(p.traverse)
-        ],
-        traverse:
-        Traverse[
-          angle === "left"
-            ? 7 - Columns.indexOf(p.column)
-            : Columns.indexOf(p.column)
-        ],
-      });
-    });
-    return this.syncCurrentProblem(newProblem);
-  }
-
-  FlipBoard(axis: "x" | "y") {
-    const newProblem = this.clonedProblem();
-    newProblem.pieces.forEach((p) => {
-      CurrentProblemService.setPieceLocation(p, {
-        column:
-            axis === "x" ? p.column : Columns[7 - Columns.indexOf(p.column)],
-        traverse:
-            axis === "y"
-              ? p.traverse
-              : Traverse[7 - Traverse.indexOf(p.traverse)],
-      });
-    });
-    return this.syncCurrentProblem(newProblem);
-  }
-
-  ShiftBoard(axis: "x" | "y" | "-x" | "-y") {
-    const newProblem = this.clonedProblem();
+  RotateBoard(angle: "clockwise" | "counterclockwise") {
+    const newProblem = ProblemHelpers.rotateBoard(this.clonedProblem(), angle);
     if (!newProblem) return;
-    newProblem.pieces.slice().forEach((p) => {
-      const delta = axis.includes("-") ? -1 : 1;
-      const newCol = axis.includes("x") ? getNewColumn(p.column, delta) : p.column;
-      const newRow = axis.includes("y") ? getNewTraverse(p.traverse, delta) : p.traverse;
-      if (!newCol || !newRow) {
-        CurrentProblemService.removePiece(newProblem, p);
-      }
-      else {
-        CurrentProblemService.setPieceLocation(p, { traverse: newRow, column: newCol });
-      }
-    });
+    return this.syncCurrentProblem(newProblem);
+  }
+
+  FlipBoard(axis: FlipAxis) {
+    const newProblem = ProblemHelpers.flipBoard(this.clonedProblem(), axis);
+    if (!newProblem) return;
+    return this.syncCurrentProblem(newProblem);
+  }
+
+  ShiftBoard(axis: "x" | "y", amount: number) {
+    const newProblem = ProblemHelpers.shiftBoard(this.clonedProblem(), axis, amount);
+    if (!newProblem) return;
     return this.syncCurrentProblem(newProblem);
   }
 
@@ -404,76 +362,4 @@ export class CurrentProblemService {
       this.syncCurrentProblem(this.#dbManager.CurrentProblem()?.clone() ?? null);
     }
   }
-
-  private static swapPieces(problem: Problem | null, from: SquareLocation, to: SquareLocation): void {
-    const p1 = problem?.GetPieceAt(from.column, from.traverse);
-    const p2 = problem?.GetPieceAt(to.column, to.traverse);
-    if (p2) CurrentProblemService.removePiece(problem, p2);
-    if (p1) CurrentProblemService.removePiece(problem, p1);
-    if (p2) CurrentProblemService.addPieceAt(problem, from, p2);
-    if (p1) CurrentProblemService.addPieceAt(problem, to, p1);
-  }
-
-  private static addPieceAt(problem: Problem | null, location: SquareLocation, piece: Piece): void {
-    const newPiece: IPieceV4 = {
-      appearance: piece.appearance,
-      color: piece.color,
-      fairyCode: piece.fairyCode,
-      fairyParams: piece.fairyParams,
-      rotation: piece.rotation,
-      fairyAttributes: piece.fairyAttributes,
-      column: location.column,
-      traverse: location.traverse,
-    };
-    CurrentProblemService.removePieceAt(problem, location);
-    problem?.pieces.push(
-      Piece.fromJson(newPiece),
-    );
-  }
-
-  private static removePiece(problem: Problem | null, p: Piece): void {
-    const ix = problem?.pieces.indexOf(p) ?? null;
-    if (ix === null || !problem) return;
-    problem?.pieces.splice(ix, 1);
-  }
-
-  private static movePiece(problem: Problem | null, from: SquareLocation, to: SquareLocation): void {
-    CurrentProblemService.removePieceAt(problem, to);
-    CurrentProblemService.swapPieces(problem, from, to);
-  }
-
-  private static removePieceAt(problem: Problem | null, location: SquareLocation): void {
-    if (!problem) return;
-    const oldP = problem.GetPieceAt(location.column, location.traverse);
-    if (!oldP) return;
-    // remove piece;
-    CurrentProblemService.removePiece(problem, oldP);
-  }
-
-  private static setPieceLocation(
-    piece: Piece | undefined,
-    location: SquareLocation,
-  ): void {
-    if (!piece) return;
-    piece.SetLocation(location.column, location.traverse);
-  }
-
-  private static recalcStipulationDesc(problem: Problem | null): void {
-    if (!problem) return;
-    const { problemType, stipulationType, moves } = problem.stipulation;
-    problem.stipulation.completeStipulationDesc = (problemType === "-" ? "" : problemType) + stipulationType + moves;
-    return;
-  }
 }
-
-const getNewColumn = (col: Columns, offset: 1 | -1): Columns | undefined => {
-  const ix = Columns.indexOf(col) + offset;
-  if (ix < 0 || ix > 7) return undefined;
-  return Columns[ix];
-};
-
-const getNewTraverse = (tra: Traverse, offset: 1 | -1): Traverse | undefined => {
-  const ix = Traverse.indexOf(tra) + offset;
-  if (ix < 0 || ix > 7) return undefined;
-  return Traverse[ix];
-};

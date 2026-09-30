@@ -168,5 +168,5 @@ export const getBBfromSquare = (square: SquareNames): Bitboard => {
   if (squareRx.test(square) === false) {
     throw new Error(`Invalid square name: ${square}`);
   }
-  return WK_BB_SQ[square];
+  return WK_BB_SQ[square as keyof typeof WK_BB_SQ];
 };

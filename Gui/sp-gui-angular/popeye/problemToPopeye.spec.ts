@@ -1,4 +1,5 @@
 import { Problem } from "@sp/dbmanager/src/lib/models";
+import { Stipulation } from "@sp/dbmanager/src/lib/models/stipulation";
 import { Twins } from "@sp/dbmanager/src/lib/models/twins";
 import { TwinModes } from "@sp/dbmanager/src/lib/SPX.v4";
 import { describe, expect, it } from "vitest";
@@ -44,7 +45,7 @@ describe("problemToSpCore", () => {
     ]);
   });
 
-  it("uses black to move when the problem starts at move 1.5", () => {
+  it("uses white to move when the problem starts at move 2.5", () => {
     const problem = Problem.fromFen("8/8/8/8/8/8/8/4K3");
     problem.stipulation.moves = 2.5;
     problem.stipulation.completeStipulationDesc = "h#2.5";
@@ -53,6 +54,18 @@ describe("problemToSpCore", () => {
 
     expect(rows).toEqual([
       "Stipulation h#2.5",
+      "FEN 8/8/8/8/8/8/8/4K3 w - - 0 1",
+    ]);
+  });
+
+  it("uses black to move when the problem starts at move 2", () => {
+    const problem = Problem.fromFen("8/8/8/8/8/8/8/4K3");
+    problem.stipulation = Stipulation.fromCompleteDesc("H#2");
+
+    const rows = problemToSpCore(problem);
+
+    expect(rows).toEqual([
+      "Stipulation H#2",
       "FEN 8/8/8/8/8/8/8/4K3 b - - 0 1",
     ]);
   });

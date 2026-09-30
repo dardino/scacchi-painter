@@ -11,12 +11,11 @@ import {
 } from "@dardino/chess-board";
 import { Piece, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
-import { Columns, IProblemV4, Traverse } from "@sp/dbmanager/src/lib/SPX.v4";
+import { IProblemV4, Traverse } from "@sp/dbmanager/src/lib/SPX.v4";
 import {
-  GetLocationFromIndex,
-  GetSquareIndex,
   SquareLocation,
   getFFenFromPosition,
+  toSquareLocation,
   updatePositionFromFen,
 } from "@sp/dbmanager/src/public-api";
 import { getPieceIcon } from "@sp/gui/src/app/services/cursor.service";
@@ -70,10 +69,7 @@ implements OnInit, OnChanges, OnDestroy {
 
   currentCell = signal<UiCell | null>(null);
   private lastHash = signal<string | undefined>(undefined);
-  private uiCells = signal<UiCell[]>([]);
   #displayMoveService = inject(DisplayMoveService);
-
-  cells = computed(() => this.uiCells());
 
   cellSize = () => (this.chessboard()?.nativeElement.offsetWidth ?? 256) / 8;
 
@@ -159,37 +155,12 @@ implements OnInit, OnChanges, OnDestroy {
     this.focusOut.emit();
   }
 
-  clearCells() {
-    const cells: UiCell[] = [];
-    for (let i = 0; i < 64; i++) {
-      cells.push({
-        location: GetLocationFromIndex(i),
-        piece: null,
-      });
-    }
-    this.uiCells.set(cells);
-  }
-
   updateBoard() {
-    this.clearCells();
-    const pp = this.position()?.pieces;
-    const cells = this.uiCells();
-    if (pp) {
-      for (const piece of pp) {
-        const index = GetSquareIndex(piece.column, piece.traverse);
-        if (index < 0 || index > 63) {
-          console.error(piece.column, piece.traverse);
-        }
-        cells[index].piece = piece;
-      }
-    }
+    // Update the visual representation of the board based on the current position
   }
 
   #toCellLocation(detail: CellClickEventDetail): SquareLocation {
-    return {
-      column: `Col${detail.square[0].toUpperCase()}` as Columns,
-      traverse: `Row${detail.square[1]}` as Traverse,
-    };
+    return toSquareLocation(detail.square as FairySquare);
   }
 
   #getPieceAtLocation(location: SquareLocation): Piece | null {

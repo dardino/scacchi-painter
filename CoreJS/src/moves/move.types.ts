@@ -1,6 +1,6 @@
-export type SquareNames = `${MoveCols}${MoveRows}`;
 export type MoveCols = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h";
 export type MoveRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type SquareNames = `${MoveCols}${MoveRows}`;
 export type MoveType = "-" | "*";
 export type MoveNum = `${number}.` | `${number}...`;
 
@@ -8,6 +8,7 @@ export type MoveNum = `${number}.` | `${number}...`;
  * Represents information about a single half-move in a chess game.
  */
 export interface HalfMoveInfo {
+  color: "w" | "b";
   /** The number of the move */
   num: number;
   /** Indicates which half of the move: "l" for left half move, "r" for right half move */
@@ -42,4 +43,10 @@ export interface HalfMoveInfo {
   threat: boolean;
   /** Indicates if the move is a zugzwang */
   zugzwang: boolean;
+  /** Cames from twin (if the move originates from a twin game) */
+  fromTwin: string;
+  /** Indicates if the move is a castling move */
+  isCastling: boolean;
+  /** The length of the castling move: "0-0" for short castling, "0-0-0" for long castling */
+  castlingLength: "0-0" | "0-0-0" | "";
 }

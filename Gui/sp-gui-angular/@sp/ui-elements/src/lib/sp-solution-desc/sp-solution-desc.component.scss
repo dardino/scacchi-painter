@@ -103,3 +103,17 @@ hr {
 .solution:focus {
   outline: 2px solid rgba(255, 202, 202, 0.8);
 }
+
+.starting-postion {
+  display: inline-flex;
+  vertical-align: text-bottom;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: 2px solid rgba(255, 202, 202, 0.8);
+  }
+}

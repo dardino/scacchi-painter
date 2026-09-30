@@ -23,10 +23,10 @@ export const popeyeTwinMapper: Record<
     `Shift: ${args[0]} -> ${args[1]}`.trim(),
   TraslateToroidal: (...args: string[]) =>
     `Shift: ${args[0]} -> ${args[1]}`.trim(),
-  MirrorHorizontal: () => `Mirror a1 a8`,
-  MirrorVertical: () => `Mirror a1 h1`,
-  MirrorDiagonalA1H8: () => `Mirror a1 h8`,
-  MirrorDiagonalA8H1: () => `Mirror a8 h1`,
+  MirrorHorizontal: () => `Mirror a1<-->a8`,
+  MirrorVertical: () => `Mirror a1<-->h1`,
+  MirrorDiagonalA1H8: () => `Mirror a1<-->h8`,
+  MirrorDiagonalA8H1: () => `Mirror a8<-->h1`,
   Stipulation: (...args: string[]) => `Stipulation > ${args.join(" ")}`.trim(),
   ChangeProblemType: (...args: string[]) =>
     `Stipulation > ${args.join(" ")}`.trim(),
@@ -34,7 +34,7 @@ export const popeyeTwinMapper: Record<
   AfterKey: () => `After Key`,
   SwapColors: () => `PolishType`,
   Condition: (...args: string[]) => `Condition ${args.join(" ")}`.trim(),
-  Mirror: (...args: string[]) => `Mirror ${args.join(" ").replace("<-->", " ")}`.trim(),
+  Mirror: (...args: string[]) => `Mirror ${args.join(" ")}`.trim(),
 };
 
 const pieceSortByName = (a: Piece, b: Piece): -1 | 0 | 1 => {
@@ -50,14 +50,6 @@ const toPopeyePiece = (a: Piece): string =>
     a.column[3].toLowerCase(),
     a.traverse[3],
   ].join("");
-
-const getSpCoreSideToMove = (problem: Problem): "w" | "b" =>
-  problem.startMoveN === 1.5 ? "b" : "w";
-
-const toSpCoreFen = (problem: Problem): string => {
-  const boardFen = problem.getCurrentFen().split(" [", 1)[0];
-  return `${boardFen} ${getSpCoreSideToMove(problem)} - - 0 1`;
-};
 
 export function problemToPopeye(problem: Problem, mode: SolveModes): string[] {
   const rows: string[] = [];
@@ -127,7 +119,7 @@ export function problemToSpCore(problem: Problem): string[] {
 
   const rows = [
     `Stipulation ${problem.stipulation.completeStipulationDesc}`,
-    `FEN ${toSpCoreFen(problem)}`,
+    `FEN ${problem.getCurrentFen()}`,
   ];
 
   if (optionRows.length > 0) {

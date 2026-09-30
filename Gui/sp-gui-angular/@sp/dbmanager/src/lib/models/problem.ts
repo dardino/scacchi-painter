@@ -4,17 +4,16 @@ import { SP2 } from "../SP2";
 import { Columns, IProblemV4, Traverse } from "../SPX.v4";
 import { Base64 } from "../base64";
 import {
-  GetLocationFromIndex,
   GetSolutionFromElement,
   GetSquareIndex,
   SquareLocation,
   convertToRtf,
   createXmlElement,
   distinct,
-  fenToChessBoard,
   getCanvasLocation,
+  getFFenFromPosition,
   notEmpty,
-  notNull,
+  updatePositionFromFen,
 } from "../helpers";
 import { Author } from "./author";
 import {
@@ -29,6 +28,7 @@ import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
 
 export class Problem implements IProblemV4 {
+  public boardSize = { columns: 8, rows: 8 };
   static readonly SNAPSHOT_MAIN_ID = "$_MAIN_$";
 
   public textSolution = "";
@@ -136,11 +136,8 @@ export class Problem implements IProblemV4 {
   }
 
   static fromFen(original: string) {
-    const extractInfo = fenToChessBoard(original);
-    const p = new Problem();
-    p.pieces = extractInfo
-      .map((el, sqi) => Piece.fromPartial(el, GetLocationFromIndex(sqi)))
-      .filter(notNull);
+    const pos = updatePositionFromFen(original);
+    const p = Problem.fromJson(pos);
     p.saveSnapshot(Problem.SNAPSHOT_MAIN_ID);
     return p;
   }
@@ -237,6 +234,7 @@ export class Problem implements IProblemV4 {
         {},
       );
     }
+    if (this.boardSize != null) json.boardSize = this.boardSize;
     return json;
   }
 
@@ -366,42 +364,7 @@ export class Problem implements IProblemV4 {
   }
 
   public getCurrentFen(): string {
-    const rows: string[] = [];
-    for (let r = 7; r >= 0; r--) {
-      let empty = 0;
-      let row = "";
-      for (let c = 0; c <= 7; c++) {
-        const p = this.getPieceAt(r, c);
-        if (p) {
-          if (empty > 0) row += empty.toString();
-          row += p.ToNotation();
-          empty = 0;
-        }
-        else {
-          empty++;
-        }
-      }
-      if (empty > 0) {
-        row += empty.toString();
-      }
-      rows.push(row);
-    }
-    return (rows.join("/") + this.getFairiesFen()).trim();
-  }
-
-  private getFairiesFen(): string {
-    const fps = this.pieces.filter(p => p.isFairy());
-    if (fps.length === 0) return "";
-    return ` [${fps.map(p => p.ToFairyNotation()).join(",")}]`;
-  }
-
-  private getPieceAt(row: number, col: number) {
-    const p = this.pieces?.find(
-      f =>
-        Columns.indexOf(f.column) === col
-        && Traverse.indexOf(f.traverse) === 8 - row - 1,
-    );
-    return p;
+    return getFFenFromPosition(this);
   }
 
   GetPieceAt(column: Columns, traverse: Traverse) {
@@ -412,7 +375,7 @@ export class Problem implements IProblemV4 {
   }
 
   setCellFairyAttribute(location: SquareLocation, attribute: string) {
-    this.fairyCells[GetSquareIndex(location)] = attribute;
+    this.fairyCells[GetSquareIndex({ columns: 8, rows: 8 }, location)] = attribute;
   }
 }
 

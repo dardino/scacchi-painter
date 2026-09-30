@@ -1,6 +1,7 @@
 import { getEndingType, getProblemType, XMLProblemTypesKeys, XMLStipulationTypes } from "../SP2";
 import { EndingTypes, IStipulation, ProblemTypes } from "../SPX.v4";
 
+export type MoveColors = [left: "White", right: "Black"] | [left: "Black", right: "White"];
 export class Stipulation implements IStipulation {
   problemType: ProblemTypes = "-";
   stipulationType: EndingTypes = "#";
@@ -8,7 +9,15 @@ export class Stipulation implements IStipulation {
   serie = false;
   moves = 2;
   completeStipulationDesc = "#2";
-  colorStarter: "White" | "Black" = "White";
+  get moveColors(): MoveColors {
+    const colorStarter: MoveColors = this.problemType === "H" ? ["Black", "White"] : ["White", "Black"];
+    if (this.moves * 2 % 2 === 0) {
+      return colorStarter;
+    }
+    else {
+      return colorStarter.reverse() as MoveColors;
+    }
+  }
 
   get simpleStipulationDesc(): string {
     const { problemType, stipulationType } = this;
@@ -38,6 +47,19 @@ export class Stipulation implements IStipulation {
     p.serie = stipulation.serie ?? false;
     p.moves = stipulation.moves ?? 2;
     p.completeStipulationDesc = stipulation.completeStipulationDesc ?? "#2";
+    return p;
+  }
+
+  static fromCompleteDesc(completeStipulationDesc: string): Stipulation {
+    const p = new Stipulation();
+    p.completeStipulationDesc = completeStipulationDesc;
+    // Extract problemType, stipulationType, and moves from the completeStipulationDesc I.E: "HS#2"
+    const match = completeStipulationDesc.match(/^([A-Z-]*)(#|=|\+|%|~|##|==|#=|!=|!#|00|ep|Zxy|x|##!|ct|<>|ctr|<>r|c81)(\d+(\.\d+)?)$/);
+    if (match) {
+      p.problemType = match[1] as ProblemTypes || "-";
+      p.stipulationType = match[2] as EndingTypes;
+      p.moves = parseFloat(match[3]);
+    }
     return p;
   }
 

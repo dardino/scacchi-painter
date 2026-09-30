@@ -1,7 +1,9 @@
 import { Component, computed, inject, input } from "@angular/core";
 import { FormsModule, NgModel } from "@angular/forms";
+import { MatIcon } from "@angular/material/icon";
 import { HalfMoveInfo } from "@dardino-chess/core";
 import { CurrentProblemService } from "@sp/dbmanager/src/lib/current-problem.service";
+import { ProblemHelpers } from "@sp/dbmanager/src/lib/helpers/problem.helpers";
 import { notEmpty } from "@sp/dbmanager/src/public-api";
 import { istructionRegExp, outlogRegExp } from "@sp/gui/src/app/constants/constants";
 import { PreferencesService } from "@sp/gui/src/app/services/preferences.service";
@@ -20,6 +22,7 @@ import { buildTreeMoves, TreeMove } from "./sp-solution-desc.helper";
     NgxEditorModule,
     FormsModule,
     SpSolutionMoveComponent,
+    MatIcon,
   ],
 })
 export class SpSolutionDescComponent {
@@ -47,6 +50,10 @@ export class SpSolutionDescComponent {
   #moveDisplayService = inject(DisplayMoveService);
 
   jsonSolution = input<HalfMoveInfo[]>([]);
+  clickStartingPosition = (fromTwin: string) => {
+    this.#moveDisplayService.setInitialPositionOfTwin(fromTwin);
+  };
+
   onClickMove = (moveIndex: number) => {
     const myTreeNode = this.moveTree().find(treeNode => treeNode.id === moveIndex);
     if (!myTreeNode) return;
@@ -56,6 +63,22 @@ export class SpSolutionDescComponent {
       return treeNode?.move ?? null;
     }).filter(notEmpty);
     this.#moveDisplayService.applyMoves(allMoves);
+  };
+
+  getClasses = (treeNode: TreeMove<HalfMoveInfo>) => {
+    return [
+      "solution",
+      this.mode,
+      treeNode.move.threat ? "threat" : "",
+      treeNode.move.zugzwang ? "zugzwang" : "",
+      treeNode.move.isKey ? "key" : "",
+      treeNode.move.refutes ? "refutes" : "",
+      this.isDemolition(treeNode) ? "demolition" : "",
+    ].join(" ");
+  };
+
+  shouldHideNum = (treeNode: TreeMove<HalfMoveInfo>) => {
+    return this.mode === "inline" && !this.lineBr(treeNode) && treeNode.parentId !== null && !treeNode.move.refutes;
   };
 
   viewMode = input<ViewModes>("html");
@@ -122,6 +145,17 @@ export class SpSolutionDescComponent {
     // more than one halfmove of current player has the same parent and the parent is not null
     const siblings = this.moveTree().filter(node => node.parentId !== null && node.parentId === treeNode.parentId && node.move.part === "l");
     return siblings.length > 1;
+  };
+
+  twinHasChanged = (treeNode: TreeMove<HalfMoveInfo>) => {
+    const prevByIndex = this.moveTree().find(node => node.id === treeNode.id - 1) ?? null;
+    if (!prevByIndex) return true;
+    return prevByIndex.move.fromTwin !== treeNode.move.fromTwin;
+  };
+
+  getTwinDesc = (fromTwin: string) => {
+    // Implement the logic to get the description of the twin
+    return `${fromTwin}) ${ProblemHelpers.getTwinFromLetter(fromTwin, this.#current.Problem()!)?.toString()}`;
   };
 
   ngModelOptions: NgModel["options"] = {

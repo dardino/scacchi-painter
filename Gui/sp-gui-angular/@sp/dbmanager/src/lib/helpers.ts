@@ -23,28 +23,9 @@ export interface ProblemDb {
 
 export const FairyAttributes = ["None"] as const;
 
-export type BoardFile = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h`;
-export type BoardRank = `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8`;
+export type BoardFile = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h` | `i` | `j` | `k`;
+export type BoardRank = `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11`;
 export type SquareColors = "black" | "white";
-
-export const GetSquareColor = (
-  ...args: [loc: SquareLocation] | [col: Columns, row: Traverse]
-): SquareColors => {
-  let col = args[0];
-  let row = args[1];
-  if (col == null) {
-    return "white";
-  }
-  if (typeof col !== "string") {
-    row = col.traverse;
-    col = col.column;
-  }
-  if (row == null) throw new Error("invalid parameters 'row'");
-
-  return ((Columns.indexOf(col) % 2) + Traverse.indexOf(row)) % 2
-    ? "black"
-    : "white";
-};
 
 export interface SquareLocation {
   column: Columns;
@@ -52,6 +33,7 @@ export interface SquareLocation {
 }
 
 export const GetSquareIndex = (
+  boardsize: { columns: number; rows: number },
   ...args: [loc: SquareLocation] | [col: Columns, row: Traverse]
 ): number => {
   let col = args[0];
@@ -64,12 +46,22 @@ export const GetSquareIndex = (
     col = col.column;
   }
   if (row == null) throw new Error("invalid parameters 'row'");
-  return Columns.indexOf(col) + Columns.length * Traverse.indexOf(row);
+  return Columns.indexOf(col) + boardsize.columns * Traverse.indexOf(row);
 };
-export const GetLocationFromIndex = (index: number): SquareLocation => ({
-  column: Columns[index % Columns.length],
-  traverse: Traverse[Math.floor(index / Columns.length)],
+
+export const GetLocationFromIndex = (boardsize: { columns: number; rows: number }, index: number): SquareLocation => ({
+  column: Columns[index % boardsize.columns],
+  traverse: Traverse[boardsize.rows - Math.floor(index / boardsize.columns) - 1],
 });
+
+export const toSquareLocation = (square: FairySquare): SquareLocation => {
+  const column = `Col${square[0].toUpperCase()}` as Columns;
+  const traverse = `Row${square.slice(1)}` as Traverse;
+  return {
+    column,
+    traverse,
+  };
+};
 
 export type SP2PieceName
   = | "King"
@@ -114,12 +106,12 @@ export const getCanvasLocation = (x: Columns, y: Traverse): FairySquare | null =
 };
 export const getBoardFile = (x: string | Columns): BoardFile => {
   if (typeof x === "number") x = Columns[x];
-  x = x.substr(3, 1).toLowerCase(); // extract col from "ColA";
+  x = x.slice(3).toLowerCase(); // extract col from "ColA";
   return x as BoardFile;
 };
 export const getBoardRank = (y: string | Traverse): BoardRank => {
   if (typeof y === "number") y = Traverse[y];
-  y = y.substr(3, 1); // extract row from "Row8";
+  y = y.slice(3); // extract row from "Row8";
   return y as BoardRank;
 };
 
@@ -618,7 +610,7 @@ export function updatePositionFromFen(ffen: string, currentPosition?: IProblemV4
         appearance: p.type,
         color: getPieceColor(p.color),
         column: `Col${square[0].toUpperCase()}` as Columns,
-        traverse: `Row${square[1]}` as Traverse,
+        traverse: `Row${square.slice(1)}` as Traverse,
         fairyAttributes: p.fairyCondition ? [p.fairyCondition] : [],
         fairyCode: p.fairyName as FairyPiecesCodes ?? null,
         fairyParams: p.fairyName ? [] : [],
@@ -650,7 +642,7 @@ export function getFFenFromPosition(position?: Partial<IProblemV4> | null): stri
   if (!position) return getEmptyBoardFen();
   const pos: FenPosition = {
     activeColor: getStartingColor(position.stipulation),
-    castlingRights: "KQkq",
+    castlingRights: "-", // TODO: check if castling rights are available in the position
     enPassantTarget: "-",
     fullmoveNumber: 1,
     halfmoveClock: 0,
