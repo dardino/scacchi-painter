@@ -21,6 +21,17 @@ A future update will introduce a new “Did you know?” banner on the home page
 * The banner can be hidden if you prefer not to see it at startup
 * You'll be able to access the problem editor directly from the menu without navigating through the problem list
 
+### New UI And Parsing Improvements
+
+* ✏️ **Updated edit icon** - clearer action in the database list
+* 🎞️ **Improved move handling** - smoother transitions and animations during edits
+* 🧩 **Twin-aware bridge updates** - better stipulation and twin parsing support in Tauri and web bridge
+* 🔁 **DisplayMove refinements** - twin transformations are applied more consistently
+* 🧭 **Solution description updates** - twin changes and starting-position display are improved
+* ♟️ **Move parser enhancements** - castling moves and twin info are handled more reliably
+* 🛠️ **Toolbar usability improvements** - better accessibility and interaction flow
+* 🧾 **Popeye FEN conversion fix** - cleaner FEN generation for starting positions
+
 ## Version 0.4.2
 
 ### Editor Fixes And More Stable Data Handling
