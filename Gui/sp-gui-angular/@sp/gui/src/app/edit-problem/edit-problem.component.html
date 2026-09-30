@@ -56,6 +56,10 @@
         }
         @if (activeTab() === 2) {
         <div class="tab-content">
+          <mat-toolbar class="toolbar-row" color="secondary">
+            <lib-sp-toolbar-button (click)="editCommand('makeSnapshot')" iconText="camera_alt" iconLabel="Make snapshot"
+              [noLabel]="true"></lib-sp-toolbar-button>
+          </mat-toolbar>
           <lib-snapshots-manager></lib-snapshots-manager>
         </div>
         }
