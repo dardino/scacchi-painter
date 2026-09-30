@@ -46,10 +46,10 @@ describe("CurrentProblemService", () => {
   it("Add Piece At", async () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     let fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q7");
+    expect(fen).toBe("8/8/8/8/8/8/8/Q7 w - - 0 1");
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteKing));
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/K7");
+    expect(fen).toBe("8/8/8/8/8/8/8/K7 w - - 0 1");
     expect(service.Problem()?.pieces.length).toEqual(1);
   });
 
@@ -57,7 +57,7 @@ describe("CurrentProblemService", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteKing));
     const fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/1K6/Q7");
+    expect(fen).toBe("8/8/8/8/8/8/1K6/Q7 w - - 0 1");
   });
 
   it("Remove Piece At", () => {
@@ -65,40 +65,40 @@ describe("CurrentProblemService", () => {
     expect(service.Problem()?.pieces.length).toEqual(1);
     service.RemovePieceAt(SquareLocations.a1);
     const fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/8");
+    expect(fen).toBe("8/8/8/8/8/8/8/8 w - - 0 1");
     expect(service.Problem()?.pieces.length).toEqual(0);
   });
 
   it("Move Piece", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     let fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q7");
+    expect(fen).toBe("8/8/8/8/8/8/8/Q7 w - - 0 1");
 
     service.MovePiece(SquareLocations.a1, SquareLocations.a2);
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/Q7/8");
+    expect(fen).toBe("8/8/8/8/8/8/Q7/8 w - - 0 1");
   });
 
   it("Move Piece [swap]", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteKing));
     let fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/1K6/Q7");
+    expect(fen).toBe("8/8/8/8/8/8/1K6/Q7 w - - 0 1");
 
     service.MovePiece(SquareLocations.a1, SquareLocations.b2, "swap");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/1Q6/K7");
+    expect(fen).toBe("8/8/8/8/8/8/1Q6/K7 w - - 0 1");
   });
 
   it("Move Piece [replace]", () => {
     service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
     service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteKing));
     let fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/1K6/Q7");
+    expect(fen).toBe("8/8/8/8/8/8/1K6/Q7 w - - 0 1");
 
     service.MovePiece(SquareLocations.a1, SquareLocations.b2, "replace");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/1Q6/8");
+    expect(fen).toBe("8/8/8/8/8/8/1Q6/8 w - - 0 1");
     expect(service.Problem()?.pieces.length).toEqual(1);
   });
 
@@ -107,31 +107,31 @@ describe("CurrentProblemService", () => {
 
     service.RotatePiece(SquareLocations.a1, "Clockwise45");
     let fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q:17");
+    expect(fen).toBe("8/8/8/8/8/8/8/*0.5Q7 w - - 0 1");
 
     service.RotatePiece(SquareLocations.a1, "Clockwise90");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q:27");
+    expect(fen).toBe("8/8/8/8/8/8/8/*1Q7 w - - 0 1");
 
     service.RotatePiece(SquareLocations.a1, "Clockwise135");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q:37");
+    expect(fen).toBe("8/8/8/8/8/8/8/*1.5Q7 w - - 0 1");
 
     service.RotatePiece(SquareLocations.a1, "UpsideDown");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q:47");
+    expect(fen).toBe("8/8/8/8/8/8/8/*2Q7 w - - 0 1");
 
     service.RotatePiece(SquareLocations.a1, "Counterclockwise135");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q:57");
+    expect(fen).toBe("8/8/8/8/8/8/8/*2.5Q7 w - - 0 1");
 
     service.RotatePiece(SquareLocations.a1, "Counterclockwise90");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q:67");
+    expect(fen).toBe("8/8/8/8/8/8/8/*3Q7 w - - 0 1");
 
     service.RotatePiece(SquareLocations.a1, "Counterclockwise45");
     fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/8/Q:77");
+    expect(fen).toBe("8/8/8/8/8/8/8/*3.5Q7 w - - 0 1");
   });
 
   it("SetFairyAttribute", () => {
@@ -141,46 +141,46 @@ describe("CurrentProblemService", () => {
     service.SetAsFairyPiece(SquareLocations.a1, [], "gn");
     service.SetAsFairyPiece(SquareLocations.b2, [], "le");
     const fen = service.Problem()?.getCurrentFen();
-    expect(fen).toBe("8/8/8/8/8/8/1r6/Q7 [GNa1,LEb2]");
+    expect(fen).toBe("8/8/8/8/8/8/1r6/Q7 w - - 0 1 a1:gn:,b2:le:");
   });
   describe("RotateBoard [Right]", () => {
     it("a1 -> a8", () => {
       service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
-      service.RotateBoard("right");
+      service.RotateBoard("clockwise");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("Q7/8/8/8/8/8/8/8");
+      expect(fen).toBe("Q7/8/8/8/8/8/8/8 w - - 0 1");
     });
     it("a2 -> b8", () => {
       service.AddPieceAt(SquareLocations.a2, Piece.fromJson(WhiteQueen));
-      service.RotateBoard("right");
+      service.RotateBoard("clockwise");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("1Q6/8/8/8/8/8/8/8");
+      expect(fen).toBe("1Q6/8/8/8/8/8/8/8 w - - 0 1");
     });
     it("h5 -> e1", () => {
       service.AddPieceAt(SquareLocations.h5, Piece.fromJson(WhiteQueen));
-      service.RotateBoard("right");
+      service.RotateBoard("clockwise");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("8/8/8/8/8/8/8/4Q3");
+      expect(fen).toBe("8/8/8/8/8/8/8/4Q3 w - - 0 1");
     });
   });
   describe("RotateBoard [Left]", () => {
     it("a1 -> h1", () => {
       service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
-      service.RotateBoard("left");
+      service.RotateBoard("counterclockwise");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("8/8/8/8/8/8/8/7Q");
+      expect(fen).toBe("8/8/8/8/8/8/8/7Q w - - 0 1");
     });
     it("b2 -> b7", () => {
       service.AddPieceAt(SquareLocations.b2, Piece.fromJson(WhiteQueen));
-      service.RotateBoard("left");
+      service.RotateBoard("counterclockwise");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("8/8/8/8/8/8/6Q1/8");
+      expect(fen).toBe("8/8/8/8/8/8/6Q1/8 w - - 0 1");
     });
     it("h5 -> d8", () => {
       service.AddPieceAt(SquareLocations.h5, Piece.fromJson(WhiteQueen));
-      service.RotateBoard("left");
+      service.RotateBoard("counterclockwise");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("3Q4/8/8/8/8/8/8/8");
+      expect(fen).toBe("3Q4/8/8/8/8/8/8/8 w - - 0 1");
     });
   });
 
@@ -195,11 +195,11 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
       expect(service.Problem()?.getCurrentFen()).toBe(
-        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7",
+        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7 w - - 0 1",
       );
       service.FlipBoard("x");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("Q7/Q7/Q7/4QQQ1/8/8/5Q2/7Q");
+      expect(fen).toBe("Q7/Q7/Q7/4QQQ1/8/8/5Q2/7Q w - - 0 1");
     });
     it("Y", () => {
       service.AddPieceAt(SquareLocations.a1, Piece.fromJson(WhiteQueen));
@@ -211,11 +211,11 @@ describe("CurrentProblemService", () => {
       service.AddPieceAt(SquareLocations.f7, Piece.fromJson(WhiteQueen));
       service.AddPieceAt(SquareLocations.h8, Piece.fromJson(WhiteQueen));
       expect(service.Problem()?.getCurrentFen()).toBe(
-        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7",
+        "7Q/5Q2/8/8/4QQQ1/Q7/Q7/Q7 w - - 0 1",
       );
       service.FlipBoard("y");
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("Q7/2Q5/8/8/1QQQ4/7Q/7Q/7Q");
+      expect(fen).toBe("Q7/2Q5/8/8/1QQQ4/7Q/7Q/7Q w - - 0 1");
     });
   });
   describe("Clear Board", () => {
@@ -232,10 +232,10 @@ describe("CurrentProblemService", () => {
 
     it("clear", () => {
       let fen = service.Problem()?.getCurrentFen();
-      expect(fen).not.toBe("8/8/8/8/8/8/8/8");
+      expect(fen).not.toBe("8/8/8/8/8/8/8/8 w - - 0 1");
       service.ClearBoard();
       fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("8/8/8/8/8/8/8/8");
+      expect(fen).toBe("8/8/8/8/8/8/8/8 w - - 0 1");
     });
   });
   describe("Shift", () => {
@@ -251,24 +251,24 @@ describe("CurrentProblemService", () => {
     });
 
     it("X", () => {
-      service.ShiftBoard("x");
+      service.ShiftBoard("x", 1);
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6");
+      expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6 w - - 0 1");
     });
     it("-X", () => {
-      service.ShiftBoard("-x");
+      service.ShiftBoard("x", -1);
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8");
+      expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8 w - - 0 1");
     });
     it("Y", () => {
-      service.ShiftBoard("y");
+      service.ShiftBoard("y", 1);
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6");
+      expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6 w - - 0 1");
     });
     it("-Y", () => {
-      service.ShiftBoard("-y");
+      service.ShiftBoard("y", -1);
       const fen = service.Problem()?.getCurrentFen();
-      expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8");
+      expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8 w - - 0 1");
     });
   });
 });

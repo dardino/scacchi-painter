@@ -70,7 +70,7 @@ class TauriBridge implements BridgeGlobal {
   }
 
   private processData(data: string) {
-    const mov = parsePopeyeRow(data, this.currentProblem.startMoveN);
+    const mov = parsePopeyeRow(data, this.currentProblem.startMoveN, "");
     const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
     this.solver$.next({ raw: data, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
     if (data.indexOf("solution finished") > -1) {
@@ -105,7 +105,7 @@ class TauriBridge implements BridgeGlobal {
           this.solver$.next({ raw: "", rowtype: "log", moveTree: [] });
           const popeyeLine = msg.winning_line_popeye ?? [];
           const raw = this.formatPopeyeLikeRow(popeyeLine);
-          const mov = parsePopeyeRow(raw, this.currentProblem.startMoveN);
+          const mov = parsePopeyeRow(raw, this.currentProblem.startMoveN, "");
           const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
           this.solver$.next({ raw, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
         }

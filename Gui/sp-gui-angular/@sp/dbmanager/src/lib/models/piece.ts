@@ -67,6 +67,16 @@ export class Piece implements IPieceV4 {
     return p;
   }
 
+  static matchPieceCode(p: Piece, target: Piece | string): boolean {
+    if (typeof target === "string") {
+      return p.appearance.toLowerCase() === target.toLowerCase();
+    }
+    return (
+      p.appearance.toLowerCase() === target.appearance.toLowerCase()
+      && p.fairyCode === target.fairyCode
+    );
+  }
+
   public toSP2Xml() {
     const p = createXmlElement("Piece");
     SP2.setAppearance(p, this.appearance);

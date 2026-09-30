@@ -56,7 +56,7 @@ class WebBridge implements BridgeGlobal {
   };
 
   private message = (e: MessageEvent<string>) => {
-    const mov = parsePopeyeRow(e.data, this.problem.startMoveN);
+    const mov = parsePopeyeRow(e.data, this.problem.stipulation, this.problem.startMoveN, "");
     const halfMoves = mov.flatMap(m => m[1]).filter(move => !!move);
     this.solver$.next({ raw: e.data, rowtype: mov.length ? "data" : "log", moveTree: halfMoves });
     if (e.data.indexOf("solution finished") > -1) {

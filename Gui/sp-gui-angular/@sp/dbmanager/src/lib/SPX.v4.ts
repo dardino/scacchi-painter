@@ -69,26 +69,32 @@ export interface Author {
 export const PieceColors = ["White", "Black", "Neutral"] as const;
 export type PieceColors = typeof PieceColors[number];
 export const Columns = [
-  "ColA",
-  "ColB",
-  "ColC",
-  "ColD",
-  "ColE",
-  "ColF",
-  "ColG",
-  "ColH",
+  "ColA", // 1
+  "ColB", // 2
+  "ColC", // 3
+  "ColD", // 4
+  "ColE", // 5
+  "ColF", // 6
+  "ColG", // 7
+  "ColH", // 8
+  "ColI", // 9
+  "ColJ", // 10
+  "ColK", // 11
 ] as const;
 export type Columns = typeof Columns[number];
 
 export const Traverse = [
-  "Row8",
-  "Row7",
-  "Row6",
-  "Row5",
-  "Row4",
-  "Row3",
-  "Row2",
   "Row1",
+  "Row2",
+  "Row3",
+  "Row4",
+  "Row5",
+  "Row6",
+  "Row7",
+  "Row8",
+  "Row9",
+  "Row10",
+  "Row11",
 ] as const;
 export type Traverse = typeof Traverse[number];
 
@@ -185,6 +191,7 @@ export interface IProblemV4 {
   engineConfigurationsByEngine?: EngineConfigurationsByEngine | null;
   conditions: string[];
   tags: string[];
+  boardSize?: { columns: number; rows: number };
   snapshots: Record<string, string>;
 }
 

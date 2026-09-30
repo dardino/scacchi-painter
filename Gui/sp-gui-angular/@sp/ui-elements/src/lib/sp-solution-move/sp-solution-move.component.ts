@@ -24,6 +24,18 @@ export class SpSolutionMoveComponent {
   moveText = computed(() => {
     const value = this.value();
     if (!value) return "";
+    if (value.isCastling) {
+      return [
+        value.castlingLength,
+        value.isCheck ? "+" : "",
+        value.extraMoves.slice(1).join(","), // remove the first extra move as it is intrinsically part of the castling notation
+        value.isCheckMate ? "#" : "",
+        value.isStaleMate ? "=" : "",
+        value.isTry ? "?" : "",
+        value.refutes ? "!" : "",
+        value.isKey ? "!" : "",
+      ].join("");
+    };
     return [
       value.piece === "P" ? "" : value.piece,
       value.from,
@@ -31,7 +43,7 @@ export class SpSolutionMoveComponent {
       value.to,
       value.isPromotion ? "=" : "",
       value.promotedPiece,
-      value.extraMoves.join(""),
+      value.extraMoves.join(","),
       value.isCheck ? "+" : "",
       value.isCheckMate ? "#" : "",
       value.isStaleMate ? "=" : "",

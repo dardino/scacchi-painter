@@ -154,32 +154,32 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     rotateL: () => {
       this.runAnimation({ animation: "rotate", args: "left" }, this.chessboardAnimation()).then(() => {
-        this.#current.RotateBoard("left");
+        this.#current.RotateBoard("counterclockwise");
       });
     },
     rotateR: () => {
       this.runAnimation({ animation: "rotate", args: "right" }, this.chessboardAnimation()).then(() => {
-        this.#current.RotateBoard("right");
+        this.#current.RotateBoard("clockwise");
       });
     },
     moveU: () => {
       this.runAnimation({ animation: "translate", args: "up" }, this.chessboardAnimation()).then(() => {
-        this.#current.ShiftBoard("-y");
+        this.#current.ShiftBoard("y", 1);
       });
     },
     moveD: () => {
       this.runAnimation({ animation: "translate", args: "down" }, this.chessboardAnimation()).then(() => {
-        this.#current.ShiftBoard("y");
+        this.#current.ShiftBoard("y", -1);
       });
     },
     moveL: () => {
       this.runAnimation({ animation: "translate", args: "left" }, this.chessboardAnimation()).then(() => {
-        this.#current.ShiftBoard("-x");
+        this.#current.ShiftBoard("x", -1);
       });
     },
     moveR: () => {
       this.runAnimation({ animation: "translate", args: "right" }, this.chessboardAnimation()).then(() => {
-        this.#current.ShiftBoard("x");
+        this.#current.ShiftBoard("x", 1);
       });
     },
     resetPosition: () => this.#current.Reload(), // reload current snapshot
@@ -345,9 +345,15 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  #lastTwin = "";
   private appendSolutionMessage(msg: SolutionRow) {
     const newProblem = this.#current.Problem()?.clone();
     if (!newProblem) return;
+    if (/^[a-z]\) /.test(msg.raw)) {
+      this.#lastTwin = msg.raw[0];
+    }
+    // apply the last twin to all moves in the move tree
+    msg.moveTree.forEach(move => move.fromTwin = this.#lastTwin);
     const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
     newProblem.htmlSolution += this.toHtml([...raw]);
     newProblem.textSolution += raw.join(`\n`);
