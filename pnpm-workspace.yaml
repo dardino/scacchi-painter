@@ -24,3 +24,4 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - "@dardino/chess-board"
+  - "@tauri-apps/api@2.12.1"

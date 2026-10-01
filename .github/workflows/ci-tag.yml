@@ -35,19 +35,25 @@ jobs:
               Gui/sp-gui/src-tauri/target/release/bundle/**/*.exe
               Gui/sp-gui/src-tauri/target/release/bundle/**/*.msi
           - name: macos_arm64
-            os: macos-14
+            os: macos-26
             target: aarch64-apple-darwin
             artifact_name: tauri-macos-arm64
             artifact_paths: |
               Gui/sp-gui/src-tauri/target/aarch64-apple-darwin/release/bundle/**/*.dmg
               Gui/sp-gui/src-tauri/target/aarch64-apple-darwin/release/bundle/**/*.app
           - name: macos_x64
-            os: macos-14
+            os: macos-26-intel
             target: x86_64-apple-darwin
             artifact_name: tauri-macos-x64
             artifact_paths: |
               Gui/sp-gui/src-tauri/target/x86_64-apple-darwin/release/bundle/**/*.dmg
               Gui/sp-gui/src-tauri/target/x86_64-apple-darwin/release/bundle/**/*.app
+          - name: android
+            os: ubuntu-22.04
+            target: "android"
+            artifact_name: tauri-android-apk
+            artifact_paths: |
+              Gui/sp-gui/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
     runs-on: ${{ matrix.os }}
     name: Build Tauri (${{ matrix.name }})
     steps:
@@ -65,15 +71,55 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
 
+      - name: Setup Java
+        if: matrix.name == 'android'
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Android SDK
+        if: matrix.name == 'android'
+        shell: bash
+        run: |
+          mkdir -p "$HOME/android-sdk"
+          cd "$HOME/android-sdk"
+          curl -fsSL https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -o cmdline-tools.zip
+          unzip -q cmdline-tools.zip -d .
+          mkdir -p cmdline-tools/latest
+          mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
+
+          export ANDROID_SDK_ROOT="$HOME/android-sdk"
+          export ANDROID_HOME="$ANDROID_SDK_ROOT"
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+
+          # Accept Android SDK licenses non-interactively. This step is known to prompt in CI,
+          # and a raw pipe can exit with a broken pipe even when licenses are actually accepted.
+          set +e
+          yes 2>/dev/null | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses >/dev/null 2>&1
+          set -e
+
+          sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "platforms;android-35" "build-tools;35.0.0" "ndk;29.0.14206865"
+
+          export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/29.0.14206865"
+          export NDK_HOME="$ANDROID_NDK_HOME"
+
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME" >> "$GITHUB_ENV"
+          echo "NDK_HOME=$ANDROID_NDK_HOME" >> "$GITHUB_ENV"
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install Rust target
-        if: matrix.target != ''
+        if: matrix.target != '' && matrix.target != 'android'
         run: rustup target add ${{ matrix.target }}
 
       - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && matrix.name != 'android'
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential curl file libayatana-appindicator3-dev librsvg2-dev libssl-dev libwebkit2gtk-4.1-dev libxdo-dev patchelf wget
@@ -90,11 +136,25 @@ jobs:
         working-directory: ./CoreJS
         run: pnpm build
 
-      - name: Build Tauri desktop app
+      - name: Initialize Android project if needed
+        if: matrix.name == 'android'
+        working-directory: ./Gui/sp-gui
+        run: |
+          if [ ! -d src-tauri/gen/android ]; then
+            pnpm tauri android init --ci
+          fi
+
+      - name: Setup Gradle for Android project
+        if: matrix.name == 'android'
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Tauri app
         shell: bash
         working-directory: ./Gui/sp-gui
         run: |
-          if [ -n "${{ matrix.target }}" ]; then
+          if [ "${{ matrix.name }}" = "android" ]; then
+            pnpm tauri android build --apk --ci
+          elif [ -n "${{ matrix.target }}" ]; then
             pnpm tauri build --target "${{ matrix.target }}"
           else
             pnpm tauri build
@@ -109,7 +169,9 @@ jobs:
 
   deploy_production:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    needs: ci
+    needs:
+      - ci
+      - build_tauri
     runs-on: ubuntu-22.04
     name: Deploy to Production
     steps:
@@ -161,7 +223,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           NEW_LINE="Live at: https://orange-sea-080bc3503.azurestaticapps.net/"
-          TAURI_ASSETS="Tauri desktop assets attached to this release:\n- Linux AppImage\n- Linux Debian package (.deb)\n- Linux RPM package (.rpm)\n- Windows installer (.exe)\n- Windows installer (.msi)\n- macOS bundle (.dmg)"
+          TAURI_ASSETS="Tauri desktop assets attached to this release:\n- Linux AppImage\n- Linux Debian package (.deb)\n- Linux RPM package (.rpm)\n- Windows installer (.exe)\n- Windows installer (.msi)\n- macOS bundle (.dmg)\n- Android APK (.apk)"
 
           # Check if release exists
           if gh release view "${{ steps.tag_version.outputs.version }}" &>/dev/null; then
@@ -244,6 +306,8 @@ jobs:
               return "Windows installer (.msi)"
             if lower.endswith(".dmg"):
               return "macOS disk image (.dmg)"
+            if lower.endswith(".apk"):
+              return "Android APK (.apk)"
             return name
 
           release_json = subprocess.run(
