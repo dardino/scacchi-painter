@@ -1,6 +1,6 @@
 # Scacchi Painter GUI - CHANGELOG
 
-## WIP - Future
+## 0.5.0
 
 - [sp-gui-angular] - Add a startup “Did you know?” tip banner with weighted rotation, IndexedDB persistence, and per-session decay
 - [sp-gui-angular] - Add menu item to directly access single problem editing page

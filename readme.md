@@ -4,7 +4,12 @@
 
 A new cross-platform engine and gui for chess problem composers
 
-## Latest Changes (0.4.1)
+## 0.5.0
+
+- Added startup onboarding tips with weighted rotation and persistence
+- Added direct access to single-problem editing from the menu
+
+## 0.4.1
 
 - Fix stipulation with half moves (was rounded)
 
