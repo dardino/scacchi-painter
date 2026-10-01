@@ -11,7 +11,8 @@ export const GOOGLE_DRIVE_AUTH_CONFIG = {
   authEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
   tokenEndpoint: "https://oauth2.googleapis.com/token",
   scopes: [
-    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.readonly",
   ],
 } as const;
 
