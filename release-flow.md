@@ -47,9 +47,12 @@ git checkout -b {release_branch}
 
 1. Set all release-visible versions to the stable release value.
 2. Align README text with release wording.
-3. Align release notes text with the same version and status replacing "wip" and or "future" title with {release_version}
-4. Don't change older version comment in release_notes
-5. Avoid development suffixes or temporary markers in release-facing files.
+3. Update the current release section to the new {release_version}, but do not overwrite older historical version sections.
+4. When editing release notes or changelogs, replace "wip" / "future" headings only for the current release; keep previous version entries intact as historical records.
+5. Do not change older version comments in release_notes or changelog history unless the task explicitly requires a corrective backport.
+6. Avoid development suffixes or temporary markers in release-facing files.
+
+Important: historical version blocks are part of the product documentation and must remain in place. Add the new release at the top or in the current release area; never delete or rewrite older entries while preparing a release.
 
 ```sh
 node scripts/update-versions.mjs {version}

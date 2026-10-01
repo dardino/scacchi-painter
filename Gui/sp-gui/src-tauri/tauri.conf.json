@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/tauri.config.2.json",
   "productName": "Scacchi Painter X",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "identifier": "com.scacchipainter.gui",
   "build": {
     "beforeDevCommand": "pnpm start",
