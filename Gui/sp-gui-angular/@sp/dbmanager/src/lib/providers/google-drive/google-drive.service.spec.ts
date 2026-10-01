@@ -46,11 +46,11 @@ describe("GoogleDriveService", () => {
     await expect(resultPromise).resolves.toMatchObject({ access_token: "gis-token" });
     const requestedScope = (initTokenClient as any).mock.calls[0]?.[0]?.scope;
     expect(initTokenClient).toHaveBeenCalledWith(expect.objectContaining({
-      scope: expect.stringContaining("drive.file"),
+      scope: expect.stringContaining("drive"),
     }));
     expect(requestedScope).toBeDefined();
-    expect(requestedScope).toContain("drive.file");
-    expect(requestedScope).toContain("drive.readonly");
+    expect(requestedScope).toContain("drive");
+    expect(requestedScope).not.toContain("drive.file");
   });
 
   it("should include folders and supported project files in the Drive root query", async () => {
@@ -124,10 +124,11 @@ describe("GoogleDriveService", () => {
     const requestedScope = (initTokenClient as any).mock.calls[0]?.[0]?.scope;
     expect(initTokenClient).toHaveBeenCalledWith(expect.objectContaining({
       client_id: expect.any(String),
-      scope: expect.stringContaining("drive.file"),
+      scope: expect.stringContaining("drive"),
     }));
     expect(requestedScope).toBeDefined();
-    expect(requestedScope).toContain("drive.file");
+    expect(requestedScope).toContain("drive");
+    expect(requestedScope).not.toContain("drive.file");
     expect(requestAccessToken).toHaveBeenCalledWith({ prompt: "consent" });
   });
 });
