@@ -18,6 +18,8 @@ dd {
 
 .configuration-side {
   grid-area: side;
+  display: flex;
+  flex-direction: column;
 }
 
 .configuration-main {

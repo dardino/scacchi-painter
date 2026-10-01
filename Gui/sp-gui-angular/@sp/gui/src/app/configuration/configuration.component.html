@@ -4,6 +4,7 @@
     <dd>{{version}}</dd>
   </dl>
   <button (click)="reload()" mat-stroked-button color="warn">Force reload</button>
+  <button (click)="clearAuthInfo()" mat-stroked-button color="warn">Clear Local Auth Info</button>
 </div>
 <div class="configuration-main">
   <mat-accordion>
@@ -84,6 +85,7 @@
       <div>
         <button matButton="filled" (click)="clearLog()">Clear Log</button>
         <button matButton="filled" (click)="downloadLog()">Download Log</button>
+        <button matButton="filled" (click)="copyToClipboard()">Copy Log</button>
         <pre class="log">
         @for (entry of log(); track $index) {
           {{entry}}

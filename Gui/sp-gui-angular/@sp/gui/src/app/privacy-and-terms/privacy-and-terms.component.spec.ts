@@ -24,7 +24,8 @@ describe("PrivacyAndTermsComponent", () => {
 
   it("should explain that data is sent only via selected cloud storage providers", () => {
     const text = fixture.nativeElement.textContent as string;
-    const links = Array.from(fixture.nativeElement.querySelectorAll("a")).map((link: Element) => (link as HTMLAnchorElement).href);
+    const links = Array.from<HTMLAnchorElement>(fixture.nativeElement.querySelectorAll("a"))
+      .map(link => link.href);
 
     expect(text).toContain("OneDrive");
     expect(text).toContain("Dropbox");

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
+import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { FileExplorerComponent } from "@sp/ui-elements/src/lib/file-explorer/file-explorer.component";
@@ -23,6 +23,7 @@ export class OpenFileComponent implements OnInit {
   private db = inject(DbmanagerService);
   private dropboxService = inject(DropboxdbService);
   private onedriveService = inject(OneDriveService);
+  private googleDriveService = inject(GoogleDriveService);
   private localFolderService = inject(LocalDriveService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -38,6 +39,10 @@ export class OpenFileComponent implements OnInit {
       const source = params.get("source") as AvaliableFileServices | "new" | null | undefined;
       this.#logService.log("OpenFileComponent ~ from source:", source);
       if (source) {
+        if (source === "googledrive") {
+          return;
+        }
+
         setTimeout(() => {
           this.#processSource(source);
         }, 1);
@@ -50,6 +55,12 @@ export class OpenFileComponent implements OnInit {
     // Reset state first
     this.showFilePicker.set(false);
     this.currentFileService = null;
+
+    if (source === "googledrive") {
+      await this.#fromGoogleDrive();
+      return;
+    }
+
     // Navigate to the route with the source parameter only if current route is not already the same
     if (this.router.url !== `/openfile/${source}`) {
       this.#logService.log("Navigating to /openfile/" + source);
@@ -73,6 +84,9 @@ export class OpenFileComponent implements OnInit {
         break;
       case "onedrive":
         await this.#fromOneDrive();
+        break;
+      case "googledrive":
+        // Authorization must start from the original user click; route-triggered execution can be blocked by the browser popup policy.
         break;
       case "unknown":
       default:
@@ -107,6 +121,12 @@ export class OpenFileComponent implements OnInit {
   async #fromOneDrive() {
     this.currentFileService = this.onedriveService;
     await this.onedriveService.authorize();
+    this.showFilePicker.set(true);
+  }
+
+  async #fromGoogleDrive() {
+    this.currentFileService = this.googleDriveService;
+    await this.googleDriveService.authorize();
     this.showFilePicker.set(true);
   }
 

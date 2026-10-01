@@ -1,6 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { BehaviorSubject, Subject } from "rxjs";
 
+import { Problem } from "@sp/dbmanager/src/lib/models";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HostBridgeService } from "./host-bridge.service";
 
@@ -15,7 +16,7 @@ describe("HostBridgeService", () => {
     saveFile: ReturnType<typeof vi.fn>;
   };
 
-  type TestProblem = { engine: string; [key: string]: unknown };
+  type TestProblem = Problem;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -44,7 +45,7 @@ describe("HostBridgeService", () => {
     const solveStates: boolean[] = [];
     service.solveInProgress$.subscribe(state => solveStates.push(state));
 
-    const problem: TestProblem = { engine: "SpCore" };
+    const problem: TestProblem = { engine: "SpCore" } as TestProblem;
     service.startSolve(problem, "SpCore", "try");
 
     stream.next({ message: "SpCore does not support try mode" });
@@ -63,7 +64,7 @@ describe("HostBridgeService", () => {
     const solveStates: boolean[] = [];
     service.solveInProgress$.subscribe(state => solveStates.push(state));
 
-    const problem: TestProblem = { engine: "Popeye" };
+    const problem: TestProblem = { engine: "Popeye" } as TestProblem;
     service.startSolve(problem, "Popeye", "start");
     stream.complete();
 
@@ -84,7 +85,7 @@ describe("HostBridgeService", () => {
     const solveStates: boolean[] = [];
     service.solveInProgress$.subscribe(state => solveStates.push(state));
 
-    const problem: TestProblem = { engine: "SpCore" };
+    const problem: TestProblem = { engine: "SpCore" } as TestProblem;
     const firstStartError = service.startSolve(problem, "SpCore", "try");
     const secondStartError = service.startSolve(problem, "SpCore", "start");
 

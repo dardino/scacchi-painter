@@ -33,6 +33,15 @@
       </span>
     </a>
   </li>
+  <li [ngClass]="{ current: current() === 'googledrive' }">
+    <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('googledrive')"
+      (click)="selectSource('googledrive')">
+      <span class="open-button">
+        <mat-icon svgIcon="google_drive_icon"></mat-icon>
+        <span>Google Drive</span>
+      </span>
+    </a>
+  </li>
   <!-- we needs a 'n-1' fillers to grant the correct ui -->
   <li class="filler"></li>
   <li class="filler"></li>
