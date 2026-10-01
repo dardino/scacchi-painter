@@ -33,6 +33,10 @@ describe("SpSolutionMoveComponent", () => {
           isKey: false,
           threat: false,
           zugzwang: false,
+          color: "w",
+          isCastling: false,
+          castlingLength: "",
+          fromTwin: "",
         } as HalfMoveInfo)),
       ],
     });

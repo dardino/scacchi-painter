@@ -19,7 +19,7 @@ describe("getSpCoreUnsupportedFeatures", () => {
       TwinType: "Duplex",
     } as Twin);
     problem.pieces[0].color = "Neutral";
-    problem.pieces[0].fairyCode = [{ code: "am", params: [] }];
+    problem.pieces[0].fairyCode = "am";
 
     expect(getSpCoreUnsupportedFeatures(problem, "try")).toEqual([
       "try mode",

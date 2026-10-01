@@ -1,9 +1,10 @@
 import { computed, inject, Injectable, Signal, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { LogService } from "@sp/gui/src/app/services/log.service";
 import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, FolderSelected, RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
-import { DropboxdbService, LocalDriveService, OneDriveService } from "./providers";
+import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "./providers";
 import { convertProblemV3ToV4, IDbSpX_V3, isV3 } from "./SPX.v3";
 import { IDbSpX_V4, isV4, verifyProblemV4 } from "./SPX.v4";
 
@@ -25,8 +26,10 @@ export class DbmanagerService implements IDbManagerService {
 
   #dropboxFS = inject(DropboxdbService);
   #oneDriveFS = inject(OneDriveService);
+  #googleDriveFS = inject(GoogleDriveService);
   #localDriveFS = inject(LocalDriveService);
   #snackBar = inject(MatSnackBar);
+  #logger = inject(LogService);
 
   /** @description Current problem index is 1 based */
   #currentIndex = signal(1);
@@ -113,6 +116,8 @@ export class DbmanagerService implements IDbManagerService {
         return this.#dropboxFS;
       case "onedrive":
         return this.#oneDriveFS;
+      case "googledrive":
+        return this.#googleDriveFS;
       case "local":
         return this.#localDriveFS;
       case "unknown":
@@ -300,6 +305,7 @@ export class DbmanagerService implements IDbManagerService {
         );
       }
       else {
+        this.#logger.error("Unable to save file" + JSON.stringify(result));
         this.#snackBar.open("Unable to save: " + result.message, undefined, {
           verticalPosition: "top",
           politeness: "off",
@@ -436,7 +442,7 @@ export class DbmanagerService implements IDbManagerService {
  * @param source - The source of the file.
  */
 function saveToRecentFiles(meta: FolderItemInfo, source: AvaliableFileServices) {
-  const recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
+  const recents = getRecentFiles();
   // remove old matching file
   const oldIndex = recents.findIndex(rec => rec.source === source && rec.meta.fullPath === meta.fullPath);
   if (oldIndex > -1) recents.splice(oldIndex, 1);
@@ -446,5 +452,12 @@ function saveToRecentFiles(meta: FolderItemInfo, source: AvaliableFileServices) 
   // add current file to first
   recents.unshift({ meta, source });
   // save to recent
-  localStorage.setItem("spx.recents", JSON.stringify(recents.slice(0, 10)));
+  saveRecentFiles(recents);
+}
+
+export function saveRecentFiles(recents: RecentFileInfo[]) {
+  localStorage.setItem("spx:recents", JSON.stringify(recents.slice(0, 10)));
+}
+export function getRecentFiles(): RecentFileInfo[] {
+  return JSON.parse(localStorage.getItem("spx:recents") ?? localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
 }

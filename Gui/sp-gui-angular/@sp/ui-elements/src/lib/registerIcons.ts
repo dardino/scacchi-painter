@@ -49,6 +49,12 @@ export class AllMatIconRegistryService {
       ),
     );
     this.matIconRegistry.addSvgIcon(
+      `google_drive_icon`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        `${assetFolder}/toolbar/google_drive_icon.svg`,
+      ),
+    );
+    this.matIconRegistry.addSvgIcon(
       `my_flip_h`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
         `${assetFolder}/toolbar/fliph.svg`,

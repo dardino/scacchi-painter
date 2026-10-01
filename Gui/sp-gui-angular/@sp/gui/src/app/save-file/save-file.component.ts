@@ -6,7 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
-import { DropboxdbService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
+import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import {
   AvaliableFileServices,
@@ -37,6 +37,7 @@ export class SaveFileComponent implements OnInit {
   private db = inject(DbmanagerService);
   private dropboxFS = inject(DropboxdbService);
   private onedriveFS = inject(OneDriveService);
+  private googleDriveFS = inject(GoogleDriveService);
   private localFS = inject(LocalDriveService);
   private router = inject(Router);
 
@@ -84,6 +85,8 @@ export class SaveFileComponent implements OnInit {
         return this.dropboxFS;
       case "onedrive":
         return this.onedriveFS;
+      case "googledrive":
+        return this.googleDriveFS;
       case "unknown":
       default:
         return null;
@@ -116,6 +119,11 @@ export class SaveFileComponent implements OnInit {
         this.toOneDrive();
       }, 1);
     }
+    else if (urlhash === "#googledrive") {
+      setTimeout(() => {
+        this.toGoogleDrive();
+      }, 1);
+    }
     else if (this.selectedFile?.source === "dropbox") {
       setTimeout(() => {
         this.toDropbox();
@@ -124,6 +132,11 @@ export class SaveFileComponent implements OnInit {
     else if (this.selectedFile?.source === "onedrive") {
       setTimeout(() => {
         this.toOneDrive();
+      }, 1);
+    }
+    else if (this.selectedFile?.source === "googledrive") {
+      setTimeout(() => {
+        this.toGoogleDrive();
       }, 1);
     }
     else {
@@ -143,6 +156,9 @@ export class SaveFileComponent implements OnInit {
         break;
       case "onedrive":
         await this.toOneDrive();
+        break;
+      case "googledrive":
+        await this.toGoogleDrive();
         break;
       case "unknown":
       default:
@@ -188,6 +204,13 @@ export class SaveFileComponent implements OnInit {
    */
   public async toOneDrive() {
     if (this.selectedFile) this.selectedFile.source = "onedrive";
+  }
+
+  public async toGoogleDrive() {
+    if (this.selectedFile) {
+      this.selectedFile.source = "googledrive";
+      await this.googleDriveFS.authorize();
+    }
   }
 
   /**

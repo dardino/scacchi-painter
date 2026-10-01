@@ -87,7 +87,7 @@ export class FileExplorerComponent implements OnInit, OnChanges {
     this.isloading.set(true);
     if (this.service) {
       this.service
-        .enumContent(this.currentItem.id, this.currentItem.type, "sp2")
+        .enumContent(this.currentItem.id, this.currentItem.type, "sp2", "sp3")
         .then((items) => {
           this.items.set(items);
         }).catch(() => {

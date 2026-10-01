@@ -154,6 +154,10 @@ export class ConfigurationComponent implements OnInit {
     this.#logService.downloadLogs();
   }
 
+  copyToClipboard() {
+    this.#logService.copyLogsToClipboard();
+  }
+
   version: string;
 
   ngOnInit(): void {
@@ -163,5 +167,19 @@ export class ConfigurationComponent implements OnInit {
   reload() {
     location.href = "/?" + Math.random();
     location.href = "/";
+  }
+
+  clearAuthInfo() {
+    // remove all storage excluding "spx:*"
+    for (const key in localStorage) {
+      if (!key.startsWith("spx:")) {
+        localStorage.removeItem(key);
+      }
+    }
+    for (const key in sessionStorage) {
+      if (!key.startsWith("spx:")) {
+        sessionStorage.removeItem(key);
+      }
+    }
   }
 }

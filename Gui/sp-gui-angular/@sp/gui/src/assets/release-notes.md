@@ -13,6 +13,7 @@ This release introduces a new “Did you know?” banner on the home page with w
 * 🧭 **Manual navigation** - users can move between tips with next/previous controls and keep the banner useful as a quick reminder
 * ♻️ **Per-session decay** - each tip can decay once per app session, reducing repetition without fully excluding it from future cycles
 * 📎 **Direct problem editing** - a new menu item allows direct access to the single problem editing page
+* ☁️ **Google Drive support** - you can now use Google Drive in the same way as OneDrive and Dropbox for opening and saving files
 
 **What changes for you:**
 

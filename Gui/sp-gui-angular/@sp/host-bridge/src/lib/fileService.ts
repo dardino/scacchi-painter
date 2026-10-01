@@ -5,7 +5,7 @@ export interface FolderItemInfo {
   id: string;
 }
 
-export type AvaliableFileServices = "local" | "dropbox" | "onedrive" | "unknown";
+export type AvaliableFileServices = "local" | "dropbox" | "onedrive" | "googledrive" | "unknown";
 
 export interface FileService<T extends AvaliableFileServices> {
   readonly sourceName: T;

@@ -3,7 +3,7 @@ import { MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { DbmanagerService, setLocalAuthInfo } from "@sp/dbmanager/src/public-api";
+import { DbmanagerService, getRecentFiles, saveRecentFiles, setLocalAuthInfo } from "@sp/dbmanager/src/public-api";
 import { RecentFileInfo } from "@sp/host-bridge/src/lib/fileService";
 import { DbsourceComponent } from "@sp/ui-elements/src/lib/dbsource/dbsource.component";
 import { LogService } from "../services/log.service";
@@ -29,7 +29,7 @@ export class RecentsComponent {
   }
 
   constructor() {
-    this.recents = JSON.parse(localStorage.getItem("spx.recents") ?? "[]") as RecentFileInfo[];
+    this.recents = getRecentFiles();
   }
 
   async clickOnRecent(fInfo: RecentFileInfo) {
@@ -54,6 +54,6 @@ export class RecentsComponent {
 
   removeRecent(fInfo: RecentFileInfo) {
     this.recents = this.recents.filter(recent => recent.meta.id !== fInfo.meta.id);
-    localStorage.setItem("spx.recents", JSON.stringify(this.recents));
+    saveRecentFiles(this.recents);
   }
 }

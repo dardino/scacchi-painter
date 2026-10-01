@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { getLocalAuthInfo, setLocalAuthInfo, HASHES, LocalAuthInfo } from "./helpers";
+import { getLocalAuthInfo, HASHES, LocalAuthInfo, setLocalAuthInfo } from "./helpers";
 
 describe("OAuth Helpers", () => {
   beforeEach(() => {
@@ -16,8 +16,9 @@ describe("OAuth Helpers", () => {
     it("should contain expected hash values", () => {
       expect(HASHES).toContain("dropbox");
       expect(HASHES).toContain("onedrive");
+      expect(HASHES).toContain("googledrive");
       expect(HASHES).toContain("null");
-      expect(HASHES.length).toBe(3);
+      expect(HASHES.length).toBe(4);
     });
   });
 
@@ -29,6 +30,7 @@ describe("OAuth Helpers", () => {
       expect(authInfo.state).toBe("");
       expect(authInfo.dropbox_token).toBe("null");
       expect(authInfo.onedrive_token).toBe("null");
+      expect(authInfo.google_token).toBe("null");
       expect(authInfo.return_url).toBe("");
     });
 
@@ -66,6 +68,15 @@ describe("OAuth Helpers", () => {
       expect(authInfo.onedrive_token).toBe(mockToken);
     });
 
+    it("should return stored google_token value", () => {
+      const mockToken = JSON.stringify({ access_token: "test-google-token" });
+      localStorage.setItem("google_token", mockToken);
+
+      const authInfo = getLocalAuthInfo();
+
+      expect(authInfo.google_token).toBe(mockToken);
+    });
+
     it("should return stored return_url value", () => {
       localStorage.setItem("return_url", "/savefile#dropbox");
 
@@ -77,11 +88,13 @@ describe("OAuth Helpers", () => {
     it("should return all stored values together", () => {
       const mockDropboxToken = JSON.stringify({ access_token: "dropbox-token" });
       const mockOnedriveToken = JSON.stringify({ accessToken: "onedrive-token" });
+      const mockGoogleToken = JSON.stringify({ access_token: "google-token" });
 
       localStorage.setItem("redirect", "onedrive");
       localStorage.setItem("state", "auth-state-456");
       localStorage.setItem("dropbox_token", mockDropboxToken);
       localStorage.setItem("onedrive_token", mockOnedriveToken);
+      localStorage.setItem("google_token", mockGoogleToken);
 
       const authInfo = getLocalAuthInfo();
 
@@ -89,6 +102,7 @@ describe("OAuth Helpers", () => {
       expect(authInfo.state).toBe("auth-state-456");
       expect(authInfo.dropbox_token).toBe(mockDropboxToken);
       expect(authInfo.onedrive_token).toBe(mockOnedriveToken);
+      expect(authInfo.google_token).toBe(mockGoogleToken);
     });
   });
 
@@ -117,6 +131,13 @@ describe("OAuth Helpers", () => {
       setLocalAuthInfo({ onedrive_token: mockToken });
 
       expect(localStorage.getItem("onedrive_token")).toBe(mockToken);
+    });
+
+    it("should set google_token value in localStorage", () => {
+      const mockToken = JSON.stringify({ access_token: "new-google-token" });
+      setLocalAuthInfo({ google_token: mockToken });
+
+      expect(localStorage.getItem("google_token")).toBe(mockToken);
     });
 
     it("should set return_url value in localStorage", () => {

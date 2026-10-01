@@ -12,8 +12,9 @@ const data: FairypieceDialogInput = {
     color: "Black",
     column: "ColA",
     traverse: "Row1",
-    fairyAttribute: "SomeAttribute",
-    fairyCode: [{ code: "SomeCode", params: ["SomeParam"] }],
+    fairyCode: "X/Y",
+    fairyAttributes: ["SomeAttribute"],
+    fairyParams: ["SomeParam"],
     rotation: "UpsideDown",
   },
 };

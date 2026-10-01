@@ -34,6 +34,15 @@ export class LogService {
     document.body.removeChild(element);
   }
 
+  copyLogsToClipboard() {
+    const logs = this.Logs().join("\n");
+    navigator.clipboard.writeText(logs).then(() => {
+      this.log("Logs copied to clipboard.");
+    }).catch((err) => {
+      this.error(`Failed to copy logs to clipboard: ${err instanceof Error ? err.message : String(err)}`);
+    });
+  }
+
   Logs = this.#logs.asReadonly();
 
   constructor() {}

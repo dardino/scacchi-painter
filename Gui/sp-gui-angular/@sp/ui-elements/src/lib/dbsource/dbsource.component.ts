@@ -13,6 +13,7 @@ export class DbsourceComponent {
   static mapDesc: Record<AvaliableFileServices, string> = {
     dropbox: "Dropbox",
     onedrive: "One Drive",
+    googledrive: "Google Drive",
     local: "Local",
     unknown: "In memory",
   };
