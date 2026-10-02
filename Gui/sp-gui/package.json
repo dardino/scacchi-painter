@@ -7,7 +7,9 @@
     "start": "echo 'il server è già avviato a mano in locahost:4200'",
     "tauri": "tauri",
     "android:init": "pnpm icons && tauri android init --ci",
-    "android:build:apk": "pnpm icons && tauri android build --apk --ci"
+    "android:build": "pnpm icons && tauri android build --aab --ci",
+    "android:build:bundle": "pnpm icons && tauri android build --aab --ci",
+    "android:build:apk": "pnpm icons && tauri android build --aab --ci"
   },
   "private": true,
   "dependencies": {
