@@ -92,13 +92,13 @@ In VS Code you can run the `dev: full web stack` task from the workspace root.
 
 A running and usable online preview is available
 
-[Here (pre-release)](https://orange-sea-080bc3503-release.westeurope.azurestaticapps.net/)
+[Here (pre-release)](https://orange-sea-080bc3503-nightly.westeurope.azurestaticapps.net/)
 
 or
 
 [Here (lts)](https://orange-sea-080bc3503.azurestaticapps.net/)
 
-Go to [Roadmap](https://github.com/dardino/scacchi-painter/wiki/RoadMap) to look at the future
+Go to [Homepage](https://dardino.github.io/scacchi-painter/)
 
 ## Rust Solver Planning
 
