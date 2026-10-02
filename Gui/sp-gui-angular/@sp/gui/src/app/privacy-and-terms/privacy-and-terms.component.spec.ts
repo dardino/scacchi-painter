@@ -28,8 +28,11 @@ describe("PrivacyAndTermsComponent", () => {
       .map(link => link.href);
 
     expect(text).toContain("OneDrive");
+    expect(text).toContain("Google Drive");
     expect(text).toContain("Dropbox");
+    expect(text).toContain("retention");
     expect(links).toContain("https://privacy.microsoft.com/privacystatement");
     expect(links).toContain("https://www.dropbox.com/terms");
+    expect(links).toContain("https://policies.google.com/privacy");
   });
 });
