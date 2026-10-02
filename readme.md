@@ -13,14 +13,14 @@ A new cross-platform engine and gui for chess problem composers
 
 - Fix stipulation with half moves (was rounded)
 
-## (0.4.0)
+## 0.4.0
 
 - Added support for animations [#173]
 - Fixed the local file-opening loop that could repeatedly reload the board
 - Added support for pasting a plausible FEN string from the clipboard directly onto the board [#170]
 - Added support for problems defined as "zero-position" [#323]
 
-## (0.3.1)
+## 0.3.1
 
 Chessboard Angular Component Refactor:
 
@@ -40,7 +40,7 @@ Developer Experience:
 
 Enabled editor.formatOnSave in VSCode settings for consistent code formatting.
 
-## Latest Changes (0.2.2)
+## 0.2.2
 
 The 0.2.2 release introduces:
 
