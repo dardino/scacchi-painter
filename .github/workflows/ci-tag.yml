@@ -51,9 +51,10 @@ jobs:
           - name: android
             os: ubuntu-22.04
             target: "android"
-            artifact_name: tauri-android-apk
+            artifact_name: tauri-android
             artifact_paths: |
               Gui/sp-gui/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+              Gui/sp-gui/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
     runs-on: ${{ matrix.os }}
     name: Build Tauri (${{ matrix.name }})
     steps:
@@ -153,7 +154,7 @@ jobs:
         working-directory: ./Gui/sp-gui
         run: |
           if [ "${{ matrix.name }}" = "android" ]; then
-            pnpm tauri android build --apk --ci
+            pnpm tauri android build --apk --aab --ci
           elif [ -n "${{ matrix.target }}" ]; then
             pnpm tauri build --target "${{ matrix.target }}"
           else
@@ -223,7 +224,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           NEW_LINE="Live at: https://orange-sea-080bc3503.azurestaticapps.net/"
-          TAURI_ASSETS="Tauri desktop assets attached to this release:\n- Linux AppImage\n- Linux Debian package (.deb)\n- Linux RPM package (.rpm)\n- Windows installer (.exe)\n- Windows installer (.msi)\n- macOS bundle (.dmg)\n- Android APK (.apk)"
+          TAURI_ASSETS="Tauri desktop assets attached to this release:\n- Linux AppImage\n- Linux Debian package (.deb)\n- Linux RPM package (.rpm)\n- Windows installer (.exe)\n- Windows installer (.msi)\n- macOS bundle (.dmg)\n- Android APK (.apk)\n- Android App Bundle (.aab)"
 
           # Check if release exists
           if gh release view "${{ steps.tag_version.outputs.version }}" &>/dev/null; then
@@ -275,7 +276,14 @@ jobs:
             echo "No Tauri assets found in ./release-assets" >&2
             exit 1
           fi
-          find ./release-assets -type f -print0 | while IFS= read -r -d '' asset; do
+
+          find ./release-assets -type f \( \
+            -not -name "icon.icns" \
+            -a -not -name "info.plist" \
+            -a -not -name "pyLinux64" \
+            -a -not -name "pymacArm64" \
+            -a -not -name "pywin64" \
+          \) -print0 | while IFS= read -r -d '' asset; do
             gh release upload "${{ steps.tag_version.outputs.version }}" "$asset" --clobber --repo "${{ github.repository }}"
           done
 
@@ -308,6 +316,8 @@ jobs:
               return "macOS disk image (.dmg)"
             if lower.endswith(".apk"):
               return "Android APK (.apk)"
+            if lower.endswith(".aab"):
+              return "Android App Bundle (.aab)"
             return name
 
           release_json = subprocess.run(

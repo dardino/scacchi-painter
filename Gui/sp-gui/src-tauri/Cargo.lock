@@ -462,7 +462,7 @@ checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
 name = "chess-core"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "serde",
  "thiserror 2.0.21",
@@ -2637,7 +2637,7 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "problem-io"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "chess-core",
  "serde",
@@ -2646,7 +2646,7 @@ dependencies = [
 
 [[package]]
 name = "problem-solver"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "chess-core",
  "problem-io",
@@ -2900,7 +2900,7 @@ dependencies = [
 
 [[package]]
 name = "scacchi-painter-x"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "problem-io",
  "problem-solver",

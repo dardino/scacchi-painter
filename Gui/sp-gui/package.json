@@ -6,8 +6,10 @@
     "icons": "pnpm tauricon ./src-tauri/logo.svg",
     "start": "echo 'il server è già avviato a mano in locahost:4200'",
     "tauri": "tauri",
-    "android:init": "tauri android init --ci",
-    "android:build:apk": "tauri android build --apk --ci"
+    "android:init": "pnpm icons && tauri android init --ci",
+    "android:build": "pnpm icons && tauri android build --aab --ci",
+    "android:build:bundle": "pnpm icons && tauri android build --aab --ci",
+    "android:build:apk": "pnpm icons && tauri android build --aab --ci"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +22,7 @@
     "@tauri-apps/tauricon": "^1.0.3",
     "@types/node": "^26.6.3",
     "chalk": "^6.0.1",
+    "sharp": "^0.35.5",
     "typescript": "^7.0.2",
     "vite-node": "^6.0.0"
   }
