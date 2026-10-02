@@ -18,8 +18,8 @@ allowBuilds:
   esbuild: true
   lmdb: false
   msgpackr-extract: false
-  optipng-bin: false
-  sharp: false
+  optipng-bin: true
+  sharp: true
   zopflipng-bin: false
 
 minimumReleaseAgeExclude:
