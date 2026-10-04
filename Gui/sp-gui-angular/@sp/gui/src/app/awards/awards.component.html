@@ -1,3 +1,16 @@
 <section class="awards">
   <h2>Awards</h2>
-</section>
+
+  <mat-list>
+    @if (awards().length === 0) {
+    <mat-list-item>No awards available.</mat-list-item>
+    } @else {
+    @for (award of awards(); track award.awardsTitle) {
+    <mat-list-item>
+      <span matListItemTitle>{{ award.awardsTitle }}</span>
+      <span matListItemLine>{{ award.awardsDescription }}</span>
+      <span matListItemMeta>{{ award.awardsDate }} · {{ award.awardsJudge }}</span>
+    </mat-list-item>
+    }
+    }
+  </mat-list>
