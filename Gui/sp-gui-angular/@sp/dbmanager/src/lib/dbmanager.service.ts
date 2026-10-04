@@ -5,14 +5,17 @@ import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, Folde
 import { prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
 import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "./providers";
-import { convertProblemV3ToV4, IDbSpX_V3, isV3 } from "./SPX.v3";
-import { IDbSpX_V4, isV4, verifyProblemV4 } from "./SPX.v4";
+import { IDbSpX_V3, isV3 } from "./SPX.v3";
+import { IDbSpX_V4, isV4 } from "./SPX.v4";
+import { Awards, convertDbToV5, IDbSpX_V5, isV5 } from "./SPX.v5";
 
 export interface IDbManagerService {
   CurrentProblem: Signal<Problem | null>;
   All: Signal<Problem[]>;
+  Awards: Signal<Awards[]>;
   SetCurrentProblem(problem: Problem | null): Promise<void>;
   SetData(problems: Problem[]): void;
+  SetAwards(awards: Awards[]): void;
   SaveTemporary(): Promise<void>;
 }
 
@@ -22,6 +25,10 @@ export interface IDbManagerService {
 export class DbmanagerService implements IDbManagerService {
   SetData(problems: Problem[]): void {
     this.#database.set(problems);
+  }
+
+  SetAwards(awards: Awards[]): void {
+    this.#awards.set(awards);
   }
 
   #dropboxFS = inject(DropboxdbService);
@@ -36,9 +43,11 @@ export class DbmanagerService implements IDbManagerService {
   #currentFile = signal<FolderSelected | null>(null);
   #workInProgress = signal(false);
   #database = signal<Problem[]>([]);
+  #awards = signal<Awards[]>([]);
 
   // #region public Properties
   All = this.#database.asReadonly();
+  Awards = this.#awards.asReadonly();
   wip = computed(() => this.#workInProgress());
   FileName = computed(() => this.#currentFile()?.meta.itemName);
   CurrentIndex = computed(() => this.#currentIndex());
@@ -229,12 +238,13 @@ export class DbmanagerService implements IDbManagerService {
     localStorage.setItem("spdb_info", JSON.stringify(this.#currentFile()));
   }
 
-  private toJSON(): IDbSpX_V4 {
+  private toJSON(): IDbSpX_V5 {
     return {
       lastIndex: this.#currentIndex(),
       problems: this.#database().map(p => p.toJson()),
+      awards: this.#awards(),
       name: "Scacchi Painter X Database",
-      version: 4,
+      version: 5,
     };
   }
 
@@ -328,20 +338,15 @@ export class DbmanagerService implements IDbManagerService {
 
   private async loadFromJson(jsonString: string): Promise<Error | null> {
     try {
-      let obj = JSON.parse(jsonString) as IDbSpX_V4 | IDbSpX_V3;
-      if (!isV3(obj) && !isV4(obj))
+      const raw = JSON.parse(jsonString) as IDbSpX_V5 | IDbSpX_V4 | IDbSpX_V3;
+      if (!isV3(raw) && !isV4(raw) && !isV5(raw)) {
         throw new Error("Unsupported file version!");
-      // get the current file version
+      }
 
-      if (isV3(obj)) obj = {
-        ...obj,
-        problems: obj.problems.map(p => convertProblemV3ToV4(p)),
-        version: 4,
-      } as IDbSpX_V4;
-
-      obj = verifyProblemV4(obj);
+      const obj = convertDbToV5(raw);
 
       this.#database.set(obj.problems.map(p => Problem.fromJson(p)));
+      this.#awards.set(obj.awards ?? []);
       this.#currentIndex.set(obj.lastIndex ?? 1);
       return null;
     }

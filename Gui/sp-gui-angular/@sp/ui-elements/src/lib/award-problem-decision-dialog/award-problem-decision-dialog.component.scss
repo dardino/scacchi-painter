@@ -1,0 +1,30 @@
+.decision-dialog {
+  display: grid;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.board-wrap lib-chessboard {
+  width: min(100%, 18rem);
+  display: block;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 1rem;
+}
+
+.stipulation {
+  margin: 0;
+  font-weight: 600;
+}

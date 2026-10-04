@@ -1,0 +1,101 @@
+:host {
+  display: contents;
+}
+
+.awards {
+  display: contents;
+}
+
+.awards-side {
+  grid-area: side;
+}
+
+.awards-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  grid-area: toolbar;
+}
+
+.awards-header h2 {
+  margin: 0;
+}
+
+.award-list {
+  grid-area: main;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.award-item,
+.award-empty {
+  list-style-type: none;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+  background-color: #144e6c;
+  border: dashed 1px #c2c2c2;
+  align-items: center;
+  min-height: 2rem;
+  margin-top: -1px;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.award-empty {
+  cursor: default;
+}
+
+.award-item:hover {
+  background-color: rgba(#144e6c, 0.5);
+}
+
+.award-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.award-title {
+  display: block;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.award-description {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.award-problem-count {
+  display: block;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.award-meta {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+.award-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}

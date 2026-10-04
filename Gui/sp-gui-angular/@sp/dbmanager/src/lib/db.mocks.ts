@@ -6,13 +6,20 @@ import { join } from "node:path";
 import { Observable, Subject } from "rxjs";
 import { IDbManagerService } from "./dbmanager.service";
 import { Piece, Problem } from "./models";
+import { Awards } from "./SPX.v5";
 
 @Injectable({ providedIn: "root" })
 export class MockDbmanagerService implements IDbManagerService {
   private all = signal<Problem[]>([]);
+  private awards = signal<Awards[]>([]);
   All = this.all.asReadonly();
+  Awards = this.awards.asReadonly();
   SetData(problems: Problem[]): void {
     this.all.set(problems);
+  }
+
+  SetAwards(awards: Awards[]): void {
+    this.awards.set(awards);
   }
 
   get wip$(): Signal<boolean> {

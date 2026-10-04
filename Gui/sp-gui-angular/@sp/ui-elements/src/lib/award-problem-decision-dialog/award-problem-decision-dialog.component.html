@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Problema da includere nel verdetto</h2>
+<div mat-dialog-content class="decision-dialog">
+  <div class="board-wrap">
+    <lib-chessboard [position]="problem" [smallBoard]="true" [hideInfo]="true" boardType="HTML"
+      disabled></lib-chessboard>
+  </div>
+  <div class="meta">
+    <p class="stipulation">{{ problem.stipulation.completeStipulationDesc }}</p>
+    @if (problem.personalID) {
+    <span>ID: {{ problem.personalID }}</span>
+    <p innerHTML="{{problem.htmlSolution}}"></p>
+    }
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="choose('interrupt')">Interrompi</button>
+  <button mat-button type="button" (click)="choose('skip')">Salta</button>
+  <button mat-button color="warn" type="button" (click)="choose('exclude')">Escludi</button>
+  <button mat-flat-button color="primary" type="button" (click)="choose('include')">Includi</button>
+</div>

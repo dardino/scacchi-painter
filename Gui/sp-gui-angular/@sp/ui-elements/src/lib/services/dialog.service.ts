@@ -1,14 +1,18 @@
 import { Injectable, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { Author } from "@sp/dbmanager/src/lib/models";
+import { Author, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
+import { Awards } from "@sp/dbmanager/src/lib/SPX.v5";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
+import { AwardProblemDecisionData, AwardProblemDecisionDialogComponent, AwardProblemDecisionResult } from "../award-problem-decision-dialog/award-problem-decision-dialog.component";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { FairypieceDialogComponent, FairypieceDialogInput, FairypieceDialogResponse } from "../fairypiece-dialog/fairypiece-dialog.component";
+import { ProblemComparisonDialogComponent, ProblemComparisonDialogData } from "../problem-comparison-dialog/problem-comparison-dialog.component";
 import { SolveEngineDialogComponent, SolveEngineDialogData, SolveEngineDialogResult } from "../solve-engine-dialog/solve-engine-dialog.component";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
+import { VerdictDialogComponent, VerdictDialogData } from "../verdict-dialog/verdict-dialog.component";
 
 @Injectable({
   providedIn: "root",
@@ -45,6 +49,52 @@ export class DialogService {
       {
         width: "25rem",
         maxWidth: "95%",
+      },
+    ).afterClosed();
+  }
+
+  verdictDialog(data: Awards | null, mode: "view" | "create" | "edit" = "view") {
+    const award = data ?? {
+      awardsTitle: "",
+      awardsDescription: "",
+      awardsDate: new Date().toISOString().slice(0, 10),
+      awardsJudge: "",
+      awardsProblems: [],
+    };
+
+    return this.dialog.open<VerdictDialogComponent, VerdictDialogData, Awards | null>(
+      VerdictDialogComponent,
+      {
+        width: "28rem",
+        maxWidth: "95%",
+        data: {
+          mode,
+          award,
+        },
+      },
+    ).afterClosed();
+  }
+
+  awardProblemDecisionDialog(problem: Problem) {
+    return this.dialog.open<AwardProblemDecisionDialogComponent, AwardProblemDecisionData, AwardProblemDecisionResult>(
+      AwardProblemDecisionDialogComponent,
+      {
+        width: "36rem",
+        maxWidth: "95vw",
+        disableClose: true,
+        data: { problem },
+      },
+    ).afterClosed();
+  }
+
+  problemComparisonDialog(problems: [Problem, Problem]) {
+    return this.dialog.open<ProblemComparisonDialogComponent, ProblemComparisonDialogData, string | null>(
+      ProblemComparisonDialogComponent,
+      {
+        width: "90vw",
+        maxWidth: "90vw",
+        disableClose: true,
+        data: { problems },
       },
     ).afterClosed();
   }

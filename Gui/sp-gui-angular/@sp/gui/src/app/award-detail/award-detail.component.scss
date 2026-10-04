@@ -1,0 +1,31 @@
+:host {
+  display: contents;
+  --mat-progress-bar-track-height: 1rem;
+  --mat-progress-bar-active-indicator-height: 1rem;
+}
+
+.award-detail {
+  grid-area: side;
+}
+
+.award-generation {
+  grid-area: main;
+}
+
+.award-toolbar {
+  grid-area: toolbar;
+}
+
+.award-problem-item {
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+
+}
+
+.ordering-progress {
+  background-color: #f5f5f5;
+  padding: 2px;
+  border-radius: 3px;
+}

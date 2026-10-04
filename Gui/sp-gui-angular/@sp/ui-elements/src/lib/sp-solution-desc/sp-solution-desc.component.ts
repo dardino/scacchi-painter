@@ -155,7 +155,8 @@ export class SpSolutionDescComponent {
 
   getTwinDesc = (fromTwin: string) => {
     // Implement the logic to get the description of the twin
-    return `${fromTwin}) ${ProblemHelpers.getTwinFromLetter(fromTwin, this.#current.Problem()!)?.toString()}`;
+    const twinDesc = ProblemHelpers.getTwinFromLetter(fromTwin, this.#current.Problem()!)?.toString();
+    return [fromTwin, twinDesc].filter(notEmpty).join(") ");
   };
 
   ngModelOptions: NgModel["options"] = {

@@ -1,7 +1,9 @@
 import { computed } from "@angular/core";
+import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Columns, IProblemV4, Traverse } from "../SPX.v4";
+import { IProblemV5 } from "../SPX.v5";
 import { Base64 } from "../base64";
 import {
   GetSolutionFromElement,
@@ -28,6 +30,7 @@ import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
 
 export class Problem implements IProblemV4 {
+  public uuid = crypto.randomUUID();
   public boardSize = { columns: 8, rows: 8 };
   static readonly SNAPSHOT_MAIN_ID = "$_MAIN_$";
 
@@ -63,6 +66,7 @@ export class Problem implements IProblemV4 {
   public pieces: Piece[] = [];
   public twins = Twins.fromJson({});
   public htmlSolution = "";
+  public jsonSolutions: HalfMoveInfo[] = [];
   public conditions: string[] = [];
   public fairyCells: string[] = [];
   public tags: string[] = [];
@@ -122,8 +126,9 @@ export class Problem implements IProblemV4 {
     return p;
   }
 
-  static fromJson(jsonObj: Partial<IProblemV4>): Problem {
+  static fromJson(jsonObj: Partial<IProblemV5>): Problem {
     const p = new Problem();
+    p.uuid = jsonObj.uuid ?? p.uuid;
     Problem.applyJson(jsonObj, p);
     p.snapshots = { ...jsonObj.snapshots };
     if (Object.keys(p.snapshots).length === 0) {
@@ -142,7 +147,7 @@ export class Problem implements IProblemV4 {
     return p;
   }
 
-  static applyJson(a: Partial<IProblemV4>, b: Problem) {
+  static applyJson(a: Partial<IProblemV5>, b: Problem) {
     b.authors
       = (a.authors?.length ?? 0)
         ? (a.authors ?? []).map(Author.fromJson)
@@ -179,6 +184,7 @@ export class Problem implements IProblemV4 {
       ?? (b.engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {}),
     );
     b.htmlSolution = a.htmlSolution ?? "";
+    b.jsonSolutions = Array.isArray(a.jsonSolutions) ? [...a.jsonSolutions] : [];
     b.date = a.date ? a.date : new Date().toISOString();
     b.personalID = a.personalID ? a.personalID : "";
     b.prizeRank = a.prizeRank ?? 0;
@@ -188,8 +194,8 @@ export class Problem implements IProblemV4 {
     b.tags = (a.tags ? [...a.tags] : []).filter(notEmpty);
   }
 
-  toJson(): Partial<IProblemV4> {
-    const json: Partial<IProblemV4> = {};
+  toJson(): Partial<IProblemV5> {
+    const json: Partial<IProblemV5> = {};
     if (this.authors.length > 0) {
       json.authors = this.authors.map(a => a.toJson());
     }
@@ -221,6 +227,7 @@ export class Problem implements IProblemV4 {
     if (this.engineConfig != null) json.engineConfig = cloneEngineConfiguration(this.engineConfig) ?? {};
     if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
     if (this.textSolution) json.textSolution = this.textSolution;
+    if (this.jsonSolutions.length > 0) json.jsonSolutions = [...this.jsonSolutions];
     if (this.date) json.date = this.date;
     if (this.personalID) json.personalID = this.personalID;
     if (this.prizeRank) json.prizeRank = this.prizeRank;
@@ -234,6 +241,7 @@ export class Problem implements IProblemV4 {
         {},
       );
     }
+    if (this.uuid) json.uuid = this.uuid;
     if (this.boardSize != null) json.boardSize = this.boardSize;
     return json;
   }

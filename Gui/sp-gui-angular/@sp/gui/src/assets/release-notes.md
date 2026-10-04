@@ -13,6 +13,7 @@ This release introduces a new “Did you know?” banner on the home page with w
 * 🧭 **Manual navigation** - users can move between tips with next/previous controls and keep the banner useful as a quick reminder
 * ♻️ **Per-session decay** - each tip can decay once per app session, reducing repetition without fully excluding it from future cycles
 * 📎 **Direct problem editing** - a new menu item allows direct access to the single problem editing page
+* 🏆 **Awards management** - create, edit, and generate award verdicts directly from the database workflow
 * ☁️ **Google Drive support** - you can now use Google Drive in the same way as OneDrive and Dropbox for opening and saving files
 
 **What changes for you:**
@@ -21,6 +22,7 @@ This release introduces a new “Did you know?” banner on the home page with w
 * Important tips surface more often without always repeating the same ones
 * The banner can be hidden if you prefer not to see it at startup
 * You can access the problem editor directly from the menu without navigating through the problem list
+* You can manage award results and verdicts without leaving the database flow
 
 ### New UI And Parsing Improvements
 

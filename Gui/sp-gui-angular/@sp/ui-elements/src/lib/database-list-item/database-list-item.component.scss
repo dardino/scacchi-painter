@@ -174,7 +174,8 @@
 
 .solution {
   flex: 1 1 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   text-overflow: clip;
   line-height: 1em;
   margin: 0;
@@ -189,12 +190,10 @@
     * {
       margin: 0;
       display: inline;
+    }
 
-      ::after {
-        content: "/";
-        padding: 0 0.2rem;
-        display: inline;
-      }
+    p {
+      display: block;
     }
   }
 }

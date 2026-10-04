@@ -41,6 +41,7 @@
     background-attachment: local;
 
     display: grid;
+    gap: .2rem;
     grid-template-columns: auto auto 1fr;
     grid-template-rows: auto auto auto 1fr;
     grid-template-areas: "header header header"

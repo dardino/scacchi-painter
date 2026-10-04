@@ -28,6 +28,14 @@ export const RoutesList = getRoutes({
     path: "list",
     loadComponent: () => import("./database-list/database-list.component").then(m => m.DatabaseListComponent),
   },
+  awards: {
+    path: "awards",
+    loadComponent: () => import("./awards/awards.component").then(m => m.AwardsComponent),
+  },
+  awardDetail: {
+    path: "awards/:id",
+    loadComponent: () => import("./award-detail/award-detail.component").then(m => m.AwardDetailComponent),
+  },
   redirect: {
     path: "redirect",
     loadComponent: () => import("./auth-redirect/auth-redirect.component").then(m => m.AuthRedirectComponent),

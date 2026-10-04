@@ -36,7 +36,7 @@
     </button>
   </div>
   <div class="dbitem-container" #dbItemContainer *cdkVirtualFor="let item of itemSource; let index = index">
-    <app-database-list-item (delete)="deleteItem($event)" [problem]="item!.problem!"
-      [dbIndex]="item!.dbIndex"></app-database-list-item>
+    <lib-database-list-item (delete)="deleteItem($event)" [problem]="item!.problem!"
+      [dbIndex]="item!.dbIndex"></lib-database-list-item>
   </div>
 </cdk-virtual-scroll-viewport>

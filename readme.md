@@ -8,6 +8,7 @@ A new cross-platform engine and gui for chess problem composers
 
 - Added startup onboarding tips with weighted rotation and persistence
 - Added direct access to single-problem editing from the menu
+- Added awards management and verdict generation for problem databases
 
 ## 0.4.1
 

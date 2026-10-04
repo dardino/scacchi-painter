@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Compare problems</h2>
+<div mat-dialog-content class="comparison-dialog">
+  <div class="problem-stack">
+    <div class="problem-slot top-slot">
+      @if (topProblem()) {
+      <lib-database-list-item [problem]="topProblem()" [dbIndex]="0"
+        [hideActions]="{ delete: true, edit: true }"></lib-database-list-item>
+      }
+    </div>
+
+    <button mat-stroked-button type="button" class="swap-button" (click)="swap()">SWAP</button>
+
+    <div class="problem-slot bottom-slot">
+      @if (bottomProblem()) {
+      <lib-database-list-item [problem]="bottomProblem()" [dbIndex]="1"
+        [hideActions]="{ delete: true, edit: true }"></lib-database-list-item>
+      }
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="breakComparison()">Break</button>
+  <button mat-flat-button color="primary" type="button" (click)="confirm()">Confirm</button>
+</div>

@@ -1,8 +1,13 @@
-import { Component, Input, inject } from "@angular/core";
+import { Component, Input, computed, inject } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { Router } from "@angular/router";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { RoutesList } from "@sp/gui/src/app/app-routing-list";
+import { filter } from "rxjs/internal/operators/filter";
+import { map } from "rxjs/internal/operators/map";
+import { startWith } from "rxjs/internal/operators/startWith";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 
 @Component({
@@ -18,7 +23,9 @@ import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button
 })
 export class ToolbarDbComponent {
   private db = inject(DbmanagerService);
+  private currentProblem = inject(CurrentProblemService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   @Input() boardType: "canvas" | "HTML";
   @Input() hideLabels?: boolean;
@@ -33,6 +40,17 @@ export class ToolbarDbComponent {
   canGoNext() {
     return this.currentIndex() < this.totalCount();
   }
+
+  currentRoutePath = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      startWith(null),
+      map(() => this.route.firstChild?.routeConfig?.path ?? null),
+    ),
+    { initialValue: this.route.firstChild?.routeConfig?.path ?? null },
+  );
+
+  editMode = computed(() => this.currentRoutePath() === RoutesList.edit.path);
 
   goToDB() {
     this.router.navigate([`/list`], { fragment: `${this.currentIndex()}` });
@@ -74,6 +92,7 @@ export class ToolbarDbComponent {
   }
 
   save() {
+    this.currentProblem.UpdateSnapshot();
     this.db.Save().then((success) => {
       if (!success) this.router.navigate(["/savefile"]);
     });

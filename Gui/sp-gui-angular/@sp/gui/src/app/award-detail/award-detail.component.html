@@ -1,0 +1,76 @@
+@let currentAward = award();
+
+<div class="award-toolbar">
+  <h1>Award Details and Generation</h1>
+</div>
+
+@if (currentAward) {
+<mat-card class="award-detail">
+  <mat-card-header>
+    <mat-card-title>{{ currentAward.awardsTitle }}</mat-card-title>
+    <mat-card-subtitle>Award details</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p>{{ currentAward.awardsDescription }}</p>
+
+    <dl>
+      <div>
+        <dt>Date</dt>
+        <dd>{{ currentAward.awardsDate ? (currentAward.awardsDate | date: 'longDate') : '-' }}</dd>
+      </div>
+      <div>
+        <dt>Judge</dt>
+        <dd>{{ currentAward.awardsJudge || '-' }}</dd>
+      </div>
+      <div>
+        <dt>Problems</dt>
+        <dd>{{ currentAward.awardsProblems.length }}</dd>
+      </div>
+    </dl>
+
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="award-generation">
+  <mat-card-header>
+    <mat-card-title>Award Management</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Use this section to create a new award related to the current award.</p>
+    @if (pendingProblems().length > 0) {
+    <button mat-raised-button color="primary" (click)="processPendingProblems()">Process Pending Problems</button>
+    } @else {
+    <button mat-raised-button color="primary" (click)="startOrderingViaPairwise()">Ordering via Pairwise
+      Comparison</button>
+    <div class="ordering-progress">
+      <mat-progress-bar mode="determinate" [value]="getOrderingProgress()"></mat-progress-bar>
+    </div>
+    }
+
+    @if (awardProblems().length > 0) {
+    <section class="award-problems">
+      <h3>Problems in award</h3>
+      @for (problemRef of awardProblems(); track problemRef.dbIndex) {
+      <div class="award-problem-item">
+        <span>{{ getAwardedStatus(problemRef) }}</span>
+        <lib-database-list-item (delete)="removeFromAward(problemRef)" [problem]="problemRef.problem"
+          [dbIndex]="problemRef.dbIndex" [hideActions]="{ delete: false, edit: true }"></lib-database-list-item>
+      </div>
+      }
+    </section>
+    } @else {
+    <p>No problems assigned to this award.</p>
+    }
+  </mat-card-content>
+</mat-card>
+} @else {
+<mat-card class="award-detail empty-state">
+  <mat-card-header>
+    <mat-card-title>Award not found</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>The requested award does not exist in the current database.</p>
+  </mat-card-content>
+</mat-card>
+}

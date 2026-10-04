@@ -52,4 +52,35 @@ describe("Snapshots", () => {
     fen = problem.getCurrentFen();
     expect(fen).toBe("R7/1r6/8/4k3/5K2/8/2Q5/8 w - - 0 1");
   });
+
+  it("Serializes jsonSolutions when saving", () => {
+    const problem = Problem.fromFen("8/8/8/8/8/8/8/8 w - - 0 1");
+    const move: typeof problem.jsonSolutions[number] = {
+      color: "w",
+      num: 1,
+      part: "l",
+      from: "e2",
+      to: "e4",
+      type: "-",
+      isPromotion: false,
+      promotedPiece: "",
+      isCheck: false,
+      isCheckMate: false,
+      isStaleMate: false,
+      isTry: false,
+      refutes: false,
+      isKey: false,
+      extraMoves: [],
+      piece: "P",
+      threat: false,
+      zugzwang: false,
+      fromTwin: "",
+      isCastling: false,
+      castlingLength: "",
+    };
+
+    problem.jsonSolutions = [move];
+
+    expect(problem.toJson().jsonSolutions).toEqual([move]);
+  });
 });

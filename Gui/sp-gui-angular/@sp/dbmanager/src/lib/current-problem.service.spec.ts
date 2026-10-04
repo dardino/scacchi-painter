@@ -261,12 +261,12 @@ describe("CurrentProblemService", () => {
       expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8 w - - 0 1");
     });
     it("Y", () => {
-      service.ShiftBoard("y", 1);
+      service.ShiftBoard("y", -1);
       const fen = service.Problem()?.getCurrentFen();
       expect(fen).toBe("8/7Q/6Q1/5Q2/4Q3/3Q4/2Q5/1Q6 w - - 0 1");
     });
     it("-Y", () => {
-      service.ShiftBoard("y", -1);
+      service.ShiftBoard("y", 1);
       const fen = service.Problem()?.getCurrentFen();
       expect(fen).toBe("6Q1/5Q2/4Q3/3Q4/2Q5/1Q6/Q7/8 w - - 0 1");
     });
