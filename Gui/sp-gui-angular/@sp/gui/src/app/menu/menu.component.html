@@ -5,6 +5,7 @@
   @if (dbLoaded()) {
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/savefile']">Save database as...</a>
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/list']">List problems in database</a>
+  <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/awards']">Awards</a>
   <a (click)="selectElement.emit()" mat-list-item [routerLink]="['/edit/' + dbCurrentIndex()]">Edit problem
     n.{{dbCurrentIndex()}}</a>
   }
