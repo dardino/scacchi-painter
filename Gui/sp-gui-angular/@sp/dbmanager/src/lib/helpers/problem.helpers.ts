@@ -122,7 +122,7 @@ export class ProblemHelpers {
     const [offsetXAmount = 0, offsetYAmount = 0] = Array.isArray(amount) ? amount : [amount, amount];
     // calculate offsetX and offsetY based on the shift direction and amount
     const offsetX = axis.includes("x") ? offsetXAmount : 0;
-    const offsetY = axis.includes("y") ? -offsetYAmount : 0; // negate offsetY to maintain consistent direction with the board's coordinate system
+    const offsetY = axis.includes("y") ? offsetYAmount : 0;
 
     problem.pieces.slice().forEach((p) => {
       const newCol = axis.includes("x") ? getNewColumn(problem.boardSize, p.column, offsetX, mode) : p.column;
