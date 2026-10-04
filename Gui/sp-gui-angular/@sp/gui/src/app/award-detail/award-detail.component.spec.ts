@@ -221,7 +221,7 @@ describe("AwardDetailComponent", () => {
 
   it("should keep all problems when only one item is already ranked", async () => {
     const fourthProblem = Problem.fromJson({
-      uuid: "p-4",
+      uuid: "p-4-0000-0000-0000-0000",
       stipulation: { completeStipulationDesc: "Mate in 4" },
       personalID: "ID-4",
       date: "2024-01-04",
@@ -290,7 +290,7 @@ describe("AwardDetailComponent", () => {
 
   it("should place the new problem in second position among six ranked problems", async () => {
     const fourthProblem = Problem.fromJson({
-      uuid: "p-4",
+      uuid: "p-4-0000-0000-0000-0000",
       stipulation: { completeStipulationDesc: "Mate in 4" },
       personalID: "ID-4",
       date: "2024-01-04",
@@ -298,7 +298,7 @@ describe("AwardDetailComponent", () => {
       authors: [],
     });
     const fifthProblem = Problem.fromJson({
-      uuid: "p-5",
+      uuid: "p-5-0000-0000-0000-0000",
       stipulation: { completeStipulationDesc: "Mate in 5" },
       personalID: "ID-5",
       date: "2024-01-05",
@@ -306,7 +306,7 @@ describe("AwardDetailComponent", () => {
       authors: [],
     });
     const sixthProblem = Problem.fromJson({
-      uuid: "p-6",
+      uuid: "p-6-0000-0000-0000-0000",
       stipulation: { completeStipulationDesc: "Mate in 6" },
       personalID: "ID-6",
       date: "2024-01-06",
@@ -314,7 +314,7 @@ describe("AwardDetailComponent", () => {
       authors: [],
     });
     const newProblem = Problem.fromJson({
-      uuid: "p-new",
+      uuid: "p-new-0000-0000-0000-0000",
       stipulation: { completeStipulationDesc: "Mate in 7" },
       personalID: "ID-NEW",
       date: "2024-01-07",

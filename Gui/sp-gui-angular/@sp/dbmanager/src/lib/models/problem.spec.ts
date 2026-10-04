@@ -55,7 +55,7 @@ describe("Snapshots", () => {
 
   it("Serializes jsonSolutions when saving", () => {
     const problem = Problem.fromFen("8/8/8/8/8/8/8/8 w - - 0 1");
-    const move = {
+    const move: typeof problem.jsonSolutions[number] = {
       color: "w",
       num: 1,
       part: "l",
@@ -77,7 +77,7 @@ describe("Snapshots", () => {
       fromTwin: "",
       isCastling: false,
       castlingLength: "",
-    } as const;
+    };
 
     problem.jsonSolutions = [move];
 
