@@ -91,8 +91,8 @@ export class DialogService {
     return this.dialog.open<ProblemComparisonDialogComponent, ProblemComparisonDialogData, string | null>(
       ProblemComparisonDialogComponent,
       {
-        width: "46rem",
-        maxWidth: "95vw",
+        width: "90vw",
+        maxWidth: "90vw",
         disableClose: true,
         data: { problems },
       },

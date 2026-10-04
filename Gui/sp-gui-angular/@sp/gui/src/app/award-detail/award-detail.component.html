@@ -43,14 +43,20 @@
     } @else {
     <button mat-raised-button color="primary" (click)="startOrderingViaPairwise()">Ordering via Pairwise
       Comparison</button>
+    <div class="ordering-progress">
+      <mat-progress-bar mode="determinate" [value]="getOrderingProgress()"></mat-progress-bar>
+    </div>
     }
 
     @if (awardProblems().length > 0) {
     <section class="award-problems">
       <h3>Problems in award</h3>
       @for (problemRef of awardProblems(); track problemRef.dbIndex) {
-      <lib-database-list-item (delete)="removeFromAward(problemRef)" [problem]="problemRef.problem"
-        [dbIndex]="problemRef.dbIndex"></lib-database-list-item>
+      <div class="award-problem-item">
+        <span>{{ getAwardedStatus(problemRef) }}</span>
+        <lib-database-list-item (delete)="removeFromAward(problemRef)" [problem]="problemRef.problem"
+          [dbIndex]="problemRef.dbIndex" [hideActions]="{ delete: false, edit: true }"></lib-database-list-item>
+      </div>
       }
     </section>
     } @else {

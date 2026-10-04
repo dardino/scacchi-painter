@@ -3,7 +3,8 @@
   <div class="problem-stack">
     <div class="problem-slot top-slot">
       @if (topProblem()) {
-      <lib-database-list-item [problem]="topProblem()" [dbIndex]="0" [hideActions]="true"></lib-database-list-item>
+      <lib-database-list-item [problem]="topProblem()" [dbIndex]="0"
+        [hideActions]="{ delete: true, edit: true }"></lib-database-list-item>
       }
     </div>
 
@@ -11,7 +12,8 @@
 
     <div class="problem-slot bottom-slot">
       @if (bottomProblem()) {
-      <lib-database-list-item [problem]="bottomProblem()" [dbIndex]="1" [hideActions]="true"></lib-database-list-item>
+      <lib-database-list-item [problem]="bottomProblem()" [dbIndex]="1"
+        [hideActions]="{ delete: true, edit: true }"></lib-database-list-item>
       }
     </div>
   </div>

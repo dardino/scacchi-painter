@@ -6,6 +6,11 @@ import { RouterModule } from "@angular/router";
 import { ChessboardModule } from "@sp/chessboard/src/public-api";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 
+export type HideActions = {
+  delete: boolean;
+  edit: boolean;
+};
+
 @Component({
   selector: "lib-database-list-item",
   templateUrl: "./database-list-item.component.html",
@@ -22,9 +27,12 @@ import { Problem } from "@sp/dbmanager/src/lib/models";
 export class DatabaseListItemComponent {
   problem = input<Problem>(null!);
   dbIndex = input<number>(0);
-  hideActions = input(false);
+  hideActions = input<HideActions>({ delete: false, edit: false });
 
   @Output() delete = new EventEmitter<number>(true);
+
+  isDeleteHidden = computed(() => this.hideActions().delete);
+  isEditHidden = computed(() => this.hideActions().edit);
 
   hasTwins = computed(() => {
     const twins = this.problem()?.twins;

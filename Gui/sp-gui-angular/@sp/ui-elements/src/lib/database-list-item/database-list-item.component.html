@@ -33,12 +33,16 @@
       <p class="solution" [innerHTML]="solutionHTML()"></p>
     </div>
     <div class="actions">
+      @if (!isDeleteHidden()) {
       <button title="Delete" type="button" class="action-button" mat-icon-button color="accent" (click)="removeItem()">
         <mat-icon class="action">delete_permanent</mat-icon>
       </button>
+      }
+      @if (!isEditHidden()) {
       <a title="Edit" class="action-button" mat-icon-button color="accent" [routerLink]="['/edit/' + dbIndex()]">
         <mat-icon class="action">edit_square</mat-icon>
       </a>
+      }
     </div>
   </div>
 </div>
