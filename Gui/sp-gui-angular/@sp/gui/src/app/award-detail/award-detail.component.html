@@ -41,15 +41,16 @@
     @if (pendingProblems().length > 0) {
     <button mat-raised-button color="primary" (click)="processPendingProblems()">Process Pending Problems</button>
     } @else {
-    <p>No pending problems to process.</p>
+    <button mat-raised-button color="primary" (click)="startOrderingViaPairwise()">Ordering via Pairwise
+      Comparison</button>
     }
 
     @if (awardProblems().length > 0) {
     <section class="award-problems">
       <h3>Problems in award</h3>
       @for (problemRef of awardProblems(); track problemRef.dbIndex) {
-      <app-database-list-item (delete)="removeFromAward(problemRef)" [problem]="problemRef.problem"
-        [dbIndex]="problemRef.dbIndex"></app-database-list-item>
+      <lib-database-list-item (delete)="removeFromAward(problemRef)" [problem]="problemRef.problem"
+        [dbIndex]="problemRef.dbIndex"></lib-database-list-item>
       }
     </section>
     } @else {

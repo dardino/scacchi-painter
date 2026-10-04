@@ -11,7 +11,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
-import { DatabaseListItemComponent } from "../database-list-item/database-list-item.component";
+import { DatabaseListItemComponent } from "@sp/ui-elements/src/public-api";
 import { MyDataSource } from "./database-source";
 
 @Component({

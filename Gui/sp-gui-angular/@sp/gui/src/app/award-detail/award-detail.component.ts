@@ -4,9 +4,9 @@ import { MatCardModule } from "@angular/material/card";
 import { ActivatedRoute } from "@angular/router";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Awards, AwardsProblem, DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { DatabaseListItemComponent } from "@sp/ui-elements/src/lib/database-list-item/database-list-item.component";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { firstValueFrom } from "rxjs";
-import { DatabaseListItemComponent } from "../database-list-item/database-list-item.component";
 
 @Component({
   selector: "app-award-detail",
@@ -142,5 +142,21 @@ export class AwardDetailComponent {
 
     this.db.SetAwards(nextAwards);
     await this.db.SaveTemporary();
+  }
+
+  async startOrderingViaPairwise() {
+    const problems = this.awardProblems().map(problemRef => problemRef.problem);
+    if (problems.length < 2) {
+      return;
+    }
+
+    const [firstProblem, secondProblem] = problems as [Problem, Problem];
+    const winnerUuid = await firstValueFrom(this.modal.problemComparisonDialog([firstProblem, secondProblem]));
+
+    if (winnerUuid === null) {
+      return;
+    }
+
+    return winnerUuid;
   }
 }

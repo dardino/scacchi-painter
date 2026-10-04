@@ -9,6 +9,7 @@ import { AwardProblemDecisionData, AwardProblemDecisionDialogComponent, AwardPro
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { FairypieceDialogComponent, FairypieceDialogInput, FairypieceDialogResponse } from "../fairypiece-dialog/fairypiece-dialog.component";
+import { ProblemComparisonDialogComponent, ProblemComparisonDialogData } from "../problem-comparison-dialog/problem-comparison-dialog.component";
 import { SolveEngineDialogComponent, SolveEngineDialogData, SolveEngineDialogResult } from "../solve-engine-dialog/solve-engine-dialog.component";
 import { TwinDialogComponent } from "../twin-dialog/twin-dialog.component";
 import { VerdictDialogComponent, VerdictDialogData } from "../verdict-dialog/verdict-dialog.component";
@@ -82,6 +83,18 @@ export class DialogService {
         maxWidth: "95vw",
         disableClose: true,
         data: { problem },
+      },
+    ).afterClosed();
+  }
+
+  problemComparisonDialog(problems: [Problem, Problem]) {
+    return this.dialog.open<ProblemComparisonDialogComponent, ProblemComparisonDialogData, string | null>(
+      ProblemComparisonDialogComponent,
+      {
+        width: "46rem",
+        maxWidth: "95vw",
+        disableClose: true,
+        data: { problems },
       },
     ).afterClosed();
   }

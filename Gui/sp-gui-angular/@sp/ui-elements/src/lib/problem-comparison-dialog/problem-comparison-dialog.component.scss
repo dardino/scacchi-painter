@@ -1,0 +1,23 @@
+.comparison-dialog {
+  display: block;
+  padding: 0.5rem 0;
+}
+
+.problem-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.problem-slot {
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.02);
+  padding: 0.25rem;
+}
+
+.swap-button {
+  align-self: center;
+  min-width: 7rem;
+}
