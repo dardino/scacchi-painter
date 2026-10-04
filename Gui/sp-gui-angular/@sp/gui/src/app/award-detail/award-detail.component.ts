@@ -108,7 +108,8 @@ export class AwardDetailComponent {
       else {
         const excludedTitle = "Esclusi";
         const excludedAwardIndex = nextAwards.findIndex(item => item.awardsTitle === excludedTitle);
-        const excludedProblem: AwardsProblem = { problemID: problem.uuid, rankInAward: -1 };
+        const excludedProblem: AwardsProblem = {
+          problemID: problem.uuid, rankInAward: -1, awarded: false };
 
         if (excludedAwardIndex >= 0) {
           nextAwards[excludedAwardIndex] = {

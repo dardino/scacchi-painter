@@ -75,7 +75,7 @@ describe("AwardsComponent", () => {
     const award = dbMock.Awards()[0];
     const count = award.awardsProblems.length;
 
-    expect(fixture.nativeElement.textContent).toContain(`${count} problema${count === 1 ? "" : "i"}`);
+    expect(fixture.nativeElement.textContent).toContain(`${count} problem${count === 1 ? "" : "s"}`);
   });
 
   it("should update an existing verdict from the info dialog", async () => {

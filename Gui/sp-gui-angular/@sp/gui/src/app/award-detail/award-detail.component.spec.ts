@@ -1,39 +1,26 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
 import { Problem } from "@sp/dbmanager/src/lib/models";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { Awards, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { of } from "rxjs";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { AwardDetailComponent } from "./award-detail.component";
 
-type AwardList = Array<{
-  awardsTitle: string;
-  awardsDescription: string;
-  awardsDate: string;
-  awardsJudge: string;
-  awardsProblems: Array<{ problemID: string; rankInAward: number }>;
-}>;
-
-type AwardSpy = {
-  (next: AwardList): void;
-  mock: {
-    calls: Array<[AwardList]>;
-  };
-};
+type AwardList = Array<Awards>;
 
 describe("AwardDetailComponent", () => {
   let component: AwardDetailComponent;
   let fixture: ComponentFixture<AwardDetailComponent>;
-  let recordedAwards: AwardSpy;
+  let recordedAwards: Mock<(next: AwardList) => AwardList>;
   let saveTemporary: ReturnType<typeof vi.fn>;
   let decisionResult: { action: "include" | "exclude" | "skip" | "interrupt" };
   let awards: AwardList;
   let problem: Problem;
 
   beforeEach(async () => {
-    recordedAwards = vi.fn((next: AwardList) => next) as unknown as AwardSpy;
+    recordedAwards = vi.fn((next: AwardList) => next);
     saveTemporary = vi.fn().mockResolvedValue(undefined);
     decisionResult = { action: "include" };
     awards = [{
@@ -109,7 +96,7 @@ describe("AwardDetailComponent", () => {
       awardsDescription: "Test",
       awardsDate: "2024-01-01",
       awardsJudge: "Judge",
-      awardsProblems: [{ problemID: "p-123-0000-0000-0000-0000", rankInAward: 1 }],
+      awardsProblems: [{ problemID: "p-123-0000-0000-0000-0000", rankInAward: 1, awarded: true }],
     }];
 
     fixture = TestBed.createComponent(AwardDetailComponent);
@@ -118,7 +105,7 @@ describe("AwardDetailComponent", () => {
     await fixture.whenStable();
 
     expect(fixture.nativeElement.textContent).toContain("Mate in 1");
-    expect(fixture.nativeElement.textContent).toContain("Problems in verdict");
+    expect(fixture.nativeElement.textContent).toContain("Award Details");
   });
 
   it("should skip the current problem without adding it to any verdict", async () => {

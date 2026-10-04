@@ -4,7 +4,8 @@ import { IDbSpX_V4, IProblemV4, isV4, verifyProblemV4 } from "./SPX.v4";
 
 export interface AwardsProblem {
   problemID: IProblemV5["uuid"];
-  rankInAward: number; // -1 se non ancora valutato
+  rankInAward: number;
+  awarded: boolean;
 }
 export interface Awards {
   awardsTitle: string;
