@@ -8,7 +8,7 @@
 <mat-card class="award-detail">
   <mat-card-header>
     <mat-card-title>{{ currentAward.awardsTitle }}</mat-card-title>
-    <mat-card-subtitle>Verdict details</mat-card-subtitle>
+    <mat-card-subtitle>Award details</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -28,19 +28,32 @@
         <dd>{{ currentAward.awardsProblems.length }}</dd>
       </div>
     </dl>
+
   </mat-card-content>
 </mat-card>
 
 <mat-card class="award-generation">
   <mat-card-header>
-    <mat-card-title>Generate New Verdict</mat-card-title>
+    <mat-card-title>Award Management</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p>Use this section to create a new verdict related to the current award.</p>
+    <p>Use this section to create a new award related to the current award.</p>
     @if (pendingProblems().length > 0) {
     <button mat-raised-button color="primary" (click)="processPendingProblems()">Process Pending Problems</button>
     } @else {
     <p>No pending problems to process.</p>
+    }
+
+    @if (awardProblems().length > 0) {
+    <section class="award-problems">
+      <h3>Problems in award</h3>
+      @for (problemRef of awardProblems(); track problemRef.dbIndex) {
+      <app-database-list-item (delete)="removeFromAward(problemRef)" [problem]="problemRef.problem"
+        [dbIndex]="problemRef.dbIndex"></app-database-list-item>
+      }
+    </section>
+    } @else {
+    <p>No problems assigned to this award.</p>
     }
   </mat-card-content>
 </mat-card>
@@ -50,7 +63,7 @@
     <mat-card-title>Award not found</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p>The requested verdict does not exist in the current database.</p>
+    <p>The requested award does not exist in the current database.</p>
   </mat-card-content>
 </mat-card>
 }

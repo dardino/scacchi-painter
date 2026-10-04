@@ -4,7 +4,7 @@
   </div>
 
   <div class="awards-side">
-    <button mat-flat-button color="primary" type="button" (click)="addNewVerdict()">Aggiungi nuovo</button>
+    <button mat-flat-button color="primary" type="button" (click)="addNewVerdict()">Add new award</button>
   </div>
 
   <ul class="award-list">
@@ -29,6 +29,10 @@
         <button type="button" mat-icon-button color="accent" aria-label="Generate verdict rank list"
           (click)="generateVerdict($event, award)">
           <mat-icon>auto_awesome</mat-icon>
+        </button>
+        <button type="button" mat-icon-button color="accent" aria-label="Generate verdict rank list"
+          (click)="resetVerdict($event, award)">
+          <mat-icon>refresh</mat-icon>
         </button>
       </div>
     </li>

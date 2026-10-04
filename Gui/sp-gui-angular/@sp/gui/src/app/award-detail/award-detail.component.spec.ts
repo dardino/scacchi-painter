@@ -72,6 +72,7 @@ describe("AwardDetailComponent", () => {
           useValue: {
             Awards: () => awards,
             All: () => [problem],
+            CurrentProblem: () => null,
             SetAwards: (next: typeof awards) => {
               awards.splice(0, awards.length, ...next);
               recordedAwards(next);
@@ -100,6 +101,24 @@ describe("AwardDetailComponent", () => {
     const awards = recordedAwards.mock.calls[0][0];
     expect(awards[0].awardsProblems).toContainEqual({ problemID: "p-123-0000-0000-0000-0000", rankInAward: -1 });
     expect(saveTemporary).toHaveBeenCalled();
+  });
+
+  it("should render the assigned problems in the verdict detail view", async () => {
+    awards = [{
+      awardsTitle: "Spring",
+      awardsDescription: "Test",
+      awardsDate: "2024-01-01",
+      awardsJudge: "Judge",
+      awardsProblems: [{ problemID: "p-123-0000-0000-0000-0000", rankInAward: 1 }],
+    }];
+
+    fixture = TestBed.createComponent(AwardDetailComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.textContent).toContain("Mate in 1");
+    expect(fixture.nativeElement.textContent).toContain("Problems in verdict");
   });
 
   it("should skip the current problem without adding it to any verdict", async () => {

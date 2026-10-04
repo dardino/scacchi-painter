@@ -2,14 +2,16 @@ import { DatePipe } from "@angular/common";
 import { Component, computed, inject } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { ActivatedRoute } from "@angular/router";
+import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Awards, AwardsProblem, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { firstValueFrom } from "rxjs";
+import { DatabaseListItemComponent } from "../database-list-item/database-list-item.component";
 
 @Component({
   selector: "app-award-detail",
   standalone: true,
-  imports: [DatePipe, MatCardModule],
+  imports: [DatePipe, MatCardModule, DatabaseListItemComponent],
   styleUrl: "./award-detail.component.scss",
   templateUrl: "./award-detail.component.html",
 })
@@ -17,6 +19,8 @@ export class AwardDetailComponent {
   private db = inject(DbmanagerService);
   private route = inject(ActivatedRoute);
   private modal = inject(DialogService);
+  #allProblemsIds = computed(() => this.db.All().map(problem => problem.uuid));
+  #alreadyInAwardIds = computed(() => this.db.Awards().flatMap(award => award.awardsProblems.map(problem => problem.problemID)));
 
   readonly award = computed<Awards | null>(() => {
     const rawId = this.route.snapshot.paramMap.get("id");
@@ -30,9 +34,41 @@ export class AwardDetailComponent {
     return awards[index] ?? null;
   });
 
+  readonly awardProblems = computed(() => {
+    const award = this.award();
+    if (!award) {
+      return [];
+    }
+
+    const problemsById = new Map(this.db.All().map((problem, index) => [
+      problem.uuid, { problem, dbIndex: index + 1 },
+    ]));
+    const result = award.awardsProblems.flatMap((problemRef) => {
+      const match = problemsById.get(problemRef.problemID);
+      return match ? [match] : [];
+    });
+    return result;
+  });
+
+  removeFromAward(problemRef: { problem: Problem; dbIndex: number }) {
+    const award = this.award();
+    if (!award) {
+      return;
+    }
+    const nextAwards = [...this.db.Awards()];
+    const currentAwardIndex = nextAwards.findIndex(item => item === award);
+    if (currentAwardIndex >= 0) {
+      const currentAward = { ...nextAwards[currentAwardIndex] };
+      currentAward.awardsProblems = currentAward.awardsProblems.filter(p => p.problemID !== problemRef.problem.uuid);
+      nextAwards[currentAwardIndex] = currentAward;
+      this.db.SetAwards(nextAwards);
+      this.db.SaveTemporary();
+    }
+  }
+
   pendingProblems() {
-    const allProblems = this.db.All().map(problem => problem.uuid);
-    const alreadyInAward = this.db.Awards().flatMap(award => award.awardsProblems.map(problem => problem.problemID));
+    const allProblems = this.#allProblemsIds();
+    const alreadyInAward = this.#alreadyInAwardIds();
     const pendingIDs = allProblems.filter(problemID => !alreadyInAward.includes(problemID));
     return this.db.All().filter(problem => pendingIDs.includes(problem.uuid)) ?? [];
   }

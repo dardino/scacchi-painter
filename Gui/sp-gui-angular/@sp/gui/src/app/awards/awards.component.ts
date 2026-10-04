@@ -83,4 +83,21 @@ export class AwardsComponent {
 
     this.router.navigate(["/awards", String(index >= 0 ? index : this.awards().length)]);
   }
+
+  resetVerdict(event: Event, award: Awards) {
+    event.stopPropagation();
+    const index = this.awards().findIndex(item => item === award || (
+      item.awardsTitle === award.awardsTitle
+      && item.awardsDescription === award.awardsDescription
+      && item.awardsDate === award.awardsDate
+      && item.awardsJudge === award.awardsJudge
+    ));
+
+    if (index >= 0) {
+      const nextAwards = [...this.awards()];
+      nextAwards.splice(index, 1);
+      this.db.SetAwards(nextAwards);
+      void this.db.SaveTemporary();
+    }
+  }
 }
