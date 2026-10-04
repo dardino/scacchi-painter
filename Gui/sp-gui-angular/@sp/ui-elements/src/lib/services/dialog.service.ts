@@ -51,7 +51,7 @@ export class DialogService {
     ).afterClosed();
   }
 
-  verdictDialog(data: Awards | null, mode: "view" | "create" = "view") {
+  verdictDialog(data: Awards | null, mode: "view" | "create" | "edit" = "view") {
     const award = data ?? {
       awardsTitle: "",
       awardsDescription: "",

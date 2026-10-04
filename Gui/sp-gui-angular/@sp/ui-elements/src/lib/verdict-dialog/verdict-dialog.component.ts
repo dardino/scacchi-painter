@@ -8,7 +8,7 @@ import { MatInputModule } from "@angular/material/input";
 import { Awards } from "@sp/dbmanager/src/lib/SPX.v5";
 
 export interface VerdictDialogData {
-  mode: "view" | "create";
+  mode: "view" | "create" | "edit";
   award: Awards;
 }
 
@@ -24,6 +24,7 @@ export class VerdictDialogComponent {
   data = inject<VerdictDialogData>(MAT_DIALOG_DATA);
 
   readonly isCreateMode = this.data?.mode === "create";
+  readonly isEditableMode = this.data?.mode === "create" || this.data?.mode === "edit";
   draft: Awards = {
     ...this.data?.award,
     awardsTitle: this.data?.award?.awardsTitle ?? "",

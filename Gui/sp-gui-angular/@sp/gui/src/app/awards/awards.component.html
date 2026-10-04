@@ -1,21 +1,36 @@
 <section class="awards">
   <div class="awards-header">
     <h2>Awards</h2>
+  </div>
+
+  <div class="awards-side">
     <button mat-flat-button color="primary" type="button" (click)="addNewVerdict()">Aggiungi nuovo</button>
   </div>
 
-  <mat-list>
+  <ul class="award-list">
     @if (awards().length === 0) {
-    <mat-list-item>No awards available.</mat-list-item>
+    <li class="award-empty">No awards available.</li>
     } @else {
     @for (award of awards(); track award.awardsTitle) {
-    <mat-list-item (click)="openVerdict(award)" tabindex="0" (keydown.enter)="openVerdict(award)">
-      <span matListItemTitle>{{ award.awardsTitle }}</span>
-      <span matListItemLine>{{ award.awardsDescription }}</span>
-      <span matListItemMeta>{{ award.awardsDate ? (award.awardsDate | date: 'mediumDate') : '-' }} · {{
+    <li class="award-item">
+      <div class="award-copy">
+        <span class="award-title">{{ award.awardsTitle }}</span>
+        <span class="award-description">{{ award.awardsDescription }}</span>
+      </div>
+      <span class="award-meta">{{ award.awardsDate ? (award.awardsDate | date: 'mediumDate') : '-' }} · {{
         award.awardsJudge }}</span>
-    </mat-list-item>
+      <div class="award-actions" aria-label="Verdict actions">
+        <button type="button" mat-icon-button color="accent" aria-label="View verdict details"
+          (click)="openVerdictFromRow($event, award)">
+          <mat-icon>info</mat-icon>
+        </button>
+        <button type="button" mat-icon-button color="accent" aria-label="Generate verdict rank list"
+          (click)="generateVerdict($event, award)">
+          <mat-icon>auto_awesome</mat-icon>
+        </button>
+      </div>
+    </li>
     }
     }
-  </mat-list>
+  </ul>
 </section>

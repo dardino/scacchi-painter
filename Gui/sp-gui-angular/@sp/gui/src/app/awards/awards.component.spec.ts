@@ -1,6 +1,6 @@
 import { signal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { Awards, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { of } from "rxjs";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -11,7 +11,7 @@ describe("AwardsComponent", () => {
   let component: AwardsComponent;
   let fixture: ComponentFixture<AwardsComponent>;
   let dbMock: {
-    Awards: ReturnType<typeof signal>;
+    Awards: () => Awards[];
     SetAwards: ReturnType<typeof vi.fn>;
     SaveTemporary: ReturnType<typeof vi.fn>;
   };
@@ -60,6 +60,29 @@ describe("AwardsComponent", () => {
 
   it("should render the awards list from the DB", () => {
     expect(fixture.nativeElement.textContent).toContain("Spring Tournament");
+  });
+
+  it("should update an existing verdict from the info dialog", async () => {
+    const originalAward = {
+      awardsTitle: "Spring Tournament",
+      awardsDescription: "Regional event",
+      awardsDate: "2026-01-01",
+      awardsJudge: "Judge A",
+      awardsProblems: [],
+    };
+    const updatedAward = {
+      ...originalAward,
+      awardsDescription: "Updated regional event",
+      awardsJudge: "Judge Z",
+    };
+
+    dialogServiceMock.verdictDialog.mockReturnValue(of(updatedAward));
+
+    await component.openVerdict(originalAward);
+
+    expect(dialogServiceMock.verdictDialog).toHaveBeenCalledWith(originalAward, "edit");
+    expect(dbMock.SetAwards).toHaveBeenCalledWith([updatedAward]);
+    expect(dbMock.SaveTemporary).toHaveBeenCalled();
   });
 
   it("should save a newly created verdict into the DB", async () => {
