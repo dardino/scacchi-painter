@@ -303,6 +303,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const prob = this.problem()?.clone();
     if (prob) {
       prob.engine = this.selectedEngine();
+      prob.jsonSolutions = [];
       this.jsonSolution.set([]);
       prob.htmlSolution = "";
       prob.textSolution = "";
@@ -357,7 +358,8 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
     const raw = msg.raw.replace(/[\r\n]+/g, "\n").split("\n");
     newProblem.htmlSolution += this.toHtml([...raw]);
     newProblem.textSolution += raw.join(`\n`);
-    this.jsonSolution.set([...this.jsonSolution(), ...msg.moveTree]);
+    newProblem.jsonSolutions = [...newProblem.jsonSolutions, ...msg.moveTree];
+    this.jsonSolution.set(newProblem.jsonSolutions);
     this.#current.SetProblem(() => newProblem);
   }
 
