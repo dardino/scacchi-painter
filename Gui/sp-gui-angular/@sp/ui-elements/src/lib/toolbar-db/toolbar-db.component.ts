@@ -2,7 +2,7 @@ import { Component, Input, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { CurrentProblemService, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button.component";
 
 @Component({
@@ -18,6 +18,7 @@ import { SpToolbarButtonComponent } from "../sp-toolbar-button/sp-toolbar-button
 })
 export class ToolbarDbComponent {
   private db = inject(DbmanagerService);
+  private currentProblem = inject(CurrentProblemService);
   private router = inject(Router);
 
   @Input() boardType: "canvas" | "HTML";
@@ -74,6 +75,7 @@ export class ToolbarDbComponent {
   }
 
   save() {
+    this.currentProblem.UpdateSnapshot();
     this.db.Save().then((success) => {
       if (!success) this.router.navigate(["/savefile"]);
     });
