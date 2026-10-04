@@ -1,0 +1,68 @@
+@if (isCreateMode) {
+<h2 mat-dialog-title>Add new verdict</h2>
+
+<div mat-dialog-content class="verdict-dialog-content">
+  <mat-form-field color="accent" appearance="outline">
+    <mat-label>Title</mat-label>
+    <input matInput type="text" [(ngModel)]="draft.awardsTitle" />
+  </mat-form-field>
+
+  <mat-form-field color="accent" appearance="outline">
+    <mat-label>Description</mat-label>
+    <textarea matInput [(ngModel)]="draft.awardsDescription"></textarea>
+  </mat-form-field>
+
+  <mat-form-field color="accent" appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput type="date" [(ngModel)]="draft.awardsDate" />
+  </mat-form-field>
+
+  <mat-form-field color="accent" appearance="outline">
+    <mat-label>Judge</mat-label>
+    <input matInput type="text" [(ngModel)]="draft.awardsJudge" />
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button type="button" (click)="close()">Cancel</button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">Save</button>
+</div>
+} @else {
+<h2 mat-dialog-title>{{ data.award.awardsTitle }}</h2>
+
+<div mat-dialog-content class="verdict-dialog-content">
+  <p class="verdict-description">{{ data.award.awardsDescription }}</p>
+
+  <dl class="verdict-meta">
+    <div>
+      <dt>Date</dt>
+      <dd>{{ data.award.awardsDate ? (data.award.awardsDate | date: 'longDate') : '-' }}</dd>
+    </div>
+    <div>
+      <dt>Judge</dt>
+      <dd>{{ data.award.awardsJudge || "-" }}</dd>
+    </div>
+    <div>
+      <dt>Problems</dt>
+      <dd>{{ data.award.awardsProblems.length }}</dd>
+    </div>
+  </dl>
+
+  @if (data.award.awardsProblems.length > 0) {
+  <ul class="verdict-problems">
+    @for (problem of data.award.awardsProblems; track problem.problemID) {
+    <li>
+      <span>{{ problem.problemID }}</span>
+      <strong>{{ problem.rankInAward >= 0 ? problem.rankInAward : "Not ranked" }}</strong>
+    </li>
+    }
+  </ul>
+  } @else {
+  <p class="empty-state">No problems assigned to this verdict.</p>
+  }
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">Close</button>
+</div>
+}

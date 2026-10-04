@@ -1,16 +1,21 @@
 <section class="awards">
-  <h2>Awards</h2>
+  <div class="awards-header">
+    <h2>Awards</h2>
+    <button mat-flat-button color="primary" type="button" (click)="addNewVerdict()">Aggiungi nuovo</button>
+  </div>
 
   <mat-list>
     @if (awards().length === 0) {
     <mat-list-item>No awards available.</mat-list-item>
     } @else {
     @for (award of awards(); track award.awardsTitle) {
-    <mat-list-item>
+    <mat-list-item (click)="openVerdict(award)" tabindex="0" (keydown.enter)="openVerdict(award)">
       <span matListItemTitle>{{ award.awardsTitle }}</span>
       <span matListItemLine>{{ award.awardsDescription }}</span>
-      <span matListItemMeta>{{ award.awardsDate }} · {{ award.awardsJudge }}</span>
+      <span matListItemMeta>{{ award.awardsDate ? (award.awardsDate | date: 'mediumDate') : '-' }} · {{
+        award.awardsJudge }}</span>
     </mat-list-item>
     }
     }
   </mat-list>
+</section>

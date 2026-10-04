@@ -1,0 +1,56 @@
+:host {
+  display: block;
+}
+
+.verdict-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.verdict-description {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.verdict-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.verdict-meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.verdict-meta dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.verdict-meta dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.verdict-problems {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.verdict-problems li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.empty-state {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+}
