@@ -2,6 +2,7 @@ import { DatePipe } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { Router } from "@angular/router";
 import { Awards, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { firstValueFrom } from "rxjs";
@@ -16,6 +17,7 @@ import { firstValueFrom } from "rxjs";
 export class AwardsComponent {
   private db = inject(DbmanagerService);
   private modal = inject(DialogService);
+  private router = inject(Router);
 
   protected readonly awards = this.db.Awards;
 
@@ -72,6 +74,13 @@ export class AwardsComponent {
 
   generateVerdict(event: Event, award: Awards) {
     event.stopPropagation();
-    console.warn("Generate verdict page not implemented yet for:", award.awardsTitle);
+    const index = this.awards().findIndex(item => item === award || (
+      item.awardsTitle === award.awardsTitle
+      && item.awardsDescription === award.awardsDescription
+      && item.awardsDate === award.awardsDate
+      && item.awardsJudge === award.awardsJudge
+    ));
+
+    this.router.navigate(["/awards", String(index >= 0 ? index : this.awards().length)]);
   }
 }

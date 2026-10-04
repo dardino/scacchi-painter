@@ -1,5 +1,6 @@
 import { signal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { Router } from "@angular/router";
 import { Awards, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { of } from "rxjs";
@@ -16,6 +17,7 @@ describe("AwardsComponent", () => {
     SaveTemporary: ReturnType<typeof vi.fn>;
   };
   let dialogServiceMock: { verdictDialog: ReturnType<typeof vi.fn> };
+  let routerMock: { navigate: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     dbMock = {
@@ -34,6 +36,9 @@ describe("AwardsComponent", () => {
     dialogServiceMock = {
       verdictDialog: vi.fn(),
     };
+    routerMock = {
+      navigate: vi.fn(),
+    };
 
     await TestBed.configureTestingModule({
       imports: [AwardsComponent],
@@ -45,6 +50,10 @@ describe("AwardsComponent", () => {
         {
           provide: DialogService,
           useValue: dialogServiceMock,
+        },
+        {
+          provide: Router,
+          useValue: routerMock,
         },
       ],
     }).compileComponents();
@@ -83,6 +92,14 @@ describe("AwardsComponent", () => {
     expect(dialogServiceMock.verdictDialog).toHaveBeenCalledWith(originalAward, "edit");
     expect(dbMock.SetAwards).toHaveBeenCalledWith([updatedAward]);
     expect(dbMock.SaveTemporary).toHaveBeenCalled();
+  });
+
+  it("should navigate to the award generation page when generating a verdict", () => {
+    const award = dbMock.Awards()[0];
+
+    component.generateVerdict(new Event("click"), award);
+
+    expect(routerMock.navigate).toHaveBeenCalledWith(["/awards", "0"]);
   });
 
   it("should save a newly created verdict into the DB", async () => {

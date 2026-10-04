@@ -1,0 +1,15 @@
+:host {
+  display: contents;
+}
+
+.award-detail {
+  grid-area: side;
+}
+
+.award-generation {
+  grid-area: main;
+}
+
+.award-toolbar {
+  grid-area: toolbar;
+}
