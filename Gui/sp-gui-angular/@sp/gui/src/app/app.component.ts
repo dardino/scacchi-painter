@@ -55,6 +55,8 @@ export class AppComponent implements OnInit {
   private currentFile = this.db.CurrentFile;
   #msalService = inject(MsalAuthService);
 
+  // TODO: Consider refactoring to move this logic to a dedicated service or utility function
+  // also toolbardb uses this logic
   currentRoutePath = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -74,7 +76,6 @@ export class AppComponent implements OnInit {
   );
 
   dbLoaded = computed(() => this.currentProblem() != null);
-  pathIsEdit = computed(() => this.currentRoutePath() === RoutesList.edit.path);
   fileName = computed(() => this.currentFile()?.meta.itemName);
   fileSource = computed(() => this.currentFile()?.source ?? "unknown");
 

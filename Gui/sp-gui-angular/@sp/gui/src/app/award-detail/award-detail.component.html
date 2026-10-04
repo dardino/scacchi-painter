@@ -37,6 +37,11 @@
   </mat-card-header>
   <mat-card-content>
     <p>Use this section to create a new verdict related to the current award.</p>
+    @if (pendingProblems().length > 0) {
+    <button mat-raised-button color="primary" (click)="processPendingProblems()">Process Pending Problems</button>
+    } @else {
+    <p>No pending problems to process.</p>
+    }
   </mat-card-content>
 </mat-card>
 } @else {

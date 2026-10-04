@@ -26,11 +26,7 @@
 }
 
 .workboard {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-row: 2 / -1;
-  grid-template-rows: subgrid;
-  grid-template-columns: subgrid;
+  display: contents;
 }
 
 #info {

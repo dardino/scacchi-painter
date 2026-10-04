@@ -14,7 +14,7 @@ export interface Awards {
   awardsProblems: AwardsProblem[];
 }
 export type IProblemV5 = IProblemV4 & {
-  uuid: string;
+  uuid: `${string}-${string}-${string}-${string}-${string}`;
   jsonSolutions: HalfMoveInfo[];
 };
 

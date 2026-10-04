@@ -16,6 +16,8 @@
       <div class="award-copy">
         <span class="award-title">{{ award.awardsTitle }}</span>
         <span class="award-description">{{ award.awardsDescription }}</span>
+        <span class="award-problem-count">{{ award.awardsProblems.length }} problem{{ award.awardsProblems.length === 1
+          ? '' : 's' }}</span>
       </div>
       <span class="award-meta">{{ award.awardsDate ? (award.awardsDate | date: 'mediumDate') : '-' }} · {{
         award.awardsJudge }}</span>

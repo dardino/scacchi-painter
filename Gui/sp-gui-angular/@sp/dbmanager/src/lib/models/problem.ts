@@ -2,6 +2,7 @@ import { computed } from "@angular/core";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { SP2 } from "../SP2";
 import { Columns, IProblemV4, Traverse } from "../SPX.v4";
+import { IProblemV5 } from "../SPX.v5";
 import { Base64 } from "../base64";
 import {
   GetSolutionFromElement,
@@ -28,6 +29,7 @@ import { Stipulation } from "./stipulation";
 import { Twins } from "./twins";
 
 export class Problem implements IProblemV4 {
+  public uuid = crypto.randomUUID();
   public boardSize = { columns: 8, rows: 8 };
   static readonly SNAPSHOT_MAIN_ID = "$_MAIN_$";
 
@@ -122,8 +124,9 @@ export class Problem implements IProblemV4 {
     return p;
   }
 
-  static fromJson(jsonObj: Partial<IProblemV4>): Problem {
+  static fromJson(jsonObj: Partial<IProblemV5>): Problem {
     const p = new Problem();
+    p.uuid = jsonObj.uuid ?? p.uuid;
     Problem.applyJson(jsonObj, p);
     p.snapshots = { ...jsonObj.snapshots };
     if (Object.keys(p.snapshots).length === 0) {
@@ -188,8 +191,8 @@ export class Problem implements IProblemV4 {
     b.tags = (a.tags ? [...a.tags] : []).filter(notEmpty);
   }
 
-  toJson(): Partial<IProblemV4> {
-    const json: Partial<IProblemV4> = {};
+  toJson(): Partial<IProblemV5> {
+    const json: Partial<IProblemV5> = {};
     if (this.authors.length > 0) {
       json.authors = this.authors.map(a => a.toJson());
     }
@@ -234,6 +237,7 @@ export class Problem implements IProblemV4 {
         {},
       );
     }
+    if (this.uuid) json.uuid = this.uuid;
     if (this.boardSize != null) json.boardSize = this.boardSize;
     return json;
   }

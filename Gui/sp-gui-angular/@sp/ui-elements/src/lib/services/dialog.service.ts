@@ -1,10 +1,11 @@
 import { Injectable, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { Author } from "@sp/dbmanager/src/lib/models";
+import { Author, Problem } from "@sp/dbmanager/src/lib/models";
 import { Twin } from "@sp/dbmanager/src/lib/models/twin";
 import { Awards } from "@sp/dbmanager/src/lib/SPX.v5";
 import { Engines } from "@sp/host-bridge/src/lib/bridge-global";
 import { AuthorDialogComponent } from "../author-dialog/author-dialog.component";
+import { AwardProblemDecisionData, AwardProblemDecisionDialogComponent, AwardProblemDecisionResult } from "../award-problem-decision-dialog/award-problem-decision-dialog.component";
 import { ConditionsDialogComponent } from "../conditions-dialog/conditions-dialog.component";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { FairypieceDialogComponent, FairypieceDialogInput, FairypieceDialogResponse } from "../fairypiece-dialog/fairypiece-dialog.component";
@@ -69,6 +70,18 @@ export class DialogService {
           mode,
           award,
         },
+      },
+    ).afterClosed();
+  }
+
+  awardProblemDecisionDialog(problem: Problem) {
+    return this.dialog.open<AwardProblemDecisionDialogComponent, AwardProblemDecisionData, AwardProblemDecisionResult>(
+      AwardProblemDecisionDialogComponent,
+      {
+        width: "36rem",
+        maxWidth: "95vw",
+        disableClose: true,
+        data: { problem },
       },
     ).afterClosed();
   }

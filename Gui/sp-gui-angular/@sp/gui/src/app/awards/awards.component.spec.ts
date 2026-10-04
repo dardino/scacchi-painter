@@ -71,6 +71,13 @@ describe("AwardsComponent", () => {
     expect(fixture.nativeElement.textContent).toContain("Spring Tournament");
   });
 
+  it("should display the number of admitted problems for each award", () => {
+    const award = dbMock.Awards()[0];
+    const count = award.awardsProblems.length;
+
+    expect(fixture.nativeElement.textContent).toContain(`${count} problema${count === 1 ? "" : "i"}`);
+  });
+
   it("should update an existing verdict from the info dialog", async () => {
     const originalAward = {
       awardsTitle: "Spring Tournament",
