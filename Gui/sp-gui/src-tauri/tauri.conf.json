@@ -2,7 +2,7 @@
   "$schema": "../schemas/tauri.config.2.json",
   "productName": "Scacchi Painter X",
   "version": "0.5.0",
-  "identifier": "com.scacchipainter.gui",
+  "identifier": "Ganori.ScacchiPainterX",
   "build": {
     "beforeDevCommand": "pnpm start",
     "devUrl": "http://localhost:4200",
@@ -23,7 +23,8 @@
         "closable": true,
         "maximizable": true,
         "minimizable": true,
-        "shadow": true
+        "shadow": true,
+        "theme": "Dark"
       }
     ],
     "security": {
@@ -31,18 +32,37 @@
     }
   },
   "bundle": {
-    "copyright": "Copyright (c) 2025, Gabriele Brunori",
     "active": true,
+    "publisher": "Ganori",
+    "homepage": "https://dardino.github.io/scacchi-painter/",
+    "shortDescription": "A chess problem composition and analysis workspace.",
+    "longDescription": "Scacchi Painter X is a chess problem composer and analysis suite for composing endgame studies, solving puzzles, and managing problem databases.",
+    "copyright": "Copyright (c) 2025 Ganori",
     "resources": [
       "popeye/*"
     ],
-    "targets": "all",
+    "targets": "app",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "allowDowngrades": false,
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "minimumWebview2Version": "137.0.0.0",
+      "nsis": null,
+      "signCommand": "signtool sign /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com /sha1 %CERT_THUMBPRINT% \"%1\"",
+      "timestampUrl": "http://timestamp.digicert.com",
+      "tsp": false,
+      "webviewInstallMode": {
+        "silent": true,
+        "type": "downloadBootstrapper"
+      },
+      "wix": null
+    }
   }
 }

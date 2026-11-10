@@ -6,6 +6,8 @@
     "icons": "pnpm tauricon ./src-tauri/logo.svg",
     "start": "echo 'il server è già avviato a mano in locahost:4200'",
     "tauri": "tauri",
+    "build:tauri:store": "pnpm tauri build --target x86_64-pc-windows-msvc --bundles app",
+    "build:msix": "pwsh -NoProfile -File ./scripts/build-msix.ps1",
     "android:init": "pnpm icons && tauri android init --ci",
     "android:build": "pnpm icons && tauri android build --aab --ci",
     "android:build:bundle": "pnpm icons && tauri android build --aab --ci",

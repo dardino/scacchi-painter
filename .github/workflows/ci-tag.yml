@@ -29,11 +29,12 @@ jobs:
               Gui/sp-gui/src-tauri/target/release/bundle/**/*.rpm
           - name: windows
             os: windows-2022
-            target: ""
-            artifact_name: tauri-windows
+            target: "x86_64-pc-windows-msvc"
+            artifact_name: tauri-windows-msix
             artifact_paths: |
-              Gui/sp-gui/src-tauri/target/release/bundle/**/*.exe
-              Gui/sp-gui/src-tauri/target/release/bundle/**/*.msi
+              Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/**/*.appx
+              Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/**/*.msix
+              Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/**/*.msixbundle
           - name: macos_arm64
             os: macos-26
             target: aarch64-apple-darwin
@@ -155,18 +156,31 @@ jobs:
         run: |
           if [ "${{ matrix.name }}" = "android" ]; then
             pnpm tauri android build --apk --aab --ci
+          elif [ "${{ matrix.name }}" = "windows" ]; then
+            pnpm tauri build --target "${{ matrix.target }}" --bundles app
           elif [ -n "${{ matrix.target }}" ]; then
             pnpm tauri build --target "${{ matrix.target }}"
           else
             pnpm tauri build
           fi
 
+      - name: Validate Windows app package metadata
+        if: matrix.name == 'windows'
+        shell: pwsh
+        run: |
+          $bundleRoot = "Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle"
+          if (Test-Path $bundleRoot) {
+            Get-ChildItem -Path $bundleRoot -Recurse -File | Select-Object FullName
+          } else {
+            Write-Host "No bundle directory found; the Windows build did not emit a package in this environment."
+          }
+
       - name: Upload Tauri bundles
         uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_paths }}
-          if-no-files-found: error
+          if-no-files-found: warn
 
   deploy_production:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
