@@ -20,9 +20,6 @@
     "build:all": "pnpm build:web && pnpm build:corejs && pnpm build:tauri && cd Core && dotnet build"
   },
   "dependencies": {
-    "eslint": "^10.2.0"
-  },
-  "overrides": {
-    "sharp": "^0.34.5"
+    "eslint": "^10.15.0"
   }
 }

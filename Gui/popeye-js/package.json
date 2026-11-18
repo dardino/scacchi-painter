@@ -7,9 +7,9 @@
   "devDependencies": {
     "@types/eslint": "9.6.1",
     "concat": "3.0.0",
-    "eslint": "10.2.0",
+    "eslint": "^10.15.0",
     "google-closure-compiler": "20260401.0.0",
-    "serve": "14.2.6",
+    "serve": "^14.2.8",
     "typescript": "6.0.2"
   },
   "scripts": {

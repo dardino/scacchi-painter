@@ -7,13 +7,14 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directories:
+      - "/"
       - "/Gui/sp-gui-angular"
       - "/Gui/sp-gui-angular/api"
       - "/Gui/sp-gui"
       - "/CoreJS"
       - "/Gui/popeye-js"
-    target-branch: "gui-integration"
-    open-pull-requests-limit: 1
+    target-branch: "master"
+    open-pull-requests-limit: 5
     pull-request-branch-name:
       separator: "-"
     schedule:
@@ -28,6 +29,59 @@ updates:
     labels:
       - "dependencies"
       - "javascript"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  - package-ecosystem: "cargo"
+    directories:
+      - "/CoreRust"
+      - "/Gui/sp-gui/src-tauri"
+    target-branch: "master"
+    open-pull-requests-limit: 5
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Rome"
+    groups:
+      rust-dependencies:
+        patterns:
+          - "*"
+    labels:
+      - "dependencies"
+      - "rust"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  - package-ecosystem: "nuget"
+    directory: "/Core"
+    target-branch: "master"
+    open-pull-requests-limit: 5
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Rome"
+    labels:
+      - "dependencies"
+      - "dotnet"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "master"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Rome"
+    labels:
+      - "dependencies"
+      - "ci"
     commit-message:
       prefix: "deps"
       include: "scope"
