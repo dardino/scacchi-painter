@@ -1,42 +1,45 @@
 # Microsoft Store submission guide for Scacchi Painter X
 
-This package is intended for Microsoft Store distribution and follows a Store-compliant packaging path. The app is delivered as a signed MSIX/Appx package rather than a loose unsigned `.exe` installer.
+This package is intended for Microsoft Store distribution and follows a Store-compliant packaging path. The app is delivered as an MSIX/Appx package rather than a loose unsigned `.exe` installer. Microsoft signs the package during publication.
 
 ## 1. Why this resolves policy 10.2.9
 
-Microsoft Store policy 10.2.9 rejects Store submissions that expose an unsigned installer or executable outside a managed package. The MSIX workflow wraps the app and required runtime files in a signed package with a valid identity, version, and publisher metadata. This prevents the app from being distributed as a standalone unsigned EXE installer.
+Microsoft Store policy 10.2.9 rejects Store submissions that expose an installer or executable outside a managed package. The MSIX workflow wraps the app and required runtime files in a package with a valid identity, version, and publisher metadata.
 
 ## 2. Product identity
 
 The configured identity is:
 
-- Product: `Scacchi Painter X`
-- Publisher: `Ganori`
-- App ID: `Ganori.ScacchiPainterX`
-- Version: `0.5.0`
+- Product: the display name reserved in Partner Center
+- Publisher: `CN=43BE6207-BFB1-4453-A2C9-459F3D97AB2D`
+- App ID: `45001Ganori80.ScacchiPainterX`
+- Version: `0.5.1`
 - Architecture: `x64`
 
 These values must remain stable in the Store submission and in the generated package.
 
 ## 3. Required build outputs
 
-The Windows Store build must create a signed MSIX package:
+Build the MSIX package from the repository root:
 
 ```powershell
 cd Gui/sp-gui
 pnpm install --frozen-lockfile
-pnpm tauri build --target x86_64-pc-windows-msvc --bundles app
+$env:MSIX_PUBLISHER = "CN=43BE6207-BFB1-4453-A2C9-459F3D97AB2D"
+$env:MSIX_PACKAGE_NAME = "45001Ganori80.ScacchiPainterX"
+$env:MSIX_DISPLAY_NAME = "<STORE_RESERVED_DISPLAY_NAME>"
+pnpm run build:msix
 ```
 
-The output should be a signed `.msix` or `.msixbundle` in:
+The MSIX output to upload to Partner Center is:
 
 ```text
-Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/
+Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.5.1.0_x64.msix
 ```
 
 ## 4. Package compliance checklist
 
-- The package is signed with a valid certificate
+- The package identity and publisher match the Store reservation
 - Package version is in the required format and increments correctly
 - Publisher identity matches the store account and package identity
 - App architecture is x64
@@ -47,8 +50,6 @@ Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/
 ## 5. Validation commands
 
 ```powershell
-signtool verify /pa "Gui\sp-gui\src-tauri\target\x86_64-pc-windows-msvc\release\bundle\ScacchiPainterX.msix"
-makeappx validate "Gui\sp-gui\src-tauri\target\x86_64-pc-windows-msvc\release\bundle\ScacchiPainterX.msix"
 Get-AppxPackage -Name *Scacchi* | Format-List
 ```
 
@@ -65,11 +66,10 @@ The package can be installed or managed through:
 ## 7. Store submission process summary
 
 1. Build the Windows x64 MSIX package.
-2. Sign the package with a valid certificate.
-3. Validate with `signtool` and `makeappx`.
-4. Upload the signed package to the Microsoft Store submission flow.
-5. Confirm the package identity, version, and metadata match the Store account.
-6. Submit for review.
+2. Validate the package with `makeappx`.
+3. Upload the package to the Microsoft Store submission flow.
+4. Confirm the package identity, version, and metadata match the Store account.
+5. Submit for review.
 
 ## 8. Known compatibility guardrails
 
@@ -86,4 +86,4 @@ This project is designed to use app-local resources, such as the bundled Popeye 
 
 ## 9. Final readiness statement
 
-The repository is configured to use Tauri 2-compatible Windows packaging conventions and to target a signed MSIX output instead of an unsigned Windows installer. Final certification still requires a Windows build environment with the valid certificate and Store signing account to generate and submit the signed package.
+The repository is configured to use Tauri 2-compatible Windows packaging conventions and to target an MSIX output instead of an unsigned Windows installer. Microsoft performs the final signing during Store publication.

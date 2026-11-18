@@ -9,8 +9,7 @@ This guide explains how to install, validate, and deploy Scacchi Painter X as a 
 - Node.js 20+
 - pnpm
 - Tauri CLI
-- Windows SDK (`signtool`, `makeappx`)
-- Microsoft-compatible signing certificate
+- Windows SDK/App Certification Kit (`makeappx`)
 
 ## 2. Install dependencies
 
@@ -28,53 +27,40 @@ pnpm install --frozen-lockfile
 rustup target add x86_64-pc-windows-msvc
 ```
 
-## 3. Build the package
+## 3. Build the MSIX package
 
 ```powershell
 cd Gui/sp-gui
-pnpm tauri build --target x86_64-pc-windows-msvc --bundles app
+$env:MSIX_PUBLISHER = "CN=43BE6207-BFB1-4453-A2C9-459F3D97AB2D"
+$env:MSIX_PACKAGE_NAME = "45001Ganori80.ScacchiPainterX"
+$env:MSIX_DISPLAY_NAME = "<STORE_RESERVED_DISPLAY_NAME>"
+pnpm run build:msix
 ```
 
-Alternative script:
+The generated unsigned package is suitable for upload to Microsoft Store, which signs it during publication:
 
-```powershell
-cd Gui/sp-gui
-pnpm run build:tauri:store
+```text
+Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.5.1.0_x64.msix
 ```
 
-## 4. Sign the package
+## 4. Install the package locally
 
 ```powershell
-$thumbprint = "<CERT_THUMBPRINT>"
-$packagePath = "Gui\sp-gui\src-tauri\target\x86_64-pc-windows-msvc\release\bundle\ScacchiPainterX.msix"
-
-signtool sign /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com /sha1 $thumbprint $packagePath
-```
-
-## 5. Install the package locally
-
-```powershell
+$packagePath = "Gui\sp-gui\src-tauri\target\x86_64-pc-windows-msvc\release\bundle\msix\ScacchiPainterX_0.5.1.0_x64.msix"
 Add-AppxPackage -Path $packagePath
 ```
 
-## 6. Validate installation
+## 5. Validate installation
 
 ```powershell
 Get-AppxPackage -Name *Scacchi* | Format-List
-```
-
-## 7. Validate the package
-
-```powershell
-signtool verify /pa $packagePath
-makeappx validate $packagePath
 ```
 
 ## 8. Deployment routes
 
 ### Microsoft Store
 
-Use the signed MSIX package in the Store submission pipeline.
+Use the MSIX package in the Store submission pipeline; Microsoft signs it during publication.
 
 ### Winget
 
@@ -84,7 +70,7 @@ winget install --id Ganori.ScacchiPainterX --source winget
 
 ### Intune
 
-Import the signed MSIX package to Intune and assign it to the target device group.
+Import a separately signed MSIX package to Intune and assign it to the target device group.
 
 ### DISM
 
@@ -94,11 +80,10 @@ dism /Online /Add-ProvisionedAppxPackage /PackagePath:$packagePath /SkipLicense
 
 ## 9. Notes about Store compliance
 
-This is not an unsigned `.exe` installer. It is a signed, Store-compliant MSIX package that follows the supported package identity and versioning model required by Microsoft Store policy.
+This is not an unsigned `.exe` installer. It is an MSIX package that follows the supported package identity and versioning model required by Microsoft Store policy.
 
 ## 10. Common issues
 
 - `rustup target add x86_64-pc-windows-msvc` is required before building a Windows x64 package.
-- `signtool` must be available from the Windows SDK.
 - `makeappx` must be installed from the Windows SDK or App Certification Kit tools.
-- If the package is not installed, ensure the certificate chain is valid and the app identity is not already in use by another package.
+- An unsigned Store package cannot be sideloaded locally; use an optional development certificate for local installation.

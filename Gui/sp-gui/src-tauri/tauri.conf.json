@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/tauri.config.2.json",
   "productName": "Scacchi Painter X",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "identifier": "Ganori.ScacchiPainterX",
   "build": {
     "beforeDevCommand": "pnpm start",
@@ -41,7 +41,7 @@
     "resources": [
       "popeye/*"
     ],
-    "targets": "app",
+    "targets": "msi",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
