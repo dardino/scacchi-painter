@@ -9,6 +9,7 @@ function createDialogData(overrides?: Partial<SolveEngineDialogData>): SolveEngi
     engine: "Popeye",
     engineConfig: null,
     engineConfigurationsByEngine: null,
+    popeyeExecutablePath: "",
     ...overrides,
   };
 }
@@ -73,5 +74,34 @@ describe("SolveEngineDialogComponent", () => {
 
     const input = root.querySelector("input[matinput]") as HTMLInputElement | null;
     expect(input).toBeTruthy();
+  });
+
+  it("shows the executable path field for native Popeye", () => {
+    createComponent({ engine: "Popeye" });
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.textContent).toContain("Popeye executable path");
+  });
+
+  it("does not show the executable path field for Popeye ASM", () => {
+    createComponent({ engine: "Popeye (ASM)", availableEngines: ["Popeye", "Popeye (ASM)", "SpCore"] });
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.textContent).not.toContain("Popeye executable path");
+  });
+
+  it("does not show the executable path field for SpCore", () => {
+    createComponent({ engine: "SpCore" });
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.textContent).not.toContain("Popeye executable path");
+  });
+
+  it("returns the trimmed executable path when saving", () => {
+    const component = createComponent({ popeyeExecutablePath: "C:\\popeye\\pywin64.exe" });
+    component.popeyeExecutablePath = "  C:\\tools\\popeye.exe  ";
+    component.clickSave();
+
+    const dialogRef = TestBed.inject(MatDialogRef) as MatDialogRef<SolveEngineDialogComponent, { popeyeExecutablePath: string } | null>;
+    expect(dialogRef.close).toHaveBeenCalledWith(
+      expect.objectContaining({ popeyeExecutablePath: "C:\\tools\\popeye.exe" }),
+    );
   });
 });

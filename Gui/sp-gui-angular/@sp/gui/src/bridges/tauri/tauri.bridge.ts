@@ -396,7 +396,10 @@ class TauriBridge implements BridgeGlobal {
         this.solver$.next({ raw: row, rowtype: "log", moveTree: [] });
       }, 1);
     });
-    invoke("run_popeye", { name: problem }).then((result) => {
+    invoke("run_popeye", {
+      name: problem,
+      executablePath: this.currentProblem.popeyeExecutablePath ?? "",
+    }).then((result) => {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0 ${result}` });
     }).catch((error) => {
       this.endSolve({ exitCode: -1, message: `${error}` });

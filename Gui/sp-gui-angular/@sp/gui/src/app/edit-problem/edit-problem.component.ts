@@ -258,6 +258,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       engine: this.selectedEngine(),
       engineConfig: this.#current.Problem()?.engineConfig ?? null,
       engineConfigurationsByEngine: this.#current.Problem()?.engineConfigurationsByEngine ?? null,
+      popeyeExecutablePath: this.#current.Problem()?.popeyeExecutablePath ?? "",
     }).subscribe((result) => {
       if (result == null) return;
       this.selectedEngine.set(result.engine);
@@ -266,6 +267,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         problem.engine = result.engine;
         problem.engineConfigurationsByEngine = cloneEngineConfigurationsByEngine(result.engineConfigurationsByEngine) ?? {};
         problem.engineConfig = cloneEngineConfiguration(result.engineConfig) ?? {};
+        problem.popeyeExecutablePath = result.popeyeExecutablePath;
       }
     });
   }

@@ -116,6 +116,7 @@ export class DialogService {
       engine: Engines;
       engineConfig: SolveEngineDialogResult["engineConfig"] | null;
       engineConfigurationsByEngine: SolveEngineDialogResult["engineConfigurationsByEngine"] | null;
+      popeyeExecutablePath: SolveEngineDialogResult["popeyeExecutablePath"];
     }, SolveEngineDialogResult | null>(
       SolveEngineDialogComponent,
       {
@@ -124,6 +125,7 @@ export class DialogService {
           engine: input.engine,
           engineConfig: input.engineConfig,
           engineConfigurationsByEngine: input.engineConfigurationsByEngine,
+          popeyeExecutablePath: input.popeyeExecutablePath ?? "",
         },
       },
     ).afterClosed();

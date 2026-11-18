@@ -61,6 +61,8 @@ export class Problem implements IProblemV4 {
   public engineConfigurationsByEngine: EngineConfigurationsByEngine = {
     Popeye: createDefaultPopeyeEngineConfiguration(),
   };
+  /** Custom path of the Popeye executable. Empty means use the bundled one. */
+  public popeyeExecutablePath = "";
 
   public authors: Author[] = [];
   public pieces: Piece[] = [];
@@ -183,6 +185,7 @@ export class Problem implements IProblemV4 {
       selectedEngineConfig
       ?? (b.engine === "Popeye" ? createDefaultPopeyeEngineConfiguration() : {}),
     );
+    b.popeyeExecutablePath = a.popeyeExecutablePath ?? "";
     b.htmlSolution = a.htmlSolution ?? "";
     b.jsonSolutions = Array.isArray(a.jsonSolutions) ? [...a.jsonSolutions] : [];
     b.date = a.date ? a.date : new Date().toISOString();
@@ -225,6 +228,7 @@ export class Problem implements IProblemV4 {
     }
 
     if (this.engineConfig != null) json.engineConfig = cloneEngineConfiguration(this.engineConfig) ?? {};
+    if (this.popeyeExecutablePath) json.popeyeExecutablePath = this.popeyeExecutablePath;
     if (this.htmlSolution) json.htmlSolution = this.htmlSolution;
     if (this.textSolution) json.textSolution = this.textSolution;
     if (this.jsonSolutions.length > 0) json.jsonSolutions = [...this.jsonSolutions];

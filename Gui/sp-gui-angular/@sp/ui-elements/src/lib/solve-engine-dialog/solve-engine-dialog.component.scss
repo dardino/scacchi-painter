@@ -18,6 +18,14 @@
   width: 16rem;
 }
 
+.executable-panel {
+  display: grid;
+}
+
+.executable-field {
+  width: 100%;
+}
+
 .options-panel {
   display: grid;
   gap: 0.875rem;

@@ -1,5 +1,6 @@
 use std::io::BufRead;
 use std::io::BufReader;
+use std::path::PathBuf;
 use std::process::{Child, Command, Stdio};
 use std::sync::{Mutex, OnceLock};
 use tauri::Manager;
@@ -118,6 +119,7 @@ async fn run_popeye<R: Runtime>(
     window: tauri::Window,
     app: tauri::AppHandle<R>,
     name: &str,
+    executable_path: Option<String>,
 ) -> Result<String, String> {
     let tmp_path = app.path().temp_dir();
     if tmp_path.is_err() {
@@ -134,17 +136,27 @@ async fn run_popeye<R: Runtime>(
         return Ok("[E] Failed to write temp file".to_string());
     }
 
-    let exe = get_popeye_executable();
-    if exe == "unknown" {
-        return Ok("[E] Unknown platform or architecture".to_string());
-    }
+    // A custom executable path (configured in the solver settings for native
+    // Popeye) takes precedence over the executable bundled with the app.
+    let custom_path = executable_path
+        .map(|path| path.trim().to_string())
+        .filter(|path| !path.is_empty());
 
-    let res = app.path().resource_dir();
-    if res.is_err() {
-        return Ok("[E] Failed to get resource dir".to_string());
-    }
-    let base_path = res.unwrap().join("popeye");
-    let popeye_path = base_path.join(exe);
+    let popeye_path: PathBuf = if let Some(path) = custom_path {
+        PathBuf::from(path)
+    } else {
+        let exe = get_popeye_executable();
+        if exe == "unknown" {
+            return Ok("[E] Unknown platform or architecture".to_string());
+        }
+
+        let res = app.path().resource_dir();
+        if res.is_err() {
+            return Ok("[E] Failed to get resource dir".to_string());
+        }
+        let base_path = res.unwrap().join("popeye");
+        base_path.join(exe)
+    };
 
     // Spawn the process
     let mut process_def = Command::new(popeye_path);

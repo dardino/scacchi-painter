@@ -25,12 +25,14 @@ export interface SolveEngineDialogData {
   engine: Engines;
   engineConfig: EngineConfiguration | null;
   engineConfigurationsByEngine: EngineConfigurationsByEngine | null;
+  popeyeExecutablePath?: string;
 }
 
 export interface SolveEngineDialogResult {
   engine: Engines;
   engineConfig: EngineConfiguration;
   engineConfigurationsByEngine: EngineConfigurationsByEngine;
+  popeyeExecutablePath: string;
 }
 
 type EngineOptionState = { enabled: boolean; values: string[] };
@@ -60,6 +62,12 @@ export class SolveEngineDialogComponent {
 
   engineConfigurationsByEngine: EngineConfigurationsByEngine = this.buildEngineConfigurationsByEngine();
   optionStateByEngine: Partial<Record<Engines, Record<string, EngineOptionState>>> = this.buildOptionStateByEngine();
+
+  popeyeExecutablePath = this.data.popeyeExecutablePath ?? "";
+
+  get isNativePopeye(): boolean {
+    return this.selectedEngine === "Popeye";
+  }
 
   get selectedEngineOptions(): Record<string, EngineOptionMeta> {
     return EngineOptionsByEngine[this.selectedEngine] ?? {};
@@ -93,6 +101,7 @@ export class SolveEngineDialogComponent {
       engine: this.selectedEngine,
       engineConfig: selectedEngineConfiguration,
       engineConfigurationsByEngine: cloneEngineConfigurationsByEngine(this.engineConfigurationsByEngine) ?? {},
+      popeyeExecutablePath: this.popeyeExecutablePath.trim(),
     });
   }
 
