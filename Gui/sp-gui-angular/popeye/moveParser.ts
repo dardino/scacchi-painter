@@ -2,7 +2,7 @@ import type { HalfMoveInfo } from "@dardino-chess/core";
 import { Stipulation } from "@sp/dbmanager/src/lib/models/stipulation";
 const Rx = /(?:^| )(?<moveN>\d\.)/;
 const parts = /^(?<left>\..|[\w*-=[\]>]*[ +#?!]*(?:threat:|zugzwang\.)?)(?<right>.*)$/;
-const halfMoveRx = /(?<setplay>\.{3})|(?<piece>\w*)(?<from>[a-h][1-8])(?<type>[-*])(?<to>[a-h][1-8])(?<promotion>=\w+)?(?<extraMoves>\[.*\])?(?<effects>(?:\s?[#=+?!])*)(?<threat>\s?threat:)?(?<zugzwang>\s?zugzwang\.)?/;
+const halfMoveRx = /(?<setplay>\.{3})|(?<piece>\w*)(?<from>[a-h][1-8])(?<type>[-*])(?<to>[a-h][1-8])(?<promotion>=\w+)?(?<extraMoves>(?:\[.*?\])+)?(?<effects>(?:\s?[#=+?!])*)(?<threat>\s?threat:)?(?<zugzwang>\s?zugzwang\.)?/;
 
 export function SplitRow(row: string) {
   return row.split(Rx).reduce((aggr, item, index, arr) => {
@@ -53,10 +53,13 @@ export function parseHalfMove(moveN: number, moveColor: "w" | "b", part: "l" | "
   }
 
   const effects = parsed.groups.effects?.split("").filter(eff => !!eff) ?? [];
+  const extraMoves = parsed.groups.extraMoves
+    ? Array.from(parsed.groups.extraMoves.matchAll(/\[.*?\]/g), match => match[0])
+    : [];
 
   const halfMoveInfo: HalfMoveInfo = {
     num: moveN,
-    extraMoves: parsed.groups.extraMoves ? [parsed.groups.extraMoves] : [],
+    extraMoves,
     from: parsed.groups.from as HalfMoveInfo["from"],
     to: parsed.groups.to as HalfMoveInfo["to"],
     isPromotion: !!parsed.groups.promotion,
