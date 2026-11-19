@@ -153,4 +153,21 @@ describe("DbmanagerService", () => {
     expect(service.All()).toHaveLength(1);
     expect(service.CurrentProblem()).not.toBeNull();
   });
+
+  it("should load XML when a stale recent metadata names an SP3 file", async () => {
+    service.SetData([Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1")]);
+    const xml = await service.GetFileContent("sp2");
+    const meta = {
+      type: "file" as const,
+      itemName: "position.sp3",
+      fullPath: "position.sp3",
+      id: "position.sp3",
+    };
+    const sp2File = new File([await xml.text()], "position.sp2", { type: "application/xml" });
+
+    const result = await service.Load({ file: sp2File, meta, source: "local" });
+
+    expect(result).toBeNull();
+    expect(service.All().length).toBeGreaterThan(0);
+  });
 });

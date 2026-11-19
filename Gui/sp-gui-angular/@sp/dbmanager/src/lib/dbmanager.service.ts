@@ -142,14 +142,25 @@ export class DbmanagerService implements IDbManagerService {
     this.#workInProgress.set(true);
     try {
       this.reset();
-      this.#currentFile.set({ meta, source });
       const content = await file.text();
-      const result = await this.loadFromContent(content);
+      const isXmlFile = file.name.toLowerCase().endsWith(".sp2")
+        || meta.fullPath.toLowerCase().endsWith(".sp2")
+        || content.trimStart().startsWith("<");
+      const resolvedMeta = file.name && file.name !== meta.itemName
+        ? {
+            ...meta,
+            itemName: file.name,
+            fullPath: file.name,
+            id: file.name,
+          }
+        : meta;
+      this.#currentFile.set({ meta: resolvedMeta, source });
+      const result = await this.loadFromContent(content, isXmlFile ? "sp2" : "sp3");
       if (result instanceof Error) {
         return result;
       }
       await this.loadProblem();
-      saveToRecentFiles(meta, source);
+      saveToRecentFiles(resolvedMeta, source);
       this.#snackBar.open("Load db completed!", undefined, {
         verticalPosition: "top",
         politeness: "assertive",
