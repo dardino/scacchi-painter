@@ -7,6 +7,8 @@ use tauri::Manager;
 use tauri::{Emitter, Runtime};
 use std::sync::atomic::{AtomicBool, Ordering};
 use serde::Deserialize;
+use serde::Serialize;
+use std::fs;
 use problem_io::{parse_popeye, ast_to_problem};
 use problem_solver::{solve_streaming, SolverConfig, StreamDirective};
 // windows
@@ -71,6 +73,176 @@ struct RustSolverOptionsInput {
     refutations_count: Option<usize>,
     show_all_defenses: bool,
     show_attempts: bool,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct LocalEntry {
+    id: String,
+    item_name: String,
+    full_path: String,
+    entry_type: String,
+}
+
+#[tauri::command]
+fn list_local_roots() -> Result<Vec<LocalEntry>, String> {
+    #[cfg(target_os = "windows")]
+    {
+        let mut roots = Vec::new();
+        for letter in b'A'..=b'Z' {
+            let root = format!("{}:\\", char::from(letter));
+            let path = PathBuf::from(&root);
+            if path.exists() {
+                roots.push(LocalEntry {
+                    id: root.clone(),
+                    item_name: root.clone(),
+                    full_path: root,
+                    entry_type: "drive".to_string(),
+                });
+            }
+        }
+        if roots.is_empty() {
+            roots.push(LocalEntry {
+                id: "C:\\".to_string(),
+                item_name: "C:\\".to_string(),
+                full_path: "C:\\".to_string(),
+                entry_type: "drive".to_string(),
+            });
+        }
+        return Ok(roots);
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        let mut roots = Vec::new();
+        if let Ok(home) = std::env::var("HOME") {
+            let home_path = PathBuf::from(home);
+            if home_path.exists() {
+                roots.push(LocalEntry {
+                    id: home_path.to_string_lossy().into_owned(),
+                    item_name: "Home".to_string(),
+                    full_path: home_path.to_string_lossy().into_owned(),
+                    entry_type: "folder".to_string(),
+                });
+            }
+        }
+        let root = PathBuf::from("/");
+        if root.exists() {
+            roots.push(LocalEntry {
+                id: "/".to_string(),
+                item_name: "Root".to_string(),
+                full_path: "/".to_string(),
+                entry_type: "root".to_string(),
+            });
+        }
+        Ok(roots)
+    }
+}
+
+#[tauri::command]
+fn list_local_folder(path: String) -> Result<Vec<LocalEntry>, String> {
+    let folder = PathBuf::from(&path);
+    if !folder.is_dir() {
+        return Err(format!("Local folder is missing or unavailable: {path}"));
+    }
+
+    let mut entries = Vec::new();
+    let read_dir = fs::read_dir(&folder)
+        .map_err(|error| format!("Unable to read folder '{path}': {error}"))?;
+
+    for entry in read_dir {
+        let entry = entry.map_err(|error| format!("Unable to inspect folder entry: {error}"))?;
+        let entry_path = entry.path();
+        let file_name = entry_path
+            .file_name()
+            .map(|name| name.to_string_lossy().into_owned())
+            .unwrap_or_else(|| entry_path.to_string_lossy().into_owned());
+
+        let metadata = entry.metadata()
+            .map_err(|error| format!("Unable to inspect '{file_name}': {error}"))?;
+        if metadata.is_dir() {
+            entries.push(LocalEntry {
+                id: entry_path.to_string_lossy().into_owned(),
+                item_name: file_name,
+                full_path: entry_path.to_string_lossy().into_owned(),
+                entry_type: "folder".to_string(),
+            });
+        }
+        else if metadata.is_file() {
+            let lower_name = file_name.to_lowercase();
+            if lower_name.ends_with(".sp2") || lower_name.ends_with(".sp3") {
+                entries.push(LocalEntry {
+                    id: entry_path.to_string_lossy().into_owned(),
+                    item_name: file_name,
+                    full_path: entry_path.to_string_lossy().into_owned(),
+                    entry_type: "file".to_string(),
+                });
+            }
+        }
+    }
+
+    entries.sort_by(|left, right| {
+        right.entry_type.cmp(&left.entry_type).then_with(|| left.item_name.cmp(&right.item_name))
+    });
+    Ok(entries)
+}
+
+#[tauri::command]
+fn read_local_file(path: String) -> Result<Vec<u8>, String> {
+    fs::read(&PathBuf::from(&path))
+        .map_err(|error| format!("Unable to read local file '{path}': {error}"))
+}
+
+#[tauri::command]
+fn write_local_file(path: String, bytes: Vec<u8>) -> Result<(), String> {
+    let target = PathBuf::from(&path);
+    if let Some(parent) = target.parent() {
+        fs::create_dir_all(parent)
+            .map_err(|error| format!("Unable to prepare local folder '{}': {error}", parent.display()))?;
+    }
+    fs::write(&target, bytes)
+        .map_err(|error| format!("Unable to write local file '{path}': {error}"))
+}
+
+#[cfg(test)]
+mod local_filesystem_tests {
+    use super::{list_local_folder, write_local_file};
+    use std::fs;
+
+    #[test]
+    fn filters_supported_database_files() {
+        let folder = std::env::temp_dir().join(format!(
+            "spx-local-files-{}",
+            std::process::id()
+        ));
+        fs::create_dir_all(&folder).unwrap();
+        fs::write(folder.join("problem.sp3"), b"{}").unwrap();
+        fs::write(folder.join("problem.sp2"), b"<root/>").unwrap();
+        fs::write(folder.join("ignored.txt"), b"ignored").unwrap();
+
+        let entries = list_local_folder(folder.to_string_lossy().into_owned()).unwrap();
+        let names: Vec<String> = entries.iter().map(|entry| entry.item_name.clone()).collect();
+
+        assert!(names.contains(&"problem.sp3".to_string()));
+        assert!(names.contains(&"problem.sp2".to_string()));
+        assert!(!names.contains(&"ignored.txt".to_string()));
+        fs::remove_dir_all(folder).unwrap();
+    }
+
+    #[test]
+    fn writes_database_file() {
+        let folder = std::env::temp_dir().join(format!(
+            "spx-local-write-{}",
+            std::process::id()
+        ));
+        fs::create_dir_all(&folder).unwrap();
+        let target = folder.join("saved.sp3");
+
+        write_local_file(target.to_string_lossy().into_owned(), b"{}".to_vec()).unwrap();
+
+        assert_eq!(fs::read(target).unwrap(), b"{}");
+        fs::remove_dir_all(folder).unwrap();
+    }
 }
 
 fn get_popeye_executable() -> &'static str {
@@ -340,6 +512,10 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             close_app,
             available_engines,
+            list_local_roots,
+            list_local_folder,
+            read_local_file,
+            write_local_file,
             run_popeye,
             stop_popeye,
             run_rust_solver,

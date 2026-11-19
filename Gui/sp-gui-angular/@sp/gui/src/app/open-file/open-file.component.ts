@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
+import { TauriLocalDriveService } from "@sp/dbmanager/src/lib/providers/localdrive/tauri-local-drive.service";
 import { DbmanagerService, FutureSp3VersionError } from "@sp/dbmanager/src/public-api";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { FileExplorerComponent } from "@sp/ui-elements/src/lib/file-explorer/file-explorer.component";
@@ -27,6 +28,7 @@ export class OpenFileComponent implements OnInit {
   private onedriveService = inject(OneDriveService);
   private googleDriveService = inject(GoogleDriveService);
   private localFolderService = inject(LocalDriveService);
+  private tauriLocalFolderService = inject(TauriLocalDriveService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   #logService = inject(LogService);
@@ -111,7 +113,9 @@ export class OpenFileComponent implements OnInit {
   }
 
   async #localFolder() {
-    this.currentFileService = this.localFolderService;
+    this.currentFileService = window.Bridge?.host === "tauri"
+      ? this.tauriLocalFolderService
+      : this.localFolderService;
     this.showFilePicker.set(true);
   }
 

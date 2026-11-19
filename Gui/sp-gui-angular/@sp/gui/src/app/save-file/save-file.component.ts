@@ -9,6 +9,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
+import { TauriLocalDriveService } from "@sp/dbmanager/src/lib/providers/localdrive/tauri-local-drive.service";
 import { DatabaseFileFormat, DbmanagerService } from "@sp/dbmanager/src/public-api";
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import {
@@ -43,6 +44,7 @@ export class SaveFileComponent implements OnInit {
   private onedriveFS = inject(OneDriveService);
   private googleDriveFS = inject(GoogleDriveService);
   private localFS = inject(LocalDriveService);
+  private tauriLocalFS = inject(TauriLocalDriveService);
   private router = inject(Router);
   private dialog = inject(DialogService);
 
@@ -99,7 +101,9 @@ export class SaveFileComponent implements OnInit {
   public get currentFileService(): FileService<AvaliableFileServices> | null {
     switch (this.currentSource) {
       case "local":
-        return this.localFS;
+        return window.Bridge?.host === "tauri"
+          ? this.tauriLocalFS
+          : this.localFS;
       case "dropbox":
         return this.dropboxFS;
       case "onedrive":

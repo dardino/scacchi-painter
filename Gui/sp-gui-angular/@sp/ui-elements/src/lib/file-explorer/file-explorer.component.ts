@@ -23,6 +23,7 @@ export class FileExplorerComponent implements OnInit, OnChanges {
   @Output() selectFile = new EventEmitter<FileSelected>();
   @Output() folderChanged = new EventEmitter<FolderSelected>();
   public isloading = signal(false);
+  public errorMessage = signal("");
 
   public currentItem: FolderItemInfo & { parent?: FolderItemInfo } = {
     fullPath: "",
@@ -85,13 +86,15 @@ export class FileExplorerComponent implements OnInit, OnChanges {
 
   private refresh() {
     this.isloading.set(true);
+    this.errorMessage.set("");
     if (this.service) {
       this.service
         .enumContent(this.currentItem.id, this.currentItem.type, "sp2", "sp3")
         .then((items) => {
           this.items.set(items);
-        }).catch(() => {
+        }).catch((error: unknown) => {
           this.items.set([]);
+          this.errorMessage.set(error instanceof Error ? error.message : String(error));
         }).finally(() => {
           this.isloading.set(false);
         });
