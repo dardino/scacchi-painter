@@ -11,6 +11,7 @@ import { Piece } from "./models/piece";
 import { Problem } from "./models/problem";
 import { Twin } from "./models/twin";
 import { TwinModes } from "./SPX.v4";
+import { FutureSp3VersionError } from "./SPX.v6";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -188,5 +189,45 @@ describe("DbmanagerService", () => {
 
     expect(result).toBeNull();
     expect(service.All().length).toBeGreaterThan(0);
+  });
+
+  it("should reject a newer SP3 version without confirmation", async () => {
+    const file = new File([JSON.stringify({
+      version: 7,
+      lastIndex: 1,
+      name: "Future",
+      awards: [],
+      problems: [{}],
+    })], "future.sp3", { type: "application/json" });
+    const meta = {
+      type: "file" as const,
+      itemName: "future.sp3",
+      fullPath: "future.sp3",
+      id: "future.sp3",
+    };
+
+    const result = await service.Load({ file, meta, source: "local" });
+
+    expect(result).toBeInstanceOf(FutureSp3VersionError);
+  });
+
+  it("should load a newer SP3 version only when explicitly allowed", async () => {
+    const file = new File([JSON.stringify({
+      version: 7,
+      lastIndex: 1,
+      name: "Future",
+      awards: [],
+      problems: [{}],
+    })], "future.sp3", { type: "application/json" });
+    const meta = {
+      type: "file" as const,
+      itemName: "future.sp3",
+      fullPath: "future.sp3",
+      id: "future.sp3",
+    };
+
+    const result = await service.Load({ file, meta, source: "local" }, true);
+
+    expect(result).toBeNull();
   });
 });

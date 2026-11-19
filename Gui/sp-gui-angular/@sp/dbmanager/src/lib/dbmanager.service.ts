@@ -8,7 +8,7 @@ import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveServic
 import { IDbSpX_V3, isV3 } from "./SPX.v3";
 import { IDbSpX_V4, isV4 } from "./SPX.v4";
 import { Awards, IDbSpX_V5, isV5 } from "./SPX.v5";
-import { convertDbToV6, IDbSpX_V6, isV6 } from "./SPX.v6";
+import { convertDbToV6, FutureSp3Database, FutureSp3VersionError, IDbSpX_V6, isV6 } from "./SPX.v6";
 
 export interface IDbManagerService {
   CurrentProblem: Signal<Problem | null>;
@@ -139,7 +139,7 @@ export class DbmanagerService implements IDbManagerService {
   }
 
   // #region PUBLIC LOADS
-  async Load({ file, meta, source }: FileSelected): Promise<Error | null> {
+  async Load({ file, meta, source }: FileSelected, allowFutureVersion = false): Promise<Error | null> {
     this.#workInProgress.set(true);
     try {
       this.reset();
@@ -156,7 +156,7 @@ export class DbmanagerService implements IDbManagerService {
           }
         : meta;
       this.#currentFile.set({ meta: resolvedMeta, source });
-      const result = await this.loadFromContent(content, isXmlFile ? "sp2" : "sp3");
+      const result = await this.loadFromContent(content, isXmlFile ? "sp2" : "sp3", allowFutureVersion);
       if (result instanceof Error) {
         return result;
       }
@@ -177,7 +177,7 @@ export class DbmanagerService implements IDbManagerService {
     }
   }
 
-  public async LoadFromService({ meta, source }: RecentFileInfo): Promise<Error | null> {
+  public async LoadFromService({ meta, source }: RecentFileInfo, allowFutureVersion = false): Promise<Error | null> {
     this.#workInProgress.set(true);
     try {
       this.#currentFile.set({ meta, source });
@@ -189,7 +189,7 @@ export class DbmanagerService implements IDbManagerService {
         return new Error("Unable to load file content from service!");
       }
       // Load gestisce completamente il loader
-      return await this.Load({ file, meta, source });
+      return await this.Load({ file, meta, source }, allowFutureVersion);
     }
     catch (err) {
       return err as Error;
@@ -348,9 +348,15 @@ export class DbmanagerService implements IDbManagerService {
     return true;
   }
 
-  private async loadFromJson(jsonString: string): Promise<Error | null> {
+  private async loadFromJson(jsonString: string, allowFutureVersion = false): Promise<Error | null> {
     try {
-      const raw = JSON.parse(jsonString) as IDbSpX_V6 | IDbSpX_V5 | IDbSpX_V4 | IDbSpX_V3;
+      const raw = JSON.parse(jsonString) as FutureSp3Database | IDbSpX_V6 | IDbSpX_V5 | IDbSpX_V4 | IDbSpX_V3;
+      if (typeof raw.version === "number" && raw.version > 6 && !allowFutureVersion) {
+        return new FutureSp3VersionError(raw.version);
+      }
+      if (typeof raw.version === "number" && raw.version > 6 && allowFutureVersion) {
+        raw.version = 6;
+      }
       if (!isV3(raw) && !isV4(raw) && !isV5(raw) && !isV6(raw)) {
         throw new Error("Unsupported file version!");
       }
@@ -391,13 +397,14 @@ export class DbmanagerService implements IDbManagerService {
   private async loadFromContent(
     content: string,
     forceVersion?: "sp2" | "sp3",
+    allowFutureVersion = false,
   ): Promise<Error | null> {
     const version: "sp2" | "sp3"
       = forceVersion
         ?? (this.#currentFile()?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3");
     const result = version === "sp2"
       ? await this.loadFromXML(content)
-      : await this.loadFromJson(content);
+      : await this.loadFromJson(content, allowFutureVersion);
     if (result instanceof Error) return result;
     await this.saveToLocalStorage();
     return null;

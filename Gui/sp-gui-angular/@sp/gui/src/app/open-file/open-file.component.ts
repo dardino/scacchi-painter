@@ -1,10 +1,12 @@
 import { Component, OnInit, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { DbmanagerService, FutureSp3VersionError } from "@sp/dbmanager/src/public-api";
 import { AvaliableFileServices, FileSelected, FileService } from "@sp/host-bridge/src/lib/fileService";
 import { FileExplorerComponent } from "@sp/ui-elements/src/lib/file-explorer/file-explorer.component";
 import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source-selector/file-source-selector.component";
+import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
+import { firstValueFrom } from "rxjs";
 import { RecentsComponent } from "../recents/recents.component";
 import { LogService } from "../services/log.service";
 
@@ -28,6 +30,7 @@ export class OpenFileComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   #logService = inject(LogService);
+  #dialog = inject(DialogService);
 
   public showFilePicker = signal(false);
   public currentFileService: FileService<AvaliableFileServices> | null = null;
@@ -132,7 +135,17 @@ export class OpenFileComponent implements OnInit {
 
   private async loadFromFile(fileInfo: FileSelected | null) {
     if (!fileInfo) return;
-    const error = await this.db.Load(fileInfo);
+    let error = await this.db.Load(fileInfo);
+    if (error instanceof FutureSp3VersionError) {
+      const confirmed = await firstValueFrom(this.#dialog.confirmDialog({
+        title: "Newer SP3 file version",
+        message: `This SP3 file uses version ${error.fileVersion}, but this ScacchiPainter supports up to version ${error.supportedVersion}. Features introduced in newer versions may be unknown and could be lost if the file is saved after opening it.`,
+        cancelText: "Cancel",
+        confirmText: "Open anyway",
+      }));
+      if (!confirmed) return;
+      error = await this.db.Load(fileInfo, true);
+    }
     if (!error) {
       this.router.navigate([`/edit/${this.db.CurrentIndex()}`]);
     }

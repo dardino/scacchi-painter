@@ -15,6 +15,24 @@ export interface IDbSpX_V6 {
   version: 6;
 }
 
+export interface FutureSp3Database {
+  lastIndex: number;
+  name: string;
+  problems: Array<Partial<IProblemV6>>;
+  awards: Awards[];
+  version: number;
+}
+
+export class FutureSp3VersionError extends Error {
+  constructor(
+    public readonly fileVersion: number,
+    public readonly supportedVersion: number = 6,
+  ) {
+    super(`SP3 file version ${fileVersion} is newer than the supported version ${supportedVersion}.`);
+    this.name = "FutureSp3VersionError";
+  }
+}
+
 export function isV6(obj: unknown): obj is IDbSpX_V6 {
   return "version" in (obj as Record<string, unknown>) && (obj as Record<string, unknown>).version === 6;
 }
