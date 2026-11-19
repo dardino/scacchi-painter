@@ -214,14 +214,53 @@ export class LocalDriveService implements FileService<"local"> {
     file: File,
     item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
-    await this.#downloadFileWithAnchor(file, item);
-    const itemName = item.itemName || file.name;
-    return {
+    if (!window.showSaveFilePicker) {
+      await this.#downloadFileWithAnchor(file, item);
+      const itemName = item.itemName || file.name;
+      return {
+        ...item,
+        itemName,
+        fullPath: itemName,
+        id: itemName,
+      };
+    }
+
+    const targetName = item.itemName || file.name;
+    if (this.#fileHandle?.name && this.#fileHandle.name !== targetName) {
+      this.#fileHandle = null;
+    }
+
+    if (this.#fileHandle) {
+      const hasWritePermission = await this.verifyPermission(this.#fileHandle, true);
+      if (!hasWritePermission) {
+        this.#fileHandle = null;
+      }
+    }
+
+    if (!this.#fileHandle) {
+      this.#fileHandle = await window.showSaveFilePicker({
+        suggestedName: item.itemName || file.name,
+      });
+    }
+
+    const hasWritePermission = await this.verifyPermission(this.#fileHandle, true);
+    if (!hasWritePermission) {
+      return new Error("Cannot write to the selected local file!");
+    }
+
+    const writable = await this.#fileHandle.createWritable();
+    await writable.write(file);
+    await writable.close();
+
+    const itemName = this.#fileHandle.name || item.itemName || file.name;
+    const savedItem: FolderItemInfo = {
       ...item,
       itemName,
       fullPath: itemName,
       id: itemName,
     };
+    await this.#saveFileHandleToIndexedDB(savedItem, this.#fileHandle);
+    return savedItem;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

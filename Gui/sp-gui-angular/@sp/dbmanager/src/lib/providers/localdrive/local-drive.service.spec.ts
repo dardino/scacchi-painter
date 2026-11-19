@@ -16,9 +16,16 @@ describe("LocalDriveService", () => {
   });
 
   it("should reuse a file handle from IndexedDB when it exists for the selected item", async () => {
+    const writable = {
+      write: vi.fn(async () => undefined),
+      close: vi.fn(async () => undefined),
+    };
     const fileHandle = {
       queryPermission: vi.fn(async () => "granted"),
+      requestPermission: vi.fn(async () => "granted"),
       getFile: vi.fn(async () => new File(["test"], "board.sp3", { type: "application/json" })),
+      name: "board.sp3",
+      createWritable: vi.fn(async () => writable),
     } as unknown as FileSystemFileHandle;
 
     const fakeStore = {
@@ -110,9 +117,29 @@ describe("LocalDriveService", () => {
     expect(item.fullPath).toBe("board.sp3");
     expect(item.itemName).toBe("board.sp3");
     expect(item.id).toBe("board.sp3");
+
+    Object.defineProperty(window, "showSaveFilePicker", {
+      configurable: true,
+      value: vi.fn(async () => {
+        throw new Error("save picker should not open");
+      }),
+    });
+
+    const saved = await service.saveFileContent(
+      new File(["test"], "board.sp3", { type: "application/json" }),
+      item,
+    );
+
+    expect(saved).not.toBeInstanceOf(Error);
+    expect(fileHandle.createWritable).toHaveBeenCalledOnce();
+    expect(writable.write).toHaveBeenCalledOnce();
   });
 
   it("should download through the local web provider", async () => {
+    Object.defineProperty(window, "showSaveFilePicker", {
+      configurable: true,
+      value: undefined,
+    });
     const createObjectURL = vi.fn(() => "blob:test");
     const revokeObjectURL = vi.fn();
     Object.defineProperty(URL, "createObjectURL", {
