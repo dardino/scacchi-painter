@@ -85,16 +85,28 @@
         <fieldset class="fieldset-settings">
           <legend>Popeye Engine</legend>
           <div class="field-container">
-            <mat-label>Popeye executable path</mat-label>
-            <input
-              matInput
-              [ngModel]="popeyeExecutablePath()"
-              (ngModelChange)="changePopeyeExecutablePath($event)"
-              placeholder="Leave empty to use the bundled Popeye"
-            />
+            <mat-label>Use a custom Popeye executable</mat-label>
+            <mat-slide-toggle
+              [ngModel]="useCustomPopeyeExecutable()"
+              (ngModelChange)="changeUseCustomPopeyeExecutable($event)"
+            ></mat-slide-toggle>
           </div>
+          @if (useCustomPopeyeExecutable()) {
+            <div class="field-container">
+              <mat-label>Popeye executable path</mat-label>
+              <div class="path-field">
+                <input
+                  matInput
+                  [ngModel]="popeyeExecutablePath()"
+                  (ngModelChange)="changePopeyeExecutablePath($event)"
+                  placeholder="Select the Popeye executable"
+                />
+                <button mat-stroked-button type="button" (click)="pickPopeyeExecutable()">Browse…</button>
+              </div>
+            </div>
+          }
           <p class="setting-help">
-            Full path of the Popeye executable used by the desktop app. Leave empty to use the bundled one.
+            When disabled, the bundled Popeye executable is used. Enable the toggle to pick a custom executable.
           </p>
         </fieldset>
       </mat-expansion-panel>

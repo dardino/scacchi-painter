@@ -14,7 +14,6 @@ import {
   NativePopeyeEngine,
   SolutionRow,
   SolveModes,
-  SolveOptions,
   SpCoreEngine,
 } from "../../../../host-bridge/src/lib/bridge-global";
 import { formatSpCoreUnsupportedMessage, getSpCoreUnsupportedFeatures } from "../../../../host-bridge/src/lib/spcore-support";
@@ -40,7 +39,6 @@ class TauriBridge implements BridgeGlobal {
   readonly host = "tauri" as const;
   private solveEnded = true;
   private currentEngine: Engines = AsmPopeyeEngine;
-  private popeyeExecutablePath = "";
   private ww: Worker | null = null;
   private hostEngines: Engines[] = [SpCoreEngine];
 
@@ -348,7 +346,7 @@ class TauriBridge implements BridgeGlobal {
 
   private solver$: BehaviorSubject<SolutionRow | EOF>;
   private currentProblem: Problem;
-  runSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes, options?: SolveOptions): Observable<SolutionRow | EOF> | Error {
+  runSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes): Observable<SolutionRow | EOF> | Error {
     if (!this.supportsEngine(engine)) {
       return new Error(`Engine not found: ${engine}`);
     }
@@ -356,7 +354,6 @@ class TauriBridge implements BridgeGlobal {
     this.currentProblem = CurrentProblem;
     this.solveEnded = false;
     this.currentEngine = engine;
-    this.popeyeExecutablePath = options?.popeyeExecutablePath ?? "";
 
     this.solver$ = new BehaviorSubject<SolutionRow | EOF>(
       {
@@ -400,10 +397,7 @@ class TauriBridge implements BridgeGlobal {
         this.solver$.next({ raw: row, rowtype: "log", moveTree: [] });
       }, 1);
     });
-    invoke("run_popeye", {
-      name: problem,
-      executablePath: this.popeyeExecutablePath,
-    }).then((result) => {
+    invoke("run_popeye", { name: problem }).then((result) => {
       this.endSolve({ exitCode: 0, message: `program exited with code: 0 ${result}` });
     }).catch((error) => {
       this.endSolve({ exitCode: -1, message: `${error}` });

@@ -5,6 +5,7 @@ use std::process::{Child, Command, Stdio};
 use std::sync::{Mutex, OnceLock};
 use tauri::Manager;
 use tauri::{Emitter, Runtime};
+use tauri_plugin_store::StoreExt;
 use std::sync::atomic::{AtomicBool, Ordering};
 use serde::Deserialize;
 use serde::Serialize;
@@ -291,7 +292,6 @@ async fn run_popeye<R: Runtime>(
     window: tauri::Window,
     app: tauri::AppHandle<R>,
     name: &str,
-    executable_path: Option<String>,
 ) -> Result<String, String> {
     let tmp_path = app.path().temp_dir();
     if tmp_path.is_err() {
@@ -308,11 +308,31 @@ async fn run_popeye<R: Runtime>(
         return Ok("[E] Failed to write temp file".to_string());
     }
 
-    // A custom executable path (configured in the solver settings for native
-    // Popeye) takes precedence over the executable bundled with the app.
-    let custom_path = executable_path
-        .map(|path| path.trim().to_string())
-        .filter(|path| !path.is_empty());
+    // Read the solver settings saved by the configuration page: the toggle
+    // decides whether a custom executable is used, the bundled one otherwise.
+    let settings = app.store("settings.json").ok();
+    let get_setting = |key: &str| {
+        settings
+            .as_ref()
+            .and_then(|store| store.get(key))
+    };
+
+    let use_custom = get_setting("spx:pref:popeyeUseCustomExecutable")
+        .and_then(|value| {
+            value.as_str()
+                .and_then(|raw| raw.parse::<bool>().ok())
+                .or_else(|| value.as_bool())
+        })
+        .unwrap_or(false);
+
+    let custom_path = if use_custom {
+        get_setting("spx:pref:popeyeExecutablePath")
+            .and_then(|value| value.as_str().map(str::to_string))
+            .map(|path| path.trim().to_string())
+            .filter(|path| !path.is_empty())
+    } else {
+        None
+    };
 
     let popeye_path: PathBuf = if let Some(path) = custom_path {
         PathBuf::from(path)
@@ -510,6 +530,7 @@ pub fn run() {
         })
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             close_app,
             available_engines,

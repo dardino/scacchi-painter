@@ -25,6 +25,7 @@ serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"
 tauri-plugin-shell = "2.6.0"
 tauri-plugin-store = "2.5.1"
+tauri-plugin-dialog = "2.8.4"
 problem-solver = { path = "../../../CoreRust/crates/problem-solver" }
 problem-io = { path = "../../../CoreRust/crates/problem-io" }
 

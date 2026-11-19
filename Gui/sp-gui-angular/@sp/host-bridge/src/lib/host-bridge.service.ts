@@ -1,7 +1,7 @@
 import { ApplicationRef, inject, Injectable } from "@angular/core";
 import { Problem } from "@sp/dbmanager/src/lib/models";
 import { Subject, Subscription } from "rxjs";
-import { AsmPopeyeEngine, BridgeGlobal, Engines, EOF, SolutionRow, SolveModes, SolveOptions } from "./bridge-global";
+import { AsmPopeyeEngine, BridgeGlobal, Engines, EOF, SolutionRow, SolveModes } from "./bridge-global";
 
 declare global {
   interface HandledFile {
@@ -57,7 +57,7 @@ export class HostBridgeService {
     return window.Bridge.availableEngines();
   }
 
-  startSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes, options?: SolveOptions): Error | undefined {
+  startSolve(CurrentProblem: Problem, engine: Engines, mode: SolveModes): Error | undefined {
     if (this.subscription?.closed) {
       this.subscription = null;
       this.solveInProgress.next(false);
@@ -67,7 +67,7 @@ export class HostBridgeService {
       console.warn("[WARN] -> Solver already started!");
       return new Error("Solver already started!");
     }
-    const obs = window.Bridge?.runSolve(CurrentProblem, engine, mode, options);
+    const obs = window.Bridge?.runSolve(CurrentProblem, engine, mode);
     if (!obs) return new Error("Engine not found!");
     if (obs instanceof Error) return obs;
 

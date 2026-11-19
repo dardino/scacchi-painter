@@ -17,8 +17,7 @@ export interface BridgeGlobal {
   runSolve(
     CurrentProblem: Problem,
     engine: Engines,
-    mode: SolveModes,
-    options?: SolveOptions
+    mode: SolveModes
   ): Observable<SolutionRow | EOF> | Error;
   supportsEngine(engine: Engines): boolean;
   availableEngines(): Engines[];
@@ -30,10 +29,6 @@ export interface EOF {
 }
 
 export type SolveModes = "start" | "try";
-
-export interface SolveOptions {
-  popeyeExecutablePath?: string;
-}
 
 export interface SolutionRow {
   rowtype: "log" | "data";

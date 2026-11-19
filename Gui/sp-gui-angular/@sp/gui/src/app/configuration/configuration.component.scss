@@ -68,6 +68,18 @@ dd {
   align-items: center;
 }
 
+.path-field {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  min-width: 0;
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 .setting-help {
   grid-column: span 2;
   margin: 0;

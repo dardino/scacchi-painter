@@ -18,6 +18,7 @@ export interface PreferencesTable {
   editorShowExtraPieces: WritableSignal<boolean>;
   compactPieceSelector: WritableSignal<boolean>;
   popeyeExecutablePath: WritableSignal<string>;
+  popeyeUseCustomExecutable: WritableSignal<boolean>;
 }
 
 @Injectable({
@@ -44,4 +45,5 @@ export class PreferencesService implements PreferencesTable {
   public editorShowExtraPieces = this.#settings.setting<boolean>("editorShowExtraPieces", false);
   public compactPieceSelector = this.#settings.setting<boolean>("compactPieceSelector", false);
   public popeyeExecutablePath = this.#settings.setting<string>("popeyeExecutablePath", "");
+  public popeyeUseCustomExecutable = this.#settings.setting<boolean>("popeyeUseCustomExecutable", false);
 }
