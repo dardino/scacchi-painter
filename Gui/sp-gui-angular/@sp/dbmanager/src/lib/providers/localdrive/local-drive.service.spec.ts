@@ -177,6 +177,7 @@ describe("LocalDriveService", () => {
       itemName: "draft.sp2",
       fullPath: "draft.sp2",
       id: "draft.sp2",
+      downloaded: true,
     });
   });
 });

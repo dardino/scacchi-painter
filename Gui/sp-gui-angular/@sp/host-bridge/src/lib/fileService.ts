@@ -3,6 +3,7 @@ export interface FolderItemInfo {
   itemName: string;
   fullPath: string;
   id: string;
+  downloaded?: boolean;
 }
 
 export type AvaliableFileServices = "local" | "dropbox" | "onedrive" | "googledrive" | "unknown";

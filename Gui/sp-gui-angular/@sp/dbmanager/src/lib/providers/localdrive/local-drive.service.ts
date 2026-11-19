@@ -222,6 +222,7 @@ export class LocalDriveService implements FileService<"local"> {
         itemName,
         fullPath: itemName,
         id: itemName,
+        downloaded: true,
       };
     }
 
