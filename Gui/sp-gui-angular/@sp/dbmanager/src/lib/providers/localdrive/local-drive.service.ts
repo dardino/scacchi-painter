@@ -198,6 +198,9 @@ export class LocalDriveService implements FileService<"local"> {
       if (!allOk) throw new Error("Cannot open a file!");
 
       const filecontent = await this.#fileHandle.getFile();
+      item.fullPath = filecontent.name;
+      item.itemName = filecontent.name;
+      item.id = filecontent.name;
 
       return filecontent;
     }

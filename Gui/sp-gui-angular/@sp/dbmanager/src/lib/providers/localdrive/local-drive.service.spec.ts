@@ -107,6 +107,9 @@ describe("LocalDriveService", () => {
     expect(file.name).toBe("board.sp3");
     expect(fileHandle.queryPermission).toHaveBeenCalled();
     expect(fakeStore.put).toHaveBeenCalledWith(fileHandle, "board-1|/tmp/board.sp3|board.sp3");
+    expect(item.fullPath).toBe("board.sp3");
+    expect(item.itemName).toBe("board.sp3");
+    expect(item.id).toBe("board.sp3");
   });
 
   it("should download through the local web provider", async () => {
