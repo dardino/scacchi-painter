@@ -13,6 +13,7 @@ import {
 import { BehaviorSubject, Observable } from "rxjs";
 
 class WebBridge implements BridgeGlobal {
+  readonly host = "web" as const;
   private problem: Problem;
   private solver$: BehaviorSubject<SolutionRow | EOF>;
   private solveEnded = true;
