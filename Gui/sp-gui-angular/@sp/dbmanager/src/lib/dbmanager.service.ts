@@ -5,6 +5,7 @@ import { AvaliableFileServices, FileSelected, FileService, FolderItemInfo, Folde
 import { prettifyXml } from "./helpers";
 import { Problem } from "./models/problem";
 import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "./providers";
+import { TauriLocalDriveService } from "./providers/localdrive/tauri-local-drive.service";
 import { IDbSpX_V3, isV3 } from "./SPX.v3";
 import { IDbSpX_V4, isV4 } from "./SPX.v4";
 import { Awards, IDbSpX_V5, isV5 } from "./SPX.v5";
@@ -38,6 +39,7 @@ export class DbmanagerService implements IDbManagerService {
   #oneDriveFS = inject(OneDriveService);
   #googleDriveFS = inject(GoogleDriveService);
   #localDriveFS = inject(LocalDriveService);
+  #tauriLocalDriveFS = inject(TauriLocalDriveService);
   #snackBar = inject(MatSnackBar);
   #logger = inject(LogService);
 
@@ -131,7 +133,9 @@ export class DbmanagerService implements IDbManagerService {
       case "googledrive":
         return this.#googleDriveFS;
       case "local":
-        return this.#localDriveFS;
+        return window.Bridge?.host === "tauri"
+          ? this.#tauriLocalDriveFS
+          : this.#localDriveFS;
       case "unknown":
       default:
         return null;

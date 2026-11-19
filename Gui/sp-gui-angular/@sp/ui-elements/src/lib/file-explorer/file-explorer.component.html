@@ -33,4 +33,7 @@
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 }
+@if (errorMessage()) {
+<div class="error" role="alert">{{ errorMessage() }}</div>
+}
 </div>
