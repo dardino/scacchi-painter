@@ -71,11 +71,20 @@ describe("DbmanagerService", () => {
 
   it("should export the current database as SP2 XML", async () => {
     service.SetData([Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1")]);
+    service.SetFileMeta({
+      source: "local",
+      meta: {
+        type: "file",
+        itemName: "position.sp3",
+        fullPath: "position.sp3",
+        id: "position.sp3",
+      },
+    });
 
     const file = await service.GetFileContent("sp2");
     const text = await file.text();
 
-    expect(file.name).toBe("temp.sp2");
+    expect(file.name).toBe("position.sp2");
     expect(text).toContain("<ScacchiPainterDatabase");
     expect(text).toContain("<SP_Item");
   });

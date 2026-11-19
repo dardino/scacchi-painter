@@ -158,7 +158,7 @@ export class LocalDriveService implements FileService<"local"> {
     const url = URL.createObjectURL(file);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = file.name || item.itemName;
+    anchor.download = item.itemName || file.name;
     anchor.style.display = "none";
     document.body.append(anchor);
     anchor.click();
@@ -215,7 +215,7 @@ export class LocalDriveService implements FileService<"local"> {
     item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
     await this.#downloadFileWithAnchor(file, item);
-    const itemName = file.name || item.itemName;
+    const itemName = item.itemName || file.name;
     return {
       ...item,
       itemName,

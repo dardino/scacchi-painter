@@ -317,16 +317,18 @@ export class DbmanagerService implements IDbManagerService {
       const result = await fs.saveFileContent(file, cf.meta);
       if (!(result instanceof Error)) {
         this.#currentFile.set({ meta: result, source: fs.sourceName });
-        const savedPath = result.fullPath || result.itemName;
-        this.#snackBar.open(
-          `Save done in: <${savedPath}>`,
-          undefined,
-          {
-            verticalPosition: "top",
-            politeness: "assertive",
-            duration: 1500,
-          },
-        );
+        if (fs.sourceName !== "local") {
+          const savedPath = result.fullPath || result.itemName;
+          this.#snackBar.open(
+            `Save done in: <${savedPath}>`,
+            undefined,
+            {
+              verticalPosition: "top",
+              politeness: "assertive",
+              duration: 1500,
+            },
+          );
+        }
       }
       else {
         this.#logger.error("Unable to save file" + JSON.stringify(result));
@@ -435,13 +437,23 @@ export class DbmanagerService implements IDbManagerService {
       const text
         = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" + prettifyXml(xmlDoc);
       const configuredPath = this.#currentFile()?.meta.fullPath ?? "temp.sp2";
-      const fullpath = configuredPath.replace(/\.(sp2|sp3)$/i, "") + ".sp2";
+      const itemName = configuredPath
+        .replace(/\\/g, "/")
+        .split("/")
+        .pop()
+        ?.replace(/\.(sp2|sp3)$/i, "") + ".sp2";
+      const fullpath = itemName;
       return new File([text], fullpath, { type: "application/octect-stream" });
     }
     else {
       const text = JSON.stringify(this.toJSON());
       const configuredPath = this.#currentFile()?.meta.fullPath ?? "temp.sp3";
-      const fullpath = configuredPath.replace(/\.(sp2|sp3)$/i, "") + ".sp3";
+      const itemName = configuredPath
+        .replace(/\\/g, "/")
+        .split("/")
+        .pop()
+        ?.replace(/\.(sp2|sp3)$/i, "") + ".sp3";
+      const fullpath = itemName;
       return new File([text], fullpath, { type: "application/octect-stream" });
     }
   }

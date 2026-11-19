@@ -126,16 +126,22 @@ describe("LocalDriveService", () => {
 
     const item = {
       type: "file" as const,
-      itemName: "draft.sp3",
+      itemName: "draft.sp2",
       fullPath: "",
       id: "draft.sp3",
     };
+    let downloadedAnchor: HTMLAnchorElement | null = null;
+    const appendSpy = vi.spyOn(document.body, "append").mockImplementation((...nodes) => {
+      downloadedAnchor = nodes[0] as HTMLAnchorElement;
+    });
 
     const result = await service.saveFileContent(
       new File(["test"], "draft.sp2", { type: "application/xml" }),
       item,
     );
 
+    expect(downloadedAnchor?.download).toBe("draft.sp2");
+    appendSpy.mockRestore();
     expect(result).not.toBeInstanceOf(Error);
     expect(result).toEqual({
       type: "file",
