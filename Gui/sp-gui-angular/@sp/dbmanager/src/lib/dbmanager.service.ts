@@ -280,7 +280,7 @@ export class DbmanagerService implements IDbManagerService {
 
   private async download(file: File): Promise<void> {
     const fileSaver = await import("file-saver");
-    fileSaver.saveAs(file, this.FileName());
+    fileSaver.saveAs(file, file.name);
   }
 
   public async SetCurrentProblem(problem: Problem | null) {
@@ -303,6 +303,27 @@ export class DbmanagerService implements IDbManagerService {
     const file = await this.GetFileContent(format);
     const fs = this.fileService;
     const cf = this.#currentFile();
+    if (cf?.source === "local") {
+      await this.download(file);
+      const meta: FolderItemInfo = {
+        ...cf.meta,
+        itemName: file.name,
+        fullPath: file.name,
+        id: file.name,
+      };
+      this.#currentFile.set({ meta, source: "local" });
+      this.#snackBar.open(
+        `Save done in: <${file.name}>`,
+        undefined,
+        {
+          verticalPosition: "top",
+          politeness: "assertive",
+          duration: 1500,
+        },
+      );
+      this.#workInProgress.set(false);
+      return true;
+    }
     if (fs && cf) {
       const result = await fs.saveFileContent(file, cf.meta);
       if (!(result instanceof Error)) {
