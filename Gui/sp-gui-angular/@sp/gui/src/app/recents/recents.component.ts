@@ -34,12 +34,14 @@ export class RecentsComponent {
 
   async clickOnRecent(fInfo: RecentFileInfo) {
     try {
-      setLocalAuthInfo({
-        return_url: this.#router.createUrlTree(["/list"]).toString(),
-      });
+      if (fInfo.source !== "local") {
+        setLocalAuthInfo({
+          return_url: this.#router.createUrlTree(["/list"]).toString(),
+        });
+      }
       const result = await this.#db.LoadFromService(fInfo);
       if (!(result instanceof Error)) {
-        this.#router.navigate(["/list"]);
+        await this.#router.navigateByUrl("/list");
       }
       else {
         this.#log.error(result.message);
