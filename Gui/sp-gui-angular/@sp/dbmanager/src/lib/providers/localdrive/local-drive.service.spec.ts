@@ -16,9 +16,16 @@ describe("LocalDriveService", () => {
   });
 
   it("should reuse a file handle from IndexedDB when it exists for the selected item", async () => {
+    const writable = {
+      write: vi.fn(async () => undefined),
+      close: vi.fn(async () => undefined),
+    };
     const fileHandle = {
       queryPermission: vi.fn(async () => "granted"),
+      requestPermission: vi.fn(async () => "granted"),
       getFile: vi.fn(async () => new File(["test"], "board.sp3", { type: "application/json" })),
+      name: "board.sp3",
+      createWritable: vi.fn(async () => writable),
     } as unknown as FileSystemFileHandle;
 
     const fakeStore = {
@@ -107,5 +114,70 @@ describe("LocalDriveService", () => {
     expect(file.name).toBe("board.sp3");
     expect(fileHandle.queryPermission).toHaveBeenCalled();
     expect(fakeStore.put).toHaveBeenCalledWith(fileHandle, "board-1|/tmp/board.sp3|board.sp3");
+    expect(item.fullPath).toBe("board.sp3");
+    expect(item.itemName).toBe("board.sp3");
+    expect(item.id).toBe("board.sp3");
+
+    Object.defineProperty(window, "showSaveFilePicker", {
+      configurable: true,
+      value: vi.fn(async () => {
+        throw new Error("save picker should not open");
+      }),
+    });
+
+    const saved = await service.saveFileContent(
+      new File(["test"], "board.sp3", { type: "application/json" }),
+      item,
+    );
+
+    expect(saved).not.toBeInstanceOf(Error);
+    expect(fileHandle.createWritable).toHaveBeenCalledOnce();
+    expect(writable.write).toHaveBeenCalledOnce();
+  });
+
+  it("should download through the local web provider", async () => {
+    Object.defineProperty(window, "showSaveFilePicker", {
+      configurable: true,
+      value: undefined,
+    });
+    const createObjectURL = vi.fn(() => "blob:test");
+    const revokeObjectURL = vi.fn();
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: createObjectURL,
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: revokeObjectURL,
+    });
+
+    const item = {
+      type: "file" as const,
+      itemName: "draft.sp2",
+      fullPath: "",
+      id: "draft.sp3",
+    };
+    const downloadedAnchors: HTMLAnchorElement[] = [];
+    const appendSpy = vi.spyOn(document.body, "append").mockImplementation((...nodes) => {
+      nodes.forEach((node) => {
+        if (node instanceof HTMLAnchorElement) downloadedAnchors.push(node);
+      });
+    });
+
+    const result = await service.saveFileContent(
+      new File(["test"], "draft.sp2", { type: "application/xml" }),
+      item,
+    );
+
+    expect(downloadedAnchors[0].download).toBe("draft.sp2");
+    appendSpy.mockRestore();
+    expect(result).not.toBeInstanceOf(Error);
+    expect(result).toEqual({
+      type: "file",
+      itemName: "draft.sp2",
+      fullPath: "draft.sp2",
+      id: "draft.sp2",
+      downloaded: true,
+    });
   });
 });

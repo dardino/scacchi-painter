@@ -1,13 +1,16 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "@sp/dbmanager/src/lib/providers";
-import { DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { DatabaseFileFormat, DbmanagerService } from "@sp/dbmanager/src/public-api";
+import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import {
   AvaliableFileServices,
   FileService,
@@ -26,6 +29,7 @@ import { FileSourceSelectorComponent } from "@sp/ui-elements/src/lib/file-source
     MatToolbarModule,
     MatInputModule,
     MatFormFieldModule,
+    MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
     FileSourceSelectorComponent,
@@ -40,6 +44,9 @@ export class SaveFileComponent implements OnInit {
   private googleDriveFS = inject(GoogleDriveService);
   private localFS = inject(LocalDriveService);
   private router = inject(Router);
+  private dialog = inject(DialogService);
+
+  format = signal<DatabaseFileFormat>("sp3");
 
   private currentFolder: FolderSelected = {
     meta: {
@@ -77,6 +84,18 @@ export class SaveFileComponent implements OnInit {
     this.selectedFile.meta.itemName = v;
   }
 
+  setFormat(format: DatabaseFileFormat) {
+    this.format.set(format);
+    const name = this.selectedFile.meta.itemName.replace(/\.(sp2|sp3)$/i, "");
+    this.selectedFile.meta.itemName = `${name}.${format}`;
+    if (this.selectedFile.meta.id) {
+      this.selectedFile.meta.id = this.selectedFile.meta.id.replace(/\.(sp2|sp3)$/i, `.${format}`);
+    }
+    if (this.selectedFile.meta.fullPath) {
+      this.selectedFile.meta.fullPath = this.selectedFile.meta.fullPath.replace(/\.(sp2|sp3)$/i, `.${format}`);
+    }
+  }
+
   public get currentFileService(): FileService<AvaliableFileServices> | null {
     switch (this.currentSource) {
       case "local":
@@ -109,6 +128,7 @@ export class SaveFileComponent implements OnInit {
     const urlhash = location.hash;
     this.selectedFile = this.db.CurrentFile() ?? this.selectedFile;
     this.currentFolder = this.db.CurrentFile() ?? this.selectedFile;
+    this.format.set(this.selectedFile.meta.itemName.toLowerCase().endsWith(".sp2") ? "sp2" : "sp3");
     if (urlhash === "#dropbox") {
       setTimeout(() => {
         this.toDropbox();
@@ -171,7 +191,7 @@ export class SaveFileComponent implements OnInit {
   /**
    * Download the db file
    */
-  public async download() {
+  public async download(format = this.format()) {
     this.db.SetFileMeta({
       meta: {
         fullPath: this.selectedFile?.meta.fullPath ?? ".",
@@ -181,7 +201,7 @@ export class SaveFileComponent implements OnInit {
       },
       source: "local",
     });
-    const file = await this.db.GetFileContent();
+    const file = await this.db.GetFileContent(format);
     const objectUrl = URL.createObjectURL(file);
     const anchor = document.createElement("a");
     document.body.appendChild(anchor);
@@ -224,12 +244,22 @@ export class SaveFileComponent implements OnInit {
   }
 
   public async saveFile() {
+    if (this.format() === "sp2") {
+      const confirmed = await firstValueFrom(this.dialog.confirmDialog({
+        title: "Save as SP2",
+        message: "SP2 does not support all SP3 features. Engine settings, solver configuration, UUIDs, and structured solutions may be omitted. Continue?",
+        cancelText: "Cancel",
+        confirmText: "Save SP2",
+      }));
+      if (!confirmed) return null;
+    }
+    this.setFormat(this.format());
     this.db.SetFileMeta({
       source: this.currentFolder.source,
       meta: this.selectedFile.meta,
     });
     try {
-      const file = await this.db.Save();
+      const file = await this.db.Save(this.format());
       if (file) {
         this.router.navigateByUrl("/list");
       }

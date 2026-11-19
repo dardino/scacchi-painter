@@ -19,6 +19,8 @@ export interface IDbManagerService {
   SaveTemporary(): Promise<void>;
 }
 
+export type DatabaseFileFormat = "sp2" | "sp3";
+
 @Injectable({
   providedIn: "root",
 })
@@ -140,10 +142,25 @@ export class DbmanagerService implements IDbManagerService {
     this.#workInProgress.set(true);
     try {
       this.reset();
-      this.#currentFile.set({ meta, source });
       const content = await file.text();
-      const result = await this.loadFromContent(content);
-      saveToRecentFiles(meta, source);
+      const isXmlFile = file.name.toLowerCase().endsWith(".sp2")
+        || meta.fullPath.toLowerCase().endsWith(".sp2")
+        || content.trimStart().startsWith("<");
+      const resolvedMeta = file.name && file.name !== meta.itemName
+        ? {
+            ...meta,
+            itemName: file.name,
+            fullPath: file.name,
+            id: file.name,
+          }
+        : meta;
+      this.#currentFile.set({ meta: resolvedMeta, source });
+      const result = await this.loadFromContent(content, isXmlFile ? "sp2" : "sp3");
+      if (result instanceof Error) {
+        return result;
+      }
+      await this.loadProblem();
+      saveToRecentFiles(resolvedMeta, source);
       this.#snackBar.open("Load db completed!", undefined, {
         verticalPosition: "top",
         politeness: "assertive",
@@ -263,8 +280,9 @@ export class DbmanagerService implements IDbManagerService {
     return doc;
   }
 
-  private async createFile(): Promise<File> {
-    const type = this.#currentFile()?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3";
+  private async createFile(format?: DatabaseFileFormat): Promise<File> {
+    const type = format
+      ?? (this.#currentFile()?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3");
     if (type === "sp2") {
       const filesp2 = await this.getDbFile("sp2");
       return filesp2;
@@ -275,11 +293,6 @@ export class DbmanagerService implements IDbManagerService {
     }
   }
 
-  private async download(file: File): Promise<void> {
-    const fileSaver = await import("file-saver");
-    fileSaver.saveAs(file, this.FileName());
-  }
-
   public async SetCurrentProblem(problem: Problem | null) {
     this.#currentProblem.set(problem?.clone() ?? null);
   }
@@ -288,31 +301,34 @@ export class DbmanagerService implements IDbManagerService {
     await this.saveToLocalStorage();
   }
 
-  public async GetFileContent(): Promise<File> {
+  public async GetFileContent(format?: DatabaseFileFormat): Promise<File> {
     // first of all save the current problem into local storage
     await this.saveToLocalStorage();
-    const file = await this.createFile();
+    const file = await this.createFile(format);
     return file;
   }
 
-  public async Save() {
+  public async Save(format?: DatabaseFileFormat) {
     await this.saveToLocalStorage();
-    const file = await this.GetFileContent();
+    const file = await this.GetFileContent(format);
     const fs = this.fileService;
     const cf = this.#currentFile();
     if (fs && cf) {
       const result = await fs.saveFileContent(file, cf.meta);
       if (!(result instanceof Error)) {
         this.#currentFile.set({ meta: result, source: fs.sourceName });
-        this.#snackBar.open(
-          `Save done in: <${cf.meta.fullPath}>`,
-          undefined,
-          {
-            verticalPosition: "top",
-            politeness: "assertive",
-            duration: 1500,
-          },
-        );
+        if (fs.sourceName !== "local" || result.downloaded !== true) {
+          const savedPath = result.fullPath || result.itemName;
+          this.#snackBar.open(
+            `Save done in: <${savedPath}>`,
+            undefined,
+            {
+              verticalPosition: "top",
+              politeness: "assertive",
+              duration: 1500,
+            },
+          );
+        }
       }
       else {
         this.#logger.error("Unable to save file" + JSON.stringify(result));
@@ -324,13 +340,8 @@ export class DbmanagerService implements IDbManagerService {
       }
     }
     else {
-      if (this.#currentFile()?.source === "local") {
-        this.download(file);
-      }
-      else {
-        this.#workInProgress.set(false);
-        return false;
-      }
+      this.#workInProgress.set(false);
+      return false;
     }
     this.#workInProgress.set(false);
     return true;
@@ -383,15 +394,10 @@ export class DbmanagerService implements IDbManagerService {
     const version: "sp2" | "sp3"
       = forceVersion
         ?? (this.#currentFile()?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3");
-    switch (version) {
-      case "sp2":
-        await this.loadFromXML(content);
-        break;
-      case "sp3":
-      default:
-        await this.loadFromJson(content);
-        break;
-    }
+    const result = version === "sp2"
+      ? await this.loadFromXML(content)
+      : await this.loadFromJson(content);
+    if (result instanceof Error) return result;
     await this.saveToLocalStorage();
     return null;
   }
@@ -430,12 +436,24 @@ export class DbmanagerService implements IDbManagerService {
       const xmlDoc = await this.ToXML();
       const text
         = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" + prettifyXml(xmlDoc);
-      const fullpath = this.#currentFile()?.meta.fullPath ?? "temp.sp2";
+      const configuredPath = this.#currentFile()?.meta.fullPath ?? "temp.sp2";
+      const itemName = configuredPath
+        .replace(/\\/g, "/")
+        .split("/")
+        .pop()
+        ?.replace(/\.(sp2|sp3)$/i, "") + ".sp2";
+      const fullpath = itemName;
       return new File([text], fullpath, { type: "application/octect-stream" });
     }
     else {
       const text = JSON.stringify(this.toJSON());
-      const fullpath = this.#currentFile()?.meta.fullPath ?? "temp.sp3";
+      const configuredPath = this.#currentFile()?.meta.fullPath ?? "temp.sp3";
+      const itemName = configuredPath
+        .replace(/\\/g, "/")
+        .split("/")
+        .pop()
+        ?.replace(/\.(sp2|sp3)$/i, "") + ".sp3";
+      const fullpath = itemName;
       return new File([text], fullpath, { type: "application/octect-stream" });
     }
   }

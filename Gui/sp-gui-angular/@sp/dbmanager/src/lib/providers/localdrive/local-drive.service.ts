@@ -198,6 +198,9 @@ export class LocalDriveService implements FileService<"local"> {
       if (!allOk) throw new Error("Cannot open a file!");
 
       const filecontent = await this.#fileHandle.getFile();
+      item.fullPath = filecontent.name;
+      item.itemName = filecontent.name;
+      item.id = filecontent.name;
 
       return filecontent;
     }
@@ -212,19 +215,53 @@ export class LocalDriveService implements FileService<"local"> {
     item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
     if (!window.showSaveFilePicker) {
-      // fallback mechanism when the File System API is not available
-      console.warn("Your current device does not support the File System API. Falling back to download via anchor element.");
       await this.#downloadFileWithAnchor(file, item);
-      return item;
+      const itemName = item.itemName || file.name;
+      return {
+        ...item,
+        itemName,
+        fullPath: itemName,
+        id: itemName,
+        downloaded: true,
+      };
+    }
+
+    const targetName = item.itemName || file.name;
+    if (this.#fileHandle?.name && this.#fileHandle.name !== targetName) {
+      this.#fileHandle = null;
+    }
+
+    if (this.#fileHandle) {
+      const hasWritePermission = await this.verifyPermission(this.#fileHandle, true);
+      if (!hasWritePermission) {
+        this.#fileHandle = null;
+      }
     }
 
     if (!this.#fileHandle) {
-      this.#fileHandle = await window.showSaveFilePicker({ suggestedName: item.itemName });
+      this.#fileHandle = await window.showSaveFilePicker({
+        suggestedName: item.itemName || file.name,
+      });
     }
-    const fileStream = await this.#fileHandle.createWritable();
-    await fileStream.write(file);
-    await fileStream.close();
-    return item;
+
+    const hasWritePermission = await this.verifyPermission(this.#fileHandle, true);
+    if (!hasWritePermission) {
+      return new Error("Cannot write to the selected local file!");
+    }
+
+    const writable = await this.#fileHandle.createWritable();
+    await writable.write(file);
+    await writable.close();
+
+    const itemName = this.#fileHandle.name || item.itemName || file.name;
+    const savedItem: FolderItemInfo = {
+      ...item,
+      itemName,
+      fullPath: itemName,
+      id: itemName,
+    };
+    await this.#saveFileHandleToIndexedDB(savedItem, this.#fileHandle);
+    return savedItem;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
