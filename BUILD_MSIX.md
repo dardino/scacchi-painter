@@ -38,7 +38,7 @@ $env:MSIX_DISPLAY_NAME = "<STORE_RESERVED_DISPLAY_NAME>"
 The MSIX package is written to:
 
 ```text
-Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.5.1.0_x64.msix
+Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.6.0.0_x64.msix
 ```
 
 ## 3. Store identity requirements
@@ -48,7 +48,7 @@ The app identity must be stable and valid for Store distribution:
 - Product name: the display name reserved in Partner Center
 - Publisher: `CN=43BE6207-BFB1-4453-A2C9-459F3D97AB2D`
 - App identity: `45001Ganori80.ScacchiPainterX`
-- Package version: `0.5.1`
+- Package version: `0.6.0`
 
 Use the package version in the Tauri config and the final signed package metadata. The `Identity Name` and `Publisher` in `AppxManifest.xml` must match the identity reserved for the app in Partner Center.
 

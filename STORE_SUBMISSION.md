@@ -13,7 +13,7 @@ The configured identity is:
 - Product: the display name reserved in Partner Center
 - Publisher: `CN=43BE6207-BFB1-4453-A2C9-459F3D97AB2D`
 - App ID: `45001Ganori80.ScacchiPainterX`
-- Version: `0.5.1`
+- Version: `0.6.0`
 - Architecture: `x64`
 
 These values must remain stable in the Store submission and in the generated package.
@@ -34,7 +34,7 @@ pnpm run build:msix
 The MSIX output to upload to Partner Center is:
 
 ```text
-Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.5.1.0_x64.msix
+Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.6.0.0_x64.msix
 ```
 
 ## 4. Package compliance checklist
