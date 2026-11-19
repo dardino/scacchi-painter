@@ -130,9 +130,11 @@ describe("LocalDriveService", () => {
       fullPath: "",
       id: "draft.sp3",
     };
-    let downloadedAnchor: HTMLAnchorElement | null = null;
+    const downloadedAnchors: HTMLAnchorElement[] = [];
     const appendSpy = vi.spyOn(document.body, "append").mockImplementation((...nodes) => {
-      downloadedAnchor = nodes[0] as HTMLAnchorElement;
+      nodes.forEach((node) => {
+        if (node instanceof HTMLAnchorElement) downloadedAnchors.push(node);
+      });
     });
 
     const result = await service.saveFileContent(
@@ -140,7 +142,7 @@ describe("LocalDriveService", () => {
       item,
     );
 
-    expect(downloadedAnchor?.download).toBe("draft.sp2");
+    expect(downloadedAnchors[0].download).toBe("draft.sp2");
     appendSpy.mockRestore();
     expect(result).not.toBeInstanceOf(Error);
     expect(result).toEqual({
