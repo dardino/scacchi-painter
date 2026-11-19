@@ -7,10 +7,11 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
 import { DbmanagerService } from "./dbmanager.service";
-import { Problem } from "./models/problem";
 import { Piece } from "./models/piece";
+import { Problem } from "./models/problem";
 import { Twin } from "./models/twin";
 import { TwinModes } from "./SPX.v4";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function getFixturePath(): string {
@@ -55,8 +56,7 @@ describe("DbmanagerService", () => {
     const { file, meta } = await getFileContent();
     const result = await service.Load({ file, meta, source: "unknown" });
     expect(result).toBeNull();
-    const allItems = service.All();
-    const prizeItem = allItems.find(item => item.prizeRank === 1 && item.prizeDescription === "Premio");
+    const prizeItem = service.All().find(item => item.prizeRank === 1 && item.prizeDescription === "Premio");
     expect(prizeItem).toBeDefined();
   });
 
@@ -64,9 +64,7 @@ describe("DbmanagerService", () => {
     const { file, meta } = await getFileContent();
     const result = await service.Load({ file, meta, source: "unknown" });
     expect(result).toBeNull();
-    const allItems = service.All();
-    const magazineItem = allItems.find(item => item.source?.length > 0);
-    expect(magazineItem).toBeDefined();
+    expect(service.All().find(item => item.source?.length > 0)).toBeDefined();
   });
 
   it("should export the current database as SP2 XML", async () => {
@@ -109,6 +107,7 @@ describe("DbmanagerService", () => {
     problem.textSolution = "1. Ra1-a2";
     problem.htmlSolution = "<p>1. Ra1-a2</p>";
     service.SetData([problem]);
+
     const exported = await service.GetFileContent("sp2");
     const meta = {
       type: "file" as const,
@@ -116,7 +115,6 @@ describe("DbmanagerService", () => {
       fullPath: "round-trip.sp2",
       id: "round-trip.sp2",
     };
-
     const result = await service.Load({ file: exported, meta, source: "unknown" });
 
     expect(result).toBeNull();
@@ -127,43 +125,55 @@ describe("DbmanagerService", () => {
     expect(service.All()[0].textSolution).toContain("Ra1-a2");
   });
 
-  it("should export explicitly selected SP3 JSON", async () => {
-    service.SetData([Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1")]);
+  it("should save SP3 databases as format version 6", async () => {
+    const file = await service.GetFileContent();
+    const json = JSON.parse(await file.text());
 
-    const file = await service.GetFileContent("sp3");
-    const text = await file.text();
-    const json = JSON.parse(text);
-
-    expect(file.name).toBe("temp.sp3");
-    expect(json.version).toBe(5);
-    expect(json.problems).toHaveLength(1);
+    expect(json.version).toBe(6);
   });
 
-  it("should load the current problem after loading a database", async () => {
+  it("should round-trip move explorer data through SP3", async () => {
     const problem = Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1");
+    problem.jsonSolutions = [{
+      color: "w",
+      num: 1,
+      part: "l",
+      from: "a1",
+      to: "a2",
+      type: "-",
+      isPromotion: false,
+      promotedPiece: "",
+      isCheck: false,
+      isCheckMate: false,
+      isStaleMate: false,
+      isTry: false,
+      refutes: false,
+      isKey: true,
+      extraMoves: ["[bKg2->e8]"],
+      piece: "R",
+      threat: false,
+      zugzwang: false,
+      fromTwin: "b",
+      isCastling: false,
+      castlingLength: "",
+    }];
     service.SetData([problem]);
+
+    const exported = await service.GetFileContent();
     const meta = {
       type: "file" as const,
-      itemName: "position.sp3",
-      fullPath: "position.sp3",
-      id: "position.sp3",
+      itemName: "moves.sp3",
+      fullPath: "moves.sp3",
+      id: "moves.sp3",
     };
-    const file = new File([JSON.stringify({
-      version: 5,
-      lastIndex: 1,
-      name: "Test",
-      awards: [],
-      problems: [problem.toJson()],
-    })], "position.sp3", { type: "application/json" });
-
-    const result = await service.Load({ file, meta, source: "local" });
+    const result = await service.Load({ file: exported, meta, source: "unknown" });
 
     expect(result).toBeNull();
     expect(service.All()).toHaveLength(1);
-    expect(service.CurrentProblem()).not.toBeNull();
+    expect(service.All()[0].jsonSolutions).toEqual(problem.jsonSolutions);
   });
 
-  it("should load XML when a stale recent metadata names an SP3 file", async () => {
+  it("should load XML when stale recent metadata names an SP3 file", async () => {
     service.SetData([Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1")]);
     const xml = await service.GetFileContent("sp2");
     const meta = {

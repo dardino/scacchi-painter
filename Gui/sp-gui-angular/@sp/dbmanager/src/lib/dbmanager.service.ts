@@ -7,7 +7,8 @@ import { Problem } from "./models/problem";
 import { DropboxdbService, GoogleDriveService, LocalDriveService, OneDriveService } from "./providers";
 import { IDbSpX_V3, isV3 } from "./SPX.v3";
 import { IDbSpX_V4, isV4 } from "./SPX.v4";
-import { Awards, convertDbToV5, IDbSpX_V5, isV5 } from "./SPX.v5";
+import { Awards, IDbSpX_V5, isV5 } from "./SPX.v5";
+import { convertDbToV6, IDbSpX_V6, isV6 } from "./SPX.v6";
 
 export interface IDbManagerService {
   CurrentProblem: Signal<Problem | null>;
@@ -255,13 +256,13 @@ export class DbmanagerService implements IDbManagerService {
     localStorage.setItem("spdb_info", JSON.stringify(this.#currentFile()));
   }
 
-  private toJSON(): IDbSpX_V5 {
+  private toJSON(): IDbSpX_V6 {
     return {
       lastIndex: this.#currentIndex(),
       problems: this.#database().map(p => p.toJson()),
       awards: this.#awards(),
       name: "Scacchi Painter X Database",
-      version: 5,
+      version: 6,
     };
   }
 
@@ -349,12 +350,12 @@ export class DbmanagerService implements IDbManagerService {
 
   private async loadFromJson(jsonString: string): Promise<Error | null> {
     try {
-      const raw = JSON.parse(jsonString) as IDbSpX_V5 | IDbSpX_V4 | IDbSpX_V3;
-      if (!isV3(raw) && !isV4(raw) && !isV5(raw)) {
+      const raw = JSON.parse(jsonString) as IDbSpX_V6 | IDbSpX_V5 | IDbSpX_V4 | IDbSpX_V3;
+      if (!isV3(raw) && !isV4(raw) && !isV5(raw) && !isV6(raw)) {
         throw new Error("Unsupported file version!");
       }
 
-      const obj = convertDbToV5(raw);
+      const obj = convertDbToV6(raw);
 
       this.#database.set(obj.problems.map(p => Problem.fromJson(p)));
       this.#awards.set(obj.awards ?? []);

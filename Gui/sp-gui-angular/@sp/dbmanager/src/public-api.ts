@@ -11,3 +11,4 @@ export { MSAL_CONFIG } from "./lib/oauth_providers/onedrive.config";
 export * from "./lib/SPX.v3";
 export * from "./lib/SPX.v4";
 export * from "./lib/SPX.v5";
+export * from "./lib/SPX.v6";
