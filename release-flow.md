@@ -4,8 +4,8 @@ This document is intended to be executed by a human operator or by the cloud Cop
 
 ## Goal
 
-Create a stable release branch from `develop`, normalize versioned files,
-and open a pull request into `master`.
+Create a stable release branch from `master`, normalize versioned files,
+and open a pull request back into `master`.
 
 ## Inputs
 

@@ -12,7 +12,9 @@ The landing page can display a rotating startup tip banner. Tips are loaded from
 
 ## Files
 
-- `@sp/gui/src/app/landing/tips-engine.ts` — pure tip logic and IndexedDB sync
+- `@sp/gui/src/app/services/tips.service.ts` — pure tip logic and IndexedDB sync
 - `@sp/gui/src/app/uiElements/tip-banner/tip-banner.component.ts` — Material banner UI
 - `@sp/gui/src/app/landing/landing.component.ts` — startup wiring and integration
 - `@sp/gui/src/assets/tips.json` — bundled default tips
+
+New tips added with a release (for example the Awards Maker, fairy effects in solutions, SP2 Save As and the desktop local file provider in 0.6.0) start with the higher default weight, so they appear more often until their weight decays.

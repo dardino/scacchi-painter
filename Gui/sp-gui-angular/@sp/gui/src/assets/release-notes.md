@@ -1,5 +1,36 @@
 # Release Notes
 
+## Version 0.6.0
+
+### Awards, Local Files And Smarter Settings
+
+This release focuses on working with problem databases: judging competitions, managing files on your own device, and keeping your solution trees and preferences where they belong.
+
+**What's New:**
+
+* 🏆 **Awards Maker** - create and manage multiple verdicts for an SP3 database, select problems, order them through pairwise comparisons and assign prizes, special prizes, honorable mentions, commendations and N.C. with automatic placements
+* ▶️ **Resumable judging** - selection, ordering and award state are saved, so you can pause a comparison session and continue later
+* 🧚 **Fairy effects in solutions** - fairy piece effects are shown directly in the solution move list
+* 🧩 **Twin description fix** - the solution panel no longer shows an incorrect twin description for problems without twins
+* 🌳 **Saved solution trees** - the move explorer data is now stored in SP3 (v6) files and restored when you reopen a database, without running the solver again
+* 📼 **SP2 Save As** - export the current database to SP2 format from the web app, with content-based SP2 detection, local downloads and clearer feedback
+* 💽 **Native local files on desktop** - the Tauri app can browse local drives and folders with a dedicated file provider; cloud storage actions are hidden where they cannot work
+* ⚙️ **System-level settings** - preferences are stored by the browser on the web and by the OS app settings folder on desktop, with automatic migration; the custom Popeye executable path is now configured in Configuration → Solver Settings
+* 📦 **Store-ready packaging** - the Windows build is delivered as an MSIX package prepared for Microsoft Store submission
+
+**What changes for you:**
+
+* You can prepare complete award verdicts directly inside the database you are judging
+* Reopening a saved database restores the move tree you were exploring
+* The desktop app opens and saves local databases without relying on web APIs
+* Your preferences follow the platform convention and no longer live inside each problem file
+* Tip: try the new Awards menu from an open SP3 database, or set a custom Popeye executable in the configuration page of the desktop app
+
+**Compatibility:**
+
+* SP3 v6 adds optional move explorer data; older SP3 files remain readable
+* Existing problem and database files remain compatible
+
 ## Version 0.5.0
 
 ### Startup Tip Banner
