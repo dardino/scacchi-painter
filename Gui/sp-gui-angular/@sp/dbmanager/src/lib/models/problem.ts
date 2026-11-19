@@ -61,6 +61,7 @@ export class Problem implements IProblemV4 {
   public engineConfigurationsByEngine: EngineConfigurationsByEngine = {
     Popeye: createDefaultPopeyeEngineConfiguration(),
   };
+
   /** Custom path of the Popeye executable. Empty means use the bundled one. */
   public popeyeExecutablePath = "";
 

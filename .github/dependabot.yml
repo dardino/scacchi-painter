@@ -5,14 +5,10 @@
 
 version: 2
 updates:
+  # pnpm workspace: update only from the root, where pnpm-lock.yaml lives.
+  # Dependabot cannot update a workspace from a subdirectory.
   - package-ecosystem: "npm"
-    directories:
-      - "/"
-      - "/Gui/sp-gui-angular"
-      - "/Gui/sp-gui-angular/api"
-      - "/Gui/sp-gui"
-      - "/CoreJS"
-      - "/Gui/popeye-js"
+    directory: "/"
     target-branch: "master"
     open-pull-requests-limit: 5
     pull-request-branch-name:
