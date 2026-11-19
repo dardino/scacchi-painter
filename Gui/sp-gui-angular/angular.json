@@ -3,7 +3,11 @@
   "version": 1,
   "cli": {
     "packageManager": "pnpm",
-    "analytics": "014f9cc7-0686-40f3-9849-09116ddf25ba"
+    "analytics": "014f9cc7-0686-40f3-9849-09116ddf25ba",
+    "schematicCollections": [
+      "@schematics/angular",
+      "playwright-ng-schematics"
+    ]
   },
   "newProjectRoot": "@sp",
   "projects": {
@@ -141,6 +145,17 @@
               "@sp/gui/**/*.ts",
               "@sp/gui/**/*.html"
             ]
+          }
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "gui:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "gui:serve:production"
+            }
           }
         }
       }

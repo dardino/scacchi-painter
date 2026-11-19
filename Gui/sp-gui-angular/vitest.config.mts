@@ -14,7 +14,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["@sp/gui/src/test-setup.ts"],
     include: ["**/*.spec.ts"],
-    exclude: ["**/node_modules/**", "dist", ".angular"],
+    exclude: ["**/node_modules/**", "dist", ".angular", "**/e2e/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
