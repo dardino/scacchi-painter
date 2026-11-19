@@ -17,6 +17,7 @@ export interface PreferencesTable {
   chessboardAnimation: WritableSignal<boolean>;
   editorShowExtraPieces: WritableSignal<boolean>;
   compactPieceSelector: WritableSignal<boolean>;
+  popeyeExecutablePath: WritableSignal<string>;
 }
 
 @Injectable({
@@ -42,4 +43,5 @@ export class PreferencesService implements PreferencesTable {
   public chessboardAnimation = this.#settings.setting<boolean>("chessboardAnimation", true);
   public editorShowExtraPieces = this.#settings.setting<boolean>("editorShowExtraPieces", false);
   public compactPieceSelector = this.#settings.setting<boolean>("compactPieceSelector", false);
+  public popeyeExecutablePath = this.#settings.setting<string>("popeyeExecutablePath", "");
 }

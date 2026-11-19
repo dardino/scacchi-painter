@@ -94,6 +94,13 @@ export class ConfigurationComponent implements OnInit {
     this.#preferences.compactPieceSelector.set(value);
   }
 
+  isTauri = environment.tauri;
+
+  popeyeExecutablePath = this.#preferences.popeyeExecutablePath.asReadonly();
+  changePopeyeExecutablePath(value: string) {
+    this.#preferences.popeyeExecutablePath.set(value.trim());
+  }
+
   enableAnimations = this.#preferences.chessboardAnimation.asReadonly();
   changeEnableAnimations(value: boolean) {
     this.#preferences.chessboardAnimation.set(value);

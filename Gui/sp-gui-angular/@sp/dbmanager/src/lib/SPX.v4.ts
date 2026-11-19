@@ -189,7 +189,6 @@ export interface IProblemV4 {
   twins: Partial<ITwins> | null;
   engineConfig?: EngineConfiguration | null;
   engineConfigurationsByEngine?: EngineConfigurationsByEngine | null;
-  popeyeExecutablePath?: string;
   conditions: string[];
   tags: string[];
   boardSize?: { columns: number; rows: number };

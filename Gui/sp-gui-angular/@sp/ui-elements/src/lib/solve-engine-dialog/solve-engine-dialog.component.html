@@ -11,20 +11,6 @@
     </mat-select>
   </mat-form-field>
 
-  @if (isNativePopeye) {
-    <section class="executable-panel">
-      <mat-form-field appearance="outline" color="accent" class="executable-field">
-        <mat-label>Popeye executable path</mat-label>
-        <input
-          matInput
-          [(ngModel)]="popeyeExecutablePath"
-          placeholder="Leave empty to use the bundled Popeye"
-        />
-        <mat-hint>Path of the Popeye executable to run instead of the bundled one.</mat-hint>
-      </mat-form-field>
-    </section>
-  }
-
   @if (hasEngineOptions) {
     <section class="options-panel">
       <div class="options-header">
