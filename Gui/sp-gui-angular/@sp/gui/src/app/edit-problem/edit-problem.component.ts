@@ -120,6 +120,13 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
         this.appendSolutionMessage(newSolutionRow);
       });
     }));
+    this.effects.push(effect(() => {
+      const currentProblem = this.problem();
+      if (!currentProblem) return;
+      this.jsonSolution.set(Array.isArray(currentProblem.jsonSolutions)
+        ? [...currentProblem.jsonSolutions]
+        : []);
+    }));
   }
 
   @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
