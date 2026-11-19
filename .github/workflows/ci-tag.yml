@@ -196,13 +196,13 @@ jobs:
           submodules: true
 
       - name: Download web deploy artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: web-deploy
           path: ./deploy/web
 
       - name: Download api deploy artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: api-deploy
           path: ./deploy/api
@@ -272,7 +272,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download Tauri artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           pattern: tauri-*
           merge-multiple: true
