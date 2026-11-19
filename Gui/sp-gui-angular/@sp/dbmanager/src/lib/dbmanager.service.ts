@@ -307,8 +307,9 @@ export class DbmanagerService implements IDbManagerService {
       const result = await fs.saveFileContent(file, cf.meta);
       if (!(result instanceof Error)) {
         this.#currentFile.set({ meta: result, source: fs.sourceName });
+        const savedPath = result.fullPath || result.itemName;
         this.#snackBar.open(
-          `Save done in: <${cf.meta.fullPath}>`,
+          `Save done in: <${savedPath}>`,
           undefined,
           {
             verticalPosition: "top",

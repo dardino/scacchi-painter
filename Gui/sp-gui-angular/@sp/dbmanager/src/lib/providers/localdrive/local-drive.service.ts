@@ -215,7 +215,13 @@ export class LocalDriveService implements FileService<"local"> {
       // fallback mechanism when the File System API is not available
       console.warn("Your current device does not support the File System API. Falling back to download via anchor element.");
       await this.#downloadFileWithAnchor(file, item);
-      return item;
+      const itemName = item.itemName || file.name;
+      return {
+        ...item,
+        itemName,
+        fullPath: item.fullPath || itemName,
+        id: item.id || itemName,
+      };
     }
 
     if (!this.#fileHandle) {
@@ -224,7 +230,13 @@ export class LocalDriveService implements FileService<"local"> {
     const fileStream = await this.#fileHandle.createWritable();
     await fileStream.write(file);
     await fileStream.close();
-    return item;
+    const itemName = this.#fileHandle.name || item.itemName || file.name;
+    return {
+      ...item,
+      itemName,
+      fullPath: itemName,
+      id: itemName,
+    };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

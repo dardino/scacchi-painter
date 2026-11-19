@@ -108,4 +108,40 @@ describe("LocalDriveService", () => {
     expect(fileHandle.queryPermission).toHaveBeenCalled();
     expect(fakeStore.put).toHaveBeenCalledWith(fileHandle, "board-1|/tmp/board.sp3|board.sp3");
   });
+
+  it("should return the selected file name after saving locally", async () => {
+    const writable = {
+      write: vi.fn(async () => undefined),
+      close: vi.fn(async () => undefined),
+    };
+    const fileHandle = {
+      name: "saved-board.sp2",
+      createWritable: vi.fn(async () => writable),
+    } as unknown as FileSystemFileHandle;
+
+    Object.defineProperty(window, "showSaveFilePicker", {
+      configurable: true,
+      value: vi.fn(async () => fileHandle),
+    });
+
+    const item = {
+      type: "file" as const,
+      itemName: "draft.sp3",
+      fullPath: "",
+      id: "draft.sp3",
+    };
+
+    const result = await service.saveFileContent(
+      new File(["test"], "draft.sp2", { type: "application/xml" }),
+      item,
+    );
+
+    expect(result).not.toBeInstanceOf(Error);
+    expect(result).toEqual({
+      type: "file",
+      itemName: "saved-board.sp2",
+      fullPath: "saved-board.sp2",
+      id: "saved-board.sp2",
+    });
+  });
 });
