@@ -14,7 +14,7 @@ $stagingRoot = Join-Path $targetRoot 'msix\package'
 $bundleRoot = Join-Path $releaseRoot 'bundle\msix'
 $exeName = 'scacchi-painter-x.exe'
 $exePath = Join-Path $releaseRoot $exeName
-$version = '0.5.1.0'
+$version = '0.6.0.0'
 $packageName = $env:MSIX_PACKAGE_NAME
 $publisher = $env:MSIX_PUBLISHER
 $displayName = $env:MSIX_DISPLAY_NAME
@@ -104,7 +104,7 @@ $manifest = @"
 Set-Content -Path (Join-Path $stagingRoot 'AppxManifest.xml') -Value $manifest -Encoding utf8
 
 New-Item -Path $bundleRoot -ItemType Directory -Force | Out-Null
-$msixPath = Join-Path $bundleRoot 'ScacchiPainterX_0.5.1.0_x64.msix'
+$msixPath = Join-Path $bundleRoot 'ScacchiPainterX_0.6.0.0_x64.msix'
 if (Test-Path $msixPath) {
     Remove-Item -Path $msixPath -Force
 }

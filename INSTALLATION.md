@@ -40,13 +40,13 @@ pnpm run build:msix
 The generated unsigned package is suitable for upload to Microsoft Store, which signs it during publication:
 
 ```text
-Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.5.1.0_x64.msix
+Gui/sp-gui/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msix/ScacchiPainterX_0.6.0.0_x64.msix
 ```
 
 ## 4. Install the package locally
 
 ```powershell
-$packagePath = "Gui\sp-gui\src-tauri\target\x86_64-pc-windows-msvc\release\bundle\msix\ScacchiPainterX_0.5.1.0_x64.msix"
+$packagePath = "Gui\sp-gui\src-tauri\target\x86_64-pc-windows-msvc\release\bundle\msix\ScacchiPainterX_0.6.0.0_x64.msix"
 Add-AppxPackage -Path $packagePath
 ```
 
