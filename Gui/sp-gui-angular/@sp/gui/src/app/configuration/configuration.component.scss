@@ -69,15 +69,7 @@ dd {
 }
 
 .path-field {
-  display: flex;
-  gap: .5rem;
-  align-items: center;
-  min-width: 0;
-
-  input {
-    flex: 1;
-    min-width: 0;
-  }
+  width: 100%;
 }
 
 .setting-help {

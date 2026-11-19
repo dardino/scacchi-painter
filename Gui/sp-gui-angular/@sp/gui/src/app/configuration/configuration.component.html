@@ -94,15 +94,15 @@
           @if (useCustomPopeyeExecutable()) {
             <div class="field-container">
               <mat-label>Popeye executable path</mat-label>
-              <div class="path-field">
+              <mat-form-field appearance="outline" class="path-field">
                 <input
                   matInput
                   [ngModel]="popeyeExecutablePath()"
                   (ngModelChange)="changePopeyeExecutablePath($event)"
                   placeholder="Select the Popeye executable"
                 />
-                <button mat-stroked-button type="button" (click)="pickPopeyeExecutable()">Browse…</button>
-              </div>
+                <button mat-stroked-button matSuffix type="button" (click)="pickPopeyeExecutable()">Browse…</button>
+              </mat-form-field>
             </div>
           }
           <p class="setting-help">
