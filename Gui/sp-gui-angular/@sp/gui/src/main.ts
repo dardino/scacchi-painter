@@ -9,6 +9,7 @@ import { RoutesList } from "./app/app-routing-list";
 import { AppComponent } from "./app/app.component";
 import { polyfillBridge } from "./bridges/web/web.bridge";
 import { environment } from "./environments/environment";
+import { initializeSettings } from "./app/services/settings.storage";
 
 import "@dardino/chess-board";
 
@@ -18,13 +19,21 @@ if (environment.production) {
 
 polyfillBridge();
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZonelessChangeDetection(),
-    provideHttpClient(),
-    provideRouter(Object.entries(RoutesList).map(e => e[1])),
-    AllMatIconRegistryService.registerAssetFolder(environment.assetFolder),
-    ChessboardAnimationService,
-    provideServiceWorker("ngsw-worker.js", { enabled: environment.production }),
-  ],
-}).catch(err => console.error(err));
+async function bootstrap() {
+  // Settings must be loaded before components create their signals so that
+  // they start with the persisted values instead of the defaults.
+  await initializeSettings();
+
+  await bootstrapApplication(AppComponent, {
+    providers: [
+      provideZonelessChangeDetection(),
+      provideHttpClient(),
+      provideRouter(Object.entries(RoutesList).map(e => e[1])),
+      AllMatIconRegistryService.registerAssetFolder(environment.assetFolder),
+      ChessboardAnimationService,
+      provideServiceWorker("ngsw-worker.js", { enabled: environment.production }),
+    ],
+  });
+}
+
+bootstrap().catch(err => console.error(err));

@@ -509,6 +509,7 @@ pub fn run() {
             custom_auth_redirect_response(request)
         })
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_store::Builder::new().build())
         .invoke_handler(tauri::generate_handler![
             close_app,
             available_engines,

@@ -5,6 +5,7 @@ import packageJson from "../../../../package.json";
 
 export const environment = {
   production: false,
+  tauri: false,
   assetFolder: `../../../assets`,
   version: packageJson.version,
 };

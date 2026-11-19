@@ -76,6 +76,29 @@
         </div>
       </fieldset>
     </mat-expansion-panel>
+    @if (isTauri) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Solver Settings</mat-panel-title>
+          <mat-panel-description>Configure the native Popeye engine</mat-panel-description>
+        </mat-expansion-panel-header>
+        <fieldset class="fieldset-settings">
+          <legend>Popeye Engine</legend>
+          <div class="field-container">
+            <mat-label>Popeye executable path</mat-label>
+            <input
+              matInput
+              [ngModel]="popeyeExecutablePath()"
+              (ngModelChange)="changePopeyeExecutablePath($event)"
+              placeholder="Leave empty to use the bundled Popeye"
+            />
+          </div>
+          <p class="setting-help">
+            Full path of the Popeye executable used by the desktop app. Leave empty to use the bundled one.
+          </p>
+        </fieldset>
+      </mat-expansion-panel>
+    }
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>

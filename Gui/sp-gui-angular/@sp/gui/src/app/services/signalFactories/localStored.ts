@@ -5,7 +5,7 @@ const lsPropNameGetter = <T extends string>(value: T): `spx:pref:${typeof value}
   return retVal;
 };
 
-function serialize(v: unknown): string {
+export function serialize(v: unknown): string {
   if (typeof v === "boolean") return v === true ? "true" : "false";
   if (typeof v === "number") return v.toString();
   if (v === null || v === undefined) return "";
@@ -13,7 +13,7 @@ function serialize(v: unknown): string {
   return JSON.stringify(v);
 }
 
-function parse<T>(raw: string, fallback: T): T {
+export function parse<T>(raw: string, fallback: T): T {
   try {
     if (raw === "") return fallback;
     // Se fallback è string → non parse JSON
