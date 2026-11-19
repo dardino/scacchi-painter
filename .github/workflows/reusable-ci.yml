@@ -72,14 +72,14 @@ jobs:
           cp -R "$WEB_ROOT"/api/node_modules ./deploy/api/node_modules
 
       - name: Upload web deploy artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: web-deploy
           path: ./deploy/web
           if-no-files-found: error
 
       - name: Upload api deploy artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: api-deploy
           path: ./deploy/api
