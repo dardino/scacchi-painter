@@ -115,6 +115,40 @@ function getOffsetAndDirection(twin: Twin) {
   return { offsetX, offsetY, directionX, directionY };
 }
 
+export function applyFairyEffect(problem: Problem, effect: string): boolean {
+  const normalizedEffect = effect.trim().replace(/^\[|\]$/g, "");
+  const match = /^([wbn])([A-Za-z]+)([a-k][1-9][0-9]?)->([a-k][1-9][0-9]?)$/.exec(normalizedEffect);
+  if (!match) return false;
+
+  const [, colorCode, pieceCode, , targetSquare] = match;
+  const { column: targetColumn, traverse: targetTraverse } = toSquareLocation(targetSquare as FairySquare);
+  const fairyPiece = problem.fairyPieces().find(piece =>
+    piece.fairyCode?.toLowerCase() === pieceCode.toLowerCase());
+  const standardPieces: Record<string, ChessPieceType> = {
+    k: "k",
+    q: "q",
+    r: "r",
+    b: "b",
+    n: "n",
+    p: "p",
+  };
+
+  const rebornPiece = Piece.fromJson({
+    color: colorCode === "w" ? "White" : colorCode === "b" ? "Black" : "Neutral",
+    appearance: fairyPiece?.appearance
+      ?? standardPieces[pieceCode.toLowerCase()]
+      ?? pieceCode.toLowerCase() as ChessPieceType,
+    rotation: fairyPiece?.rotation ?? "NoRotation",
+    fairyCode: fairyPiece?.fairyCode ?? null,
+    fairyAttributes: fairyPiece ? [...fairyPiece.fairyAttributes] : [],
+    fairyParams: fairyPiece ? [...fairyPiece.fairyParams] : [],
+    column: targetColumn,
+    traverse: targetTraverse,
+  });
+  ProblemHelpers.addPieceAt(problem, { column: targetColumn, traverse: targetTraverse }, rebornPiece);
+  return true;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -197,11 +231,22 @@ export class DisplayMoveService {
       problem.pieces.push(pieceToMove);
 
       move.extraMoves.forEach((extraMove) => {
-        const moveToApply = parseHalfMove(move.num, move.color, move.part, extraMove, 1, move.fromTwin);
-        if (moveToApply) {
-          this.#applyMoveToProblem(problem, moveToApply);
-        }
+        this.#applyExtraMoveToProblem(problem, move, extraMove);
       });
     }
+  };
+
+  #applyExtraMoveToProblem = (problem: Problem, move: HalfMoveInfo, extraMove: string) => {
+    const effect = extraMove.trim().replace(/^\[|\]$/g, "");
+    if (this.#applyFairyEffectToProblem(problem, effect)) return;
+
+    const moveToApply = parseHalfMove(move.num, move.color, move.part, effect, 1, move.fromTwin);
+    if (moveToApply) {
+      this.#applyMoveToProblem(problem, moveToApply);
+    }
+  };
+
+  #applyFairyEffectToProblem = (problem: Problem, effect: string): boolean => {
+    return applyFairyEffect(problem, effect);
   };
 }
