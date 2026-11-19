@@ -19,6 +19,8 @@ export interface IDbManagerService {
   SaveTemporary(): Promise<void>;
 }
 
+export type DatabaseFileFormat = "sp2" | "sp3";
+
 @Injectable({
   providedIn: "root",
 })
@@ -263,8 +265,9 @@ export class DbmanagerService implements IDbManagerService {
     return doc;
   }
 
-  private async createFile(): Promise<File> {
-    const type = this.#currentFile()?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3";
+  private async createFile(format?: DatabaseFileFormat): Promise<File> {
+    const type = format
+      ?? (this.#currentFile()?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3");
     if (type === "sp2") {
       const filesp2 = await this.getDbFile("sp2");
       return filesp2;
@@ -288,16 +291,16 @@ export class DbmanagerService implements IDbManagerService {
     await this.saveToLocalStorage();
   }
 
-  public async GetFileContent(): Promise<File> {
+  public async GetFileContent(format?: DatabaseFileFormat): Promise<File> {
     // first of all save the current problem into local storage
     await this.saveToLocalStorage();
-    const file = await this.createFile();
+    const file = await this.createFile(format);
     return file;
   }
 
-  public async Save() {
+  public async Save(format?: DatabaseFileFormat) {
     await this.saveToLocalStorage();
-    const file = await this.GetFileContent();
+    const file = await this.GetFileContent(format);
     const fs = this.fileService;
     const cf = this.#currentFile();
     if (fs && cf) {
@@ -430,12 +433,14 @@ export class DbmanagerService implements IDbManagerService {
       const xmlDoc = await this.ToXML();
       const text
         = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" + prettifyXml(xmlDoc);
-      const fullpath = this.#currentFile()?.meta.fullPath ?? "temp.sp2";
+      const configuredPath = this.#currentFile()?.meta.fullPath ?? "temp.sp2";
+      const fullpath = configuredPath.replace(/\.(sp2|sp3)$/i, "") + ".sp2";
       return new File([text], fullpath, { type: "application/octect-stream" });
     }
     else {
       const text = JSON.stringify(this.toJSON());
-      const fullpath = this.#currentFile()?.meta.fullPath ?? "temp.sp3";
+      const configuredPath = this.#currentFile()?.meta.fullPath ?? "temp.sp3";
+      const fullpath = configuredPath.replace(/\.(sp2|sp3)$/i, "") + ".sp3";
       return new File([text], fullpath, { type: "application/octect-stream" });
     }
   }

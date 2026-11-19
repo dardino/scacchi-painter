@@ -21,4 +21,16 @@ describe("SaveFileComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should switch the selected file name between SP2 and SP3", () => {
+    component.fileName = "problem.sp3";
+    component.setFormat("sp2");
+
+    expect(component.format()).toBe("sp2");
+    expect(component.fileName).toBe("problem.sp2");
+
+    component.setFormat("sp3");
+    expect(component.format()).toBe("sp3");
+    expect(component.fileName).toBe("problem.sp3");
+  });
 });

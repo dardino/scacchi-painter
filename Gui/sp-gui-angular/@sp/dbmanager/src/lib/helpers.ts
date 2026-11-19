@@ -563,6 +563,9 @@ export const createXmlElement = (elName: string): Element => {
 
 export const prettifyXml = (sourceXml: string | Document) => {
   const xmlDoc = typeof sourceXml === "string" ? new DOMParser().parseFromString(sourceXml, "application/xml") : sourceXml;
+  if (typeof XSLTProcessor === "undefined") {
+    return new XMLSerializer().serializeToString(xmlDoc);
+  }
   const xsltDoc = new DOMParser().parseFromString(
     [
       // describes how we want to modify the XML - indent everything

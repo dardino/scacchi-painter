@@ -13,6 +13,13 @@
       </button>
       }
     </mat-form-field>
+    <mat-form-field subscriptSizing="dynamic" aria-label="File format">
+      <mat-label>Format</mat-label>
+      <mat-select [value]="format()" (selectionChange)="setFormat($event.value)">
+        <mat-option value="sp3">SP3</mat-option>
+        <mat-option value="sp2">SP2</mat-option>
+      </mat-select>
+    </mat-form-field>
     <button [title]="actionName" mat-fab (click)="saveFile()" color="primary" class="save-button">
       <mat-icon>save</mat-icon>
     </button>

@@ -283,6 +283,7 @@ export class Problem implements IProblemV4 {
     SP2.setConditions(item, this.conditions);
     SP2.setTags(item, this.tags);
     SP2.setSolution(item, this.textSolution);
+    SP2.setHtmlSolution(item, this.htmlSolution);
     const rtfSol = (await convertToRtf(this.htmlSolution)) ?? this.textSolution;
     SP2.setRtfSolution(item, rtfSol);
     return item;

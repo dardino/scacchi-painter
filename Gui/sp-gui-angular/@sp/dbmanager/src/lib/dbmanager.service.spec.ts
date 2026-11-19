@@ -7,6 +7,10 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
 import { DbmanagerService } from "./dbmanager.service";
+import { Problem } from "./models/problem";
+import { Piece } from "./models/piece";
+import { Twin } from "./models/twin";
+import { TwinModes } from "./SPX.v4";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -64,5 +68,66 @@ describe("DbmanagerService", () => {
     const allItems = service.All();
     const magazineItem = allItems.find(item => item.source?.length > 0);
     expect(magazineItem).toBeDefined();
+  });
+
+  it("should export the current database as SP2 XML", async () => {
+    service.SetData([Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1")]);
+
+    const file = await service.GetFileContent("sp2");
+    const text = await file.text();
+
+    expect(file.name).toBe("temp.sp2");
+    expect(text).toContain("<ScacchiPainterDatabase");
+    expect(text).toContain("<SP_Item");
+  });
+
+  it("should round-trip one problem through SP2 XML", async () => {
+    const problem = Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1");
+    problem.pieces.push(Piece.fromJson({
+      appearance: "n",
+      color: "White",
+      fairyCode: "am",
+      fairyAttributes: ["Royal"],
+      fairyParams: [],
+      column: "ColE",
+      traverse: "Row4",
+    }));
+    problem.twins.TwinList.push(Twin.fromJson({
+      TwinType: "MovePiece",
+      TwinModes: TwinModes.Normal,
+      ValueA: "e4",
+      ValueB: "e5",
+    }));
+    problem.textSolution = "1. Ra1-a2";
+    problem.htmlSolution = "<p>1. Ra1-a2</p>";
+    service.SetData([problem]);
+    const exported = await service.GetFileContent("sp2");
+    const meta = {
+      type: "file" as const,
+      itemName: "round-trip.sp2",
+      fullPath: "round-trip.sp2",
+      id: "round-trip.sp2",
+    };
+
+    const result = await service.Load({ file: exported, meta, source: "unknown" });
+
+    expect(result).toBeNull();
+    expect(service.All()).toHaveLength(1);
+    expect(service.All()[0].pieces).toHaveLength(3);
+    expect(service.All()[0].pieces.some(piece => piece.fairyCode === "am")).toBe(true);
+    expect(service.All()[0].twins.TwinList).toHaveLength(2);
+    expect(service.All()[0].textSolution).toContain("Ra1-a2");
+  });
+
+  it("should export explicitly selected SP3 JSON", async () => {
+    service.SetData([Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1")]);
+
+    const file = await service.GetFileContent("sp3");
+    const text = await file.text();
+    const json = JSON.parse(text);
+
+    expect(file.name).toBe("temp.sp3");
+    expect(json.version).toBe(5);
+    expect(json.problems).toHaveLength(1);
   });
 });
