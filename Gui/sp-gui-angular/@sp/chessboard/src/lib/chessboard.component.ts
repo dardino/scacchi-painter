@@ -20,7 +20,6 @@ import {
 } from "@sp/dbmanager/src/public-api";
 import { getPieceIcon } from "@sp/gui/src/app/services/cursor.service";
 import { DisplayMoveService } from "@sp/ui-elements/src/lib/services/displayMove.service";
-import html2canvas from "html2canvas";
 import { Subscription } from "rxjs";
 import { AnimationData, Animations, ChessboardAnimationService } from "./chessboard-animation.service";
 
@@ -230,6 +229,7 @@ implements OnInit, OnChanges, OnDestroy {
   async takeSnapshot() {
     const board = this.chessboard()?.nativeElement;
     if (!board) return null;
+    const { default: html2canvas } = await import("html2canvas");
     const canvas = await html2canvas(board);
     const url = await new Promise<Blob | null>((resolve) => {
       canvas.toBlob((blob) => {

@@ -142,8 +142,12 @@ export class HostBridgeService {
       return window.Bridge.saveFile(content);
     }
     else {
-      const fls = await import("file-saver");
-      fls.saveAs(content, content.name + `.${type}`);
+      const url = URL.createObjectURL(content);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${content.name}.${type}`;
+      link.click();
+      URL.revokeObjectURL(url);
       return "OK";
     }
   }
