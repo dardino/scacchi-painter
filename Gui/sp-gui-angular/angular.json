@@ -19,7 +19,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
             "deleteOutputPath": true,
             "outputPath": {
@@ -118,7 +118,7 @@
           "defaultConfiguration": ""
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "buildTarget": "gui:build"
           },
@@ -132,7 +132,7 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "gui:build"
           }
@@ -155,7 +155,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "@sp/chessboard/tsconfig.lib.json",
             "project": "@sp/chessboard/ng-package.json"
@@ -184,7 +184,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "@sp/dbmanager/tsconfig.lib.json",
             "project": "@sp/dbmanager/ng-package.json"
@@ -213,7 +213,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "@sp/ui-elements/tsconfig.lib.json",
             "project": "@sp/ui-elements/ng-package.json"
@@ -242,7 +242,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "@sp/host-bridge/tsconfig.lib.json",
             "project": "@sp/host-bridge/ng-package.json"
