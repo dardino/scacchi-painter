@@ -129,5 +129,4 @@ describe("DbmanagerService", () => {
     expect(json.version).toBe(5);
     expect(json.problems).toHaveLength(1);
   });
-
 });
