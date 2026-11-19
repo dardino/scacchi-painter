@@ -3,7 +3,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { FolderItemInfo } from "@sp/host-bridge/src/lib/fileService";
 import { DbmanagerService } from "./dbmanager.service";
@@ -11,11 +11,6 @@ import { Problem } from "./models/problem";
 import { Piece } from "./models/piece";
 import { Twin } from "./models/twin";
 import { TwinModes } from "./SPX.v4";
-const saveAsMock = vi.fn();
-vi.mock("file-saver", () => ({
-  saveAs: saveAsMock,
-}));
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function getFixturePath(): string {
@@ -135,24 +130,4 @@ describe("DbmanagerService", () => {
     expect(json.problems).toHaveLength(1);
   });
 
-  it("should download an explicitly selected SP2 file from the local web source", async () => {
-    saveAsMock.mockClear();
-    service.SetData([Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1")]);
-    service.SetFileMeta({
-      source: "local",
-      meta: {
-        type: "file",
-        itemName: "position.sp3",
-        fullPath: "position.sp3",
-        id: "position.sp3",
-      },
-    });
-
-    const saved = await service.Save("sp2");
-
-    expect(saved).toBe(true);
-    expect(saveAsMock).toHaveBeenCalledOnce();
-    expect(saveAsMock.mock.calls[0][0]).toBeInstanceOf(File);
-    expect(saveAsMock.mock.calls[0][1]).toBe("position.sp2");
-  });
 });

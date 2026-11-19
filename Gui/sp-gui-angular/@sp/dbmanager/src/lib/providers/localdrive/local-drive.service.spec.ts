@@ -109,19 +109,16 @@ describe("LocalDriveService", () => {
     expect(fakeStore.put).toHaveBeenCalledWith(fileHandle, "board-1|/tmp/board.sp3|board.sp3");
   });
 
-  it("should return the selected file name after saving locally", async () => {
-    const writable = {
-      write: vi.fn(async () => undefined),
-      close: vi.fn(async () => undefined),
-    };
-    const fileHandle = {
-      name: "saved-board.sp2",
-      createWritable: vi.fn(async () => writable),
-    } as unknown as FileSystemFileHandle;
-
-    Object.defineProperty(window, "showSaveFilePicker", {
+  it("should download through the local web provider", async () => {
+    const createObjectURL = vi.fn(() => "blob:test");
+    const revokeObjectURL = vi.fn();
+    Object.defineProperty(URL, "createObjectURL", {
       configurable: true,
-      value: vi.fn(async () => fileHandle),
+      value: createObjectURL,
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: revokeObjectURL,
     });
 
     const item = {
@@ -139,9 +136,9 @@ describe("LocalDriveService", () => {
     expect(result).not.toBeInstanceOf(Error);
     expect(result).toEqual({
       type: "file",
-      itemName: "saved-board.sp2",
-      fullPath: "saved-board.sp2",
-      id: "saved-board.sp2",
+      itemName: "draft.sp2",
+      fullPath: "draft.sp2",
+      id: "draft.sp2",
     });
   });
 });

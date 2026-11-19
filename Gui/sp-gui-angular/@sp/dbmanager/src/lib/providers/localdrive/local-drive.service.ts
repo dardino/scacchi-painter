@@ -158,7 +158,7 @@ export class LocalDriveService implements FileService<"local"> {
     const url = URL.createObjectURL(file);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = item.itemName || file.name;
+    anchor.download = file.name || item.itemName;
     anchor.style.display = "none";
     document.body.append(anchor);
     anchor.click();
@@ -211,26 +211,8 @@ export class LocalDriveService implements FileService<"local"> {
     file: File,
     item: FolderItemInfo,
   ): Promise<FolderItemInfo | Error> {
-    if (!window.showSaveFilePicker) {
-      // fallback mechanism when the File System API is not available
-      console.warn("Your current device does not support the File System API. Falling back to download via anchor element.");
-      await this.#downloadFileWithAnchor(file, item);
-      const itemName = item.itemName || file.name;
-      return {
-        ...item,
-        itemName,
-        fullPath: item.fullPath || itemName,
-        id: item.id || itemName,
-      };
-    }
-
-    if (!this.#fileHandle) {
-      this.#fileHandle = await window.showSaveFilePicker({ suggestedName: item.itemName });
-    }
-    const fileStream = await this.#fileHandle.createWritable();
-    await fileStream.write(file);
-    await fileStream.close();
-    const itemName = this.#fileHandle.name || item.itemName || file.name;
+    await this.#downloadFileWithAnchor(file, item);
+    const itemName = file.name || item.itemName;
     return {
       ...item,
       itemName,
