@@ -145,6 +145,10 @@ export class DbmanagerService implements IDbManagerService {
       this.#currentFile.set({ meta, source });
       const content = await file.text();
       const result = await this.loadFromContent(content);
+      if (result instanceof Error) {
+        return result;
+      }
+      await this.loadProblem();
       saveToRecentFiles(meta, source);
       this.#snackBar.open("Load db completed!", undefined, {
         verticalPosition: "top",
@@ -377,15 +381,10 @@ export class DbmanagerService implements IDbManagerService {
     const version: "sp2" | "sp3"
       = forceVersion
         ?? (this.#currentFile()?.meta.fullPath.slice(-4) === ".sp2" ? "sp2" : "sp3");
-    switch (version) {
-      case "sp2":
-        await this.loadFromXML(content);
-        break;
-      case "sp3":
-      default:
-        await this.loadFromJson(content);
-        break;
-    }
+    const result = version === "sp2"
+      ? await this.loadFromXML(content)
+      : await this.loadFromJson(content);
+    if (result instanceof Error) return result;
     await this.saveToLocalStorage();
     return null;
   }

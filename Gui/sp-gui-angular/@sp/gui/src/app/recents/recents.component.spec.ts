@@ -15,8 +15,15 @@ describe("RecentsComponent", () => {
     TestBed.configureTestingModule({
       imports: [RecentsComponent],
       providers: [
-        { provide: DbmanagerService, useValue: { LoadFromService: vi.fn(async () => null) } },
-        { provide: Router, useValue: { createUrlTree: vi.fn(() => "/list"), navigateByUrl: vi.fn(async () => true) } },
+        {
+          provide: DbmanagerService,
+          useValue: {
+            LoadFromService: vi.fn(async () => null),
+            All: vi.fn(() => [{}]),
+            CurrentIndex: vi.fn(() => 7),
+          },
+        },
+        { provide: Router, useValue: { createUrlTree: vi.fn(() => "/list"), navigate: vi.fn(async () => true), navigateByUrl: vi.fn(async () => true) } },
         { provide: MatSnackBar, useValue: { open: vi.fn() } },
         { provide: LogService, useValue: { error: vi.fn() } },
       ],
@@ -30,7 +37,7 @@ describe("RecentsComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should navigate to the database list after loading a local recent", async () => {
+  it("should navigate to the last loaded problem after loading a local recent", async () => {
     const db = TestBed.inject(DbmanagerService);
     const router = TestBed.inject(Router);
     const recent = {
@@ -46,6 +53,6 @@ describe("RecentsComponent", () => {
     await component.clickOnRecent(recent);
 
     expect(db.LoadFromService).toHaveBeenCalledWith(recent);
-    expect(router.navigateByUrl).toHaveBeenCalledWith("/list");
+    expect(router.navigate).toHaveBeenCalledWith(["/edit", 7]);
   });
 });

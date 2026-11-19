@@ -129,4 +129,28 @@ describe("DbmanagerService", () => {
     expect(json.version).toBe(5);
     expect(json.problems).toHaveLength(1);
   });
+
+  it("should load the current problem after loading a database", async () => {
+    const problem = Problem.fromFen("8/8/8/8/8/8/8/R3K3 w - - 0 1");
+    service.SetData([problem]);
+    const meta = {
+      type: "file" as const,
+      itemName: "position.sp3",
+      fullPath: "position.sp3",
+      id: "position.sp3",
+    };
+    const file = new File([JSON.stringify({
+      version: 5,
+      lastIndex: 1,
+      name: "Test",
+      awards: [],
+      problems: [problem.toJson()],
+    })], "position.sp3", { type: "application/json" });
+
+    const result = await service.Load({ file, meta, source: "local" });
+
+    expect(result).toBeNull();
+    expect(service.All()).toHaveLength(1);
+    expect(service.CurrentProblem()).not.toBeNull();
+  });
 });

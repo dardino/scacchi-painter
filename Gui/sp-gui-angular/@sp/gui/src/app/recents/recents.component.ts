@@ -41,7 +41,12 @@ export class RecentsComponent {
       }
       const result = await this.#db.LoadFromService(fInfo);
       if (!(result instanceof Error)) {
-        await this.#router.navigateByUrl("/list");
+        if (this.#db.All().length > 0) {
+          await this.#router.navigate(["/edit", this.#db.CurrentIndex()]);
+        }
+        else {
+          await this.#router.navigate(["/list"]);
+        }
       }
       else {
         this.#log.error(result.message);
