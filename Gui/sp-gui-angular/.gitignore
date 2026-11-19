@@ -49,3 +49,8 @@ log.txt
 
 #scripts
 scripts/*.txt
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

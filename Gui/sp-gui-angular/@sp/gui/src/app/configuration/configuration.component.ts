@@ -6,6 +6,7 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpan
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { ServiceWorkerModule, SwUpdate } from "@angular/service-worker";
 import { concat, first, interval } from "rxjs";
 import { environment } from "../../environments/environment";
@@ -35,6 +36,7 @@ import { AvailableThemes } from "../services/types";
     MatExpansionPanelDescription,
     MatSelect,
     MatOption,
+    MatSlideToggleModule,
   ],
 })
 export class ConfigurationComponent implements OnInit {
@@ -99,6 +101,23 @@ export class ConfigurationComponent implements OnInit {
   popeyeExecutablePath = this.#preferences.popeyeExecutablePath.asReadonly();
   changePopeyeExecutablePath(value: string) {
     this.#preferences.popeyeExecutablePath.set(value.trim());
+  }
+
+  useCustomPopeyeExecutable = this.#preferences.popeyeUseCustomExecutable.asReadonly();
+  changeUseCustomPopeyeExecutable(value: boolean) {
+    this.#preferences.popeyeUseCustomExecutable.set(value);
+  }
+
+  async pickPopeyeExecutable() {
+    const { open } = await import("@tauri-apps/plugin-dialog");
+    const selected = await open({
+      multiple: false,
+      directory: false,
+      title: "Select the Popeye executable",
+    });
+    if (typeof selected === "string") {
+      this.changePopeyeExecutablePath(selected);
+    }
   }
 
   enableAnimations = this.#preferences.chessboardAnimation.asReadonly();

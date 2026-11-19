@@ -315,9 +315,7 @@ export class EditProblemComponent implements OnInit, OnDestroy, AfterViewInit {
       prob.htmlSolution = "";
       prob.textSolution = "";
       this.#current.SetProblem(() => prob);
-      this.#engine.startSolving(prob, mode, {
-        popeyeExecutablePath: this.#preferences.popeyeExecutablePath(),
-      });
+      this.#engine.startSolving(prob, mode);
     }
   }
 

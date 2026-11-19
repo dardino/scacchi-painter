@@ -12,6 +12,7 @@
     "core:default",
     "opener:default",
     "shell:default",
-    "store:default"
+    "store:default",
+    "dialog:default"
   ]
 }
