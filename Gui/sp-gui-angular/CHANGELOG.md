@@ -1,5 +1,19 @@
 # Scacchi Painter GUI - CHANGELOG
 
+## 0.6.0
+
+**Feature release**: awards workflow, local file handling for desktop and web, persisted solution trees, and environment-aware settings.
+
+- [sp-gui-angular] [#354](https://github.com/dardino/scacchi-painter/issues/354) **Awards Maker** - dedicated Awards menu for SP3 databases: create and manage verdicts, select problems, order them through pairwise comparison, assign prizes, special prizes, honorable mentions and other distinctions, with resumable state
+- [sp-gui-angular] [#336](https://github.com/dardino/scacchi-painter/issues/336) **Fairy effects in solution display** - fairy piece effects are rendered in the solution move list
+- [sp-gui-angular] **Twin description fix** - the solution panel no longer shows an incorrect twin description when a problem has no twins
+- [dbmanager] [#376](https://github.com/dardino/scacchi-painter/issues/376) **SP3 v6 move explorer persistence** - the parsed solution tree (`jsonSolutions`) is serialized and restored with round-trip and backward-compatibility coverage; opening newer SP3 files produces a warning
+- [sp-gui-angular] [#37](https://github.com/dardino/scacchi-painter/issues/37) **SP2 Save As** - export the current database to SP2 format, with content/name detection, local downloads and restored recent-file navigation
+- [sp-gui / Tauri] [#379](https://github.com/dardino/scacchi-painter/issues/379) **Native local file provider** - browse local drives and folders from the desktop app; [#374](https://github.com/dardino/scacchi-painter/issues/374) hides unavailable cloud storage actions in Tauri builds
+- [sp-gui / Tauri] [#381](https://github.com/dardino/scacchi-painter/issues/381) **Environment-aware settings** - preferences are stored in `localStorage` on the web and in `tauri-plugin-store` on desktop, with one-time migration; the Popeye executable path moved from the problem to a system setting in the configuration page
+- [sp-gui / Tauri] **Store packaging** - MSIX packaging flow and documentation for Microsoft Store submission
+- [tooling] **Maintenance** - refreshed dependency overrides and Dependabot configuration, updated GitHub Actions and Rust dependency groups, fixed CI lint/coverage
+
 ## 0.5.0
 
 - [sp-gui-angular] - Add a startup “Did you know?” tip banner with weighted rotation, IndexedDB persistence, and per-session decay

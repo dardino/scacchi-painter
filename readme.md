@@ -4,6 +4,19 @@
 
 A new cross-platform engine and gui for chess problem composers
 
+## 0.6.0
+
+- Added the Awards Maker: create and manage verdicts, select problems, order them by pairwise comparison and assign prizes/mentions in SP3 databases [#354](https://github.com/dardino/scacchi-painter/issues/354)
+- Added a native local file provider for the Tauri desktop app, with drive and folder navigation [#379](https://github.com/dardino/scacchi-painter/issues/379)
+- Cloud storage actions are hidden in the desktop build, where the OAuth redirect flow is not supported [#374](https://github.com/dardino/scacchi-painter/issues/374)
+- Added SP2 Save As and local downloads in the web app, with SP2 detection by content and file name [#37](https://github.com/dardino/scacchi-painter/issues/37)
+- The move explorer tree is now saved in SP3 v6 databases and restored when reopening a file [#376](https://github.com/dardino/scacchi-painter/issues/376)
+- Fairy piece effects are displayed in the solution move list [#336](https://github.com/dardino/scacchi-painter/issues/336), and twin descriptions are fixed when a problem has no twins
+- Added environment-aware settings: `localStorage` on the web, `tauri-plugin-store` on desktop; the Popeye executable path is now a system setting [#381](https://github.com/dardino/scacchi-painter/issues/381)
+- Windows packaging moved to a Store-compliant MSIX package; see [BUILD_MSIX.md](BUILD_MSIX.md) and [STORE_SUBMISSION.md](STORE_SUBMISSION.md)
+
+Release notes: [in-app notes](Gui/sp-gui-angular/@sp/gui/src/assets/release-notes.md) and [GUI changelog](Gui/sp-gui-angular/CHANGELOG.md).
+
 ## 0.5.0
 
 - Added startup onboarding tips with weighted rotation and persistence

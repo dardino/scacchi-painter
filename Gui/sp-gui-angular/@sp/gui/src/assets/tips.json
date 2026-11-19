@@ -6,5 +6,13 @@
   "You can now change the board colors in the configuration page.",
   "You can now create a snapshot of the current position and restore it later.",
   "If you paste (CTRL+V or CMD+V on Mac) a FEN with the board highlighted, it is applied to the board.",
-  "You can now access the problem editor directly from the menu without navigating through the problem list."
+  "You can now access the problem editor directly from the menu without navigating through the problem list.",
+  "Open an SP3 database and use the Awards menu to create a verdict, compare problems side by side and assign prizes.",
+  "Award judgments are saved automatically: you can close the comparison dialog and resume it later.",
+  "Fairy piece effects are displayed alongside the moves in the solution list.",
+  "The solution tree you explore is saved in SP3 files and is restored when you reopen the database.",
+  "You can save the current database as an SP2 file with Save As in the web app.",
+  "In the desktop app you can browse your local drives and folders to open database files.",
+  "On desktop, set a custom Popeye executable path in Configuration under Solver Settings; leave it empty to use the bundled one.",
+  "Your preferences are stored with the operating system on desktop and in the browser on web."
 ]
