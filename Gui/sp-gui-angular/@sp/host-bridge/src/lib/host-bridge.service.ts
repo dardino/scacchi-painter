@@ -160,6 +160,10 @@ export class HostBridgeService {
     return typeof window.Bridge?.openFile === "function";
   }
 
+  public get isTauri(): boolean {
+    return window.Bridge?.host === "tauri";
+  }
+
   public closeApp() {
     if (window.Bridge) return window.Bridge.closeApp?.();
   }

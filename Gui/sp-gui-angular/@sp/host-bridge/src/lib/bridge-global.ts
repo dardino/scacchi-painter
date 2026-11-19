@@ -9,6 +9,7 @@ export const SpCoreEngine = "SpCore" as const;
 export type Engines = typeof NativePopeyeEngine | typeof AsmPopeyeEngine | typeof SpCoreEngine;
 
 export interface BridgeGlobal {
+  readonly host: "tauri" | "web";
   openFile(): File | PromiseLike<File | null> | null;
   saveFile(content: File): string | Promise<string>;
   closeApp?(): void;

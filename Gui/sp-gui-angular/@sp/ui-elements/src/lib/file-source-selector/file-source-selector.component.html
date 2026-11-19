@@ -17,6 +17,7 @@
       </span>
     </a>
   </li>
+  @if (isCloudStorageAvailable) {
   <li [ngClass]="{ current: current() === 'dropbox' }">
     <a tabindex="0" mat-stroked-button (keydown.enter)="selectSource('dropbox')" (click)="selectSource('dropbox')">
       <span class="open-button">
@@ -42,6 +43,7 @@
       </span>
     </a>
   </li>
+  }
   <!-- we needs a 'n-1' fillers to grant the correct ui -->
   <li class="filler"></li>
   <li class="filler"></li>

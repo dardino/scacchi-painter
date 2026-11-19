@@ -9,6 +9,7 @@ import { DbsourceComponent } from "@sp/ui-elements/src/lib/dbsource/dbsource.com
 import { DialogService } from "@sp/ui-elements/src/lib/services/dialog.service";
 import { firstValueFrom } from "rxjs";
 import { LogService } from "../services/log.service";
+import { HostBridgeService } from "@sp/host-bridge/src/public-api";
 
 @Component({
   selector: "app-recents",
@@ -22,6 +23,7 @@ export class RecentsComponent {
   #router = inject(Router);
   #log = inject(LogService);
   #snackBar = inject(MatSnackBar);
+  #hostBridge = inject(HostBridgeService);
   #dialog = inject(DialogService);
 
   public allowRemove = input(false);
@@ -33,6 +35,10 @@ export class RecentsComponent {
 
   constructor() {
     this.recents = getRecentFiles();
+    if (this.#hostBridge.isTauri) {
+      this.recents = this.recents.filter(recent =>
+        !["dropbox", "onedrive", "googledrive"].includes(recent.source));
+    }
   }
 
   async clickOnRecent(fInfo: RecentFileInfo) {

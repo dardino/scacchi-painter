@@ -20,4 +20,22 @@ describe("FileSourceSelectorComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should hide cloud storages in Tauri", () => {
+    window.Bridge = { host: "tauri" } as never;
+    fixture = TestBed.createComponent(FileSourceSelectorComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isCloudStorageAvailable).toBe(false);
+  });
+
+  it("should show cloud storages in the web bridge", () => {
+    window.Bridge = { host: "web" } as never;
+    fixture = TestBed.createComponent(FileSourceSelectorComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isCloudStorageAvailable).toBe(true);
+  });
 });

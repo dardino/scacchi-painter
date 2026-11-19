@@ -55,4 +55,18 @@ describe("RecentsComponent", () => {
     expect(db.LoadFromService).toHaveBeenCalledWith(recent);
     expect(router.navigate).toHaveBeenCalledWith(["/edit", 7]);
   });
+
+  it("should filter cloud recents in Tauri", () => {
+    localStorage.setItem("spx:recents", JSON.stringify([
+      { source: "local", meta: { type: "file", itemName: "local.sp3", fullPath: "local.sp3", id: "local.sp3" } },
+      { source: "dropbox", meta: { type: "file", itemName: "cloud.sp3", fullPath: "cloud.sp3", id: "cloud.sp3" } },
+    ]));
+    window.Bridge = { host: "tauri" } as never;
+
+    fixture = TestBed.createComponent(RecentsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.recents.map(recent => recent.source)).toEqual(["local"]);
+  });
 });

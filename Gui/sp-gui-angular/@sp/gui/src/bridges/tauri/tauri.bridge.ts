@@ -36,6 +36,7 @@ type SpCoreSolution = {
 };
 
 class TauriBridge implements BridgeGlobal {
+  readonly host = "tauri" as const;
   private solveEnded = true;
   private currentEngine: Engines = AsmPopeyeEngine;
   private ww: Worker | null = null;
